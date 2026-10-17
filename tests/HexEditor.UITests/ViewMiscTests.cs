@@ -623,7 +623,7 @@ public sealed class ViewMiscTests
 
     /// <summary>設定画面のカテゴリ (Core の SettingCategories.All と同じ順)。</summary>
     private static readonly string[] SettingsCategories =
-        ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "update", "privacy", "explorer", "advanced"];
+        ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "templates", "update", "privacy", "explorer", "advanced"];
 
     /// <summary>表示中の操作できる要素のうち、名前 (AutomationProperties.Name) のないもの。</summary>
     internal static IEnumerable<string> UnnamedInteractiveElements(AppSession app, string where)

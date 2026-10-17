@@ -26,6 +26,8 @@
     TC-PKG-09-03  "Unregister from this PC" (the test command shell/unregisterPc, the same call as the settings
                   screen) shows "Delete the HexEditor folder to complete the uninstall" and leaves no HexEditor
                   values in HKCU\Software and no %TEMP%\HexEditor-<hash>\
+    TC-AUTO-36-08 hexed --unregister (the command line, AUTO-36) removes the registrations of the portable version and
+                  leaves no HexEditor key in HKCU\Software; the exit code is 0 and the output lists the removed items
     TC-UI-55-03   unsigned: the classic menu "Open with HexEditor" (Shell API) opens the file; no sparse package
     TC-UI-43-05   switching the display language and restarting does not crash (23 languages and "system")
     TC-PKG-31-01  the start page offers to import the installer settings; importing gives the dark theme and the
@@ -450,6 +452,46 @@ if ($TestZip) {
         # 4. The temp folder of this copy.
         Assert-True (-not (Test-Path $temp)) "$temp remains"
         Add-TestNote 'TC-PKG-09-03: the button of the settings screen (Advanced) is pressed through the test command shell/unregisterPc (the same call). A test build does not register toast notifications (it only logs them), so their removal is checked by the registry diff only.'
+    }
+
+    Invoke-TestCase 'TC-AUTO-36-08' 'hexed --unregister leaves no HexEditor registry keys' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'hexed-unregister')
+        $exe = Join-Path $app 'HexEditor.exe'
+        $hexed = Join-Path $app 'hexed.exe'
+        Assert-True (Test-Path $hexed) "no hexed.exe in the portable folder ($app)"
+        $temp = Join-Path ([System.IO.Path]::GetTempPath()) ("HexEditor-" + (Get-FolderHash $app))
+        $before = Export-UserSoftware (Join-Path $WorkDir 'hexed-unregister\before.reg')
+        # Register the Explorer integration (context menu and file associations) through the settings call, then quit.
+        $a = Start-TestApp -Exe $exe
+        try {
+            $registered = Send-TestCommand $a 'shell' @{ action = 'register' }
+            Assert-True ($registered.contextMenu -and $registered.fileAssociations) 'not registered'
+        } finally { Stop-TestApp $a }
+
+        # 1. The app is closed. 2. hexed --unregister: exit code and the list of removed items on standard output.
+        $info = New-Object System.Diagnostics.ProcessStartInfo $hexed
+        $info.Arguments = '--unregister --lang en'
+        $info.UseShellExecute = $false
+        $info.RedirectStandardOutput = $true
+        $info.RedirectStandardError = $true
+        $info.CreateNoWindow = $true
+        $process = [System.Diagnostics.Process]::Start($info)
+        $stdout = $process.StandardOutput.ReadToEnd()
+        $stderr = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        Write-Host "hexed --unregister: exit $($process.ExitCode)`n$stdout$stderr"
+        Assert-True ($process.ExitCode -eq 0) "exit code $($process.ExitCode): $stdout $stderr"
+        Assert-True ($stdout -match 'Removed: Explorer context menu') "the output does not list the context menu: $stdout"
+
+        # 3. No HexEditor keys or values are left compared with the snapshot taken before registering.
+        $after = Export-UserSoftware (Join-Path $WorkDir 'hexed-unregister\after.reg')
+        $added = @($after | Where-Object { -not $before.Contains($_) -and $_ -match 'hexeditor' } |
+                Where-Object { -not (Test-WindowsRecorded ('\' + ($_ -split '\|', 2)[0].Substring('HKEY_CURRENT_USER\'.Length) + '\')) })
+        Assert-True ($added.Count -eq 0) ("left in the registry: " + (($added | Select-Object -First 20) -join '; '))
+        Assert-True (-not (Test-Path -LiteralPath $menuKey)) "$menuKey remains"
+        # 4. The temp folder of this copy.
+        Assert-True (-not (Test-Path $temp)) "$temp remains"
+        Add-TestNote 'TC-AUTO-36-08: the sparse package registration is not made by a test build (no certificate), so it is not checked here (TC-UI-55-03 covers the unsigned case).'
     }
 
     Invoke-TestCase 'TC-UI-55-03' 'unsigned portable: classic menu, no sparse package' {

@@ -1,0 +1,3347 @@
+{
+  "name": "DER / X.509 証明書",
+  "type": "application",
+  "offset": 0,
+  "size": 488,
+  "children": [
+    {
+      "name": "elements",
+      "path": "elements",
+      "type": "Element[1]",
+      "offset": 0,
+      "size": 488,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "elements[0]",
+          "type": "Element",
+          "offset": 0,
+          "size": 488,
+          "display": "Element (4)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "elements[0].tag",
+              "type": "TagByte",
+              "offset": 0,
+              "size": 1,
+              "display": "TagByte (3)",
+              "children": [
+                {
+                  "name": "tag_class",
+                  "path": "elements[0].tag.tag_class",
+                  "type": "2 bit",
+                  "offset": 0,
+                  "size": 1,
+                  "bit_offset": 6,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "constructed",
+                  "path": "elements[0].tag.constructed",
+                  "type": "1 bit",
+                  "offset": 0,
+                  "size": 1,
+                  "bit_offset": 5,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "tag_number",
+                  "path": "elements[0].tag.tag_number",
+                  "type": "5 bit",
+                  "offset": 0,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 5,
+                  "value": 16,
+                  "display": "16 (0b10000)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "elements[0].length",
+              "type": "Length",
+              "offset": 1,
+              "size": 3,
+              "display": "Length (2)",
+              "children": [
+                {
+                  "name": "first",
+                  "path": "elements[0].length.first",
+                  "type": "u8",
+                  "offset": 1,
+                  "size": 1,
+                  "value": 130,
+                  "display": "130"
+                },
+                {
+                  "name": "extra",
+                  "path": "elements[0].length.extra",
+                  "type": "u8[2]",
+                  "offset": 2,
+                  "size": 2,
+                  "value": "01E4",
+                  "display": "01 E4"
+                }
+              ]
+            },
+            {
+              "name": "value_length",
+              "path": "elements[0].value_length",
+              "type": "u64",
+              "offset": 4,
+              "size": 0,
+              "value": 484,
+              "display": "484"
+            },
+            {
+              "name": "children",
+              "path": "elements[0].children",
+              "type": "Element[3]",
+              "offset": 4,
+              "size": 484,
+              "display": "[3]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "elements[0].children[0]",
+                  "type": "Element",
+                  "offset": 4,
+                  "size": 434,
+                  "display": "Element (4)",
+                  "children": [
+                    {
+                      "name": "tag",
+                      "path": "elements[0].children[0].tag",
+                      "type": "TagByte",
+                      "offset": 4,
+                      "size": 1,
+                      "display": "TagByte (3)",
+                      "children": [
+                        {
+                          "name": "tag_class",
+                          "path": "elements[0].children[0].tag.tag_class",
+                          "type": "2 bit",
+                          "offset": 4,
+                          "size": 1,
+                          "bit_offset": 6,
+                          "bit_size": 2,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "constructed",
+                          "path": "elements[0].children[0].tag.constructed",
+                          "type": "1 bit",
+                          "offset": 4,
+                          "size": 1,
+                          "bit_offset": 5,
+                          "bit_size": 1,
+                          "value": 1,
+                          "display": "1 (0b1)"
+                        },
+                        {
+                          "name": "tag_number",
+                          "path": "elements[0].children[0].tag.tag_number",
+                          "type": "5 bit",
+                          "offset": 4,
+                          "size": 1,
+                          "bit_offset": 0,
+                          "bit_size": 5,
+                          "value": 16,
+                          "display": "16 (0b10000)"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "length",
+                      "path": "elements[0].children[0].length",
+                      "type": "Length",
+                      "offset": 5,
+                      "size": 3,
+                      "display": "Length (2)",
+                      "children": [
+                        {
+                          "name": "first",
+                          "path": "elements[0].children[0].length.first",
+                          "type": "u8",
+                          "offset": 5,
+                          "size": 1,
+                          "value": 130,
+                          "display": "130"
+                        },
+                        {
+                          "name": "extra",
+                          "path": "elements[0].children[0].length.extra",
+                          "type": "u8[2]",
+                          "offset": 6,
+                          "size": 2,
+                          "value": "01AE",
+                          "display": "01 AE"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "elements[0].children[0].value_length",
+                      "type": "u64",
+                      "offset": 8,
+                      "size": 0,
+                      "value": 430,
+                      "display": "430"
+                    },
+                    {
+                      "name": "children",
+                      "path": "elements[0].children[0].children",
+                      "type": "Element[8]",
+                      "offset": 8,
+                      "size": 430,
+                      "display": "[8]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "elements[0].children[0].children[0]",
+                          "type": "Element",
+                          "offset": 8,
+                          "size": 5,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[0].tag",
+                              "type": "TagByte",
+                              "offset": 8,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[0].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 8,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 2,
+                                  "display": "2 (0b10)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[0].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 8,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[0].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 8,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[0].length",
+                              "type": "Length",
+                              "offset": 9,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[0].length.first",
+                                  "type": "u8",
+                                  "offset": 9,
+                                  "size": 1,
+                                  "value": 3,
+                                  "display": "3"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[0].value_length",
+                              "type": "u64",
+                              "offset": 10,
+                              "size": 0,
+                              "value": 3,
+                              "display": "3"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[0].children",
+                              "type": "Element[1]",
+                              "offset": 10,
+                              "size": 3,
+                              "display": "[1]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[0].children[0]",
+                                  "type": "Element",
+                                  "offset": 10,
+                                  "size": 3,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[0].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 10,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[0].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 10,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[0].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 10,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[0].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 10,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 2,
+                                          "display": "2 (0b10)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[0].children[0].length",
+                                      "type": "Length",
+                                      "offset": 11,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[0].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 11,
+                                          "size": 1,
+                                          "value": 1,
+                                          "display": "1"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[0].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 12,
+                                      "size": 0,
+                                      "value": 1,
+                                      "display": "1"
+                                    },
+                                    {
+                                      "name": "integer_bytes",
+                                      "path": "elements[0].children[0].children[0].children[0].integer_bytes",
+                                      "type": "u8[1]",
+                                      "offset": 12,
+                                      "size": 1,
+                                      "value": "02",
+                                      "display": "02"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "elements[0].children[0].children[1]",
+                          "type": "Element",
+                          "offset": 13,
+                          "size": 4,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[1].tag",
+                              "type": "TagByte",
+                              "offset": 13,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[1].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 13,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[1].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 13,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[1].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 13,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 2,
+                                  "display": "2 (0b10)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[1].length",
+                              "type": "Length",
+                              "offset": 14,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[1].length.first",
+                                  "type": "u8",
+                                  "offset": 14,
+                                  "size": 1,
+                                  "value": 2,
+                                  "display": "2"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[1].value_length",
+                              "type": "u64",
+                              "offset": 15,
+                              "size": 0,
+                              "value": 2,
+                              "display": "2"
+                            },
+                            {
+                              "name": "integer_bytes",
+                              "path": "elements[0].children[0].children[1].integer_bytes",
+                              "type": "u8[2]",
+                              "offset": 15,
+                              "size": 2,
+                              "value": "0123",
+                              "display": "01 23"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[2]",
+                          "path": "elements[0].children[0].children[2]",
+                          "type": "Element",
+                          "offset": 17,
+                          "size": 15,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[2].tag",
+                              "type": "TagByte",
+                              "offset": 17,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[2].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 17,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[2].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 17,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[2].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 17,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 16,
+                                  "display": "16 (0b10000)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[2].length",
+                              "type": "Length",
+                              "offset": 18,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[2].length.first",
+                                  "type": "u8",
+                                  "offset": 18,
+                                  "size": 1,
+                                  "value": 13,
+                                  "display": "13"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[2].value_length",
+                              "type": "u64",
+                              "offset": 19,
+                              "size": 0,
+                              "value": 13,
+                              "display": "13"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[2].children",
+                              "type": "Element[2]",
+                              "offset": 19,
+                              "size": 13,
+                              "display": "[2]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[2].children[0]",
+                                  "type": "Element",
+                                  "offset": 19,
+                                  "size": 11,
+                                  "display": "Element (6)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[2].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 19,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[2].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 19,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[2].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 19,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[2].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 19,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 6,
+                                          "display": "6 (0b110)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[2].children[0].length",
+                                      "type": "Length",
+                                      "offset": 20,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[2].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 20,
+                                          "size": 1,
+                                          "value": 9,
+                                          "display": "9"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[2].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 21,
+                                      "size": 0,
+                                      "value": 9,
+                                      "display": "9"
+                                    },
+                                    {
+                                      "name": "oid_bytes",
+                                      "path": "elements[0].children[0].children[2].children[0].oid_bytes",
+                                      "type": "u8[9]",
+                                      "offset": 21,
+                                      "size": 9,
+                                      "value": "2A864886F70D01010B",
+                                      "display": "2A 86 48 86 F7 0D 01 01 0B"
+                                    },
+                                    {
+                                      "name": "oid",
+                                      "path": "elements[0].children[0].children[2].children[0].oid",
+                                      "type": "string",
+                                      "offset": 30,
+                                      "size": 0,
+                                      "value": "1.2.840.113549.1.1.11",
+                                      "display": "1.2.840.113549.1.1.11"
+                                    },
+                                    {
+                                      "name": "oid_description",
+                                      "path": "elements[0].children[0].children[2].children[0].oid_description",
+                                      "type": "string",
+                                      "offset": 30,
+                                      "size": 0,
+                                      "value": "sha256WithRSAEncryption",
+                                      "display": "sha256WithRSAEncryption"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "[1]",
+                                  "path": "elements[0].children[0].children[2].children[1]",
+                                  "type": "Element",
+                                  "offset": 30,
+                                  "size": 2,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[2].children[1].tag",
+                                      "type": "TagByte",
+                                      "offset": 30,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[2].children[1].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 30,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[2].children[1].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 30,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[2].children[1].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 30,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 5,
+                                          "display": "5 (0b101)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[2].children[1].length",
+                                      "type": "Length",
+                                      "offset": 31,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[2].children[1].length.first",
+                                          "type": "u8",
+                                          "offset": 31,
+                                          "size": 1,
+                                          "value": 0,
+                                          "display": "0"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[2].children[1].value_length",
+                                      "type": "u64",
+                                      "offset": 32,
+                                      "size": 0,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "data",
+                                      "path": "elements[0].children[0].children[2].children[1].data",
+                                      "type": "u8[0]",
+                                      "offset": 32,
+                                      "size": 0,
+                                      "value": "",
+                                      "display": ""
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[3]",
+                          "path": "elements[0].children[0].children[3]",
+                          "type": "Element",
+                          "offset": 32,
+                          "size": 30,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[3].tag",
+                              "type": "TagByte",
+                              "offset": 32,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[3].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 32,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[3].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 32,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[3].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 32,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 16,
+                                  "display": "16 (0b10000)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[3].length",
+                              "type": "Length",
+                              "offset": 33,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[3].length.first",
+                                  "type": "u8",
+                                  "offset": 33,
+                                  "size": 1,
+                                  "value": 28,
+                                  "display": "28"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[3].value_length",
+                              "type": "u64",
+                              "offset": 34,
+                              "size": 0,
+                              "value": 28,
+                              "display": "28"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[3].children",
+                              "type": "Element[1]",
+                              "offset": 34,
+                              "size": 28,
+                              "display": "[1]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[3].children[0]",
+                                  "type": "Element",
+                                  "offset": 34,
+                                  "size": 28,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[3].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 34,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[3].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 34,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[3].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 34,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 1,
+                                          "display": "1 (0b1)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[3].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 34,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 17,
+                                          "display": "17 (0b10001)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[3].children[0].length",
+                                      "type": "Length",
+                                      "offset": 35,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[3].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 35,
+                                          "size": 1,
+                                          "value": 26,
+                                          "display": "26"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[3].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 36,
+                                      "size": 0,
+                                      "value": 26,
+                                      "display": "26"
+                                    },
+                                    {
+                                      "name": "children",
+                                      "path": "elements[0].children[0].children[3].children[0].children",
+                                      "type": "Element[1]",
+                                      "offset": 36,
+                                      "size": 26,
+                                      "display": "[1]",
+                                      "children": [
+                                        {
+                                          "name": "[0]",
+                                          "path": "elements[0].children[0].children[3].children[0].children[0]",
+                                          "type": "Element",
+                                          "offset": 36,
+                                          "size": 26,
+                                          "display": "Element (4)",
+                                          "children": [
+                                            {
+                                              "name": "tag",
+                                              "path": "elements[0].children[0].children[3].children[0].children[0].tag",
+                                              "type": "TagByte",
+                                              "offset": 36,
+                                              "size": 1,
+                                              "display": "TagByte (3)",
+                                              "children": [
+                                                {
+                                                  "name": "tag_class",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].tag.tag_class",
+                                                  "type": "2 bit",
+                                                  "offset": 36,
+                                                  "size": 1,
+                                                  "bit_offset": 6,
+                                                  "bit_size": 2,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "constructed",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].tag.constructed",
+                                                  "type": "1 bit",
+                                                  "offset": 36,
+                                                  "size": 1,
+                                                  "bit_offset": 5,
+                                                  "bit_size": 1,
+                                                  "value": 1,
+                                                  "display": "1 (0b1)"
+                                                },
+                                                {
+                                                  "name": "tag_number",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].tag.tag_number",
+                                                  "type": "5 bit",
+                                                  "offset": 36,
+                                                  "size": 1,
+                                                  "bit_offset": 0,
+                                                  "bit_size": 5,
+                                                  "value": 16,
+                                                  "display": "16 (0b10000)"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "length",
+                                              "path": "elements[0].children[0].children[3].children[0].children[0].length",
+                                              "type": "Length",
+                                              "offset": 37,
+                                              "size": 1,
+                                              "display": "Length (1)",
+                                              "children": [
+                                                {
+                                                  "name": "first",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].length.first",
+                                                  "type": "u8",
+                                                  "offset": 37,
+                                                  "size": 1,
+                                                  "value": 24,
+                                                  "display": "24"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "value_length",
+                                              "path": "elements[0].children[0].children[3].children[0].children[0].value_length",
+                                              "type": "u64",
+                                              "offset": 38,
+                                              "size": 0,
+                                              "value": 24,
+                                              "display": "24"
+                                            },
+                                            {
+                                              "name": "children",
+                                              "path": "elements[0].children[0].children[3].children[0].children[0].children",
+                                              "type": "Element[2]",
+                                              "offset": 38,
+                                              "size": 24,
+                                              "display": "[2]",
+                                              "children": [
+                                                {
+                                                  "name": "[0]",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].children[0]",
+                                                  "type": "Element",
+                                                  "offset": 38,
+                                                  "size": 5,
+                                                  "display": "Element (6)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 38,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[0].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 38,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[0].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 38,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[0].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 38,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 6,
+                                                          "display": "6 (0b110)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].length",
+                                                      "type": "Length",
+                                                      "offset": 39,
+                                                      "size": 1,
+                                                      "display": "Length (1)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[0].length.first",
+                                                          "type": "u8",
+                                                          "offset": 39,
+                                                          "size": 1,
+                                                          "value": 3,
+                                                          "display": "3"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].value_length",
+                                                      "type": "u64",
+                                                      "offset": 40,
+                                                      "size": 0,
+                                                      "value": 3,
+                                                      "display": "3"
+                                                    },
+                                                    {
+                                                      "name": "oid_bytes",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].oid_bytes",
+                                                      "type": "u8[3]",
+                                                      "offset": 40,
+                                                      "size": 3,
+                                                      "value": "550403",
+                                                      "display": "55 04 03"
+                                                    },
+                                                    {
+                                                      "name": "oid",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].oid",
+                                                      "type": "string",
+                                                      "offset": 43,
+                                                      "size": 0,
+                                                      "value": "2.5.4.3",
+                                                      "display": "2.5.4.3"
+                                                    },
+                                                    {
+                                                      "name": "oid_description",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[0].oid_description",
+                                                      "type": "string",
+                                                      "offset": 43,
+                                                      "size": 0,
+                                                      "value": "commonName",
+                                                      "display": "commonName"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "[1]",
+                                                  "path": "elements[0].children[0].children[3].children[0].children[0].children[1]",
+                                                  "type": "Element",
+                                                  "offset": 43,
+                                                  "size": 19,
+                                                  "display": "Element (4)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[1].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 43,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[1].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 43,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[1].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 43,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[1].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 43,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 12,
+                                                          "display": "12 (0b1100)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[1].length",
+                                                      "type": "Length",
+                                                      "offset": 44,
+                                                      "size": 1,
+                                                      "display": "Length (1)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[3].children[0].children[0].children[1].length.first",
+                                                          "type": "u8",
+                                                          "offset": 44,
+                                                          "size": 1,
+                                                          "value": 17,
+                                                          "display": "17"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[1].value_length",
+                                                      "type": "u64",
+                                                      "offset": 45,
+                                                      "size": 0,
+                                                      "value": 17,
+                                                      "display": "17"
+                                                    },
+                                                    {
+                                                      "name": "utf8_string",
+                                                      "path": "elements[0].children[0].children[3].children[0].children[0].children[1].utf8_string",
+                                                      "type": "char[17]",
+                                                      "offset": 45,
+                                                      "size": 17,
+                                                      "value": "HexEditor Test CA",
+                                                      "display": "HexEditor Test CA"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[4]",
+                          "path": "elements[0].children[0].children[4]",
+                          "type": "Element",
+                          "offset": 62,
+                          "size": 32,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[4].tag",
+                              "type": "TagByte",
+                              "offset": 62,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[4].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 62,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[4].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 62,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[4].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 62,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 16,
+                                  "display": "16 (0b10000)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[4].length",
+                              "type": "Length",
+                              "offset": 63,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[4].length.first",
+                                  "type": "u8",
+                                  "offset": 63,
+                                  "size": 1,
+                                  "value": 30,
+                                  "display": "30"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[4].value_length",
+                              "type": "u64",
+                              "offset": 64,
+                              "size": 0,
+                              "value": 30,
+                              "display": "30"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[4].children",
+                              "type": "Element[2]",
+                              "offset": 64,
+                              "size": 30,
+                              "display": "[2]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[4].children[0]",
+                                  "type": "Element",
+                                  "offset": 64,
+                                  "size": 15,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[4].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 64,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[4].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 64,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[4].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 64,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[4].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 64,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 23,
+                                          "display": "23 (0b10111)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[4].children[0].length",
+                                      "type": "Length",
+                                      "offset": 65,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[4].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 65,
+                                          "size": 1,
+                                          "value": 13,
+                                          "display": "13"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[4].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 66,
+                                      "size": 0,
+                                      "value": 13,
+                                      "display": "13"
+                                    },
+                                    {
+                                      "name": "utc_time",
+                                      "path": "elements[0].children[0].children[4].children[0].utc_time",
+                                      "type": "char[13]",
+                                      "offset": 66,
+                                      "size": 13,
+                                      "value": "260101000000Z",
+                                      "display": "260101000000Z"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "[1]",
+                                  "path": "elements[0].children[0].children[4].children[1]",
+                                  "type": "Element",
+                                  "offset": 79,
+                                  "size": 15,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[4].children[1].tag",
+                                      "type": "TagByte",
+                                      "offset": 79,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[4].children[1].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 79,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[4].children[1].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 79,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[4].children[1].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 79,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 23,
+                                          "display": "23 (0b10111)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[4].children[1].length",
+                                      "type": "Length",
+                                      "offset": 80,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[4].children[1].length.first",
+                                          "type": "u8",
+                                          "offset": 80,
+                                          "size": 1,
+                                          "value": 13,
+                                          "display": "13"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[4].children[1].value_length",
+                                      "type": "u64",
+                                      "offset": 81,
+                                      "size": 0,
+                                      "value": 13,
+                                      "display": "13"
+                                    },
+                                    {
+                                      "name": "utc_time",
+                                      "path": "elements[0].children[0].children[4].children[1].utc_time",
+                                      "type": "char[13]",
+                                      "offset": 81,
+                                      "size": 13,
+                                      "value": "360101000000Z",
+                                      "display": "360101000000Z"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[5]",
+                          "path": "elements[0].children[0].children[5]",
+                          "type": "Element",
+                          "offset": 94,
+                          "size": 27,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[5].tag",
+                              "type": "TagByte",
+                              "offset": 94,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[5].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 94,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[5].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 94,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[5].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 94,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 16,
+                                  "display": "16 (0b10000)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[5].length",
+                              "type": "Length",
+                              "offset": 95,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[5].length.first",
+                                  "type": "u8",
+                                  "offset": 95,
+                                  "size": 1,
+                                  "value": 25,
+                                  "display": "25"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[5].value_length",
+                              "type": "u64",
+                              "offset": 96,
+                              "size": 0,
+                              "value": 25,
+                              "display": "25"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[5].children",
+                              "type": "Element[1]",
+                              "offset": 96,
+                              "size": 25,
+                              "display": "[1]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[5].children[0]",
+                                  "type": "Element",
+                                  "offset": 96,
+                                  "size": 25,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[5].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 96,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[5].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 96,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[5].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 96,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 1,
+                                          "display": "1 (0b1)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[5].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 96,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 17,
+                                          "display": "17 (0b10001)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[5].children[0].length",
+                                      "type": "Length",
+                                      "offset": 97,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[5].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 97,
+                                          "size": 1,
+                                          "value": 23,
+                                          "display": "23"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[5].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 98,
+                                      "size": 0,
+                                      "value": 23,
+                                      "display": "23"
+                                    },
+                                    {
+                                      "name": "children",
+                                      "path": "elements[0].children[0].children[5].children[0].children",
+                                      "type": "Element[1]",
+                                      "offset": 98,
+                                      "size": 23,
+                                      "display": "[1]",
+                                      "children": [
+                                        {
+                                          "name": "[0]",
+                                          "path": "elements[0].children[0].children[5].children[0].children[0]",
+                                          "type": "Element",
+                                          "offset": 98,
+                                          "size": 23,
+                                          "display": "Element (4)",
+                                          "children": [
+                                            {
+                                              "name": "tag",
+                                              "path": "elements[0].children[0].children[5].children[0].children[0].tag",
+                                              "type": "TagByte",
+                                              "offset": 98,
+                                              "size": 1,
+                                              "display": "TagByte (3)",
+                                              "children": [
+                                                {
+                                                  "name": "tag_class",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].tag.tag_class",
+                                                  "type": "2 bit",
+                                                  "offset": 98,
+                                                  "size": 1,
+                                                  "bit_offset": 6,
+                                                  "bit_size": 2,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "constructed",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].tag.constructed",
+                                                  "type": "1 bit",
+                                                  "offset": 98,
+                                                  "size": 1,
+                                                  "bit_offset": 5,
+                                                  "bit_size": 1,
+                                                  "value": 1,
+                                                  "display": "1 (0b1)"
+                                                },
+                                                {
+                                                  "name": "tag_number",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].tag.tag_number",
+                                                  "type": "5 bit",
+                                                  "offset": 98,
+                                                  "size": 1,
+                                                  "bit_offset": 0,
+                                                  "bit_size": 5,
+                                                  "value": 16,
+                                                  "display": "16 (0b10000)"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "length",
+                                              "path": "elements[0].children[0].children[5].children[0].children[0].length",
+                                              "type": "Length",
+                                              "offset": 99,
+                                              "size": 1,
+                                              "display": "Length (1)",
+                                              "children": [
+                                                {
+                                                  "name": "first",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].length.first",
+                                                  "type": "u8",
+                                                  "offset": 99,
+                                                  "size": 1,
+                                                  "value": 21,
+                                                  "display": "21"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "value_length",
+                                              "path": "elements[0].children[0].children[5].children[0].children[0].value_length",
+                                              "type": "u64",
+                                              "offset": 100,
+                                              "size": 0,
+                                              "value": 21,
+                                              "display": "21"
+                                            },
+                                            {
+                                              "name": "children",
+                                              "path": "elements[0].children[0].children[5].children[0].children[0].children",
+                                              "type": "Element[2]",
+                                              "offset": 100,
+                                              "size": 21,
+                                              "display": "[2]",
+                                              "children": [
+                                                {
+                                                  "name": "[0]",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].children[0]",
+                                                  "type": "Element",
+                                                  "offset": 100,
+                                                  "size": 5,
+                                                  "display": "Element (6)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 100,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[0].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 100,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[0].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 100,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[0].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 100,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 6,
+                                                          "display": "6 (0b110)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].length",
+                                                      "type": "Length",
+                                                      "offset": 101,
+                                                      "size": 1,
+                                                      "display": "Length (1)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[0].length.first",
+                                                          "type": "u8",
+                                                          "offset": 101,
+                                                          "size": 1,
+                                                          "value": 3,
+                                                          "display": "3"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].value_length",
+                                                      "type": "u64",
+                                                      "offset": 102,
+                                                      "size": 0,
+                                                      "value": 3,
+                                                      "display": "3"
+                                                    },
+                                                    {
+                                                      "name": "oid_bytes",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].oid_bytes",
+                                                      "type": "u8[3]",
+                                                      "offset": 102,
+                                                      "size": 3,
+                                                      "value": "550403",
+                                                      "display": "55 04 03"
+                                                    },
+                                                    {
+                                                      "name": "oid",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].oid",
+                                                      "type": "string",
+                                                      "offset": 105,
+                                                      "size": 0,
+                                                      "value": "2.5.4.3",
+                                                      "display": "2.5.4.3"
+                                                    },
+                                                    {
+                                                      "name": "oid_description",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[0].oid_description",
+                                                      "type": "string",
+                                                      "offset": 105,
+                                                      "size": 0,
+                                                      "value": "commonName",
+                                                      "display": "commonName"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "[1]",
+                                                  "path": "elements[0].children[0].children[5].children[0].children[0].children[1]",
+                                                  "type": "Element",
+                                                  "offset": 105,
+                                                  "size": 16,
+                                                  "display": "Element (4)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[1].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 105,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[1].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 105,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[1].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 105,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[1].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 105,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 12,
+                                                          "display": "12 (0b1100)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[1].length",
+                                                      "type": "Length",
+                                                      "offset": 106,
+                                                      "size": 1,
+                                                      "display": "Length (1)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[5].children[0].children[0].children[1].length.first",
+                                                          "type": "u8",
+                                                          "offset": 106,
+                                                          "size": 1,
+                                                          "value": 14,
+                                                          "display": "14"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[1].value_length",
+                                                      "type": "u64",
+                                                      "offset": 107,
+                                                      "size": 0,
+                                                      "value": 14,
+                                                      "display": "14"
+                                                    },
+                                                    {
+                                                      "name": "utf8_string",
+                                                      "path": "elements[0].children[0].children[5].children[0].children[0].children[1].utf8_string",
+                                                      "type": "char[14]",
+                                                      "offset": 107,
+                                                      "size": 14,
+                                                      "value": "HexEditor Test",
+                                                      "display": "HexEditor Test"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[6]",
+                          "path": "elements[0].children[0].children[6]",
+                          "type": "Element",
+                          "offset": 121,
+                          "size": 36,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[6].tag",
+                              "type": "TagByte",
+                              "offset": 121,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[6].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 121,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[6].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 121,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[6].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 121,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 16,
+                                  "display": "16 (0b10000)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[6].length",
+                              "type": "Length",
+                              "offset": 122,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[6].length.first",
+                                  "type": "u8",
+                                  "offset": 122,
+                                  "size": 1,
+                                  "value": 34,
+                                  "display": "34"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[6].value_length",
+                              "type": "u64",
+                              "offset": 123,
+                              "size": 0,
+                              "value": 34,
+                              "display": "34"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[6].children",
+                              "type": "Element[2]",
+                              "offset": 123,
+                              "size": 34,
+                              "display": "[2]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[6].children[0]",
+                                  "type": "Element",
+                                  "offset": 123,
+                                  "size": 15,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[6].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 123,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[6].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 123,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[6].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 123,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 1,
+                                          "display": "1 (0b1)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[6].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 123,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 16,
+                                          "display": "16 (0b10000)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[6].children[0].length",
+                                      "type": "Length",
+                                      "offset": 124,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[6].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 124,
+                                          "size": 1,
+                                          "value": 13,
+                                          "display": "13"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[6].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 125,
+                                      "size": 0,
+                                      "value": 13,
+                                      "display": "13"
+                                    },
+                                    {
+                                      "name": "children",
+                                      "path": "elements[0].children[0].children[6].children[0].children",
+                                      "type": "Element[2]",
+                                      "offset": 125,
+                                      "size": 13,
+                                      "display": "[2]",
+                                      "children": [
+                                        {
+                                          "name": "[0]",
+                                          "path": "elements[0].children[0].children[6].children[0].children[0]",
+                                          "type": "Element",
+                                          "offset": 125,
+                                          "size": 11,
+                                          "display": "Element (6)",
+                                          "children": [
+                                            {
+                                              "name": "tag",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].tag",
+                                              "type": "TagByte",
+                                              "offset": 125,
+                                              "size": 1,
+                                              "display": "TagByte (3)",
+                                              "children": [
+                                                {
+                                                  "name": "tag_class",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[0].tag.tag_class",
+                                                  "type": "2 bit",
+                                                  "offset": 125,
+                                                  "size": 1,
+                                                  "bit_offset": 6,
+                                                  "bit_size": 2,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "constructed",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[0].tag.constructed",
+                                                  "type": "1 bit",
+                                                  "offset": 125,
+                                                  "size": 1,
+                                                  "bit_offset": 5,
+                                                  "bit_size": 1,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "tag_number",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[0].tag.tag_number",
+                                                  "type": "5 bit",
+                                                  "offset": 125,
+                                                  "size": 1,
+                                                  "bit_offset": 0,
+                                                  "bit_size": 5,
+                                                  "value": 6,
+                                                  "display": "6 (0b110)"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "length",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].length",
+                                              "type": "Length",
+                                              "offset": 126,
+                                              "size": 1,
+                                              "display": "Length (1)",
+                                              "children": [
+                                                {
+                                                  "name": "first",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[0].length.first",
+                                                  "type": "u8",
+                                                  "offset": 126,
+                                                  "size": 1,
+                                                  "value": 9,
+                                                  "display": "9"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "value_length",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].value_length",
+                                              "type": "u64",
+                                              "offset": 127,
+                                              "size": 0,
+                                              "value": 9,
+                                              "display": "9"
+                                            },
+                                            {
+                                              "name": "oid_bytes",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].oid_bytes",
+                                              "type": "u8[9]",
+                                              "offset": 127,
+                                              "size": 9,
+                                              "value": "2A864886F70D010101",
+                                              "display": "2A 86 48 86 F7 0D 01 01 01"
+                                            },
+                                            {
+                                              "name": "oid",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].oid",
+                                              "type": "string",
+                                              "offset": 136,
+                                              "size": 0,
+                                              "value": "1.2.840.113549.1.1.1",
+                                              "display": "1.2.840.113549.1.1.1"
+                                            },
+                                            {
+                                              "name": "oid_description",
+                                              "path": "elements[0].children[0].children[6].children[0].children[0].oid_description",
+                                              "type": "string",
+                                              "offset": 136,
+                                              "size": 0,
+                                              "value": "rsaEncryption",
+                                              "display": "rsaEncryption"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "[1]",
+                                          "path": "elements[0].children[0].children[6].children[0].children[1]",
+                                          "type": "Element",
+                                          "offset": 136,
+                                          "size": 2,
+                                          "display": "Element (4)",
+                                          "children": [
+                                            {
+                                              "name": "tag",
+                                              "path": "elements[0].children[0].children[6].children[0].children[1].tag",
+                                              "type": "TagByte",
+                                              "offset": 136,
+                                              "size": 1,
+                                              "display": "TagByte (3)",
+                                              "children": [
+                                                {
+                                                  "name": "tag_class",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[1].tag.tag_class",
+                                                  "type": "2 bit",
+                                                  "offset": 136,
+                                                  "size": 1,
+                                                  "bit_offset": 6,
+                                                  "bit_size": 2,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "constructed",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[1].tag.constructed",
+                                                  "type": "1 bit",
+                                                  "offset": 136,
+                                                  "size": 1,
+                                                  "bit_offset": 5,
+                                                  "bit_size": 1,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "tag_number",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[1].tag.tag_number",
+                                                  "type": "5 bit",
+                                                  "offset": 136,
+                                                  "size": 1,
+                                                  "bit_offset": 0,
+                                                  "bit_size": 5,
+                                                  "value": 5,
+                                                  "display": "5 (0b101)"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "length",
+                                              "path": "elements[0].children[0].children[6].children[0].children[1].length",
+                                              "type": "Length",
+                                              "offset": 137,
+                                              "size": 1,
+                                              "display": "Length (1)",
+                                              "children": [
+                                                {
+                                                  "name": "first",
+                                                  "path": "elements[0].children[0].children[6].children[0].children[1].length.first",
+                                                  "type": "u8",
+                                                  "offset": 137,
+                                                  "size": 1,
+                                                  "value": 0,
+                                                  "display": "0"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "value_length",
+                                              "path": "elements[0].children[0].children[6].children[0].children[1].value_length",
+                                              "type": "u64",
+                                              "offset": 138,
+                                              "size": 0,
+                                              "value": 0,
+                                              "display": "0"
+                                            },
+                                            {
+                                              "name": "data",
+                                              "path": "elements[0].children[0].children[6].children[0].children[1].data",
+                                              "type": "u8[0]",
+                                              "offset": 138,
+                                              "size": 0,
+                                              "value": "",
+                                              "display": ""
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "[1]",
+                                  "path": "elements[0].children[0].children[6].children[1]",
+                                  "type": "Element",
+                                  "offset": 138,
+                                  "size": 19,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[6].children[1].tag",
+                                      "type": "TagByte",
+                                      "offset": 138,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[6].children[1].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 138,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[6].children[1].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 138,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[6].children[1].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 138,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 3,
+                                          "display": "3 (0b11)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[6].children[1].length",
+                                      "type": "Length",
+                                      "offset": 139,
+                                      "size": 1,
+                                      "display": "Length (1)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[6].children[1].length.first",
+                                          "type": "u8",
+                                          "offset": 139,
+                                          "size": 1,
+                                          "value": 17,
+                                          "display": "17"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[6].children[1].value_length",
+                                      "type": "u64",
+                                      "offset": 140,
+                                      "size": 0,
+                                      "value": 17,
+                                      "display": "17"
+                                    },
+                                    {
+                                      "name": "data",
+                                      "path": "elements[0].children[0].children[6].children[1].data",
+                                      "type": "u8[17]",
+                                      "offset": 140,
+                                      "size": 17,
+                                      "value": "00808182838485868788898A8B8C8D8E8F",
+                                      "display": "00 80 81 82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E …"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[7]",
+                          "path": "elements[0].children[0].children[7]",
+                          "type": "Element",
+                          "offset": 157,
+                          "size": 281,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[0].children[7].tag",
+                              "type": "TagByte",
+                              "offset": 157,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[0].children[7].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 157,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 2,
+                                  "display": "2 (0b10)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[0].children[7].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 157,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 1,
+                                  "display": "1 (0b1)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[0].children[7].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 157,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 3,
+                                  "display": "3 (0b11)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[0].children[7].length",
+                              "type": "Length",
+                              "offset": 158,
+                              "size": 3,
+                              "display": "Length (2)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[0].children[7].length.first",
+                                  "type": "u8",
+                                  "offset": 158,
+                                  "size": 1,
+                                  "value": 130,
+                                  "display": "130"
+                                },
+                                {
+                                  "name": "extra",
+                                  "path": "elements[0].children[0].children[7].length.extra",
+                                  "type": "u8[2]",
+                                  "offset": 159,
+                                  "size": 2,
+                                  "value": "0115",
+                                  "display": "01 15"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[0].children[7].value_length",
+                              "type": "u64",
+                              "offset": 161,
+                              "size": 0,
+                              "value": 277,
+                              "display": "277"
+                            },
+                            {
+                              "name": "children",
+                              "path": "elements[0].children[0].children[7].children",
+                              "type": "Element[1]",
+                              "offset": 161,
+                              "size": 277,
+                              "display": "[1]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "elements[0].children[0].children[7].children[0]",
+                                  "type": "Element",
+                                  "offset": 161,
+                                  "size": 277,
+                                  "display": "Element (4)",
+                                  "children": [
+                                    {
+                                      "name": "tag",
+                                      "path": "elements[0].children[0].children[7].children[0].tag",
+                                      "type": "TagByte",
+                                      "offset": 161,
+                                      "size": 1,
+                                      "display": "TagByte (3)",
+                                      "children": [
+                                        {
+                                          "name": "tag_class",
+                                          "path": "elements[0].children[0].children[7].children[0].tag.tag_class",
+                                          "type": "2 bit",
+                                          "offset": 161,
+                                          "size": 1,
+                                          "bit_offset": 6,
+                                          "bit_size": 2,
+                                          "value": 0,
+                                          "display": "0 (0b0)"
+                                        },
+                                        {
+                                          "name": "constructed",
+                                          "path": "elements[0].children[0].children[7].children[0].tag.constructed",
+                                          "type": "1 bit",
+                                          "offset": 161,
+                                          "size": 1,
+                                          "bit_offset": 5,
+                                          "bit_size": 1,
+                                          "value": 1,
+                                          "display": "1 (0b1)"
+                                        },
+                                        {
+                                          "name": "tag_number",
+                                          "path": "elements[0].children[0].children[7].children[0].tag.tag_number",
+                                          "type": "5 bit",
+                                          "offset": 161,
+                                          "size": 1,
+                                          "bit_offset": 0,
+                                          "bit_size": 5,
+                                          "value": 16,
+                                          "display": "16 (0b10000)"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "length",
+                                      "path": "elements[0].children[0].children[7].children[0].length",
+                                      "type": "Length",
+                                      "offset": 162,
+                                      "size": 3,
+                                      "display": "Length (2)",
+                                      "children": [
+                                        {
+                                          "name": "first",
+                                          "path": "elements[0].children[0].children[7].children[0].length.first",
+                                          "type": "u8",
+                                          "offset": 162,
+                                          "size": 1,
+                                          "value": 130,
+                                          "display": "130"
+                                        },
+                                        {
+                                          "name": "extra",
+                                          "path": "elements[0].children[0].children[7].children[0].length.extra",
+                                          "type": "u8[2]",
+                                          "offset": 163,
+                                          "size": 2,
+                                          "value": "0111",
+                                          "display": "01 11"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "value_length",
+                                      "path": "elements[0].children[0].children[7].children[0].value_length",
+                                      "type": "u64",
+                                      "offset": 165,
+                                      "size": 0,
+                                      "value": 273,
+                                      "display": "273"
+                                    },
+                                    {
+                                      "name": "children",
+                                      "path": "elements[0].children[0].children[7].children[0].children",
+                                      "type": "Element[1]",
+                                      "offset": 165,
+                                      "size": 273,
+                                      "display": "[1]",
+                                      "children": [
+                                        {
+                                          "name": "[0]",
+                                          "path": "elements[0].children[0].children[7].children[0].children[0]",
+                                          "type": "Element",
+                                          "offset": 165,
+                                          "size": 273,
+                                          "display": "Element (4)",
+                                          "children": [
+                                            {
+                                              "name": "tag",
+                                              "path": "elements[0].children[0].children[7].children[0].children[0].tag",
+                                              "type": "TagByte",
+                                              "offset": 165,
+                                              "size": 1,
+                                              "display": "TagByte (3)",
+                                              "children": [
+                                                {
+                                                  "name": "tag_class",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].tag.tag_class",
+                                                  "type": "2 bit",
+                                                  "offset": 165,
+                                                  "size": 1,
+                                                  "bit_offset": 6,
+                                                  "bit_size": 2,
+                                                  "value": 0,
+                                                  "display": "0 (0b0)"
+                                                },
+                                                {
+                                                  "name": "constructed",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].tag.constructed",
+                                                  "type": "1 bit",
+                                                  "offset": 165,
+                                                  "size": 1,
+                                                  "bit_offset": 5,
+                                                  "bit_size": 1,
+                                                  "value": 1,
+                                                  "display": "1 (0b1)"
+                                                },
+                                                {
+                                                  "name": "tag_number",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].tag.tag_number",
+                                                  "type": "5 bit",
+                                                  "offset": 165,
+                                                  "size": 1,
+                                                  "bit_offset": 0,
+                                                  "bit_size": 5,
+                                                  "value": 16,
+                                                  "display": "16 (0b10000)"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "length",
+                                              "path": "elements[0].children[0].children[7].children[0].children[0].length",
+                                              "type": "Length",
+                                              "offset": 166,
+                                              "size": 3,
+                                              "display": "Length (2)",
+                                              "children": [
+                                                {
+                                                  "name": "first",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].length.first",
+                                                  "type": "u8",
+                                                  "offset": 166,
+                                                  "size": 1,
+                                                  "value": 130,
+                                                  "display": "130"
+                                                },
+                                                {
+                                                  "name": "extra",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].length.extra",
+                                                  "type": "u8[2]",
+                                                  "offset": 167,
+                                                  "size": 2,
+                                                  "value": "010D",
+                                                  "display": "01 0D"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "value_length",
+                                              "path": "elements[0].children[0].children[7].children[0].children[0].value_length",
+                                              "type": "u64",
+                                              "offset": 169,
+                                              "size": 0,
+                                              "value": 269,
+                                              "display": "269"
+                                            },
+                                            {
+                                              "name": "children",
+                                              "path": "elements[0].children[0].children[7].children[0].children[0].children",
+                                              "type": "Element[2]",
+                                              "offset": 169,
+                                              "size": 269,
+                                              "display": "[2]",
+                                              "children": [
+                                                {
+                                                  "name": "[0]",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].children[0]",
+                                                  "type": "Element",
+                                                  "offset": 169,
+                                                  "size": 5,
+                                                  "display": "Element (6)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 169,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[0].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 169,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[0].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 169,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[0].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 169,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 6,
+                                                          "display": "6 (0b110)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].length",
+                                                      "type": "Length",
+                                                      "offset": 170,
+                                                      "size": 1,
+                                                      "display": "Length (1)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[0].length.first",
+                                                          "type": "u8",
+                                                          "offset": 170,
+                                                          "size": 1,
+                                                          "value": 3,
+                                                          "display": "3"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].value_length",
+                                                      "type": "u64",
+                                                      "offset": 171,
+                                                      "size": 0,
+                                                      "value": 3,
+                                                      "display": "3"
+                                                    },
+                                                    {
+                                                      "name": "oid_bytes",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].oid_bytes",
+                                                      "type": "u8[3]",
+                                                      "offset": 171,
+                                                      "size": 3,
+                                                      "value": "551D11",
+                                                      "display": "55 1D 11"
+                                                    },
+                                                    {
+                                                      "name": "oid",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].oid",
+                                                      "type": "string",
+                                                      "offset": 174,
+                                                      "size": 0,
+                                                      "value": "2.5.29.17",
+                                                      "display": "2.5.29.17"
+                                                    },
+                                                    {
+                                                      "name": "oid_description",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[0].oid_description",
+                                                      "type": "string",
+                                                      "offset": 174,
+                                                      "size": 0,
+                                                      "value": "subjectAltName",
+                                                      "display": "subjectAltName"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "[1]",
+                                                  "path": "elements[0].children[0].children[7].children[0].children[0].children[1]",
+                                                  "type": "Element",
+                                                  "offset": 174,
+                                                  "size": 264,
+                                                  "display": "Element (4)",
+                                                  "children": [
+                                                    {
+                                                      "name": "tag",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[1].tag",
+                                                      "type": "TagByte",
+                                                      "offset": 174,
+                                                      "size": 1,
+                                                      "display": "TagByte (3)",
+                                                      "children": [
+                                                        {
+                                                          "name": "tag_class",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[1].tag.tag_class",
+                                                          "type": "2 bit",
+                                                          "offset": 174,
+                                                          "size": 1,
+                                                          "bit_offset": 6,
+                                                          "bit_size": 2,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "constructed",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[1].tag.constructed",
+                                                          "type": "1 bit",
+                                                          "offset": 174,
+                                                          "size": 1,
+                                                          "bit_offset": 5,
+                                                          "bit_size": 1,
+                                                          "value": 0,
+                                                          "display": "0 (0b0)"
+                                                        },
+                                                        {
+                                                          "name": "tag_number",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[1].tag.tag_number",
+                                                          "type": "5 bit",
+                                                          "offset": 174,
+                                                          "size": 1,
+                                                          "bit_offset": 0,
+                                                          "bit_size": 5,
+                                                          "value": 4,
+                                                          "display": "4 (0b100)"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "length",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[1].length",
+                                                      "type": "Length",
+                                                      "offset": 175,
+                                                      "size": 3,
+                                                      "display": "Length (2)",
+                                                      "children": [
+                                                        {
+                                                          "name": "first",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[1].length.first",
+                                                          "type": "u8",
+                                                          "offset": 175,
+                                                          "size": 1,
+                                                          "value": 130,
+                                                          "display": "130"
+                                                        },
+                                                        {
+                                                          "name": "extra",
+                                                          "path": "elements[0].children[0].children[7].children[0].children[0].children[1].length.extra",
+                                                          "type": "u8[2]",
+                                                          "offset": 176,
+                                                          "size": 2,
+                                                          "value": "0104",
+                                                          "display": "01 04"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "name": "value_length",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[1].value_length",
+                                                      "type": "u64",
+                                                      "offset": 178,
+                                                      "size": 0,
+                                                      "value": 260,
+                                                      "display": "260"
+                                                    },
+                                                    {
+                                                      "name": "data",
+                                                      "path": "elements[0].children[0].children[7].children[0].children[0].children[1].data",
+                                                      "type": "u8[260]",
+                                                      "offset": 178,
+                                                      "size": 260,
+                                                      "value": "6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A6162636465666768696A6B6C6D6E6F707172737475767778797A",
+                                                      "display": "61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 …"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "elements[0].children[1]",
+                  "type": "Element",
+                  "offset": 438,
+                  "size": 15,
+                  "display": "Element (4)",
+                  "children": [
+                    {
+                      "name": "tag",
+                      "path": "elements[0].children[1].tag",
+                      "type": "TagByte",
+                      "offset": 438,
+                      "size": 1,
+                      "display": "TagByte (3)",
+                      "children": [
+                        {
+                          "name": "tag_class",
+                          "path": "elements[0].children[1].tag.tag_class",
+                          "type": "2 bit",
+                          "offset": 438,
+                          "size": 1,
+                          "bit_offset": 6,
+                          "bit_size": 2,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "constructed",
+                          "path": "elements[0].children[1].tag.constructed",
+                          "type": "1 bit",
+                          "offset": 438,
+                          "size": 1,
+                          "bit_offset": 5,
+                          "bit_size": 1,
+                          "value": 1,
+                          "display": "1 (0b1)"
+                        },
+                        {
+                          "name": "tag_number",
+                          "path": "elements[0].children[1].tag.tag_number",
+                          "type": "5 bit",
+                          "offset": 438,
+                          "size": 1,
+                          "bit_offset": 0,
+                          "bit_size": 5,
+                          "value": 16,
+                          "display": "16 (0b10000)"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "length",
+                      "path": "elements[0].children[1].length",
+                      "type": "Length",
+                      "offset": 439,
+                      "size": 1,
+                      "display": "Length (1)",
+                      "children": [
+                        {
+                          "name": "first",
+                          "path": "elements[0].children[1].length.first",
+                          "type": "u8",
+                          "offset": 439,
+                          "size": 1,
+                          "value": 13,
+                          "display": "13"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "elements[0].children[1].value_length",
+                      "type": "u64",
+                      "offset": 440,
+                      "size": 0,
+                      "value": 13,
+                      "display": "13"
+                    },
+                    {
+                      "name": "children",
+                      "path": "elements[0].children[1].children",
+                      "type": "Element[2]",
+                      "offset": 440,
+                      "size": 13,
+                      "display": "[2]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "elements[0].children[1].children[0]",
+                          "type": "Element",
+                          "offset": 440,
+                          "size": 11,
+                          "display": "Element (6)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[1].children[0].tag",
+                              "type": "TagByte",
+                              "offset": 440,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[1].children[0].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 440,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[1].children[0].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 440,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[1].children[0].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 440,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 6,
+                                  "display": "6 (0b110)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[1].children[0].length",
+                              "type": "Length",
+                              "offset": 441,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[1].children[0].length.first",
+                                  "type": "u8",
+                                  "offset": 441,
+                                  "size": 1,
+                                  "value": 9,
+                                  "display": "9"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[1].children[0].value_length",
+                              "type": "u64",
+                              "offset": 442,
+                              "size": 0,
+                              "value": 9,
+                              "display": "9"
+                            },
+                            {
+                              "name": "oid_bytes",
+                              "path": "elements[0].children[1].children[0].oid_bytes",
+                              "type": "u8[9]",
+                              "offset": 442,
+                              "size": 9,
+                              "value": "2A864886F70D01010B",
+                              "display": "2A 86 48 86 F7 0D 01 01 0B"
+                            },
+                            {
+                              "name": "oid",
+                              "path": "elements[0].children[1].children[0].oid",
+                              "type": "string",
+                              "offset": 451,
+                              "size": 0,
+                              "value": "1.2.840.113549.1.1.11",
+                              "display": "1.2.840.113549.1.1.11"
+                            },
+                            {
+                              "name": "oid_description",
+                              "path": "elements[0].children[1].children[0].oid_description",
+                              "type": "string",
+                              "offset": 451,
+                              "size": 0,
+                              "value": "sha256WithRSAEncryption",
+                              "display": "sha256WithRSAEncryption"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "elements[0].children[1].children[1]",
+                          "type": "Element",
+                          "offset": 451,
+                          "size": 2,
+                          "display": "Element (4)",
+                          "children": [
+                            {
+                              "name": "tag",
+                              "path": "elements[0].children[1].children[1].tag",
+                              "type": "TagByte",
+                              "offset": 451,
+                              "size": 1,
+                              "display": "TagByte (3)",
+                              "children": [
+                                {
+                                  "name": "tag_class",
+                                  "path": "elements[0].children[1].children[1].tag.tag_class",
+                                  "type": "2 bit",
+                                  "offset": 451,
+                                  "size": 1,
+                                  "bit_offset": 6,
+                                  "bit_size": 2,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "constructed",
+                                  "path": "elements[0].children[1].children[1].tag.constructed",
+                                  "type": "1 bit",
+                                  "offset": 451,
+                                  "size": 1,
+                                  "bit_offset": 5,
+                                  "bit_size": 1,
+                                  "value": 0,
+                                  "display": "0 (0b0)"
+                                },
+                                {
+                                  "name": "tag_number",
+                                  "path": "elements[0].children[1].children[1].tag.tag_number",
+                                  "type": "5 bit",
+                                  "offset": 451,
+                                  "size": 1,
+                                  "bit_offset": 0,
+                                  "bit_size": 5,
+                                  "value": 5,
+                                  "display": "5 (0b101)"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "length",
+                              "path": "elements[0].children[1].children[1].length",
+                              "type": "Length",
+                              "offset": 452,
+                              "size": 1,
+                              "display": "Length (1)",
+                              "children": [
+                                {
+                                  "name": "first",
+                                  "path": "elements[0].children[1].children[1].length.first",
+                                  "type": "u8",
+                                  "offset": 452,
+                                  "size": 1,
+                                  "value": 0,
+                                  "display": "0"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "value_length",
+                              "path": "elements[0].children[1].children[1].value_length",
+                              "type": "u64",
+                              "offset": 453,
+                              "size": 0,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "data",
+                              "path": "elements[0].children[1].children[1].data",
+                              "type": "u8[0]",
+                              "offset": 453,
+                              "size": 0,
+                              "value": "",
+                              "display": ""
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "elements[0].children[2]",
+                  "type": "Element",
+                  "offset": 453,
+                  "size": 35,
+                  "display": "Element (4)",
+                  "children": [
+                    {
+                      "name": "tag",
+                      "path": "elements[0].children[2].tag",
+                      "type": "TagByte",
+                      "offset": 453,
+                      "size": 1,
+                      "display": "TagByte (3)",
+                      "children": [
+                        {
+                          "name": "tag_class",
+                          "path": "elements[0].children[2].tag.tag_class",
+                          "type": "2 bit",
+                          "offset": 453,
+                          "size": 1,
+                          "bit_offset": 6,
+                          "bit_size": 2,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "constructed",
+                          "path": "elements[0].children[2].tag.constructed",
+                          "type": "1 bit",
+                          "offset": 453,
+                          "size": 1,
+                          "bit_offset": 5,
+                          "bit_size": 1,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "tag_number",
+                          "path": "elements[0].children[2].tag.tag_number",
+                          "type": "5 bit",
+                          "offset": 453,
+                          "size": 1,
+                          "bit_offset": 0,
+                          "bit_size": 5,
+                          "value": 3,
+                          "display": "3 (0b11)"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "length",
+                      "path": "elements[0].children[2].length",
+                      "type": "Length",
+                      "offset": 454,
+                      "size": 1,
+                      "display": "Length (1)",
+                      "children": [
+                        {
+                          "name": "first",
+                          "path": "elements[0].children[2].length.first",
+                          "type": "u8",
+                          "offset": 454,
+                          "size": 1,
+                          "value": 33,
+                          "display": "33"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "elements[0].children[2].value_length",
+                      "type": "u64",
+                      "offset": 455,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "data",
+                      "path": "elements[0].children[2].data",
+                      "type": "u8[33]",
+                      "offset": 455,
+                      "size": 33,
+                      "value": "00E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF",
+                      "display": "00 E0 E1 E2 E3 E4 E5 E6 E7 E8 E9 EA EB EC ED EE …"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

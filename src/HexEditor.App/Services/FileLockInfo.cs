@@ -12,8 +12,10 @@ public static class FileLockInfo
     private const int CchRmMaxSvcName = 63;
     private const int ErrorMoreData = 234;
 
-    public static IReadOnlyList<string> ProcessesUsing(string path)
+    /// <param name="excludeSelf">このプロセス自身を除く (保存の失敗のとき。このアプリは開いているファイルのハンドルを持っているため)。</param>
+    public static IReadOnlyList<string> ProcessesUsing(string path, bool excludeSelf = false)
     {
+        int self = excludeSelf ? Environment.ProcessId : -1;
         var names = new List<string>();
         if (RmStartSession(out uint session, 0, Guid.NewGuid().ToString("N")) != 0)
         {
@@ -36,7 +38,8 @@ public static class FileLockInfo
                 count = needed;
                 if (RmGetList(session, out needed, ref count, infos, out _) == 0)
                 {
-                    names.AddRange(infos.Take((int)count).Select(i => i.AppName).Where(n => !string.IsNullOrWhiteSpace(n)).Distinct());
+                    names.AddRange(infos.Take((int)count).Where(i => i.Process.ProcessId != self).Select(i => i.AppName)
+                        .Where(n => !string.IsNullOrWhiteSpace(n)).Distinct());
                 }
             }
         }

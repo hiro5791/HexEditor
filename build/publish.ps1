@@ -23,6 +23,10 @@
   (the windows runners have the tools). Elsewhere the DLL is left out with a warning.
   -TestHooks makes a test build (-p:HexTestHooks=true: the test channel and the Test menu, test strategy 7.2)
   for the distribution tests in build/tests/. Never release a test build.
+  -CSharpComponentManifest is the csharp-component.json written by build/Build-CSharpComponent.ps1 (AUTO-03 spec 3).
+  The app embeds it so that it can verify and add the C# script component. Without it the script looks for
+  artifacts/CSharpComponent/<arch>/csharp-component.json (or artifacts/CSharpComponent/csharp-component.json); when that is missing too, the app is built without the manifest
+  (C# scripts cannot be added) and a warning is printed.
 #>
 [CmdletBinding()]
 param(
@@ -33,7 +37,8 @@ param(
     [string]$Configuration = 'Release',
     [string]$PreviousReleaseDir,
     [switch]$TestHooks,
-    [switch]$RequireShellExtension
+    [switch]$RequireShellExtension,
+    [string]$CSharpComponentManifest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -62,6 +67,23 @@ $common = @(
 )
 if ($Commit) { $common += "-p:HexCommit=$Commit" }
 if ($TestHooks) { $common += '-p:HexTestHooks=true' }
+# C# script component manifest (AUTO-03 spec 3): embedded into the app so that it can verify the component it adds.
+if (-not $CSharpComponentManifest) {
+    foreach ($candidate in "artifacts/CSharpComponent/$Arch/csharp-component.json", 'artifacts/CSharpComponent/csharp-component.json') {
+        $defaultManifest = Join-Path (Split-Path -Parent $PSScriptRoot) $candidate
+        if (Test-Path $defaultManifest) { $CSharpComponentManifest = $defaultManifest; break }
+    }
+}
+if ($CSharpComponentManifest) {
+    if (-not (Test-Path $CSharpComponentManifest)) { throw "The C# component manifest does not exist: $CSharpComponentManifest" }
+    # The component is paired with the app version (AUTO-03 spec 3); the app downloads the zip named in the manifest from the same release.
+    $componentManifest = Get-Content -Raw -Encoding utf8 $CSharpComponentManifest | ConvertFrom-Json
+    if ($componentManifest.version -ne $Version) { throw "The C# component manifest is for version $($componentManifest.version), not $Version." }
+    if ($componentManifest.packageName -ne "HexEditor-$Version-$Arch-csharp.zip") { Write-Warning "The C# component zip is named $($componentManifest.packageName), not HexEditor-$Version-$Arch-csharp.zip (PKG-26)." }
+    $common += "-p:HexCSharpComponentManifest=$((Resolve-Path $CSharpComponentManifest).Path)"
+} else {
+    Write-Warning 'No C# script component manifest (run build/Build-CSharpComponent.ps1 or pass -CSharpComponentManifest). C# scripts cannot be added in this build.'
+}
 # Pseudo-locales (qps-ploc, qps-plocm) ship only in preview and local builds, not in stable releases (UI-46 spec 3).
 $isStable = $Version -notmatch '-'
 if ($isStable) { $common += '-p:HexPseudoLocales=false' }
@@ -113,6 +135,53 @@ function Copy-ElevatedHelper($helper, $destination) {
 # Code signing (PKG-25): a no-op unless HEX_SIGNING_ENABLED is true.
 $sign = Join-Path $PSScriptRoot 'sign.ps1'
 
+# The command line hexed.exe (AUTO-36, PKG-03, PKG-05, PKG-08): a small console program that uses HexEditor.Core and
+# HexEditor.Platform only (no WinUI). Like the elevated helper it is published self-contained for the same runtime identifier,
+# signed, and only its own four files are copied next to HexEditor.exe (the runtime files and HexEditor.Core.dll / HexEditor.Platform.dll
+# in the app folder are the same ones). The Msix build gets the files through -p:HexCliDir (the manifest declares the alias hexed.exe).
+$CliFiles = @('hexed.exe', 'hexed.dll', 'hexed.deps.json', 'hexed.runtimeconfig.json')
+
+function Build-Cli {
+    $cliStaging = Join-Path $staging 'Cli'
+    $cliArgs = @('publish', (Join-Path $root 'src/HexEditor.Cli/HexEditor.Cli.csproj'),
+        '-c', $Configuration, '-r', $rid, "-p:HexDistro=$Distro", "-p:HexVersion=$Version", '--self-contained', 'true', '-nologo', '-o', $cliStaging)
+    if ($Commit) { $cliArgs += "-p:HexCommit=$Commit" }
+    if ($TestHooks) { $cliArgs += '-p:HexTestHooks=true' }
+    Invoke-Checked 'dotnet' $cliArgs
+    if (-not (Test-Path (Join-Path $cliStaging 'hexed.exe'))) { throw 'hexed.exe was not produced (AUTO-36).' }
+    foreach ($name in $CliFiles) {
+        $file = Join-Path $cliStaging $name
+        if (Test-Path $file) { & $sign -Path $file }
+    }
+    $script:CliDir = $cliStaging
+}
+
+function Copy-Cli($cliDir, $destination) {
+    foreach ($name in $CliFiles) { Copy-Item (Join-Path $cliDir $name) (Join-Path $destination $name) -Force }
+}
+
+# The code editor (AUTO-20, TPL-31) bundles Monaco: every distribution must contain these files (the app never loads them from the internet).
+$MonacoFiles = @('Assets/Monaco/vs/loader.js', 'Assets/Monaco/vs/editor/editor.main.js', 'Assets/Monaco/host/index.html', 'Assets/Monaco/host/host.js',
+    'Assets/Monaco/host/hexeditor.d.ts', 'Assets/Monaco/LICENSE.txt', 'Assets/Monaco/ThirdPartyNotices.txt')
+
+function Assert-Monaco($folder) {
+    foreach ($name in $MonacoFiles) {
+        if (-not (Test-Path (Join-Path $folder $name))) { throw "The output is missing $name (Monaco, AUTO-20)." }
+    }
+}
+
+function Assert-MonacoInPackage($package) {
+    Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($package)
+    try {
+        $names = @($archive.Entries | ForEach-Object { [System.Uri]::UnescapeDataString($_.FullName).Replace('\', '/') })
+        foreach ($name in $MonacoFiles) {
+            if ($names -notcontains $name) { throw "The package is missing $name (Monaco, AUTO-20)." }
+        }
+    }
+    finally { $archive.Dispose() }
+}
+
 switch ($Distro) {
     'Portable' {
         $helper = Build-ElevatedHelper
@@ -120,13 +189,16 @@ switch ($Distro) {
         if (Get-ChildItem $publishDir -Filter 'Velopack*.dll') { throw 'Portable output must not contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
         Copy-ElevatedHelper $helper $publishDir
+        Build-Cli | Out-Null
+        Copy-Cli $script:CliDir $publishDir
+        Assert-Monaco $publishDir
 
         # The marker tells the app to keep its data next to the exe (PKG-05, PKG-12, PKG-13).
         Set-Content -Path (Join-Path $publishDir 'portable.marker') -Value '' -Encoding ascii -NoNewline
         Copy-Item (Join-Path $PSScriptRoot 'portable/README.txt') $publishDir
         Copy-Item (Join-Path $root 'LICENSE') (Join-Path $publishDir 'LICENSE.txt')
-        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
-            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14)." }
+        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'hexed.exe', 'hexed.dll', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
+            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14, AUTO-36)." }
         }
 
         $zip = Join-Path $out "HexEditor-$Version-$Arch-portable.zip"
@@ -150,6 +222,9 @@ switch ($Distro) {
         if (-not (Get-ChildItem $publishDir -Filter 'Velopack*.dll')) { throw 'Installer output must contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
         Copy-ElevatedHelper $helper $publishDir
+        Build-Cli | Out-Null
+        Copy-Cli $script:CliDir $publishDir
+        Assert-Monaco $publishDir
         Push-Location $root
         try {
             Invoke-Checked 'dotnet' @('tool', 'restore')
@@ -206,7 +281,10 @@ switch ($Distro) {
             Write-Warning "The Visual C++ build tools ($vcComponent) are not installed: the package has no Windows 11 context menu (UI-55)."
         }
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
-        $msixExtra = if ($shellExtension) { @("-p:HexShellExtensionDir=$shellExtension") } else { @() }
+        $msixExtra = @(if ($shellExtension) { "-p:HexShellExtensionDir=$shellExtension" })
+        # hexed.exe (AUTO-36): the manifest declares it as the second application with the execution alias hexed.exe.
+        Build-Cli | Out-Null
+        $msixExtra += "-p:HexCliDir=$script:CliDir"
         Invoke-Checked 'dotnet' (@('publish') + $common + $msixExtra + @(
             '-p:GenerateAppxPackageOnBuild=true',
             '-p:AppxPackageSigningEnabled=false',
@@ -215,6 +293,7 @@ switch ($Distro) {
         $msix = Get-ChildItem (Join-Path $staging 'AppPackages') -Recurse -Filter '*.msix' |
             Where-Object { $_.FullName -notmatch '\\Dependencies\\' } | Select-Object -First 1
         if (-not $msix) { throw 'No .msix was produced.' }
+        Assert-MonacoInPackage $msix.FullName
         Copy-Item $msix.FullName (Join-Path $out "HexEditor-$Version-$Arch.msix")
     }
 }

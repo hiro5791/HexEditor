@@ -1,0 +1,368 @@
+{
+  "name": "TrueType / OpenType フォント",
+  "type": "application",
+  "offset": 0,
+  "size": 0,
+  "children": [
+    {
+      "name": "offset_table",
+      "path": "offset_table",
+      "type": "OffsetTable",
+      "offset": 0,
+      "size": 12,
+      "display": "OffsetTable (5)",
+      "children": [
+        {
+          "name": "sfnt_version",
+          "path": "offset_table.sfnt_version",
+          "type": "SfntVersion",
+          "offset": 0,
+          "size": 4,
+          "value": 1330926671,
+          "display": "OpenTypeCff (0x4F54544F)"
+        },
+        {
+          "name": "num_tables",
+          "path": "offset_table.num_tables",
+          "type": "u16",
+          "offset": 4,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "search_range",
+          "path": "offset_table.search_range",
+          "type": "u16",
+          "offset": 6,
+          "size": 2,
+          "value": 32,
+          "display": "32"
+        },
+        {
+          "name": "entry_selector",
+          "path": "offset_table.entry_selector",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "range_shift",
+          "path": "offset_table.range_shift",
+          "type": "u16",
+          "offset": 10,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "tables",
+      "path": "tables",
+      "type": "TableRecord[2]",
+      "offset": 12,
+      "size": 32,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "tables[0]",
+          "type": "TableRecord",
+          "offset": 12,
+          "size": 16,
+          "display": "TableRecord (4)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "tables[0].tag",
+              "type": "char[4]",
+              "offset": 12,
+              "size": 4,
+              "value": "head",
+              "display": "head"
+            },
+            {
+              "name": "checksum",
+              "path": "tables[0].checksum",
+              "type": "u32",
+              "offset": 16,
+              "size": 4,
+              "value": 468209057,
+              "display": "0x1BE84DA1"
+            },
+            {
+              "name": "offset",
+              "path": "tables[0].offset",
+              "type": "u32",
+              "offset": 20,
+              "size": 4,
+              "value": 48,
+              "display": "0x30"
+            },
+            {
+              "name": "length",
+              "path": "tables[0].length",
+              "type": "u32",
+              "offset": 24,
+              "size": 4,
+              "value": 54,
+              "display": "54"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "tables[1]",
+          "type": "TableRecord",
+          "offset": 28,
+          "size": 16,
+          "display": "TableRecord (4)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "tables[1].tag",
+              "type": "char[4]",
+              "offset": 28,
+              "size": 4,
+              "value": "maxp",
+              "display": "maxp"
+            },
+            {
+              "name": "checksum",
+              "path": "tables[1].checksum",
+              "type": "u32",
+              "offset": 32,
+              "size": 4,
+              "value": 806912,
+              "display": "0xC5000"
+            },
+            {
+              "name": "offset",
+              "path": "tables[1].offset",
+              "type": "u32",
+              "offset": 36,
+              "size": 4,
+              "value": 104,
+              "display": "0x68"
+            },
+            {
+              "name": "length",
+              "path": "tables[1].length",
+              "type": "u32",
+              "offset": 40,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "path": "head",
+      "type": "Head",
+      "offset": 48,
+      "size": 54,
+      "display": "Head (18)",
+      "children": [
+        {
+          "name": "major_version",
+          "path": "head.major_version",
+          "type": "u16",
+          "offset": 48,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "minor_version",
+          "path": "head.minor_version",
+          "type": "u16",
+          "offset": 50,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "font_revision",
+          "path": "head.font_revision",
+          "type": "s32",
+          "offset": 52,
+          "size": 4,
+          "value": 65536,
+          "display": "65536",
+          "comment": "16.16 固定小数点"
+        },
+        {
+          "name": "checksum_adjustment",
+          "path": "head.checksum_adjustment",
+          "type": "u32",
+          "offset": 56,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "magic_number",
+          "path": "head.magic_number",
+          "type": "u32",
+          "offset": 60,
+          "size": 4,
+          "value": 1594834165,
+          "display": "0x5F0F3CF5"
+        },
+        {
+          "name": "head_flags",
+          "path": "head.head_flags",
+          "type": "u16",
+          "offset": 64,
+          "size": 2,
+          "value": 11,
+          "display": "0xB"
+        },
+        {
+          "name": "units_per_em",
+          "path": "head.units_per_em",
+          "type": "u16",
+          "offset": 66,
+          "size": 2,
+          "value": 1000,
+          "display": "1000"
+        },
+        {
+          "name": "created",
+          "path": "head.created",
+          "type": "s64",
+          "offset": 68,
+          "size": 8,
+          "value": 3700000000,
+          "display": "3700000000",
+          "comment": "1904-01-01 からの秒数"
+        },
+        {
+          "name": "modified",
+          "path": "head.modified",
+          "type": "s64",
+          "offset": 76,
+          "size": 8,
+          "value": 3700000000,
+          "display": "3700000000"
+        },
+        {
+          "name": "x_min",
+          "path": "head.x_min",
+          "type": "s16",
+          "offset": 84,
+          "size": 2,
+          "value": -50,
+          "display": "-50"
+        },
+        {
+          "name": "y_min",
+          "path": "head.y_min",
+          "type": "s16",
+          "offset": 86,
+          "size": 2,
+          "value": -200,
+          "display": "-200"
+        },
+        {
+          "name": "x_max",
+          "path": "head.x_max",
+          "type": "s16",
+          "offset": 88,
+          "size": 2,
+          "value": 1000,
+          "display": "1000"
+        },
+        {
+          "name": "y_max",
+          "path": "head.y_max",
+          "type": "s16",
+          "offset": 90,
+          "size": 2,
+          "value": 900,
+          "display": "900"
+        },
+        {
+          "name": "mac_style",
+          "path": "head.mac_style",
+          "type": "u16",
+          "offset": 92,
+          "size": 2,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "lowest_rec_ppem",
+          "path": "head.lowest_rec_ppem",
+          "type": "u16",
+          "offset": 94,
+          "size": 2,
+          "value": 8,
+          "display": "8"
+        },
+        {
+          "name": "font_direction_hint",
+          "path": "head.font_direction_hint",
+          "type": "s16",
+          "offset": 96,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "index_to_loc_format",
+          "path": "head.index_to_loc_format",
+          "type": "s16",
+          "offset": 98,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "glyph_data_format",
+          "path": "head.glyph_data_format",
+          "type": "s16",
+          "offset": 100,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "maxp",
+      "path": "maxp",
+      "type": "Maxp",
+      "offset": 104,
+      "size": 6,
+      "display": "Maxp (2)",
+      "children": [
+        {
+          "name": "version",
+          "path": "maxp.version",
+          "type": "s32",
+          "offset": 104,
+          "size": 4,
+          "value": 20480,
+          "display": "20480",
+          "comment": "16.16 固定小数点。0x00005000 は CFF、0x00010000 は TrueType"
+        },
+        {
+          "name": "num_glyphs",
+          "path": "maxp.num_glyphs",
+          "type": "u16",
+          "offset": 108,
+          "size": 2,
+          "value": 12,
+          "display": "12"
+        }
+      ]
+    }
+  ]
+}

@@ -14,7 +14,17 @@ public sealed record LoadedBookmarks(DocumentDataHeader Header, int NextAutoNumb
 
 /// <summary>保存したブックマーク 1 件 (値の型。100 万件の写しでオブジェクトを 1 件ずつ作らない)。</summary>
 public readonly record struct BookmarkRecord(long Start, long Length, string Name, BookmarkColor Color, string Comment, int Number, string? Group,
-    DateTime Created, DateTime Updated, bool RangeDeleted, bool CreatedForNumber, bool EditedByUser, bool Customized, bool ColorSet = false);
+    DateTime Created, DateTime Updated, bool RangeDeleted, bool CreatedForNumber, bool EditedByUser, bool Customized, bool ColorSet = false)
+{
+    /// <summary>型 (INSP-29)。</summary>
+    public string? TypeId { get; init; }
+
+    /// <summary>型のエンディアン (<c>le</c> / <c>be</c>。null はドキュメントのエンディアン)。</summary>
+    public Inspector.Endianness? TypeEndian { get; init; }
+
+    /// <summary>位置の式 (INSP-29)。</summary>
+    public string? PositionExpression { get; init; }
+}
 
 /// <summary>
 /// ブックマークの保存と読み込み (INSP-23 の仕様 7)。ファイル本体には書かず、付随データ (00-overview 10 章) の
@@ -160,6 +170,21 @@ public static class BookmarkStore
                     writer.WriteBoolean("colorSet", true);
                 }
 
+                if (b.TypeId is { } type)
+                {
+                    writer.WriteString("type", type);
+                }
+
+                if (b.TypeEndian is { } endian)
+                {
+                    writer.WriteString("endian", endian == Inspector.Endianness.Big ? "be" : "le");
+                }
+
+                if (b.PositionExpression is { } expression)
+                {
+                    writer.WriteString("expression", expression);
+                }
+
                 writer.WriteEndObject();
             }
 
@@ -204,7 +229,14 @@ public static class BookmarkStore
                     e.TryGetProperty("createdForNumber", out JsonElement auto) && auto.GetBoolean(),
                     e.TryGetProperty("edited", out JsonElement edited) && edited.GetBoolean(),
                     e.TryGetProperty("customized", out JsonElement customized) && customized.GetBoolean(),
-                    ColorSetOf(e)));
+                    ColorSetOf(e))
+                {
+                    TypeId = e.TryGetProperty("type", out JsonElement type) ? type.GetString() : null,
+                    TypeEndian = e.TryGetProperty("endian", out JsonElement endian)
+                        ? endian.GetString() == "be" ? Inspector.Endianness.Big : Inspector.Endianness.Little
+                        : null,
+                    PositionExpression = e.TryGetProperty("expression", out JsonElement expression) ? expression.GetString() : null,
+                });
             }
         }
 
@@ -225,8 +257,12 @@ public static class BookmarkStore
         {
             long start = Math.Min(r.Start, documentLength);
             long length = Math.Min(r.Length, documentLength - start);
-            bookmarks.Restore(start, length, r.Name, r.Color, r.Comment, r.Number, r.Group, r.Created, r.Updated, r.RangeDeleted,
+            Bookmark b = bookmarks.Restore(start, length, r.Name, r.Color, r.Comment, r.Number, r.Group, r.Created, r.Updated, r.RangeDeleted,
                 r.CreatedForNumber, r.EditedByUser, r.Customized, r.ColorSet);
+            if (r.TypeId is not null || r.TypeEndian is not null || r.PositionExpression is not null)
+            {
+                bookmarks.RestoreTyped(b, r.TypeId, r.TypeEndian, r.PositionExpression);
+            }
         }
 
         bookmarks.RaiseReset();

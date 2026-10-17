@@ -1,0 +1,2 @@
+import cycle1;
+struct C2 { u8 v; };

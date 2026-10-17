@@ -1,0 +1,332 @@
+{
+  "name": "FLAC 音声",
+  "type": "application",
+  "offset": 0,
+  "size": 92,
+  "children": [
+    {
+      "name": "signature",
+      "path": "signature",
+      "type": "char[4]",
+      "offset": 0,
+      "size": 4,
+      "value": "fLaC",
+      "display": "fLaC"
+    },
+    {
+      "name": "blocks",
+      "path": "blocks",
+      "type": "Block[2]",
+      "offset": 4,
+      "size": 72,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "blocks[0]",
+          "type": "Block",
+          "offset": 4,
+          "size": 38,
+          "display": "Block (3)",
+          "children": [
+            {
+              "name": "header",
+              "path": "blocks[0].header",
+              "type": "BlockHeaderByte",
+              "offset": 4,
+              "size": 1,
+              "display": "BlockHeaderByte (2)",
+              "children": [
+                {
+                  "name": "is_last",
+                  "path": "blocks[0].header.is_last",
+                  "type": "1 bit",
+                  "offset": 4,
+                  "size": 1,
+                  "bit_offset": 7,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "type",
+                  "path": "blocks[0].header.type",
+                  "type": "7 bit",
+                  "offset": 4,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 7,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "blocks[0].length",
+              "type": "u24",
+              "offset": 5,
+              "size": 3,
+              "value": 34,
+              "display": "34"
+            },
+            {
+              "name": "stream_info",
+              "path": "blocks[0].stream_info",
+              "type": "StreamInfo",
+              "offset": 8,
+              "size": 34,
+              "display": "StreamInfo (6)",
+              "children": [
+                {
+                  "name": "min_block_size",
+                  "path": "blocks[0].stream_info.min_block_size",
+                  "type": "u16",
+                  "offset": 8,
+                  "size": 2,
+                  "value": 4096,
+                  "display": "4096"
+                },
+                {
+                  "name": "max_block_size",
+                  "path": "blocks[0].stream_info.max_block_size",
+                  "type": "u16",
+                  "offset": 10,
+                  "size": 2,
+                  "value": 4096,
+                  "display": "4096"
+                },
+                {
+                  "name": "min_frame_size",
+                  "path": "blocks[0].stream_info.min_frame_size",
+                  "type": "u24",
+                  "offset": 12,
+                  "size": 3,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "max_frame_size",
+                  "path": "blocks[0].stream_info.max_frame_size",
+                  "type": "u24",
+                  "offset": 15,
+                  "size": 3,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "parameters",
+                  "path": "blocks[0].stream_info.parameters",
+                  "type": "StreamParameters",
+                  "offset": 18,
+                  "size": 8,
+                  "display": "StreamParameters (4)",
+                  "children": [
+                    {
+                      "name": "sample_rate",
+                      "path": "blocks[0].stream_info.parameters.sample_rate",
+                      "type": "20 bit",
+                      "offset": 18,
+                      "size": 3,
+                      "bit_offset": 4,
+                      "bit_size": 20,
+                      "value": 44100,
+                      "display": "44100 (0b1010110001000100)"
+                    },
+                    {
+                      "name": "channels_minus_one",
+                      "path": "blocks[0].stream_info.parameters.channels_minus_one",
+                      "type": "3 bit",
+                      "offset": 20,
+                      "size": 1,
+                      "bit_offset": 1,
+                      "bit_size": 3,
+                      "value": 1,
+                      "display": "1 (0b1)"
+                    },
+                    {
+                      "name": "bits_per_sample_minus_one",
+                      "path": "blocks[0].stream_info.parameters.bits_per_sample_minus_one",
+                      "type": "5 bit",
+                      "offset": 20,
+                      "size": 2,
+                      "bit_offset": 4,
+                      "bit_size": 5,
+                      "value": 15,
+                      "display": "15 (0b1111)"
+                    },
+                    {
+                      "name": "total_samples",
+                      "path": "blocks[0].stream_info.parameters.total_samples",
+                      "type": "36 bit",
+                      "offset": 21,
+                      "size": 5,
+                      "bit_offset": 0,
+                      "bit_size": 36,
+                      "value": 44100,
+                      "display": "44100 (0b1010110001000100)"
+                    }
+                  ]
+                },
+                {
+                  "name": "md5_signature",
+                  "path": "blocks[0].stream_info.md5_signature",
+                  "type": "u8[16]",
+                  "offset": 26,
+                  "size": 16,
+                  "value": "D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF",
+                  "display": "D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "blocks[1]",
+          "type": "Block",
+          "offset": 42,
+          "size": 34,
+          "display": "Block (3)",
+          "children": [
+            {
+              "name": "header",
+              "path": "blocks[1].header",
+              "type": "BlockHeaderByte",
+              "offset": 42,
+              "size": 1,
+              "display": "BlockHeaderByte (2)",
+              "children": [
+                {
+                  "name": "is_last",
+                  "path": "blocks[1].header.is_last",
+                  "type": "1 bit",
+                  "offset": 42,
+                  "size": 1,
+                  "bit_offset": 7,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "type",
+                  "path": "blocks[1].header.type",
+                  "type": "7 bit",
+                  "offset": 42,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 7,
+                  "value": 4,
+                  "display": "4 (0b100)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "blocks[1].length",
+              "type": "u24",
+              "offset": 43,
+              "size": 3,
+              "value": 30,
+              "display": "30"
+            },
+            {
+              "name": "vorbis_comment",
+              "path": "blocks[1].vorbis_comment",
+              "type": "VorbisComment",
+              "offset": 46,
+              "size": 30,
+              "display": "VorbisComment (3)",
+              "children": [
+                {
+                  "name": "vendor",
+                  "path": "blocks[1].vorbis_comment.vendor",
+                  "type": "VorbisString",
+                  "offset": 46,
+                  "size": 13,
+                  "display": "VorbisString (2)",
+                  "children": [
+                    {
+                      "name": "length",
+                      "path": "blocks[1].vorbis_comment.vendor.length",
+                      "type": "u32",
+                      "offset": 46,
+                      "size": 4,
+                      "value": 9,
+                      "display": "9"
+                    },
+                    {
+                      "name": "text",
+                      "path": "blocks[1].vorbis_comment.vendor.text",
+                      "type": "char[9]",
+                      "offset": 50,
+                      "size": 9,
+                      "value": "HexEditor",
+                      "display": "HexEditor"
+                    }
+                  ]
+                },
+                {
+                  "name": "count",
+                  "path": "blocks[1].vorbis_comment.count",
+                  "type": "u32",
+                  "offset": 59,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "comments",
+                  "path": "blocks[1].vorbis_comment.comments",
+                  "type": "VorbisString[1]",
+                  "offset": 63,
+                  "size": 13,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "blocks[1].vorbis_comment.comments[0]",
+                      "type": "VorbisString",
+                      "offset": 63,
+                      "size": 13,
+                      "display": "VorbisString (2)",
+                      "children": [
+                        {
+                          "name": "length",
+                          "path": "blocks[1].vorbis_comment.comments[0].length",
+                          "type": "u32",
+                          "offset": 63,
+                          "size": 4,
+                          "value": 9,
+                          "display": "9"
+                        },
+                        {
+                          "name": "text",
+                          "path": "blocks[1].vorbis_comment.comments[0].text",
+                          "type": "char[9]",
+                          "offset": 67,
+                          "size": 9,
+                          "value": "TITLE=Hex",
+                          "display": "TITLE=Hex"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "audio_frames",
+      "path": "audio_frames",
+      "type": "u8[16]",
+      "offset": 76,
+      "size": 16,
+      "value": "FFF86918000000000000000000000000",
+      "display": "FF F8 69 18 00 00 00 00 00 00 00 00 00 00 00 00"
+    }
+  ]
+}

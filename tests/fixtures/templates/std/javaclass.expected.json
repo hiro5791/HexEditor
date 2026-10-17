@@ -1,0 +1,615 @@
+{
+  "name": "Java クラスファイル",
+  "type": "application",
+  "offset": 0,
+  "size": 125,
+  "children": [
+    {
+      "name": "magic",
+      "path": "magic",
+      "type": "u8[4]",
+      "offset": 0,
+      "size": 4,
+      "value": "CAFEBABE",
+      "display": "CA FE BA BE"
+    },
+    {
+      "name": "minor_version",
+      "path": "minor_version",
+      "type": "u16",
+      "offset": 4,
+      "size": 2,
+      "value": 0,
+      "display": "0"
+    },
+    {
+      "name": "major_version",
+      "path": "major_version",
+      "type": "u16",
+      "offset": 6,
+      "size": 2,
+      "value": 52,
+      "display": "52",
+      "comment": "45: Java 1.1、52: Java 8、61: Java 17、65: Java 21"
+    },
+    {
+      "name": "constant_pool_count",
+      "path": "constant_pool_count",
+      "type": "u16",
+      "offset": 8,
+      "size": 2,
+      "value": 11,
+      "display": "11",
+      "comment": "項目の数 + 1。long / double は番号を 2 つ使う"
+    },
+    {
+      "name": "constant_pool",
+      "path": "constant_pool",
+      "type": "ConstantPoolEntry[9]",
+      "offset": 10,
+      "size": 85,
+      "display": "[9]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "constant_pool[0]",
+          "type": "ConstantPoolEntry",
+          "offset": 10,
+          "size": 10,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[0].tag",
+              "type": "ConstantTag",
+              "offset": 10,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[0].utf8",
+              "type": "Utf8Info",
+              "offset": 11,
+              "size": 9,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[0].utf8.length",
+                  "type": "u16",
+                  "offset": 11,
+                  "size": 2,
+                  "value": 7,
+                  "display": "7"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[0].utf8.text",
+                  "type": "char[7]",
+                  "offset": 13,
+                  "size": 7,
+                  "value": "HexTest",
+                  "display": "HexTest"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "constant_pool[1]",
+          "type": "ConstantPoolEntry",
+          "offset": 20,
+          "size": 3,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[1].tag",
+              "type": "ConstantTag",
+              "offset": 20,
+              "size": 1,
+              "value": 7,
+              "display": "Class (0x7)"
+            },
+            {
+              "name": "name_index",
+              "path": "constant_pool[1].name_index",
+              "type": "u16",
+              "offset": 21,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "constant_pool[2]",
+          "type": "ConstantPoolEntry",
+          "offset": 23,
+          "size": 19,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[2].tag",
+              "type": "ConstantTag",
+              "offset": 23,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[2].utf8",
+              "type": "Utf8Info",
+              "offset": 24,
+              "size": 18,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[2].utf8.length",
+                  "type": "u16",
+                  "offset": 24,
+                  "size": 2,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[2].utf8.text",
+                  "type": "char[16]",
+                  "offset": 26,
+                  "size": 16,
+                  "value": "java/lang/Object",
+                  "display": "java/lang/Object"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "constant_pool[3]",
+          "type": "ConstantPoolEntry",
+          "offset": 42,
+          "size": 3,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[3].tag",
+              "type": "ConstantTag",
+              "offset": 42,
+              "size": 1,
+              "value": 7,
+              "display": "Class (0x7)"
+            },
+            {
+              "name": "name_index",
+              "path": "constant_pool[3].name_index",
+              "type": "u16",
+              "offset": 43,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "constant_pool[4]",
+          "type": "ConstantPoolEntry",
+          "offset": 45,
+          "size": 7,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[4].tag",
+              "type": "ConstantTag",
+              "offset": 45,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[4].utf8",
+              "type": "Utf8Info",
+              "offset": 46,
+              "size": 6,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[4].utf8.length",
+                  "type": "u16",
+                  "offset": 46,
+                  "size": 2,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[4].utf8.text",
+                  "type": "char[4]",
+                  "offset": 48,
+                  "size": 4,
+                  "value": "main",
+                  "display": "main"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[5]",
+          "path": "constant_pool[5]",
+          "type": "ConstantPoolEntry",
+          "offset": 52,
+          "size": 6,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[5].tag",
+              "type": "ConstantTag",
+              "offset": 52,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[5].utf8",
+              "type": "Utf8Info",
+              "offset": 53,
+              "size": 5,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[5].utf8.length",
+                  "type": "u16",
+                  "offset": 53,
+                  "size": 2,
+                  "value": 3,
+                  "display": "3"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[5].utf8.text",
+                  "type": "char[3]",
+                  "offset": 55,
+                  "size": 3,
+                  "value": "()V",
+                  "display": "()V"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[6]",
+          "path": "constant_pool[6]",
+          "type": "ConstantPoolEntry",
+          "offset": 58,
+          "size": 13,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[6].tag",
+              "type": "ConstantTag",
+              "offset": 58,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[6].utf8",
+              "type": "Utf8Info",
+              "offset": 59,
+              "size": 12,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[6].utf8.length",
+                  "type": "u16",
+                  "offset": 59,
+                  "size": 2,
+                  "value": 10,
+                  "display": "10"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[6].utf8.text",
+                  "type": "char[10]",
+                  "offset": 61,
+                  "size": 10,
+                  "value": "SourceFile",
+                  "display": "SourceFile"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[7]",
+          "path": "constant_pool[7]",
+          "type": "ConstantPoolEntry",
+          "offset": 71,
+          "size": 15,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[7].tag",
+              "type": "ConstantTag",
+              "offset": 71,
+              "size": 1,
+              "value": 1,
+              "display": "Utf8 (0x1)"
+            },
+            {
+              "name": "utf8",
+              "path": "constant_pool[7].utf8",
+              "type": "Utf8Info",
+              "offset": 72,
+              "size": 14,
+              "display": "Utf8Info (2)",
+              "children": [
+                {
+                  "name": "length",
+                  "path": "constant_pool[7].utf8.length",
+                  "type": "u16",
+                  "offset": 72,
+                  "size": 2,
+                  "value": 12,
+                  "display": "12"
+                },
+                {
+                  "name": "text",
+                  "path": "constant_pool[7].utf8.text",
+                  "type": "char[12]",
+                  "offset": 74,
+                  "size": 12,
+                  "value": "HexTest.java",
+                  "display": "HexTest.java"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[8]",
+          "path": "constant_pool[8]",
+          "type": "ConstantPoolEntry",
+          "offset": 86,
+          "size": 9,
+          "display": "ConstantPoolEntry (2)",
+          "children": [
+            {
+              "name": "tag",
+              "path": "constant_pool[8].tag",
+              "type": "ConstantTag",
+              "offset": 86,
+              "size": 1,
+              "value": 5,
+              "display": "Long (0x5)"
+            },
+            {
+              "name": "long_value",
+              "path": "constant_pool[8].long_value",
+              "type": "s64",
+              "offset": 87,
+              "size": 8,
+              "value": 1234605616436508552,
+              "display": "1234605616436508552"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "access_flags",
+      "path": "access_flags",
+      "type": "ClassAccess",
+      "offset": 95,
+      "size": 2,
+      "value": 33,
+      "display": "Public | Super"
+    },
+    {
+      "name": "this_class",
+      "path": "this_class",
+      "type": "u16",
+      "offset": 97,
+      "size": 2,
+      "value": 2,
+      "display": "2"
+    },
+    {
+      "name": "super_class",
+      "path": "super_class",
+      "type": "u16",
+      "offset": 99,
+      "size": 2,
+      "value": 4,
+      "display": "4"
+    },
+    {
+      "name": "interfaces_count",
+      "path": "interfaces_count",
+      "type": "u16",
+      "offset": 101,
+      "size": 2,
+      "value": 0,
+      "display": "0"
+    },
+    {
+      "name": "interfaces",
+      "path": "interfaces",
+      "type": "u16[0]",
+      "offset": 103,
+      "size": 0,
+      "display": "[0]",
+      "children": []
+    },
+    {
+      "name": "fields_count",
+      "path": "fields_count",
+      "type": "u16",
+      "offset": 103,
+      "size": 2,
+      "value": 0,
+      "display": "0"
+    },
+    {
+      "name": "fields",
+      "path": "fields",
+      "type": "Member[0]",
+      "offset": 105,
+      "size": 0,
+      "display": "[0]",
+      "children": []
+    },
+    {
+      "name": "methods_count",
+      "path": "methods_count",
+      "type": "u16",
+      "offset": 105,
+      "size": 2,
+      "value": 1,
+      "display": "1"
+    },
+    {
+      "name": "methods",
+      "path": "methods",
+      "type": "Member[1]",
+      "offset": 107,
+      "size": 8,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "methods[0]",
+          "type": "Member",
+          "offset": 107,
+          "size": 8,
+          "display": "Member (5)",
+          "children": [
+            {
+              "name": "access_flags",
+              "path": "methods[0].access_flags",
+              "type": "MemberAccess",
+              "offset": 107,
+              "size": 2,
+              "value": 9,
+              "display": "Public | Static"
+            },
+            {
+              "name": "name_index",
+              "path": "methods[0].name_index",
+              "type": "u16",
+              "offset": 109,
+              "size": 2,
+              "value": 5,
+              "display": "5"
+            },
+            {
+              "name": "descriptor_index",
+              "path": "methods[0].descriptor_index",
+              "type": "u16",
+              "offset": 111,
+              "size": 2,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "attributes_count",
+              "path": "methods[0].attributes_count",
+              "type": "u16",
+              "offset": 113,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "attributes",
+              "path": "methods[0].attributes",
+              "type": "Attribute[0]",
+              "offset": 115,
+              "size": 0,
+              "display": "[0]",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "attributes_count",
+      "path": "attributes_count",
+      "type": "u16",
+      "offset": 115,
+      "size": 2,
+      "value": 1,
+      "display": "1"
+    },
+    {
+      "name": "attributes",
+      "path": "attributes",
+      "type": "Attribute[1]",
+      "offset": 117,
+      "size": 8,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "attributes[0]",
+          "type": "Attribute",
+          "offset": 117,
+          "size": 8,
+          "display": "Attribute (3)",
+          "children": [
+            {
+              "name": "name_index",
+              "path": "attributes[0].name_index",
+              "type": "u16",
+              "offset": 117,
+              "size": 2,
+              "value": 7,
+              "display": "7"
+            },
+            {
+              "name": "length",
+              "path": "attributes[0].length",
+              "type": "u32",
+              "offset": 119,
+              "size": 4,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "info",
+              "path": "attributes[0].info",
+              "type": "u8[2]",
+              "offset": 123,
+              "size": 2,
+              "value": "0008",
+              "display": "00 08"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

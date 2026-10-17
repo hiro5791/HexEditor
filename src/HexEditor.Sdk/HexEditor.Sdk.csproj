@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    自動化 API (08 の AUTO-04) とプラグイン SDK (AUTO-29) の型。WinUI にも Core にも依存しない。
+    スクリプト (JavaScript と C#)・プラグイン・外部からの自動操作が使う型定義の唯一の元で、
+    XML ドキュメントコメント (<summary> は英語、<ja> は日本語) から hexeditor.d.ts と API リファレンスを生成する (tools/ApiGen)。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HexEditor.Sdk</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- トリミングの対象から外す (AUTO-03 の仕様 5、PKG-10)。 -->
+    <IsTrimmable>false</IsTrimmable>
+    <!--
+      SDK のバージョン (AUTO-29 の仕様 2。SdkInfo.Version と同じ)。アプリのバージョンとは別に数える。プラグインが参照した SDK の
+      アセンブリのバージョンで「どの SDK でビルドしたか」を判定するため、マイナーバージョンまでをアセンブリのバージョンにする。
+    -->
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <!-- NuGet パッケージ HexEditor.Sdk (AUTO-29 の仕様 1)。 -->
+    <IsPackable>true</IsPackable>
+    <PackageId>HexEditor.Sdk</PackageId>
+    <PackageVersion>$(HexSdkPackageVersion)</PackageVersion>
+    <Description>Automation API and plugin extension point interfaces for HexEditor.</Description>
+  </PropertyGroup>
+
+</Project>

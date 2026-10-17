@@ -1,0 +1,239 @@
+{
+  "name": "exFAT ブートセクタ",
+  "type": "application",
+  "offset": 0,
+  "size": 512,
+  "children": [
+    {
+      "name": "boot_sector",
+      "path": "boot_sector",
+      "type": "BootSector",
+      "offset": 0,
+      "size": 512,
+      "display": "BootSector (24)",
+      "children": [
+        {
+          "name": "jump",
+          "path": "boot_sector.jump",
+          "type": "u8[3]",
+          "offset": 0,
+          "size": 3,
+          "value": "EB7690",
+          "display": "EB 76 90"
+        },
+        {
+          "name": "file_system_name",
+          "path": "boot_sector.file_system_name",
+          "type": "char[8]",
+          "offset": 3,
+          "size": 8,
+          "value": "EXFAT   ",
+          "display": "EXFAT   "
+        },
+        {
+          "name": "must_be_zero",
+          "path": "boot_sector.must_be_zero",
+          "type": "u8[53]",
+          "offset": 11,
+          "size": 53,
+          "value": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "partition_offset",
+          "path": "boot_sector.partition_offset",
+          "type": "u64",
+          "offset": 64,
+          "size": 8,
+          "value": 2048,
+          "display": "2048",
+          "comment": "セクタ数"
+        },
+        {
+          "name": "volume_length",
+          "path": "boot_sector.volume_length",
+          "type": "u64",
+          "offset": 72,
+          "size": 8,
+          "value": 131072,
+          "display": "131072",
+          "comment": "セクタ数"
+        },
+        {
+          "name": "fat_offset",
+          "path": "boot_sector.fat_offset",
+          "type": "u32",
+          "offset": 80,
+          "size": 4,
+          "value": 2048,
+          "display": "2048",
+          "comment": "セクタ数"
+        },
+        {
+          "name": "fat_length",
+          "path": "boot_sector.fat_length",
+          "type": "u32",
+          "offset": 84,
+          "size": 4,
+          "value": 1024,
+          "display": "1024",
+          "comment": "セクタ数"
+        },
+        {
+          "name": "cluster_heap_offset",
+          "path": "boot_sector.cluster_heap_offset",
+          "type": "u32",
+          "offset": 88,
+          "size": 4,
+          "value": 4096,
+          "display": "4096",
+          "comment": "セクタ数"
+        },
+        {
+          "name": "cluster_count",
+          "path": "boot_sector.cluster_count",
+          "type": "u32",
+          "offset": 92,
+          "size": 4,
+          "value": 15000,
+          "display": "15000"
+        },
+        {
+          "name": "first_cluster_of_root_directory",
+          "path": "boot_sector.first_cluster_of_root_directory",
+          "type": "u32",
+          "offset": 96,
+          "size": 4,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "volume_serial_number",
+          "path": "boot_sector.volume_serial_number",
+          "type": "u32",
+          "offset": 100,
+          "size": 4,
+          "value": 3405643777,
+          "display": "0xCAFE0001"
+        },
+        {
+          "name": "file_system_revision_minor",
+          "path": "boot_sector.file_system_revision_minor",
+          "type": "u8",
+          "offset": 104,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "file_system_revision_major",
+          "path": "boot_sector.file_system_revision_major",
+          "type": "u8",
+          "offset": 105,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "volume_flags",
+          "path": "boot_sector.volume_flags",
+          "type": "VolumeFlags",
+          "offset": 106,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "bytes_per_sector_shift",
+          "path": "boot_sector.bytes_per_sector_shift",
+          "type": "u8",
+          "offset": 108,
+          "size": 1,
+          "value": 9,
+          "display": "9"
+        },
+        {
+          "name": "sectors_per_cluster_shift",
+          "path": "boot_sector.sectors_per_cluster_shift",
+          "type": "u8",
+          "offset": 109,
+          "size": 1,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "number_of_fats",
+          "path": "boot_sector.number_of_fats",
+          "type": "u8",
+          "offset": 110,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "drive_select",
+          "path": "boot_sector.drive_select",
+          "type": "u8",
+          "offset": 111,
+          "size": 1,
+          "value": 128,
+          "display": "0x80"
+        },
+        {
+          "name": "percent_in_use",
+          "path": "boot_sector.percent_in_use",
+          "type": "u8",
+          "offset": 112,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved",
+          "path": "boot_sector.reserved",
+          "type": "u8[7]",
+          "offset": 113,
+          "size": 7,
+          "value": "00000000000000",
+          "display": "00 00 00 00 00 00 00"
+        },
+        {
+          "name": "boot_code",
+          "path": "boot_sector.boot_code",
+          "type": "u8[390]",
+          "offset": 120,
+          "size": 390,
+          "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "boot_signature",
+          "path": "boot_sector.boot_signature",
+          "type": "u8[2]",
+          "offset": 510,
+          "size": 2,
+          "value": "55AA",
+          "display": "55 AA"
+        },
+        {
+          "name": "bytes_per_sector",
+          "path": "boot_sector.bytes_per_sector",
+          "type": "u64",
+          "offset": 512,
+          "size": 0,
+          "value": 512,
+          "display": "512"
+        },
+        {
+          "name": "bytes_per_cluster",
+          "path": "boot_sector.bytes_per_cluster",
+          "type": "u64",
+          "offset": 512,
+          "size": 0,
+          "value": 4096,
+          "display": "4096"
+        }
+      ]
+    }
+  ]
+}

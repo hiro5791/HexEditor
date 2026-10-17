@@ -1,0 +1,4 @@
+u8 head[0x40];
+u8 mark;
+u8 tail;
+std::core::assert(mark == 0, "mark は 0 のはず");

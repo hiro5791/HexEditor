@@ -1,0 +1,2848 @@
+{
+  "name": "OLE 複合文書 (CFB)",
+  "type": "application",
+  "offset": 0,
+  "size": 512,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 512,
+      "display": "Header (18)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "header.signature",
+          "type": "u8[8]",
+          "offset": 0,
+          "size": 8,
+          "value": "D0CF11E0A1B11AE1",
+          "display": "D0 CF 11 E0 A1 B1 1A E1"
+        },
+        {
+          "name": "clsid",
+          "path": "header.clsid",
+          "type": "guid",
+          "offset": 8,
+          "size": 16,
+          "value": "00000000000000000000000000000000",
+          "display": "{00000000-0000-0000-0000-000000000000}"
+        },
+        {
+          "name": "minor_version",
+          "path": "header.minor_version",
+          "type": "u16",
+          "offset": 24,
+          "size": 2,
+          "value": 62,
+          "display": "62"
+        },
+        {
+          "name": "major_version",
+          "path": "header.major_version",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 3,
+          "display": "3",
+          "comment": "3: 512 バイトのセクタ、4: 4096 バイトのセクタ"
+        },
+        {
+          "name": "byte_order",
+          "path": "header.byte_order",
+          "type": "u16",
+          "offset": 28,
+          "size": 2,
+          "value": 65534,
+          "display": "0xFFFE"
+        },
+        {
+          "name": "sector_shift",
+          "path": "header.sector_shift",
+          "type": "u16",
+          "offset": 30,
+          "size": 2,
+          "value": 9,
+          "display": "9",
+          "comment": "セクタの大きさ = 2 の sector_shift 乗"
+        },
+        {
+          "name": "mini_sector_shift",
+          "path": "header.mini_sector_shift",
+          "type": "u16",
+          "offset": 32,
+          "size": 2,
+          "value": 6,
+          "display": "6"
+        },
+        {
+          "name": "reserved",
+          "path": "header.reserved",
+          "type": "u8[6]",
+          "offset": 34,
+          "size": 6,
+          "value": "000000000000",
+          "display": "00 00 00 00 00 00"
+        },
+        {
+          "name": "directory_sector_count",
+          "path": "header.directory_sector_count",
+          "type": "u32",
+          "offset": 40,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "fat_sector_count",
+          "path": "header.fat_sector_count",
+          "type": "u32",
+          "offset": 44,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "first_directory_sector",
+          "path": "header.first_directory_sector",
+          "type": "u32",
+          "offset": 48,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "transaction_signature",
+          "path": "header.transaction_signature",
+          "type": "u32",
+          "offset": 52,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "mini_stream_cutoff",
+          "path": "header.mini_stream_cutoff",
+          "type": "u32",
+          "offset": 56,
+          "size": 4,
+          "value": 4096,
+          "display": "4096"
+        },
+        {
+          "name": "first_mini_fat_sector",
+          "path": "header.first_mini_fat_sector",
+          "type": "u32",
+          "offset": 60,
+          "size": 4,
+          "value": 4294967294,
+          "display": "ENDOFCHAIN (0xFFFFFFFE)"
+        },
+        {
+          "name": "mini_fat_sector_count",
+          "path": "header.mini_fat_sector_count",
+          "type": "u32",
+          "offset": 64,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "first_difat_sector",
+          "path": "header.first_difat_sector",
+          "type": "u32",
+          "offset": 68,
+          "size": 4,
+          "value": 4294967294,
+          "display": "ENDOFCHAIN (0xFFFFFFFE)"
+        },
+        {
+          "name": "difat_sector_count",
+          "path": "header.difat_sector_count",
+          "type": "u32",
+          "offset": 72,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "difat",
+          "path": "header.difat",
+          "type": "u32[109]",
+          "offset": 76,
+          "size": 436,
+          "display": "[109]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "header.difat[0]",
+              "type": "u32",
+              "offset": 76,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[1]",
+              "path": "header.difat[1]",
+              "type": "u32",
+              "offset": 80,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[2]",
+              "path": "header.difat[2]",
+              "type": "u32",
+              "offset": 84,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[3]",
+              "path": "header.difat[3]",
+              "type": "u32",
+              "offset": 88,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[4]",
+              "path": "header.difat[4]",
+              "type": "u32",
+              "offset": 92,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[5]",
+              "path": "header.difat[5]",
+              "type": "u32",
+              "offset": 96,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[6]",
+              "path": "header.difat[6]",
+              "type": "u32",
+              "offset": 100,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[7]",
+              "path": "header.difat[7]",
+              "type": "u32",
+              "offset": 104,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[8]",
+              "path": "header.difat[8]",
+              "type": "u32",
+              "offset": 108,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[9]",
+              "path": "header.difat[9]",
+              "type": "u32",
+              "offset": 112,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[10]",
+              "path": "header.difat[10]",
+              "type": "u32",
+              "offset": 116,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[11]",
+              "path": "header.difat[11]",
+              "type": "u32",
+              "offset": 120,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[12]",
+              "path": "header.difat[12]",
+              "type": "u32",
+              "offset": 124,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[13]",
+              "path": "header.difat[13]",
+              "type": "u32",
+              "offset": 128,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[14]",
+              "path": "header.difat[14]",
+              "type": "u32",
+              "offset": 132,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[15]",
+              "path": "header.difat[15]",
+              "type": "u32",
+              "offset": 136,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[16]",
+              "path": "header.difat[16]",
+              "type": "u32",
+              "offset": 140,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[17]",
+              "path": "header.difat[17]",
+              "type": "u32",
+              "offset": 144,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[18]",
+              "path": "header.difat[18]",
+              "type": "u32",
+              "offset": 148,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[19]",
+              "path": "header.difat[19]",
+              "type": "u32",
+              "offset": 152,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[20]",
+              "path": "header.difat[20]",
+              "type": "u32",
+              "offset": 156,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[21]",
+              "path": "header.difat[21]",
+              "type": "u32",
+              "offset": 160,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[22]",
+              "path": "header.difat[22]",
+              "type": "u32",
+              "offset": 164,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[23]",
+              "path": "header.difat[23]",
+              "type": "u32",
+              "offset": 168,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[24]",
+              "path": "header.difat[24]",
+              "type": "u32",
+              "offset": 172,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[25]",
+              "path": "header.difat[25]",
+              "type": "u32",
+              "offset": 176,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[26]",
+              "path": "header.difat[26]",
+              "type": "u32",
+              "offset": 180,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[27]",
+              "path": "header.difat[27]",
+              "type": "u32",
+              "offset": 184,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[28]",
+              "path": "header.difat[28]",
+              "type": "u32",
+              "offset": 188,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[29]",
+              "path": "header.difat[29]",
+              "type": "u32",
+              "offset": 192,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[30]",
+              "path": "header.difat[30]",
+              "type": "u32",
+              "offset": 196,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[31]",
+              "path": "header.difat[31]",
+              "type": "u32",
+              "offset": 200,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[32]",
+              "path": "header.difat[32]",
+              "type": "u32",
+              "offset": 204,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[33]",
+              "path": "header.difat[33]",
+              "type": "u32",
+              "offset": 208,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[34]",
+              "path": "header.difat[34]",
+              "type": "u32",
+              "offset": 212,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[35]",
+              "path": "header.difat[35]",
+              "type": "u32",
+              "offset": 216,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[36]",
+              "path": "header.difat[36]",
+              "type": "u32",
+              "offset": 220,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[37]",
+              "path": "header.difat[37]",
+              "type": "u32",
+              "offset": 224,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[38]",
+              "path": "header.difat[38]",
+              "type": "u32",
+              "offset": 228,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[39]",
+              "path": "header.difat[39]",
+              "type": "u32",
+              "offset": 232,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[40]",
+              "path": "header.difat[40]",
+              "type": "u32",
+              "offset": 236,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[41]",
+              "path": "header.difat[41]",
+              "type": "u32",
+              "offset": 240,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[42]",
+              "path": "header.difat[42]",
+              "type": "u32",
+              "offset": 244,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[43]",
+              "path": "header.difat[43]",
+              "type": "u32",
+              "offset": 248,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[44]",
+              "path": "header.difat[44]",
+              "type": "u32",
+              "offset": 252,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[45]",
+              "path": "header.difat[45]",
+              "type": "u32",
+              "offset": 256,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[46]",
+              "path": "header.difat[46]",
+              "type": "u32",
+              "offset": 260,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[47]",
+              "path": "header.difat[47]",
+              "type": "u32",
+              "offset": 264,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[48]",
+              "path": "header.difat[48]",
+              "type": "u32",
+              "offset": 268,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[49]",
+              "path": "header.difat[49]",
+              "type": "u32",
+              "offset": 272,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[50]",
+              "path": "header.difat[50]",
+              "type": "u32",
+              "offset": 276,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[51]",
+              "path": "header.difat[51]",
+              "type": "u32",
+              "offset": 280,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[52]",
+              "path": "header.difat[52]",
+              "type": "u32",
+              "offset": 284,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[53]",
+              "path": "header.difat[53]",
+              "type": "u32",
+              "offset": 288,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[54]",
+              "path": "header.difat[54]",
+              "type": "u32",
+              "offset": 292,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[55]",
+              "path": "header.difat[55]",
+              "type": "u32",
+              "offset": 296,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[56]",
+              "path": "header.difat[56]",
+              "type": "u32",
+              "offset": 300,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[57]",
+              "path": "header.difat[57]",
+              "type": "u32",
+              "offset": 304,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[58]",
+              "path": "header.difat[58]",
+              "type": "u32",
+              "offset": 308,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[59]",
+              "path": "header.difat[59]",
+              "type": "u32",
+              "offset": 312,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[60]",
+              "path": "header.difat[60]",
+              "type": "u32",
+              "offset": 316,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[61]",
+              "path": "header.difat[61]",
+              "type": "u32",
+              "offset": 320,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[62]",
+              "path": "header.difat[62]",
+              "type": "u32",
+              "offset": 324,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[63]",
+              "path": "header.difat[63]",
+              "type": "u32",
+              "offset": 328,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[64]",
+              "path": "header.difat[64]",
+              "type": "u32",
+              "offset": 332,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[65]",
+              "path": "header.difat[65]",
+              "type": "u32",
+              "offset": 336,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[66]",
+              "path": "header.difat[66]",
+              "type": "u32",
+              "offset": 340,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[67]",
+              "path": "header.difat[67]",
+              "type": "u32",
+              "offset": 344,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[68]",
+              "path": "header.difat[68]",
+              "type": "u32",
+              "offset": 348,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[69]",
+              "path": "header.difat[69]",
+              "type": "u32",
+              "offset": 352,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[70]",
+              "path": "header.difat[70]",
+              "type": "u32",
+              "offset": 356,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[71]",
+              "path": "header.difat[71]",
+              "type": "u32",
+              "offset": 360,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[72]",
+              "path": "header.difat[72]",
+              "type": "u32",
+              "offset": 364,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[73]",
+              "path": "header.difat[73]",
+              "type": "u32",
+              "offset": 368,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[74]",
+              "path": "header.difat[74]",
+              "type": "u32",
+              "offset": 372,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[75]",
+              "path": "header.difat[75]",
+              "type": "u32",
+              "offset": 376,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[76]",
+              "path": "header.difat[76]",
+              "type": "u32",
+              "offset": 380,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[77]",
+              "path": "header.difat[77]",
+              "type": "u32",
+              "offset": 384,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[78]",
+              "path": "header.difat[78]",
+              "type": "u32",
+              "offset": 388,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[79]",
+              "path": "header.difat[79]",
+              "type": "u32",
+              "offset": 392,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[80]",
+              "path": "header.difat[80]",
+              "type": "u32",
+              "offset": 396,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[81]",
+              "path": "header.difat[81]",
+              "type": "u32",
+              "offset": 400,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[82]",
+              "path": "header.difat[82]",
+              "type": "u32",
+              "offset": 404,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[83]",
+              "path": "header.difat[83]",
+              "type": "u32",
+              "offset": 408,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[84]",
+              "path": "header.difat[84]",
+              "type": "u32",
+              "offset": 412,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[85]",
+              "path": "header.difat[85]",
+              "type": "u32",
+              "offset": 416,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[86]",
+              "path": "header.difat[86]",
+              "type": "u32",
+              "offset": 420,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[87]",
+              "path": "header.difat[87]",
+              "type": "u32",
+              "offset": 424,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[88]",
+              "path": "header.difat[88]",
+              "type": "u32",
+              "offset": 428,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[89]",
+              "path": "header.difat[89]",
+              "type": "u32",
+              "offset": 432,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[90]",
+              "path": "header.difat[90]",
+              "type": "u32",
+              "offset": 436,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[91]",
+              "path": "header.difat[91]",
+              "type": "u32",
+              "offset": 440,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[92]",
+              "path": "header.difat[92]",
+              "type": "u32",
+              "offset": 444,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[93]",
+              "path": "header.difat[93]",
+              "type": "u32",
+              "offset": 448,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[94]",
+              "path": "header.difat[94]",
+              "type": "u32",
+              "offset": 452,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[95]",
+              "path": "header.difat[95]",
+              "type": "u32",
+              "offset": 456,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[96]",
+              "path": "header.difat[96]",
+              "type": "u32",
+              "offset": 460,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[97]",
+              "path": "header.difat[97]",
+              "type": "u32",
+              "offset": 464,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[98]",
+              "path": "header.difat[98]",
+              "type": "u32",
+              "offset": 468,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[99]",
+              "path": "header.difat[99]",
+              "type": "u32",
+              "offset": 472,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[100]",
+              "path": "header.difat[100]",
+              "type": "u32",
+              "offset": 476,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[101]",
+              "path": "header.difat[101]",
+              "type": "u32",
+              "offset": 480,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[102]",
+              "path": "header.difat[102]",
+              "type": "u32",
+              "offset": 484,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[103]",
+              "path": "header.difat[103]",
+              "type": "u32",
+              "offset": 488,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[104]",
+              "path": "header.difat[104]",
+              "type": "u32",
+              "offset": 492,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[105]",
+              "path": "header.difat[105]",
+              "type": "u32",
+              "offset": 496,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[106]",
+              "path": "header.difat[106]",
+              "type": "u32",
+              "offset": 500,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[107]",
+              "path": "header.difat[107]",
+              "type": "u32",
+              "offset": 504,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "[108]",
+              "path": "header.difat[108]",
+              "type": "u32",
+              "offset": 508,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "first_fat_sector",
+      "path": "first_fat_sector",
+      "type": "u32[128]",
+      "offset": 512,
+      "size": 512,
+      "display": "[128]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "first_fat_sector[0]",
+          "type": "u32",
+          "offset": 512,
+          "size": 4,
+          "value": 4294967293,
+          "display": "FATSECT (0xFFFFFFFD)"
+        },
+        {
+          "name": "[1]",
+          "path": "first_fat_sector[1]",
+          "type": "u32",
+          "offset": 516,
+          "size": 4,
+          "value": 4294967294,
+          "display": "ENDOFCHAIN (0xFFFFFFFE)"
+        },
+        {
+          "name": "[2]",
+          "path": "first_fat_sector[2]",
+          "type": "u32",
+          "offset": 520,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[3]",
+          "path": "first_fat_sector[3]",
+          "type": "u32",
+          "offset": 524,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[4]",
+          "path": "first_fat_sector[4]",
+          "type": "u32",
+          "offset": 528,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[5]",
+          "path": "first_fat_sector[5]",
+          "type": "u32",
+          "offset": 532,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[6]",
+          "path": "first_fat_sector[6]",
+          "type": "u32",
+          "offset": 536,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[7]",
+          "path": "first_fat_sector[7]",
+          "type": "u32",
+          "offset": 540,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[8]",
+          "path": "first_fat_sector[8]",
+          "type": "u32",
+          "offset": 544,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[9]",
+          "path": "first_fat_sector[9]",
+          "type": "u32",
+          "offset": 548,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[10]",
+          "path": "first_fat_sector[10]",
+          "type": "u32",
+          "offset": 552,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[11]",
+          "path": "first_fat_sector[11]",
+          "type": "u32",
+          "offset": 556,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[12]",
+          "path": "first_fat_sector[12]",
+          "type": "u32",
+          "offset": 560,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[13]",
+          "path": "first_fat_sector[13]",
+          "type": "u32",
+          "offset": 564,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[14]",
+          "path": "first_fat_sector[14]",
+          "type": "u32",
+          "offset": 568,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[15]",
+          "path": "first_fat_sector[15]",
+          "type": "u32",
+          "offset": 572,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[16]",
+          "path": "first_fat_sector[16]",
+          "type": "u32",
+          "offset": 576,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[17]",
+          "path": "first_fat_sector[17]",
+          "type": "u32",
+          "offset": 580,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[18]",
+          "path": "first_fat_sector[18]",
+          "type": "u32",
+          "offset": 584,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[19]",
+          "path": "first_fat_sector[19]",
+          "type": "u32",
+          "offset": 588,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[20]",
+          "path": "first_fat_sector[20]",
+          "type": "u32",
+          "offset": 592,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[21]",
+          "path": "first_fat_sector[21]",
+          "type": "u32",
+          "offset": 596,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[22]",
+          "path": "first_fat_sector[22]",
+          "type": "u32",
+          "offset": 600,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[23]",
+          "path": "first_fat_sector[23]",
+          "type": "u32",
+          "offset": 604,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[24]",
+          "path": "first_fat_sector[24]",
+          "type": "u32",
+          "offset": 608,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[25]",
+          "path": "first_fat_sector[25]",
+          "type": "u32",
+          "offset": 612,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[26]",
+          "path": "first_fat_sector[26]",
+          "type": "u32",
+          "offset": 616,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[27]",
+          "path": "first_fat_sector[27]",
+          "type": "u32",
+          "offset": 620,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[28]",
+          "path": "first_fat_sector[28]",
+          "type": "u32",
+          "offset": 624,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[29]",
+          "path": "first_fat_sector[29]",
+          "type": "u32",
+          "offset": 628,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[30]",
+          "path": "first_fat_sector[30]",
+          "type": "u32",
+          "offset": 632,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[31]",
+          "path": "first_fat_sector[31]",
+          "type": "u32",
+          "offset": 636,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[32]",
+          "path": "first_fat_sector[32]",
+          "type": "u32",
+          "offset": 640,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[33]",
+          "path": "first_fat_sector[33]",
+          "type": "u32",
+          "offset": 644,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[34]",
+          "path": "first_fat_sector[34]",
+          "type": "u32",
+          "offset": 648,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[35]",
+          "path": "first_fat_sector[35]",
+          "type": "u32",
+          "offset": 652,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[36]",
+          "path": "first_fat_sector[36]",
+          "type": "u32",
+          "offset": 656,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[37]",
+          "path": "first_fat_sector[37]",
+          "type": "u32",
+          "offset": 660,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[38]",
+          "path": "first_fat_sector[38]",
+          "type": "u32",
+          "offset": 664,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[39]",
+          "path": "first_fat_sector[39]",
+          "type": "u32",
+          "offset": 668,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[40]",
+          "path": "first_fat_sector[40]",
+          "type": "u32",
+          "offset": 672,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[41]",
+          "path": "first_fat_sector[41]",
+          "type": "u32",
+          "offset": 676,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[42]",
+          "path": "first_fat_sector[42]",
+          "type": "u32",
+          "offset": 680,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[43]",
+          "path": "first_fat_sector[43]",
+          "type": "u32",
+          "offset": 684,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[44]",
+          "path": "first_fat_sector[44]",
+          "type": "u32",
+          "offset": 688,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[45]",
+          "path": "first_fat_sector[45]",
+          "type": "u32",
+          "offset": 692,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[46]",
+          "path": "first_fat_sector[46]",
+          "type": "u32",
+          "offset": 696,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[47]",
+          "path": "first_fat_sector[47]",
+          "type": "u32",
+          "offset": 700,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[48]",
+          "path": "first_fat_sector[48]",
+          "type": "u32",
+          "offset": 704,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[49]",
+          "path": "first_fat_sector[49]",
+          "type": "u32",
+          "offset": 708,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[50]",
+          "path": "first_fat_sector[50]",
+          "type": "u32",
+          "offset": 712,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[51]",
+          "path": "first_fat_sector[51]",
+          "type": "u32",
+          "offset": 716,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[52]",
+          "path": "first_fat_sector[52]",
+          "type": "u32",
+          "offset": 720,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[53]",
+          "path": "first_fat_sector[53]",
+          "type": "u32",
+          "offset": 724,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[54]",
+          "path": "first_fat_sector[54]",
+          "type": "u32",
+          "offset": 728,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[55]",
+          "path": "first_fat_sector[55]",
+          "type": "u32",
+          "offset": 732,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[56]",
+          "path": "first_fat_sector[56]",
+          "type": "u32",
+          "offset": 736,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[57]",
+          "path": "first_fat_sector[57]",
+          "type": "u32",
+          "offset": 740,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[58]",
+          "path": "first_fat_sector[58]",
+          "type": "u32",
+          "offset": 744,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[59]",
+          "path": "first_fat_sector[59]",
+          "type": "u32",
+          "offset": 748,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[60]",
+          "path": "first_fat_sector[60]",
+          "type": "u32",
+          "offset": 752,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[61]",
+          "path": "first_fat_sector[61]",
+          "type": "u32",
+          "offset": 756,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[62]",
+          "path": "first_fat_sector[62]",
+          "type": "u32",
+          "offset": 760,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[63]",
+          "path": "first_fat_sector[63]",
+          "type": "u32",
+          "offset": 764,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[64]",
+          "path": "first_fat_sector[64]",
+          "type": "u32",
+          "offset": 768,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[65]",
+          "path": "first_fat_sector[65]",
+          "type": "u32",
+          "offset": 772,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[66]",
+          "path": "first_fat_sector[66]",
+          "type": "u32",
+          "offset": 776,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[67]",
+          "path": "first_fat_sector[67]",
+          "type": "u32",
+          "offset": 780,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[68]",
+          "path": "first_fat_sector[68]",
+          "type": "u32",
+          "offset": 784,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[69]",
+          "path": "first_fat_sector[69]",
+          "type": "u32",
+          "offset": 788,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[70]",
+          "path": "first_fat_sector[70]",
+          "type": "u32",
+          "offset": 792,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[71]",
+          "path": "first_fat_sector[71]",
+          "type": "u32",
+          "offset": 796,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[72]",
+          "path": "first_fat_sector[72]",
+          "type": "u32",
+          "offset": 800,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[73]",
+          "path": "first_fat_sector[73]",
+          "type": "u32",
+          "offset": 804,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[74]",
+          "path": "first_fat_sector[74]",
+          "type": "u32",
+          "offset": 808,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[75]",
+          "path": "first_fat_sector[75]",
+          "type": "u32",
+          "offset": 812,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[76]",
+          "path": "first_fat_sector[76]",
+          "type": "u32",
+          "offset": 816,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[77]",
+          "path": "first_fat_sector[77]",
+          "type": "u32",
+          "offset": 820,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[78]",
+          "path": "first_fat_sector[78]",
+          "type": "u32",
+          "offset": 824,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[79]",
+          "path": "first_fat_sector[79]",
+          "type": "u32",
+          "offset": 828,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[80]",
+          "path": "first_fat_sector[80]",
+          "type": "u32",
+          "offset": 832,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[81]",
+          "path": "first_fat_sector[81]",
+          "type": "u32",
+          "offset": 836,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[82]",
+          "path": "first_fat_sector[82]",
+          "type": "u32",
+          "offset": 840,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[83]",
+          "path": "first_fat_sector[83]",
+          "type": "u32",
+          "offset": 844,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[84]",
+          "path": "first_fat_sector[84]",
+          "type": "u32",
+          "offset": 848,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[85]",
+          "path": "first_fat_sector[85]",
+          "type": "u32",
+          "offset": 852,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[86]",
+          "path": "first_fat_sector[86]",
+          "type": "u32",
+          "offset": 856,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[87]",
+          "path": "first_fat_sector[87]",
+          "type": "u32",
+          "offset": 860,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[88]",
+          "path": "first_fat_sector[88]",
+          "type": "u32",
+          "offset": 864,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[89]",
+          "path": "first_fat_sector[89]",
+          "type": "u32",
+          "offset": 868,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[90]",
+          "path": "first_fat_sector[90]",
+          "type": "u32",
+          "offset": 872,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[91]",
+          "path": "first_fat_sector[91]",
+          "type": "u32",
+          "offset": 876,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[92]",
+          "path": "first_fat_sector[92]",
+          "type": "u32",
+          "offset": 880,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[93]",
+          "path": "first_fat_sector[93]",
+          "type": "u32",
+          "offset": 884,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[94]",
+          "path": "first_fat_sector[94]",
+          "type": "u32",
+          "offset": 888,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[95]",
+          "path": "first_fat_sector[95]",
+          "type": "u32",
+          "offset": 892,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[96]",
+          "path": "first_fat_sector[96]",
+          "type": "u32",
+          "offset": 896,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[97]",
+          "path": "first_fat_sector[97]",
+          "type": "u32",
+          "offset": 900,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[98]",
+          "path": "first_fat_sector[98]",
+          "type": "u32",
+          "offset": 904,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[99]",
+          "path": "first_fat_sector[99]",
+          "type": "u32",
+          "offset": 908,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[100]",
+          "path": "first_fat_sector[100]",
+          "type": "u32",
+          "offset": 912,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[101]",
+          "path": "first_fat_sector[101]",
+          "type": "u32",
+          "offset": 916,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[102]",
+          "path": "first_fat_sector[102]",
+          "type": "u32",
+          "offset": 920,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[103]",
+          "path": "first_fat_sector[103]",
+          "type": "u32",
+          "offset": 924,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[104]",
+          "path": "first_fat_sector[104]",
+          "type": "u32",
+          "offset": 928,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[105]",
+          "path": "first_fat_sector[105]",
+          "type": "u32",
+          "offset": 932,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[106]",
+          "path": "first_fat_sector[106]",
+          "type": "u32",
+          "offset": 936,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[107]",
+          "path": "first_fat_sector[107]",
+          "type": "u32",
+          "offset": 940,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[108]",
+          "path": "first_fat_sector[108]",
+          "type": "u32",
+          "offset": 944,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[109]",
+          "path": "first_fat_sector[109]",
+          "type": "u32",
+          "offset": 948,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[110]",
+          "path": "first_fat_sector[110]",
+          "type": "u32",
+          "offset": 952,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[111]",
+          "path": "first_fat_sector[111]",
+          "type": "u32",
+          "offset": 956,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[112]",
+          "path": "first_fat_sector[112]",
+          "type": "u32",
+          "offset": 960,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[113]",
+          "path": "first_fat_sector[113]",
+          "type": "u32",
+          "offset": 964,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[114]",
+          "path": "first_fat_sector[114]",
+          "type": "u32",
+          "offset": 968,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[115]",
+          "path": "first_fat_sector[115]",
+          "type": "u32",
+          "offset": 972,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[116]",
+          "path": "first_fat_sector[116]",
+          "type": "u32",
+          "offset": 976,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[117]",
+          "path": "first_fat_sector[117]",
+          "type": "u32",
+          "offset": 980,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[118]",
+          "path": "first_fat_sector[118]",
+          "type": "u32",
+          "offset": 984,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[119]",
+          "path": "first_fat_sector[119]",
+          "type": "u32",
+          "offset": 988,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[120]",
+          "path": "first_fat_sector[120]",
+          "type": "u32",
+          "offset": 992,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[121]",
+          "path": "first_fat_sector[121]",
+          "type": "u32",
+          "offset": 996,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[122]",
+          "path": "first_fat_sector[122]",
+          "type": "u32",
+          "offset": 1000,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[123]",
+          "path": "first_fat_sector[123]",
+          "type": "u32",
+          "offset": 1004,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[124]",
+          "path": "first_fat_sector[124]",
+          "type": "u32",
+          "offset": 1008,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[125]",
+          "path": "first_fat_sector[125]",
+          "type": "u32",
+          "offset": 1012,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[126]",
+          "path": "first_fat_sector[126]",
+          "type": "u32",
+          "offset": 1016,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        },
+        {
+          "name": "[127]",
+          "path": "first_fat_sector[127]",
+          "type": "u32",
+          "offset": 1020,
+          "size": 4,
+          "value": 4294967295,
+          "display": "FREESECT (0xFFFFFFFF)"
+        }
+      ]
+    },
+    {
+      "name": "directory",
+      "path": "directory",
+      "type": "DirectoryEntry[4]",
+      "offset": 1024,
+      "size": 512,
+      "display": "[4]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "directory[0]",
+          "type": "DirectoryEntry",
+          "offset": 1024,
+          "size": 128,
+          "display": "DirectoryEntry (13)",
+          "children": [
+            {
+              "name": "name",
+              "path": "directory[0].name",
+              "type": "char16[32]",
+              "offset": 1024,
+              "size": 64,
+              "value": "Root Entry",
+              "display": "Root Entry"
+            },
+            {
+              "name": "name_length",
+              "path": "directory[0].name_length",
+              "type": "u16",
+              "offset": 1088,
+              "size": 2,
+              "value": 22,
+              "display": "22",
+              "comment": "終端の 0 を含むバイト数"
+            },
+            {
+              "name": "object_type",
+              "path": "directory[0].object_type",
+              "type": "ObjectType",
+              "offset": 1090,
+              "size": 1,
+              "value": 5,
+              "display": "RootStorage (0x5)"
+            },
+            {
+              "name": "color",
+              "path": "directory[0].color",
+              "type": "Color",
+              "offset": 1091,
+              "size": 1,
+              "value": 1,
+              "display": "Black (0x1)"
+            },
+            {
+              "name": "left_sibling",
+              "path": "directory[0].left_sibling",
+              "type": "u32",
+              "offset": 1092,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "right_sibling",
+              "path": "directory[0].right_sibling",
+              "type": "u32",
+              "offset": 1096,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "child",
+              "path": "directory[0].child",
+              "type": "u32",
+              "offset": 1100,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "clsid",
+              "path": "directory[0].clsid",
+              "type": "guid",
+              "offset": 1104,
+              "size": 16,
+              "value": "00000000000000000000000000000000",
+              "display": "{00000000-0000-0000-0000-000000000000}"
+            },
+            {
+              "name": "state_bits",
+              "path": "directory[0].state_bits",
+              "type": "u32",
+              "offset": 1120,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "creation_time",
+              "path": "directory[0].creation_time",
+              "type": "filetime",
+              "offset": 1124,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "modified_time",
+              "path": "directory[0].modified_time",
+              "type": "filetime",
+              "offset": 1132,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "starting_sector",
+              "path": "directory[0].starting_sector",
+              "type": "u32",
+              "offset": 1140,
+              "size": 4,
+              "value": 4294967294,
+              "display": "ENDOFCHAIN (0xFFFFFFFE)"
+            },
+            {
+              "name": "stream_size",
+              "path": "directory[0].stream_size",
+              "type": "u64",
+              "offset": 1144,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "directory[1]",
+          "type": "DirectoryEntry",
+          "offset": 1152,
+          "size": 128,
+          "display": "DirectoryEntry (13)",
+          "children": [
+            {
+              "name": "name",
+              "path": "directory[1].name",
+              "type": "char16[32]",
+              "offset": 1152,
+              "size": 64,
+              "value": "Stream1",
+              "display": "Stream1"
+            },
+            {
+              "name": "name_length",
+              "path": "directory[1].name_length",
+              "type": "u16",
+              "offset": 1216,
+              "size": 2,
+              "value": 16,
+              "display": "16",
+              "comment": "終端の 0 を含むバイト数"
+            },
+            {
+              "name": "object_type",
+              "path": "directory[1].object_type",
+              "type": "ObjectType",
+              "offset": 1218,
+              "size": 1,
+              "value": 2,
+              "display": "Stream (0x2)"
+            },
+            {
+              "name": "color",
+              "path": "directory[1].color",
+              "type": "Color",
+              "offset": 1219,
+              "size": 1,
+              "value": 1,
+              "display": "Black (0x1)"
+            },
+            {
+              "name": "left_sibling",
+              "path": "directory[1].left_sibling",
+              "type": "u32",
+              "offset": 1220,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "right_sibling",
+              "path": "directory[1].right_sibling",
+              "type": "u32",
+              "offset": 1224,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "child",
+              "path": "directory[1].child",
+              "type": "u32",
+              "offset": 1228,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "clsid",
+              "path": "directory[1].clsid",
+              "type": "guid",
+              "offset": 1232,
+              "size": 16,
+              "value": "00000000000000000000000000000000",
+              "display": "{00000000-0000-0000-0000-000000000000}"
+            },
+            {
+              "name": "state_bits",
+              "path": "directory[1].state_bits",
+              "type": "u32",
+              "offset": 1248,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "creation_time",
+              "path": "directory[1].creation_time",
+              "type": "filetime",
+              "offset": 1252,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "modified_time",
+              "path": "directory[1].modified_time",
+              "type": "filetime",
+              "offset": 1260,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "starting_sector",
+              "path": "directory[1].starting_sector",
+              "type": "u32",
+              "offset": 1268,
+              "size": 4,
+              "value": 4294967294,
+              "display": "ENDOFCHAIN (0xFFFFFFFE)"
+            },
+            {
+              "name": "stream_size",
+              "path": "directory[1].stream_size",
+              "type": "u64",
+              "offset": 1272,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "directory[2]",
+          "type": "DirectoryEntry",
+          "offset": 1280,
+          "size": 128,
+          "display": "DirectoryEntry (13)",
+          "children": [
+            {
+              "name": "name",
+              "path": "directory[2].name",
+              "type": "char16[32]",
+              "offset": 1280,
+              "size": 64,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "name_length",
+              "path": "directory[2].name_length",
+              "type": "u16",
+              "offset": 1344,
+              "size": 2,
+              "value": 0,
+              "display": "0",
+              "comment": "終端の 0 を含むバイト数"
+            },
+            {
+              "name": "object_type",
+              "path": "directory[2].object_type",
+              "type": "ObjectType",
+              "offset": 1346,
+              "size": 1,
+              "value": 0,
+              "display": "Unknown (0x0)"
+            },
+            {
+              "name": "color",
+              "path": "directory[2].color",
+              "type": "Color",
+              "offset": 1347,
+              "size": 1,
+              "value": 0,
+              "display": "Red (0x0)"
+            },
+            {
+              "name": "left_sibling",
+              "path": "directory[2].left_sibling",
+              "type": "u32",
+              "offset": 1348,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "right_sibling",
+              "path": "directory[2].right_sibling",
+              "type": "u32",
+              "offset": 1352,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "child",
+              "path": "directory[2].child",
+              "type": "u32",
+              "offset": 1356,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "clsid",
+              "path": "directory[2].clsid",
+              "type": "guid",
+              "offset": 1360,
+              "size": 16,
+              "value": "00000000000000000000000000000000",
+              "display": "{00000000-0000-0000-0000-000000000000}"
+            },
+            {
+              "name": "state_bits",
+              "path": "directory[2].state_bits",
+              "type": "u32",
+              "offset": 1376,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "creation_time",
+              "path": "directory[2].creation_time",
+              "type": "filetime",
+              "offset": 1380,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "modified_time",
+              "path": "directory[2].modified_time",
+              "type": "filetime",
+              "offset": 1388,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "starting_sector",
+              "path": "directory[2].starting_sector",
+              "type": "u32",
+              "offset": 1396,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "stream_size",
+              "path": "directory[2].stream_size",
+              "type": "u64",
+              "offset": 1400,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "directory[3]",
+          "type": "DirectoryEntry",
+          "offset": 1408,
+          "size": 128,
+          "display": "DirectoryEntry (13)",
+          "children": [
+            {
+              "name": "name",
+              "path": "directory[3].name",
+              "type": "char16[32]",
+              "offset": 1408,
+              "size": 64,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "name_length",
+              "path": "directory[3].name_length",
+              "type": "u16",
+              "offset": 1472,
+              "size": 2,
+              "value": 0,
+              "display": "0",
+              "comment": "終端の 0 を含むバイト数"
+            },
+            {
+              "name": "object_type",
+              "path": "directory[3].object_type",
+              "type": "ObjectType",
+              "offset": 1474,
+              "size": 1,
+              "value": 0,
+              "display": "Unknown (0x0)"
+            },
+            {
+              "name": "color",
+              "path": "directory[3].color",
+              "type": "Color",
+              "offset": 1475,
+              "size": 1,
+              "value": 0,
+              "display": "Red (0x0)"
+            },
+            {
+              "name": "left_sibling",
+              "path": "directory[3].left_sibling",
+              "type": "u32",
+              "offset": 1476,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "right_sibling",
+              "path": "directory[3].right_sibling",
+              "type": "u32",
+              "offset": 1480,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "child",
+              "path": "directory[3].child",
+              "type": "u32",
+              "offset": 1484,
+              "size": 4,
+              "value": 4294967295,
+              "display": "FREESECT (0xFFFFFFFF)"
+            },
+            {
+              "name": "clsid",
+              "path": "directory[3].clsid",
+              "type": "guid",
+              "offset": 1488,
+              "size": 16,
+              "value": "00000000000000000000000000000000",
+              "display": "{00000000-0000-0000-0000-000000000000}"
+            },
+            {
+              "name": "state_bits",
+              "path": "directory[3].state_bits",
+              "type": "u32",
+              "offset": 1504,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "creation_time",
+              "path": "directory[3].creation_time",
+              "type": "filetime",
+              "offset": 1508,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "modified_time",
+              "path": "directory[3].modified_time",
+              "type": "filetime",
+              "offset": 1516,
+              "size": 8,
+              "value": 0,
+              "display": "1/1/1601 12:00:00 AM"
+            },
+            {
+              "name": "starting_sector",
+              "path": "directory[3].starting_sector",
+              "type": "u32",
+              "offset": 1524,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "stream_size",
+              "path": "directory[3].stream_size",
+              "type": "u64",
+              "offset": 1528,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

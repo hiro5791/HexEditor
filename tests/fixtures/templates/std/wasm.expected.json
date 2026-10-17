@@ -1,0 +1,393 @@
+{
+  "name": "WebAssembly モジュール",
+  "type": "application",
+  "offset": 0,
+  "size": 41,
+  "children": [
+    {
+      "name": "magic",
+      "path": "magic",
+      "type": "u8[4]",
+      "offset": 0,
+      "size": 4,
+      "value": "0061736D",
+      "display": "00 61 73 6D"
+    },
+    {
+      "name": "version",
+      "path": "version",
+      "type": "u32",
+      "offset": 4,
+      "size": 4,
+      "value": 1,
+      "display": "1"
+    },
+    {
+      "name": "sections",
+      "path": "sections",
+      "type": "Section[4]",
+      "offset": 8,
+      "size": 33,
+      "display": "[4]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "sections[0]",
+          "type": "Section",
+          "offset": 8,
+          "size": 9,
+          "display": "Section (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "sections[0].id",
+              "type": "SectionId",
+              "offset": 8,
+              "size": 1,
+              "value": 1,
+              "display": "Type (0x1)"
+            },
+            {
+              "name": "size",
+              "path": "sections[0].size",
+              "type": "uleb128",
+              "offset": 9,
+              "size": 1,
+              "value": 7,
+              "display": "7"
+            },
+            {
+              "name": "type_section",
+              "path": "sections[0].type_section",
+              "type": "TypeSection",
+              "offset": 10,
+              "size": 7,
+              "display": "TypeSection (2)",
+              "children": [
+                {
+                  "name": "count",
+                  "path": "sections[0].type_section.count",
+                  "type": "uleb128",
+                  "offset": 10,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "types",
+                  "path": "sections[0].type_section.types",
+                  "type": "FuncType[1]",
+                  "offset": 11,
+                  "size": 6,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "sections[0].type_section.types[0]",
+                      "type": "FuncType",
+                      "offset": 11,
+                      "size": 6,
+                      "display": "FuncType (5)",
+                      "children": [
+                        {
+                          "name": "form",
+                          "path": "sections[0].type_section.types[0].form",
+                          "type": "u8",
+                          "offset": 11,
+                          "size": 1,
+                          "value": 96,
+                          "display": "96"
+                        },
+                        {
+                          "name": "parameter_count",
+                          "path": "sections[0].type_section.types[0].parameter_count",
+                          "type": "uleb128",
+                          "offset": 12,
+                          "size": 1,
+                          "value": 2,
+                          "display": "2"
+                        },
+                        {
+                          "name": "parameters",
+                          "path": "sections[0].type_section.types[0].parameters",
+                          "type": "ValueType[2]",
+                          "offset": 13,
+                          "size": 2,
+                          "display": "[2]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "sections[0].type_section.types[0].parameters[0]",
+                              "type": "ValueType",
+                              "offset": 13,
+                              "size": 1,
+                              "value": 127,
+                              "display": "I32 (0x7F)"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "sections[0].type_section.types[0].parameters[1]",
+                              "type": "ValueType",
+                              "offset": 14,
+                              "size": 1,
+                              "value": 127,
+                              "display": "I32 (0x7F)"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "result_count",
+                          "path": "sections[0].type_section.types[0].result_count",
+                          "type": "uleb128",
+                          "offset": 15,
+                          "size": 1,
+                          "value": 1,
+                          "display": "1"
+                        },
+                        {
+                          "name": "results",
+                          "path": "sections[0].type_section.types[0].results",
+                          "type": "ValueType[1]",
+                          "offset": 16,
+                          "size": 1,
+                          "display": "[1]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "sections[0].type_section.types[0].results[0]",
+                              "type": "ValueType",
+                              "offset": 16,
+                              "size": 1,
+                              "value": 127,
+                              "display": "I32 (0x7F)"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "sections[1]",
+          "type": "Section",
+          "offset": 17,
+          "size": 4,
+          "display": "Section (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "sections[1].id",
+              "type": "SectionId",
+              "offset": 17,
+              "size": 1,
+              "value": 3,
+              "display": "Function (0x3)"
+            },
+            {
+              "name": "size",
+              "path": "sections[1].size",
+              "type": "uleb128",
+              "offset": 18,
+              "size": 1,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "function_section",
+              "path": "sections[1].function_section",
+              "type": "FunctionSection",
+              "offset": 19,
+              "size": 2,
+              "display": "FunctionSection (2)",
+              "children": [
+                {
+                  "name": "count",
+                  "path": "sections[1].function_section.count",
+                  "type": "uleb128",
+                  "offset": 19,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "type_indices",
+                  "path": "sections[1].function_section.type_indices",
+                  "type": "uleb128[1]",
+                  "offset": 20,
+                  "size": 1,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "sections[1].function_section.type_indices[0]",
+                      "type": "uleb128",
+                      "offset": 20,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "sections[2]",
+          "type": "Section",
+          "offset": 21,
+          "size": 9,
+          "display": "Section (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "sections[2].id",
+              "type": "SectionId",
+              "offset": 21,
+              "size": 1,
+              "value": 7,
+              "display": "Export (0x7)"
+            },
+            {
+              "name": "size",
+              "path": "sections[2].size",
+              "type": "uleb128",
+              "offset": 22,
+              "size": 1,
+              "value": 7,
+              "display": "7"
+            },
+            {
+              "name": "export_section",
+              "path": "sections[2].export_section",
+              "type": "ExportSection",
+              "offset": 23,
+              "size": 7,
+              "display": "ExportSection (2)",
+              "children": [
+                {
+                  "name": "count",
+                  "path": "sections[2].export_section.count",
+                  "type": "uleb128",
+                  "offset": 23,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "exports",
+                  "path": "sections[2].export_section.exports",
+                  "type": "Export[1]",
+                  "offset": 24,
+                  "size": 6,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "sections[2].export_section.exports[0]",
+                      "type": "Export",
+                      "offset": 24,
+                      "size": 6,
+                      "display": "Export (3)",
+                      "children": [
+                        {
+                          "name": "name",
+                          "path": "sections[2].export_section.exports[0].name",
+                          "type": "Name",
+                          "offset": 24,
+                          "size": 4,
+                          "display": "Name (2)",
+                          "children": [
+                            {
+                              "name": "length",
+                              "path": "sections[2].export_section.exports[0].name.length",
+                              "type": "uleb128",
+                              "offset": 24,
+                              "size": 1,
+                              "value": 3,
+                              "display": "3"
+                            },
+                            {
+                              "name": "text",
+                              "path": "sections[2].export_section.exports[0].name.text",
+                              "type": "char[3]",
+                              "offset": 25,
+                              "size": 3,
+                              "value": "add",
+                              "display": "add"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "kind",
+                          "path": "sections[2].export_section.exports[0].kind",
+                          "type": "ExternalKind",
+                          "offset": 28,
+                          "size": 1,
+                          "value": 0,
+                          "display": "Function (0x0)"
+                        },
+                        {
+                          "name": "index",
+                          "path": "sections[2].export_section.exports[0].index",
+                          "type": "uleb128",
+                          "offset": 29,
+                          "size": 1,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "sections[3]",
+          "type": "Section",
+          "offset": 30,
+          "size": 11,
+          "display": "Section (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "sections[3].id",
+              "type": "SectionId",
+              "offset": 30,
+              "size": 1,
+              "value": 10,
+              "display": "Code (0xA)"
+            },
+            {
+              "name": "size",
+              "path": "sections[3].size",
+              "type": "uleb128",
+              "offset": 31,
+              "size": 1,
+              "value": 9,
+              "display": "9"
+            },
+            {
+              "name": "data",
+              "path": "sections[3].data",
+              "type": "u8[9]",
+              "offset": 32,
+              "size": 9,
+              "value": "010700200020016A0B",
+              "display": "01 07 00 20 00 20 01 6A 0B"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -61,6 +61,22 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <!-- 第三者のライセンス表示はすべての配布形態に入れる (PKG-05 の仕様 1、UI-40)。 -->
     <Content Include="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!--
+      コードエディタの Monaco Editor (08 の AUTO-20 の仕様 1、07 の TPL-31)。配布物に同梱し、インターネットから読み込まない。
+      Assets\Monaco\vs は npm の monaco-editor の min/vs から使う部分だけを写したもの (版と確認の値は Assets\Monaco\README.md)、
+      Assets\Monaco\host は WebView2 の中のページ (このリポジトリのコード)。3 つの配布形態 (MSIX・ポータブル・インストーラ) すべてに入る。
+    -->
+    <Content Include="Assets\Monaco\**\*" Exclude="Assets\Monaco\README.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- JavaScript の補完の型定義 (AUTO-04 で生成したもの。docs/api が正本) -->
+    <Content Include="..\..\docs\api\hexeditor.d.ts;..\..\docs\api\hexeditor.ja.d.ts" Link="Assets\Monaco\host\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- 同梱のサンプルスクリプト (08 の AUTO-46)。実行時は AppContext.BaseDirectory\Samples\scripts\ から読む (信頼の確認なし。ScriptingService)。 -->
+    <Content Include="..\..\samples\scripts\*" Link="Samples\scripts\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!--
+      C# スクリプト コンポーネントの検証用の一覧 (08 の AUTO-03 の仕様 3: アプリ本体に埋め込む SHA-256 の一覧)。
+      build/Build-CSharpComponent.ps1 が作り、-p:HexCSharpComponentManifest=<パス> で渡す。渡さないビルドでは埋め込まない (追加できない)。
+    -->
+    <EmbeddedResource Include="$(HexCSharpComponentManifest)" LogicalName="HexEditor.CSharpComponent.json"
+      Condition="'$(HexCSharpComponentManifest)' != '' and Exists('$(HexCSharpComponentManifest)')" />
     <!-- settings.json の JSON スキーマ (UI-23 の仕様 8)。設定項目の登録から作る (Core のテスト SettingsSchemaIsUpToDate)。 -->
     <!-- 英語の文字列 (表示言語に関係なく英語名で検索するため。Loc.English)。 -->
     <EmbeddedResource Include="Strings\en\Resources.resw" LogicalName="HexEditor.Strings.en.resw" />
@@ -107,6 +123,22 @@
   <Target Name="HexWarnMissingShellExtension" BeforeTargets="BeforeBuild"
           Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexShellExtensionDir)' == ''">
     <Warning Text="HexShellExtensionDir が指定されていないため、HexEditor.ShellExtension.dll をパッケージに入れません (Windows 11 の新しい右クリックメニューが出ません。UI-55)。" />
+  </Target>
+
+  <!--
+    コマンドライン hexed.exe (08 の AUTO-36)。MSIX 版はマニフェストの 2 つ目の Application (App Execution Alias hexed.exe) が指すため、
+    hexed.exe とその 3 つのファイルをパッケージに入れる。build/publish.ps1 が HexEditor.Cli を発行して HexCliDir で渡す。
+    .NET の実行環境は HexEditor.exe のものを使う (補助プロセスと同じ。同じバージョンで自己完結型に発行する)。
+  -->
+  <ItemGroup Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexCliDir)' != ''">
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.exe" Link="hexed.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.dll" Link="hexed.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.deps.json" Link="hexed.deps.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.runtimeconfig.json" Link="hexed.runtimeconfig.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="HexWarnMissingCli" BeforeTargets="BeforeBuild"
+          Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexCliDir)' == ''">
+    <Warning Text="HexCliDir が指定されていないため、hexed.exe をパッケージに入れません (マニフェストの Application 'Hexed' が指す実行ファイルがないため、MSIX を作れません。build/publish.ps1 を使ってください)。" />
   </Target>
 
   <ItemGroup>
@@ -157,6 +189,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
     <ProjectReference Include="..\HexEditor.Platform\HexEditor.Platform.csproj" />
+    <!-- プラグイン SDK の UI 部分 (08 の AUTO-29)。プラグインのパネルの型をアプリとプラグインで共有する。 -->
+    <ProjectReference Include="..\HexEditor.Sdk.UI\HexEditor.Sdk.UI.csproj" />
   </ItemGroup>
 
   <!--
@@ -175,6 +209,19 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
   </PropertyGroup>
+
+  <!--
+    同梱の Monaco (Assets\Monaco) は MRT のリソース (resources.pri) の索引に入れない。ページは WebView2 の仮想ホストからパスで読むので
+    リソースとして引くことはなく、名前の中の「.」を言語などの修飾子と読まれて警告 (PRI249) になるため。パッケージの中身には入ったまま
+    (_AppxLayoutAssetPackageFiles は UseAppxLayout が false の間は PRI の索引から外すだけに使われる)。
+  -->
+  <Target Name="HexExcludeMonacoFromPri" BeforeTargets="_GenerateProjectPriConfigurationFiles">
+    <ItemGroup>
+      <_HexMonacoPriFile Include="@(PriOutputs)" Condition="$([System.String]::Copy('%(PriOutputs.TargetPath)').StartsWith('Assets\Monaco'))" />
+      <_HexMonacoPriFile Include="@(PackagingOutputs)" Condition="$([System.String]::Copy('%(PackagingOutputs.TargetPath)').StartsWith('Assets\Monaco'))" />
+      <_AppxLayoutAssetPackageFiles Include="@(_HexMonacoPriFile)" />
+    </ItemGroup>
+  </Target>
 
   <!-- 疑似翻訳 (UI-46)。安定版のビルドでは HexPseudoLocales=false にする。 -->
   <Import Project="..\..\build\PseudoLocalize.targets" />

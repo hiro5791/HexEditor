@@ -111,6 +111,9 @@ public partial class App : Application
         Devices = new Services.DeviceService(env);
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
 
+        // 設定「ファイルのロック」(ENG-15 の仕様 3)。変えたら、その後に開くファイルから使う。
+        MainViewModel.LockPolicySource = () => Core.Engine.FileLockSettings.Parse(Settings.GetString(Core.Engine.FileLockSettings.Key, Core.Engine.FileLockSettings.WhileModified));
+
         // 最近使ったファイル・前回の位置・セッション・初回起動の状態 (ENG-16、UI-31、UI-38)。ポータブル版では exe と同じドライブの
         // ファイルを exe からの相対パスで記録する (UI-32 の仕様 8)。
         string exeFolder = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
@@ -141,7 +144,16 @@ public partial class App : Application
         MainWindow.RegisterSelectionPanels();
         MainWindow.RegisterFormatIssuesPanel();
         MainWindow.RegisterComparePanel();
+        MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
+
+        // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
+        Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
+
+        // プラグイン (08 の AUTO-30)。ここでは準備だけで、読み込みは最初のウィンドウを表示した後 (起動を遅らせない)。
+        Services.Plugins.PluginService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
+        // 構造体テンプレート (07) のパネルと、コマンドライン・スクリプトのつなぎ目 (スクリプトの用意の後)。
+        MainWindow.RegisterTemplatePanels();
         var window = new MainWindow(vm);
         Window = window;
 
@@ -235,5 +247,8 @@ public partial class App : Application
 
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();
+
+        // プラグインの読み込み (AUTO-30 の仕様 4: 最初のウィンドウを表示した後にバックグラウンドで)。セーフモードの案内は MainWindow.SafeMode.cs。
+        Services.Plugins.PluginService.StartLoading();
     }
 }

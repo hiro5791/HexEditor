@@ -170,38 +170,6 @@ public sealed partial class MainWindow : Window
 
     private WindowId WindowId => AppWindow.Id;
 
-    /// <summary>コマンドラインで指定したファイルを開く (起動時、または転送された 2 つ目の起動)。</summary>
-    public void OpenFromCommandLine(CommandLine commandLine, bool activate)
-    {
-        foreach (string file in commandLine.Files)
-        {
-            TryOpen(file);
-        }
-
-        // ジャンプリストの「新規作成」(--new-document。UI-35)。
-        if (commandLine.NewDocument)
-        {
-            Vm.NewDocument();
-        }
-
-        // ジャンプリストの「ディスクを開く」(--open-disk。UI-35)。
-        if (commandLine.OpenDisk)
-        {
-            DispatcherQueue.TryEnqueue(() => _ = Commands.ExecuteAsync("file.openDisk"));
-        }
-
-        if (commandLine.Offset is { } offset && Editor is { } editor
-            && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
-        {
-            editor.GoTo(target);
-        }
-
-        if (activate)
-        {
-            Activate();
-        }
-    }
-
     /// <summary>
     /// タイトル (UI-02 の仕様 3): 「● 文書名 - HexEditor」。未保存の変更があれば ●、管理者として実行中は「(管理者)」、
     /// セーフモードでは「(セーフモード)」を付ける。プレビュー版は「HexEditor Preview」。
@@ -304,7 +272,7 @@ public sealed partial class MainWindow : Window
     private DocumentViewModel? SaveTarget() => ActiveCompare is { } compare ? compare.Focused.Owner : Vm.Selected;
 
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
-    private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
+    private async Task<bool> SaveCoreAsync(DocumentViewModel doc, bool saveAs)
     {
         // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
         if (!saveAs && doc.IsDevice)
@@ -447,6 +415,11 @@ public sealed partial class MainWindow : Window
         {
             ShowNotice(Loc.Get("Error_Unreadable"), InfoBarSeverity.Error, doc);
         }
+        catch (UnauthorizedAccessException) when (FileLockInfo.ProcessesUsing(path, excludeSelf: true) is { Count: > 0 } users)
+        {
+            // 他のアプリが削除を許さずに開いているファイルの置き換えは「アクセス拒否」になる: 使用中として「再試行」を出す (ENG-20 の「エラー」)。
+            ShowInUseNotice(doc, path, users);
+        }
         catch (UnauthorizedAccessException)
         {
             ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error, doc);
@@ -467,12 +440,40 @@ public sealed partial class MainWindow : Window
                 }),
             ]);
         }
+        catch (IOException ex) when (ex.HResult is SharingViolation or LockViolation)
+        {
+            // 他のアプリが使用中 (ENG-20 の「エラー」)。
+            ShowInUseNotice(doc, path, FileLockInfo.ProcessesUsing(path, excludeSelf: true));
+        }
         catch (IOException ex)
         {
             ShowNotice(Loc.Format("Error_SaveIo", ex.Message), InfoBarSeverity.Error, doc);
         }
 
         return false;
+    }
+
+    /// <summary>他のアプリが使用中で保存できない: 使用中のプロセス名と「再試行」ボタン (ENG-20 の「エラー」)。再試行は同じ保存先へ保存し直す。</summary>
+    private void ShowInUseNotice(DocumentViewModel doc, string path, IReadOnlyList<string> users)
+    {
+        string target = Path.GetFileName(path);
+        ShowNotice(users.Count > 0 ? Loc.Format("Error_SaveInUseBy", target, string.Join(", ", users)) : Loc.Format("Error_SaveInUse", target),
+            InfoBarSeverity.Error, doc, actions:
+            [
+                new NotificationAction(Loc.Get("Common_Retry"), () => _ = RetrySaveAsync(doc, path)),
+            ]);
+    }
+
+    /// <summary>使用中で保存できなかったときの「再試行」: 同じ保存先へもう一度保存する (名前を付けて保存でも保存先を選び直さない)。</summary>
+    private Task<bool> RetrySaveAsync(DocumentViewModel doc, string path)
+    {
+        if (string.Equals(path, doc.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            return SaveAsync(doc, saveAs: false);
+        }
+
+        _binarySaveAsPath = path;
+        return SaveAsync(doc, saveAs: true);
     }
 
     // ---- 編集・移動 ----

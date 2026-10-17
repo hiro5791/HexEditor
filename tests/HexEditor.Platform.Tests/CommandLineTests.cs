@@ -32,6 +32,53 @@ public sealed class CommandLineTests
     }
 
     [Fact]
+    public void OpenOptionsOfHexedAreParsedAndTheirValuesAreNotFiles()
+    {
+        // hexed open が HexEditor.exe に渡す引数 (AUTO-37)。--compare だけは値を 2 つ取る。
+        CommandLine c = CommandLine.Parse([
+            @"C:\w\a.bin", "-g", "end-16", "--select", "0x10:0x20", "-r", "--encoding", "cp932", "--template", "pe",
+            "--compare", @"C:\w\x.bin", @"C:\w\y.bin", "--run", @"C:\w\s.js", "--disk", "0", "--volume", "C:", "--process", "notepad",
+            "--write-block", "--plugin-dev", @"C:\dev\plg", "--wait-id", "abc123", "--unregister-result", @"C:\t\r.txt"]);
+        Assert.Equal([@"C:\w\a.bin"], c.Files);
+        Assert.Equal("end-16", c.Offset);
+        Assert.Equal("0x10:0x20", c.Select);
+        Assert.True(c.ReadOnly);
+        Assert.Equal("cp932", c.Encoding);
+        Assert.Equal("pe", c.Template);
+        Assert.Equal([@"C:\w\x.bin", @"C:\w\y.bin"], c.Compare);
+        Assert.Equal(@"C:\w\s.js", c.Run);
+        Assert.Equal("0", c.Disk);
+        Assert.Equal("C:", c.Volume);
+        Assert.Equal("notepad", c.Process);
+        Assert.True(c.WriteBlock);
+        Assert.Equal(@"C:\dev\plg", c.PluginDev);
+        Assert.Equal("abc123", c.WaitId);
+        Assert.Equal(@"C:\t\r.txt", c.UnregisterResult);
+        Assert.True(c.HasOpenActions);
+        Assert.False(CommandLine.Parse(["a.bin"]).HasOpenActions);
+    }
+
+    [Fact]
+    public void ACompareWithoutTwoFilesAndAnInvalidWaitIdAreIgnored()
+    {
+        CommandLine c = CommandLine.Parse(["--compare", "only-one.bin"]);
+        Assert.Empty(c.Compare);
+        Assert.Empty(c.Files);
+        Assert.Null(CommandLine.Parse(["--wait-id", @"..\evil"]).WaitId);
+        Assert.Null(CommandLine.Parse(["--wait-id", "Local\\x y"]).WaitId);
+    }
+
+    [Fact]
+    public void WaitSignalNamesAreSessionLocal()
+    {
+        string id = WaitSignal.NewId();
+        Assert.True(WaitSignal.IsValidId(id));
+        Assert.StartsWith(@"Local\HexEditor.Wait.", WaitSignal.EventName(id));
+        Assert.False(WaitSignal.IsValidId(string.Empty));
+        Assert.False(WaitSignal.IsValidId(new string('a', 65)));
+    }
+
+    [Fact]
     public void UnregisterIsAFlagAndNotAFile()
     {
         // HexEditor.exe --unregister (08 の AUTO-36 の 9)。

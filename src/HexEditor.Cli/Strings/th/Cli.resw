@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>ยกเลิกแล้ว</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>ดูวิธีใช้ได้ด้วย 'hexed --help' (หรือ 'hexed &lt;command&gt; --help')</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: เกิดข้อผิดพลาดที่ไม่คาดคิด ({0}) บันทึกรายละเอียดไว้ที่ {1} แล้ว</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>วิธีใช้: hexed &lt;command&gt; [อาร์กิวเมนต์] [ตัวเลือก]
+       hexed &lt;file&gt; [ตัวเลือก]          (เหมือนกับ: hexed open &lt;file&gt;)
+
+คำสั่ง:
+  open      เปิดไฟล์ ดิสก์ หรือโปรเซสในหน้าต่าง HexEditor
+  hash      คำนวณและตรวจสอบแฮชและเช็กซัม
+  dump      พิมพ์ฮิกซ์ดัมพ์
+  compare   เปรียบเทียบไฟล์สองไฟล์
+  run       เรียกใช้สคริปต์โดยไม่มีหน้าต่าง
+  template  ใช้เทมเพลตโครงสร้างและพิมพ์ผลลัพธ์
+  patch     ใช้แพตช์ IPS กับไฟล์
+  convert   แปลงระหว่างรูปแบบ (Intel HEX, S-record, Base64, ซอร์สโค้ด ฯลฯ)
+  find      ค้นหาไฟล์และพิมพ์รายการที่ตรงกัน
+
+ตัวเลือกทั่วไป (ทุกคำสั่ง):
+  -h, --help           แสดงวิธีใช้ (ใช้ได้ด้วย: hexed &lt;command&gt; --help)
+      --version        แสดงเวอร์ชัน
+  -q, --quiet          พิมพ์เฉพาะผลลัพธ์
+      --format &lt;f&gt;     รูปแบบผลลัพธ์: text (ค่าเริ่มต้น) หรือ json
+  -o, --output &lt;path&gt;  เขียนผลลัพธ์ลงไฟล์แทนหน้าจอ
+      --lang &lt;tag&gt;     ภาษาของข้อความ (เช่น en, ja)
+      --no-color       ไม่ใช้สี
+      --unregister     ลบการลงทะเบียนที่ทำไว้บนพีซีเครื่องนี้ (เมนูคลิกขวา การเชื่อมโยงไฟล์ จัมพ์ลิสต์ PATH
+                       โฟลเดอร์ชั่วคราว)
+
+รหัสออก: 0 สำเร็จ, 1 ผลลัพธ์เชิงลบ (มีความต่าง ไม่พบ ไม่ตรงกัน), 2 ใช้ผิดวิธี,
+3 ข้อผิดพลาด I/O, 4 ข้อผิดพลาดของสคริปต์หรือเทมเพลต, 5 ไม่ได้รับอนุญาต, 6 ยกเลิก, 7 เกินขีดจำกัด,
+8 ข้อผิดพลาดของรูปแบบ, 10 ข้อผิดพลาดภายใน
+
+ออฟเซ็ต ความยาว และช่วง ใช้นิพจน์ได้ ตัวเลขที่ไม่มีคำนำหน้าเป็นเลขฐานสิบ ใช้ 0x สำหรับเลขฐานสิบหก
+ช่วงเขียนเป็น start:length หรือ start..end (ไม่รวม end) 'end' คือความยาวไฟล์ (เช่น end-16:16)
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>วิธีใช้: hexed open [paths...] [ตัวเลือก]
+
+เปิดไฟล์ในหน้าต่าง HexEditor ถ้า HexEditor ทำงานอยู่แล้ว ไฟล์จะเปิดเป็นแท็บในนั้น
+พาธแบบสัมพัทธ์จะอ้างอิงจากโฟลเดอร์ปัจจุบัน
+
+ตัวเลือก:
+  -g, --offset &lt;expr&gt;      วางเคอร์เซอร์ที่ตำแหน่งนี้ (เช่น 0x1000 หรือ end-16)
+      --select &lt;range&gt;     เลือกช่วงนี้ (start:length หรือ start..end)
+  -r, --readonly           เปิดแบบอ่านอย่างเดียว
+      --disk &lt;n|path&gt;      เปิดดิสก์จริง (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     เปิดวอลุ่ม (--volume C:)
+      --process &lt;pid|name&gt; เปิดหน่วยความจำของโปรเซส
+      --encoding &lt;name&gt;    การเข้ารหัสอักขระของคอลัมน์ข้อความ
+      --template &lt;name|path&gt;  ใช้เทมเพลตโครงสร้างหลังเปิด
+      --compare &lt;a&gt; &lt;b&gt;    เปิดไฟล์สองไฟล์ในมุมมองเปรียบเทียบ
+      --run &lt;script&gt;       เรียกใช้สคริปต์หลังเปิด
+      --new-window         เปิดในหน้าต่างใหม่
+      --new-document       เปิดเอกสารเปล่าใหม่
+      --open-disk          แสดงกล่องโต้ตอบเปิดดิสก์
+      --new-instance       เริ่มโปรเซสแยกต่างหากแทนการใช้โปรเซสที่ทำงานอยู่
+  -w, --wait               ไม่ส่งกลับจนกว่าเอกสารที่เปิดจะถูกปิด
+      --safe-mode          เริ่มในโหมดปลอดภัย (เฉพาะโปรเซสใหม่)
+      --write-block        เริ่มโดยป้องกันการเขียนทั้งแอป
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   แสดงข้อความแปลจำลอง (บิลด์พรีวิว)
+      --plugin-dev &lt;folder&gt; โหลดปลั๊กอินที่กำลังพัฒนา (เฉพาะโปรเซสใหม่)
+      --ui-lang &lt;tag&gt;      ภาษาที่แสดงของหน้าต่าง (เฉพาะโปรเซสใหม่)
+      --test-hooks &lt;file&gt;  เปิดใช้การแทรกข้อผิดพลาด (เฉพาะบิลด์ทดสอบ)
+
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>วิธีใช้: hexed hash [paths...] [ตัวเลือก]
+       hexed hash --check &lt;checksum file&gt; [ตัวเลือก]
+
+คำนวณแฮชและเช็กซัม พาธอาจมีไวลด์การ์ด (*.bin) หรือเป็นโฟลเดอร์ ใช้ - เพื่ออ่านจากอินพุตมาตรฐาน
+คำนวณหลายอัลกอริทึมในการอ่านครั้งเดียว
+
+ตัวเลือก:
+  -a, --algorithm &lt;id,...&gt;   รหัสอัลกอริทึม คั่นด้วยจุลภาค (ค่าเริ่มต้น sha256)
+                             '--algorithm list' พิมพ์รหัสที่ใช้ได้
+      --range &lt;range&gt;        แฮชเฉพาะช่วงนี้ (start:length หรือ start..end)
+      --format &lt;f&gt;           text (ค่าเริ่มต้น): algorithm  value  path
+                             gnu: value  path (เหมือน sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: หนึ่งออบเจ็กต์ต่อไฟล์
+      --check &lt;file&gt;         ตรวจสอบไฟล์ที่ระบุในไฟล์เช็กซัม (.sha256, .md5,
+                             SHA256SUMS, .sfv ฯลฯ) และพิมพ์ OK, FAILED หรือ MISSING
+  -r, --recurse              รวมโฟลเดอร์ย่อยเมื่อระบุโฟลเดอร์
+
+รหัสออก: 0 สำเร็จ, 1 ไม่ตรงกับ --check, 3 อ่านไฟล์ไม่ได้
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>วิธีใช้: hexed dump &lt;path&gt; [ตัวเลือก]
+
+พิมพ์ฮิกซ์ดัมพ์ของไฟล์ (หรือช่วงหนึ่ง) ไปยังเอาต์พุตมาตรฐาน การใช้หน่วยความจำไม่ขึ้นกับขนาดไฟล์
+
+ตัวเลือก:
+      --range &lt;range&gt;        ช่วงที่จะพิมพ์ (start:length หรือ start..end; ค่าเริ่มต้น: ทั้งไฟล์)
+      --width &lt;n&gt;            ไบต์ต่อบรรทัด (ค่าเริ่มต้น 16)
+      --group &lt;n&gt;            ไบต์ต่อกลุ่ม (ค่าเริ่มต้นขึ้นกับสไตล์; 0 คือไม่จัดกลุ่ม)
+      --encoding &lt;name&gt;      การเข้ารหัสอักขระของคอลัมน์ข้อความ (ค่าเริ่มต้น ascii)
+      --base-address &lt;expr&gt;  ที่อยู่ที่แสดงสำหรับไบต์แรก (ค่าเริ่มต้น 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              พิมพ์ * สำหรับบรรทัดที่ซ้ำกับบรรทัดก่อนหน้า (เหมือน hexdump -C)
+
+รหัสออก: 2 ถ้าช่วงอยู่นอกไฟล์
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>วิธีใช้: hexed compare &lt;path1&gt; &lt;path2&gt; [ตัวเลือก]
+
+เปรียบเทียบไฟล์สองไฟล์และพิมพ์ความต่าง
+
+ตัวเลือก:
+      --mode &lt;byte|resync&gt;   byte (ค่าเริ่มต้น): เปรียบเทียบไบต์ที่ออฟเซ็ตเดียวกัน
+                             resync: อนุญาตให้มีการแทรกและลบ
+      --range1 &lt;range&gt;       ช่วงของไฟล์แรก (ค่าเริ่มต้น: ทั้งหมด)
+      --range2 &lt;range&gt;       ช่วงของไฟล์ที่สอง (ค่าเริ่มต้น: ทั้งหมด)
+      --max &lt;n&gt;              จำนวนความต่างสูงสุดที่จะพิมพ์ (ค่าเริ่มต้น 1000);
+                             ที่เหลือนับเท่านั้น
+      --format &lt;text|json&gt;   รูปแบบผลลัพธ์
+      --brief                พิมพ์หนึ่งบรรทัด (เหมือนหรือต่าง) และหยุดที่ความต่างแรก
+
+รหัสออก: 0 เหมือนกัน, 1 ต่างกัน, 3 อ่านไฟล์ไม่ได้
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>วิธีใช้: hexed run &lt;script&gt; [files...] [ตัวเลือก]
+
+เรียกใช้สคริปต์โดยไม่เปิดหน้าต่าง ไฟล์จะเปิดตามลำดับ (app.documents) ไฟล์แรก
+คือ app.activeDocument
+
+ตัวเลือก:
+      --arg &lt;name=value&gt;   พารามิเตอร์ของสคริปต์ (ใช้ซ้ำได้) ใช้ได้ใน script.args ด้วย
+      --trust              เรียกใช้สคริปต์ที่ไม่เชื่อถือโดยไม่ถาม
+      --allow &lt;perm,...&gt;   สิทธิ์ที่จะให้ (เช่น file-read)
+      --save               บันทึกทุกเอกสารที่เปลี่ยนแปลงเมื่อสคริปต์สิ้นสุด
+      --save-as &lt;path&gt;     บันทึกเอกสารแรกไปยังพาธนี้ (ไม่เปลี่ยนต้นฉบับ)
+      --dry-run            ไม่บันทึกอะไร พิมพ์สรุปการเปลี่ยนแปลง
+      --timeout &lt;seconds&gt;  เวลาทำงานสูงสุดของสคริปต์ทั้งหมด
+  -r, --readonly           เปิดไฟล์แบบอ่านอย่างเดียว
+
+โดยค่าเริ่มต้นจะบันทึกเฉพาะเอกสารที่สคริปต์เรียก doc.save()
+รหัสออกของสคริปต์ตั้งได้ด้วย app.exit(code) รหัส 2 ถึง 10 มีความหมายตามที่ระบุใน
+'hexed --help' ใช้ 64 ขึ้นไปสำหรับความหมายของคุณเอง</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>วิธีใช้: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [ตัวเลือก]
+
+ใช้เทมเพลตโครงสร้างกับไฟล์และพิมพ์ผลลัพธ์
+
+ตัวเลือก:
+      --template &lt;name|path&gt;  เทมเพลตที่จะใช้
+      --auto                  เลือกเทมเพลตโดยอัตโนมัติ (รหัสออก 1 ถ้าไม่มีที่เหมาะสม)
+  -g, --offset &lt;expr&gt;         ออฟเซ็ตเริ่มต้นของโครงสร้าง (ค่าเริ่มต้น 0)
+      --format &lt;f&gt;            json, csv หรือ text (ต้นไม้ที่ย่อหน้า ค่าเริ่มต้น text)
+      --depth &lt;n&gt;             ความลึกสูงสุดของต้นไม้
+      --fields &lt;path,...&gt;     พิมพ์เฉพาะฟิลด์เหล่านี้ (เช่น header.e_lfanew,sections[*].name)
+
+รหัสออก: 4 สำหรับข้อผิดพลาดของเทมเพลต
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>วิธีใช้: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [ตัวเลือก]
+
+ใช้ไฟล์แพตช์กับไฟล์ ต้องระบุอย่างใดอย่างหนึ่งระหว่าง -o และ --in-place เวอร์ชันนี้ใช้แพตช์ IPS
+และ IPS32 ได้
+
+ตัวเลือก:
+  -o, --output &lt;path&gt;       เขียนไฟล์ที่แพตช์แล้วที่นี่ (ไม่เปลี่ยนไฟล์เป้าหมาย)
+      --in-place            แทนที่ไฟล์เป้าหมายอย่างปลอดภัย (เขียนไฟล์ชั่วคราวก่อน)
+      --format &lt;f&gt;          auto (ค่าเริ่มต้น), ips หรือ ips32
+      --verify-before &lt;a:v&gt; ตรวจสอบแฮชของไฟล์เป้าหมายก่อน (เช่น sha256:ab12...);
+                            ถ้าต่างกัน รหัสออก 1 และไม่เขียนอะไร
+      --verify-after &lt;a:v&gt;  ตรวจสอบแฮชของผลลัพธ์ก่อนเขียน
+      --dry-run             พิมพ์จำนวนเรคคอร์ดและไบต์ที่เปลี่ยน ไม่ใช้อะไร
+
+รหัสออก: 1 การตรวจสอบล้มเหลว, 8 แพตช์เสียหาย</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>วิธีใช้: hexed convert &lt;input&gt; &lt;output&gt; [ตัวเลือก]
+
+แปลงไฟล์ระหว่างรูปแบบนำเข้า/ส่งออกของ HexEditor
+
+ตัวเลือก:
+      --from &lt;format&gt;       รูปแบบอินพุต (ค่าเริ่มต้น: ตรวจจากเนื้อหาและนามสกุล)
+      --to &lt;format&gt;         รูปแบบเอาต์พุต (ค่าเริ่มต้น: ตามนามสกุลเอาต์พุต; bin ถ้าไม่รู้จัก)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     อ่านไฟล์ Intel HEX / S-record แม้เช็กซัมจะผิด
+      --fill &lt;hex&gt;          ไบต์ที่ใช้เติมช่องว่าง (ค่าเริ่มต้น FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+ตัวเลือกรูปแบบใช้ชื่อเดียวกับฟิลด์ของกล่องโต้ตอบนำเข้า/ส่งออก เขียนด้วยตัวพิมพ์เล็กและขีดกลาง เช่น --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8
+
+รหัสออก: 8 สำหรับข้อผิดพลาดเช็กซัมหรือรูปแบบในอินพุต</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>วิธีใช้: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [ตัวเลือก]
+
+ค้นหาไฟล์และพิมพ์ "path  offset  length" สำหรับแต่ละรายการที่ตรงกัน
+
+ตัวเลือก:
+      --hex &lt;pattern&gt;      ไบต์ เช่น "DE AD ?? EF" (?? คือไบต์ใดก็ได้ ? คือนิบเบิลใดก็ได้)
+      --text &lt;string&gt;      ข้อความ
+      --regex &lt;expr&gt;       นิพจน์ทั่วไป (บนข้อความ)
+      --encoding &lt;name&gt;    การเข้ารหัสอักขระของ --text และ --regex (ค่าเริ่มต้น utf-8)
+      --case-sensitive     แยกตัวพิมพ์ใหญ่และเล็ก
+      --range &lt;range&gt;      ค้นหาเฉพาะช่วงนี้ของแต่ละไฟล์
+      --max &lt;n&gt;            หยุดหลังพบ n รายการ
+      --format &lt;text|json&gt; รูปแบบผลลัพธ์
+  -r, --recurse            รวมโฟลเดอร์ย่อยเมื่อระบุโฟลเดอร์
+
+รหัสออก: 0 พบ, 1 ไม่พบ, 3 อ่านไฟล์ไม่ได้
+ใน PowerShell ให้ใส่ค่าที่มี $ ในเครื่องหมายคำพูดเดี่ยว (เช่น '$1F00')</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>ไม่รู้จักคำสั่งหรือไฟล์: {0} คำสั่ง: open, hash, dump, compare, run, template, patch, convert, find</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>ไม่รู้จักภาษา: {0} ใช้แท็กภาษาที่แสดงอย่างใดอย่างหนึ่งจาก 23 ภาษา (เช่น en, ja, zh-Hans)</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>ไม่รู้จักตัวเลือก {0} สำหรับ '{1}'</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>ตัวเลือก {0} ไม่รับค่า ('{1}')</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>ตัวเลือก {0} ต้องมีค่า ('{1}')</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>ไม่มีพาธนี้: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>ถูกปฏิเสธการเข้าถึง: {0} ตรวจสอบสิทธิ์ของไฟล์หรือเรียกใช้จากบัญชีที่เข้าถึงได้</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>ไม่สามารถอ่าน {0} ได้: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>ไม่สามารถเขียน {0} ได้: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} เป็นโฟลเดอร์ ไม่ใช่ไฟล์</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>ไม่มีไฟล์ที่ตรงกับ {0}</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>ไม่สามารถอ่าน {0} ที่ {1} ได้</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>พื้นที่ว่างบน {0} ไม่พอ (ต้องการ {1} ไบต์ มี {2})</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>ไฟล์ใหญ่เกินไปสำหรับระบบไฟล์ของ {0} ({1})</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>พาธเอาต์พุต {0} เป็นอินพุตด้วย เลือกพาธเอาต์พุตอื่น</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: ไม่สามารถอ่านนิพจน์ "{1}" ที่ตำแหน่ง {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" อยู่นอกไฟล์ (ความยาว {2})</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" ต้องเป็นตัวเลขตั้งแต่ {2} ถึง {3}</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>'{1}' ไม่รองรับ --format {0} ใช้: {2}</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' ต้องมีพาธอินพุตอย่างน้อยหนึ่งพาธ</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' รับพาธอินพุตได้เพียงหนึ่งพาธ</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>เวอร์ชันนี้ไม่มี '{0}'</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>เวอร์ชันนี้ไม่มี {0}</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>ข้อมูลไม่พอดีกับรูปแบบ {0} (ขีดจำกัด {1})</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>ไม่รู้จักการเข้ารหัสอักขระ: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>นิพจน์ว่างเปล่า</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>ข้อผิดพลาดทางไวยากรณ์</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>วงเล็บไม่ได้ปิด</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>ไม่รู้จักชื่อ (ใช้ end สำหรับความยาวไฟล์)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>ไม่สามารถใช้บุ๊กมาร์กในบรรทัดคำสั่งได้</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>ไม่รู้จักฟังก์ชัน</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>หารด้วยศูนย์</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>ค่าใหญ่เกินไป</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>ไม่ใช่ตัวเลขที่ถูกต้อง</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>อ่านข้อมูลตรงนี้ไม่ได้</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>ใช้ไม่ได้ในบรรทัดคำสั่ง</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu ต้องใช้อัลกอริทึมเดียวเท่านั้น หากใช้หลายอัลกอริทึมให้ใช้ --format bsd หรือ text</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>ใช้ --range กับอินพุตมาตรฐานไม่ได้</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>ไม่รู้จักอัลกอริทึม: {0} ดูรหัสได้ด้วย 'hexed hash --algorithm list'</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>อัลกอริทึม {0} ใช้ไม่ได้บนพีซีเครื่องนี้</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} ไม่มีบรรทัดเช็กซัมที่อ่านได้</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>ไม่สามารถระบุอัลกอริทึมของ {0} ได้ ระบุด้วย --algorithm</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>เช็กซัมที่คำนวณได้ {0} รายการไม่ตรงกัน</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>ไฟล์ที่ระบุไว้ {0} ไฟล์ไม่มีอยู่</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>ไม่รู้จักสไตล์: {0} ดู 'hexed dump --help'</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' ต้องมีสองพาธ</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>ไม่รู้จักโหมด: {0} ใช้ byte หรือ resync</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>เปลี่ยนแปลง</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>แทรก</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>อ่านไม่ได้</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... ความต่างอีก {0} รายการไม่ได้แสดง (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>ความต่าง {0} รายการ รวม {1} ไบต์</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>ไฟล์ทั้งสองเหมือนกัน</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>ไฟล์ทั้งสองต่างกัน (ความต่างแรกที่ {0})</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>อ่านไม่ได้ {0} ช่วง</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>ระบุเพียงหนึ่งอย่างจาก --hex, --text และ --regex</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>รูปแบบการค้นหาไม่ถูกต้อง ({0})</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: ข้ามช่วงที่อ่านไม่ได้ {1} ช่วง</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>วิธีใช้: hexed convert &lt;input&gt; &lt;output&gt; [ตัวเลือก]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>แพตช์ IPS ให้ใช้ 'hexed patch' ไม่ใช่ 'hexed convert'</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>ค่าไม่ถูกต้องสำหรับ: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>ไม่รู้จักรูปแบบ: {0} รูปแบบ: {1}</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" ไม่ถูกต้อง ใช้: {2}</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} ใช้ไม่ได้กับการแปลงจาก {1} เป็น {2}</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  บรรทัด {0} คอลัมน์ {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: เช็กซัมผิดพลาดที่บรรทัด {1} คอลัมน์ {2} ใช้ --ignore-checksum เพื่ออ่านไฟล์ต่อไป
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: ข้อผิดพลาดของรูปแบบที่บรรทัด {1} คอลัมน์ {2} ({3})
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>ข้ามข้อผิดพลาดเช็กซัม {0} รายการ</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>วิธีใช้: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>ระบุ -o &lt;output&gt; หรือ --in-place (เพื่อไม่ให้ไฟล์เดิมเปลี่ยนโดยไม่ตั้งใจ)</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>ใช้ -o และ --in-place พร้อมกันไม่ได้</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>พาธเอาต์พุต {0} เป็นไฟล์เป้าหมายหรือแพตช์ ใช้ --in-place เพื่อแทนที่ไฟล์เป้าหมาย</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ไม่ใช่รูปแบบแพตช์ ใช้ auto, ips หรือ ips32</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: เวอร์ชันนี้ไม่รองรับแพตช์ UPS, BPS และ .hexpatch รองรับ IPS และ IPS32</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} ไม่ใช่ไฟล์แพตช์ที่รู้จัก</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: แพตช์เสียหายที่เรคคอร์ด {1} (ออฟเซ็ตไฟล์ {2})</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} ไม่ใช่แพตช์ {1}</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" ต้องอยู่ในรูป algorithm:value (เช่น sha256:ab12...)</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>แฮชของ {0} ไม่ตรงกับที่คาดไว้ (--verify-before) ไม่ได้เขียนอะไร</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>แฮชของ {0} ที่แพตช์แล้วไม่ตรงกับที่คาดไว้ (--verify-after) ไม่ได้เขียนอะไร</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>ใช้ {0} เรคคอร์ด เปลี่ยน {1} ไบต์ ความยาวเปลี่ยน {2} เขียน {3} แล้ว</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} เรคคอร์ด จะเปลี่ยน {1} ไบต์ ความยาวเปลี่ยน {2} ความยาวใหม่ {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>ระบุเพียงหนึ่งอย่างจาก --template และ --auto</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>ไม่พบเทมเพลต "{0}" ใช้ชื่อของเทมเพลตมาตรฐาน (เช่น pe, png) หรือพาธของไฟล์ .hxt หรือ .ksy</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>ไม่มีเทมเพลตที่ตรงกับ {0}</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>ข้อผิดพลาดของเทมเพลต: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>วิธีใช้: hexed run &lt;script&gt; [files...] [ตัวเลือก]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>ใช้ได้เพียงหนึ่งอย่างจาก --save, --save-as และ --dry-run</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>ใช้ --readonly ร่วมกับ --save หรือ --save-as ไม่ได้</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" ต้องอยู่ในรูป name=value</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" ต้องเป็นจำนวนวินาทีที่มากกว่า 0</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as ต้องมีไฟล์ที่จะเปิด (ไฟล์แรกจะถูกบันทึกไปยังพาธใหม่)</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} คือไฟล์ที่เปิดอยู่ ใช้ --save เพื่อเขียนทับ</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: เปลี่ยน {1} ไบต์ (ไม่ได้บันทึก: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก และไม่ได้บันทึก (ใช้ --save หรือ doc.save())</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>ไม่รู้จักภาษาที่แสดง: {0} ใช้แท็กภาษาที่แสดงอย่างใดอย่างหนึ่งจาก 23 ภาษา (เช่น ar, ja)</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>ไม่รู้จัก pseudo-locale: {0} ใช้ qps-ploc หรือ qps-plocm</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>ไม่พบ HexEditor.exe ข้างๆ hexed.exe</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>ไม่สามารถเริ่ม {0} ได้: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor ออกด้วยรหัส {0} ก่อนที่เอกสารจะถูกปิด</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>ลบการลงทะเบียนทั้งหมดแล้ว</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>ลบแล้ว: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>ไม่สามารถลบ: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>เมนูคลิกขวาของ File Explorer</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>การเชื่อมโยงไฟล์</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>รายการ App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>รายการ PATH ของ hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>จัมพ์ลิสต์ของแถบงาน</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>การลงทะเบียนการแจ้งเตือน</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>โฟลเดอร์ชั่วคราว</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>รายการรีจิสทรี</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>การลงทะเบียนของเวอร์ชันนี้จัดการโดย Windows ไม่ได้ลบอะไร</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>สำเนานี้ไม่ได้ลงทะเบียนอะไรไว้ ไม่ได้ลบอะไร</value></data>
+</root>

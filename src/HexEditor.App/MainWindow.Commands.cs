@@ -110,8 +110,24 @@ public sealed partial class MainWindow
         Commands.Register("file.new", () => New_Click(this, e));
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
-        Commands.Register("file.save", () => Save_Click(this, e),
-            () => NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        Commands.Register("file.save", async () =>
+        {
+            // スクリプトエディタ・テンプレートエディタのタブでは、そのファイルを保存する (AUTO-20 の仕様 6、TPL-31)
+            if (ActiveScriptEditor is { } scriptEditor)
+            {
+                scriptEditor.Save();
+                return;
+            }
+
+            if (ActiveTemplateEditor is { } templateEditor)
+            {
+                await templateEditor.SaveAsync();
+                return;
+            }
+
+            Save_Click(this, e);
+        }, () => ActiveScriptEditor is not null || ActiveTemplateEditor is not null ? CommandState.Available
+            : NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
             () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
@@ -149,6 +165,10 @@ public sealed partial class MainWindow
         Commands.Register("edit.pasteOverwrite", () => RunEditorCommandAsync(EditorCommand.PasteOverwrite), () => NeedsEditable());
         Commands.Register("edit.selectAll", () => SelectAll_Click(this, e),
             () => NeedsDocument(d => d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
+        // 編集 > 削除・選択の解除 (EDIT-13、EDIT-03)。Delete・Esc キーと同じ処理 (キーは Hex ビューが処理する)。
+        Commands.Register("edit.delete", () => CurrentView()?.DeleteForward(),
+            () => NeedsEditable(d => d.Editor.HasSelection || d.Editor.Cursor < d.Document.Length ? null : Loc.Get("Command_NothingToDelete")));
+        Commands.Register("edit.clearSelection", () => Editor?.ClearSelection(), () => NeedsDocument(d => d.Editor.HasSelection ? null : noSelection));
         Commands.Register("edit.toggleInsert", () => ToggleInsert_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         RegisterEditCommands();
@@ -161,7 +181,18 @@ public sealed partial class MainWindow
         Commands.Register("search.findNext", () => FindNext_Click(this, e), NeedsDocument);
         Commands.Register("search.findPrevious", () => FindPrevious_Click(this, e), NeedsDocument);
         RegisterSearchCommands();
-        Commands.Register("go.goTo", () => GoTo_Click(this, e), NeedsDocument);
+        Commands.Register("go.goTo", () =>
+        {
+            // スクリプト・マクロから offset つきで呼ばれたら、移動バーを出さずに移動する。
+            if (HexEditor.App.Commands.CommandArgs.IsScripted && HexEditor.App.Commands.CommandArgs.Get<string>("offset") is { } offset && Editor is { } target)
+            {
+                target.GoTo(Core.Scripting.ScriptValues.EvaluateNumber(offset, new EditorExpressionContext(target)));
+            }
+            else
+            {
+                GoTo_Click(this, e);
+            }
+        }, NeedsDocument);
         // ニブル単位の移動 (VIEW-26) と列の切り替え (VIEW-27) のコマンドパレットの項目 (ショートカットは既定なし。キーは Hex ビューが処理する)。
         Commands.Register("go.nextNibble", () => Editor?.NextNibble(), NeedsDocument);
         Commands.Register("go.previousNibble", () => Editor?.PreviousNibble(), NeedsDocument);
@@ -212,9 +243,14 @@ public sealed partial class MainWindow
         RegisterHashCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
+        RegisterTemplateCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();
+        RegisterScriptCommands();
+        RegisterScriptUiCommands();
+        RegisterCodeEditorCommands();
+        RegisterPluginCommands();
         Commands.Register("help.commandPalette", () => OpenPalette(">"));
         Commands.Register("help.shortcuts", OpenShortcutsPage);
         Commands.Register("help.documentation", () => Documentation_Click(this, e));
@@ -244,6 +280,11 @@ public sealed partial class MainWindow
         }
 
         DependencyObject? focused = Root.XamlRoot is null ? null : FocusManager.GetFocusedElement(Root.XamlRoot) as DependencyObject;
+        if (FocusInMonaco(focused))
+        {
+            return; // Monaco の中のキーはページから受け取る (CodeEditor_KeyForwarded)
+        }
+
         if (RouteKey(focused, (int)e.Key, CurrentModifiers(), CurrentKeyContext()).Handled)
         {
             e.Handled = true;
@@ -258,6 +299,14 @@ public sealed partial class MainWindow
     {
         for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
         {
+            // コードエディタの標準の編集キー (Ctrl+G など) はグローバルの同じキーより優先する (00-overview 8.1)
+            if (node is Controls.ICodeEditorKeys editor
+                && editor.HandleEditorKey((VirtualKey)key, modifiers.HasFlag(KeyModifiers.Ctrl), modifiers.HasFlag(KeyModifiers.Shift), modifiers.HasFlag(KeyModifiers.Alt)))
+            {
+                _keys.Reset();
+                return new DispatchResult(true);
+            }
+
             if (node is IKeyCaptureHost host)
             {
                 if (host.IsCapturingKeys && host.TryCaptureKey(new KeyStroke(modifiers, key)))
@@ -302,6 +351,9 @@ public sealed partial class MainWindow
                     return new KeyContext(KeyScope.Panel, text);
                 case Controls.CommandPalette:
                     return new KeyContext(KeyScope.Global, true);
+                case Controls.ICodeEditorHost:
+                    // テンプレートエディタ・スクリプトエディタ (00-overview 8.5)
+                    return new KeyContext(KeyScope.CodeEditor, true);
             }
         }
 

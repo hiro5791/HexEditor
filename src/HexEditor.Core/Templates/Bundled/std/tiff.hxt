@@ -1,0 +1,110 @@
+// HexEditor 標準ライブラリ (TPL-18): std.tiff
+// TIFF の型 (ヘッダ、IFD、項目)。標準テンプレート (TPL-34) の tiff と jpeg (EXIF) で使う。
+// IFD の位置はすべて TIFF ヘッダの先頭 (base) からの相対位置である。
+
+namespace std::tiff {
+
+    enum FieldType : u16 {
+        Byte = 1, Ascii = 2, Short = 3, Long = 4, Rational = 5, SByte = 6, Undefined = 7, SShort = 8, SLong = 9, SRational = 10,
+        Float = 11, Double = 12, Ifd = 13, Long8 = 16, SLong8 = 17, Ifd8 = 18,
+    };
+
+    enum Tag : u16 {
+        NewSubfileType = 0x00FE, ImageWidth = 0x0100, ImageLength = 0x0101, BitsPerSample = 0x0102, Compression = 0x0103,
+        PhotometricInterpretation = 0x0106, ImageDescription = 0x010E, Make = 0x010F, Model = 0x0110, StripOffsets = 0x0111,
+        Orientation = 0x0112, SamplesPerPixel = 0x0115, RowsPerStrip = 0x0116, StripByteCounts = 0x0117, XResolution = 0x011A,
+        YResolution = 0x011B, PlanarConfiguration = 0x011C, ResolutionUnit = 0x0128, Software = 0x0131, DateTime = 0x0132,
+        Artist = 0x013B, SubIfds = 0x014A, JpegInterchangeFormat = 0x0201, Copyright = 0x8298, ExifIfd = 0x8769, GpsIfd = 0x8825,
+        ExposureTime = 0x829A, FNumber = 0x829D, ExposureProgram = 0x8822, IsoSpeedRatings = 0x8827, ExifVersion = 0x9000,
+        DateTimeOriginal = 0x9003, DateTimeDigitized = 0x9004, ColorSpace = 0xA001, PixelXDimension = 0xA002, PixelYDimension = 0xA003,
+        InteropIfd = 0xA005,
+    };
+
+    /// 型 1 つの大きさ (バイト)
+    fn type_size(u64 type) -> u64 {
+        switch (type) {
+            case 1: return 1;
+            case 2: return 1;
+            case 3: return 2;
+            case 4: return 4;
+            case 5: return 8;
+            case 6: return 1;
+            case 7: return 1;
+            case 8: return 2;
+            case 9: return 4;
+            case 10: return 8;
+            case 11: return 4;
+            case 12: return 8;
+            case 13: return 4;
+            case 16: return 8;
+            case 17: return 8;
+            case 18: return 8;
+            default: return 1;
+        }
+    }
+
+    fn endian_name(bool big) -> string {
+        return big ? "big" : "little";
+    }
+
+    /// 項目の値の位置を求める (4 バイト以内なら値の欄の中、それより大きければ base + 値の欄のオフセット)
+    fn data_offset(u64 entry, u64 base, bool big) -> u64 {
+        local u64 size = type_size(std::mem::read_u16(entry + 2, endian_name(big))) * std::mem::read_u32(entry + 4, endian_name(big));
+        if (size <= 4) {
+            return entry + 8;
+        }
+        return base + std::mem::read_u32(entry + 8, endian_name(big));
+    }
+
+    /// IFD の項目 (12 バイト)。base は TIFF ヘッダの先頭、big はビッグエンディアンかどうか。
+    struct Entry(u64 base, bool big) {
+        Tag       tag;
+        FieldType type;
+        u32       count;
+        u32       value_or_offset [[format("hex")]];
+        local u64 size_in_bytes = type_size(type) * count [[show]];
+        local u64 value_at = data_offset(addressof(this), base, big);
+        if (type == FieldType::Ascii && count > 0 && count <= 4096) {
+            local string text = std::mem::read_string(value_at, count, "latin1") [[show]];
+        } else if (count == 1 && (type == FieldType::Short || type == FieldType::SShort)) {
+            local u64 number = std::mem::read_u16(value_at, endian_name(big)) [[show]];
+        } else if (count == 1 && (type == FieldType::Long || type == FieldType::SLong)) {
+            local u64 number = std::mem::read_u32(value_at, endian_name(big)) [[show]];
+        } else if (count == 1 && type == FieldType::Rational) {
+            local string ratio = std::format("{}/{}", std::mem::read_u32(value_at, endian_name(big)), std::mem::read_u32(value_at + 4, endian_name(big))) [[show]];
+        }
+    };
+
+    /// IFD (項目の数、項目、次の IFD の位置)
+    struct Ifd(u64 base, bool big, u32 depth) {
+        u16      count;
+        Entry(base, big) entries[count];
+        u32      next_ifd [[format("hex")]];
+        // Exif、GPS、相互運用性の IFD (入れ子は 3 段まで)
+        for (local u32 i = 0; i < count && i < 256; i += 1) {
+            if (depth < 3 && is_ifd_pointer(entries[i].tag) && entries[i].type == FieldType::Long) {
+                Ifd(base, big, depth + 1) sub_ifd @ base + entries[i].value_or_offset;
+            }
+        }
+    };
+
+    /// TIFF ヘッダ (8 バイト)。バイトオーダーを読んで、以降のエンディアンを決める。
+    struct Header {
+        char order[2] [[expect(order == "II" || order == "MM", "II でも MM でもありません")]];
+        if (order == "MM") std::core::set_endian(big);
+        else               std::core::set_endian(little);
+        u16  magic [[expect(magic == 42, "42 ではありません")]];
+        u32  ifd0_offset [[format("hex")]];
+    };
+
+    /// IFD の項目の値が別の IFD を指すタグか (Exif、GPS、相互運用性)
+    fn is_ifd_pointer(u64 tag) -> bool {
+        return tag == 0x8769 || tag == 0x8825 || tag == 0xA005;
+    }
+
+    /// IFD の連鎖で次の IFD の位置を読む (なければ 0)
+    fn next_ifd(u64 base, u64 ifd, bool big) -> u64 {
+        local u64 count = std::mem::read_u16(base + ifd, endian_name(big));
+        return std::mem::read_u32(base + ifd + 2 + count * 12, endian_name(big));
+    }
+};

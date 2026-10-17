@@ -11,6 +11,17 @@
     <InternalsVisibleTo Include="HexEditor.Core.Tests" />
   </ItemGroup>
 
+  <!-- 自動化 API の型 (AUTO-04) と JavaScript の実行環境 Jint (AUTO-02。BSD-2-Clause、依存の Acornima は BSD-3-Clause)。 -->
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Sdk\HexEditor.Sdk.csproj" />
+    <PackageReference Include="Jint" Version="4.16.4" />
+  </ItemGroup>
+
+  <!-- スクリプトの実行環境の前置き (JavaScript の例外の型、console、AbortController など)。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Scripting\Js\prelude.js" LogicalName="HexEditor.Scripting.prelude.js" />
+  </ItemGroup>
+
   <!-- ショートカットのプリセット (UI-19 の仕様 2)。アプリに同梱する。 -->
   <ItemGroup>
     <EmbeddedResource Include="Commands\Presets\*.json" LogicalName="HexEditor.Presets.%(Filename).json" />
@@ -19,6 +30,11 @@
   <!-- ファイル形式の判定の内蔵のシグネチャデータベース (ANA-17 の仕様 1)。本プロジェクトが自前で作成・保守する。 -->
   <ItemGroup>
     <EmbeddedResource Include="FileTypes\magic.json" LogicalName="HexEditor.FileTypes.magic.json" />
+  </ItemGroup>
+
+  <!-- 構造体テンプレートの標準ライブラリ (TPL-18 の仕様 5)。検索パスの (4) として読む。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Bundled\**\*.hxt" LogicalName="HexEditor.Templates.Bundled.%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

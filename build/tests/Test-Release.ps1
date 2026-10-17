@@ -121,7 +121,7 @@ Invoke-TestCase 'TC-PKG-26-01' 'the files of the release' {
     foreach ($arch in $archs) {
         # Velopack feeds (PKG-21 spec 3): a preview version is in win-<arch>-preview, a stable version in both channels.
         $feeds = if ($Version -match '-') { @("releases.win-$arch-preview.json") } else { @("releases.win-$arch-stable.json", "releases.win-$arch-preview.json") }
-        foreach ($name in @("HexEditor-$Version-$arch-Setup.exe", "HexEditor-$Version-$arch-portable.zip") + $feeds) {
+        foreach ($name in @("HexEditor-$Version-$arch-Setup.exe", "HexEditor-$Version-$arch-portable.zip", "HexEditor-$Version-$arch-csharp.zip") + $feeds) {
             Assert-True ($assets -contains $name) "$name is not in the release"
         }
         Assert-True (@($assets | Where-Object { $_ -like "*$Version*win-$arch*-full.nupkg" }).Count -ge 1) "no full package for win-$arch"
@@ -129,7 +129,6 @@ Invoke-TestCase 'TC-PKG-26-01' 'the files of the release' {
     Assert-True ($assets -contains 'SHA256SUMS.txt') 'SHA256SUMS.txt is not in the release'
     Assert-True ("$($release.body)".TrimStart().StartsWith('## Which file should I download?')) 'the notes do not start with the "which file" table'
     Assert-True ("$($release.body)" -match '\| --- \| --- \|') 'the notes have no table'
-    Add-TestNote 'TC-PKG-26-01: HexEditor-<ver>-<arch>-csharp.zip is not checked (the C# script component, AUTO-03, does not exist yet).'
 }
 
 Invoke-TestCase 'TC-PKG-26-02' 'SHA256SUMS.txt' {

@@ -2366,7 +2366,7 @@
 - `HexEditor-0.1.0-x64-Setup.exe`、`HexEditor-0.1.0-arm64-Setup.exe`、`HexEditor-0.1.0-x64-portable.zip`、`HexEditor-0.1.0-arm64-portable.zip`、`HexEditor-0.1.0-x64-csharp.zip`、`HexEditor-0.1.0-arm64-csharp.zip`、Velopack の `*-full.nupkg` と `releases.<チャネル>.json`、`SHA256SUMS.txt` がある。
 - リリースの本文の先頭に、どのファイルを選べばよいかの表がある。
 
-**備考**: 本リポジトリのリリースのたびに、`release.yml` の `publish` で同じことを確かめる (`build/tests/Test-Release.ps1`)。`HexEditor-<版>-<アーキテクチャ>-csharp.zip` は、C# スクリプトのコンポーネント (08 の AUTO-03) ができるまで確かめない。
+**備考**: 本リポジトリのリリースのたびに、`release.yml` の `publish` で同じことを確かめる (`build/tests/Test-Release.ps1`)。`HexEditor-<版>-<アーキテクチャ>-csharp.zip` は `release.yml` の `component` がアーキテクチャごとに作ったもの (フェーズ 3 から確かめる)。
 
 ### TC-PKG-26-02 SHA256SUMS.txt の値
 

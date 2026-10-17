@@ -1,0 +1,2048 @@
+{
+  "name": "MBR パーティションテーブル",
+  "type": "application",
+  "offset": 0,
+  "size": 512,
+  "children": [
+    {
+      "name": "mbr",
+      "path": "mbr",
+      "type": "Mbr",
+      "offset": 0,
+      "size": 512,
+      "display": "Mbr (5)",
+      "children": [
+        {
+          "name": "boot_code",
+          "path": "mbr.boot_code",
+          "type": "u8[440]",
+          "offset": 0,
+          "size": 440,
+          "value": "FA31C08ED88EC0FBEBFE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "FA 31 C0 8E D8 8E C0 FB EB FE 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "disk_signature",
+          "path": "mbr.disk_signature",
+          "type": "u32",
+          "offset": 440,
+          "size": 4,
+          "value": 1146378312,
+          "display": "0x44545848"
+        },
+        {
+          "name": "reserved",
+          "path": "mbr.reserved",
+          "type": "u16",
+          "offset": 444,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "partitions",
+          "path": "mbr.partitions",
+          "type": "MbrPartitionEntry[4]",
+          "offset": 446,
+          "size": 64,
+          "display": "[4]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "mbr.partitions[0]",
+              "type": "MbrPartitionEntry",
+              "offset": 446,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "mbr.partitions[0].status",
+                  "type": "u8",
+                  "offset": 446,
+                  "size": 1,
+                  "value": 128,
+                  "display": "0x80 (active)"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "mbr.partitions[0].chs_first",
+                  "type": "Chs",
+                  "offset": 447,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[0].chs_first.head",
+                      "type": "u8",
+                      "offset": 447,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[0].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 448,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[0].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 449,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[0].chs_first.sector",
+                      "type": "u32",
+                      "offset": 450,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[0].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 450,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "mbr.partitions[0].type",
+                  "type": "MbrPartitionType",
+                  "offset": 450,
+                  "size": 1,
+                  "value": 7,
+                  "display": "NtfsExfat (0x7)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "mbr.partitions[0].chs_last",
+                  "type": "Chs",
+                  "offset": 451,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[0].chs_last.head",
+                      "type": "u8",
+                      "offset": 451,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[0].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 452,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[0].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 453,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[0].chs_last.sector",
+                      "type": "u32",
+                      "offset": 454,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[0].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 454,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "mbr.partitions[0].lba_first",
+                  "type": "u32",
+                  "offset": 454,
+                  "size": 4,
+                  "value": 2048,
+                  "display": "2048"
+                },
+                {
+                  "name": "sectors",
+                  "path": "mbr.partitions[0].sectors",
+                  "type": "u32",
+                  "offset": 458,
+                  "size": 4,
+                  "value": 6144,
+                  "display": "6144"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "mbr.partitions[1]",
+              "type": "MbrPartitionEntry",
+              "offset": 462,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "mbr.partitions[1].status",
+                  "type": "u8",
+                  "offset": 462,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "mbr.partitions[1].chs_first",
+                  "type": "Chs",
+                  "offset": 463,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[1].chs_first.head",
+                      "type": "u8",
+                      "offset": 463,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[1].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 464,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[1].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 465,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[1].chs_first.sector",
+                      "type": "u32",
+                      "offset": 466,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[1].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 466,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "mbr.partitions[1].type",
+                  "type": "MbrPartitionType",
+                  "offset": 466,
+                  "size": 1,
+                  "value": 12,
+                  "display": "Fat32Lba (0xC)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "mbr.partitions[1].chs_last",
+                  "type": "Chs",
+                  "offset": 467,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[1].chs_last.head",
+                      "type": "u8",
+                      "offset": 467,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[1].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 468,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[1].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 469,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[1].chs_last.sector",
+                      "type": "u32",
+                      "offset": 470,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[1].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 470,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "mbr.partitions[1].lba_first",
+                  "type": "u32",
+                  "offset": 470,
+                  "size": 4,
+                  "value": 8192,
+                  "display": "8192"
+                },
+                {
+                  "name": "sectors",
+                  "path": "mbr.partitions[1].sectors",
+                  "type": "u32",
+                  "offset": 474,
+                  "size": 4,
+                  "value": 4096,
+                  "display": "4096"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "mbr.partitions[2]",
+              "type": "MbrPartitionEntry",
+              "offset": 478,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "mbr.partitions[2].status",
+                  "type": "u8",
+                  "offset": 478,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "mbr.partitions[2].chs_first",
+                  "type": "Chs",
+                  "offset": 479,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[2].chs_first.head",
+                      "type": "u8",
+                      "offset": 479,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[2].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 480,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[2].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 481,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[2].chs_first.sector",
+                      "type": "u32",
+                      "offset": 482,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[2].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 482,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "mbr.partitions[2].type",
+                  "type": "MbrPartitionType",
+                  "offset": 482,
+                  "size": 1,
+                  "value": 15,
+                  "display": "ExtendedLba (0xF)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "mbr.partitions[2].chs_last",
+                  "type": "Chs",
+                  "offset": 483,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[2].chs_last.head",
+                      "type": "u8",
+                      "offset": 483,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[2].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 484,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[2].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 485,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[2].chs_last.sector",
+                      "type": "u32",
+                      "offset": 486,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[2].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 486,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "mbr.partitions[2].lba_first",
+                  "type": "u32",
+                  "offset": 486,
+                  "size": 4,
+                  "value": 8,
+                  "display": "8"
+                },
+                {
+                  "name": "sectors",
+                  "path": "mbr.partitions[2].sectors",
+                  "type": "u32",
+                  "offset": 490,
+                  "size": 4,
+                  "value": 24,
+                  "display": "24"
+                }
+              ]
+            },
+            {
+              "name": "[3]",
+              "path": "mbr.partitions[3]",
+              "type": "MbrPartitionEntry",
+              "offset": 494,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "mbr.partitions[3].status",
+                  "type": "u8",
+                  "offset": 494,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "mbr.partitions[3].chs_first",
+                  "type": "Chs",
+                  "offset": 495,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[3].chs_first.head",
+                      "type": "u8",
+                      "offset": 495,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[3].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 496,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[3].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 497,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[3].chs_first.sector",
+                      "type": "u32",
+                      "offset": 498,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[3].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 498,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "mbr.partitions[3].type",
+                  "type": "MbrPartitionType",
+                  "offset": 498,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "mbr.partitions[3].chs_last",
+                  "type": "Chs",
+                  "offset": 499,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "mbr.partitions[3].chs_last.head",
+                      "type": "u8",
+                      "offset": 499,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "mbr.partitions[3].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 500,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "mbr.partitions[3].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 501,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "mbr.partitions[3].chs_last.sector",
+                      "type": "u32",
+                      "offset": 502,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "mbr.partitions[3].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 502,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "mbr.partitions[3].lba_first",
+                  "type": "u32",
+                  "offset": 502,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "mbr.partitions[3].sectors",
+                  "type": "u32",
+                  "offset": 506,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "boot_signature",
+          "path": "mbr.boot_signature",
+          "type": "u8[2]",
+          "offset": 510,
+          "size": 2,
+          "value": "55AA",
+          "display": "55 AA"
+        }
+      ]
+    },
+    {
+      "name": "ebr[0]",
+      "path": "ebr[0]",
+      "type": "Mbr",
+      "offset": 4096,
+      "size": 512,
+      "display": "Mbr (5)",
+      "children": [
+        {
+          "name": "boot_code",
+          "path": "ebr[0].boot_code",
+          "type": "u8[440]",
+          "offset": 4096,
+          "size": 440,
+          "value": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "disk_signature",
+          "path": "ebr[0].disk_signature",
+          "type": "u32",
+          "offset": 4536,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "reserved",
+          "path": "ebr[0].reserved",
+          "type": "u16",
+          "offset": 4540,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "partitions",
+          "path": "ebr[0].partitions",
+          "type": "MbrPartitionEntry[4]",
+          "offset": 4542,
+          "size": 64,
+          "display": "[4]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "ebr[0].partitions[0]",
+              "type": "MbrPartitionEntry",
+              "offset": 4542,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[0].partitions[0].status",
+                  "type": "u8",
+                  "offset": 4542,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[0].partitions[0].chs_first",
+                  "type": "Chs",
+                  "offset": 4543,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[0].chs_first.head",
+                      "type": "u8",
+                      "offset": 4543,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[0].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4544,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[0].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 4545,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[0].chs_first.sector",
+                      "type": "u32",
+                      "offset": 4546,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[0].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 4546,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[0].partitions[0].type",
+                  "type": "MbrPartitionType",
+                  "offset": 4546,
+                  "size": 1,
+                  "value": 131,
+                  "display": "Linux (0x83)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[0].partitions[0].chs_last",
+                  "type": "Chs",
+                  "offset": 4547,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[0].chs_last.head",
+                      "type": "u8",
+                      "offset": 4547,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[0].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4548,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[0].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 4549,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[0].chs_last.sector",
+                      "type": "u32",
+                      "offset": 4550,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[0].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 4550,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[0].partitions[0].lba_first",
+                  "type": "u32",
+                  "offset": 4550,
+                  "size": 4,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[0].partitions[0].sectors",
+                  "type": "u32",
+                  "offset": 4554,
+                  "size": 4,
+                  "value": 8,
+                  "display": "8"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "ebr[0].partitions[1]",
+              "type": "MbrPartitionEntry",
+              "offset": 4558,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[0].partitions[1].status",
+                  "type": "u8",
+                  "offset": 4558,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[0].partitions[1].chs_first",
+                  "type": "Chs",
+                  "offset": 4559,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[1].chs_first.head",
+                      "type": "u8",
+                      "offset": 4559,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[1].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4560,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[1].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 4561,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[1].chs_first.sector",
+                      "type": "u32",
+                      "offset": 4562,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[1].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 4562,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[0].partitions[1].type",
+                  "type": "MbrPartitionType",
+                  "offset": 4562,
+                  "size": 1,
+                  "value": 5,
+                  "display": "Extended (0x5)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[0].partitions[1].chs_last",
+                  "type": "Chs",
+                  "offset": 4563,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[1].chs_last.head",
+                      "type": "u8",
+                      "offset": 4563,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[1].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4564,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[1].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 4565,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[1].chs_last.sector",
+                      "type": "u32",
+                      "offset": 4566,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[1].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 4566,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[0].partitions[1].lba_first",
+                  "type": "u32",
+                  "offset": 4566,
+                  "size": 4,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[0].partitions[1].sectors",
+                  "type": "u32",
+                  "offset": 4570,
+                  "size": 4,
+                  "value": 8,
+                  "display": "8"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "ebr[0].partitions[2]",
+              "type": "MbrPartitionEntry",
+              "offset": 4574,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[0].partitions[2].status",
+                  "type": "u8",
+                  "offset": 4574,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[0].partitions[2].chs_first",
+                  "type": "Chs",
+                  "offset": 4575,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[2].chs_first.head",
+                      "type": "u8",
+                      "offset": 4575,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[2].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4576,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[2].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 4577,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[2].chs_first.sector",
+                      "type": "u32",
+                      "offset": 4578,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[2].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 4578,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[0].partitions[2].type",
+                  "type": "MbrPartitionType",
+                  "offset": 4578,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[0].partitions[2].chs_last",
+                  "type": "Chs",
+                  "offset": 4579,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[2].chs_last.head",
+                      "type": "u8",
+                      "offset": 4579,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[2].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4580,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[2].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 4581,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[2].chs_last.sector",
+                      "type": "u32",
+                      "offset": 4582,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[2].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 4582,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[0].partitions[2].lba_first",
+                  "type": "u32",
+                  "offset": 4582,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[0].partitions[2].sectors",
+                  "type": "u32",
+                  "offset": 4586,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            },
+            {
+              "name": "[3]",
+              "path": "ebr[0].partitions[3]",
+              "type": "MbrPartitionEntry",
+              "offset": 4590,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[0].partitions[3].status",
+                  "type": "u8",
+                  "offset": 4590,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[0].partitions[3].chs_first",
+                  "type": "Chs",
+                  "offset": 4591,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[3].chs_first.head",
+                      "type": "u8",
+                      "offset": 4591,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[3].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4592,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[3].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 4593,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[3].chs_first.sector",
+                      "type": "u32",
+                      "offset": 4594,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[3].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 4594,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[0].partitions[3].type",
+                  "type": "MbrPartitionType",
+                  "offset": 4594,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[0].partitions[3].chs_last",
+                  "type": "Chs",
+                  "offset": 4595,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[0].partitions[3].chs_last.head",
+                      "type": "u8",
+                      "offset": 4595,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[0].partitions[3].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 4596,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[0].partitions[3].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 4597,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[0].partitions[3].chs_last.sector",
+                      "type": "u32",
+                      "offset": 4598,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[0].partitions[3].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 4598,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[0].partitions[3].lba_first",
+                  "type": "u32",
+                  "offset": 4598,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[0].partitions[3].sectors",
+                  "type": "u32",
+                  "offset": 4602,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "boot_signature",
+          "path": "ebr[0].boot_signature",
+          "type": "u8[2]",
+          "offset": 4606,
+          "size": 2,
+          "value": "55AA",
+          "display": "55 AA"
+        }
+      ]
+    },
+    {
+      "name": "ebr[1]",
+      "path": "ebr[1]",
+      "type": "Mbr",
+      "offset": 12288,
+      "size": 512,
+      "display": "Mbr (5)",
+      "children": [
+        {
+          "name": "boot_code",
+          "path": "ebr[1].boot_code",
+          "type": "u8[440]",
+          "offset": 12288,
+          "size": 440,
+          "value": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "disk_signature",
+          "path": "ebr[1].disk_signature",
+          "type": "u32",
+          "offset": 12728,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "reserved",
+          "path": "ebr[1].reserved",
+          "type": "u16",
+          "offset": 12732,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "partitions",
+          "path": "ebr[1].partitions",
+          "type": "MbrPartitionEntry[4]",
+          "offset": 12734,
+          "size": 64,
+          "display": "[4]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "ebr[1].partitions[0]",
+              "type": "MbrPartitionEntry",
+              "offset": 12734,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[1].partitions[0].status",
+                  "type": "u8",
+                  "offset": 12734,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[1].partitions[0].chs_first",
+                  "type": "Chs",
+                  "offset": 12735,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[0].chs_first.head",
+                      "type": "u8",
+                      "offset": 12735,
+                      "size": 1,
+                      "value": 32,
+                      "display": "32"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[0].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12736,
+                      "size": 1,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[0].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 12737,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[0].chs_first.sector",
+                      "type": "u32",
+                      "offset": 12738,
+                      "size": 0,
+                      "value": 33,
+                      "display": "33"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[0].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 12738,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[1].partitions[0].type",
+                  "type": "MbrPartitionType",
+                  "offset": 12738,
+                  "size": 1,
+                  "value": 130,
+                  "display": "LinuxSwapOld (0x82)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[1].partitions[0].chs_last",
+                  "type": "Chs",
+                  "offset": 12739,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[0].chs_last.head",
+                      "type": "u8",
+                      "offset": 12739,
+                      "size": 1,
+                      "value": 254,
+                      "display": "254"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[0].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12740,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[0].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 12741,
+                      "size": 1,
+                      "value": 255,
+                      "display": "255"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[0].chs_last.sector",
+                      "type": "u32",
+                      "offset": 12742,
+                      "size": 0,
+                      "value": 63,
+                      "display": "63"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[0].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 12742,
+                      "size": 0,
+                      "value": 1023,
+                      "display": "1023"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[1].partitions[0].lba_first",
+                  "type": "u32",
+                  "offset": 12742,
+                  "size": 4,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[1].partitions[0].sectors",
+                  "type": "u32",
+                  "offset": 12746,
+                  "size": 4,
+                  "value": 4,
+                  "display": "4"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "ebr[1].partitions[1]",
+              "type": "MbrPartitionEntry",
+              "offset": 12750,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[1].partitions[1].status",
+                  "type": "u8",
+                  "offset": 12750,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[1].partitions[1].chs_first",
+                  "type": "Chs",
+                  "offset": 12751,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[1].chs_first.head",
+                      "type": "u8",
+                      "offset": 12751,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[1].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12752,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[1].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 12753,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[1].chs_first.sector",
+                      "type": "u32",
+                      "offset": 12754,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[1].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 12754,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[1].partitions[1].type",
+                  "type": "MbrPartitionType",
+                  "offset": 12754,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[1].partitions[1].chs_last",
+                  "type": "Chs",
+                  "offset": 12755,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[1].chs_last.head",
+                      "type": "u8",
+                      "offset": 12755,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[1].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12756,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[1].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 12757,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[1].chs_last.sector",
+                      "type": "u32",
+                      "offset": 12758,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[1].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 12758,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[1].partitions[1].lba_first",
+                  "type": "u32",
+                  "offset": 12758,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[1].partitions[1].sectors",
+                  "type": "u32",
+                  "offset": 12762,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "ebr[1].partitions[2]",
+              "type": "MbrPartitionEntry",
+              "offset": 12766,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[1].partitions[2].status",
+                  "type": "u8",
+                  "offset": 12766,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[1].partitions[2].chs_first",
+                  "type": "Chs",
+                  "offset": 12767,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[2].chs_first.head",
+                      "type": "u8",
+                      "offset": 12767,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[2].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12768,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[2].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 12769,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[2].chs_first.sector",
+                      "type": "u32",
+                      "offset": 12770,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[2].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 12770,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[1].partitions[2].type",
+                  "type": "MbrPartitionType",
+                  "offset": 12770,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[1].partitions[2].chs_last",
+                  "type": "Chs",
+                  "offset": 12771,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[2].chs_last.head",
+                      "type": "u8",
+                      "offset": 12771,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[2].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12772,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[2].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 12773,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[2].chs_last.sector",
+                      "type": "u32",
+                      "offset": 12774,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[2].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 12774,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[1].partitions[2].lba_first",
+                  "type": "u32",
+                  "offset": 12774,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[1].partitions[2].sectors",
+                  "type": "u32",
+                  "offset": 12778,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            },
+            {
+              "name": "[3]",
+              "path": "ebr[1].partitions[3]",
+              "type": "MbrPartitionEntry",
+              "offset": 12782,
+              "size": 16,
+              "display": "MbrPartitionEntry (6)",
+              "children": [
+                {
+                  "name": "status",
+                  "path": "ebr[1].partitions[3].status",
+                  "type": "u8",
+                  "offset": 12782,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x00"
+                },
+                {
+                  "name": "chs_first",
+                  "path": "ebr[1].partitions[3].chs_first",
+                  "type": "Chs",
+                  "offset": 12783,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[3].chs_first.head",
+                      "type": "u8",
+                      "offset": 12783,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[3].chs_first.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12784,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[3].chs_first.cylinder_low",
+                      "type": "u8",
+                      "offset": 12785,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[3].chs_first.sector",
+                      "type": "u32",
+                      "offset": 12786,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[3].chs_first.cylinder",
+                      "type": "u32",
+                      "offset": 12786,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "type",
+                  "path": "ebr[1].partitions[3].type",
+                  "type": "MbrPartitionType",
+                  "offset": 12786,
+                  "size": 1,
+                  "value": 0,
+                  "display": "Empty (0x0)"
+                },
+                {
+                  "name": "chs_last",
+                  "path": "ebr[1].partitions[3].chs_last",
+                  "type": "Chs",
+                  "offset": 12787,
+                  "size": 3,
+                  "display": "Chs (5)",
+                  "children": [
+                    {
+                      "name": "head",
+                      "path": "ebr[1].partitions[3].chs_last.head",
+                      "type": "u8",
+                      "offset": 12787,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector_and_cylinder_high",
+                      "path": "ebr[1].partitions[3].chs_last.sector_and_cylinder_high",
+                      "type": "u8",
+                      "offset": 12788,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder_low",
+                      "path": "ebr[1].partitions[3].chs_last.cylinder_low",
+                      "type": "u8",
+                      "offset": 12789,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "sector",
+                      "path": "ebr[1].partitions[3].chs_last.sector",
+                      "type": "u32",
+                      "offset": 12790,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "cylinder",
+                      "path": "ebr[1].partitions[3].chs_last.cylinder",
+                      "type": "u32",
+                      "offset": 12790,
+                      "size": 0,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "lba_first",
+                  "path": "ebr[1].partitions[3].lba_first",
+                  "type": "u32",
+                  "offset": 12790,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "sectors",
+                  "path": "ebr[1].partitions[3].sectors",
+                  "type": "u32",
+                  "offset": 12794,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "boot_signature",
+          "path": "ebr[1].boot_signature",
+          "type": "u8[2]",
+          "offset": 12798,
+          "size": 2,
+          "value": "55AA",
+          "display": "55 AA"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "name": "BMP 画像",
+  "type": "application",
+  "offset": 0,
+  "size": 70,
+  "children": [
+    {
+      "name": "file_header",
+      "path": "file_header",
+      "type": "FileHeader",
+      "offset": 0,
+      "size": 14,
+      "display": "FileHeader (5)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "file_header.signature",
+          "type": "char[2]",
+          "offset": 0,
+          "size": 2,
+          "value": "BM",
+          "display": "BM"
+        },
+        {
+          "name": "file_size",
+          "path": "file_header.file_size",
+          "type": "u32",
+          "offset": 2,
+          "size": 4,
+          "value": 86,
+          "display": "86"
+        },
+        {
+          "name": "reserved1",
+          "path": "file_header.reserved1",
+          "type": "u16",
+          "offset": 6,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved2",
+          "path": "file_header.reserved2",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "pixel_data_offset",
+          "path": "file_header.pixel_data_offset",
+          "type": "u32",
+          "offset": 10,
+          "size": 4,
+          "value": 70,
+          "display": "0x46"
+        }
+      ]
+    },
+    {
+      "name": "dib_header",
+      "path": "dib_header",
+      "type": "InfoHeader",
+      "offset": 14,
+      "size": 40,
+      "display": "InfoHeader (11)",
+      "children": [
+        {
+          "name": "header_size",
+          "path": "dib_header.header_size",
+          "type": "u32",
+          "offset": 14,
+          "size": 4,
+          "value": 40,
+          "display": "40"
+        },
+        {
+          "name": "width",
+          "path": "dib_header.width",
+          "type": "s32",
+          "offset": 18,
+          "size": 4,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "height",
+          "path": "dib_header.height",
+          "type": "s32",
+          "offset": 22,
+          "size": 4,
+          "value": 4,
+          "display": "4",
+          "comment": "正なら下から上、負なら上から下の順"
+        },
+        {
+          "name": "planes",
+          "path": "dib_header.planes",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "bits_per_pixel",
+          "path": "dib_header.bits_per_pixel",
+          "type": "u16",
+          "offset": 28,
+          "size": 2,
+          "value": 8,
+          "display": "8"
+        },
+        {
+          "name": "compression",
+          "path": "dib_header.compression",
+          "type": "Compression",
+          "offset": 30,
+          "size": 4,
+          "value": 0,
+          "display": "Rgb (0x0)"
+        },
+        {
+          "name": "image_size",
+          "path": "dib_header.image_size",
+          "type": "u32",
+          "offset": 34,
+          "size": 4,
+          "value": 16,
+          "display": "16"
+        },
+        {
+          "name": "x_pixels_per_meter",
+          "path": "dib_header.x_pixels_per_meter",
+          "type": "s32",
+          "offset": 38,
+          "size": 4,
+          "value": 2835,
+          "display": "2835"
+        },
+        {
+          "name": "y_pixels_per_meter",
+          "path": "dib_header.y_pixels_per_meter",
+          "type": "s32",
+          "offset": 42,
+          "size": 4,
+          "value": 2835,
+          "display": "2835"
+        },
+        {
+          "name": "colors_used",
+          "path": "dib_header.colors_used",
+          "type": "u32",
+          "offset": 46,
+          "size": 4,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "colors_important",
+          "path": "dib_header.colors_important",
+          "type": "u32",
+          "offset": 50,
+          "size": 4,
+          "value": 4,
+          "display": "4"
+        }
+      ]
+    },
+    {
+      "name": "color_table",
+      "path": "color_table",
+      "type": "bgra8[4]",
+      "offset": 54,
+      "size": 16,
+      "display": "[4]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "color_table[0]",
+          "type": "bgra8",
+          "offset": 54,
+          "size": 4,
+          "value": "0000FF00",
+          "display": "#FF000000"
+        },
+        {
+          "name": "[1]",
+          "path": "color_table[1]",
+          "type": "bgra8",
+          "offset": 58,
+          "size": 4,
+          "value": "00FF0000",
+          "display": "#00FF0000"
+        },
+        {
+          "name": "[2]",
+          "path": "color_table[2]",
+          "type": "bgra8",
+          "offset": 62,
+          "size": 4,
+          "value": "FF000000",
+          "display": "#0000FF00"
+        },
+        {
+          "name": "[3]",
+          "path": "color_table[3]",
+          "type": "bgra8",
+          "offset": 66,
+          "size": 4,
+          "value": "FFFFFF00",
+          "display": "#FFFFFF00"
+        }
+      ]
+    },
+    {
+      "name": "pixel_data",
+      "path": "pixel_data",
+      "type": "u8[16]",
+      "offset": 70,
+      "size": 16,
+      "value": "00010203010203000203000103000102",
+      "display": "00 01 02 03 01 02 03 00 02 03 00 01 03 00 01 02"
+    }
+  ]
+}

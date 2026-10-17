@@ -47,6 +47,15 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <!--  配列モードで選んだ型の行の強調 (INSP-21 の仕様 5)  -->
+                <Rectangle
+                    Grid.RowSpan="2"
+                    Grid.ColumnSpan="2"
+                    Margin="-8,0"
+                    AutomationProperties.AccessibilityView="Raw"
+                    Fill="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                    Stroke="{ThemeResource AccentFillColorDefaultBrush}"
+                    Visibility="{x:Bind IsArrayType, Mode=OneWay}" />
                 <StackPanel Orientation="Horizontal" Spacing="4">
                     <FontIcon
                         AutomationProperties.AccessibilityView="Raw"
@@ -212,6 +221,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <StackPanel Spacing="4">
         <local:WrapPanel Margin="8,6,8,0" HorizontalSpacing="4" VerticalSpacing="4">
             <DropDownButton
                 x:Name="EndianButton"
@@ -284,6 +294,59 @@
                 </Button.Flyout>
             </Button>
         </local:WrapPanel>
+        <!--
+            配列モードの操作部 (INSP-21 の仕様 1): 前の要素・要素番号・要素のサイズ (間隔)・次の要素・終了。配列モードの間だけ表示する。
+        -->
+        <local:WrapPanel
+            x:Name="ArrayBar"
+            Margin="8,0"
+            AutomationProperties.AutomationId="Inspector_ArrayBar"
+            HorizontalSpacing="4"
+            VerticalSpacing="4"
+            Visibility="{x:Bind Vm.IsArrayMode, Mode=OneWay}">
+            <Button
+                x:Name="ArrayPrevious"
+                AutomationProperties.AutomationId="Inspector_ArrayPrevious"
+                Click="ArrayPrevious_Click"
+                IsEnabled="{x:Bind Vm.CanPreviousElement, Mode=OneWay}"
+                TabIndex="6">
+                <FontIcon FontSize="12" Glyph="&#xE76B;" />
+            </Button>
+            <TextBox
+                x:Name="ArrayIndexBox"
+                MinWidth="64"
+                AutomationProperties.AutomationId="Inspector_ArrayIndex"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                KeyDown="ArrayIndexBox_KeyDown"
+                TabIndex="7"
+                Text="{x:Bind Vm.ArrayIndexText, Mode=OneWay}" />
+            <TextBox
+                x:Name="ArrayStrideBox"
+                MinWidth="72"
+                AutomationProperties.AutomationId="Inspector_ArrayStride"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                KeyDown="ArrayStrideBox_KeyDown"
+                TabIndex="8"
+                Text="{x:Bind Vm.ArrayStrideText, Mode=OneWay}" />
+            <Button
+                x:Name="ArrayNext"
+                AutomationProperties.AutomationId="Inspector_ArrayNext"
+                Click="ArrayNext_Click"
+                IsEnabled="{x:Bind Vm.CanNextElement, Mode=OneWay}"
+                TabIndex="9">
+                <FontIcon FontSize="12" Glyph="&#xE76C;" />
+            </Button>
+            <Button
+                x:Name="ArrayExit"
+                AutomationProperties.AutomationId="Inspector_ArrayExit"
+                Click="ArrayExit_Click"
+                TabIndex="10">
+                <FontIcon FontSize="12" Glyph="&#xE711;" />
+            </Button>
+        </local:WrapPanel>
+        </StackPanel>
 
         <TextBlock
             x:Name="OriginLabel"

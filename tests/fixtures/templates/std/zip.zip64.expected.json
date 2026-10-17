@@ -1,0 +1,1796 @@
+{
+  "name": "ZIP アーカイブ",
+  "type": "application",
+  "offset": 0,
+  "size": 246,
+  "children": [
+    {
+      "name": "eocd",
+      "path": "eocd",
+      "type": "EndOfCentralDirectory",
+      "offset": 575,
+      "size": 44,
+      "display": "EndOfCentralDirectory (9)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "eocd.signature",
+          "type": "u8[4]",
+          "offset": 575,
+          "size": 4,
+          "value": "504B0506",
+          "display": "50 4B 05 06"
+        },
+        {
+          "name": "disk_number",
+          "path": "eocd.disk_number",
+          "type": "u16",
+          "offset": 579,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "disk_with_central_directory",
+          "path": "eocd.disk_with_central_directory",
+          "type": "u16",
+          "offset": 581,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "entries_on_disk",
+          "path": "eocd.entries_on_disk",
+          "type": "u16",
+          "offset": 583,
+          "size": 2,
+          "value": 65535,
+          "display": "65535"
+        },
+        {
+          "name": "total_entries",
+          "path": "eocd.total_entries",
+          "type": "u16",
+          "offset": 585,
+          "size": 2,
+          "value": 65535,
+          "display": "65535"
+        },
+        {
+          "name": "central_directory_size",
+          "path": "eocd.central_directory_size",
+          "type": "u32",
+          "offset": 587,
+          "size": 4,
+          "value": 4294967295,
+          "display": "4294967295"
+        },
+        {
+          "name": "central_directory_offset",
+          "path": "eocd.central_directory_offset",
+          "type": "u32",
+          "offset": 591,
+          "size": 4,
+          "value": 4294967295,
+          "display": "0xFFFFFFFF"
+        },
+        {
+          "name": "comment_length",
+          "path": "eocd.comment_length",
+          "type": "u16",
+          "offset": 595,
+          "size": 2,
+          "value": 22,
+          "display": "22"
+        },
+        {
+          "name": "comment",
+          "path": "eocd.comment",
+          "type": "char[22]",
+          "offset": 597,
+          "size": 22,
+          "value": "HexEditor test archive",
+          "display": "HexEditor test archive"
+        }
+      ]
+    },
+    {
+      "name": "zip64_locator",
+      "path": "zip64_locator",
+      "type": "Zip64EndOfCentralDirectoryLocator",
+      "offset": 555,
+      "size": 20,
+      "display": "Zip64EndOfCentralDirectoryLocator (4)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "zip64_locator.signature",
+          "type": "u8[4]",
+          "offset": 555,
+          "size": 4,
+          "value": "504B0607",
+          "display": "50 4B 06 07"
+        },
+        {
+          "name": "disk_with_zip64_eocd",
+          "path": "zip64_locator.disk_with_zip64_eocd",
+          "type": "u32",
+          "offset": 559,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "zip64_eocd_offset",
+          "path": "zip64_locator.zip64_eocd_offset",
+          "type": "u64",
+          "offset": 563,
+          "size": 8,
+          "value": 499,
+          "display": "0x1F3"
+        },
+        {
+          "name": "total_disks",
+          "path": "zip64_locator.total_disks",
+          "type": "u32",
+          "offset": 571,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        }
+      ]
+    },
+    {
+      "name": "zip64_eocd",
+      "path": "zip64_eocd",
+      "type": "Zip64EndOfCentralDirectory",
+      "offset": 499,
+      "size": 56,
+      "display": "Zip64EndOfCentralDirectory (10)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "zip64_eocd.signature",
+          "type": "u8[4]",
+          "offset": 499,
+          "size": 4,
+          "value": "504B0606",
+          "display": "50 4B 06 06"
+        },
+        {
+          "name": "record_size",
+          "path": "zip64_eocd.record_size",
+          "type": "u64",
+          "offset": 503,
+          "size": 8,
+          "value": 44,
+          "display": "44"
+        },
+        {
+          "name": "version_made_by",
+          "path": "zip64_eocd.version_made_by",
+          "type": "u16",
+          "offset": 511,
+          "size": 2,
+          "value": 45,
+          "display": "45"
+        },
+        {
+          "name": "version_needed",
+          "path": "zip64_eocd.version_needed",
+          "type": "u16",
+          "offset": 513,
+          "size": 2,
+          "value": 45,
+          "display": "45"
+        },
+        {
+          "name": "disk_number",
+          "path": "zip64_eocd.disk_number",
+          "type": "u32",
+          "offset": 515,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "disk_with_central_directory",
+          "path": "zip64_eocd.disk_with_central_directory",
+          "type": "u32",
+          "offset": 519,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "entries_on_disk",
+          "path": "zip64_eocd.entries_on_disk",
+          "type": "u64",
+          "offset": 523,
+          "size": 8,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "total_entries",
+          "path": "zip64_eocd.total_entries",
+          "type": "u64",
+          "offset": 531,
+          "size": 8,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "central_directory_size",
+          "path": "zip64_eocd.central_directory_size",
+          "type": "u64",
+          "offset": 539,
+          "size": 8,
+          "value": 253,
+          "display": "253"
+        },
+        {
+          "name": "central_directory_offset",
+          "path": "zip64_eocd.central_directory_offset",
+          "type": "u64",
+          "offset": 547,
+          "size": 8,
+          "value": 246,
+          "display": "0xF6"
+        }
+      ]
+    },
+    {
+      "name": "central_directory",
+      "path": "central_directory",
+      "type": "CentralDirectoryEntry[3]",
+      "offset": 246,
+      "size": 253,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "central_directory[0]",
+          "type": "CentralDirectoryEntry",
+          "offset": 246,
+          "size": 83,
+          "display": "CentralDirectoryEntry (24)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "central_directory[0].signature",
+              "type": "u8[4]",
+              "offset": 246,
+              "size": 4,
+              "value": "504B0102",
+              "display": "50 4B 01 02"
+            },
+            {
+              "name": "version_made_by",
+              "path": "central_directory[0].version_made_by",
+              "type": "u8",
+              "offset": 250,
+              "size": 1,
+              "value": 30,
+              "display": "30"
+            },
+            {
+              "name": "host_os",
+              "path": "central_directory[0].host_os",
+              "type": "u8",
+              "offset": 251,
+              "size": 1,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "version_needed",
+              "path": "central_directory[0].version_needed",
+              "type": "u16",
+              "offset": 252,
+              "size": 2,
+              "value": 45,
+              "display": "45"
+            },
+            {
+              "name": "flags",
+              "path": "central_directory[0].flags",
+              "type": "GeneralPurposeFlags",
+              "offset": 254,
+              "size": 2,
+              "value": 2048,
+              "display": "Utf8"
+            },
+            {
+              "name": "method",
+              "path": "central_directory[0].method",
+              "type": "Method",
+              "offset": 256,
+              "size": 2,
+              "value": 0,
+              "display": "Stored (0x0)"
+            },
+            {
+              "name": "mod_time",
+              "path": "central_directory[0].mod_time",
+              "type": "dostime",
+              "offset": 258,
+              "size": 2,
+              "value": 25692,
+              "display": "1/1/1980 12:34:56 PM"
+            },
+            {
+              "name": "mod_date",
+              "path": "central_directory[0].mod_date",
+              "type": "dosdate",
+              "offset": 260,
+              "size": 2,
+              "value": 23888,
+              "display": "10/16/2026 12:00:00 AM"
+            },
+            {
+              "name": "crc32",
+              "path": "central_directory[0].crc32",
+              "type": "u32",
+              "offset": 262,
+              "size": 4,
+              "value": 1257326565,
+              "display": "0x4AF147E5"
+            },
+            {
+              "name": "compressed_size",
+              "path": "central_directory[0].compressed_size",
+              "type": "u32",
+              "offset": 266,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "uncompressed_size",
+              "path": "central_directory[0].uncompressed_size",
+              "type": "u32",
+              "offset": 270,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name_length",
+              "path": "central_directory[0].file_name_length",
+              "type": "u16",
+              "offset": 274,
+              "size": 2,
+              "value": 9,
+              "display": "9"
+            },
+            {
+              "name": "extra_field_length",
+              "path": "central_directory[0].extra_field_length",
+              "type": "u16",
+              "offset": 276,
+              "size": 2,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "file_comment_length",
+              "path": "central_directory[0].file_comment_length",
+              "type": "u16",
+              "offset": 278,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "disk_number_start",
+              "path": "central_directory[0].disk_number_start",
+              "type": "u16",
+              "offset": 280,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "internal_attributes",
+              "path": "central_directory[0].internal_attributes",
+              "type": "u16",
+              "offset": 282,
+              "size": 2,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "external_attributes",
+              "path": "central_directory[0].external_attributes",
+              "type": "u32",
+              "offset": 284,
+              "size": 4,
+              "value": 2175008768,
+              "display": "0x81A40000"
+            },
+            {
+              "name": "local_header_offset",
+              "path": "central_directory[0].local_header_offset",
+              "type": "u32",
+              "offset": 288,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name",
+              "path": "central_directory[0].file_name",
+              "type": "char[9]",
+              "offset": 292,
+              "size": 9,
+              "value": "hello.txt",
+              "display": "hello.txt"
+            },
+            {
+              "name": "extra_fields",
+              "path": "central_directory[0].extra_fields",
+              "type": "ExtraField[1]",
+              "offset": 301,
+              "size": 28,
+              "display": "[1]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "central_directory[0].extra_fields[0]",
+                  "type": "ExtraField",
+                  "offset": 301,
+                  "size": 28,
+                  "display": "ExtraField (3)",
+                  "children": [
+                    {
+                      "name": "id",
+                      "path": "central_directory[0].extra_fields[0].id",
+                      "type": "u16",
+                      "offset": 301,
+                      "size": 2,
+                      "value": 1,
+                      "display": "0x1"
+                    },
+                    {
+                      "name": "size",
+                      "path": "central_directory[0].extra_fields[0].size",
+                      "type": "u16",
+                      "offset": 303,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "values",
+                      "path": "central_directory[0].extra_fields[0].values",
+                      "type": "u64[3]",
+                      "offset": 305,
+                      "size": 24,
+                      "display": "[3]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "central_directory[0].extra_fields[0].values[0]",
+                          "type": "u64",
+                          "offset": 305,
+                          "size": 8,
+                          "value": 18,
+                          "display": "18"
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "central_directory[0].extra_fields[0].values[1]",
+                          "type": "u64",
+                          "offset": 313,
+                          "size": 8,
+                          "value": 18,
+                          "display": "18"
+                        },
+                        {
+                          "name": "[2]",
+                          "path": "central_directory[0].extra_fields[0].values[2]",
+                          "type": "u64",
+                          "offset": 321,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "file_comment",
+              "path": "central_directory[0].file_comment",
+              "type": "char[0]",
+              "offset": 329,
+              "size": 0,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "real_uncompressed_size",
+              "path": "central_directory[0].real_uncompressed_size",
+              "type": "u64",
+              "offset": 329,
+              "size": 0,
+              "value": 18,
+              "display": "18"
+            },
+            {
+              "name": "real_compressed_size",
+              "path": "central_directory[0].real_compressed_size",
+              "type": "u64",
+              "offset": 329,
+              "size": 0,
+              "value": 18,
+              "display": "18"
+            },
+            {
+              "name": "real_local_header_offset",
+              "path": "central_directory[0].real_local_header_offset",
+              "type": "u64",
+              "offset": 329,
+              "size": 0,
+              "value": 0,
+              "display": "0x0"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "central_directory[1]",
+          "type": "CentralDirectoryEntry",
+          "offset": 329,
+          "size": 86,
+          "display": "CentralDirectoryEntry (24)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "central_directory[1].signature",
+              "type": "u8[4]",
+              "offset": 329,
+              "size": 4,
+              "value": "504B0102",
+              "display": "50 4B 01 02"
+            },
+            {
+              "name": "version_made_by",
+              "path": "central_directory[1].version_made_by",
+              "type": "u8",
+              "offset": 333,
+              "size": 1,
+              "value": 30,
+              "display": "30"
+            },
+            {
+              "name": "host_os",
+              "path": "central_directory[1].host_os",
+              "type": "u8",
+              "offset": 334,
+              "size": 1,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "version_needed",
+              "path": "central_directory[1].version_needed",
+              "type": "u16",
+              "offset": 335,
+              "size": 2,
+              "value": 45,
+              "display": "45"
+            },
+            {
+              "name": "flags",
+              "path": "central_directory[1].flags",
+              "type": "GeneralPurposeFlags",
+              "offset": 337,
+              "size": 2,
+              "value": 2048,
+              "display": "Utf8"
+            },
+            {
+              "name": "method",
+              "path": "central_directory[1].method",
+              "type": "Method",
+              "offset": 339,
+              "size": 2,
+              "value": 8,
+              "display": "Deflate (0x8)"
+            },
+            {
+              "name": "mod_time",
+              "path": "central_directory[1].mod_time",
+              "type": "dostime",
+              "offset": 341,
+              "size": 2,
+              "value": 25692,
+              "display": "1/1/1980 12:34:56 PM"
+            },
+            {
+              "name": "mod_date",
+              "path": "central_directory[1].mod_date",
+              "type": "dosdate",
+              "offset": 343,
+              "size": 2,
+              "value": 23888,
+              "display": "10/16/2026 12:00:00 AM"
+            },
+            {
+              "name": "crc32",
+              "path": "central_directory[1].crc32",
+              "type": "u32",
+              "offset": 345,
+              "size": 4,
+              "value": 726611918,
+              "display": "0x2B4F37CE"
+            },
+            {
+              "name": "compressed_size",
+              "path": "central_directory[1].compressed_size",
+              "type": "u32",
+              "offset": 349,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "uncompressed_size",
+              "path": "central_directory[1].uncompressed_size",
+              "type": "u32",
+              "offset": 353,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name_length",
+              "path": "central_directory[1].file_name_length",
+              "type": "u16",
+              "offset": 357,
+              "size": 2,
+              "value": 12,
+              "display": "12"
+            },
+            {
+              "name": "extra_field_length",
+              "path": "central_directory[1].extra_field_length",
+              "type": "u16",
+              "offset": 359,
+              "size": 2,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "file_comment_length",
+              "path": "central_directory[1].file_comment_length",
+              "type": "u16",
+              "offset": 361,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "disk_number_start",
+              "path": "central_directory[1].disk_number_start",
+              "type": "u16",
+              "offset": 363,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "internal_attributes",
+              "path": "central_directory[1].internal_attributes",
+              "type": "u16",
+              "offset": 365,
+              "size": 2,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "external_attributes",
+              "path": "central_directory[1].external_attributes",
+              "type": "u32",
+              "offset": 367,
+              "size": 4,
+              "value": 2175008768,
+              "display": "0x81A40000"
+            },
+            {
+              "name": "local_header_offset",
+              "path": "central_directory[1].local_header_offset",
+              "type": "u32",
+              "offset": 371,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name",
+              "path": "central_directory[1].file_name",
+              "type": "char[12]",
+              "offset": 375,
+              "size": 12,
+              "value": "dir/data.bin",
+              "display": "dir/data.bin"
+            },
+            {
+              "name": "extra_fields",
+              "path": "central_directory[1].extra_fields",
+              "type": "ExtraField[1]",
+              "offset": 387,
+              "size": 28,
+              "display": "[1]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "central_directory[1].extra_fields[0]",
+                  "type": "ExtraField",
+                  "offset": 387,
+                  "size": 28,
+                  "display": "ExtraField (3)",
+                  "children": [
+                    {
+                      "name": "id",
+                      "path": "central_directory[1].extra_fields[0].id",
+                      "type": "u16",
+                      "offset": 387,
+                      "size": 2,
+                      "value": 1,
+                      "display": "0x1"
+                    },
+                    {
+                      "name": "size",
+                      "path": "central_directory[1].extra_fields[0].size",
+                      "type": "u16",
+                      "offset": 389,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "values",
+                      "path": "central_directory[1].extra_fields[0].values",
+                      "type": "u64[3]",
+                      "offset": 391,
+                      "size": 24,
+                      "display": "[3]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "central_directory[1].extra_fields[0].values[0]",
+                          "type": "u64",
+                          "offset": 391,
+                          "size": 8,
+                          "value": 200,
+                          "display": "200"
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "central_directory[1].extra_fields[0].values[1]",
+                          "type": "u64",
+                          "offset": 399,
+                          "size": 8,
+                          "value": 9,
+                          "display": "9"
+                        },
+                        {
+                          "name": "[2]",
+                          "path": "central_directory[1].extra_fields[0].values[2]",
+                          "type": "u64",
+                          "offset": 407,
+                          "size": 8,
+                          "value": 77,
+                          "display": "77"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "file_comment",
+              "path": "central_directory[1].file_comment",
+              "type": "char[0]",
+              "offset": 415,
+              "size": 0,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "real_uncompressed_size",
+              "path": "central_directory[1].real_uncompressed_size",
+              "type": "u64",
+              "offset": 415,
+              "size": 0,
+              "value": 200,
+              "display": "200"
+            },
+            {
+              "name": "real_compressed_size",
+              "path": "central_directory[1].real_compressed_size",
+              "type": "u64",
+              "offset": 415,
+              "size": 0,
+              "value": 9,
+              "display": "9"
+            },
+            {
+              "name": "real_local_header_offset",
+              "path": "central_directory[1].real_local_header_offset",
+              "type": "u64",
+              "offset": 415,
+              "size": 0,
+              "value": 77,
+              "display": "0x4D"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "central_directory[2]",
+          "type": "CentralDirectoryEntry",
+          "offset": 415,
+          "size": 84,
+          "display": "CentralDirectoryEntry (24)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "central_directory[2].signature",
+              "type": "u8[4]",
+              "offset": 415,
+              "size": 4,
+              "value": "504B0102",
+              "display": "50 4B 01 02"
+            },
+            {
+              "name": "version_made_by",
+              "path": "central_directory[2].version_made_by",
+              "type": "u8",
+              "offset": 419,
+              "size": 1,
+              "value": 30,
+              "display": "30"
+            },
+            {
+              "name": "host_os",
+              "path": "central_directory[2].host_os",
+              "type": "u8",
+              "offset": 420,
+              "size": 1,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "version_needed",
+              "path": "central_directory[2].version_needed",
+              "type": "u16",
+              "offset": 421,
+              "size": 2,
+              "value": 45,
+              "display": "45"
+            },
+            {
+              "name": "flags",
+              "path": "central_directory[2].flags",
+              "type": "GeneralPurposeFlags",
+              "offset": 423,
+              "size": 2,
+              "value": 2056,
+              "display": "DataDescriptor | Utf8"
+            },
+            {
+              "name": "method",
+              "path": "central_directory[2].method",
+              "type": "Method",
+              "offset": 425,
+              "size": 2,
+              "value": 0,
+              "display": "Stored (0x0)"
+            },
+            {
+              "name": "mod_time",
+              "path": "central_directory[2].mod_time",
+              "type": "dostime",
+              "offset": 427,
+              "size": 2,
+              "value": 25692,
+              "display": "1/1/1980 12:34:56 PM"
+            },
+            {
+              "name": "mod_date",
+              "path": "central_directory[2].mod_date",
+              "type": "dosdate",
+              "offset": 429,
+              "size": 2,
+              "value": 23888,
+              "display": "10/16/2026 12:00:00 AM"
+            },
+            {
+              "name": "crc32",
+              "path": "central_directory[2].crc32",
+              "type": "u32",
+              "offset": 431,
+              "size": 4,
+              "value": 1247706261,
+              "display": "0x4A5E7C95"
+            },
+            {
+              "name": "compressed_size",
+              "path": "central_directory[2].compressed_size",
+              "type": "u32",
+              "offset": 435,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "uncompressed_size",
+              "path": "central_directory[2].uncompressed_size",
+              "type": "u32",
+              "offset": 439,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name_length",
+              "path": "central_directory[2].file_name_length",
+              "type": "u16",
+              "offset": 443,
+              "size": 2,
+              "value": 10,
+              "display": "10"
+            },
+            {
+              "name": "extra_field_length",
+              "path": "central_directory[2].extra_field_length",
+              "type": "u16",
+              "offset": 445,
+              "size": 2,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "file_comment_length",
+              "path": "central_directory[2].file_comment_length",
+              "type": "u16",
+              "offset": 447,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "disk_number_start",
+              "path": "central_directory[2].disk_number_start",
+              "type": "u16",
+              "offset": 449,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "internal_attributes",
+              "path": "central_directory[2].internal_attributes",
+              "type": "u16",
+              "offset": 451,
+              "size": 2,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "external_attributes",
+              "path": "central_directory[2].external_attributes",
+              "type": "u32",
+              "offset": 453,
+              "size": 4,
+              "value": 2175008768,
+              "display": "0x81A40000"
+            },
+            {
+              "name": "local_header_offset",
+              "path": "central_directory[2].local_header_offset",
+              "type": "u32",
+              "offset": 457,
+              "size": 4,
+              "value": 4294967295,
+              "display": "4294967295"
+            },
+            {
+              "name": "file_name",
+              "path": "central_directory[2].file_name",
+              "type": "char[10]",
+              "offset": 461,
+              "size": 10,
+              "value": "stream.txt",
+              "display": "stream.txt"
+            },
+            {
+              "name": "extra_fields",
+              "path": "central_directory[2].extra_fields",
+              "type": "ExtraField[1]",
+              "offset": 471,
+              "size": 28,
+              "display": "[1]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "central_directory[2].extra_fields[0]",
+                  "type": "ExtraField",
+                  "offset": 471,
+                  "size": 28,
+                  "display": "ExtraField (3)",
+                  "children": [
+                    {
+                      "name": "id",
+                      "path": "central_directory[2].extra_fields[0].id",
+                      "type": "u16",
+                      "offset": 471,
+                      "size": 2,
+                      "value": 1,
+                      "display": "0x1"
+                    },
+                    {
+                      "name": "size",
+                      "path": "central_directory[2].extra_fields[0].size",
+                      "type": "u16",
+                      "offset": 473,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "values",
+                      "path": "central_directory[2].extra_fields[0].values",
+                      "type": "u64[3]",
+                      "offset": 475,
+                      "size": 24,
+                      "display": "[3]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "central_directory[2].extra_fields[0].values[0]",
+                          "type": "u64",
+                          "offset": 475,
+                          "size": 8,
+                          "value": 14,
+                          "display": "14"
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "central_directory[2].extra_fields[0].values[1]",
+                          "type": "u64",
+                          "offset": 483,
+                          "size": 8,
+                          "value": 14,
+                          "display": "14"
+                        },
+                        {
+                          "name": "[2]",
+                          "path": "central_directory[2].extra_fields[0].values[2]",
+                          "type": "u64",
+                          "offset": 491,
+                          "size": 8,
+                          "value": 148,
+                          "display": "148"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "file_comment",
+              "path": "central_directory[2].file_comment",
+              "type": "char[0]",
+              "offset": 499,
+              "size": 0,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "real_uncompressed_size",
+              "path": "central_directory[2].real_uncompressed_size",
+              "type": "u64",
+              "offset": 499,
+              "size": 0,
+              "value": 14,
+              "display": "14"
+            },
+            {
+              "name": "real_compressed_size",
+              "path": "central_directory[2].real_compressed_size",
+              "type": "u64",
+              "offset": 499,
+              "size": 0,
+              "value": 14,
+              "display": "14"
+            },
+            {
+              "name": "real_local_header_offset",
+              "path": "central_directory[2].real_local_header_offset",
+              "type": "u64",
+              "offset": 499,
+              "size": 0,
+              "value": 148,
+              "display": "0x94"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "local_files",
+      "path": "local_files",
+      "type": "LocalFile[3]",
+      "offset": 0,
+      "size": 246,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "local_files[0]",
+          "type": "LocalFile",
+          "offset": 0,
+          "size": 77,
+          "display": "LocalFile (2)",
+          "children": [
+            {
+              "name": "header",
+              "path": "local_files[0].header",
+              "type": "LocalFileHeader",
+              "offset": 0,
+              "size": 59,
+              "display": "LocalFileHeader (13)",
+              "children": [
+                {
+                  "name": "signature",
+                  "path": "local_files[0].header.signature",
+                  "type": "u8[4]",
+                  "offset": 0,
+                  "size": 4,
+                  "value": "504B0304",
+                  "display": "50 4B 03 04"
+                },
+                {
+                  "name": "version_needed",
+                  "path": "local_files[0].header.version_needed",
+                  "type": "u16",
+                  "offset": 4,
+                  "size": 2,
+                  "value": 45,
+                  "display": "45"
+                },
+                {
+                  "name": "flags",
+                  "path": "local_files[0].header.flags",
+                  "type": "GeneralPurposeFlags",
+                  "offset": 6,
+                  "size": 2,
+                  "value": 2048,
+                  "display": "Utf8"
+                },
+                {
+                  "name": "method",
+                  "path": "local_files[0].header.method",
+                  "type": "Method",
+                  "offset": 8,
+                  "size": 2,
+                  "value": 0,
+                  "display": "Stored (0x0)"
+                },
+                {
+                  "name": "mod_time",
+                  "path": "local_files[0].header.mod_time",
+                  "type": "dostime",
+                  "offset": 10,
+                  "size": 2,
+                  "value": 25692,
+                  "display": "1/1/1980 12:34:56 PM"
+                },
+                {
+                  "name": "mod_date",
+                  "path": "local_files[0].header.mod_date",
+                  "type": "dosdate",
+                  "offset": 12,
+                  "size": 2,
+                  "value": 23888,
+                  "display": "10/16/2026 12:00:00 AM"
+                },
+                {
+                  "name": "crc32",
+                  "path": "local_files[0].header.crc32",
+                  "type": "u32",
+                  "offset": 14,
+                  "size": 4,
+                  "value": 1257326565,
+                  "display": "0x4AF147E5"
+                },
+                {
+                  "name": "compressed_size",
+                  "path": "local_files[0].header.compressed_size",
+                  "type": "u32",
+                  "offset": 18,
+                  "size": 4,
+                  "value": 4294967295,
+                  "display": "4294967295"
+                },
+                {
+                  "name": "uncompressed_size",
+                  "path": "local_files[0].header.uncompressed_size",
+                  "type": "u32",
+                  "offset": 22,
+                  "size": 4,
+                  "value": 4294967295,
+                  "display": "4294967295"
+                },
+                {
+                  "name": "file_name_length",
+                  "path": "local_files[0].header.file_name_length",
+                  "type": "u16",
+                  "offset": 26,
+                  "size": 2,
+                  "value": 9,
+                  "display": "9"
+                },
+                {
+                  "name": "extra_field_length",
+                  "path": "local_files[0].header.extra_field_length",
+                  "type": "u16",
+                  "offset": 28,
+                  "size": 2,
+                  "value": 20,
+                  "display": "20"
+                },
+                {
+                  "name": "file_name",
+                  "path": "local_files[0].header.file_name",
+                  "type": "char[9]",
+                  "offset": 30,
+                  "size": 9,
+                  "value": "hello.txt",
+                  "display": "hello.txt"
+                },
+                {
+                  "name": "extra_fields",
+                  "path": "local_files[0].header.extra_fields",
+                  "type": "ExtraField[1]",
+                  "offset": 39,
+                  "size": 20,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "local_files[0].header.extra_fields[0]",
+                      "type": "ExtraField",
+                      "offset": 39,
+                      "size": 20,
+                      "display": "ExtraField (3)",
+                      "children": [
+                        {
+                          "name": "id",
+                          "path": "local_files[0].header.extra_fields[0].id",
+                          "type": "u16",
+                          "offset": 39,
+                          "size": 2,
+                          "value": 1,
+                          "display": "0x1"
+                        },
+                        {
+                          "name": "size",
+                          "path": "local_files[0].header.extra_fields[0].size",
+                          "type": "u16",
+                          "offset": 41,
+                          "size": 2,
+                          "value": 16,
+                          "display": "16"
+                        },
+                        {
+                          "name": "values",
+                          "path": "local_files[0].header.extra_fields[0].values",
+                          "type": "u64[2]",
+                          "offset": 43,
+                          "size": 16,
+                          "display": "[2]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "local_files[0].header.extra_fields[0].values[0]",
+                              "type": "u64",
+                              "offset": 43,
+                              "size": 8,
+                              "value": 18,
+                              "display": "18"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "local_files[0].header.extra_fields[0].values[1]",
+                              "type": "u64",
+                              "offset": 51,
+                              "size": 8,
+                              "value": 18,
+                              "display": "18"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "data",
+              "path": "local_files[0].data",
+              "type": "u8[18]",
+              "offset": 59,
+              "size": 18,
+              "value": "48656C6C6F2C20486578456469746F72210A",
+              "display": "48 65 6C 6C 6F 2C 20 48 65 78 45 64 69 74 6F 72 …"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "local_files[1]",
+          "type": "LocalFile",
+          "offset": 77,
+          "size": 71,
+          "display": "LocalFile (2)",
+          "children": [
+            {
+              "name": "header",
+              "path": "local_files[1].header",
+              "type": "LocalFileHeader",
+              "offset": 77,
+              "size": 62,
+              "display": "LocalFileHeader (13)",
+              "children": [
+                {
+                  "name": "signature",
+                  "path": "local_files[1].header.signature",
+                  "type": "u8[4]",
+                  "offset": 77,
+                  "size": 4,
+                  "value": "504B0304",
+                  "display": "50 4B 03 04"
+                },
+                {
+                  "name": "version_needed",
+                  "path": "local_files[1].header.version_needed",
+                  "type": "u16",
+                  "offset": 81,
+                  "size": 2,
+                  "value": 45,
+                  "display": "45"
+                },
+                {
+                  "name": "flags",
+                  "path": "local_files[1].header.flags",
+                  "type": "GeneralPurposeFlags",
+                  "offset": 83,
+                  "size": 2,
+                  "value": 2048,
+                  "display": "Utf8"
+                },
+                {
+                  "name": "method",
+                  "path": "local_files[1].header.method",
+                  "type": "Method",
+                  "offset": 85,
+                  "size": 2,
+                  "value": 8,
+                  "display": "Deflate (0x8)"
+                },
+                {
+                  "name": "mod_time",
+                  "path": "local_files[1].header.mod_time",
+                  "type": "dostime",
+                  "offset": 87,
+                  "size": 2,
+                  "value": 25692,
+                  "display": "1/1/1980 12:34:56 PM"
+                },
+                {
+                  "name": "mod_date",
+                  "path": "local_files[1].header.mod_date",
+                  "type": "dosdate",
+                  "offset": 89,
+                  "size": 2,
+                  "value": 23888,
+                  "display": "10/16/2026 12:00:00 AM"
+                },
+                {
+                  "name": "crc32",
+                  "path": "local_files[1].header.crc32",
+                  "type": "u32",
+                  "offset": 91,
+                  "size": 4,
+                  "value": 726611918,
+                  "display": "0x2B4F37CE"
+                },
+                {
+                  "name": "compressed_size",
+                  "path": "local_files[1].header.compressed_size",
+                  "type": "u32",
+                  "offset": 95,
+                  "size": 4,
+                  "value": 4294967295,
+                  "display": "4294967295"
+                },
+                {
+                  "name": "uncompressed_size",
+                  "path": "local_files[1].header.uncompressed_size",
+                  "type": "u32",
+                  "offset": 99,
+                  "size": 4,
+                  "value": 4294967295,
+                  "display": "4294967295"
+                },
+                {
+                  "name": "file_name_length",
+                  "path": "local_files[1].header.file_name_length",
+                  "type": "u16",
+                  "offset": 103,
+                  "size": 2,
+                  "value": 12,
+                  "display": "12"
+                },
+                {
+                  "name": "extra_field_length",
+                  "path": "local_files[1].header.extra_field_length",
+                  "type": "u16",
+                  "offset": 105,
+                  "size": 2,
+                  "value": 20,
+                  "display": "20"
+                },
+                {
+                  "name": "file_name",
+                  "path": "local_files[1].header.file_name",
+                  "type": "char[12]",
+                  "offset": 107,
+                  "size": 12,
+                  "value": "dir/data.bin",
+                  "display": "dir/data.bin"
+                },
+                {
+                  "name": "extra_fields",
+                  "path": "local_files[1].header.extra_fields",
+                  "type": "ExtraField[1]",
+                  "offset": 119,
+                  "size": 20,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "local_files[1].header.extra_fields[0]",
+                      "type": "ExtraField",
+                      "offset": 119,
+                      "size": 20,
+                      "display": "ExtraField (3)",
+                      "children": [
+                        {
+                          "name": "id",
+                          "path": "local_files[1].header.extra_fields[0].id",
+                          "type": "u16",
+                          "offset": 119,
+                          "size": 2,
+                          "value": 1,
+                          "display": "0x1"
+                        },
+                        {
+                          "name": "size",
+                          "path": "local_files[1].header.extra_fields[0].size",
+                          "type": "u16",
+                          "offset": 121,
+                          "size": 2,
+                          "value": 16,
+                          "display": "16"
+                        },
+                        {
+                          "name": "values",
+                          "path": "local_files[1].header.extra_fields[0].values",
+                          "type": "u64[2]",
+                          "offset": 123,
+                          "size": 16,
+                          "display": "[2]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "local_files[1].header.extra_fields[0].values[0]",
+                              "type": "u64",
+                              "offset": 123,
+                              "size": 8,
+                              "value": 200,
+                              "display": "200"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "local_files[1].header.extra_fields[0].values[1]",
+                              "type": "u64",
+                              "offset": 131,
+                              "size": 8,
+                              "value": 9,
+                              "display": "9"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "data",
+              "path": "local_files[1].data",
+              "type": "u8[9]",
+              "offset": 139,
+              "size": 9,
+              "value": "636064626618061800",
+              "display": "63 60 64 62 66 18 06 18 00"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "local_files[2]",
+          "type": "LocalFile",
+          "offset": 148,
+          "size": 98,
+          "display": "LocalFile (3)",
+          "children": [
+            {
+              "name": "header",
+              "path": "local_files[2].header",
+              "type": "LocalFileHeader",
+              "offset": 148,
+              "size": 60,
+              "display": "LocalFileHeader (13)",
+              "children": [
+                {
+                  "name": "signature",
+                  "path": "local_files[2].header.signature",
+                  "type": "u8[4]",
+                  "offset": 148,
+                  "size": 4,
+                  "value": "504B0304",
+                  "display": "50 4B 03 04"
+                },
+                {
+                  "name": "version_needed",
+                  "path": "local_files[2].header.version_needed",
+                  "type": "u16",
+                  "offset": 152,
+                  "size": 2,
+                  "value": 45,
+                  "display": "45"
+                },
+                {
+                  "name": "flags",
+                  "path": "local_files[2].header.flags",
+                  "type": "GeneralPurposeFlags",
+                  "offset": 154,
+                  "size": 2,
+                  "value": 2056,
+                  "display": "DataDescriptor | Utf8"
+                },
+                {
+                  "name": "method",
+                  "path": "local_files[2].header.method",
+                  "type": "Method",
+                  "offset": 156,
+                  "size": 2,
+                  "value": 0,
+                  "display": "Stored (0x0)"
+                },
+                {
+                  "name": "mod_time",
+                  "path": "local_files[2].header.mod_time",
+                  "type": "dostime",
+                  "offset": 158,
+                  "size": 2,
+                  "value": 25692,
+                  "display": "1/1/1980 12:34:56 PM"
+                },
+                {
+                  "name": "mod_date",
+                  "path": "local_files[2].header.mod_date",
+                  "type": "dosdate",
+                  "offset": 160,
+                  "size": 2,
+                  "value": 23888,
+                  "display": "10/16/2026 12:00:00 AM"
+                },
+                {
+                  "name": "crc32",
+                  "path": "local_files[2].header.crc32",
+                  "type": "u32",
+                  "offset": 162,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0x0"
+                },
+                {
+                  "name": "compressed_size",
+                  "path": "local_files[2].header.compressed_size",
+                  "type": "u32",
+                  "offset": 166,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "uncompressed_size",
+                  "path": "local_files[2].header.uncompressed_size",
+                  "type": "u32",
+                  "offset": 170,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "file_name_length",
+                  "path": "local_files[2].header.file_name_length",
+                  "type": "u16",
+                  "offset": 174,
+                  "size": 2,
+                  "value": 10,
+                  "display": "10"
+                },
+                {
+                  "name": "extra_field_length",
+                  "path": "local_files[2].header.extra_field_length",
+                  "type": "u16",
+                  "offset": 176,
+                  "size": 2,
+                  "value": 20,
+                  "display": "20"
+                },
+                {
+                  "name": "file_name",
+                  "path": "local_files[2].header.file_name",
+                  "type": "char[10]",
+                  "offset": 178,
+                  "size": 10,
+                  "value": "stream.txt",
+                  "display": "stream.txt"
+                },
+                {
+                  "name": "extra_fields",
+                  "path": "local_files[2].header.extra_fields",
+                  "type": "ExtraField[1]",
+                  "offset": 188,
+                  "size": 20,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "local_files[2].header.extra_fields[0]",
+                      "type": "ExtraField",
+                      "offset": 188,
+                      "size": 20,
+                      "display": "ExtraField (3)",
+                      "children": [
+                        {
+                          "name": "id",
+                          "path": "local_files[2].header.extra_fields[0].id",
+                          "type": "u16",
+                          "offset": 188,
+                          "size": 2,
+                          "value": 1,
+                          "display": "0x1"
+                        },
+                        {
+                          "name": "size",
+                          "path": "local_files[2].header.extra_fields[0].size",
+                          "type": "u16",
+                          "offset": 190,
+                          "size": 2,
+                          "value": 16,
+                          "display": "16"
+                        },
+                        {
+                          "name": "values",
+                          "path": "local_files[2].header.extra_fields[0].values",
+                          "type": "u64[2]",
+                          "offset": 192,
+                          "size": 16,
+                          "display": "[2]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "local_files[2].header.extra_fields[0].values[0]",
+                              "type": "u64",
+                              "offset": 192,
+                              "size": 8,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "local_files[2].header.extra_fields[0].values[1]",
+                              "type": "u64",
+                              "offset": 200,
+                              "size": 8,
+                              "value": 0,
+                              "display": "0"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "data",
+              "path": "local_files[2].data",
+              "type": "u8[14]",
+              "offset": 208,
+              "size": 14,
+              "value": "73747265616D656420656E747279",
+              "display": "73 74 72 65 61 6D 65 64 20 65 6E 74 72 79"
+            },
+            {
+              "name": "descriptor",
+              "path": "local_files[2].descriptor",
+              "type": "DataDescriptor",
+              "offset": 222,
+              "size": 24,
+              "display": "DataDescriptor (4)",
+              "children": [
+                {
+                  "name": "signature",
+                  "path": "local_files[2].descriptor.signature",
+                  "type": "u32",
+                  "offset": 222,
+                  "size": 4,
+                  "value": 134695760,
+                  "display": "0x8074B50"
+                },
+                {
+                  "name": "crc32",
+                  "path": "local_files[2].descriptor.crc32",
+                  "type": "u32",
+                  "offset": 226,
+                  "size": 4,
+                  "value": 1247706261,
+                  "display": "0x4A5E7C95"
+                },
+                {
+                  "name": "compressed_size",
+                  "path": "local_files[2].descriptor.compressed_size",
+                  "type": "u64",
+                  "offset": 230,
+                  "size": 8,
+                  "value": 14,
+                  "display": "14"
+                },
+                {
+                  "name": "uncompressed_size",
+                  "path": "local_files[2].descriptor.uncompressed_size",
+                  "type": "u64",
+                  "offset": 238,
+                  "size": 8,
+                  "value": 14,
+                  "display": "14"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

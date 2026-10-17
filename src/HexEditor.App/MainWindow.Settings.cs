@@ -131,7 +131,10 @@ public sealed partial class MainWindow
 
     public void CloseToolPage(string id)
     {
+        // ページの後始末: 比較タブ (MainWindow.Compare.cs)、スクリプトエディタ、テンプレートエディタ
         OnToolPageClosing(id);
+        OnScriptEditorClosing(id);
+        TemplateEditorClosed(id);
         _toolPages.RemoveAll(p => p.Id == id);
         if (id == "settings")
         {

@@ -1627,6 +1627,8 @@
 - 手順 2: すべて 50 ms 以内 (UI が固まらない)。
 - 手順 3: `Throw` が「エラー: test failure」の形、`Echo` が起点の 4 バイトの Hex、int32 が正しい値。
 
+**備考**: TD-INSP-PLUGIN-TYPES は署名の代わりに、テスト用の設定フォルダの信頼の記録で実行を許可する (この PC の証明書ストアに証明書を入れない)。`Loop` は変換から戻らない型として作る。同じ手順を設定フォルダの `inspector/` に置いたテンプレートの型 (`Loop` は無限ループ、`Throw` は起点から読める 4 KB を超えて読むために失敗する型) でも確かめる。手順 2 の時間は、キー入力からインスペクタの更新までをアプリの中で測る (`inspectorKeyLatency`)。
+
 ### TC-INSP-22-03 定義ファイルの保存し直しでの更新
 
 | 項目 | 内容 |
@@ -3049,7 +3051,7 @@
 | TD-INSP-BM-CSV-EXCEL | 約 300 バイト | Excel の「CSV UTF-8 (コンマ区切り)」と同じ形式 (BOM 付き、改行 CRLF、カンマ・改行を含む値は `"` で囲む) の CSV。1 行目は HexEditor の CSV の書き出しと同じ見出し。データ 3 行: (1) `0x10`、`4`、`ヘッダ`、`#FF0000`、`Header`、`magic, bytes`。(2) `0x100`、`16`、`table`、`#00FF00`、`Body/Tables`、`line1` と `line2` の 2 行。(3) `0x400`、`1`、`flag`、`#0000FF`、空、空 |
 | TD-INSP-BM-JSON-BAD | 約 80 バイト | 4 行の JSON。1 行目 `{`、2 行目 `  "version": 1,`、3 行目 `  "bookmarks": [ { "start": 16,, "length": 4 } ]` (カンマが 2 つ続く構文の誤り)、4 行目 `}` |
 | TD-INSP-TPL-TYPE | 約 200 バイト | 07-templates.md のテンプレート言語で、構造体 `Header6` (uint16 LE の `id`、uint32 LE の `size` の 6 バイト) に「インスペクタに表示する」属性を付けた定義ファイル。設定フォルダの `inspector/` に置いて使う |
-| TD-INSP-PLUGIN-TYPES | 約 20 KiB | テスト用のプラグイン (08-automation.md のインスペクタの型の拡張点を実装し、テスト用の証明書で署名したもの)。型 `Loop` (サイズ 4。変換で無限ループする)、`Throw` (サイズ 4。変換で `InvalidOperationException("test failure")` を投げる)、`Echo` (サイズ 4。4 バイトを空白区切りの Hex の文字列にする) |
+| TD-INSP-PLUGIN-TYPES | 約 20 KiB | テスト用のプラグイン (08-automation.md のインスペクタの型の拡張点を実装したもの。tests/plugins の Plugin.Generic を test.json で設定する。テストでは信頼の記録で許可する)。型 `Loop` (サイズ 4。変換から戻らない)、`Throw` (サイズ 4。起点の先頭のバイトが `01` のとき、変換で `InvalidOperationException("test failure")` を投げる。ほかの位置では先頭のバイトの Hex。08 の AUTO-30 の仕様 7 の「1 分間に 10 回の例外で停止」に手順 2 で掛からないため)、`Echo` (サイズ 4。4 バイトを空白区切りの Hex の文字列にする) |
 | TD-INSP-YARA-PK | 約 80 バイト | YARA のルールファイル。`rule zip_local_header { strings: $pk = { 50 4B 03 04 } condition: $pk }` |
 | TD-INSP-SCRIPT-ANNOT3 | 約 500 バイト | 08-automation.md の JavaScript のスクリプト。開いているドキュメントに、出どころ「スクリプト」の一時的な注釈を 3 つ付ける: `outer` (0x00 から長さ 0x40)、`middle` (0x08 から長さ 0x18)、`inner` (0x10 から長さ 1)。説明はそれぞれ `outer desc`、`middle desc`、`inner desc` |
 | TD-INSP-RULES-64 | 約 20 KiB | TD-RANDOM-16M 用の付随データ (設定フォルダの `documents/` に置く)。有効なドキュメントのルール 64 件: バイト値のルール 16 件 (`00-0F`、`10-1F`、…、`F0-FF`)、Hex パターンのルール 16 件 (TD-RANDOM-16M の先頭から 4 KiB ごとに取った 4 バイト)、テキストのルール 16 件 (`PK`、`MZ` など 2 文字)、正規表現のルール 8 件 (`[\x00-\x1F]{4,}` など)、数値のルール 8 件 (uint32 LE で `0..0xFF` など) |

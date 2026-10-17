@@ -30,6 +30,91 @@ Velopack (installer version only)
 https://github.com/velopack/velopack
 License: MIT License. Copyright (c) Velopack Ltd.
 
+-------------------------------------------------------------------------------
+Jint (JavaScript interpreter for scripts)
+https://github.com/sebastienros/jint
+License: BSD 2-Clause License (below). Copyright (c) Sebastien Ros.
+
+-------------------------------------------------------------------------------
+Acornima (JavaScript parser used by Jint)
+https://github.com/adams85/acornima
+License: BSD 3-Clause License (below). Copyright (c) Adam Simon.
+Acornima is a port of acorn (https://github.com/acornjs/acorn), MIT License,
+Copyright (c) Marijn Haverbeke and others.
+
+-------------------------------------------------------------------------------
+Monaco Editor 0.57.0 (code editor of the script and template editors)
+https://github.com/microsoft/monaco-editor
+License: MIT License. Copyright (c) 2016 - present Microsoft Corporation.
+npm package monaco-editor 0.57.0, dist.integrity
+sha512-5BkI9KGoqrNvBGUe15/QlZq3OooZ8WLg1AxTpaqHRCP3HNpzPPZKE2EDz8M7c+VRmCeUw1Brp4cx/PWm3kI/5A==
+The license and the notices of the components that Monaco contains are in
+Assets\Monaco\LICENSE.txt and Assets\Monaco\ThirdPartyNotices.txt.
+
+-------------------------------------------------------------------------------
+Microsoft Edge WebView2 (Microsoft.Web.WebView2; part of the Windows App SDK)
+https://learn.microsoft.com/microsoft-edge/webview2/
+License: Microsoft Software License Terms (BSD-style license for the SDK).
+The WebView2 Runtime is installed with Windows and is not redistributed.
+
+-------------------------------------------------------------------------------
+Roslyn (Microsoft.CodeAnalysis; C# script component only - not included in
+the application, downloaded separately when C# scripts are first used)
+https://github.com/dotnet/roslyn
+License: MIT License. Copyright (c) .NET Foundation and Contributors.
+
+===============================================================================
+BSD 2-Clause License (Jint)
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+===============================================================================
+BSD 3-Clause License (Acornima)
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 ===============================================================================
 MIT License
 

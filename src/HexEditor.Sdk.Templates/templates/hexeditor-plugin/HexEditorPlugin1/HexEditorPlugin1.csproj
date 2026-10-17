@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- 依存ライブラリをビルドの出力に集める (プラグインのフォルダから読み込まれる)。 -->
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <!-- F5 で起動する HexEditor (インストーラ版の既定の場所)。別の場所にある場合は -p:HexEditorExe=... か環境変数で変える。 -->
+    <HexEditorExe Condition="'$(HexEditorExe)' == ''">$(LOCALAPPDATA)\HexEditor\current\HexEditor.exe</HexEditorExe>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- SDK はアプリのものを使うため、出力にコピーしない。 -->
+    <PackageReference Include="HexEditor.Sdk" Version="1.0.0" ExcludeAssets="runtime" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

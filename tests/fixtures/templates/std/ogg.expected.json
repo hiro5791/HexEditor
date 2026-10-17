@@ -1,0 +1,317 @@
+{
+  "name": "Ogg コンテナ",
+  "type": "application",
+  "offset": 0,
+  "size": 96,
+  "children": [
+    {
+      "name": "pages",
+      "path": "pages",
+      "type": "Page[2]",
+      "offset": 0,
+      "size": 96,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "pages[0]",
+          "type": "Page",
+          "offset": 0,
+          "size": 58,
+          "display": "Page (11)",
+          "children": [
+            {
+              "name": "capture_pattern",
+              "path": "pages[0].capture_pattern",
+              "type": "char[4]",
+              "offset": 0,
+              "size": 4,
+              "value": "OggS",
+              "display": "OggS"
+            },
+            {
+              "name": "version",
+              "path": "pages[0].version",
+              "type": "u8",
+              "offset": 4,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "header_type",
+              "path": "pages[0].header_type",
+              "type": "HeaderType",
+              "offset": 5,
+              "size": 1,
+              "display": "HeaderType (4)",
+              "children": [
+                {
+                  "name": "continued",
+                  "path": "pages[0].header_type.continued",
+                  "type": "1 bit",
+                  "offset": 5,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "begin_stream",
+                  "path": "pages[0].header_type.begin_stream",
+                  "type": "1 bit",
+                  "offset": 5,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "end_stream",
+                  "path": "pages[0].header_type.end_stream",
+                  "type": "1 bit",
+                  "offset": 5,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "reserved",
+                  "path": "pages[0].header_type.reserved",
+                  "type": "5 bit",
+                  "offset": 5,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 5,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "granule_position",
+              "path": "pages[0].granule_position",
+              "type": "s64",
+              "offset": 6,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "serial_number",
+              "path": "pages[0].serial_number",
+              "type": "u32",
+              "offset": 14,
+              "size": 4,
+              "value": 4660,
+              "display": "0x1234"
+            },
+            {
+              "name": "sequence_number",
+              "path": "pages[0].sequence_number",
+              "type": "u32",
+              "offset": 18,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "checksum",
+              "path": "pages[0].checksum",
+              "type": "u32",
+              "offset": 22,
+              "size": 4,
+              "value": 2605776504,
+              "display": "0x9B50FE78"
+            },
+            {
+              "name": "page_segments",
+              "path": "pages[0].page_segments",
+              "type": "u8",
+              "offset": 26,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "segment_table",
+              "path": "pages[0].segment_table",
+              "type": "u8[1]",
+              "offset": 27,
+              "size": 1,
+              "value": "1E",
+              "display": "1E"
+            },
+            {
+              "name": "payload",
+              "path": "pages[0].payload",
+              "type": "u8[30]",
+              "offset": 28,
+              "size": 30,
+              "value": "01766F72626973000000000244AC00000000000000F4010000000000B801",
+              "display": "01 76 6F 72 62 69 73 00 00 00 00 02 44 AC 00 00 …"
+            },
+            {
+              "name": "codec_signature",
+              "path": "pages[0].codec_signature",
+              "type": "string",
+              "offset": 58,
+              "size": 0,
+              "value": "vorbis",
+              "display": "vorbis"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "pages[1]",
+          "type": "Page",
+          "offset": 58,
+          "size": 38,
+          "display": "Page (10)",
+          "children": [
+            {
+              "name": "capture_pattern",
+              "path": "pages[1].capture_pattern",
+              "type": "char[4]",
+              "offset": 58,
+              "size": 4,
+              "value": "OggS",
+              "display": "OggS"
+            },
+            {
+              "name": "version",
+              "path": "pages[1].version",
+              "type": "u8",
+              "offset": 62,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "header_type",
+              "path": "pages[1].header_type",
+              "type": "HeaderType",
+              "offset": 63,
+              "size": 1,
+              "display": "HeaderType (4)",
+              "children": [
+                {
+                  "name": "continued",
+                  "path": "pages[1].header_type.continued",
+                  "type": "1 bit",
+                  "offset": 63,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "begin_stream",
+                  "path": "pages[1].header_type.begin_stream",
+                  "type": "1 bit",
+                  "offset": 63,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "end_stream",
+                  "path": "pages[1].header_type.end_stream",
+                  "type": "1 bit",
+                  "offset": 63,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "reserved",
+                  "path": "pages[1].header_type.reserved",
+                  "type": "5 bit",
+                  "offset": 63,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 5,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "granule_position",
+              "path": "pages[1].granule_position",
+              "type": "s64",
+              "offset": 64,
+              "size": 8,
+              "value": 44100,
+              "display": "44100"
+            },
+            {
+              "name": "serial_number",
+              "path": "pages[1].serial_number",
+              "type": "u32",
+              "offset": 72,
+              "size": 4,
+              "value": 4660,
+              "display": "0x1234"
+            },
+            {
+              "name": "sequence_number",
+              "path": "pages[1].sequence_number",
+              "type": "u32",
+              "offset": 76,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "checksum",
+              "path": "pages[1].checksum",
+              "type": "u32",
+              "offset": 80,
+              "size": 4,
+              "value": 1923451288,
+              "display": "0x72A58998"
+            },
+            {
+              "name": "page_segments",
+              "path": "pages[1].page_segments",
+              "type": "u8",
+              "offset": 84,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "segment_table",
+              "path": "pages[1].segment_table",
+              "type": "u8[1]",
+              "offset": 85,
+              "size": 1,
+              "value": "0A",
+              "display": "0A"
+            },
+            {
+              "name": "payload",
+              "path": "pages[1].payload",
+              "type": "u8[10]",
+              "offset": 86,
+              "size": 10,
+              "value": "4F6767456E6430313233",
+              "display": "4F 67 67 45 6E 64 30 31 32 33"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

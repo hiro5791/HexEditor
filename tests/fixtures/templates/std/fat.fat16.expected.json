@@ -1,0 +1,229 @@
+{
+  "name": "FAT ブートセクタ",
+  "type": "application",
+  "offset": 0,
+  "size": 512,
+  "children": [
+    {
+      "name": "bpb",
+      "path": "bpb",
+      "type": "Bpb",
+      "offset": 0,
+      "size": 36,
+      "display": "Bpb (14)",
+      "children": [
+        {
+          "name": "jump",
+          "path": "bpb.jump",
+          "type": "u8[3]",
+          "offset": 0,
+          "size": 3,
+          "value": "EB3C90",
+          "display": "EB 3C 90"
+        },
+        {
+          "name": "oem_name",
+          "path": "bpb.oem_name",
+          "type": "char[8]",
+          "offset": 3,
+          "size": 8,
+          "value": "MSDOS5.0",
+          "display": "MSDOS5.0"
+        },
+        {
+          "name": "bytes_per_sector",
+          "path": "bpb.bytes_per_sector",
+          "type": "u16",
+          "offset": 11,
+          "size": 2,
+          "value": 512,
+          "display": "512"
+        },
+        {
+          "name": "sectors_per_cluster",
+          "path": "bpb.sectors_per_cluster",
+          "type": "u8",
+          "offset": 13,
+          "size": 1,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "reserved_sectors",
+          "path": "bpb.reserved_sectors",
+          "type": "u16",
+          "offset": 14,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "number_of_fats",
+          "path": "bpb.number_of_fats",
+          "type": "u8",
+          "offset": 16,
+          "size": 1,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "root_entries",
+          "path": "bpb.root_entries",
+          "type": "u16",
+          "offset": 17,
+          "size": 2,
+          "value": 512,
+          "display": "512",
+          "comment": "FAT12 / FAT16 のルートディレクトリの項目数。FAT32 では 0"
+        },
+        {
+          "name": "total_sectors16",
+          "path": "bpb.total_sectors16",
+          "type": "u16",
+          "offset": 19,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "media",
+          "path": "bpb.media",
+          "type": "u8",
+          "offset": 21,
+          "size": 1,
+          "value": 248,
+          "display": "0xF8"
+        },
+        {
+          "name": "fat_size16",
+          "path": "bpb.fat_size16",
+          "type": "u16",
+          "offset": 22,
+          "size": 2,
+          "value": 64,
+          "display": "64",
+          "comment": "FAT32 では 0"
+        },
+        {
+          "name": "sectors_per_track",
+          "path": "bpb.sectors_per_track",
+          "type": "u16",
+          "offset": 24,
+          "size": 2,
+          "value": 32,
+          "display": "32"
+        },
+        {
+          "name": "number_of_heads",
+          "path": "bpb.number_of_heads",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 64,
+          "display": "64"
+        },
+        {
+          "name": "hidden_sectors",
+          "path": "bpb.hidden_sectors",
+          "type": "u32",
+          "offset": 28,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "total_sectors32",
+          "path": "bpb.total_sectors32",
+          "type": "u32",
+          "offset": 32,
+          "size": 4,
+          "value": 65536,
+          "display": "65536"
+        }
+      ]
+    },
+    {
+      "name": "extended",
+      "path": "extended",
+      "type": "ExtendedBootRecord16",
+      "offset": 36,
+      "size": 26,
+      "display": "ExtendedBootRecord16 (6)",
+      "children": [
+        {
+          "name": "drive_number",
+          "path": "extended.drive_number",
+          "type": "u8",
+          "offset": 36,
+          "size": 1,
+          "value": 128,
+          "display": "0x80"
+        },
+        {
+          "name": "reserved",
+          "path": "extended.reserved",
+          "type": "u8",
+          "offset": 37,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "boot_signature",
+          "path": "extended.boot_signature",
+          "type": "u8",
+          "offset": 38,
+          "size": 1,
+          "value": 41,
+          "display": "0x29",
+          "comment": "0x29 なら、以降の 3 つの欄がある"
+        },
+        {
+          "name": "volume_id",
+          "path": "extended.volume_id",
+          "type": "u32",
+          "offset": 39,
+          "size": 4,
+          "value": 1450757615,
+          "display": "0x5678CDEF"
+        },
+        {
+          "name": "volume_label",
+          "path": "extended.volume_label",
+          "type": "char[11]",
+          "offset": 43,
+          "size": 11,
+          "value": "HXTESTFAT16",
+          "display": "HXTESTFAT16"
+        },
+        {
+          "name": "file_system_type",
+          "path": "extended.file_system_type",
+          "type": "char[8]",
+          "offset": 54,
+          "size": 8,
+          "value": "FAT16   ",
+          "display": "FAT16   "
+        }
+      ]
+    },
+    {
+      "name": "boot_code",
+      "path": "boot_code",
+      "type": "u8[448]",
+      "offset": 62,
+      "size": 448,
+      "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+    },
+    {
+      "name": "boot_sector_signature",
+      "path": "boot_sector_signature",
+      "type": "u8[2]",
+      "offset": 510,
+      "size": 2,
+      "value": "55AA",
+      "display": "55 AA"
+    }
+  ]
+}

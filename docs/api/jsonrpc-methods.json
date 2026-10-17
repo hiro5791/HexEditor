@@ -1,0 +1,1706 @@
+{
+  "apiVersion": "1.0",
+  "methods": [
+    {
+      "method": "app.open",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "OpenOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CDocument\u003E",
+      "permission": null
+    },
+    {
+      "method": "app.openDisk",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "OpenOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CDocument\u003E",
+      "permission": "disk"
+    },
+    {
+      "method": "app.openProcess",
+      "params": [
+        {
+          "name": "pid",
+          "type": "number",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "OpenOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CDocument\u003E",
+      "permission": "disk"
+    },
+    {
+      "method": "app.newDocument",
+      "params": [
+        {
+          "name": "options",
+          "type": "NewDocumentOptions",
+          "optional": true
+        }
+      ],
+      "result": "Document",
+      "permission": null
+    },
+    {
+      "method": "app.on",
+      "params": [
+        {
+          "name": "eventName",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "handler",
+          "type": "(event: ScriptEventArgs) =\u003E void",
+          "optional": false
+        }
+      ],
+      "result": "EventSubscription",
+      "permission": null
+    },
+    {
+      "method": "app.stop",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "app.exit",
+      "params": [
+        {
+          "name": "code",
+          "type": "number",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "bookmarks.add",
+      "params": [
+        {
+          "name": "bookmark",
+          "type": "BookmarkSpec",
+          "optional": false
+        }
+      ],
+      "result": "Bookmark",
+      "permission": null
+    },
+    {
+      "method": "bookmarks.remove",
+      "params": [
+        {
+          "name": "bookmark",
+          "type": "Bookmark",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "bookmarks.clear",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "bookmarks.find",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "Bookmark | null",
+      "permission": null
+    },
+    {
+      "method": "bookmarks.addFromResults",
+      "params": [
+        {
+          "name": "results",
+          "type": "ByteRange[]",
+          "optional": false
+        },
+        {
+          "name": "nameFormat",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "number",
+      "permission": null
+    },
+    {
+      "method": "clipboard.setText",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "clipboard.setBytes",
+      "params": [
+        {
+          "name": "data",
+          "type": "BytePattern",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "clipboard.getText",
+      "params": [],
+      "result": "string | null",
+      "permission": "clipboard-read"
+    },
+    {
+      "method": "clipboard.getBytes",
+      "params": [],
+      "result": "Uint8Array | null",
+      "permission": "clipboard-read"
+    },
+    {
+      "method": "clipboard.copyAs",
+      "params": [
+        {
+          "name": "document",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "formatId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "CopyAsOptions",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "clipboard.formatAs",
+      "params": [
+        {
+          "name": "document",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "formatId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "CopyAsOptions",
+          "optional": true
+        }
+      ],
+      "result": "string",
+      "permission": null
+    },
+    {
+      "method": "commands.execute",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "args",
+          "type": "Record\u003Cstring, unknown\u003E",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cunknown\u003E",
+      "permission": null
+    },
+    {
+      "method": "commands.list",
+      "params": [],
+      "result": "CommandInfo[]",
+      "permission": null
+    },
+    {
+      "method": "document.save",
+      "params": [
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.saveAs",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.close",
+      "params": [
+        {
+          "name": "options",
+          "type": "CloseOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.undo",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.redo",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.beginUndoGroup",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.endUndoGroup",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.goTo",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.scrollTo",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.openRange",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        }
+      ],
+      "result": "Promise\u003CDocument\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.readBytes",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "length",
+          "type": "OffsetArg",
+          "optional": false
+        }
+      ],
+      "result": "Uint8Array",
+      "permission": null
+    },
+    {
+      "method": "document.readByte",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        }
+      ],
+      "result": "number",
+      "permission": null
+    },
+    {
+      "method": "document.readInt",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "endian",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "number | bigint",
+      "permission": null
+    },
+    {
+      "method": "document.readFloat",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "endian",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "number",
+      "permission": null
+    },
+    {
+      "method": "document.readString",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "maxLength",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg | null",
+          "optional": true
+        },
+        {
+          "name": "options",
+          "type": "ReadStringOptions",
+          "optional": true
+        }
+      ],
+      "result": "string",
+      "permission": null
+    },
+    {
+      "method": "document.writeBytes",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "data",
+          "type": "BytePattern",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.writeInt",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "value",
+          "type": "number | bigint",
+          "optional": false
+        },
+        {
+          "name": "endian",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.writeFloat",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "optional": false
+        },
+        {
+          "name": "endian",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.writeString",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg | null",
+          "optional": true
+        }
+      ],
+      "result": "number",
+      "permission": null
+    },
+    {
+      "method": "document.insertBytes",
+      "params": [
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "data",
+          "type": "BytePattern",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.delete",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.fill",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "pattern",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FillOptions",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.resize",
+      "params": [
+        {
+          "name": "newLength",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "fill",
+          "type": "BytePattern | null",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "document.transform",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "operand",
+          "type": "TransformOperand | null",
+          "optional": true
+        },
+        {
+          "name": "options",
+          "type": "TransformOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.findAll",
+      "params": [
+        {
+          "name": "pattern",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FindOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CSearchResults\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.find",
+      "params": [
+        {
+          "name": "pattern",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FindOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CByteRange | null\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.replaceAll",
+      "params": [
+        {
+          "name": "pattern",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "replacement",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FindOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cnumber\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.count",
+      "params": [
+        {
+          "name": "pattern",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FindOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cnumber\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.copyRange",
+      "params": [
+        {
+          "name": "source",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "destination",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "destinationOffset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "CopyRangeOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.exportRange",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ExportRangeOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": "file-write"
+    },
+    {
+      "method": "document.chunks",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg | null",
+          "optional": true
+        },
+        {
+          "name": "chunkSize",
+          "type": "number",
+          "optional": true
+        }
+      ],
+      "result": "AsyncIterable\u003CDataChunk\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.transformChunks",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "transform",
+          "type": "(data: Uint8Array, offset: number) =\u003E Uint8Array | number[]",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.histogram",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg | null",
+          "optional": true
+        },
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cnumber[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.entropy",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg | null",
+          "optional": true
+        },
+        {
+          "name": "options",
+          "type": "EntropyOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cnumber | number[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.compare",
+      "params": [
+        {
+          "name": "other",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "CompareOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CByteRange[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.strings",
+      "params": [
+        {
+          "name": "options",
+          "type": "StringsOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CFoundString[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "document.applyTemplate",
+      "params": [
+        {
+          "name": "nameOrPath",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ApplyTemplateOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CTemplateNode\u003E",
+      "permission": null
+    },
+    {
+      "method": "eventSubscription.off",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "fileSystem.readBytes",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "optional": true
+        },
+        {
+          "name": "length",
+          "type": "number",
+          "optional": true
+        }
+      ],
+      "result": "Uint8Array",
+      "permission": "file-read"
+    },
+    {
+      "method": "fileSystem.readText",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg | null",
+          "optional": true
+        }
+      ],
+      "result": "string",
+      "permission": "file-read"
+    },
+    {
+      "method": "fileSystem.writeBytes",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "data",
+          "type": "BytePattern",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": "file-write"
+    },
+    {
+      "method": "fileSystem.writeText",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg | null",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": "file-write"
+    },
+    {
+      "method": "fileSystem.list",
+      "params": [
+        {
+          "name": "folder",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "string[]",
+      "permission": "file-read"
+    },
+    {
+      "method": "fileSystem.exists",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "boolean",
+      "permission": "file-read"
+    },
+    {
+      "method": "fileSystem.stat",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "FileStat",
+      "permission": "file-read"
+    },
+    {
+      "method": "fileSystem.delete",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": "file-write"
+    },
+    {
+      "method": "fileSystem.createFolder",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": "file-write"
+    },
+    {
+      "method": "hash.compute",
+      "params": [
+        {
+          "name": "document",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "range",
+          "type": "RangeArg | null",
+          "optional": true
+        },
+        {
+          "name": "algorithms",
+          "type": "HashAlgorithmSpec[]",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CHashResult[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "hash.computeBytes",
+      "params": [
+        {
+          "name": "data",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "algorithm",
+          "type": "HashAlgorithmSpec",
+          "optional": false
+        }
+      ],
+      "result": "HashResult",
+      "permission": null
+    },
+    {
+      "method": "hash.computeFile",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "algorithms",
+          "type": "HashAlgorithmSpec[]",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "AsyncOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CHashResult[]\u003E",
+      "permission": "file-read"
+    },
+    {
+      "method": "highlights.add",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "optional": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "highlights.clear",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "inspector.decode",
+      "params": [
+        {
+          "name": "document",
+          "type": "Document",
+          "optional": false
+        },
+        {
+          "name": "offset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "typeId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "InspectorOptions",
+          "optional": true
+        }
+      ],
+      "result": "InspectorValue",
+      "permission": null
+    },
+    {
+      "method": "inspector.encode",
+      "params": [
+        {
+          "name": "typeId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "valueText",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "InspectorOptions",
+          "optional": true
+        }
+      ],
+      "result": "Uint8Array",
+      "permission": null
+    },
+    {
+      "method": "inspector.show",
+      "params": [
+        {
+          "name": "typeId",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "inspector.hide",
+      "params": [
+        {
+          "name": "typeId",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "net.fetch",
+      "params": [
+        {
+          "name": "url",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "FetchOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CFetchResponse\u003E",
+      "permission": "network"
+    },
+    {
+      "method": "plugins.list",
+      "params": [],
+      "result": "PluginInfo[]",
+      "permission": null
+    },
+    {
+      "method": "plugins.get",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "PluginHandle | null",
+      "permission": null
+    },
+    {
+      "method": "processRunner.run",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "args",
+          "type": "string[]",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "ProcessOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003CProcessResult\u003E",
+      "permission": "process"
+    },
+    {
+      "method": "scriptStorage.get",
+      "params": [
+        {
+          "name": "key",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "unknown",
+      "permission": null
+    },
+    {
+      "method": "scriptStorage.set",
+      "params": [
+        {
+          "name": "key",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "value",
+          "type": "unknown",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "scriptStorage.remove",
+      "params": [
+        {
+          "name": "key",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "selection.set",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "selection.add",
+      "params": [
+        {
+          "name": "range",
+          "type": "RangeArg",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "selection.clear",
+      "params": [],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "selection.setRectangle",
+      "params": [
+        {
+          "name": "startOffset",
+          "type": "OffsetArg",
+          "optional": false
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "optional": false
+        },
+        {
+          "name": "columns",
+          "type": "number",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "selection.fromResults",
+      "params": [
+        {
+          "name": "results",
+          "type": "ByteRange[]",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "settings.get",
+      "params": [
+        {
+          "name": "key",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "unknown",
+      "permission": null
+    },
+    {
+      "method": "settings.set",
+      "params": [
+        {
+          "name": "key",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "value",
+          "type": "unknown",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": "settings"
+    },
+    {
+      "method": "templateNode.get",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "TemplateNode | null",
+      "permission": null
+    },
+    {
+      "method": "templateNode.toJSON",
+      "params": [],
+      "result": "unknown",
+      "permission": null
+    },
+    {
+      "method": "templates.list",
+      "params": [],
+      "result": "TemplateInfo[]",
+      "permission": null
+    },
+    {
+      "method": "templates.detect",
+      "params": [
+        {
+          "name": "document",
+          "type": "Document",
+          "optional": false
+        }
+      ],
+      "result": "TemplateInfo[]",
+      "permission": null
+    },
+    {
+      "method": "templates.registerExtension",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "fn",
+          "type": "(...args: any[]) =\u003E any",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "TemplateExtensionOptions",
+          "optional": true
+        }
+      ],
+      "result": "EventSubscription",
+      "permission": null
+    },
+    {
+      "method": "text.encode",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg",
+          "optional": false
+        }
+      ],
+      "result": "Uint8Array",
+      "permission": null
+    },
+    {
+      "method": "text.decode",
+      "params": [
+        {
+          "name": "bytes",
+          "type": "BytePattern",
+          "optional": false
+        },
+        {
+          "name": "encoding",
+          "type": "EncodingArg",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "DecodeOptions",
+          "optional": true
+        }
+      ],
+      "result": "string",
+      "permission": null
+    },
+    {
+      "method": "ui.message",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "MessageOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cvoid\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.confirm",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "buttons",
+          "type": "string[]",
+          "optional": false
+        }
+      ],
+      "result": "Promise\u003Cnumber\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.prompt",
+      "params": [
+        {
+          "name": "label",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "PromptOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cunknown\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.form",
+      "params": [
+        {
+          "name": "fields",
+          "type": "FormField[]",
+          "optional": false
+        }
+      ],
+      "result": "Promise\u003CRecord\u003Cstring, unknown\u003E | null\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.pickFile",
+      "params": [
+        {
+          "name": "options",
+          "type": "PickOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cstring\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.pickFiles",
+      "params": [
+        {
+          "name": "options",
+          "type": "PickOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cstring[]\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.saveFile",
+      "params": [
+        {
+          "name": "options",
+          "type": "PickOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cstring\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.pickFolder",
+      "params": [
+        {
+          "name": "options",
+          "type": "PickOptions",
+          "optional": true
+        }
+      ],
+      "result": "Promise\u003Cstring\u003E",
+      "permission": null
+    },
+    {
+      "method": "ui.status",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "ui.showResults",
+      "params": [
+        {
+          "name": "title",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "rows",
+          "type": "Record\u003Cstring, unknown\u003E[]",
+          "optional": false
+        },
+        {
+          "name": "columns",
+          "type": "string[]",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "ui.output",
+      "params": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "uiProgress.report",
+      "params": [
+        {
+          "name": "fraction",
+          "type": "number",
+          "optional": false
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "optional": true
+        }
+      ],
+      "result": "void",
+      "permission": null
+    },
+    {
+      "method": "scriptEventArgs.cancel",
+      "params": [
+        {
+          "name": "reason",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "void",
+      "permission": null
+    }
+  ]
+}

@@ -5481,4 +5481,1121 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static только для чтения</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Кодировка текста (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Полный документ (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Неожиданный символ «{0}»</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Ожидается «{0}»</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>Неожиданно: «{0}»</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Недопустимое число «{0}»</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Строковый литерал не завершён</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Недопустимая escape-последовательность «{0}»</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Комментарий не завершён</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Слишком глубокая вложенность (предел: {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Недопустимая байтовая строка «{0}»</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Шаблон не является допустимым UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Шаблон слишком велик (предел: 4 МБ)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Слишком много ошибок; показаны только первые {0}</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Недопустимое значение «{1}» для pragma «{0}»</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Неизвестная pragma «{0}» пропущена</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>«{0}» уже определено в {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>«{0}» не найдено (поиск в: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Шаблоны не могут выполнить эту операцию: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Для этого шаблона нужна версия приложения {0} или новее</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Неизвестный атрибут «{0}» пропущен</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} не помещается в {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>У значения {0} несколько имён (используется «{1}»)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} превышает максимум; используется {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Шаблоны вместе с импортируемыми слишком велики (предел: 32 МБ)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>«{0}» не определено</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Деление на ноль</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Несоответствие типов: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Слишком глубокая рекурсия (предел: {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Число выполненных операторов достигло предела ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Число паттернов достигло предела ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Память для вычисления достигла предела ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Время вычисления достигло предела ({0} с)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Размещение 0x{0} находится за пределами данных</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) находится за пределами данных</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>«{0}» (0x{1}, {2} байт) находится за пределами данных</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Позиция не может быть отрицательной ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Массив не может завершиться, так как размер элемента равен 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Массив завершён, так как достигнут конец данных</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Массив усечён по пределу ({0} эл.)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Неполный последний элемент ({0} байт) не включён</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Завершающий символ строки не найден</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 длиннее 10 байт (смещение 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Содержимое структуры ({0} байт) превышает указанный размер ({1} байт)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Тип указателя должен быть целочисленным</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Вне допустимого диапазона (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Паттерны нельзя объявлять внутри функций</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Утверждение не выполнено: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Функция расширения «{0}» не зарегистрирована</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Функция расширения «{0}» завершилась с ошибкой: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Функции расширения «{0}» не разрешено выполняться</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Индекс {0} вне диапазона (от 0 до {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>sizeof({0}) использовать нельзя, так как размер типа не фиксирован</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Сумма битовых полей ({0} бит) превышает {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Битовое поле не может быть шире 64 бит ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Не удалось распаковать {0}: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Распаковка остановлена: данные достигли предела ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} не поддерживается в этой версии</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Длина ({0}) превышает предел 256 МБ на один вызов</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Невозможно присвоить значение «{0}»</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Не удалось прочитать данные по адресу 0x{0}</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Вычисление отменено</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} не помещается в {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>«{0}» не является функцией</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>«{0}» принимает аргументов: {1}</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Функция Kaitai Struct «{0}» не поддерживается</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Содержимое не совпадает с ожидаемыми байтами</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Проверка не пройдена: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Вывод усечён, так как он слишком длинный</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Число разделов достигло общего предела ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>«{0}» не является паттерном</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>У «{0}» нет члена «{1}»</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Недопустимый аргумент для «{0}»: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Данные не соответствуют сигнатуре {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Не удалось записать временный файл: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Синтаксическая ошибка YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Теги YAML не разрешены ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Слишком много раскрытий псевдонимов YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Повторяющийся ключ «{0}»</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Для отступов нельзя использовать символы табуляции</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Недопустимый файл .ksy: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Слишком глубокая вложенность YAML</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Внутренняя ошибка вычислителя шаблонов: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>возможно, вы имели в виду «{0}»?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Сведения</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Предупреждение</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Скрипты</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Скрипт: выполнить</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>запустить скрипт повторно ещё раз выполнить run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Скрипт: выполнить файл скрипта...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>запустить файл скрипта выполнить run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Скрипт: остановить все скрипты</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>остановить отменить скрипты stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Скрипт: добавить компонент скриптов C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>компонент установить добавить csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Скрипты</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Выполнить скрипт...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Выполнить последний скрипт</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Остановить все скрипты</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Добавить компонент скриптов C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Автоматический запуск (хуки)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>хук автоматический запуск старт открытие сохранение закрытие скрипт hook automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Папки скриптов</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>папка скриптов библиотека общая script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Панель вывода</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Редактор скриптов</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Максимум строк в панели вывода</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>При превышении предела старые строки удаляются (100–1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Показывать панель вывода, когда скрипт выводит данные</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Показывается без перехвата фокуса клавиатуры.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Останавливаться на исключениях при отладке</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Выберите, когда отладчик JavaScript приостанавливается при исключении.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Никогда</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Только необработанные исключения</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Все исключения</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Дополнительные папки скриптов</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Папки, добавляемые в список скриптов.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Зарегистрированные здесь скрипты запускаются автоматически. Без добавления сюда ничего не запускается, а скрипты должны быть доверенными.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Безопасный режим включён, поэтому автоматический запуск отключён.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>лимит времени {0} с</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Скрипты не зарегистрированы.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Добавить скрипт</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Добавить</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Выбрать файл...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Выберите скрипт для автоматического запуска.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Добавьте «{0}» кнопкой «Добавить».</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Включить {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Условие</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Вверх</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Вниз</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Запускать только для подходящих данных. Оставьте пустым, чтобы подходили все.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Расширение (например, .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Шаблон пути (например, C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Начальные байты (hex, например, 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Источник данных</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Любой</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Перечисленные здесь папки показываются в списке скриптов в дополнение к стандартной папке скриптов.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Дополнительных папок нет.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Добавить папку...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Скрипт</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Макрос</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Скрипт</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Курсор</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Показать или скрыть список скриптов</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>скрипты макросы список панель scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Показать или скрыть панель вывода</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>вывод журнал сообщения панель output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Показать или скрыть панель консоли</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>консоль repl панель console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Показать список скриптов</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>скрипты макросы список панель scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Показать консоль</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>консоль repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Новый скрипт</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>создать новый скрипт javascript js create javascript js</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Новый скрипт C#</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>создать новый скрипт csharp csx create csharp csx</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Открыть образец</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>образцы примеры examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Открыть папку скриптов</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>папка проводник folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Запуск с отладкой</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>отладчик точка останова шаг debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Приостановить</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>пауза прервать отладчик break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Очистить вывод</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>очистить журнал вывод clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Начать или остановить запись</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>записать макрос запись record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Воспроизвести последний макрос</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>повторить последний макрос воспроизвести replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Воспроизвести повторно</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>повторять макрос цикл repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Курсор: влево</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>курсор переместить влево cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Курсор: вправо</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>курсор переместить вправо cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Курсор: вверх</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>курсор переместить вверх cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Курсор: вниз</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>курсор переместить вниз cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Курсор: страница вверх</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>курсор страница вверх cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Курсор: страница вниз</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>курсор страница вниз cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Курсор: начало строки</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>курсор начало строки cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Курсор: конец строки</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>курсор конец строки cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Курсор: начало файла</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>курсор начало файла cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Курсор: конец файла</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>курсор конец файла cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Редактор скриптов не открыт.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Список скриптов</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Консоль</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Новый скрипт</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Новый скрипт C#</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Образцы</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>Б</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Открыть папку скриптов</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Макрос</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>М</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Начать или остановить запись</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Воспроизвести последний макрос</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Воспроизвести повторно...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Список скриптов</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Вывод</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Консоль</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>М</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Скрипты</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Вывод</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Консоль</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Все</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Скрипт: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Плагин: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Источник вывода</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Фильтр</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Очистить</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Копировать всё</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Сохранить в файл</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Переносить строки</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Вывод скопирован.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Сведения</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Предупреждение</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Список скриптов</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Фильтр скриптов</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Новый скрипт</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Новый скрипт JavaScript</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Новый скрипт C#</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Открыть папку скриптов</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Выполнить</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Изменить</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Открыть копию для изменения</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Переименовать...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Новое имя</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Удалить (в корзину)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Показать в папке</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Назначить сочетание клавиш...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Запускать автоматически...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Скрипты</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Макросы</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Образцы</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Папка не найдена</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>резидентный</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Кандидат на автоматический запуск: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>«{0}» перемещён в корзину.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Не удалось скопировать образец: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Не удалось создать скрипт: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Не удалось переименовать: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Не удалось удалить: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Не удалось открыть папку: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Выполнить</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Отладка</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Приостановить</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Шаг с обходом</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Шаг с заходом</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Шаг с выходом</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Целевой документ</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(активный документ)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Редактор скриптов: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Проблемы</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Проблемы ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Отладка</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Стек вызовов</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Переменные</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Наблюдение</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Добавить выражение для наблюдения</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Локальные</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Замыкание</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Глобальные</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Скрипт</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Исключение: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Строка {0}, столбец {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Изменён</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Выполняется</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Приостановлен на строке {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Выполнен ({0} с)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Остановлен</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Не выполнялся</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Ошибка выполнения</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>«{0}» сохранён.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Не удалось сохранить скрипт: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Не удалось прочитать скрипт: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>Размер «{0}» превышает 10 МБ. Измените его во внешнем редакторе.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Скрипты C# нельзя выполнять по шагам в приложении</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Точка останова</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Отключённая точка останова</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Условная точка останова</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>В «{0}» есть несохранённые изменения. Сохранить перед закрытием?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Не сохранять</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Отладка скрипта C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Ожидание подключения отладчика. Идентификатор процесса: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Скрипты C# нельзя выполнять по шагам в приложении. Подключите внешний отладчик (Visual Studio или Visual Studio Code) к этому процессу и вызовите System.Diagnostics.Debugger.Break() в скрипте, чтобы остановиться.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Выполнить без подключения</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Язык</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Сбросить сеанс</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Очистить</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Введите выражение или оператор (Enter: выполнить, Shift+Enter: новая строка)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Журнал консоли</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Начат новый сеанс.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Остановлено.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Ввод завершился с ошибкой.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Чтобы использовать C# в консоли, добавьте компонент скриптов C#.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>запуск</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>открытие файла</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>перед сохранением</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>после сохранения</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>перед закрытием</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Скрипт автоматического запуска «{0}» ({1}) завершился с ошибкой: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Скрипт автоматического запуска «{0}» ({1}) остановлен: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Скрипт автоматического запуска «{0}» ({1}) три раза подряд завершился с ошибкой и был отключён.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Открыть параметры</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Скрипт «{0}» отменил сохранение: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Скрипт перед сохранением завершился с ошибкой</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Скрипт «{0}» завершился с ошибкой: {1}
+Всё равно сохранить?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Не сохранять</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Запись макроса</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Начать</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Выберите, как записывать позиции, указанные мышью.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Относительно курсора (по умолчанию)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Абсолютные смещения</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Больше не спрашивать (использовать этот вариант)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Запись начата.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Запись ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Запись макроса, операций: {0}. Щёлкните, чтобы остановить.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Эту операцию нельзя записать: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>выделение с клавиатуры</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>удаление</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>ввод в нескольких курсорах</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>заполнение этим содержимым</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Переход к смещению</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Выделение диапазона</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Заменить все</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Не найдено: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Ничего не записано.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Записанных макросов пока нет.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Сначала остановите запись.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Последний макрос</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Не удалось прочитать макрос: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Макрос остановлен: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Макрос остановлен на повторе {0}, операция «{1}»: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Сохранение макроса ({0, plural, one {# операция} few {# операции} many {# операций} other {# операции}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Папка</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Сочетание клавиш (необязательно)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>например, Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Не сохранять</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Введите имя.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Не удалось распознать сочетание клавиш: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Сохранить здесь не удалось: {0}. Выберите другую папку.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Макрос «{0}» сохранён.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Повторное воспроизведение макроса</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Макрос</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Число повторов</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Раз (от 1 до 1 000 000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>До конца файла</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Для каждого результата поиска</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>В пределах выделения</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Воспроизвести</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Введите число от 1 до {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Предел времени выполнения (секунды)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Сколько времени может выполняться скрипт JavaScript, прежде чем он будет приостановлен и вас спросят, продолжать ли. 0 — без ограничения. Ожидание массовых операций и вашего ввода не учитывается.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Предел памяти (МБ)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Объём памяти, который может использовать скрипт JavaScript (16–4096 МБ).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Предел глубины рекурсии</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Максимальная глубина вызовов функций (100–10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Одновременно выполняемых скриптов</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Остальные скрипты ждут, пока один не завершится (1–16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Политика скриптов (организация)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Задаётся вашей организацией в файле параметров. Отключает скрипты и плагины или разрешает только подписанные плагины.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Без ограничений</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Отключить все скрипты и плагины</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Только подписанные плагины</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Скрипт: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Скрипт: {0} — {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Скрипт: {0} (запись)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Скрипт: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Ни один скрипт не выполняется.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Компонент скриптов C# уже установлен.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Скрипты отключены параметром вашей организации (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Скрипт отменил сохранение: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Скрипт «{0}» выполняется.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Скрипт «{0}» завершился с ошибкой.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Подробности</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Скрипт «{0}» не выполнен: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Скрипт: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {Выполняется # скрипт} few {Выполняются # скрипта} many {Выполняются # скриптов} other {Выполняется # скрипта}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Скрипт «{0}» выполняется более {1} с.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Продолжить (ещё {0} с)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Выполнить скрипт «{0}»?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor работает от имени администратора. Этот скрипт будет выполняться с правами администратора и может выполнять действия, влияющие на весь компьютер.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Имя: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Автор: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Этот код может выполнять на компьютере любые действия с вашими правами (включая чтение и запись файлов и сетевое взаимодействие). Запускайте только код авторов, которым вы доверяете.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Этот скрипт может читать и изменять открытые документы. Он также запрашивает следующие разрешения:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Этот скрипт может читать и изменять открытые документы. Других разрешений он не запрашивает.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Этот файл получен из Интернета. Запускайте его, только если доверяете источнику.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Выполнить</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Не выполнять</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Выполнить один раз</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Всегда разрешать</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Чтение любых файлов</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Создание, запись и удаление любых файлов</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Сетевое взаимодействие (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Запуск внешних программ</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Открытие дисков, томов и памяти процессов</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Чтение буфера обмена</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Изменение параметров приложения</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Скрипт запрашивает разрешение «{0}» ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Разрешить</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Не разрешать</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Компонент скриптов C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Для скриптов C# нужен компонент скриптов C# (Roslyn), который не установлен. Добавить его сейчас?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Добавить</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Скачивание компонента.
+Размер: {0}
+Сохраняется в: {1}
+Источник: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Скачать</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Размер загрузки превышает ожидаемые {0} байт; загрузка остановлена.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Добавление компонента скриптов C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Компонент скриптов C# добавлен.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Не удалось добавить компонент скриптов C#: {0} Вы можете добавить его вручную: скачайте zip-архив компонента со страницы выпуска и распакуйте его в папку components\csharp\&lt;версия&gt;\ в папке данных.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Не удалось добавить компонент скриптов C#: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Неизвестная кодировка символов «{0}». Текстовый столбец не изменён.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>Нельзя использовать {0} «{1}» (не удалось разобрать выражение в позиции {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} «{1}» находится за пределами файла (длина {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} недоступно в этой версии.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Нет диска, соответствующего «{0}».</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Нет тома, соответствующего «{0}».</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Нет процесса, соответствующего «{0}».</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>«{0}» соответствует нескольким процессам ({1}). Укажите идентификатор процесса параметром --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Открыть источник данных плагина</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>Л</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Операции плагинов</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>Е</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Плагины</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>Л</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Управление плагинами...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Управление</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>менеджер плагинов расширения дополнения plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Плагин</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Загружать только подписанные плагины</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Плагины без действительной подписи не загружаются. Вступает в силу после перезапуска.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Папки разработки плагинов</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Папки с результатами сборки, которые загружаются напрямую как плагины (изменяются в диспетчере плагинов).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Плагины</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Плагины</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Плагины</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Плагины добавляют типы инспектора, хэши, форматы, команды и панели. Плагины выполняются с теми же правами, что и вы; включайте только плагины авторов, которым вы доверяете. Изменения вступают в силу после перезапуска.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Безопасный режим: плагины не загружаются. Список и параметры не изменяются.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Добавить...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Перезапустить сейчас</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Открыть папку плагинов</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Параметры плагина...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Включён</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Включён</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Отключён</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Плагины не установлены. Добавьте файл .hexplugin кнопкой «Добавить...» или перетащите его в список.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Папки разработки</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Плагины загружаются напрямую из этих папок с результатами сборки и отображаются как «Разработка». Для каждой папки вас спрашивают один раз.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Добавить папку разработки...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Папка разработки добавлена. Перезапустите, чтобы загрузить её.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Доверенные издатели</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Плагины, подписанные этими издателями, включаются без запроса. Удалите издателя, чтобы запрос выводился снова.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Установленные плагины</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Перетащите сюда файл .hexplugin, чтобы добавить его.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Добавить плагин</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>неизвестный издатель</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Подписан: {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Подписан: {0} (не удалось проверить отзыв)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Недействительная подпись</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Подпись ещё не проверена</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Не подписан</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Включён</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Отключён</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Не удаётся загрузить ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Остановлен ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Не загружен ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Загрузка...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — изменения после перезапуска</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Разработка</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Нет расширений</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Добавляет: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (отключено: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>В безопасном режиме добавлять плагины нельзя.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Плагин не добавлен: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Удаление плагина</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Удалить «{0}»? Загруженные плагины удаляются после перезапуска.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Параметры плагина {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>тип инспектора</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>хэш</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>формат импорта</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>формат экспорта</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>источник данных</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>представление преобразования</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>операция с данными</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>команда</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>пункт меню</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>панель</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>страница параметров</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>функция шаблона</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>определение типа файла</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>дизассемблер</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>правила раскраски</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API скриптов</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>неизвестно</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Включить плагин «{0}»?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (обновление)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Издатель: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Загружен из папки разработки.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Этот код может выполнять на компьютере любые действия с вашими правами (включая чтение и запись файлов и доступ к сети). Включайте только плагины авторов, которым вы доверяете.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Плагин запрашивает: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Этот плагин не подписан. Издателя невозможно проверить.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Всегда доверять плагинам от {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Включить</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Не включать</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor работает от имени администратора. Этот плагин будет выполняться с правами администратора и может влиять на весь компьютер.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Загрузить плагины от имени администратора?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor работает от имени администратора. Эти плагины будут выполняться с правами администратора и могут влиять на весь компьютер:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— пока не доверенный</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Загрузить</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Не загружать</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Плагин «{0}» остановлен из-за повторяющихся ошибок.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Отключить плагин</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Повторить при перезапуске</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Плагин «{0}» не будет загружен после перезапуска.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Отключить плагин?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>В прошлый раз HexEditor завершился неожиданно, возможно, из-за плагина «{0}». Отключить его?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Оставить включённым</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Эту команду плагина сейчас нельзя выполнить.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Команда «{0}» плагина «{1}» завершилась с ошибкой. См. панель вывода.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Открыть: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>Не удалось открыть {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Копировать как: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Скопировано как {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Операция с данными: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Операция с данными {0} завершилась с ошибкой: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Добавлено плагином {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Панель плагина</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Плагину не удалось создать эту панель.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Плагины</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(остановлен)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Этот тип плагина нельзя изменить с этим значением.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Структура</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Вывод шаблона</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Шаблоны структур</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>Ш</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Применить шаблон...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Применить шаблон отсюда...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>Ш</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Показать тип в позиции курсора...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Применить Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Найти подходящие шаблоны</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Выполнить снова</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Удалить применение</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Экспорт результатов...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>Э</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Новый шаблон</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Открыть шаблон...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Изменить шаблон</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>И</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Преобразовать .ksy в HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>Е</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Управление шаблонами</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>А</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Раскраска структуры</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Структура</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Вывод шаблона</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>Ш</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Результаты структуры...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Применить шаблон отсюда...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Остановка при чтении здесь</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Шаблон</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Редактор кода</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Шаблон: применить</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>структура;разбор;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Шаблон: применить отсюда</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>курсор;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Шаблон: показать тип в позиции курсора</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>перейти по типу;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Шаблон: применить Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Шаблон: выполнить снова</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>пересчитать;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Шаблон: удалить применение</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>отменить применение;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Шаблон: остановить вычисление</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>отмена;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Шаблон: показать дерево результатов</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>дерево;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Шаблон: показать вывод</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>ошибки;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Шаблон: изменить значение</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>изменить правка change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Шаблон: перейти к определению</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>объявление declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Шаблон: перейти к целевому объекту указателя</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>указатель pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Шаблон: копировать значение</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>буфер обмена clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Шаблон: добавить в закладки</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>закладка bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Шаблон: экспортировать результаты</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Шаблон: переключить раскраску</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>подсветка highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Шаблон: найти подходящие шаблоны</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>определить detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Шаблон: создать</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>создать create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Шаблон: открыть</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>файл file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Шаблон: изменить</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>редактор editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Шаблон: управление</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>библиотека library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Шаблон: преобразовать .ksy в HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Шаблон: справочник стандартной библиотеки</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>справка функции help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Шаблон: пробный запуск</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>тест;не сохранено;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Шаблон: остановка при чтении здесь</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>точка останова данных data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Вид: панель структуры</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>результаты шаблона template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Вид: панель вывода шаблона</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>ошибки errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Редактор кода: начать отладку / продолжить</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>запуск;отладка;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Редактор кода: остановить отладку</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>завершить end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Редактор кода: переключить точку останова</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>точка останова break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Редактор кода: шаг с обходом</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>далее next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Редактор кода: шаг с заходом</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>войти enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Редактор кода: шаг с выходом</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>вернуться return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Редактор кода: выполнить до курсора</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>курсор cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Редактор кода: добавить выражение для наблюдения</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>наблюдение watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Редактор кода: перейти к определению</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>объявление declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Редактор кода: найти ссылки</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>использования usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Редактор кода: форматировать документ</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>отступ indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Редактор кода: закомментировать / раскомментировать</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>комментарий comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Редактор кода: показать варианты автозавершения</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>автозавершение intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Шаблоны</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Автоприменение</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Что делать, если шаблон подходит к открываемому файлу (по сигнатуре, типу MIME или расширению).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Предлагать</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Всегда применять</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Ничего не делать</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Пересчитывать после изменения</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Повторно вычислять применённые шаблоны через 500 мс после последнего изменения. Если отключено, используйте «Выполнить снова» в дереве результатов.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Раскраска структуры</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Раскрашивать диапазоны паттернов шаблона в Hex-представлении.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Непрозрачность раскраски (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Непрозрачность раскраски структуры поверх фона Hex-представления.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Папки шаблонов</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Дополнительные папки для поиска пользовательских шаблонов.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Шаблоны инспектора</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Шаблоны, типы [[inspector]] которых показываются в инспекторе данных.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Настройки шаблонов</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Отключённые шаблоны, шаблоны, исключённые из автоприменения, и скрытые предложения.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Управление шаблонами</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Папки шаблонов</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Шаблоны</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Шаблоны инспектора</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Добавить папку...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Удалить</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Нет доступа к этой папке.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Фильтр по имени</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Импорт...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Новый шаблон</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Включён</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Автоприменение</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Изменить</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Экспорт...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Скрыт другим шаблоном с тем же именем.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Предложения отключены</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Нет</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Показывать снова</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Добавить шаблон инспектора...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>размер не фиксирован</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>В этом шаблоне есть типы инспектора нефиксированного размера или больше 4 КБ. Рекомендуются типы фиксированного размера не более 4 КБ.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Импортировано файлов шаблонов: {0}.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Не удалось импортировать: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Экспортировано файлов: {0} в {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Не удалось экспортировать: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Стандартные шаблоны входят в состав приложения. Чтобы экспортировать копию, воспользуйтесь командой «Дублировать и изменить».</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Применить шаблон</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Применить шаблон</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Выполнить снова</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Выполнить снова</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Остановить вычисление</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Остановить вычисление</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Экспорт</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Экспорт</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Столбцы</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Столбцы</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Следовать за курсором</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Следовать за курсором</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Фильтр по имени, значению или типу</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Фильтр</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Дерево результатов</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Путь (например, chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Путь</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Вычислить всё и искать</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>Совпадений: {0}</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Путь «{0}» не найден.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Значение</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Смещение</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Размер</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Комментарий</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Порядок байтов</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Конец</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Цвет</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Порядок столбцов</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Переместить «{0}» влево</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Переместить «{0}» вправо</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Сбросить столбцы</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Вычисление…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Вычислено паттернов: {0}</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>Ошибок: {0}, предупреждений: {1}</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Число паттернов достигло предела ({0}). Показаны частичные результаты.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Увеличить предел и выполнить снова</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>Элементов: {0}</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} бит</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Биты {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / местное: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Значение не определено</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Не определено</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Следовать</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Указывает на {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>смещение {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>размер {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(не сохранён)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(файл шаблона не найден)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Ни один шаблон не применён.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Вычисление не выполняется.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Выберите узел в дереве результатов.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Выбранный узел не является указателем.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Цель указателя равна null или находится за пределами данных.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Шаблон «{0}» не найден.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>К документу можно применить не более {0} шаблонов.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>Файл шаблона «{0}» не найден.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Вычисление шаблона {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON больше 64 МБ. Сохраните его в файл.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Сохранить в файл...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Шаблон: {0}
+Начальное смещение: {1}
+Вид: {2}
+Порядок байтов: {3}
+Тип: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Стандартный</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Пользовательский</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Последние</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Использует скрипты</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Подробности</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Перейти к данным</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Перейти к целевому объекту указателя</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Перейти к определению</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Изменить значение</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Копировать значение</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Копировать имя и значение</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Копировать путь</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Копировать байты</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Копировать смещение</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Копировать поддерево как JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Добавить в закладки</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Добавить диапазоны к множественному выделению</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Открыть раздел в новой вкладке</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Применить шаблон отсюда...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Остановка при чтении здесь</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Переключить: фиксированный / следующий за курсором</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Сделать фиксированным</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Параметры применения</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Экспорт...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Выполнить снова</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Удалить применение</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Значение</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>У этого паттерна есть только преобразование при чтении, поэтому вы изменяете необработанное значение.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Введите число</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Истина</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Заполнить остаток нулями</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Местное время</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Часовой пояс</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Введите значение от 0 до {1} (бит: {0}).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Значение вне диапазона для этого типа.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Текст длиннее поля ({0} байт).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Не удалось выполнить преобразование при записи: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Не удаётся прочитать значение.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Паттерны внутри раздела изменять нельзя.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Этот паттерн доступен только для чтения.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Вычисляемые значения изменять нельзя.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Узлы с ошибками изменять нельзя.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>У этого узла нет значения для изменения.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Изменение значения шаблона</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Применение шаблона</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Применение Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Поиск шаблонов</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Имя, описание, расширение или тип MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Шаблоны</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Начальное смещение</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Введите смещение внутри документа.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Порядок байтов по умолчанию</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Параметр документа</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Параметр документа (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Параметр документа (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Вид</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Фиксированный</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Следует за курсором</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Тип (следует за курсором)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Применить</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Версия {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Лицензия: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Подходящие шаблоны</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (оценка {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>сигнатура</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>расширение</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Нет шаблонов, подходящих к этому документу.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Этот файл похож на {0}. Применить шаблон «{0}»?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(использует скрипты)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Применить</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Другие варианты...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Не показывать для этого формата</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Произошла ошибка при применении шаблона «{0}».</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Экспорт результатов структуры</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Что экспортировать</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Всё применение целиком</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Выбранное поддерево ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Максимум элементов массива</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Максимальная глубина</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Без ограничения</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Включать скрытые паттерны</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Записывать смещения как шестнадцатеричные строки</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Сохранить...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Экспорт результатов структуры</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>Узлов: {0}</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Экспортировано в {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Не удалось экспортировать в {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>На диске недостаточно места.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Очистить</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Очистить</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Вывод шаблона</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Перейти к источнику</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Перейти к данным</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Справка по {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Пробный запуск</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Целевой документ</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Целевой документ</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Начать отладку / продолжить</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Шаг с обходом</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Шаг с заходом</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Шаг с выходом</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Вычислять по порядку при отладке</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Форматировать документ</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Закомментировать / раскомментировать</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Исходный текст шаблона</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Варианты автозавершения</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Переменные</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Наблюдение</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Стек вызовов</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Точки останова</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Переменные</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Наблюдение</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Стек вызовов</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Точки останова</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Добавить выражение для наблюдения</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Добавить</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Выражение (например, c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Проблемы</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Ссылка в строке {0}, столбец {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Новый шаблон</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Редактор шаблонов не открыт.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Отладка не выполняется.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Откройте документ, чтобы выполнить на нём шаблон.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Не удалось открыть шаблон {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Не удалось сохранить шаблон: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Стандартные шаблоны нельзя сохранять напрямую. Используйте «Дублировать и изменить», чтобы сохранить копию в своей папке шаблонов.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Дублировать и изменить</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Исправьте синтаксические ошибки перед отладкой.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>При отладке отложенное вычисление отключено. Большие массивы могут обрабатываться долго.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Точка останова данных</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Отладчик остановится при создании паттерна, содержащего {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Не удалось преобразовать {0} в HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Вычислено паттернов: {0} (остановлено на пределе: {1}; показаны частичные результаты)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>шаги</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>паттерны</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>память</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>время</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Перейти к строке</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Номер строки (1–{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Редактор кода (шаблона или скрипта) не открыт.</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Этот редактор не поддерживает эту команду.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Перейти по указателю</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>указатель смещение адрес переход инспектор pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Перейти по указателю</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Абсолютный (смещение)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Абсолютный (адрес)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Относительно курсора</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Относительно конца значения</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Относительно базы…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>База (выражение)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Перейти</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Цель {0} находится за пределами документа (длина {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>В этой строке нет значения, которое можно использовать как позицию</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Введите базу в виде выражения, например 0x400000 или bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Выберите строку с целым числом в инспекторе данных</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Перемещаться как по массиву этого типа</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Предыдущий элемент</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Следующий элемент</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Выйти из режима массива</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Номер элемента</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Размер элемента</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(не на границе элемента)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Элемент {0} находится за пределами документа</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Значение</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Выр.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Циклическая ссылка между закладками</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Ссылки bm.name вложены глубже {0} уровней</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Позиция {0} находится за пределами документа</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Ошибка в выражении позиции: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Значение</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Изменение значения закладки</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(без типа)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Тип</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Порядок байтов</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Документ</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Выражение позиции</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>например, u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Вид: панель просмотра изображения</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>визуализатор растр пиксели картинка изображение visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Просмотр изображения</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>Я</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Просмотр изображения</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1 бит, чёрно-белое</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2 бита, серое</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4 бита, серое</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8 бит, серое</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 бит (цвета темы байтов)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Следовать за курсором</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Начало выделения</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Фиксированное</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Сверху вниз</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Снизу вверх (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Авто</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Формат пикселей</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Ширина (пиксели)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Байтов в строке</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Авто</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Начальная позиция</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Фиксированная начальная позиция</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Порядок строк</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Масштаб</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Дополнительные параметры</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Изображение</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Прокрутка строк</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Сохранить как изображение…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Диапазон просмотра слишком велик; отрисовываются только первые 64 МБ</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Введите фиксированную начальную позицию в виде выражения</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Нет изображения для сохранения</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Изображение сохранено в {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Не удалось сохранить {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Изображение PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>По умолчанию</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Время ожидания истекло</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Тип выполнялся дольше {0} мс; он будет выполнен снова при изменении начальной позиции</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Ошибка: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Файл типа инспектора {0}, строка {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Включён автономный режим (или загрузки отключены), поэтому компонент не скачивается. Чтобы добавить его вручную, возьмите {0} на странице выпуска этой версии (при необходимости на другом компьютере) и распакуйте в {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Запуск в безопасном режиме. Плагины и автоматически запускаемые скрипты не загружаются.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Перезапустить в обычном режиме</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Шаблон: поиск значений полей</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>поиск;поле;значение;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Ни один шаблон не применён.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Синтаксическая ошибка в символе {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>условие пусто</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>отсутствует значение</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>неизвестное условие (используйте name:, type: или value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>неизвестное сравнение (используйте =, !=, &lt;, &lt;=, &gt;, &gt;= или ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>кавычки не закрыты</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>недопустимое регулярное выражение</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Значения шаблона</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Нажмите Enter, чтобы найти значения полей. Результаты появятся в разделе «Результаты поиска».</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Поле</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (пользовательский)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (шаблон {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Снять выделение</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>стереть байты</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Снять выделение</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>отменить выделение ничего</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>В позиции курсора нечего удалять.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Карта памяти</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Блокировка файла</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Могут ли другие приложения записывать в файл, пока он открыт здесь. Применяется к файлам, открытым после изменения.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Запрещать запись другим приложениям, только пока есть несохраненные изменения</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Всегда запрещать запись другим приложениям, пока файл открыт</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Не блокировать (всегда разрешать запись другим приложениям)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Цвет акцента</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Цвет выделения, рамок фокуса и акцентных кнопок. Не используется в режиме высокой контрастности. Вступит в силу после перезапуска.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Цвет акцента Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Другой цвет</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>Не удается сохранить {0}, так как он используется другим приложением.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>Не удается сохранить {0}, так как он используется приложением {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Доверие и разрешения</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>доверие разрешение всегда разрешать отозвать безопасность скрипт</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Скрипты, для которых выбрано «Всегда разрешать», запускаются без запроса. Отзовите разрешение, чтобы при следующем запуске снова появился запрос.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Ваша организация задала политику скриптов: {0}. Ее нельзя изменить здесь.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Нет скриптов, которым всегда разрешен запуск.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Доверие к плагинам настраивается в диспетчере плагинов</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Без дополнительных разрешений</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Разрешения: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · разрешено {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Отозвать</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Отозвать доверие к {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Компонент скриптов C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn компонент кэш версия удалить</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Установленная версия: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Установлена другая версия ({0}). Добавьте компонент для этой версии HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Не установлен. Этот компонент нужен для скриптов C#.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Добавить...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Очистить кэш компиляции</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Компонент удален.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Кэш компиляции очищен.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Ь</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Я</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Базовый редактор</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime не установлен, поэтому используется базовый редактор с меньшим набором функций (например, без сворачивания и без автодополнения для скриптов). Установите Microsoft Edge WebView2 Runtime и снова откройте редактор.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Не удалось запустить редактор кода (WebView2), поэтому используется базовый редактор с меньшим набором функций. Возможно, поможет переустановка Microsoft Edge WebView2 Runtime.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Получить WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Чтобы использовать автодополнение, добавьте компонент скриптов C#.</value></data>
 </root>

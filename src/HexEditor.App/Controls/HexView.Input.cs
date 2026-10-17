@@ -205,6 +205,7 @@ public sealed partial class HexView
         }
 
         PointerPoint point = e.GetCurrentPoint(Surface);
+        _macroPressCursor = point.Properties.IsLeftButtonPressed ? _editor.Cursor : -1;
         if (e.Pointer.PointerDeviceType == PointerDeviceType.Touch)
         {
             TouchPressed(point.Position);
@@ -373,6 +374,9 @@ public sealed partial class HexView
         return true;
     }
 
+    /// <summary>マウスを押した時点のカーソル (マクロの記録用。左ボタンでなければ -1)。</summary>
+    private long _macroPressCursor = -1;
+
     private void Surface_PointerReleased(object sender, PointerRoutedEventArgs e)
     {
         if (_touchActive)
@@ -381,6 +385,13 @@ public sealed partial class HexView
         }
 
         ReleaseWithMode((e.KeyModifiers & VirtualKeyModifiers.Control) != 0, (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0);
+        if (_editor is not null && _macroPressCursor >= 0)
+        {
+            // マウスでのクリック・選択をマクロに記録する (位置は記録開始の方式に従う。AUTO-27 の仕様 3)。
+            Services.Scripting.MacroHooks.Pointer(_macroPressCursor, _editor.Cursor, _editor.SelectionStart, _editor.HasSelection ? _editor.SelectionLength : 0);
+            _macroPressCursor = -1;
+        }
+
         EndPointer();
         Surface.ReleasePointerCapture(e.Pointer);
     }
@@ -1151,13 +1162,7 @@ public sealed partial class HexView
         menu.Items.Add(MenuItem("Paste", Loc.Get("Menu_Edit_Paste/Text"), "edit.paste", () => CommandRequested?.Invoke(this, EditorCommand.Paste)));
         menu.Items.Add(MenuItem("PasteOverwrite", Loc.Get("Menu_Edit_PasteOverwrite/Text"), "edit.pasteOverwrite",
             () => CommandRequested?.Invoke(this, EditorCommand.PasteOverwrite)));
-        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "key:Delete", () =>
-        {
-            if (_editor is not null)
-            {
-                DeleteWithAnnouncement(_editor.Delete);
-            }
-        }));
+        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "key:Delete", DeleteForward));
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(MenuItem("SelectAll", Loc.Get("Menu_Edit_SelectAll/Text"), "edit.selectAll",
             () => CommandRequested?.Invoke(this, EditorCommand.SelectAll)));
@@ -1408,9 +1413,30 @@ public sealed partial class HexView
         if (handled)
         {
             RestartBlink();
+            Services.Scripting.MacroHooks.KeyMove(key, ctrl, shift);
         }
 
         return handled;
+    }
+
+    /// <summary>
+    /// Delete キーと同じ削除 (編集 > 削除、右クリックメニュー「削除」。EDIT-13 の「呼び出し」)。要素数の多いマルチ選択・矩形の削除は
+    /// キーと同じく長時間処理にする。
+    /// </summary>
+    public void DeleteForward()
+    {
+        if (_editor is null)
+        {
+            return;
+        }
+
+        if (LongRangeDeleteRequested is { } longDelete && _editor.LongRangeDeleteAction(backspace: false) is var action && action != RangeDeleteAction.None)
+        {
+            longDelete(this, action);
+            return;
+        }
+
+        DeleteWithAnnouncement(_editor.Delete);
     }
 
     /// <summary>削除して、削除したバイト数を読み上げる (EDIT-13 の仕様 6)。</summary>
@@ -1485,11 +1511,29 @@ public sealed partial class HexView
             return;
         }
 
+        bool recording = Services.Scripting.MacroHooks.IsRecording;
+        if (recording && (_editor.HasMultipleCarets || _editor.HasMultipleRanges))
+        {
+            Services.Scripting.MacroHooks.Unrecordable(Services.Loc.Get("Macro_Unrecordable_MultiCursor"));
+            recording = false;
+        }
+
         if (_editor.ActiveColumn == ActiveColumn.Hex)
         {
             foreach (char ch in text)
             {
+                long at = _editor.Cursor;
+                bool wasLow = _editor.LowNibble;
+                bool insert = _editor.InsertMode;
                 EditResult r = _editor.TypeHexDigit(ch);
+                if (recording && r == EditResult.Done && wasLow && !_editor.LowNibble)
+                {
+                    // 1 バイトを書き終えた (2 桁目): 書いたバイトを記録する。連続した入力は 1 回の writeBytes / insertBytes にまとまる。
+                    byte[] written = new byte[1];
+                    _editor.Document.Current.Read(at, written);
+                    Services.Scripting.MacroHooks.Typed(written, insert);
+                }
+
                 Report(r);
                 if (r is EditResult.FixedLength or EditResult.NotEditable or EditResult.CellFormatNotEditable)
                 {
@@ -1500,7 +1544,14 @@ public sealed partial class HexView
         else
         {
             LastRejectedText = text;
-            Report(_editor.TypeText(text));
+            bool insertText = _editor.InsertMode;
+            EditResult textResult = _editor.TypeText(text);
+            if (recording && textResult == EditResult.Done && _editor.TextEncoding.TryEncode(text, out byte[] encoded))
+            {
+                Services.Scripting.MacroHooks.Typed(encoded, insertText);
+            }
+
+            Report(textResult);
             LastRejectedText = null;
         }
 

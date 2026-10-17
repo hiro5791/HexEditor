@@ -377,6 +377,7 @@ public sealed partial class FindBar : UserControl
             if (hit is { } h)
             {
                 editor.SelectMatch(h.Offset, h.Length);
+                Services.Scripting.MacroHooks.Find(CaptureQuery(), forward);
                 Status.Text = h.Wrapped ? Loc.Get(forward ? "Find_WrappedToStart" : "Find_WrappedToEnd") : string.Empty;
                 MarkQuery(QueryState.Normal);
                 UpdateCountText();

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    「1 つ新しいマイナーバージョンの SDK」の代わり (TC-AUTO-29-02 の TD-AUTO-PLG-SDK13)。HexEditor.Sdk と同じソースを、アセンブリの
+    バージョンだけを 1 つ上げてビルドする。これを参照してビルドしたプラグインは、今のアプリ (SDK 1.0) では読み込めない。
+  -->
+  <PropertyGroup>
+    <AssemblyName>HexEditor.Sdk</AssemblyName>
+    <RootNamespace>HexEditor.Sdk</RootNamespace>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\src\HexEditor.Sdk\**\*.cs" Exclude="..\..\..\src\HexEditor.Sdk\obj\**;..\..\..\src\HexEditor.Sdk\bin\**" />
+  </ItemGroup>
+
+</Project>

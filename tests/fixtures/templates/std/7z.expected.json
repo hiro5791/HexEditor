@@ -1,0 +1,100 @@
+{
+  "name": "7z アーカイブ",
+  "type": "application",
+  "offset": 0,
+  "size": 32,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "SignatureHeader",
+      "offset": 0,
+      "size": 32,
+      "display": "SignatureHeader (7)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "header.signature",
+          "type": "u8[6]",
+          "offset": 0,
+          "size": 6,
+          "value": "377ABCAF271C",
+          "display": "37 7A BC AF 27 1C"
+        },
+        {
+          "name": "version_major",
+          "path": "header.version_major",
+          "type": "u8",
+          "offset": 6,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "version_minor",
+          "path": "header.version_minor",
+          "type": "u8",
+          "offset": 7,
+          "size": 1,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "start_header_crc",
+          "path": "header.start_header_crc",
+          "type": "u32",
+          "offset": 8,
+          "size": 4,
+          "value": 3641810746,
+          "display": "0xD9119F3A"
+        },
+        {
+          "name": "next_header_offset",
+          "path": "header.next_header_offset",
+          "type": "u64",
+          "offset": 12,
+          "size": 8,
+          "value": 16,
+          "display": "16",
+          "comment": "シグネチャヘッダの直後 (オフセット 32) からの相対位置"
+        },
+        {
+          "name": "next_header_size",
+          "path": "header.next_header_size",
+          "type": "u64",
+          "offset": 20,
+          "size": 8,
+          "value": 10,
+          "display": "10"
+        },
+        {
+          "name": "next_header_crc",
+          "path": "header.next_header_crc",
+          "type": "u32",
+          "offset": 28,
+          "size": 4,
+          "value": 4218508546,
+          "display": "0xFB715502"
+        }
+      ]
+    },
+    {
+      "name": "pack_streams",
+      "path": "pack_streams",
+      "type": "u8[16]",
+      "offset": 32,
+      "size": 16,
+      "value": "A0A1A2A3A4A5A6A7A8A9AAABACADAEAF",
+      "display": "A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 AA AB AC AD AE AF"
+    },
+    {
+      "name": "next_header",
+      "path": "next_header",
+      "type": "u8[10]",
+      "offset": 48,
+      "size": 10,
+      "value": "01040600010910000A00",
+      "display": "01 04 06 00 01 09 10 00 0A 00"
+    }
+  ]
+}

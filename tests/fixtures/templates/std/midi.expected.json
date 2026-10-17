@@ -1,0 +1,212 @@
+{
+  "name": "MIDI ファイル",
+  "type": "application",
+  "offset": 0,
+  "size": 64,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "HeaderChunk",
+      "offset": 0,
+      "size": 14,
+      "display": "HeaderChunk (5)",
+      "children": [
+        {
+          "name": "id",
+          "path": "header.id",
+          "type": "char[4]",
+          "offset": 0,
+          "size": 4,
+          "value": "MThd",
+          "display": "MThd"
+        },
+        {
+          "name": "length",
+          "path": "header.length",
+          "type": "u32",
+          "offset": 4,
+          "size": 4,
+          "value": 6,
+          "display": "6"
+        },
+        {
+          "name": "format",
+          "path": "header.format",
+          "type": "Format",
+          "offset": 8,
+          "size": 2,
+          "value": 1,
+          "display": "Simultaneous (0x1)"
+        },
+        {
+          "name": "tracks",
+          "path": "header.tracks",
+          "type": "u16",
+          "offset": 10,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "division",
+          "path": "header.division",
+          "type": "u16",
+          "offset": 12,
+          "size": 2,
+          "value": 480,
+          "display": "0x1E0",
+          "comment": "最上位ビットが 0 なら 4 分音符あたりのティック数、1 なら SMPTE"
+        }
+      ]
+    },
+    {
+      "name": "tracks",
+      "path": "tracks",
+      "type": "TrackChunk[2]",
+      "offset": 14,
+      "size": 50,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "tracks[0]",
+          "type": "TrackChunk",
+          "offset": 14,
+          "size": 27,
+          "display": "TrackChunk (5)",
+          "children": [
+            {
+              "name": "id",
+              "path": "tracks[0].id",
+              "type": "char[4]",
+              "offset": 14,
+              "size": 4,
+              "value": "MTrk",
+              "display": "MTrk"
+            },
+            {
+              "name": "length",
+              "path": "tracks[0].length",
+              "type": "u32",
+              "offset": 18,
+              "size": 4,
+              "value": 19,
+              "display": "19"
+            },
+            {
+              "name": "first_delta_time",
+              "path": "tracks[0].first_delta_time",
+              "type": "vlq",
+              "offset": 22,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "first_event",
+              "path": "tracks[0].first_event",
+              "type": "MetaEvent",
+              "offset": 23,
+              "size": 6,
+              "display": "MetaEvent (4)",
+              "children": [
+                {
+                  "name": "marker",
+                  "path": "tracks[0].first_event.marker",
+                  "type": "u8",
+                  "offset": 23,
+                  "size": 1,
+                  "value": 255,
+                  "display": "255"
+                },
+                {
+                  "name": "type",
+                  "path": "tracks[0].first_event.type",
+                  "type": "u8",
+                  "offset": 24,
+                  "size": 1,
+                  "value": 81,
+                  "display": "0x51"
+                },
+                {
+                  "name": "length",
+                  "path": "tracks[0].first_event.length",
+                  "type": "vlq",
+                  "offset": 25,
+                  "size": 1,
+                  "value": 3,
+                  "display": "3"
+                },
+                {
+                  "name": "data",
+                  "path": "tracks[0].first_event.data",
+                  "type": "u8[3]",
+                  "offset": 26,
+                  "size": 3,
+                  "value": "07A120",
+                  "display": "07 A1 20"
+                }
+              ]
+            },
+            {
+              "name": "events",
+              "path": "tracks[0].events",
+              "type": "u8[12]",
+              "offset": 29,
+              "size": 12,
+              "value": "00FF58040402180800FF2F00",
+              "display": "00 FF 58 04 04 02 18 08 00 FF 2F 00"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "tracks[1]",
+          "type": "TrackChunk",
+          "offset": 41,
+          "size": 23,
+          "display": "TrackChunk (4)",
+          "children": [
+            {
+              "name": "id",
+              "path": "tracks[1].id",
+              "type": "char[4]",
+              "offset": 41,
+              "size": 4,
+              "value": "MTrk",
+              "display": "MTrk"
+            },
+            {
+              "name": "length",
+              "path": "tracks[1].length",
+              "type": "u32",
+              "offset": 45,
+              "size": 4,
+              "value": 15,
+              "display": "15"
+            },
+            {
+              "name": "first_delta_time",
+              "path": "tracks[1].first_delta_time",
+              "type": "vlq",
+              "offset": 49,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "events",
+              "path": "tracks[1].events",
+              "type": "u8[14]",
+              "offset": 50,
+              "size": 14,
+              "value": "C00000903C4060803C4000FF2F00",
+              "display": "C0 00 00 90 3C 40 60 80 3C 40 00 FF 2F 00"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

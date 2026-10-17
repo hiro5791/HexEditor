@@ -1,0 +1,192 @@
+{
+  "name": "VHD 仮想ディスク",
+  "type": "application",
+  "offset": 0,
+  "size": 0,
+  "children": [
+    {
+      "name": "footer",
+      "path": "footer",
+      "type": "Footer",
+      "offset": 4096,
+      "size": 512,
+      "display": "Footer (16)",
+      "children": [
+        {
+          "name": "cookie",
+          "path": "footer.cookie",
+          "type": "char[8]",
+          "offset": 4096,
+          "size": 8,
+          "value": "conectix",
+          "display": "conectix"
+        },
+        {
+          "name": "features",
+          "path": "footer.features",
+          "type": "u32",
+          "offset": 4104,
+          "size": 4,
+          "value": 2,
+          "display": "0x2"
+        },
+        {
+          "name": "file_format_version",
+          "path": "footer.file_format_version",
+          "type": "u32",
+          "offset": 4108,
+          "size": 4,
+          "value": 65536,
+          "display": "0x10000"
+        },
+        {
+          "name": "data_offset",
+          "path": "footer.data_offset",
+          "type": "u64",
+          "offset": 4112,
+          "size": 8,
+          "value": 18446744073709551615,
+          "display": "0xFFFFFFFFFFFFFFFF",
+          "comment": "固定ディスクでは 0xFFFFFFFFFFFFFFFF"
+        },
+        {
+          "name": "timestamp",
+          "path": "footer.timestamp",
+          "type": "u32",
+          "offset": 4120,
+          "size": 4,
+          "value": 805306368,
+          "display": "805306368",
+          "comment": "2000-01-01 00:00:00 UTC からの秒数"
+        },
+        {
+          "name": "creator_application",
+          "path": "footer.creator_application",
+          "type": "char[4]",
+          "offset": 4124,
+          "size": 4,
+          "value": "hex ",
+          "display": "hex "
+        },
+        {
+          "name": "creator_version",
+          "path": "footer.creator_version",
+          "type": "u32",
+          "offset": 4128,
+          "size": 4,
+          "value": 65536,
+          "display": "0x10000"
+        },
+        {
+          "name": "creator_host_os",
+          "path": "footer.creator_host_os",
+          "type": "char[4]",
+          "offset": 4132,
+          "size": 4,
+          "value": "Wi2k",
+          "display": "Wi2k"
+        },
+        {
+          "name": "original_size",
+          "path": "footer.original_size",
+          "type": "u64",
+          "offset": 4136,
+          "size": 8,
+          "value": 4096,
+          "display": "4096"
+        },
+        {
+          "name": "current_size",
+          "path": "footer.current_size",
+          "type": "u64",
+          "offset": 4144,
+          "size": 8,
+          "value": 4096,
+          "display": "4096"
+        },
+        {
+          "name": "disk_geometry",
+          "path": "footer.disk_geometry",
+          "type": "Geometry",
+          "offset": 4152,
+          "size": 4,
+          "display": "Geometry (3)",
+          "children": [
+            {
+              "name": "cylinders",
+              "path": "footer.disk_geometry.cylinders",
+              "type": "u16",
+              "offset": 4152,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "heads",
+              "path": "footer.disk_geometry.heads",
+              "type": "u8",
+              "offset": 4154,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sectors_per_track",
+              "path": "footer.disk_geometry.sectors_per_track",
+              "type": "u8",
+              "offset": 4155,
+              "size": 1,
+              "value": 8,
+              "display": "8"
+            }
+          ]
+        },
+        {
+          "name": "disk_type",
+          "path": "footer.disk_type",
+          "type": "DiskType",
+          "offset": 4156,
+          "size": 4,
+          "value": 2,
+          "display": "Fixed (0x2)"
+        },
+        {
+          "name": "checksum",
+          "path": "footer.checksum",
+          "type": "u32",
+          "offset": 4160,
+          "size": 4,
+          "value": 4294962704,
+          "display": "0xFFFFEE10"
+        },
+        {
+          "name": "unique_id",
+          "path": "footer.unique_id",
+          "type": "u8[16]",
+          "offset": 4164,
+          "size": 16,
+          "value": "303132333435363738393A3B3C3D3E3F",
+          "display": "30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F"
+        },
+        {
+          "name": "saved_state",
+          "path": "footer.saved_state",
+          "type": "u8",
+          "offset": 4180,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved",
+          "path": "footer.reserved",
+          "type": "u8[427]",
+          "offset": 4181,
+          "size": 427,
+          "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        }
+      ]
+    }
+  ]
+}

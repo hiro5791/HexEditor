@@ -1,0 +1,55 @@
+{
+  "name": "リッチテキスト (RTF)",
+  "type": "application",
+  "offset": 0,
+  "size": 80,
+  "children": [
+    {
+      "name": "signature",
+      "path": "signature",
+      "type": "Signature",
+      "offset": 0,
+      "size": 6,
+      "display": "Signature (2)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "signature.magic",
+          "type": "char[5]",
+          "offset": 0,
+          "size": 5,
+          "value": "{\\rtf",
+          "display": "{\\rtf"
+        },
+        {
+          "name": "version",
+          "path": "signature.version",
+          "type": "char[1]",
+          "offset": 5,
+          "size": 1,
+          "value": "1",
+          "display": "1",
+          "comment": "通常は 1"
+        }
+      ]
+    },
+    {
+      "name": "declarations",
+      "path": "declarations",
+      "type": "char[45]",
+      "offset": 6,
+      "size": 45,
+      "value": "\\ansi\\ansicpg1252\\deff0{\\fonttbl{\\f0 Arial;}}",
+      "display": "\\ansi\\ansicpg1252\\deff0{\\fonttbl{\\f0 Arial;}}"
+    },
+    {
+      "name": "body",
+      "path": "body",
+      "type": "u8[29]",
+      "offset": 51,
+      "size": 29,
+      "value": "0A5C66302048656C6C6F2C20486578456469746F72215C7061720A7D0A",
+      "display": "0A 5C 66 30 20 48 65 6C 6C 6F 2C 20 48 65 78 45 …"
+    }
+  ]
+}

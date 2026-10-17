@@ -1,0 +1,114 @@
+// HexEditor 標準テンプレート (TPL-34): WebAssembly モジュール
+// ライセンス: MIT。
+// マジックと版、セクションの並びを読む。type、import、function、export、start のセクションは中身を解釈し、
+// それ以外 (code、data、custom など) は中身を読まない。大きさと個数は LEB128。
+#pragma name "WebAssembly module"
+#pragma name.ja "WebAssembly モジュール"
+#pragma description "WebAssembly binary module: header and sections (type, import, function, export, start decoded; code, data and custom sections as raw data)."
+#pragma description.ja "WebAssembly のバイナリモジュール: ヘッダとセクション (type、import、function、export、start は解釈、code、data、custom などは生のデータ)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "00 61 73 6D"
+#pragma mime "application/wasm"
+#pragma extensions "wasm"
+#pragma endian little
+
+enum SectionId : u8 {
+    Custom = 0, Type = 1, Import = 2, Function = 3, Table = 4, Memory = 5, Global = 6, Export = 7, Start = 8, Element = 9, Code = 10,
+    Data = 11, DataCount = 12, Tag = 13,
+};
+
+enum ValueType : u8 { I32 = 0x7F, I64 = 0x7E, F32 = 0x7D, F64 = 0x7C, V128 = 0x7B, FuncRef = 0x70, ExternRef = 0x6F };
+
+enum ExternalKind : u8 { Function = 0, Table = 1, Memory = 2, Global = 3, Tag = 4 };
+
+struct Name {
+    uleb128 length;
+    char    text[length] [[encoding("utf-8")]];
+};
+
+struct FuncType {
+    u8      form [[expect(form == 0x60, "関数型の 0x60 ではありません")]];
+    uleb128 parameter_count;
+    ValueType parameters[parameter_count];
+    uleb128 result_count;
+    ValueType results[result_count];
+};
+
+struct TypeSection {
+    uleb128  count;
+    FuncType types[count];
+};
+
+struct Limits {
+    u8      limits_flags;
+    uleb128 minimum;
+    if ((limits_flags & 1) != 0) {
+        uleb128 maximum;
+    }
+};
+
+struct ImportTable {
+    ValueType element_type;
+    Limits    table_limits;
+};
+
+struct ImportGlobal {
+    ValueType value_type;
+    u8        mutability;
+};
+
+struct Import {
+    Name         module_name;
+    Name         field_name;
+    ExternalKind kind;
+    switch (kind) {
+        case ExternalKind::Function: uleb128 type_index;
+        case ExternalKind::Table: ImportTable table;
+        case ExternalKind::Memory: Limits memory_limits;
+        case ExternalKind::Global: ImportGlobal global;
+    }
+};
+
+struct ImportSection {
+    uleb128 count;
+    Import  imports[count];
+};
+
+struct FunctionSection {
+    uleb128 count;
+    uleb128 type_indices[count];
+};
+
+struct Export {
+    Name         name;
+    ExternalKind kind;
+    uleb128      index;
+};
+
+struct ExportSection {
+    uleb128 count;
+    Export  exports[count];
+};
+
+struct Section {
+    SectionId id [[color("accent1")]];
+    uleb128   size;
+    local u64 body_start = $;
+    switch (id) {
+        case SectionId::Custom: Name custom_name;
+        case SectionId::Type: TypeSection type_section;
+        case SectionId::Import: ImportSection import_section;
+        case SectionId::Function: FunctionSection function_section;
+        case SectionId::Export: ExportSection export_section;
+        case SectionId::Start: uleb128 start_function_index;
+    }
+    if (body_start + size > $) {
+        u8 data[body_start + size - $] [[lazy]];
+    }
+} [[size(1 + sizeof(size) + size)]];
+
+u8  magic[4] [[expect(magic == x"00 61 73 6D", "\\0asm ではありません")]];
+u32 version;
+Section sections[until(std::eof())];

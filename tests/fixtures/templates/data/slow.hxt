@@ -1,0 +1,3 @@
+#pragma magic 0 "53 4C 4F 57"
+#pragma priority 100
+u32 magic; while (true) {}

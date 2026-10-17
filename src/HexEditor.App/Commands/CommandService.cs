@@ -265,8 +265,17 @@ public static class CommandService
     private static string NameKey(string id) => "Cmd_" + CommandDefinition.KeyPart(id);
 
     /// <summary>コマンドの今のショートカットの表示 (例: <c>Ctrl+G, Ctrl+J</c>)。メニューの右側とツールチップに出す。</summary>
-    public static string ShortcutText(string id) =>
-        KeyboardLayout.Format(Keys.BindingsFor(id).Select(b => b.Binding.Chord).Distinct());
+    public static string ShortcutText(string id)
+    {
+        var chords = Keys.BindingsFor(id).Select(b => b.Binding.Chord).Distinct().ToList();
+        if (chords.Count == 0 && Catalog.Find(id)?.FixedKey is { } fixedKey)
+        {
+            // 部品が自分で処理する固定のキー (Hex ビューの Delete・Esc など)。表示だけ。
+            return KeyboardLayout.Format(Core.Commands.KeyChord.Parse(fixedKey));
+        }
+
+        return KeyboardLayout.Format(chords);
+    }
 
     public static string ScopeName(KeyScope scope) => Loc.Get("KeyScope_" + KeyScopes.Name(scope));
 

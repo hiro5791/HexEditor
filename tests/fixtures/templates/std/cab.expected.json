@@ -1,0 +1,386 @@
+{
+  "name": "Microsoft キャビネット (CAB)",
+  "type": "application",
+  "offset": 0,
+  "size": 44,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 36,
+      "display": "Header (13)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "header.signature",
+          "type": "u8[4]",
+          "offset": 0,
+          "size": 4,
+          "value": "4D534346",
+          "display": "4D 53 43 46"
+        },
+        {
+          "name": "reserved1",
+          "path": "header.reserved1",
+          "type": "u32",
+          "offset": 4,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "cabinet_size",
+          "path": "header.cabinet_size",
+          "type": "u32",
+          "offset": 8,
+          "size": 4,
+          "value": 108,
+          "display": "108"
+        },
+        {
+          "name": "reserved2",
+          "path": "header.reserved2",
+          "type": "u32",
+          "offset": 12,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "files_offset",
+          "path": "header.files_offset",
+          "type": "u32",
+          "offset": 16,
+          "size": 4,
+          "value": 44,
+          "display": "0x2C"
+        },
+        {
+          "name": "reserved3",
+          "path": "header.reserved3",
+          "type": "u32",
+          "offset": 20,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "version_minor",
+          "path": "header.version_minor",
+          "type": "u8",
+          "offset": 24,
+          "size": 1,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "version_major",
+          "path": "header.version_major",
+          "type": "u8",
+          "offset": 25,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "folder_count",
+          "path": "header.folder_count",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "file_count",
+          "path": "header.file_count",
+          "type": "u16",
+          "offset": 28,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "packed",
+          "path": "header.packed",
+          "type": "HeaderFlags",
+          "offset": 30,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "set_id",
+          "path": "header.set_id",
+          "type": "u16",
+          "offset": 32,
+          "size": 2,
+          "value": 4660,
+          "display": "4660"
+        },
+        {
+          "name": "cabinet_index",
+          "path": "header.cabinet_index",
+          "type": "u16",
+          "offset": 34,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "folders",
+      "path": "folders",
+      "type": "Folder[1]",
+      "offset": 36,
+      "size": 8,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "folders[0]",
+          "type": "Folder",
+          "offset": 36,
+          "size": 8,
+          "display": "Folder (3)",
+          "children": [
+            {
+              "name": "data_offset",
+              "path": "folders[0].data_offset",
+              "type": "u32",
+              "offset": 36,
+              "size": 4,
+              "value": 88,
+              "display": "0x58"
+            },
+            {
+              "name": "data_block_count",
+              "path": "folders[0].data_block_count",
+              "type": "u16",
+              "offset": 40,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "compression",
+              "path": "folders[0].compression",
+              "type": "CompressionType",
+              "offset": 42,
+              "size": 2,
+              "value": 0,
+              "display": "None (0x0)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "files",
+      "path": "files",
+      "type": "File[2]",
+      "offset": 44,
+      "size": 44,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "files[0]",
+          "type": "File",
+          "offset": 44,
+          "size": 22,
+          "display": "File (7)",
+          "children": [
+            {
+              "name": "size",
+              "path": "files[0].size",
+              "type": "u32",
+              "offset": 44,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "uncompressed_offset",
+              "path": "files[0].uncompressed_offset",
+              "type": "u32",
+              "offset": 48,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "folder_index",
+              "path": "files[0].folder_index",
+              "type": "u16",
+              "offset": 52,
+              "size": 2,
+              "value": 0,
+              "display": "0",
+              "comment": "0xFFFD / 0xFFFE / 0xFFFF は前後のキャビネットにまたがる特別な値"
+            },
+            {
+              "name": "date",
+              "path": "files[0].date",
+              "type": "dosdate",
+              "offset": 54,
+              "size": 2,
+              "value": 23888,
+              "display": "10/16/2026 12:00:00 AM"
+            },
+            {
+              "name": "time",
+              "path": "files[0].time",
+              "type": "dostime",
+              "offset": 56,
+              "size": 2,
+              "value": 25692,
+              "display": "1/1/1980 12:34:56 PM"
+            },
+            {
+              "name": "attributes",
+              "path": "files[0].attributes",
+              "type": "FileAttributes",
+              "offset": 58,
+              "size": 2,
+              "value": 32,
+              "display": "Archive"
+            },
+            {
+              "name": "name",
+              "path": "files[0].name",
+              "type": "string",
+              "offset": 60,
+              "size": 6,
+              "value": "a.txt",
+              "display": "a.txt"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "files[1]",
+          "type": "File",
+          "offset": 66,
+          "size": 22,
+          "display": "File (7)",
+          "children": [
+            {
+              "name": "size",
+              "path": "files[1].size",
+              "type": "u32",
+              "offset": 66,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "uncompressed_offset",
+              "path": "files[1].uncompressed_offset",
+              "type": "u32",
+              "offset": 70,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "folder_index",
+              "path": "files[1].folder_index",
+              "type": "u16",
+              "offset": 74,
+              "size": 2,
+              "value": 0,
+              "display": "0",
+              "comment": "0xFFFD / 0xFFFE / 0xFFFF は前後のキャビネットにまたがる特別な値"
+            },
+            {
+              "name": "date",
+              "path": "files[1].date",
+              "type": "dosdate",
+              "offset": 76,
+              "size": 2,
+              "value": 23888,
+              "display": "10/16/2026 12:00:00 AM"
+            },
+            {
+              "name": "time",
+              "path": "files[1].time",
+              "type": "dostime",
+              "offset": 78,
+              "size": 2,
+              "value": 25692,
+              "display": "1/1/1980 12:34:56 PM"
+            },
+            {
+              "name": "attributes",
+              "path": "files[1].attributes",
+              "type": "FileAttributes",
+              "offset": 80,
+              "size": 2,
+              "value": 32,
+              "display": "Archive"
+            },
+            {
+              "name": "name",
+              "path": "files[1].name",
+              "type": "string",
+              "offset": 82,
+              "size": 6,
+              "value": "b.txt",
+              "display": "b.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "first_data_block",
+      "path": "first_data_block",
+      "type": "DataBlock",
+      "offset": 88,
+      "size": 20,
+      "display": "DataBlock (4)",
+      "children": [
+        {
+          "name": "checksum",
+          "path": "first_data_block.checksum",
+          "type": "u32",
+          "offset": 88,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "compressed_size",
+          "path": "first_data_block.compressed_size",
+          "type": "u16",
+          "offset": 92,
+          "size": 2,
+          "value": 12,
+          "display": "12"
+        },
+        {
+          "name": "uncompressed_size",
+          "path": "first_data_block.uncompressed_size",
+          "type": "u16",
+          "offset": 94,
+          "size": 2,
+          "value": 12,
+          "display": "12"
+        },
+        {
+          "name": "data",
+          "path": "first_data_block.data",
+          "type": "u8[12]",
+          "offset": 96,
+          "size": 12,
+          "value": "486578456469746F72434142",
+          "display": "48 65 78 45 64 69 74 6F 72 43 41 42"
+        }
+      ]
+    }
+  ]
+}

@@ -15,6 +15,8 @@
 | 合計 | 183 |
 
 - 手動・半自動の所要時間の合計の目安: 7 分 (優先度「高」の手動・半自動はなし)。
+- フェーズ 3 のコマンドラインのテストの実装上の取り決め: TC-AUTO-36-03 は ConPTY の代わりに、標準エラー出力が端末かどうかを差し込める実行環境で 1 行の進捗と、リダイレクト時に出ないことを確かめる (リダイレクトは実際の `cmd` で行う)。TC-AUTO-36-04 は、窓のない専用のコンソールで起動し、テスト用のビルドの `hexed --test-send-ctrl-c` がそのコンソールに Ctrl+C を送る。TC-AUTO-40-03・43-01・44-01 は GUI の画面を操作せず、GUI が使う Core の部品 (`DiffExport`、`IpsPatch` と `DocumentSaver`、`Importer` と `DocumentSaver`) を同じ呼び出しで実行した結果と比べる。TC-AUTO-41-xx・42-xx は、スクリプトのホスト・テンプレートエンジンのマージ後に本物のエンジンで確かめる (それまでは `hexed` の側を代わりのエンジンで確かめ、本物のエンジンのテストは Skip)。
+- フェーズ 3 のプラグインのテストの実装上の取り決め: テスト用のプラグインは tests/plugins のプロジェクトをビルドしたもの (TD-AUTO-PLG-SAMPLE は Plugin.Sample、DEP-A / DEP-B は TestLib 1.0.0 / 2.0.0 に依存する Plugin.DepA / DepB、SDK13 は SdkNext でビルドした Plugin.Sdk13、それ以外は test.json で振る舞いを決める Plugin.Generic)。TC-AUTO-35-01〜03 は、テスト用のルート証明書をコンピューターの信頼されたルートに入れない (この PC の安全のため): Core のテストはプロセスの中で作ったルートだけを信頼する検証で、Platform のテストは同じ署名を WinVerifyTrust が「信頼されていないルート」だけを理由に拒否し、1 バイト書き換えると「ハッシュの不一致」にすることで確かめる。TC-AUTO-32-01 のドロップは、一覧のドロップの処理と同じ処理をテスト用の命令で呼ぶ (OLE のドロップは UI オートメーションで送れないため)。TC-AUTO-32-04 のキーは、Tab をフォーカスの移動 (Tab と同じ順)、↓ を一覧の項目の選択、Space・Enter を UI オートメーションの切り替え・実行で行う (システムのキーボードを使わない)。Explorer は開かず、開こうとしたフォルダを確かめる。TC-AUTO-30-04・TC-UI-30-03 の Shift キーはテスト用のフック `safeModeShift`、TC-AUTO-34-08 の管理者として実行はテスト用の設定 `elevated` で模擬する (SendInput と UAC を使わない)。コマンドライン (hexed) の管理者として実行 (AUTO-34 の仕様 8) は、テスト用のビルドだけが読む環境変数 `HEXED_TEST_ELEVATED` (`1` / `0`)、またはプロセスの中のテストでは CoreScriptRunner / CorePluginLoader に渡す判定で模擬する (CI の実行環境は管理者として動くため、hexed を起動するテストは既定で `0` にする)。TC-AUTO-33-01 の手順 2〜4 (テスト用のデバッガの下での起動とブレークポイント) は、ICorDebug を使うテスト用のデバッガを用意するのにパッケージのダウンロードが要るため自動化しない (手順 1 と 5、信頼の確認が 1 回であることを確かめる)。TC-AUTO-29-01 は、テンプレートを一時的なフォルダ (dotnet new の custom hive) にだけ入れ、パッケージはローカルのフォルダのフィードとこの PC のパッケージのキャッシュ (読み取り専用) だけから取る。
 - AUTO-37 の受け入れ基準にないテスト用の起動オプション (`--test-profile`、`--ui-lang`、`--test-hooks`) は、TC-AUTO-37-07〜09 で確認する。GUI の表示言語の指定は AUTO-37 の `--ui-lang` を使う (`hexed` の `--lang` はコンソールのメッセージの言語)。
 
 テストを書くうえでの共通の前提:
@@ -378,7 +380,7 @@
 **手順**:
 
 1. TD-AUTO-CSX-COMPONENT (コンポーネントだけの zip) を `<exe のフォルダ>\Data\components\csharp\<バージョン>\` に展開する。
-2. アプリを起動し、設定画面「スクリプト > C#」のコンポーネントのバージョンを取得する。
+2. アプリを起動し、設定画面「自動化 > C# スクリプト コンポーネント」のコンポーネントのバージョンを取得する。
 3. TD-AUTO-CSX-HELLO を実行し、信頼の確認で「1 回だけ実行する」を選ぶ。
 4. 出力パネルの内容を取得する。
 
@@ -713,7 +715,7 @@
 **期待結果**:
 
 - 手順 1 のすべてのコマンド ID が手順 2 に含まれる (不足が 0 件)。
-- 手順 2 の各 ID が `領域.動作` の形 (英小文字・数字・`.`・`-`) になっている。
+- 手順 2 の各 ID が `領域.動作` の形 (先頭が英小文字の英数字の語を `.` でつないだもの。例: `edit.selectAll`、`go.goTo`。09 の UI-16 のコマンド ID) になっている。
 
 ### TC-AUTO-06-02 表示言語に関係なく同じコマンド ID で同じ結果になる
 
@@ -731,7 +733,7 @@
 **手順**:
 
 1. `--ui-lang en` と新しいテスト用の設定フォルダで、TD-SEQ-1M のコピーを開いて起動する。
-2. TD-AUTO-JS-CMDS (`app.commands.execute` で `edit.select-all`、`edit.fill` (`00`)、`navigate.goto` (`0x100`)、`file.save` を順に実行するスクリプト) を信頼の確認で「1 回だけ実行する」を選んで実行する。
+2. TD-AUTO-JS-CMDS (`app.commands.execute` で `edit.selectAll`、`edit.fill` (`00`)、`go.goTo` (`0x100`)、`file.save` を順に実行するスクリプト) を信頼の確認で「1 回だけ実行する」を選んで実行する。
 3. 保存したファイルの SHA-256 を記録してアプリを終了する。
 4. `--ui-lang ja`、`--ui-lang ar` で手順 1〜3 を繰り返す。
 
@@ -1605,7 +1607,7 @@
 
 **手順**:
 
-1. `hexed run settingsset.js --trust` を実行する (`--allow` なし。`settings.set("view.bytesPerRow", 32)` を `try` で囲み、例外の名前を出力するスクリプト)。
+1. `hexed run settingsset.js --trust` を実行する (`--allow` なし。`settings.set("view.tooltips", false)` を `try` で囲み、例外の名前を出力するスクリプト)。
 2. 標準出力を取得する。
 3. 設定ファイルの SHA-256 を計算する。
 
@@ -1909,7 +1911,7 @@
 1. JavaScript の新規スクリプトを開く。
 2. `doc.` まで入力して補完の一覧を取得する。
 3. `1 +` と入力して 1 秒待ち、マーカーを取得する。
-4. WebView2 が要求したリソースの URL の一覧を (DevTools プロトコルで) 取得する。
+4. WebView2 が要求したリソースの URL の一覧を (ページの Resource Timing で) 取得し、ページから外の URL を読もうとすると断られることを確かめる。
 
 **期待結果**:
 
@@ -3371,13 +3373,38 @@
 1. アプリを起動する。
 2. メニュー「ツール > スクリプト」の各項目の有効 / 無効と、ツールチップを取得する。
 3. F5 を押し、表示されたメッセージを取得する。
-4. 設定画面「スクリプト > 信頼と許可」の該当の設定の欄の状態を取得する。
+4. 設定画面「自動化 > 信頼と許可」の表示を取得する。
 
 **期待結果**:
 
 - 手順 2 で、スクリプトの実行の項目が無効で、ツールチップに組織の設定で無効にされている旨の理由がある。
 - 手順 3 で、スクリプトは実行されず、同じ理由が表示される。
-- 手順 4 で、設定の欄が変更できない状態になっている。
+- 手順 4 で、組織の設定でスクリプトが無効にされている旨が表示され、`scripts.policy` を変更する操作がない。
+
+### TC-AUTO-34-10 「信頼と許可」で「常に許可する」を取り消すと再び確認が出る
+
+| 項目 | 内容 |
+| --- | --- |
+| 確認する基準 | AUTO-34 の受け入れ基準 10 |
+| 種別 | 自動: UI |
+| 優先度 | 中 |
+| フェーズ | 3 |
+| テストデータ | TD-AUTO-JS-HELLO |
+| 環境 | 標準 |
+
+**前提**: TD-AUTO-JS-HELLO を `scripts/` に置き、確認ダイアログで「常に許可する」を選んで 1 回実行している。
+
+**手順**:
+
+1. 設定画面「自動化 > 信頼と許可」の一覧を取得する。
+2. このスクリプトの行の「取り消す」を押し、一覧を取得する。
+3. もう一度スクリプトを実行する。
+
+**期待結果**:
+
+- 手順 1 の一覧にこのスクリプトの名前とパスがある。
+- 手順 2 の後、一覧にこのスクリプトがない (「常に許可しているスクリプトはありません」と表示される)。
+- 手順 3 で確認ダイアログが再び出る。
 
 ## AUTO-35 署名の確認
 
@@ -3901,7 +3928,7 @@
 **手順**:
 
 1. 作業フォルダで `hexed hash a.bin -a sha256 --format gnu` を実行し、標準出力を取得する。
-2. 同じフォルダで `sha256sum a.bin` を実行し、標準出力を取得する。
+2. 同じフォルダで `sha256sum a.bin` を実行し、標準出力を取得する (Git for Windows の `sha256sum` は既定がバイナリモード (`値 *パス`) なので、`--text` を付けて Linux の既定 (`値  パス`) にする)。
 3. `empty.bin` で手順 1〜2 を繰り返す。
 
 **期待結果**:
@@ -4696,7 +4723,7 @@
 | TD-AUTO-JS-BUSY | 約 10 行 | 30 秒間、整数の計算 1,000,000 回と、アクティブなドキュメントの先頭 1 MiB への `transform` (XOR `01`) を交互に繰り返す |
 | TD-AUTO-JS-PROMISEALL | 約 6 行 | `app.documents` の先頭 2 つに対する `hash.compute(..., ["sha256"])` を `Promise.all` で待ち、2 つの `hex` を出力する |
 | TD-AUTO-JS-CMDLIST | 2 行 | `app.commands.list()` の `id` と表示名を JSON で `console.log` する |
-| TD-AUTO-JS-CMDS | 4 行 | `edit.select-all`、`edit.fill` (`{pattern: "00"}`)、`navigate.goto` (`{offset: "0x100"}`)、`file.save` を `app.commands.execute` で順に実行する |
+| TD-AUTO-JS-CMDS | 4 行 | `edit.selectAll`、`edit.fill` (`{pattern: "00"}`)、`go.goTo` (`{offset: "0x100"}`)、`file.save` を `app.commands.execute` で順に実行する |
 | TD-AUTO-JS-BEFORESAVE | 2 行 | `app.on("beforeSave", e => e.cancel("blocked-by-test-42"))` で常駐する |
 | TD-AUTO-JS-SELCOUNT | 2 行 | `app.on("selectionChanged", () => console.log(Date.now()))` で常駐する |
 | TD-AUTO-JS-UNDOGROUP | 5 行 | `beginUndoGroup("g1")`、0x10・0x20・0x30 に別々の `writeBytes` で `FF`、`endUndoGroup()` |
@@ -4728,7 +4755,7 @@
 | TD-AUTO-JS-SHOWRESULTS | 1 行 | TC-AUTO-16-03 の前提のとおりの `ui.showResults` |
 | TD-AUTO-JS-PROMPTARG | 1 行 | `console.log(await ui.prompt("count", {type: "number"}))` |
 | TD-AUTO-JS-STORAGE | 約 4 行 | `script.args.mode` が `set` なら `script.storage.set("k", {n: 42})`、`get` なら `script.storage.get("k")` を JSON で出力する |
-| TD-AUTO-JS-SETTINGSSET | 3 行 | `settings.set("view.bytesPerRow", 32)` を `try` で囲み、例外の名前とメッセージを出力する |
+| TD-AUTO-JS-SETTINGSSET | 3 行 | `settings.set("view.tooltips", false)` を `try` で囲み、例外の名前とメッセージを出力する |
 | TD-AUTO-JS-NOPERM | 約 6 行 | `fs.readText("C:/Windows/win.ini")` と `net.fetch(script.args.url)` を個別に `try` で囲み、例外の名前とメッセージを出力する |
 | TD-AUTO-JS-PICKREAD | 約 5 行 | `ui.pickFile()` のパスを `fs.readText` で読んで先頭 20 文字を出力し、続けて `fs.readText("C:/Windows/win.ini")` の例外の名前を出力する |
 | TD-AUTO-JS-PROCRUN | 2 行 | `process.run(script.args.exe, ["a b", "x&y", "\"q\"", "%PATH%", "c\|d"])` の標準出力をそのまま出力する |

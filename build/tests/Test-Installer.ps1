@@ -7,6 +7,8 @@
     TC-PKG-07-02  Start menu shortcut, no desktop shortcut
     TC-PKG-07-03  "Apps" entry (Uninstall key) and uninstall from it
     TC-PKG-07-04  App Paths: ShellExecute "HexEditor" starts current\HexEditor.exe
+    TC-PKG-07-06  a new command prompt (environment read again from the registry) runs "hexed --version": the version of
+                  the build, exit code 0
     TC-PKG-11-02  the Velopack hook arguments exit within 5 s without a window
     TC-PKG-09-01  data is kept by a default uninstall
     TC-PKG-09-02  uninstall.removeUserData = true removes the data folder
@@ -162,6 +164,30 @@ Invoke-TestCase 'TC-PKG-07-04' 'App Paths' {
         Assert-True (Wait-MainWindow $p) 'no window'
         Assert-True ($p.Path -ieq $exe) "started $($p.Path)"
     } finally { Stop-HexEditor }
+}
+
+Invoke-TestCase 'TC-PKG-07-06' 'hexed works in a new command prompt' {
+    # 1. A new cmd.exe whose environment is read again from the registry (the PATH the installation added), "hexed --version".
+    $machine = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $user = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $info = New-Object System.Diagnostics.ProcessStartInfo $env:ComSpec
+    $info.Arguments = '/c hexed --version'
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.CreateNoWindow = $true
+    $info.WorkingDirectory = $env:USERPROFILE
+    $info.EnvironmentVariables['Path'] = "$machine;$user"
+    $process = [System.Diagnostics.Process]::Start($info)
+    $stdout = $process.StandardOutput.ReadToEnd().Trim()
+    $stderr = $process.StandardError.ReadToEnd().Trim()
+    $process.WaitForExit()
+    # 2. The version of the build and exit code 0.
+    $hexed = Join-Path (Split-Path -Parent $exe) 'hexed.exe'
+    Assert-True (Test-Path $hexed) "$hexed missing"
+    $expected = (Get-Item $hexed).VersionInfo.ProductVersion
+    Assert-True ($process.ExitCode -eq 0) "exit code $($process.ExitCode): $stdout $stderr"
+    Assert-True ($stdout -eq "hexed $expected") "output '$stdout' is not 'hexed $expected'"
 }
 
 Invoke-TestCase 'TC-PKG-11-02' 'Velopack hook arguments' {

@@ -1,0 +1,15 @@
+// TD-TPL-SYNTAX3: 構文エラーは 5 行目、9 行目、14 行目の 3 か所だけ
+struct Header {
+    u32 magic;
+    u16 version;
+    u16 count
+};
+
+u8 a;
+@@ u8 b;
+u8 c;
+fn ok(u8 v) -> u8 {
+    return v;
+}
+local u32 bad = 0xZZ;
+u8 last_one;

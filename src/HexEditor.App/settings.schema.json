@@ -355,6 +355,16 @@
       "type": "boolean",
       "default": true
     },
+    "files.lock": {
+      "description": "File lock",
+      "type": "string",
+      "enum": [
+        "whileModified",
+        "always",
+        "none"
+      ],
+      "default": "whileModified"
+    },
     "formats.gapFill": {
       "description": "Fill value for gaps in Intel HEX and S-record files",
       "type": "string",
@@ -479,6 +489,19 @@
       "type": "boolean",
       "default": true
     },
+    "plugins.devFolders": {
+      "description": "Plugin development folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "plugins.signedOnly": {
+      "description": "Load only signed plugins",
+      "type": "boolean",
+      "default": false
+    },
     "positionManager.followCursor": {
       "description": "Position manager follows the cursor",
       "type": "boolean",
@@ -538,6 +561,74 @@
       "description": "Save in place even when the length changes",
       "type": "boolean",
       "default": false
+    },
+    "scripts.debug.exceptions": {
+      "description": "Break on exceptions while debugging",
+      "type": "string",
+      "enum": [
+        "none",
+        "uncaught",
+        "all"
+      ],
+      "default": "uncaught"
+    },
+    "scripts.folders": {
+      "description": "Additional script folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "scripts.js.memoryMB": {
+      "description": "Memory limit (MB)",
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 4096,
+      "default": 512
+    },
+    "scripts.js.recursionDepth": {
+      "description": "Recursion depth limit",
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 10000,
+      "default": 1000
+    },
+    "scripts.js.timeoutSeconds": {
+      "description": "Execution time limit (seconds)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 86400,
+      "default": 60
+    },
+    "scripts.maxConcurrent": {
+      "description": "Scripts running at the same time",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16,
+      "default": 4
+    },
+    "scripts.output.autoShow": {
+      "description": "Show the output panel when a script writes output",
+      "type": "boolean",
+      "default": true
+    },
+    "scripts.output.maxLines": {
+      "description": "Maximum lines kept in the output panel",
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 1000000,
+      "default": 10000
+    },
+    "scripts.policy": {
+      "description": "Script policy (organization)",
+      "type": "string",
+      "enum": [
+        "none",
+        "disabled",
+        "signedPluginsOnly"
+      ],
+      "default": "none"
     },
     "search.chunkSize": {
       "description": "Search chunk size (KiB)",
@@ -657,6 +748,60 @@
       "description": "Folder for temporary data",
       "type": "string",
       "default": ""
+    },
+    "templates.autoApply": {
+      "description": "Auto-apply",
+      "type": "string",
+      "enum": [
+        "suggest",
+        "always",
+        "none"
+      ],
+      "default": "suggest"
+    },
+    "templates.autoReevaluate": {
+      "description": "Re-evaluate after editing",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.coloring": {
+      "description": "Structure coloring",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.coloringOpacity": {
+      "description": "Coloring opacity (%)",
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 100,
+      "default": 35
+    },
+    "templates.folders": {
+      "description": "Template folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.inspector": {
+      "description": "Inspector templates",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.preferences": {
+      "description": "Template preferences",
+      "type": "string",
+      "default": ""
+    },
+    "ui.accentColor": {
+      "description": "Accent color",
+      "type": "string",
+      "pattern": "^(system|#[0-9A-Fa-f]{6})$",
+      "default": "system"
     },
     "ui.backdrop": {
       "description": "Window background",

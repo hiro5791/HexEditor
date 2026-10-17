@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>أُلغي.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>شغّل 'hexed --help' (أو 'hexed &lt;command&gt; --help') لمعرفة طريقة الاستخدام.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: خطأ غير متوقع ({0}). كُتبت التفاصيل في {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>الاستخدام: hexed &lt;command&gt; [المعاملات] [الخيارات]
+           hexed &lt;file&gt; [الخيارات]          (مثل: hexed open &lt;file&gt;)
+
+الأوامر:
+  open      يفتح ملفات أو أقراصًا أو عمليات في نافذة HexEditor
+  hash      يحسب قيم التجزئة ومجاميع التحقق ويتحقق منها
+  dump      يطبع تفريغ hex
+  compare   يقارن بين ملفين
+  run       يشغّل برنامجًا نصيًا دون نافذة
+  template  يطبّق قالب بنية ويطبع النتيجة
+  patch     يطبّق تصحيح IPS على ملف
+  convert   يحوّل بين التنسيقات (Intel HEX وS-record وBase64 والشفرة المصدرية ...)
+  find      يبحث في الملفات ويطبع المطابقات
+
+الخيارات المشتركة (جميع الأوامر):
+  -h, --help           يعرض طريقة الاستخدام (أيضًا: hexed &lt;command&gt; --help)
+      --version        يعرض الإصدار
+  -q, --quiet          لا يطبع شيئًا سوى النتيجة
+      --format &lt;f&gt;     تنسيق المخرجات: text (الافتراضي) أو json
+  -o, --output &lt;path&gt;  يكتب النتيجة في ملف بدلًا من الشاشة
+      --lang &lt;tag&gt;     لغة الرسائل (مثل en وja)
+      --no-color       لا يستخدم الألوان
+      --unregister     يزيل التسجيلات التي أُجريت على هذا الكمبيوتر (قائمة النقر الأيمن،
+                       واقترانات الملفات، وقائمة الانتقال السريع، وPATH، والمجلد المؤقت)
+
+رموز الخروج: 0 نجاح، 1 نتيجة سلبية (اختلافات أو لا مطابقة أو عدم تطابق)، 2 خطأ في الاستخدام،
+3 خطأ إدخال/إخراج، 4 خطأ في برنامج نصي أو قالب، 5 غير مسموح، 6 أُلغي، 7 تجاوز الحد،
+8 خطأ في التنسيق، 10 خطأ داخلي.
+
+تقبل الإزاحات والأطوال والنطاقات تعبيرات. الرقم دون بادئة عشري؛ استخدم 0x
+للنظام السداسي عشر. النطاق هو start:length أو start..end (لا يشمل end)؛ و'end' هو
+طول الملف (مثل end-16:16). في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس
+مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>الاستخدام: hexed open [paths...] [الخيارات]
+
+يفتح ملفات في نافذة HexEditor. إذا كان HexEditor يعمل بالفعل تُفتح الملفات كعلامات تبويب
+فيه. تُحلّ المسارات النسبية من المجلد الحالي.
+
+الخيارات:
+  -g, --offset &lt;expr&gt;      يضع المؤشر في هذا الموضع (مثل 0x1000 أو end-16)
+      --select &lt;range&gt;     يحدد هذا النطاق (start:length أو start..end)
+  -r, --readonly           يفتح للقراءة فقط
+      --disk &lt;n|path&gt;      يفتح قرصًا فعليًا (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     يفتح وحدة تخزين (--volume C:)
+      --process &lt;pid|name&gt; يفتح ذاكرة عملية
+      --encoding &lt;name&gt;    ترميز أحرف عمود النص
+      --template &lt;name|path&gt;  يطبّق قالب بنية بعد الفتح
+      --compare &lt;a&gt; &lt;b&gt;    يفتح ملفين في عرض المقارنة
+      --run &lt;script&gt;       يشغّل برنامجًا نصيًا بعد الفتح
+      --new-window         يفتح في نافذة جديدة
+      --new-document       يفتح مستندًا فارغًا جديدًا
+      --open-disk          يعرض مربع حوار فتح قرص
+      --new-instance       يبدأ عملية منفصلة بدلًا من استخدام العملية الجارية
+  -w, --wait               لا يعود حتى تُغلق المستندات المفتوحة
+      --safe-mode          يبدأ في الوضع الآمن (عملية جديدة فقط)
+      --write-block        يبدأ مع حماية من الكتابة للتطبيق كله
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   يعرض نصًا مترجمًا ترجمة زائفة (إصدارات المعاينة)
+      --plugin-dev &lt;folder&gt; يحمّل مكونًا إضافيًا قيد التطوير (عملية جديدة فقط)
+      --ui-lang &lt;tag&gt;      لغة عرض النافذة (عملية جديدة فقط)
+      --test-hooks &lt;file&gt;  يفعّل حقن الأعطال (إصدارات الاختبار فقط)
+
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>الاستخدام: hexed hash [paths...] [الخيارات]
+           hexed hash --check &lt;checksum file&gt; [الخيارات]
+
+يحسب قيم التجزئة ومجاميع التحقق. يمكن أن تحتوي المسارات على أحرف بدل (*.bin) أو تكون مجلدات؛ استخدم - لقراءة
+الإدخال القياسي. تُحسب عدة خوارزميات في تمريرة واحدة.
+
+الخيارات:
+  -a, --algorithm &lt;id,...&gt;   معرّفات الخوارزميات مفصولة بفواصل (الافتراضي sha256).
+                             '--algorithm list' يطبع المعرّفات المتاحة
+      --range &lt;range&gt;        يحسب تجزئة هذا النطاق فقط (start:length أو start..end)
+      --format &lt;f&gt;           text (الافتراضي): algorithm  value  path
+                             gnu: value  path (مثل sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: كائن واحد لكل ملف
+      --check &lt;file&gt;         يتحقق من الملفات المدرجة في ملف مجاميع التحقق (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) ويطبع OK أو FAILED أو MISSING
+  -r, --recurse              يشمل المجلدات الفرعية عند إعطاء مجلد
+
+رموز الخروج: 0 نجاح، 1 عدم تطابق مع --check، 3 تعذرت قراءة ملف.
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>الاستخدام: hexed dump &lt;path&gt; [الخيارات]
+
+يطبع تفريغ hex لملف (أو لنطاق) إلى المخرجات القياسية. لا يعتمد استخدام الذاكرة على الحجم.
+
+الخيارات:
+      --range &lt;range&gt;        النطاق المطلوب طباعته (start:length أو start..end؛ الافتراضي: الملف كله)
+      --width &lt;n&gt;            عدد البايتات في كل سطر (الافتراضي 16)
+      --group &lt;n&gt;            عدد البايتات في كل مجموعة (الافتراضي يعتمد على النمط؛ 0 بلا تجميع)
+      --encoding &lt;name&gt;      ترميز أحرف عمود النص (الافتراضي ascii)
+      --base-address &lt;expr&gt;  العنوان المعروض للبايت الأول (الافتراضي 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              يطبع * للأسطر التي تكرر السطر السابق (مثل hexdump -C)
+
+رموز الخروج: 2 إذا كان النطاق خارج الملف.
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>الاستخدام: hexed compare &lt;path1&gt; &lt;path2&gt; [الخيارات]
+
+يقارن بين ملفين ويطبع الاختلافات.
+
+الخيارات:
+      --mode &lt;byte|resync&gt;   byte (الافتراضي): يقارن البايتات عند الإزاحات نفسها
+                             resync: يسمح بالإدراج والحذف
+      --range1 &lt;range&gt;       نطاق الملف الأول (الافتراضي: الكل)
+      --range2 &lt;range&gt;       نطاق الملف الثاني (الافتراضي: الكل)
+      --max &lt;n&gt;              أقصى عدد من الاختلافات المطبوعة (الافتراضي 1000)؛
+                             والباقي يُعدّ فقط
+      --format &lt;text|json&gt;   تنسيق المخرجات
+      --brief                يطبع سطرًا واحدًا (متطابق أو مختلف) ويتوقف عند أول اختلاف
+
+رموز الخروج: 0 متطابقان، 1 مختلفان، 3 تعذرت قراءة ملف.
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>الاستخدام: hexed run &lt;script&gt; [files...] [الخيارات]
+
+يشغّل برنامجًا نصيًا دون فتح نافذة. تُفتح الملفات بالترتيب (app.documents)؛ والأول
+هو app.activeDocument.
+
+الخيارات:
+      --arg &lt;name=value&gt;   معامل للبرنامج النصي (قابل للتكرار)؛ متاح أيضًا في script.args
+      --trust              يشغّل برنامجًا نصيًا غير موثوق دون سؤال
+      --allow &lt;perm,...&gt;   الأذونات الممنوحة (مثل file-read)
+      --save               يحفظ كل مستند تغيّر عند انتهاء البرنامج النصي
+      --save-as &lt;path&gt;     يحفظ المستند الأول في هذا المسار (لا يتغير الأصل)
+      --dry-run            لا يحفظ شيئًا؛ يطبع ملخصًا للتغييرات
+      --timeout &lt;seconds&gt;  أقصى وقت لتشغيل البرنامج النصي كله
+  -r, --readonly           يفتح الملفات للقراءة فقط
+
+افتراضيًا تُحفظ فقط المستندات التي يستدعي البرنامج النصي doc.save() لها.
+يمكن ضبط رمز خروج البرنامج النصي بـ app.exit(code). للرموز من 2 إلى 10 المعاني المدرجة
+في 'hexed --help'؛ استخدم 64 أو أكثر لمعانيك الخاصة.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>الاستخدام: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [الخيارات]
+
+يطبّق قالب بنية على ملف ويطبع النتيجة.
+
+الخيارات:
+      --template &lt;name|path&gt;  القالب المطلوب تطبيقه
+      --auto                  يختار القالب تلقائيًا (رمز الخروج 1 إذا لم يناسب أي قالب)
+  -g, --offset &lt;expr&gt;         إزاحة بداية البنية (الافتراضي 0)
+      --format &lt;f&gt;            json أو csv أو text (شجرة بمسافات بادئة؛ الافتراضي text)
+      --depth &lt;n&gt;             أقصى عمق للشجرة
+      --fields &lt;path,...&gt;     يطبع هذه الحقول فقط (مثل header.e_lfanew,sections[*].name)
+
+رموز الخروج: 4 لخطأ في القالب.
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>الاستخدام: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [الخيارات]
+
+يطبّق ملف تصحيح على ملف. أحد الخيارين -o و--in-place مطلوب. يطبّق هذا الإصدار تصحيحات IPS
+وIPS32.
+
+الخيارات:
+  -o, --output &lt;path&gt;       يكتب الملف المصحَّح هنا (لا يتغير الهدف)
+      --in-place            يستبدل الهدف بأمان (يُكتب ملف مؤقت أولًا)
+      --format &lt;f&gt;          auto (الافتراضي) أو ips أو ips32
+      --verify-before &lt;a:v&gt; يتحقق من تجزئة الهدف أولًا (مثل sha256:ab12...)؛
+                            رمز الخروج 1 ولا يُكتب شيء إذا اختلفت
+      --verify-after &lt;a:v&gt;  يتحقق من تجزئة النتيجة قبل كتابتها
+      --dry-run             يطبع عدد السجلات والبايتات المتغيرة؛ ولا يطبّق شيئًا
+
+رموز الخروج: 1 فشل التحقق، 8 التصحيح تالف.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>الاستخدام: hexed convert &lt;input&gt; &lt;output&gt; [الخيارات]
+
+يحوّل ملفًا بين تنسيقات الاستيراد/التصدير في HexEditor.
+
+الخيارات:
+      --from &lt;format&gt;       تنسيق الإدخال (الافتراضي: يُكتشف من المحتوى والامتداد)
+      --to &lt;format&gt;         تنسيق الإخراج (الافتراضي: من امتداد الإخراج؛ bin إذا كان مجهولًا)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     يقرأ ملفات Intel HEX / S-record حتى لو كان مجموع التحقق خاطئًا
+      --fill &lt;hex&gt;          البايت المستخدم للفجوات (الافتراضي FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32؛ S-record: auto, s1, s2, s3
+
+لخيارات التنسيق أسماء حقول مربعات حوار الاستيراد/التصدير، مكتوبة بأحرف
+صغيرة وشرطات، مثل --record-length 32 و--start-address 0x08000000 و
+--bytes-per-line 16 و--line-length 64 و--url-safe و--no-upper-case و--new-line lf و
+--encoding utf8.
+
+رموز الخروج: 8 لخطأ مجموع التحقق أو التنسيق في الإدخال.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>الاستخدام: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [الخيارات]
+
+يبحث في الملفات ويطبع "path  offset  length" لكل مطابقة.
+
+الخيارات:
+      --hex &lt;pattern&gt;      بايتات، مثل "DE AD ?? EF" (?? أي بايت، ? أي نصف بايت)
+      --text &lt;string&gt;      نص
+      --regex &lt;expr&gt;       تعبير نمطي (على النص)
+      --encoding &lt;name&gt;    ترميز أحرف --text و--regex (الافتراضي utf-8)
+      --case-sensitive     يميّز بين الأحرف الكبيرة والصغيرة
+      --range &lt;range&gt;      يبحث في هذا النطاق فقط من كل ملف
+      --max &lt;n&gt;            يتوقف بعد n من المطابقات
+      --format &lt;text|json&gt; تنسيق المخرجات
+  -r, --recurse            يشمل المجلدات الفرعية عند إعطاء مجلد
+
+رموز الخروج: 0 وُجد، 1 لم يُوجد، 3 تعذرت قراءة ملف.
+في PowerShell ضع القيم التي تحتوي على $ بين علامتي اقتباس مفردتين (مثل '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>أمر أو ملف غير معروف: {0}. الأوامر: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>لغة غير معروفة: {0}. استخدم إحدى علامات لغات العرض الـ 23 (مثل en وja وzh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>خيار غير معروف {0} للأمر '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>الخيار {0} لا يقبل قيمة ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>الخيار {0} يحتاج إلى قيمة ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>المسار غير موجود: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>تم رفض الوصول: {0}. تحقق من أذونات الملف أو شغّل الأمر من حساب يملك حق الوصول.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>يتعذر قراءة {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>يتعذر الكتابة في {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} مجلد وليس ملفًا.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>لا يوجد ملف يطابق {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>يتعذر قراءة {0} عند {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>لا توجد مساحة خالية كافية على {0} (المطلوب {1} بايت، المتاح {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>الملف أكبر من أن يتسع له نظام الملفات في {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>مسار الإخراج {0} هو أيضًا إدخال. اختر مسار إخراج آخر.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: يتعذر قراءة التعبير "{1}" عند الموضع {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" خارج الملف (الطول {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: يجب أن يكون "{1}" رقمًا من {2} إلى {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>--format {0} غير مدعوم في '{1}'. استخدم: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' يحتاج إلى مسار إدخال واحد على الأقل.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' يقبل مسار إدخال واحدًا فقط.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' غير متاح في هذا الإصدار.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} غير متاح في هذا الإصدار.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>البيانات لا تتسع للتنسيق {0} (الحد {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>ترميز أحرف غير معروف: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>التعبير فارغ</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>خطأ في الصياغة</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>قوس غير مغلق</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>اسم غير معروف (استخدم end لطول الملف)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>الإشارات المرجعية غير متاحة في سطر الأوامر</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>دالة غير معروفة</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>القسمة على صفر</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>القيمة كبيرة جدًا</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>ليس رقمًا صالحًا</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>يتعذر قراءة البيانات هنا</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>غير متاح في سطر الأوامر</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu يحتاج إلى خوارزمية واحدة بالضبط. استخدم --format bsd أو text لأكثر من واحدة.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>لا يمكن استخدام --range مع الإدخال القياسي.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>خوارزمية غير معروفة: {0}. شغّل 'hexed hash --algorithm list' لمعرفة المعرّفات.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>الخوارزمية {0} غير متاحة على هذا الكمبيوتر.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} لا يحتوي على أسطر مجاميع تحقق يمكن قراءتها.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>يتعذر تحديد الخوارزمية لـ {0}. حدّدها بـ --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} من مجاميع التحقق المحسوبة لم تتطابق.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>{0} من الملفات المدرجة مفقودة.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>نمط غير معروف: {0}. راجع 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' يحتاج إلى مسارين بالضبط.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>وضع غير معروف: {0}. استخدم byte أو resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>تغيّر</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>أُدرج</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>حُذف</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>غير قابل للقراءة</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... {0} من الاختلافات الأخرى غير معروضة (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} من الاختلافات، {1} بايت في المجموع</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>الملفان متطابقان.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>الملفان مختلفان (أول اختلاف عند {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>تعذرت قراءة {0} من النطاقات.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>حدد واحدًا فقط من --hex و--text و--regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>نمط البحث غير صالح ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: تم تخطي {1} من النطاقات غير القابلة للقراءة.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>الاستخدام: hexed convert &lt;input&gt; &lt;output&gt; [الخيارات]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>تصحيحات IPS تُطبَّق بـ 'hexed patch' وليس 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>قيمة غير صالحة لـ: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>تنسيق غير معروف: {0}. التنسيقات: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" غير صالح. استخدم: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} لا ينطبق على التحويل من {1} إلى {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  السطر {0}، العمود {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: خطأ في مجموع التحقق عند السطر {1}، العمود {2}. استخدم --ignore-checksum لقراءة الملف على أي حال.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: خطأ في التنسيق عند السطر {1}، العمود {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>تم تجاهل {0} من أخطاء مجموع التحقق.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>الاستخدام: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>حدد -o &lt;output&gt; أو --in-place (حتى لا يتغير الملف الأصلي بالخطأ).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>لا يمكن استخدام -o و--in-place معًا.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>مسار الإخراج {0} هو الهدف أو ملف التصحيح. استخدم --in-place لاستبدال الهدف.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ليس تنسيق تصحيح. استخدم auto أو ips أو ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: تصحيحات UPS وBPS و.hexpatch غير مدعومة في هذا الإصدار. IPS وIPS32 مدعومان.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} ليس ملف تصحيح يمكن التعرف عليه.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: التصحيح تالف عند السجل {1} (إزاحة الملف {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} ليس تصحيح {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: يجب أن تكون "{1}" بصيغة algorithm:value (مثل sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} لا يملك التجزئة المتوقعة (--verify-before). لم يُكتب شيء.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} بعد التصحيح لا يملك التجزئة المتوقعة (--verify-after). لم يُكتب شيء.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>طُبّق {0} من السجلات، وتغيّر {1} من البايتات، وتغيّر الطول بمقدار {2}. كُتب {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>التنسيق</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} من السجلات، سيتغير {1} من البايتات، تغيّر الطول {2}، الطول الجديد {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>حدد واحدًا فقط من --template و--auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>لم يتم العثور على القالب "{0}". استخدم اسم قالب قياسي (مثل pe أو png) أو مسار ملف .hxt أو .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>لا يوجد قالب يطابق {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>خطأ في القالب: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>الاستخدام: hexed run &lt;script&gt; [files...] [الخيارات]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>استخدم واحدًا فقط من --save و--save-as و--dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>لا يمكن الجمع بين --readonly و--save أو --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>يجب أن يكون --arg "{0}" بصيغة name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>يجب أن يكون --timeout "{0}" عددًا من الثواني أكبر من 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as يحتاج إلى ملف لفتحه (يُحفظ الملف الأول في المسار الجديد).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} هو الملف المفتوح. استخدم --save للكتابة فوقه.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: تغيّر {1} من البايتات (لم يُحفظ: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} فيه تغييرات غير محفوظة. لم تُحفظ (استخدم --save أو doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>لغة عرض غير معروفة: {0}. استخدم إحدى علامات لغات العرض الـ 23 (مثل ar وja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>لغة محلية زائفة غير معروفة: {0}. استخدم qps-ploc أو qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>لم يتم العثور على HexEditor.exe بجوار hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>يتعذر بدء {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>خرج HexEditor برمز {0} قبل إغلاق المستندات.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>أُزيلت جميع التسجيلات.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>أُزيل: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>تعذرت الإزالة: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>قائمة النقر الأيمن في مستكشف الملفات</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>اقترانات الملفات</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>إدخال App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>إدخال PATH الخاص بـ hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>قائمة الانتقال السريع في شريط المهام</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>تسجيل الإعلامات</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>المجلد المؤقت</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>مدخلات السجل</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>تسجيلات هذا الإصدار يديرها Windows. لم يُزل شيء.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>هذه النسخة لم تسجّل شيئًا. لم يُزل شيء.</value></data>
+</root>

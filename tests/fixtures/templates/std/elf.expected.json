@@ -1,0 +1,2081 @@
+{
+  "name": "ELF 実行形式",
+  "type": "application",
+  "offset": 0,
+  "size": 64,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 64,
+      "display": "Header (14)",
+      "children": [
+        {
+          "name": "ident",
+          "path": "header.ident",
+          "type": "Ident",
+          "offset": 0,
+          "size": 16,
+          "display": "Ident (7)",
+          "children": [
+            {
+              "name": "magic",
+              "path": "header.ident.magic",
+              "type": "u8[4]",
+              "offset": 0,
+              "size": 4,
+              "value": "7F454C46",
+              "display": "7F 45 4C 46"
+            },
+            {
+              "name": "class",
+              "path": "header.ident.class",
+              "type": "Class",
+              "offset": 4,
+              "size": 1,
+              "value": 2,
+              "display": "Elf64 (0x2)"
+            },
+            {
+              "name": "data",
+              "path": "header.ident.data",
+              "type": "Data",
+              "offset": 5,
+              "size": 1,
+              "value": 1,
+              "display": "LittleEndian (0x1)"
+            },
+            {
+              "name": "version",
+              "path": "header.ident.version",
+              "type": "u8",
+              "offset": 6,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "os_abi",
+              "path": "header.ident.os_abi",
+              "type": "u8",
+              "offset": 7,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "abi_version",
+              "path": "header.ident.abi_version",
+              "type": "u8",
+              "offset": 8,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "padding",
+              "path": "header.ident.padding",
+              "type": "padding[7]",
+              "offset": 9,
+              "size": 7,
+              "display": "(padding 7 bytes)",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "header.ident.padding[0]",
+                  "type": "padding",
+                  "offset": 9,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[1]",
+                  "path": "header.ident.padding[1]",
+                  "type": "padding",
+                  "offset": 10,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[2]",
+                  "path": "header.ident.padding[2]",
+                  "type": "padding",
+                  "offset": 11,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[3]",
+                  "path": "header.ident.padding[3]",
+                  "type": "padding",
+                  "offset": 12,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[4]",
+                  "path": "header.ident.padding[4]",
+                  "type": "padding",
+                  "offset": 13,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[5]",
+                  "path": "header.ident.padding[5]",
+                  "type": "padding",
+                  "offset": 14,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                },
+                {
+                  "name": "[6]",
+                  "path": "header.ident.padding[6]",
+                  "type": "padding",
+                  "offset": 15,
+                  "size": 1,
+                  "display": "(padding 1 bytes)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "e_type",
+          "path": "header.e_type",
+          "type": "Type",
+          "offset": 16,
+          "size": 2,
+          "value": 3,
+          "display": "Dyn (0x3)"
+        },
+        {
+          "name": "e_machine",
+          "path": "header.e_machine",
+          "type": "Machine",
+          "offset": 18,
+          "size": 2,
+          "value": 62,
+          "display": "X86_64 (0x3E)"
+        },
+        {
+          "name": "e_version",
+          "path": "header.e_version",
+          "type": "u32",
+          "offset": 20,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "e_entry",
+          "path": "header.e_entry",
+          "type": "u64",
+          "offset": 24,
+          "size": 8,
+          "value": 256,
+          "display": "0x100"
+        },
+        {
+          "name": "e_phoff",
+          "path": "header.e_phoff",
+          "type": "u64",
+          "offset": 32,
+          "size": 8,
+          "value": 64,
+          "display": "0x40"
+        },
+        {
+          "name": "e_shoff",
+          "path": "header.e_shoff",
+          "type": "u64",
+          "offset": 40,
+          "size": 8,
+          "value": 640,
+          "display": "0x280"
+        },
+        {
+          "name": "e_flags",
+          "path": "header.e_flags",
+          "type": "u32",
+          "offset": 48,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "e_ehsize",
+          "path": "header.e_ehsize",
+          "type": "u16",
+          "offset": 52,
+          "size": 2,
+          "value": 64,
+          "display": "64"
+        },
+        {
+          "name": "e_phentsize",
+          "path": "header.e_phentsize",
+          "type": "u16",
+          "offset": 54,
+          "size": 2,
+          "value": 56,
+          "display": "56"
+        },
+        {
+          "name": "e_phnum",
+          "path": "header.e_phnum",
+          "type": "u16",
+          "offset": 56,
+          "size": 2,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "e_shentsize",
+          "path": "header.e_shentsize",
+          "type": "u16",
+          "offset": 58,
+          "size": 2,
+          "value": 64,
+          "display": "64"
+        },
+        {
+          "name": "e_shnum",
+          "path": "header.e_shnum",
+          "type": "u16",
+          "offset": 60,
+          "size": 2,
+          "value": 8,
+          "display": "8"
+        },
+        {
+          "name": "e_shstrndx",
+          "path": "header.e_shstrndx",
+          "type": "u16",
+          "offset": 62,
+          "size": 2,
+          "value": 7,
+          "display": "7"
+        }
+      ]
+    },
+    {
+      "name": "program_headers",
+      "path": "program_headers",
+      "type": "ProgramHeader64[3]",
+      "offset": 64,
+      "size": 168,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "program_headers[0]",
+          "type": "ProgramHeader64",
+          "offset": 64,
+          "size": 56,
+          "display": "ProgramHeader64 (8)",
+          "children": [
+            {
+              "name": "p_type",
+              "path": "program_headers[0].p_type",
+              "type": "SegmentType",
+              "offset": 64,
+              "size": 4,
+              "value": 1,
+              "display": "Load (0x1)"
+            },
+            {
+              "name": "p_flags",
+              "path": "program_headers[0].p_flags",
+              "type": "SegmentFlags",
+              "offset": 68,
+              "size": 4,
+              "value": 5,
+              "display": "X | R"
+            },
+            {
+              "name": "p_offset",
+              "path": "program_headers[0].p_offset",
+              "type": "u64",
+              "offset": 72,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_vaddr",
+              "path": "program_headers[0].p_vaddr",
+              "type": "u64",
+              "offset": 80,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_paddr",
+              "path": "program_headers[0].p_paddr",
+              "type": "u64",
+              "offset": 88,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_filesz",
+              "path": "program_headers[0].p_filesz",
+              "type": "u64",
+              "offset": 96,
+              "size": 8,
+              "value": 1152,
+              "display": "1152"
+            },
+            {
+              "name": "p_memsz",
+              "path": "program_headers[0].p_memsz",
+              "type": "u64",
+              "offset": 104,
+              "size": 8,
+              "value": 1152,
+              "display": "1152"
+            },
+            {
+              "name": "p_align",
+              "path": "program_headers[0].p_align",
+              "type": "u64",
+              "offset": 112,
+              "size": 8,
+              "value": 4096,
+              "display": "4096"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "program_headers[1]",
+          "type": "ProgramHeader64",
+          "offset": 120,
+          "size": 56,
+          "display": "ProgramHeader64 (8)",
+          "children": [
+            {
+              "name": "p_type",
+              "path": "program_headers[1].p_type",
+              "type": "SegmentType",
+              "offset": 120,
+              "size": 4,
+              "value": 2,
+              "display": "Dynamic (0x2)"
+            },
+            {
+              "name": "p_flags",
+              "path": "program_headers[1].p_flags",
+              "type": "SegmentFlags",
+              "offset": 124,
+              "size": 4,
+              "value": 6,
+              "display": "W | R"
+            },
+            {
+              "name": "p_offset",
+              "path": "program_headers[1].p_offset",
+              "type": "u64",
+              "offset": 128,
+              "size": 8,
+              "value": 352,
+              "display": "0x160"
+            },
+            {
+              "name": "p_vaddr",
+              "path": "program_headers[1].p_vaddr",
+              "type": "u64",
+              "offset": 136,
+              "size": 8,
+              "value": 352,
+              "display": "0x160"
+            },
+            {
+              "name": "p_paddr",
+              "path": "program_headers[1].p_paddr",
+              "type": "u64",
+              "offset": 144,
+              "size": 8,
+              "value": 352,
+              "display": "0x160"
+            },
+            {
+              "name": "p_filesz",
+              "path": "program_headers[1].p_filesz",
+              "type": "u64",
+              "offset": 152,
+              "size": 8,
+              "value": 96,
+              "display": "96"
+            },
+            {
+              "name": "p_memsz",
+              "path": "program_headers[1].p_memsz",
+              "type": "u64",
+              "offset": 160,
+              "size": 8,
+              "value": 96,
+              "display": "96"
+            },
+            {
+              "name": "p_align",
+              "path": "program_headers[1].p_align",
+              "type": "u64",
+              "offset": 168,
+              "size": 8,
+              "value": 8,
+              "display": "8"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "program_headers[2]",
+          "type": "ProgramHeader64",
+          "offset": 176,
+          "size": 56,
+          "display": "ProgramHeader64 (8)",
+          "children": [
+            {
+              "name": "p_type",
+              "path": "program_headers[2].p_type",
+              "type": "SegmentType",
+              "offset": 176,
+              "size": 4,
+              "value": 1685382481,
+              "display": "GnuStack (0x6474E551)"
+            },
+            {
+              "name": "p_flags",
+              "path": "program_headers[2].p_flags",
+              "type": "SegmentFlags",
+              "offset": 180,
+              "size": 4,
+              "value": 6,
+              "display": "W | R"
+            },
+            {
+              "name": "p_offset",
+              "path": "program_headers[2].p_offset",
+              "type": "u64",
+              "offset": 184,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_vaddr",
+              "path": "program_headers[2].p_vaddr",
+              "type": "u64",
+              "offset": 192,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_paddr",
+              "path": "program_headers[2].p_paddr",
+              "type": "u64",
+              "offset": 200,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "p_filesz",
+              "path": "program_headers[2].p_filesz",
+              "type": "u64",
+              "offset": 208,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "p_memsz",
+              "path": "program_headers[2].p_memsz",
+              "type": "u64",
+              "offset": 216,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "p_align",
+              "path": "program_headers[2].p_align",
+              "type": "u64",
+              "offset": 224,
+              "size": 8,
+              "value": 16,
+              "display": "16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "section_headers",
+      "path": "section_headers",
+      "type": "SectionHeader64[8]",
+      "offset": 640,
+      "size": 512,
+      "display": "[8]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "section_headers[0]",
+          "type": "SectionHeader64",
+          "offset": 640,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[0].sh_name",
+              "type": "u32",
+              "offset": 640,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[0].sh_type",
+              "type": "SectionType",
+              "offset": 644,
+              "size": 4,
+              "value": 0,
+              "display": "Null (0x0)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[0].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 648,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[0].sh_addr",
+              "type": "u64",
+              "offset": 656,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[0].sh_offset",
+              "type": "u64",
+              "offset": 664,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[0].sh_size",
+              "type": "u64",
+              "offset": 672,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[0].sh_link",
+              "type": "u32",
+              "offset": 680,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[0].sh_info",
+              "type": "u32",
+              "offset": 684,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[0].sh_addralign",
+              "type": "u64",
+              "offset": 688,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[0].sh_entsize",
+              "type": "u64",
+              "offset": 696,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[0].name",
+              "type": "string",
+              "offset": 704,
+              "size": 0,
+              "value": "",
+              "display": ""
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "section_headers[1]",
+          "type": "SectionHeader64",
+          "offset": 704,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[1].sh_name",
+              "type": "u32",
+              "offset": 704,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[1].sh_type",
+              "type": "SectionType",
+              "offset": 708,
+              "size": 4,
+              "value": 1,
+              "display": "ProgBits (0x1)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[1].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 712,
+              "size": 8,
+              "value": 6,
+              "display": "Alloc | ExecInstr"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[1].sh_addr",
+              "type": "u64",
+              "offset": 720,
+              "size": 8,
+              "value": 256,
+              "display": "0x100"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[1].sh_offset",
+              "type": "u64",
+              "offset": 728,
+              "size": 8,
+              "value": 256,
+              "display": "0x100"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[1].sh_size",
+              "type": "u64",
+              "offset": 736,
+              "size": 8,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[1].sh_link",
+              "type": "u32",
+              "offset": 744,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[1].sh_info",
+              "type": "u32",
+              "offset": 748,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[1].sh_addralign",
+              "type": "u64",
+              "offset": 752,
+              "size": 8,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[1].sh_entsize",
+              "type": "u64",
+              "offset": 760,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[1].name",
+              "type": "string",
+              "offset": 768,
+              "size": 0,
+              "value": ".text",
+              "display": ".text"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "section_headers[2]",
+          "type": "SectionHeader64",
+          "offset": 768,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[2].sh_name",
+              "type": "u32",
+              "offset": 768,
+              "size": 4,
+              "value": 7,
+              "display": "7"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[2].sh_type",
+              "type": "SectionType",
+              "offset": 772,
+              "size": 4,
+              "value": 11,
+              "display": "DynSym (0xB)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[2].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 776,
+              "size": 8,
+              "value": 2,
+              "display": "Alloc"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[2].sh_addr",
+              "type": "u64",
+              "offset": 784,
+              "size": 8,
+              "value": 304,
+              "display": "0x130"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[2].sh_offset",
+              "type": "u64",
+              "offset": 792,
+              "size": 8,
+              "value": 304,
+              "display": "0x130"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[2].sh_size",
+              "type": "u64",
+              "offset": 800,
+              "size": 8,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[2].sh_link",
+              "type": "u32",
+              "offset": 808,
+              "size": 4,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[2].sh_info",
+              "type": "u32",
+              "offset": 812,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[2].sh_addralign",
+              "type": "u64",
+              "offset": 816,
+              "size": 8,
+              "value": 8,
+              "display": "8"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[2].sh_entsize",
+              "type": "u64",
+              "offset": 824,
+              "size": 8,
+              "value": 24,
+              "display": "24"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[2].name",
+              "type": "string",
+              "offset": 832,
+              "size": 0,
+              "value": ".dynsym",
+              "display": ".dynsym"
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "section_headers[3]",
+          "type": "SectionHeader64",
+          "offset": 832,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[3].sh_name",
+              "type": "u32",
+              "offset": 832,
+              "size": 4,
+              "value": 15,
+              "display": "15"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[3].sh_type",
+              "type": "SectionType",
+              "offset": 836,
+              "size": 4,
+              "value": 3,
+              "display": "StrTab (0x3)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[3].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 840,
+              "size": 8,
+              "value": 2,
+              "display": "Alloc"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[3].sh_addr",
+              "type": "u64",
+              "offset": 848,
+              "size": 8,
+              "value": 272,
+              "display": "0x110"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[3].sh_offset",
+              "type": "u64",
+              "offset": 856,
+              "size": 8,
+              "value": 272,
+              "display": "0x110"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[3].sh_size",
+              "type": "u64",
+              "offset": 864,
+              "size": 8,
+              "value": 18,
+              "display": "18"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[3].sh_link",
+              "type": "u32",
+              "offset": 872,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[3].sh_info",
+              "type": "u32",
+              "offset": 876,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[3].sh_addralign",
+              "type": "u64",
+              "offset": 880,
+              "size": 8,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[3].sh_entsize",
+              "type": "u64",
+              "offset": 888,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[3].name",
+              "type": "string",
+              "offset": 896,
+              "size": 0,
+              "value": ".dynstr",
+              "display": ".dynstr"
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "section_headers[4]",
+          "type": "SectionHeader64",
+          "offset": 896,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[4].sh_name",
+              "type": "u32",
+              "offset": 896,
+              "size": 4,
+              "value": 23,
+              "display": "23"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[4].sh_type",
+              "type": "SectionType",
+              "offset": 900,
+              "size": 4,
+              "value": 6,
+              "display": "Dynamic (0x6)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[4].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 904,
+              "size": 8,
+              "value": 3,
+              "display": "Write | Alloc"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[4].sh_addr",
+              "type": "u64",
+              "offset": 912,
+              "size": 8,
+              "value": 352,
+              "display": "0x160"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[4].sh_offset",
+              "type": "u64",
+              "offset": 920,
+              "size": 8,
+              "value": 352,
+              "display": "0x160"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[4].sh_size",
+              "type": "u64",
+              "offset": 928,
+              "size": 8,
+              "value": 96,
+              "display": "96"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[4].sh_link",
+              "type": "u32",
+              "offset": 936,
+              "size": 4,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[4].sh_info",
+              "type": "u32",
+              "offset": 940,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[4].sh_addralign",
+              "type": "u64",
+              "offset": 944,
+              "size": 8,
+              "value": 8,
+              "display": "8"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[4].sh_entsize",
+              "type": "u64",
+              "offset": 952,
+              "size": 8,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[4].name",
+              "type": "string",
+              "offset": 960,
+              "size": 0,
+              "value": ".dynamic",
+              "display": ".dynamic"
+            }
+          ]
+        },
+        {
+          "name": "[5]",
+          "path": "section_headers[5]",
+          "type": "SectionHeader64",
+          "offset": 960,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[5].sh_name",
+              "type": "u32",
+              "offset": 960,
+              "size": 4,
+              "value": 32,
+              "display": "32"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[5].sh_type",
+              "type": "SectionType",
+              "offset": 964,
+              "size": 4,
+              "value": 2,
+              "display": "SymTab (0x2)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[5].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 968,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[5].sh_addr",
+              "type": "u64",
+              "offset": 976,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[5].sh_offset",
+              "type": "u64",
+              "offset": 984,
+              "size": 8,
+              "value": 448,
+              "display": "0x1C0"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[5].sh_size",
+              "type": "u64",
+              "offset": 992,
+              "size": 8,
+              "value": 72,
+              "display": "72"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[5].sh_link",
+              "type": "u32",
+              "offset": 1000,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[5].sh_info",
+              "type": "u32",
+              "offset": 1004,
+              "size": 4,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[5].sh_addralign",
+              "type": "u64",
+              "offset": 1008,
+              "size": 8,
+              "value": 8,
+              "display": "8"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[5].sh_entsize",
+              "type": "u64",
+              "offset": 1016,
+              "size": 8,
+              "value": 24,
+              "display": "24"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[5].name",
+              "type": "string",
+              "offset": 1024,
+              "size": 0,
+              "value": ".symtab",
+              "display": ".symtab"
+            }
+          ]
+        },
+        {
+          "name": "[6]",
+          "path": "section_headers[6]",
+          "type": "SectionHeader64",
+          "offset": 1024,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[6].sh_name",
+              "type": "u32",
+              "offset": 1024,
+              "size": 4,
+              "value": 40,
+              "display": "40"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[6].sh_type",
+              "type": "SectionType",
+              "offset": 1028,
+              "size": 4,
+              "value": 3,
+              "display": "StrTab (0x3)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[6].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 1032,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[6].sh_addr",
+              "type": "u64",
+              "offset": 1040,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[6].sh_offset",
+              "type": "u64",
+              "offset": 1048,
+              "size": 8,
+              "value": 520,
+              "display": "0x208"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[6].sh_size",
+              "type": "u64",
+              "offset": 1056,
+              "size": 8,
+              "value": 13,
+              "display": "13"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[6].sh_link",
+              "type": "u32",
+              "offset": 1064,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[6].sh_info",
+              "type": "u32",
+              "offset": 1068,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[6].sh_addralign",
+              "type": "u64",
+              "offset": 1072,
+              "size": 8,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[6].sh_entsize",
+              "type": "u64",
+              "offset": 1080,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[6].name",
+              "type": "string",
+              "offset": 1088,
+              "size": 0,
+              "value": ".strtab",
+              "display": ".strtab"
+            }
+          ]
+        },
+        {
+          "name": "[7]",
+          "path": "section_headers[7]",
+          "type": "SectionHeader64",
+          "offset": 1088,
+          "size": 64,
+          "display": "SectionHeader64 (11)",
+          "children": [
+            {
+              "name": "sh_name",
+              "path": "section_headers[7].sh_name",
+              "type": "u32",
+              "offset": 1088,
+              "size": 4,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "sh_type",
+              "path": "section_headers[7].sh_type",
+              "type": "SectionType",
+              "offset": 1092,
+              "size": 4,
+              "value": 3,
+              "display": "StrTab (0x3)"
+            },
+            {
+              "name": "sh_flags",
+              "path": "section_headers[7].sh_flags",
+              "type": "SectionFlags64",
+              "offset": 1096,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addr",
+              "path": "section_headers[7].sh_addr",
+              "type": "u64",
+              "offset": 1104,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "sh_offset",
+              "path": "section_headers[7].sh_offset",
+              "type": "u64",
+              "offset": 1112,
+              "size": 8,
+              "value": 544,
+              "display": "0x220"
+            },
+            {
+              "name": "sh_size",
+              "path": "section_headers[7].sh_size",
+              "type": "u64",
+              "offset": 1120,
+              "size": 8,
+              "value": 58,
+              "display": "58"
+            },
+            {
+              "name": "sh_link",
+              "path": "section_headers[7].sh_link",
+              "type": "u32",
+              "offset": 1128,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_info",
+              "path": "section_headers[7].sh_info",
+              "type": "u32",
+              "offset": 1132,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sh_addralign",
+              "path": "section_headers[7].sh_addralign",
+              "type": "u64",
+              "offset": 1136,
+              "size": 8,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "sh_entsize",
+              "path": "section_headers[7].sh_entsize",
+              "type": "u64",
+              "offset": 1144,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "section_headers[7].name",
+              "type": "string",
+              "offset": 1152,
+              "size": 0,
+              "value": ".shstrtab",
+              "display": ".shstrtab"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "symtab",
+      "path": "symtab",
+      "type": "Symbol64[3]",
+      "offset": 448,
+      "size": 72,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "symtab[0]",
+          "type": "Symbol64",
+          "offset": 448,
+          "size": 24,
+          "display": "Symbol64 (7)",
+          "children": [
+            {
+              "name": "st_name",
+              "path": "symtab[0].st_name",
+              "type": "u32",
+              "offset": 448,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_info",
+              "path": "symtab[0].st_info",
+              "type": "SymbolInfo",
+              "offset": 452,
+              "size": 1,
+              "display": "SymbolInfo (2)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "symtab[0].st_info.type",
+                  "type": "4 bit",
+                  "offset": 452,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 4,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "bind",
+                  "path": "symtab[0].st_info.bind",
+                  "type": "4 bit",
+                  "offset": 452,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "st_other",
+              "path": "symtab[0].st_other",
+              "type": "u8",
+              "offset": 453,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_shndx",
+              "path": "symtab[0].st_shndx",
+              "type": "u16",
+              "offset": 454,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_value",
+              "path": "symtab[0].st_value",
+              "type": "u64",
+              "offset": 456,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "st_size",
+              "path": "symtab[0].st_size",
+              "type": "u64",
+              "offset": 464,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "symtab[0].name",
+              "type": "string",
+              "offset": 472,
+              "size": 0,
+              "value": "",
+              "display": ""
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "symtab[1]",
+          "type": "Symbol64",
+          "offset": 472,
+          "size": 24,
+          "display": "Symbol64 (7)",
+          "children": [
+            {
+              "name": "st_name",
+              "path": "symtab[1].st_name",
+              "type": "u32",
+              "offset": 472,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "st_info",
+              "path": "symtab[1].st_info",
+              "type": "SymbolInfo",
+              "offset": 476,
+              "size": 1,
+              "display": "SymbolInfo (2)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "symtab[1].st_info.type",
+                  "type": "4 bit",
+                  "offset": 476,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 4,
+                  "value": 4,
+                  "display": "4 (0b100)"
+                },
+                {
+                  "name": "bind",
+                  "path": "symtab[1].st_info.bind",
+                  "type": "4 bit",
+                  "offset": 476,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "st_other",
+              "path": "symtab[1].st_other",
+              "type": "u8",
+              "offset": 477,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_shndx",
+              "path": "symtab[1].st_shndx",
+              "type": "u16",
+              "offset": 478,
+              "size": 2,
+              "value": 65521,
+              "display": "65521"
+            },
+            {
+              "name": "st_value",
+              "path": "symtab[1].st_value",
+              "type": "u64",
+              "offset": 480,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "st_size",
+              "path": "symtab[1].st_size",
+              "type": "u64",
+              "offset": 488,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "symtab[1].name",
+              "type": "string",
+              "offset": 496,
+              "size": 0,
+              "value": "hx.c",
+              "display": "hx.c"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "symtab[2]",
+          "type": "Symbol64",
+          "offset": 496,
+          "size": 24,
+          "display": "Symbol64 (7)",
+          "children": [
+            {
+              "name": "st_name",
+              "path": "symtab[2].st_name",
+              "type": "u32",
+              "offset": 496,
+              "size": 4,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "st_info",
+              "path": "symtab[2].st_info",
+              "type": "SymbolInfo",
+              "offset": 500,
+              "size": 1,
+              "display": "SymbolInfo (2)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "symtab[2].st_info.type",
+                  "type": "4 bit",
+                  "offset": 500,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 4,
+                  "value": 2,
+                  "display": "2 (0b10)"
+                },
+                {
+                  "name": "bind",
+                  "path": "symtab[2].st_info.bind",
+                  "type": "4 bit",
+                  "offset": 500,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                }
+              ]
+            },
+            {
+              "name": "st_other",
+              "path": "symtab[2].st_other",
+              "type": "u8",
+              "offset": 501,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_shndx",
+              "path": "symtab[2].st_shndx",
+              "type": "u16",
+              "offset": 502,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "st_value",
+              "path": "symtab[2].st_value",
+              "type": "u64",
+              "offset": 504,
+              "size": 8,
+              "value": 256,
+              "display": "0x100"
+            },
+            {
+              "name": "st_size",
+              "path": "symtab[2].st_size",
+              "type": "u64",
+              "offset": 512,
+              "size": 8,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "name",
+              "path": "symtab[2].name",
+              "type": "string",
+              "offset": 520,
+              "size": 0,
+              "value": "hx_add",
+              "display": "hx_add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dynsym",
+      "path": "dynsym",
+      "type": "Symbol64[2]",
+      "offset": 304,
+      "size": 48,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "dynsym[0]",
+          "type": "Symbol64",
+          "offset": 304,
+          "size": 24,
+          "display": "Symbol64 (7)",
+          "children": [
+            {
+              "name": "st_name",
+              "path": "dynsym[0].st_name",
+              "type": "u32",
+              "offset": 304,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_info",
+              "path": "dynsym[0].st_info",
+              "type": "SymbolInfo",
+              "offset": 308,
+              "size": 1,
+              "display": "SymbolInfo (2)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "dynsym[0].st_info.type",
+                  "type": "4 bit",
+                  "offset": 308,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 4,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "bind",
+                  "path": "dynsym[0].st_info.bind",
+                  "type": "4 bit",
+                  "offset": 308,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "st_other",
+              "path": "dynsym[0].st_other",
+              "type": "u8",
+              "offset": 309,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_shndx",
+              "path": "dynsym[0].st_shndx",
+              "type": "u16",
+              "offset": 310,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_value",
+              "path": "dynsym[0].st_value",
+              "type": "u64",
+              "offset": 312,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "st_size",
+              "path": "dynsym[0].st_size",
+              "type": "u64",
+              "offset": 320,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "name",
+              "path": "dynsym[0].name",
+              "type": "string",
+              "offset": 328,
+              "size": 0,
+              "value": "",
+              "display": ""
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "dynsym[1]",
+          "type": "Symbol64",
+          "offset": 328,
+          "size": 24,
+          "display": "Symbol64 (7)",
+          "children": [
+            {
+              "name": "st_name",
+              "path": "dynsym[1].st_name",
+              "type": "u32",
+              "offset": 328,
+              "size": 4,
+              "value": 11,
+              "display": "11"
+            },
+            {
+              "name": "st_info",
+              "path": "dynsym[1].st_info",
+              "type": "SymbolInfo",
+              "offset": 332,
+              "size": 1,
+              "display": "SymbolInfo (2)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "dynsym[1].st_info.type",
+                  "type": "4 bit",
+                  "offset": 332,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 4,
+                  "value": 2,
+                  "display": "2 (0b10)"
+                },
+                {
+                  "name": "bind",
+                  "path": "dynsym[1].st_info.bind",
+                  "type": "4 bit",
+                  "offset": 332,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                }
+              ]
+            },
+            {
+              "name": "st_other",
+              "path": "dynsym[1].st_other",
+              "type": "u8",
+              "offset": 333,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "st_shndx",
+              "path": "dynsym[1].st_shndx",
+              "type": "u16",
+              "offset": 334,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "st_value",
+              "path": "dynsym[1].st_value",
+              "type": "u64",
+              "offset": 336,
+              "size": 8,
+              "value": 256,
+              "display": "0x100"
+            },
+            {
+              "name": "st_size",
+              "path": "dynsym[1].st_size",
+              "type": "u64",
+              "offset": 344,
+              "size": 8,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "name",
+              "path": "dynsym[1].name",
+              "type": "string",
+              "offset": 352,
+              "size": 0,
+              "value": "hx_add",
+              "display": "hx_add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dynamic",
+      "path": "dynamic",
+      "type": "Dynamic64[6]",
+      "offset": 352,
+      "size": 96,
+      "display": "[6]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "dynamic[0]",
+          "type": "Dynamic64",
+          "offset": 352,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[0].d_tag",
+              "type": "u64",
+              "offset": 352,
+              "size": 8,
+              "value": 1,
+              "display": "DT_NEEDED (1)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[0].d_val",
+              "type": "u64",
+              "offset": 360,
+              "size": 8,
+              "value": 1,
+              "display": "0x1"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "dynamic[1]",
+          "type": "Dynamic64",
+          "offset": 368,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[1].d_tag",
+              "type": "u64",
+              "offset": 368,
+              "size": 8,
+              "value": 5,
+              "display": "DT_STRTAB (5)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[1].d_val",
+              "type": "u64",
+              "offset": 376,
+              "size": 8,
+              "value": 272,
+              "display": "0x110"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "dynamic[2]",
+          "type": "Dynamic64",
+          "offset": 384,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[2].d_tag",
+              "type": "u64",
+              "offset": 384,
+              "size": 8,
+              "value": 6,
+              "display": "DT_SYMTAB (6)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[2].d_val",
+              "type": "u64",
+              "offset": 392,
+              "size": 8,
+              "value": 304,
+              "display": "0x130"
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "dynamic[3]",
+          "type": "Dynamic64",
+          "offset": 400,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[3].d_tag",
+              "type": "u64",
+              "offset": 400,
+              "size": 8,
+              "value": 10,
+              "display": "DT_STRSZ (10)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[3].d_val",
+              "type": "u64",
+              "offset": 408,
+              "size": 8,
+              "value": 20,
+              "display": "0x14"
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "dynamic[4]",
+          "type": "Dynamic64",
+          "offset": 416,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[4].d_tag",
+              "type": "u64",
+              "offset": 416,
+              "size": 8,
+              "value": 11,
+              "display": "DT_SYMENT (11)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[4].d_val",
+              "type": "u64",
+              "offset": 424,
+              "size": 8,
+              "value": 24,
+              "display": "0x18"
+            }
+          ]
+        },
+        {
+          "name": "[5]",
+          "path": "dynamic[5]",
+          "type": "Dynamic64",
+          "offset": 432,
+          "size": 16,
+          "display": "Dynamic64 (2)",
+          "children": [
+            {
+              "name": "d_tag",
+              "path": "dynamic[5].d_tag",
+              "type": "u64",
+              "offset": 432,
+              "size": 8,
+              "value": 0,
+              "display": "DT_NULL (0)"
+            },
+            {
+              "name": "d_val",
+              "path": "dynamic[5].d_val",
+              "type": "u64",
+              "offset": 440,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

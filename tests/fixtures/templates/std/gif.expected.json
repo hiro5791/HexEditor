@@ -1,0 +1,791 @@
+{
+  "name": "GIF 画像",
+  "type": "application",
+  "offset": 0,
+  "size": 88,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 6,
+      "display": "Header (2)",
+      "children": [
+        {
+          "name": "signature",
+          "path": "header.signature",
+          "type": "char[3]",
+          "offset": 0,
+          "size": 3,
+          "value": "GIF",
+          "display": "GIF"
+        },
+        {
+          "name": "version",
+          "path": "header.version",
+          "type": "char[3]",
+          "offset": 3,
+          "size": 3,
+          "value": "89a",
+          "display": "89a"
+        }
+      ]
+    },
+    {
+      "name": "screen",
+      "path": "screen",
+      "type": "LogicalScreenDescriptor",
+      "offset": 6,
+      "size": 7,
+      "display": "LogicalScreenDescriptor (5)",
+      "children": [
+        {
+          "name": "width",
+          "path": "screen.width",
+          "type": "u16",
+          "offset": 6,
+          "size": 2,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "height",
+          "path": "screen.height",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "packed",
+          "path": "screen.packed",
+          "type": "ScreenFlags",
+          "offset": 10,
+          "size": 1,
+          "display": "ScreenFlags (4)",
+          "children": [
+            {
+              "name": "global_color_table",
+              "path": "screen.packed.global_color_table",
+              "type": "1 bit",
+              "offset": 10,
+              "size": 1,
+              "bit_offset": 7,
+              "bit_size": 1,
+              "value": 1,
+              "display": "1 (0b1)"
+            },
+            {
+              "name": "color_resolution",
+              "path": "screen.packed.color_resolution",
+              "type": "3 bit",
+              "offset": 10,
+              "size": 1,
+              "bit_offset": 4,
+              "bit_size": 3,
+              "value": 7,
+              "display": "7 (0b111)"
+            },
+            {
+              "name": "sort",
+              "path": "screen.packed.sort",
+              "type": "1 bit",
+              "offset": 10,
+              "size": 1,
+              "bit_offset": 3,
+              "bit_size": 1,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "table_size",
+              "path": "screen.packed.table_size",
+              "type": "3 bit",
+              "offset": 10,
+              "size": 1,
+              "bit_offset": 0,
+              "bit_size": 3,
+              "value": 1,
+              "display": "1 (0b1)"
+            }
+          ]
+        },
+        {
+          "name": "background_color_index",
+          "path": "screen.background_color_index",
+          "type": "u8",
+          "offset": 11,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "pixel_aspect_ratio",
+          "path": "screen.pixel_aspect_ratio",
+          "type": "u8",
+          "offset": 12,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "global_color_table",
+      "path": "global_color_table",
+      "type": "rgb8[4]",
+      "offset": 13,
+      "size": 12,
+      "display": "[4]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "global_color_table[0]",
+          "type": "rgb8",
+          "offset": 13,
+          "size": 3,
+          "value": "FF0000",
+          "display": "#FF0000"
+        },
+        {
+          "name": "[1]",
+          "path": "global_color_table[1]",
+          "type": "rgb8",
+          "offset": 16,
+          "size": 3,
+          "value": "00FF00",
+          "display": "#00FF00"
+        },
+        {
+          "name": "[2]",
+          "path": "global_color_table[2]",
+          "type": "rgb8",
+          "offset": 19,
+          "size": 3,
+          "value": "0000FF",
+          "display": "#0000FF"
+        },
+        {
+          "name": "[3]",
+          "path": "global_color_table[3]",
+          "type": "rgb8",
+          "offset": 22,
+          "size": 3,
+          "value": "FFFFFF",
+          "display": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "name": "blocks",
+      "path": "blocks",
+      "type": "Block[5]",
+      "offset": 25,
+      "size": 63,
+      "display": "[5]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "blocks[0]",
+          "type": "Block",
+          "offset": 25,
+          "size": 8,
+          "display": "Block (2)",
+          "children": [
+            {
+              "name": "introducer",
+              "path": "blocks[0].introducer",
+              "type": "u8",
+              "offset": 25,
+              "size": 1,
+              "value": 33,
+              "display": "0x21"
+            },
+            {
+              "name": "extension",
+              "path": "blocks[0].extension",
+              "type": "Extension",
+              "offset": 26,
+              "size": 7,
+              "display": "Extension (2)",
+              "children": [
+                {
+                  "name": "label",
+                  "path": "blocks[0].extension.label",
+                  "type": "u8",
+                  "offset": 26,
+                  "size": 1,
+                  "value": 249,
+                  "display": "0xF9"
+                },
+                {
+                  "name": "graphic_control",
+                  "path": "blocks[0].extension.graphic_control",
+                  "type": "GraphicControl",
+                  "offset": 27,
+                  "size": 6,
+                  "display": "GraphicControl (5)",
+                  "children": [
+                    {
+                      "name": "block_size",
+                      "path": "blocks[0].extension.graphic_control.block_size",
+                      "type": "u8",
+                      "offset": 27,
+                      "size": 1,
+                      "value": 4,
+                      "display": "4"
+                    },
+                    {
+                      "name": "packed",
+                      "path": "blocks[0].extension.graphic_control.packed",
+                      "type": "GraphicControlFlags",
+                      "offset": 28,
+                      "size": 1,
+                      "display": "GraphicControlFlags (4)",
+                      "children": [
+                        {
+                          "name": "reserved",
+                          "path": "blocks[0].extension.graphic_control.packed.reserved",
+                          "type": "3 bit",
+                          "offset": 28,
+                          "size": 1,
+                          "bit_offset": 5,
+                          "bit_size": 3,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "disposal_method",
+                          "path": "blocks[0].extension.graphic_control.packed.disposal_method",
+                          "type": "3 bit",
+                          "offset": 28,
+                          "size": 1,
+                          "bit_offset": 2,
+                          "bit_size": 3,
+                          "value": 1,
+                          "display": "1 (0b1)"
+                        },
+                        {
+                          "name": "user_input",
+                          "path": "blocks[0].extension.graphic_control.packed.user_input",
+                          "type": "1 bit",
+                          "offset": 28,
+                          "size": 1,
+                          "bit_offset": 1,
+                          "bit_size": 1,
+                          "value": 0,
+                          "display": "0 (0b0)"
+                        },
+                        {
+                          "name": "transparent_color",
+                          "path": "blocks[0].extension.graphic_control.packed.transparent_color",
+                          "type": "1 bit",
+                          "offset": 28,
+                          "size": 1,
+                          "bit_offset": 0,
+                          "bit_size": 1,
+                          "value": 1,
+                          "display": "1 (0b1)"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "delay_time",
+                      "path": "blocks[0].extension.graphic_control.delay_time",
+                      "type": "u16",
+                      "offset": 29,
+                      "size": 2,
+                      "value": 10,
+                      "display": "10",
+                      "comment": "1/100 秒"
+                    },
+                    {
+                      "name": "transparent_color_index",
+                      "path": "blocks[0].extension.graphic_control.transparent_color_index",
+                      "type": "u8",
+                      "offset": 31,
+                      "size": 1,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "terminator",
+                      "path": "blocks[0].extension.graphic_control.terminator",
+                      "type": "u8",
+                      "offset": 32,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "blocks[1]",
+          "type": "Block",
+          "offset": 33,
+          "size": 17,
+          "display": "Block (2)",
+          "children": [
+            {
+              "name": "introducer",
+              "path": "blocks[1].introducer",
+              "type": "u8",
+              "offset": 33,
+              "size": 1,
+              "value": 33,
+              "display": "0x21"
+            },
+            {
+              "name": "extension",
+              "path": "blocks[1].extension",
+              "type": "Extension",
+              "offset": 34,
+              "size": 16,
+              "display": "Extension (2)",
+              "children": [
+                {
+                  "name": "label",
+                  "path": "blocks[1].extension.label",
+                  "type": "u8",
+                  "offset": 34,
+                  "size": 1,
+                  "value": 254,
+                  "display": "0xFE"
+                },
+                {
+                  "name": "blocks",
+                  "path": "blocks[1].extension.blocks",
+                  "type": "SubBlock[2]",
+                  "offset": 35,
+                  "size": 15,
+                  "display": "[2]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "blocks[1].extension.blocks[0]",
+                      "type": "SubBlock",
+                      "offset": 35,
+                      "size": 14,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[1].extension.blocks[0].size",
+                          "type": "u8",
+                          "offset": 35,
+                          "size": 1,
+                          "value": 13,
+                          "display": "13"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[1].extension.blocks[0].data",
+                          "type": "u8[13]",
+                          "offset": 36,
+                          "size": 13,
+                          "value": "486578456469746F7220474946",
+                          "display": "48 65 78 45 64 69 74 6F 72 20 47 49 46"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "blocks[1].extension.blocks[1]",
+                      "type": "SubBlock",
+                      "offset": 49,
+                      "size": 1,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[1].extension.blocks[1].size",
+                          "type": "u8",
+                          "offset": 49,
+                          "size": 1,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[1].extension.blocks[1].data",
+                          "type": "u8[0]",
+                          "offset": 50,
+                          "size": 0,
+                          "value": "",
+                          "display": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "blocks[2]",
+          "type": "Block",
+          "offset": 50,
+          "size": 19,
+          "display": "Block (2)",
+          "children": [
+            {
+              "name": "introducer",
+              "path": "blocks[2].introducer",
+              "type": "u8",
+              "offset": 50,
+              "size": 1,
+              "value": 33,
+              "display": "0x21"
+            },
+            {
+              "name": "extension",
+              "path": "blocks[2].extension",
+              "type": "Extension",
+              "offset": 51,
+              "size": 18,
+              "display": "Extension (2)",
+              "children": [
+                {
+                  "name": "label",
+                  "path": "blocks[2].extension.label",
+                  "type": "u8",
+                  "offset": 51,
+                  "size": 1,
+                  "value": 255,
+                  "display": "0xFF"
+                },
+                {
+                  "name": "blocks",
+                  "path": "blocks[2].extension.blocks",
+                  "type": "SubBlock[3]",
+                  "offset": 52,
+                  "size": 17,
+                  "display": "[3]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "blocks[2].extension.blocks[0]",
+                      "type": "SubBlock",
+                      "offset": 52,
+                      "size": 12,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[2].extension.blocks[0].size",
+                          "type": "u8",
+                          "offset": 52,
+                          "size": 1,
+                          "value": 11,
+                          "display": "11"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[2].extension.blocks[0].data",
+                          "type": "u8[11]",
+                          "offset": 53,
+                          "size": 11,
+                          "value": "4E45545343415045322E30",
+                          "display": "4E 45 54 53 43 41 50 45 32 2E 30"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "blocks[2].extension.blocks[1]",
+                      "type": "SubBlock",
+                      "offset": 64,
+                      "size": 4,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[2].extension.blocks[1].size",
+                          "type": "u8",
+                          "offset": 64,
+                          "size": 1,
+                          "value": 3,
+                          "display": "3"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[2].extension.blocks[1].data",
+                          "type": "u8[3]",
+                          "offset": 65,
+                          "size": 3,
+                          "value": "010000",
+                          "display": "01 00 00"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[2]",
+                      "path": "blocks[2].extension.blocks[2]",
+                      "type": "SubBlock",
+                      "offset": 68,
+                      "size": 1,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[2].extension.blocks[2].size",
+                          "type": "u8",
+                          "offset": 68,
+                          "size": 1,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[2].extension.blocks[2].data",
+                          "type": "u8[0]",
+                          "offset": 69,
+                          "size": 0,
+                          "value": "",
+                          "display": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "blocks[3]",
+          "type": "Block",
+          "offset": 69,
+          "size": 18,
+          "display": "Block (2)",
+          "children": [
+            {
+              "name": "introducer",
+              "path": "blocks[3].introducer",
+              "type": "u8",
+              "offset": 69,
+              "size": 1,
+              "value": 44,
+              "display": "0x2C"
+            },
+            {
+              "name": "image",
+              "path": "blocks[3].image",
+              "type": "ImageDescriptor",
+              "offset": 70,
+              "size": 17,
+              "display": "ImageDescriptor (7)",
+              "children": [
+                {
+                  "name": "left",
+                  "path": "blocks[3].image.left",
+                  "type": "u16",
+                  "offset": 70,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "top",
+                  "path": "blocks[3].image.top",
+                  "type": "u16",
+                  "offset": 72,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "width",
+                  "path": "blocks[3].image.width",
+                  "type": "u16",
+                  "offset": 74,
+                  "size": 2,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "height",
+                  "path": "blocks[3].image.height",
+                  "type": "u16",
+                  "offset": 76,
+                  "size": 2,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "packed",
+                  "path": "blocks[3].image.packed",
+                  "type": "ImageFlags",
+                  "offset": 78,
+                  "size": 1,
+                  "display": "ImageFlags (5)",
+                  "children": [
+                    {
+                      "name": "local_color_table",
+                      "path": "blocks[3].image.packed.local_color_table",
+                      "type": "1 bit",
+                      "offset": 78,
+                      "size": 1,
+                      "bit_offset": 7,
+                      "bit_size": 1,
+                      "value": 0,
+                      "display": "0 (0b0)"
+                    },
+                    {
+                      "name": "interlace",
+                      "path": "blocks[3].image.packed.interlace",
+                      "type": "1 bit",
+                      "offset": 78,
+                      "size": 1,
+                      "bit_offset": 6,
+                      "bit_size": 1,
+                      "value": 0,
+                      "display": "0 (0b0)"
+                    },
+                    {
+                      "name": "sort",
+                      "path": "blocks[3].image.packed.sort",
+                      "type": "1 bit",
+                      "offset": 78,
+                      "size": 1,
+                      "bit_offset": 5,
+                      "bit_size": 1,
+                      "value": 0,
+                      "display": "0 (0b0)"
+                    },
+                    {
+                      "name": "reserved",
+                      "path": "blocks[3].image.packed.reserved",
+                      "type": "2 bit",
+                      "offset": 78,
+                      "size": 1,
+                      "bit_offset": 3,
+                      "bit_size": 2,
+                      "value": 0,
+                      "display": "0 (0b0)"
+                    },
+                    {
+                      "name": "table_size",
+                      "path": "blocks[3].image.packed.table_size",
+                      "type": "3 bit",
+                      "offset": 78,
+                      "size": 1,
+                      "bit_offset": 0,
+                      "bit_size": 3,
+                      "value": 0,
+                      "display": "0 (0b0)"
+                    }
+                  ]
+                },
+                {
+                  "name": "lzw_minimum_code_size",
+                  "path": "blocks[3].image.lzw_minimum_code_size",
+                  "type": "u8",
+                  "offset": 79,
+                  "size": 1,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "data_blocks",
+                  "path": "blocks[3].image.data_blocks",
+                  "type": "SubBlock[2]",
+                  "offset": 80,
+                  "size": 7,
+                  "display": "[2]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "blocks[3].image.data_blocks[0]",
+                      "type": "SubBlock",
+                      "offset": 80,
+                      "size": 6,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[3].image.data_blocks[0].size",
+                          "type": "u8",
+                          "offset": 80,
+                          "size": 1,
+                          "value": 5,
+                          "display": "5"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[3].image.data_blocks[0].data",
+                          "type": "u8[5]",
+                          "offset": 81,
+                          "size": 5,
+                          "value": "841D817A50",
+                          "display": "84 1D 81 7A 50"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "blocks[3].image.data_blocks[1]",
+                      "type": "SubBlock",
+                      "offset": 86,
+                      "size": 1,
+                      "display": "SubBlock (2)",
+                      "children": [
+                        {
+                          "name": "size",
+                          "path": "blocks[3].image.data_blocks[1].size",
+                          "type": "u8",
+                          "offset": 86,
+                          "size": 1,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "data",
+                          "path": "blocks[3].image.data_blocks[1].data",
+                          "type": "u8[0]",
+                          "offset": 87,
+                          "size": 0,
+                          "value": "",
+                          "display": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "blocks[4]",
+          "type": "Block",
+          "offset": 87,
+          "size": 1,
+          "display": "Block (1)",
+          "children": [
+            {
+              "name": "introducer",
+              "path": "blocks[4].introducer",
+              "type": "u8",
+              "offset": 87,
+              "size": 1,
+              "value": 59,
+              "display": "0x3B"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

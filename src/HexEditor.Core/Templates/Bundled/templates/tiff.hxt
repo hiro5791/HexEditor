@@ -1,0 +1,34 @@
+// HexEditor 標準テンプレート (TPL-34): TIFF 画像
+// ライセンス: MIT。型は標準ライブラリ std.tiff (TPL-18) にある。
+// ヘッダのバイトオーダー (II / MM) でエンディアンを決め、IFD の連鎖 (最大 16 個) と、Exif などの入れ子の IFD を置く。画素のデータは読まない。
+#pragma name "TIFF image"
+#pragma name.ja "TIFF 画像"
+#pragma description "TIFF image (classic, little / big endian): header, IFD chain and nested IFDs (Exif, GPS) with tag entries."
+#pragma description.ja "TIFF 画像 (クラシック形式、リトル / ビッグエンディアン): ヘッダ、IFD の連鎖、入れ子の IFD (Exif、GPS) とタグの項目。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "49 49 2A 00"
+#pragma magic 0 "4D 4D 00 2A"
+#pragma mime "image/tiff"
+#pragma extensions "tif;tiff"
+#pragma endian little
+
+import std.tiff;
+
+std::tiff::Header header;
+
+local bool is_big = header.order == "MM";
+if (is_big) {
+    std::core::set_endian(big);
+} else {
+    std::core::set_endian(little);
+}
+
+local u64 next = header.ifd0_offset;
+local u32 n = 0;
+while (next != 0 && n < 16 && next + 2 <= std::core::size()) {
+    std::tiff::Ifd(0, is_big, 0) ifd @ next;
+    next = std::tiff::next_ifd(0, next, is_big);
+    n += 1;
+}

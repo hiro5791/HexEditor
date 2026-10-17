@@ -1,0 +1,99 @@
+// HexEditor 標準テンプレート (TPL-34): ISO 9660 のボリューム記述子
+// ライセンス: MIT。
+// システム領域 (16 セクタ) の後にあるボリューム記述子 (ブート、プライマリ、補助、パーティション、終端) を、終端まで (最大 32 個) 読む。
+// ディレクトリやファイルのデータは読まない。
+#pragma name "ISO 9660 volume descriptors"
+#pragma name.ja "ISO 9660 ボリューム記述子"
+#pragma description "ISO 9660 disc image: volume descriptor set (boot record, primary / supplementary volume descriptor with root directory record, terminator)."
+#pragma description.ja "ISO 9660 のディスクイメージ: ボリューム記述子の並び (ブートレコード、ルートディレクトリレコードを持つプライマリ / 補助ボリューム記述子、終端)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 32769 "43 44 30 30 31"
+#pragma mime "application/x-iso9660-image"
+#pragma extensions "iso"
+#pragma endian little
+
+enum DescriptorType : u8 { BootRecord = 0, Primary = 1, Supplementary = 2, VolumePartition = 3, Terminator = 255 };
+
+/// リトルエンディアンとビッグエンディアンを並べた 16 bit の値
+struct Both16 {
+    le u16 little_endian;
+    be u16 big_endian;
+};
+
+/// リトルエンディアンとビッグエンディアンを並べた 32 bit の値
+struct Both32 {
+    le u32 little_endian;
+    be u32 big_endian;
+};
+
+/// ディレクトリレコード
+struct DirectoryRecord {
+    u8     length;
+    u8     extended_attribute_length;
+    Both32 extent_location;
+    Both32 data_length;
+    u8     recording_date[7];
+    u8     file_flags [[format("hex")]];
+    u8     file_unit_size;
+    u8     interleave_gap_size;
+    Both16 volume_sequence_number;
+    u8     file_identifier_length;
+    char   file_identifier[file_identifier_length];
+};
+
+struct PrimaryVolumeDescriptor {
+    u8     unused1;
+    char   system_identifier[32];
+    char   volume_identifier[32];
+    u8     unused2[8];
+    Both32 volume_space_size [[comment("論理ブロック数")]];
+    u8     unused3[32];
+    Both16 volume_set_size;
+    Both16 volume_sequence_number;
+    Both16 logical_block_size;
+    Both32 path_table_size;
+    le u32 type_l_path_table_location;
+    le u32 optional_type_l_path_table_location;
+    be u32 type_m_path_table_location;
+    be u32 optional_type_m_path_table_location;
+    DirectoryRecord root_directory_record [[size(34)]];
+    char   volume_set_identifier[128];
+    char   publisher_identifier[128];
+    char   data_preparer_identifier[128];
+    char   application_identifier[128];
+    char   copyright_file_identifier[37];
+    char   abstract_file_identifier[37];
+    char   bibliographic_file_identifier[37];
+    char   creation_date[17];
+    char   modification_date[17];
+    char   expiration_date[17];
+    char   effective_date[17];
+    u8     file_structure_version;
+    u8     reserved1;
+    u8     application_use[512] [[lazy]];
+    u8     reserved2[653] [[lazy]];
+};
+
+struct BootRecord {
+    char boot_system_identifier[32];
+    char boot_identifier[32];
+    u8   boot_system_use[1977] [[lazy]];
+};
+
+struct VolumeDescriptor {
+    DescriptorType type [[color("accent1")]];
+    char           identifier[5] [[expect(identifier == "CD001", "CD001 ではありません")]];
+    u8             version;
+    switch (type) {
+        case DescriptorType::BootRecord: BootRecord boot_record;
+        case DescriptorType::Primary: PrimaryVolumeDescriptor primary;
+        case DescriptorType::Supplementary: PrimaryVolumeDescriptor supplementary;
+        default: u8 data[2041] [[lazy]];
+    }
+} [[size(2048)]];
+
+// システム領域 (先頭の 32 KiB) は中身を読まない
+u8 system_area[32768] [[lazy, export(false)]];
+VolumeDescriptor descriptors[until(last.type == DescriptorType::Terminator || last.identifier != "CD001" || std::eof())];

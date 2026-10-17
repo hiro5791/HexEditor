@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Скасовано.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Довідка: 'hexed --help' (або 'hexed &lt;command&gt; --help').</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Непередбачена помилка ({0}). Подробиці записано в {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Використання: hexed &lt;command&gt; [arguments] [options]
+              hexed &lt;file&gt; [options]          (те саме, що: hexed open &lt;file&gt;)
+
+Команди:
+  open      Відкрити файли, диски або процеси у вікні HexEditor
+  hash      Обчислити та перевірити хеші й контрольні суми
+  dump      Вивести Hex-дамп
+  compare   Порівняти два файли
+  run       Виконати скрипт без вікна
+  template  Застосувати шаблон структури та вивести результат
+  patch     Застосувати патч IPS до файлу
+  convert   Перетворити формати (Intel HEX, S-record, Base64, вихідний код, ...)
+  find      Шукати у файлах і виводити збіги
+
+Спільні параметри (для всіх команд):
+  -h, --help           Показати довідку (також: hexed &lt;command&gt; --help)
+      --version        Показати версію
+  -q, --quiet          Виводити лише результат
+      --format &lt;f&gt;     Формат виводу: text (за замовчуванням) або json
+  -o, --output &lt;path&gt;  Записати результат у файл замість екрана
+      --lang &lt;tag&gt;     Мова повідомлень (наприклад, en, ja)
+      --no-color       Не використовувати кольори
+      --unregister     Видалити реєстрації, зроблені на цьому комп’ютері (контекстне меню,
+                       зіставлення файлів, список переходів, PATH, тимчасова тека)
+
+Коди завершення: 0 успіх, 1 негативний результат (відмінності, немає збігів, невідповідність),
+2 помилка використання, 3 помилка вводу-виводу, 4 помилка скрипту або шаблону, 5 не дозволено,
+6 скасовано, 7 перевищено ліміт, 8 помилка формату, 10 внутрішня помилка.
+
+Зміщення, довжини та діапазони приймають вирази. Число без префікса десяткове; для
+шістнадцяткового використовуйте 0x. Діапазон: start:length або start..end (end не включається);
+'end' — довжина файлу (наприклад, end-16:16). У PowerShell значення, що містять $, беріть в
+одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Використання: hexed open [paths...] [options]
+
+Відкриває файли у вікні HexEditor. Якщо HexEditor уже запущено, файли відкриваються в ньому як
+вкладки. Відносні шляхи відраховуються від поточної теки.
+
+Параметри:
+  -g, --offset &lt;expr&gt;      Помістити курсор у цю позицію (наприклад, 0x1000 або end-16)
+      --select &lt;range&gt;     Виділити цей діапазон (start:length або start..end)
+  -r, --readonly           Відкрити лише для читання
+      --disk &lt;n|path&gt;      Відкрити фізичний диск (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Відкрити том (--volume C:)
+      --process &lt;pid|name&gt; Відкрити пам’ять процесу
+      --encoding &lt;name&gt;    Кодування текстового стовпця
+      --template &lt;name|path&gt;  Застосувати шаблон структури після відкриття
+      --compare &lt;a&gt; &lt;b&gt;    Відкрити два файли в режимі порівняння
+      --run &lt;script&gt;       Виконати скрипт після відкриття
+      --new-window         Відкрити в новому вікні
+      --new-document       Відкрити новий порожній документ
+      --open-disk          Показати діалог «Відкрити диск»
+      --new-instance       Запустити окремий процес замість використання запущеного
+  -w, --wait               Не повертатися, доки відкриті документи не буде закрито
+      --safe-mode          Запустити в безпечному режимі (лише новий процес)
+      --write-block        Запустити із захистом від запису для всього застосунку
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Показати псевдоперекладений текст (попередні збірки)
+      --plugin-dev &lt;folder&gt; Завантажити плагін у розробці (лише новий процес)
+      --ui-lang &lt;tag&gt;      Мова інтерфейсу вікна (лише новий процес)
+      --test-hooks &lt;file&gt;  Увімкнути впровадження збоїв (лише тестові збірки)
+
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Використання: hexed hash [paths...] [options]
+              hexed hash --check &lt;checksum file&gt; [options]
+
+Обчислює хеші та контрольні суми. Шляхи можуть містити шаблонні символи (*.bin) або бути
+теками; - означає читання стандартного вводу. Кілька алгоритмів обчислюються за один прохід.
+
+Параметри:
+  -a, --algorithm &lt;id,...&gt;   Ідентифікатори алгоритмів через кому (за замовчуванням sha256).
+                             '--algorithm list' виводить доступні ідентифікатори
+      --range &lt;range&gt;        Хешувати лише цей діапазон (start:length або start..end)
+      --format &lt;f&gt;           text (за замовчуванням): algorithm  value  path
+                             gnu: value  path (як у sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: один об’єкт на файл
+      --check &lt;file&gt;         Перевірити файли зі списку у файлі контрольних сум (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) і вивести OK, FAILED або MISSING
+  -r, --recurse              Включати вкладені теки, якщо вказано теку
+
+Коди завершення: 0 успіх, 1 незбіг із --check, 3 файл не вдалося прочитати.
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Використання: hexed dump &lt;path&gt; [options]
+
+Виводить Hex-дамп файлу (або діапазону) у стандартний вивід. Обсяг пам’яті не залежить від розміру.
+
+Параметри:
+      --range &lt;range&gt;        Діапазон для виводу (start:length або start..end; за замовчуванням весь файл)
+      --width &lt;n&gt;            Байтів у рядку (за замовчуванням 16)
+      --group &lt;n&gt;            Байтів у групі (за замовчуванням залежить від стилю; 0 — без груп)
+      --encoding &lt;name&gt;      Кодування текстового стовпця (за замовчуванням ascii)
+      --base-address &lt;expr&gt;  Адреса, що показується для першого байта (за замовчуванням 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              Виводити * замість рядків, що повторюють попередній (як hexdump -C)
+
+Коди завершення: 2, якщо діапазон виходить за межі файлу.
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Використання: hexed compare &lt;path1&gt; &lt;path2&gt; [options]
+
+Порівнює два файли та виводить відмінності.
+
+Параметри:
+      --mode &lt;byte|resync&gt;   byte (за замовчуванням): порівнювати байти з однаковими зміщеннями
+                             resync: допускати вставлення та видалення
+      --range1 &lt;range&gt;       Діапазон першого файлу (за замовчуванням увесь)
+      --range2 &lt;range&gt;       Діапазон другого файлу (за замовчуванням увесь)
+      --max &lt;n&gt;              Максимальна кількість відмінностей для виводу (за замовчуванням 1000);
+                             решту лише підраховують
+      --format &lt;text|json&gt;   Формат виводу
+      --brief                Вивести один рядок (однакові чи різні) і зупинитися на першій відмінності
+
+Коди завершення: 0 однакові, 1 різні, 3 файл не вдалося прочитати.
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Використання: hexed run &lt;script&gt; [files...] [options]
+
+Виконує скрипт без відкриття вікна. Файли відкриваються по черзі (app.documents); перший із них
+— app.activeDocument.
+
+Параметри:
+      --arg &lt;name=value&gt;   Параметр скрипту (можна повторювати); також доступний у script.args
+      --trust              Виконати недовірений скрипт без запиту
+      --allow &lt;perm,...&gt;   Дозволи, які слід надати (наприклад, file-read)
+      --save               Зберегти всі змінені документи після завершення скрипту
+      --save-as &lt;path&gt;     Зберегти перший документ за цим шляхом (оригінал не змінюється)
+      --dry-run            Нічого не зберігати; вивести підсумок змін
+      --timeout &lt;seconds&gt;  Максимальний час виконання всього скрипту
+  -r, --readonly           Відкрити файли лише для читання
+
+За замовчуванням зберігаються лише документи, для яких скрипт викликає doc.save().
+Код завершення скрипту можна задати викликом app.exit(code). Коди від 2 до 10 мають значення,
+наведені в 'hexed --help'; для власних значень використовуйте 64 і вище.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Використання: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [options]
+
+Застосовує шаблон структури до файлу та виводить результат.
+
+Параметри:
+      --template &lt;name|path&gt;  Шаблон, який слід застосувати
+      --auto                  Вибрати шаблон автоматично (код завершення 1, якщо жоден не підходить)
+  -g, --offset &lt;expr&gt;         Початкове зміщення структури (за замовчуванням 0)
+      --format &lt;f&gt;            json, csv або text (дерево з відступами; за замовчуванням text)
+      --depth &lt;n&gt;             Максимальна глибина дерева
+      --fields &lt;path,...&gt;     Виводити лише ці поля (наприклад, header.e_lfanew,sections[*].name)
+
+Коди завершення: 4 у разі помилки шаблону.
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Використання: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
+
+Застосовує файл патча до файлу. Потрібен один із параметрів -o та --in-place. У цій версії
+застосовуються патчі IPS та IPS32.
+
+Параметри:
+  -o, --output &lt;path&gt;       Записати пропатчений файл сюди (цільовий файл не змінюється)
+      --in-place            Безпечно замінити цільовий файл (спочатку записується тимчасовий файл)
+      --format &lt;f&gt;          auto (за замовчуванням), ips або ips32
+      --verify-before &lt;a:v&gt; Спочатку перевірити хеш цільового файлу (наприклад, sha256:ab12...);
+                            у разі незбігу код завершення 1 і нічого не записується
+      --verify-after &lt;a:v&gt;  Перевірити хеш результату перед записом
+      --dry-run             Вивести кількість записів і змінених байтів; нічого не застосовувати
+
+Коди завершення: 1 перевірку не пройдено, 8 патч пошкоджено.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Використання: hexed convert &lt;input&gt; &lt;output&gt; [options]
+
+Перетворює файл між форматами імпорту та експорту HexEditor.
+
+Параметри:
+      --from &lt;format&gt;       Вхідний формат (за замовчуванням визначається за вмістом і розширенням)
+      --to &lt;format&gt;         Вихідний формат (за замовчуванням за розширенням результату; bin, якщо невідоме)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Читати файли Intel HEX / S-record, навіть якщо контрольна сума хибна
+      --fill &lt;hex&gt;          Байт для пропусків (за замовчуванням FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+Параметри формату мають назви полів діалогів імпорту й експорту, записані малими
+літерами через дефіс, наприклад --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Коди завершення: 8 у разі помилки контрольної суми або формату у вхідних даних.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Використання: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [options]
+
+Шукає у файлах і виводить «path  offset  length» для кожного збігу.
+
+Параметри:
+      --hex &lt;pattern&gt;      Байти, наприклад "DE AD ?? EF" (?? — будь-який байт, ? — будь-який напівбайт)
+      --text &lt;string&gt;      Текст
+      --regex &lt;expr&gt;       Регулярний вираз (для тексту)
+      --encoding &lt;name&gt;    Кодування для --text і --regex (за замовчуванням utf-8)
+      --case-sensitive     Розрізняти регістр
+      --range &lt;range&gt;      Шукати лише в цьому діапазоні кожного файлу
+      --max &lt;n&gt;            Зупинитися після n збігів
+      --format &lt;text|json&gt; Формат виводу
+  -r, --recurse            Включати вкладені теки, якщо вказано теку
+
+Коди завершення: 0 знайдено, 1 не знайдено, 3 файл не вдалося прочитати.
+У PowerShell значення, що містять $, беріть в одинарні лапки (наприклад, '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Невідома команда або файл: {0}. Команди: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Невідома мова: {0}. Використовуйте один із 23 тегів мов інтерфейсу (наприклад, en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Невідомий параметр {0} для '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>Параметр {0} не приймає значення ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>Параметру {0} потрібне значення ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Шлях не існує: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Відмовлено в доступі: {0}. Перевірте дозволи для файлу або запустіть з облікового запису з доступом.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>Не вдалося прочитати {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>Не вдалося записати {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} — це тека, а не файл.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Немає файлів, що відповідають {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>Не вдалося прочитати {0} у позиції {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Недостатньо вільного місця на {0} (потрібно байтів: {1}, доступно: {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>Файл завеликий для файлової системи {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>Шлях виводу {0} водночас є вхідним. Виберіть інший шлях виводу.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: не вдалося розібрати вираз «{1}» у позиції {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: «{1}» виходить за межі файлу (довжина {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: «{1}» має бути числом від {2} до {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>--format {0} не підтримується командою '{1}'. Використовуйте: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>Для '{0}' потрібен щонайменше один вхідний шлях.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' приймає рівно один вхідний шлях.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' недоступно в цій версії.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} недоступно в цій версії.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Дані не вміщуються у формат {0} (ліміт {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Невідоме кодування символів: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>вираз порожній</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>синтаксична помилка</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>дужку не закрито</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>невідома назва (використовуйте end для довжини файлу)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>закладки недоступні в командному рядку</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>невідома функція</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>ділення на нуль</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>значення завелике</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>недійсне число</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>тут неможливо прочитати дані</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>недоступно в командному рядку</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>Для --format gnu потрібен рівно один алгоритм. Для кількох використовуйте --format bsd або text.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range не можна використовувати зі стандартним вводом.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Невідомий алгоритм: {0}. Ідентифікатори виводить команда 'hexed hash --algorithm list'.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>Алгоритм {0} недоступний на цьому комп’ютері.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>У {0} немає рядків із контрольними сумами, які можна прочитати.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>Не вдалося визначити алгоритм для {0}. Укажіть його параметром --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>Обчислених контрольних сум, що НЕ збіглися: {0}.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>Відсутніх файлів зі списку: {0}.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Невідомий стиль: {0}. Див. 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>Для 'compare' потрібно рівно два шляхи.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Невідомий режим: {0}. Використовуйте byte або resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>змінено</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>вставлено</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>видалено</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>нечитабельно</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... відмінностей не показано: {0} (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>Відмінностей: {0}, байтів загалом: {1}</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Файли однакові.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Файли відрізняються (перша відмінність у {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>Діапазонів, які не вдалося прочитати: {0}.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Укажіть рівно один із параметрів --hex, --text і --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>Недійсний шаблон пошуку ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: пропущено нечитабельних діапазонів: {1}.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Використання: hexed convert &lt;input&gt; &lt;output&gt; [options]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Патчі IPS застосовуються командою 'hexed patch', а не 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Недійсне значення для: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Невідомий формат: {0}. Формати: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: «{1}» недійсне. Використовуйте: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} не застосовується під час перетворення з {1} на {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  рядок {0}, стовпець {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: помилка контрольної суми в рядку {1}, стовпці {2}. Щоб усе одно прочитати файл, використайте --ignore-checksum.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: помилка формату в рядку {1}, стовпці {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>Проігноровано помилок контрольної суми: {0}.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Використання: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Укажіть -o &lt;output&gt; або --in-place (щоб вихідний файл не було змінено помилково).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o і --in-place не можна використовувати разом.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Шлях виводу {0} збігається з цільовим файлом або патчем. Щоб замінити цільовий файл, використайте --in-place.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} не є форматом патча. Використовуйте auto, ips або ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: патчі UPS, BPS і .hexpatch у цій версії не підтримуються. IPS та IPS32 підтримуються.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} не є файлом патча, який можна розпізнати.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: патч пошкоджено в записі {1} (зміщення у файлі {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} не є патчем {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: «{1}» має мати вигляд algorithm:value (наприклад, sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} не має очікуваного хеша (--verify-before). Нічого не записано.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Пропатчений {0} не має очікуваного хеша (--verify-after). Нічого не записано.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Застосовано записів: {0}, змінено байтів: {1}, зміна довжини: {2}. Записано: {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>формат</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>записів: {0}, буде змінено байтів: {1}, зміна довжини: {2}, нова довжина: {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Укажіть рівно один із параметрів --template і --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>Шаблон «{0}» не знайдено. Використовуйте назву стандартного шаблону (наприклад, pe, png) або шлях до файлу .hxt чи .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Немає шаблону, що підходить до {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Помилка шаблону: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Використання: hexed run &lt;script&gt; [files...] [options]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Використовуйте лише один із параметрів --save, --save-as і --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly не можна поєднувати з --save або --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg «{0}» має мати вигляд name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout «{0}» має бути кількістю секунд, більшою за 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>Для --save-as потрібен файл для відкриття (перший файл зберігається за новим шляхом).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} — це відкритий файл. Щоб перезаписати його, використайте --save.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: змінено байтів: {1} (не збережено: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>У {0} є незбережені зміни. Їх не збережено (використайте --save або doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Невідома мова інтерфейсу: {0}. Використовуйте один із 23 тегів мов інтерфейсу (наприклад, ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Невідома псевдолокаль: {0}. Використовуйте qps-ploc або qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>HexEditor.exe не знайдено поруч із hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>Не вдалося запустити {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor завершився з кодом {0} до закриття документів.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Усі реєстрації видалено.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Видалено: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Не вдалося видалити: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>контекстне меню провідника</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>зіставлення файлів</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>запис App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>запис PATH для hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>список переходів на панелі завдань</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>реєстрація сповіщень</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>тимчасова тека</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>записи реєстру</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Реєстраціями цієї версії керує Windows. Нічого не видалено.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Ця копія нічого не реєструвала. Нічого не видалено.</value></data>
+</root>

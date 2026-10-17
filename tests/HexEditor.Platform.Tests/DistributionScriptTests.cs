@@ -132,6 +132,7 @@ public sealed partial class DistributionScriptTests : IDisposable
                 archive.CreateEntryFromFile(UnsignedExe(), "HexEditor/HexEditor.exe");
             }
 
+            File.WriteAllText(Path.Combine(assets, $"HexEditor-{Version}-{arch}-csharp.zip"), "component");
             File.WriteAllText(Path.Combine(assets, $"HexEditor-{Version}-win-{arch}-full.nupkg"), "full");
             File.WriteAllText(Path.Combine(assets, $"releases.win-{arch}-stable.json"), "{}");
             File.WriteAllText(Path.Combine(assets, $"releases.win-{arch}-preview.json"), "{}");

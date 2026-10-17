@@ -1,0 +1,49 @@
+// HexEditor 標準テンプレート (TPL-34): PCAP (パケットキャプチャ、libpcap 形式)
+// ライセンス: MIT。
+// グローバルヘッダのマジックでエンディアンと時刻の精度 (マイクロ秒 / ナノ秒) を決め、パケットヘッダとデータをファイルの末尾まで読む。
+// パケットのデータは中身を読まない。パケットは開いたときに評価する (遅延評価)。
+#pragma name "PCAP capture"
+#pragma name.ja "PCAP パケットキャプチャ"
+#pragma description "libpcap capture file (little / big endian, microsecond / nanosecond): global header with link type and packet records."
+#pragma description.ja "libpcap のキャプチャファイル (リトル / ビッグエンディアン、マイクロ秒 / ナノ秒): リンク種別を持つグローバルヘッダとパケットのレコード。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "D4 C3 B2 A1"
+#pragma magic 0 "A1 B2 C3 D4"
+#pragma magic 0 "4D 3C B2 A1"
+#pragma magic 0 "A1 B2 3C 4D"
+#pragma mime "application/vnd.tcpdump.pcap"
+#pragma extensions "pcap;cap;dmp"
+#pragma endian little
+
+enum LinkType : u32 {
+    Null = 0, Ethernet = 1, Ax25 = 3, Ieee802_5 = 6, ArcnetBsd = 7, Slip = 8, Ppp = 9, Fddi = 10, Raw = 101, Ieee80211 = 105,
+    LinuxSll = 113, Ieee80211Radiotap = 127, LinuxSll2 = 276,
+};
+
+struct GlobalHeader {
+    u32      magic [[format("hex")]];
+    u16      version_major;
+    u16      version_minor;
+    s32      thiszone;
+    u32      sigfigs;
+    u32      snaplen;
+    LinkType network;
+};
+
+struct PacketRecord {
+    u32 timestamp_seconds;
+    u32 timestamp_fraction [[comment("マイクロ秒 (マジックがナノ秒形式ならナノ秒)")]];
+    u32 captured_length;
+    u32 original_length;
+    u8  data[captured_length] [[lazy]];
+} [[size(16 + captured_length)]];
+
+// マジックをリトルエンディアンで読んだ値が A1B2C3D4 / A1B23C4D ならリトルエンディアンのファイル、D4C3B2A1 / 4D3CB2A1 ならビッグエンディアン
+local u32 magic_value = std::mem::read_u32(0, little);
+if (magic_value == 0xD4C3B2A1 || magic_value == 0x4D3CB2A1) {
+    std::core::set_endian(big);
+}
+GlobalHeader header;
+PacketRecord packets[until(std::eof())];

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.TemplateOutputPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls"
+    AutomationProperties.AutomationId="TemplateOutputPanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        テンプレートの出力パネル (TPL-27 の仕様 4)。print の出力・警告・エラーを時刻順に並べる。各行に種類のアイコンと文字
+        (情報 / 警告 / エラー) を付ける。行をダブルクリック (または Enter) すると「ソースへ」「データへ」を選べる。エラーのコードの
+        リンクでヘルプの説明ページを開く (仕様 7)。
+    -->
+    <UserControl.Resources>
+        <DataTemplate x:Key="OutputRowTemplate" x:DataType="local:TemplateOutputRow">
+            <Grid ColumnSpacing="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                    AutomationProperties.AccessibilityView="Raw"
+                    FontSize="12"
+                    Foreground="{x:Bind IconBrush}"
+                    Glyph="{x:Bind Glyph}" />
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    Text="{x:Bind SeverityText}" />
+                <HyperlinkButton
+                    Grid.Column="2"
+                    Padding="2,0"
+                    AutomationProperties.AutomationId="TplOut_Code"
+                    Click="Code_Click"
+                    Content="{x:Bind Code}"
+                    Tag="{x:Bind}"
+                    Visibility="{x:Bind CodeVisibility}" />
+                <TextBlock
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind Text}"
+                    TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Padding="8,6,8,0"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button
+                x:Name="ClearButton"
+                x:Uid="TplOut_ClearButton"
+                AutomationProperties.AutomationId="TplOut_Clear"
+                Click="Clear_Click">
+                <FontIcon FontSize="14" Glyph="&#xE894;" />
+            </Button>
+            <TextBlock
+                x:Name="Summary"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="TplOut_Summary"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+        </StackPanel>
+        <ListView
+            x:Name="List"
+            x:Uid="TplOut_List"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="TplOut_List"
+            DoubleTapped="List_DoubleTapped"
+            ItemTemplate="{StaticResource OutputRowTemplate}"
+            KeyDown="List_KeyDown"
+            SelectionMode="Single" />
+    </Grid>
+</UserControl>

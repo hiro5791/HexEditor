@@ -60,6 +60,40 @@
             FlowDirection="LeftToRight"
             Style="{ThemeResource CaptionTextBlockStyle}"
             TextWrapping="Wrap" />
+        <!--
+            型付きブックマークと位置の式 (INSP-29): 型 (検索できるドロップダウン)、エンディアン、位置の式 (入力欄と解釈結果)。
+        -->
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                x:Name="TypeChoice"
+                HorizontalAlignment="Stretch"
+                AutomationProperties.AutomationId="Bookmark_Type"
+                IsEditable="True"
+                SelectionChanged="TypeChoice_SelectionChanged"
+                TextSubmitted="TypeChoice_TextSubmitted" />
+            <ComboBox
+                x:Name="EndianChoice"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="Bookmark_Endian"
+                SelectionChanged="EndianChoice_SelectionChanged" />
+        </Grid>
+        <TextBox
+            x:Name="ExpressionBox"
+            AutomationProperties.AutomationId="Bookmark_Expression"
+            FlowDirection="LeftToRight"
+            FontFamily="Cascadia Mono, Consolas"
+            TextChanged="ExpressionBox_TextChanged" />
+        <TextBlock
+            x:Name="ExpressionInfo"
+            AutomationProperties.AutomationId="Bookmark_ExpressionInfo"
+            AutomationProperties.LiveSetting="Polite"
+            FlowDirection="LeftToRight"
+            Style="{ThemeResource CaptionTextBlockStyle}"
+            TextWrapping="Wrap" />
         <TextBlock x:Uid="Bookmark_ColorLabel" />
         <StackPanel x:Name="ColorChoices" Orientation="Horizontal" Spacing="4" />
         <ToggleButton

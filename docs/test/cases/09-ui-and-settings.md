@@ -5167,7 +5167,7 @@
 | TD-UI-HOOK-BADSECTOR | 約 100 バイト | 読み込みエラー: TD-ZERO-1M の生成先のファイルの範囲 0x200〜0x3FF (この位置を含む) の読み込みを I/O エラーにする |
 | TD-UI-PROFILE-A11Y | 約 2 KiB | テスト用の設定フォルダ一式。`documents/` に TD-ZERO-1M の生成先のパスをキーとする付随データを置き、ブックマーク 1 件 (名前 `header`、オフセット 0x20、長さ 1) を持つ。`settings.json` は `$schemaVersion` だけ |
 | TD-UI-HEXPROJ | 約 300 バイト | `proj.hexproj` (00-overview.md 10 章のプロジェクトファイル)。ファイル本体は同じフォルダの `seq.bin` (TD-SEQ-1M をこの名前で置く) を相対パスで指し、ブックマーク 1 件 (名前 `proj-mark`、オフセット 0x40、長さ 1) を持つ |
-| TD-UI-HEXPLUGIN | 約 10 KiB | `test.hexplugin`。08 の AUTO-46 のサンプルのプラグインを元に、プラグイン ID `test`、コマンド `plugin.test.hello` (InfoBar に `Hello` と表示する) だけを登録するもの。ソースはリポジトリに置き、同じ内容になるようにビルドする |
+| TD-UI-HEXPLUGIN | 約 10 KiB | `test.hexplugin`。プラグイン ID `test`、コマンド `plugin.test.hello` (出力パネルの「プラグイン: test」に `Hello` と出す) だけを登録するもの。tests/plugins の Plugin.Generic を test.json で設定してビルドし、テストのコードが .hexplugin にまとめる |
 | TD-UI-SCRIPT-1000CMD | 約 2 KiB | JavaScript のスクリプト `register-1000.js`。`script.test0001`〜`script.test1000` の 1,000 個のコマンドを、表示名 `Test command 0001`〜`Test command 1000` で登録する (08 のスクリプトの API) |
 | TD-UI-RESW-BAD | 約 10 KiB | リソースの検査ツール用のフィクスチャ。4 つのフォルダ: `ok/` (`en` と `ja` の `Resources.resw` にキー `Sample_Title.Text` = `Title` / `タイトル` と `Sample_Count` = `{count} items` / `{count} 件`、`x:Uid="Sample_Title"` を使う XAML 1 つ、`Sample_Count` を参照するコード 1 つ)、`literal/` (`ok/` の XAML に `Text="Hello"` を加えたもの)、`placeholder/` (`ok/` の `ja` の `Sample_Count` を `件` にしたもの)、`unused/` (`ok/` の両言語にキー `Sample_Unused` を加えたもの) |
 | TD-UI-RESW-GLOSSARY | 約 2 KiB | 用語集の検査ツール用のフィクスチャ。`glossary.csv` (`UTF-8` の行。`do_not_translate` は `true`) と、`en` (`Encoding_Utf8` = `UTF-8 encoding`) と `fr` (`Encoding_Utf8` = `Encodage UTF8`) の `Resources.resw` |

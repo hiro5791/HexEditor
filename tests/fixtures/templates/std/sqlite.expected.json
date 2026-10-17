@@ -1,0 +1,422 @@
+{
+  "name": "SQLite データベース",
+  "type": "application",
+  "offset": 0,
+  "size": 110,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "DatabaseHeader",
+      "offset": 0,
+      "size": 100,
+      "display": "DatabaseHeader (24)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "char[16]",
+          "offset": 0,
+          "size": 16,
+          "value": "SQLite format 3",
+          "display": "SQLite format 3"
+        },
+        {
+          "name": "page_size",
+          "path": "header.page_size",
+          "type": "u16",
+          "offset": 16,
+          "size": 2,
+          "value": 512,
+          "display": "512",
+          "comment": "1 は 65536 バイト"
+        },
+        {
+          "name": "write_version",
+          "path": "header.write_version",
+          "type": "u8",
+          "offset": 18,
+          "size": 1,
+          "value": 1,
+          "display": "1",
+          "comment": "1: ロールバックジャーナル、2: WAL"
+        },
+        {
+          "name": "read_version",
+          "path": "header.read_version",
+          "type": "u8",
+          "offset": 19,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "reserved_space_per_page",
+          "path": "header.reserved_space_per_page",
+          "type": "u8",
+          "offset": 20,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "max_embedded_payload_fraction",
+          "path": "header.max_embedded_payload_fraction",
+          "type": "u8",
+          "offset": 21,
+          "size": 1,
+          "value": 64,
+          "display": "64"
+        },
+        {
+          "name": "min_embedded_payload_fraction",
+          "path": "header.min_embedded_payload_fraction",
+          "type": "u8",
+          "offset": 22,
+          "size": 1,
+          "value": 32,
+          "display": "32"
+        },
+        {
+          "name": "leaf_payload_fraction",
+          "path": "header.leaf_payload_fraction",
+          "type": "u8",
+          "offset": 23,
+          "size": 1,
+          "value": 32,
+          "display": "32"
+        },
+        {
+          "name": "file_change_counter",
+          "path": "header.file_change_counter",
+          "type": "u32",
+          "offset": 24,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "database_size_in_pages",
+          "path": "header.database_size_in_pages",
+          "type": "u32",
+          "offset": 28,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "first_freelist_trunk_page",
+          "path": "header.first_freelist_trunk_page",
+          "type": "u32",
+          "offset": 32,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "freelist_page_count",
+          "path": "header.freelist_page_count",
+          "type": "u32",
+          "offset": 36,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "schema_cookie",
+          "path": "header.schema_cookie",
+          "type": "u32",
+          "offset": 40,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "schema_format",
+          "path": "header.schema_format",
+          "type": "u32",
+          "offset": 44,
+          "size": 4,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "default_page_cache_size",
+          "path": "header.default_page_cache_size",
+          "type": "u32",
+          "offset": 48,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "largest_root_btree_page",
+          "path": "header.largest_root_btree_page",
+          "type": "u32",
+          "offset": 52,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "text_encoding",
+          "path": "header.text_encoding",
+          "type": "TextEncoding",
+          "offset": 56,
+          "size": 4,
+          "value": 1,
+          "display": "Utf8 (0x1)"
+        },
+        {
+          "name": "user_version",
+          "path": "header.user_version",
+          "type": "u32",
+          "offset": 60,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "incremental_vacuum_mode",
+          "path": "header.incremental_vacuum_mode",
+          "type": "u32",
+          "offset": 64,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "application_id",
+          "path": "header.application_id",
+          "type": "u32",
+          "offset": 68,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "reserved",
+          "path": "header.reserved",
+          "type": "u8[20]",
+          "offset": 72,
+          "size": 20,
+          "value": "0000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "version_valid_for",
+          "path": "header.version_valid_for",
+          "type": "u32",
+          "offset": 92,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "sqlite_version_number",
+          "path": "header.sqlite_version_number",
+          "type": "u32",
+          "offset": 96,
+          "size": 4,
+          "value": 3045000,
+          "display": "3045000"
+        },
+        {
+          "name": "actual_page_size",
+          "path": "header.actual_page_size",
+          "type": "u32",
+          "offset": 100,
+          "size": 0,
+          "value": 512,
+          "display": "512"
+        }
+      ]
+    },
+    {
+      "name": "page_header",
+      "path": "page_header",
+      "type": "PageHeader",
+      "offset": 100,
+      "size": 8,
+      "display": "PageHeader (5)",
+      "children": [
+        {
+          "name": "page_type",
+          "path": "page_header.page_type",
+          "type": "PageType",
+          "offset": 100,
+          "size": 1,
+          "value": 13,
+          "display": "LeafTable (0xD)"
+        },
+        {
+          "name": "first_freeblock",
+          "path": "page_header.first_freeblock",
+          "type": "u16",
+          "offset": 101,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "cell_count",
+          "path": "page_header.cell_count",
+          "type": "u16",
+          "offset": 103,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "cell_content_start",
+          "path": "page_header.cell_content_start",
+          "type": "u16",
+          "offset": 105,
+          "size": 2,
+          "value": 479,
+          "display": "479",
+          "comment": "0 は 65536"
+        },
+        {
+          "name": "fragmented_free_bytes",
+          "path": "page_header.fragmented_free_bytes",
+          "type": "u8",
+          "offset": 107,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "cell_pointers",
+      "path": "cell_pointers",
+      "type": "u16[1]",
+      "offset": 108,
+      "size": 2,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "cell_pointers[0]",
+          "type": "u16",
+          "offset": 108,
+          "size": 2,
+          "value": 479,
+          "display": "479"
+        }
+      ]
+    },
+    {
+      "name": "cells",
+      "path": "cells",
+      "type": "TableLeafCell",
+      "offset": 479,
+      "size": 33,
+      "display": "TableLeafCell (4)",
+      "children": [
+        {
+          "name": "payload_size",
+          "path": "cells.payload_size",
+          "type": "sqlite_varint",
+          "offset": 479,
+          "size": 1,
+          "value": 31,
+          "display": "31"
+        },
+        {
+          "name": "rowid",
+          "path": "cells.rowid",
+          "type": "sqlite_varint",
+          "offset": 480,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "record_header",
+          "path": "cells.record_header",
+          "type": "RecordHeader",
+          "offset": 481,
+          "size": 6,
+          "display": "RecordHeader (2)",
+          "children": [
+            {
+              "name": "header_size",
+              "path": "cells.record_header.header_size",
+              "type": "sqlite_varint",
+              "offset": 481,
+              "size": 1,
+              "value": 6,
+              "display": "6"
+            },
+            {
+              "name": "serial_types",
+              "path": "cells.record_header.serial_types",
+              "type": "sqlite_varint[5]",
+              "offset": 482,
+              "size": 5,
+              "display": "[5]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "cells.record_header.serial_types[0]",
+                  "type": "sqlite_varint",
+                  "offset": 482,
+                  "size": 1,
+                  "value": 23,
+                  "display": "23"
+                },
+                {
+                  "name": "[1]",
+                  "path": "cells.record_header.serial_types[1]",
+                  "type": "sqlite_varint",
+                  "offset": 483,
+                  "size": 1,
+                  "value": 15,
+                  "display": "15"
+                },
+                {
+                  "name": "[2]",
+                  "path": "cells.record_header.serial_types[2]",
+                  "type": "sqlite_varint",
+                  "offset": 484,
+                  "size": 1,
+                  "value": 15,
+                  "display": "15"
+                },
+                {
+                  "name": "[3]",
+                  "path": "cells.record_header.serial_types[3]",
+                  "type": "sqlite_varint",
+                  "offset": 485,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "[4]",
+                  "path": "cells.record_header.serial_types[4]",
+                  "type": "sqlite_varint",
+                  "offset": 486,
+                  "size": 1,
+                  "value": 47,
+                  "display": "47"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "record_body",
+          "path": "cells.record_body",
+          "type": "u8[25]",
+          "offset": 487,
+          "size": 25,
+          "value": "7461626C65747402435245415445205441424C452074286129",
+          "display": "74 61 62 6C 65 74 74 02 43 52 45 41 54 45 20 54 …"
+        }
+      ]
+    }
+  ]
+}

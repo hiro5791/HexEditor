@@ -52,6 +52,15 @@ public sealed partial class MainWindow
     private async Task ShowSelectRangeDialogAsync(DocumentViewModel doc)
     {
         EditorState editor = doc.Editor;
+        if (HexEditor.App.Commands.CommandArgs.IsScripted && HexEditor.App.Commands.CommandArgs.Get<string>("range") is { } scriptedRange)
+        {
+            // スクリプト・マクロから: ダイアログを出さずに、引数の範囲を選ぶ。
+            Sdk.ByteRange r = Core.Scripting.ScriptValues.EvaluateRange(scriptedRange, new EditorExpressionContext(editor));
+            editor.RecordJump();
+            editor.Select(r.Start, r.Length);
+            return;
+        }
+
         var model = new RangeSelectionModel(new EditorExpressionContext(editor), doc.Document.Length,
             editor.HasSelection ? (editor.SelectionStart, editor.SelectionLength) : null, editor.Cursor);
         var fields = new Dictionary<RangeField, (TextBox Box, TextBlock Result)>
@@ -177,6 +186,12 @@ public sealed partial class MainWindow
         else
         {
             editor.Select(start, length);
+            Services.Scripting.MacroHooks.SelectRange(start, length);
+        }
+
+        if (rectangle.IsChecked == true || modeAdd.IsChecked == true)
+        {
+            Services.Scripting.MacroHooks.Unrecordable(Loc.Get("Macro_Unrecordable_Selection"));
         }
 
         if (scroll.IsChecked == true)

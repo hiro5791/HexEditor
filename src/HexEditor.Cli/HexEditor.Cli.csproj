@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    コマンドライン hexed.exe (AUTO-36〜AUTO-44、PKG-03)。コンソールサブシステムの小さな実行ファイル。
+    ヘッドレスのサブコマンドは WinUI を読み込まず、HexEditor.Core と HexEditor.Platform だけで動く (AUTO-36 の仕様 1)。
+    `open` は HexEditor.exe (GUI) に処理を渡す。補助プロセス HexEditor.Elevated.exe と同じく、本体と同じフォルダに置く。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>hexed</AssemblyName>
+    <RootNamespace>HexEditor.Cli</RootNamespace>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
+    <ProjectReference Include="..\HexEditor.Platform\HexEditor.Platform.csproj" />
+  </ItemGroup>
+
+  <!-- メッセージの文字列 (言語ごとの resw。キーは Cli_ で始める)。実行時に読む。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Strings\*\Cli.resw" LogicalName="HexEditor.Cli.Strings.%(RecursiveDir)Cli.resw" />
+  </ItemGroup>
+
+  <!--
+    C# スクリプト コンポーネントの検証用の一覧 (AUTO-03 の仕様 3)。App と同じものを埋め込み、GUI で追加したコンポーネントを
+    hexed run の .csx でも使えるようにする。渡さないビルドでは埋め込まない (C# スクリプトは終了コード 3)。
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="$(HexCSharpComponentManifest)" LogicalName="HexEditor.CSharpComponent.json"
+      Condition="'$(HexCSharpComponentManifest)' != '' and Exists('$(HexCSharpComponentManifest)')" />
+  </ItemGroup>
+
+  <!-- ビルドの配布形態 (PKG-12 の仕様 2。HexEditor.exe と同じ判定を使うため)。 -->
+  <ItemGroup>
+    <AssemblyMetadata Include="HexDistro" Value="$(HexDistro)" />
+    <InternalsVisibleTo Include="HexEditor.Cli.Tests" />
+  </ItemGroup>
+
+</Project>

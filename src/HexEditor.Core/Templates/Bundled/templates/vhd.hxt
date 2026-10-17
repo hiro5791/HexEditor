@@ -1,0 +1,82 @@
+// HexEditor 標準テンプレート (TPL-34): VHD (Virtual Hard Disk) のフッターとヘッダ
+// ライセンス: MIT。
+// 末尾のフッター (512 バイト)、可変・差分ディスクなら先頭のフッターのコピーと動的ディスクヘッダ (cxsparse) を読む。
+// ブロック割り当て表 (BAT) の先頭の項目だけを置き、ディスクの内容は読まない。値はすべてビッグエンディアン。
+#pragma name "VHD virtual disk"
+#pragma name.ja "VHD 仮想ディスク"
+#pragma description "Virtual Hard Disk (VHD): footer (conectix) with geometry, disk type and unique ID, and for dynamic / differencing disks the dynamic disk header (cxsparse) and BAT."
+#pragma description.ja "仮想ハードディスク (VHD): ジオメトリ、ディスクの種類、一意の ID を持つフッター (conectix)。可変・差分ディスクでは動的ディスクヘッダ (cxsparse) と BAT。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "63 6F 6E 65 63 74 69 78"
+#pragma magic -512 "63 6F 6E 65 63 74 69 78"
+#pragma mime "application/x-vhd"
+#pragma extensions "vhd"
+#pragma endian big
+
+enum DiskType : u32 { Fixed = 2, Dynamic = 3, Differencing = 4 };
+
+struct Geometry {
+    u16 cylinders;
+    u8  heads;
+    u8  sectors_per_track;
+};
+
+struct Footer {
+    char     cookie[8] [[expect(cookie == "conectix", "conectix ではありません")]];
+    u32      features [[format("hex")]];
+    u32      file_format_version [[format("hex")]];
+    u64      data_offset [[format("hex"), comment("固定ディスクでは 0xFFFFFFFFFFFFFFFF")]];
+    u32      timestamp [[comment("2000-01-01 00:00:00 UTC からの秒数")]];
+    char     creator_application[4];
+    u32      creator_version [[format("hex")]];
+    char     creator_host_os[4];
+    u64      original_size;
+    u64      current_size;
+    Geometry disk_geometry;
+    DiskType disk_type;
+    u32      checksum [[format("hex")]];
+    u8       unique_id[16];
+    u8       saved_state;
+    u8       reserved[427] [[lazy]];
+};
+
+struct ParentLocator {
+    char platform_code[4];
+    u32  platform_data_space;
+    u32  platform_data_length;
+    u32  reserved;
+    u64  platform_data_offset [[format("hex")]];
+};
+
+struct DynamicDiskHeader {
+    char          cookie[8] [[expect(cookie == "cxsparse", "cxsparse ではありません")]];
+    u64           data_offset [[format("hex")]];
+    u64           table_offset [[format("hex"), comment("ブロック割り当て表 (BAT) の位置")]];
+    u32           header_version [[format("hex")]];
+    u32           max_table_entries;
+    u32           block_size;
+    u32           checksum [[format("hex")]];
+    u8            parent_unique_id[16];
+    u32           parent_timestamp;
+    u32           reserved;
+    u8            parent_unicode_name[512] [[lazy]];
+    ParentLocator parent_locators[8];
+    u8            reserved2[256] [[lazy]];
+};
+
+local u64 size = std::core::size();
+Footer footer @ size - 512;
+
+// 可変・差分ディスクは、先頭にフッターのコピーがあり、動的ディスクヘッダが続く
+if (footer.disk_type != DiskType::Fixed) {
+    Footer footer_copy @ 0;
+    if (footer.data_offset != 0xFFFFFFFFFFFFFFFF && footer.data_offset + 1024 <= size) {
+        DynamicDiskHeader dynamic_header @ footer.data_offset;
+        local u64 entries = std::math::min(dynamic_header.max_table_entries, 65536);
+        if (dynamic_header.table_offset + entries * 4 <= size) {
+            u32 block_allocation_table[entries] @ dynamic_header.table_offset;
+        }
+    }
+}

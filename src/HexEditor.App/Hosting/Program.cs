@@ -56,12 +56,21 @@ public static class Program
             {
                 return 0;
             }
+
+            // 5.5 セーフモード (08 の AUTO-30 の仕様 8、09 の UI-30 の仕様 4): 最初のウィンドウを出す前に Shift キーを押していれば。
+            // 既存のインスタンスに転送する起動では判定しない (転送はここより前に終わっている)。スクリプトのフックとプラグインの読み込みは
+            // どちらも CommandLine.SafeMode を見る。テスト用のビルドは実際のキーの状態を読まない (フック safeModeShift)。
+            step = "safe-mode";
+            CommandLine = SafeModeStartup.Apply(CommandLine);
         }
         catch (Exception ex)
         {
             ReportStartupError(ex, step);
             return 1;
         }
+
+        // hexed open --wait の合図 (AUTO-37): アプリが終わるときは、開いたドキュメントが残っていても待っている hexed を終わらせる。
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => WaitSignals.SignalAll();
 
         PrepareSession();
 

@@ -1,3 +1,4 @@
+using HexEditor.App.Services.Scripting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Operations;
@@ -74,6 +75,17 @@ public sealed partial class MainWindow
         }
 
         args.Handled = true;
+
+        // 未保存のスクリプトエディタ (AUTO-20)・テンプレートエディタ (TPL-31) は、保存するか尋ねる。キャンセルされたら閉じない。
+        foreach (string id in _scriptEditors.Where(e => e.Value.IsDirty).Select(e => e.Key)
+            .Concat(_templateEditors.Where(e => e.Value.IsDirty).Select(e => e.Key)).ToList())
+        {
+            if (!await ConfirmCloseCodeEditorAsync(id))
+            {
+                return;
+            }
+        }
+
         if (WindowManager.Windows.Count > 1 && !WindowManager.IsExiting)
         {
             await CloseThisWindowAsync();
@@ -120,6 +132,12 @@ public sealed partial class MainWindow
         if (pending > MaterializeConfirmBytes && !await ConfirmMaterializeAsync(pending))
         {
             return false;
+        }
+
+        // 閉じる前の自動実行 (AUTO-25)。中止はできない。
+        foreach (DocumentViewModel doc in docs.Where(Vm.Documents.Contains).ToList())
+        {
+            await ScriptWorkspace.Hooks.RunBeforeCloseAsync(ScriptingService.Environment.HostFor(doc));
         }
 
         foreach (DocumentViewModel doc in docs.Where(Vm.Documents.Contains).ToList())

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    振る舞いをフォルダの test.json で決めるテスト用のプラグイン。1 つの DLL を、マニフェストと test.json を変えて
+    TD-AUTO-PLG-SDK12・THROW・SLOW・DUP1・DUP2・10 (初期化に 200 ms) などとして使う。
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\HexEditor.Sdk\HexEditor.Sdk.csproj" Private="false" />
+  </ItemGroup>
+
+</Project>

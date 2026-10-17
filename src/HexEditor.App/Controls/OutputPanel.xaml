@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.OutputPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="OutputPanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        出力パネル (AUTO-24)。上部: 出力元の切り替え、絞り込み、クリア・すべてコピー・ファイルに保存・折り返し。下: 仮想化した行の一覧
+        (時刻、種類のアイコン、出力元、本文、エラーの位置のリンク)。等幅フォントで、左から右 (00 の 5.4)。
+    -->
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Padding="8,6,8,0" ColumnSpacing="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                x:Name="ChannelBox"
+                MinWidth="180"
+                AutomationProperties.AutomationId="Output_Channel"
+                DisplayMemberPath="Display"
+                ItemsSource="{x:Bind Vm.Channels}"
+                SelectionChanged="Channel_SelectionChanged" />
+            <TextBox
+                x:Name="FilterBox"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="Output_Filter"
+                FlowDirection="LeftToRight"
+                Text="{x:Bind Vm.Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="2">
+                <Button x:Name="ClearButton" AutomationProperties.AutomationId="Output_Clear" Click="Clear_Click">
+                    <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                </Button>
+                <Button x:Name="CopyButton" AutomationProperties.AutomationId="Output_CopyAll" Click="CopyAll_Click">
+                    <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                </Button>
+                <Button x:Name="SaveButton" AutomationProperties.AutomationId="Output_Save" Click="Save_Click">
+                    <FontIcon FontSize="14" Glyph="&#xE74E;" />
+                </Button>
+                <ToggleButton x:Name="WrapButton" AutomationProperties.AutomationId="Output_Wrap" IsChecked="{x:Bind Vm.Wrap, Mode=TwoWay}">
+                    <FontIcon FontSize="14" Glyph="&#xE8E5;" />
+                </ToggleButton>
+            </StackPanel>
+        </Grid>
+        <ListView
+            x:Name="List"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="Output_List"
+            FlowDirection="LeftToRight"
+            ItemsSource="{x:Bind Vm.Rows}"
+            SelectionMode="Extended">
+            <ListView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                    <Setter Property="MinHeight" Value="0" />
+                    <Setter Property="Padding" Value="8,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:OutputRow">
+                    <Grid
+                        AutomationProperties.AutomationId="Output_Row"
+                        AutomationProperties.Name="{x:Bind AccessibleName}"
+                        ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="92" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="Auto" MinWidth="120" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            AutomationProperties.AutomationId="Output_Time"
+                            FontFamily="Cascadia Mono, Consolas"
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind TimeText}" />
+                        <FontIcon
+                            Grid.Column="1"
+                            AutomationProperties.AutomationId="Output_Kind"
+                            AutomationProperties.Name="{x:Bind KindName}"
+                            FontSize="13"
+                            Foreground="{x:Bind Brush}"
+                            Glyph="{x:Bind Glyph}" />
+                        <TextBlock
+                            Grid.Column="2"
+                            AutomationProperties.AutomationId="Output_Channel_Text"
+                            FontFamily="Cascadia Mono, Consolas"
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind ChannelText}" />
+                        <TextBlock
+                            Grid.Column="3"
+                            AutomationProperties.AutomationId="Output_Text"
+                            FontFamily="Cascadia Mono, Consolas"
+                            FontSize="12"
+                            IsTextSelectionEnabled="False"
+                            Text="{x:Bind Text}"
+                            TextTrimming="{x:Bind Trimming}"
+                            TextWrapping="{x:Bind Wrapping}" />
+                        <HyperlinkButton
+                            Grid.Column="4"
+                            Padding="4,0"
+                            AutomationProperties.AutomationId="Output_Link"
+                            Click="Link_Click"
+                            Content="{x:Bind LinkText}"
+                            FontFamily="Cascadia Mono, Consolas"
+                            FontSize="12"
+                            Tag="{x:Bind}"
+                            Visibility="{x:Bind LinkVisibility}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

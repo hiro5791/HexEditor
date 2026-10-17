@@ -15,14 +15,14 @@ public sealed partial class MainViewModel : ObservableObject
 {
     private readonly AppWideState _app;
 
-    private readonly DocumentOptions _options;
+    private readonly DocumentOptions _baseOptions;
     private readonly string _journalDirectory;
 
     public MainViewModel(OperationCenter operations, EngineMemory memory, DocumentOptions options, string journalDirectory)
     {
         Operations = operations;
         Memory = memory;
-        _options = options;
+        _baseOptions = options;
         _journalDirectory = journalDirectory;
         _app = new AppWideState();
         Recent = new RecentFileList();
@@ -37,7 +37,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         Operations = shared.Operations;
         Memory = shared.Memory;
-        _options = shared._options;
+        _baseOptions = shared._baseOptions;
         _journalDirectory = shared._journalDirectory;
         _app = shared._app;
         Recent = shared.Recent;
@@ -75,7 +75,7 @@ public sealed partial class MainViewModel : ObservableObject
     public DocumentViewModel NewDocument(long length, byte[] fill)
     {
         string name = Loc.Format("Untitled_Name", ++_app.UntitledCount);
-        var doc = new Document(MemoryByteSource.CreateEmpty(name), _options);
+        var doc = new Document(MemoryByteSource.CreateEmpty(name), CurrentOptions);
         if (length > 0)
         {
             doc.InsertPattern(0, length, fill, Loc.Get("NewSize_Title"));
@@ -115,7 +115,7 @@ public sealed partial class MainViewModel : ObservableObject
             throw;
         }
 
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), insertAt);
         doc.SetReadOnly(reason);
         AfterOpened(vm, restorePosition);
@@ -128,7 +128,7 @@ public sealed partial class MainViewModel : ObservableObject
     /// </summary>
     public DocumentViewModel OpenTemporaryCopy(string tempPath, string displayName, int? insertAt = null)
     {
-        var doc = new Document(FileByteSource.Open(tempPath), _options);
+        var doc = new Document(FileByteSource.Open(tempPath), CurrentOptions);
         DocumentViewModel vm = Add(doc, null, displayName, insertAt);
         vm.TemporaryFile = tempPath;
         return vm;
@@ -157,7 +157,7 @@ public sealed partial class MainViewModel : ObservableObject
 
             // ずらしながらのその場保存 (ENG-24): 設定と、退避ファイルの置き場所 (追加バッファの一時ファイルと同じ場所)。
             ShiftWhenLengthChanges = ShiftWhenLengthChanges,
-            SpillDirectory = Path.Combine(_options.TempDirectory, doc.Id.ToString("N")),
+            SpillDirectory = Path.Combine(CurrentOptions.TempDirectory, doc.Id.ToString("N")),
         });
         SkipBackupOnce = false;
         if (plan.Method == SaveMethod.NoChanges)
@@ -352,11 +352,16 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
-    /// <summary>ドキュメントを作るときの設定。</summary>
-    public DocumentOptions DocumentOptions => _options;
+    /// <summary>ドキュメントを作るときの設定。ファイルのロックの方針は設定「ファイルのロック」の今の値 (ENG-15 の仕様 3)。</summary>
+    public DocumentOptions DocumentOptions => CurrentOptions;
+
+    /// <summary>設定「ファイルのロック」の今の値 (App が設定から読む。null なら起動時の値のまま)。</summary>
+    public static Func<FileLockPolicy>? LockPolicySource { get; set; }
+
+    private DocumentOptions CurrentOptions => LockPolicySource is { } policy ? _baseOptions with { LockPolicy = policy() } : _baseOptions;
 
     /// <summary>復旧用データのフォルダ (ドキュメントの一時ファイルと同じ。ENG-27 の仕様 2)。</summary>
-    public string RecoveryRoot => _options.TempDirectory;
+    public string RecoveryRoot => CurrentOptions.TempDirectory;
 
     /// <summary>復旧用データから開く (ENG-27 の仕様 6)。元のファイルが変わっていた場合は読み取り専用にする。</summary>
     public DocumentViewModel AddRestored(RestoredDocument restored)

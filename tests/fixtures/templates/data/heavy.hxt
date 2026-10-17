@@ -1,0 +1,7 @@
+// TD-TPL-HEAVY: 型 Heavy は、データ全体から存在しないバイト列を 64 回探してから u32 v を 1 つ置く
+struct Heavy {
+    for (local u32 i = 0; i < 64; i += 1) {
+        local s64 hit = std::mem::find(x"DE AD BE EF 01 02 03 04", 0, std::core::size());
+    }
+    u32 v;
+};

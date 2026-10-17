@@ -1,0 +1,207 @@
+// HexEditor 標準テンプレート (TPL-34): ZIP アーカイブ (ZIP64 を含む)
+// ライセンス: MIT。
+// 末尾の End of Central Directory (EOCD) を探し (最後の 64 KiB だけを探す)、セントラルディレクトリの各項目と、それが指すローカルファイルヘッダを置く。
+// ファイル全体は走査しない。数百万の項目があるアーカイブでも、配列は開いたときに評価する。
+#pragma name "ZIP archive"
+#pragma name.ja "ZIP アーカイブ"
+#pragma description "ZIP archive (including ZIP64): end of central directory, central directory entries and local file headers."
+#pragma description.ja "ZIP アーカイブ (ZIP64 を含む): 中央ディレクトリの終端、中央ディレクトリの各項目、ローカルファイルヘッダ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "50 4B 03 04"
+#pragma magic 0 "50 4B 05 06"
+#pragma magic 0 "50 4B 07 08"
+#pragma mime "application/zip"
+#pragma extensions "zip;jar;apk;docx;xlsx;pptx;odt;ods;odp;epub;xpi;nupkg;vsix;msix;appx;whl;kmz"
+#pragma endian little
+
+enum Method : u16 {
+    Stored = 0, Shrunk = 1, Reduced1 = 2, Reduced2 = 3, Reduced3 = 4, Reduced4 = 5, Imploded = 6, Deflate = 8, Deflate64 = 9,
+    PkwareImploding = 10, Bzip2 = 12, Lzma = 14, Cmpsc = 16, Ibm_Terse = 18, Lz77 = 19, Zstd = 93, Mp3 = 94, Xz = 95, Jpeg = 96,
+    Wavpack = 97, Ppmd = 98, AesEncryption = 99,
+};
+
+flags GeneralPurposeFlags : u16 {
+    Encrypted = 0x1, Option1 = 0x2, Option2 = 0x4, DataDescriptor = 0x8, EnhancedDeflate = 0x10, Patched = 0x20, StrongEncryption = 0x40,
+    Utf8 = 0x800, MaskHeaderValues = 0x2000,
+};
+
+/// ZIP64 拡張フィールドの値 (id 1) を探して返す。position はこの拡張フィールドの中の何番目の 8 バイトか。なければ 0。
+fn zip64_value(u64 start, u64 length, u64 position) -> u64 {
+    local u64 p = start;
+    local u64 end = start + length;
+    while (p + 4 <= end) {
+        local u64 id = std::mem::read_u16(p, little);
+        local u64 size = std::mem::read_u16(p + 2, little);
+        if (id == 1) {
+            if (4 + (position + 1) * 8 <= 4 + size) {
+                return std::mem::read_u64(p + 4 + position * 8, little);
+            }
+            return 0;
+        }
+        p += 4 + size;
+    }
+    return 0;
+}
+
+/// 末尾の EOCD の位置 (PK 05 06 の最後の出現で、コメントの長さが末尾に一致するもの。なければ -1)
+fn find_eocd() -> s64 {
+    local u64 size = std::core::size();
+    if (size < 22) {
+        return -1;
+    }
+    local u64 from = size > 65557 ? size - 65557 : 0;
+    local s64 found = -1;
+    local u64 at = from;
+    for (local u32 n = 0; n < 64; n += 1) {
+        local s64 hit = std::mem::find(x"50 4B 05 06", at, size);
+        if (hit < 0) {
+            break;
+        }
+        if (hit + 22 + std::mem::read_u16(hit + 20, little) == size) {
+            found = hit;
+        }
+        at = hit + 1;
+    }
+    return found;
+}
+
+struct ExtraField {
+    u16 id [[format("hex")]];
+    u16 size;
+    switch (id) {
+        case 0x0001: u64 values[size / 8];
+        case 0x5455: u8 extended_timestamp[size] [[comment("Extended timestamp")]];
+        default:     u8 data[size] [[lazy]];
+    }
+} [[size(4 + size)]];
+
+/// ローカルファイルヘッダ (PK 03 04)
+struct LocalFileHeader {
+    u8 signature[4] [[expect(signature == x"50 4B 03 04", "ローカルファイルヘッダのシグネチャではありません")]];
+    u16           version_needed;
+    GeneralPurposeFlags flags;
+    Method        method;
+    dostime       mod_time;
+    dosdate       mod_date;
+    u32           crc32 [[format("hex")]];
+    u32           compressed_size;
+    u32           uncompressed_size;
+    u16           file_name_length;
+    u16           extra_field_length;
+    char          file_name[file_name_length] [[encoding("utf-8")]];
+    ExtraField    extra_fields[while($ < addressof(file_name) + file_name_length + extra_field_length)];
+};
+
+/// データ記述子 (フラグの bit 3 のとき、データの後に付く。シグネチャは省略されることがある)
+struct DataDescriptor(bool zip64) {
+    u32 signature [[format("hex")]];
+    u32 crc32 [[format("hex")]];
+    if (zip64) {
+        u64 compressed_size;
+        u64 uncompressed_size;
+    } else {
+        u32 compressed_size;
+        u32 uncompressed_size;
+    }
+};
+
+/// セントラルディレクトリの項目 (PK 01 02)
+struct CentralDirectoryEntry {
+    u8 signature[4] [[expect(signature == x"50 4B 01 02", "セントラルディレクトリのシグネチャではありません")]];
+    u8            version_made_by;
+    u8            host_os;
+    u16           version_needed;
+    GeneralPurposeFlags flags;
+    Method        method;
+    dostime       mod_time;
+    dosdate       mod_date;
+    u32           crc32 [[format("hex")]];
+    u32           compressed_size;
+    u32           uncompressed_size;
+    u16           file_name_length;
+    u16           extra_field_length;
+    u16           file_comment_length;
+    u16           disk_number_start;
+    u16           internal_attributes [[format("hex")]];
+    u32           external_attributes [[format("hex")]];
+    u32           local_header_offset;
+    char          file_name[file_name_length] [[encoding("utf-8")]];
+    ExtraField    extra_fields[while($ < addressof(file_name) + file_name_length + extra_field_length)];
+    char          file_comment[file_comment_length] [[encoding("utf-8")]];
+    // ZIP64 のとき、実際の値は拡張フィールド (id 1) にある
+    local u64 extra_start = addressof(file_name) + file_name_length;
+    local u64 csize_index = uncompressed_size == 0xFFFFFFFF ? 1 : 0;
+    local u64 offset_index = csize_index + (compressed_size == 0xFFFFFFFF ? 1 : 0);
+    local u64 real_uncompressed_size = uncompressed_size == 0xFFFFFFFF ? zip64_value(extra_start, extra_field_length, 0) : uncompressed_size [[show]];
+    local u64 real_compressed_size = compressed_size == 0xFFFFFFFF ? zip64_value(extra_start, extra_field_length, csize_index) : compressed_size [[show]];
+    local u64 real_local_header_offset = local_header_offset == 0xFFFFFFFF ? zip64_value(extra_start, extra_field_length, offset_index) : local_header_offset [[show, format("hex")]];
+};
+
+/// ZIP64 の End of Central Directory ロケータ (PK 06 07)
+struct Zip64EndOfCentralDirectoryLocator {
+    u8 signature[4] [[expect(signature == x"50 4B 06 07", "ZIP64 ロケータのシグネチャではありません")]];
+    u32  disk_with_zip64_eocd;
+    u64  zip64_eocd_offset [[format("hex")]];
+    u32  total_disks;
+};
+
+/// ZIP64 の End of Central Directory レコード (PK 06 06)
+struct Zip64EndOfCentralDirectory {
+    u8 signature[4] [[expect(signature == x"50 4B 06 06", "ZIP64 EOCD のシグネチャではありません")]];
+    u64  record_size;
+    u16  version_made_by;
+    u16  version_needed;
+    u32  disk_number;
+    u32  disk_with_central_directory;
+    u64  entries_on_disk;
+    u64  total_entries;
+    u64  central_directory_size;
+    u64  central_directory_offset [[format("hex")]];
+};
+
+/// End of Central Directory (PK 05 06)
+struct EndOfCentralDirectory {
+    u8 signature[4] [[expect(signature == x"50 4B 05 06", "EOCD のシグネチャではありません")]];
+    u16  disk_number;
+    u16  disk_with_central_directory;
+    u16  entries_on_disk;
+    u16  total_entries;
+    u32  central_directory_size;
+    u32  central_directory_offset [[format("hex")]];
+    u16  comment_length;
+    char comment[comment_length] [[encoding("utf-8")]];
+};
+
+/// セントラルディレクトリの i 番目の項目が指すローカルファイル。位置は項目の local_header_offset、データの大きさは項目の値を使う。
+struct LocalFile {
+    local u64 index = std::core::array_index();
+    $ = central_directory[index].real_local_header_offset;
+    LocalFileHeader header;
+    u8 data[central_directory[index].real_compressed_size] [[lazy]];
+    if ((header.flags & GeneralPurposeFlags::DataDescriptor) != 0) {
+        DataDescriptor(central_directory[index].compressed_size == 0xFFFFFFFF) descriptor;
+    }
+};
+
+local s64 eocd_position = find_eocd();
+
+if (eocd_position < 0) {
+    // 末尾の EOCD が見つからない (壊れた、または切り詰められた ZIP)。先頭のローカルファイルヘッダだけを置く。
+    std::core::warn("EOCD が見つかりません。先頭のローカルファイルヘッダだけを表示します");
+    LocalFileHeader first_local_header @ 0;
+} else {
+    EndOfCentralDirectory eocd @ eocd_position;
+    local u64 total_entries = eocd.total_entries;
+    local u64 central_directory_offset = eocd.central_directory_offset;
+    // ZIP64: EOCD の直前にロケータがあれば、本当の値は ZIP64 EOCD にある
+    if (eocd_position >= 20 && std::mem::read_u32(eocd_position - 20, little) == 0x07064B50) {
+        Zip64EndOfCentralDirectoryLocator zip64_locator @ eocd_position - 20;
+        Zip64EndOfCentralDirectory zip64_eocd @ zip64_locator.zip64_eocd_offset;
+        total_entries = zip64_eocd.total_entries;
+        central_directory_offset = zip64_eocd.central_directory_offset;
+    }
+    CentralDirectoryEntry central_directory[total_entries] @ central_directory_offset;
+    LocalFile local_files[total_entries];
+}

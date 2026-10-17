@@ -23,6 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\HexEditor.Platform\HexEditor.Platform.csproj" />
     <ProjectReference Include="..\..\src\HexEditor.ShellExtension\HexEditor.ShellExtension.csproj" />
+    <!-- テスト用の Authenticode の署名 (08 の AUTO-35。証明書はプロセスの中だけで作る)。 -->
+    <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
   </ItemGroup>
 
 </Project>

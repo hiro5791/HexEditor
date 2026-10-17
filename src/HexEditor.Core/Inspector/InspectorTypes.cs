@@ -12,6 +12,8 @@ public enum InspectorGroup
     Text,
     DateTime,
     Other,
+
+    /// <summary>ユーザー定義型 (INSP-22): テンプレートの型とプラグインの型 (08 の AUTO-31 の IInspectorType)。パネルの最後に出す。</summary>
     User,
 }
 

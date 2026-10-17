@@ -106,6 +106,11 @@ public static class BuiltInCommands
             Condition = "documentOpen",
         },
         new("edit.selectRange", "edit") { DefaultBindings = [K("Ctrl+E", KeyScope.Editor)], Condition = "documentOpen" },
+
+        // 編集 > 削除・選択の解除 (EDIT-13、EDIT-03 の「呼び出し」)。キー (Delete・Esc) は Hex ビューが処理するので割り当てにしない
+        // (00-overview.md 8.3 の表の「Hex ビューが処理する」)。メニューには固定のキーとして表示する。
+        new("edit.delete", "edit") { FixedKey = "Delete", Condition = "documentOpen && !readOnly" },
+        new("edit.clearSelection", "edit") { FixedKey = "Escape", Condition = "documentOpen && hasSelection" },
         new("edit.insertBytes", "edit") { Condition = "documentOpen && !readOnly && canResize" },
         new("edit.insertFile", "edit") { Condition = "documentOpen && !readOnly" },
         new("edit.fill", "edit") { Condition = "documentOpen && !readOnly" },
@@ -456,8 +461,55 @@ public static class BuiltInCommands
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
 
+        // ---- 構造体テンプレート (07 の TPL-20〜TPL-35)。F12 は定義へ移動 (00-overview 8.2) ----
+        new("templates.apply", "templates") { Condition = "documentOpen" },
+        new("templates.applyHere", "templates") { Condition = "documentOpen" },
+        new("templates.followType", "templates") { Condition = "documentOpen" },
+        new("templates.applyKaitai", "templates") { Condition = "documentOpen" },
+        new("templates.rerun", "templates") { Condition = "documentOpen" },
+        new("templates.remove", "templates") { Condition = "documentOpen" },
+        new("templates.stop", "templates") { Condition = "documentOpen" },
+        new("templates.showResults", "templates"),
+        new("templates.showOutput", "templates"),
+        new("templates.editValue", "templates") { Condition = "documentOpen" },
+        new("templates.goToDefinition", "templates") { DefaultBindings = [K("F12")] },
+        new("templates.goToTarget", "templates") { Condition = "documentOpen" },
+        new("templates.copyValue", "templates") { Condition = "documentOpen" },
+        new("templates.addBookmark", "templates") { Condition = "documentOpen" },
+        new("templates.export", "templates") { Condition = "documentOpen" },
+        new("templates.toggleColoring", "templates"),
+        new("templates.findCandidates", "templates") { Condition = "documentOpen" },
+        new("templates.findValues", "templates") { Condition = "documentOpen" },
+        new("templates.new", "templates"),
+        new("templates.open", "templates"),
+        new("templates.edit", "templates"),
+        new("templates.manage", "templates"),
+        new("templates.convertKsy", "templates"),
+        new("templates.libraryReference", "templates"),
+        new("templates.tryRun", "templates"),
+        new("templates.breakOnRead", "templates") { Condition = "documentOpen" },
+        new("view.panel.templates", "view"),
+        new("view.panel.templateOutput", "view"),
+
+        // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----
+        new("codeEditor.run", "codeEditor") { DefaultBindings = [K("F5", KeyScope.CodeEditor)] },
+        new("codeEditor.stop", "codeEditor") { DefaultBindings = [K("Shift+F5", KeyScope.CodeEditor)] },
+        new("codeEditor.toggleBreakpoint", "codeEditor") { DefaultBindings = [K("F9", KeyScope.CodeEditor)] },
+        new("codeEditor.stepOver", "codeEditor") { DefaultBindings = [K("F10", KeyScope.CodeEditor)] },
+        new("codeEditor.stepInto", "codeEditor") { DefaultBindings = [K("F11", KeyScope.CodeEditor)] },
+        new("codeEditor.stepOut", "codeEditor") { DefaultBindings = [K("Shift+F11", KeyScope.CodeEditor)] },
+        new("codeEditor.runToCursor", "codeEditor"),
+        new("codeEditor.addWatch", "codeEditor"),
+        new("codeEditor.goToDefinition", "codeEditor") { DefaultBindings = [K("F12", KeyScope.CodeEditor)] },
+        new("codeEditor.findReferences", "codeEditor"),
+        new("codeEditor.format", "codeEditor"),
+        new("codeEditor.toggleComment", "codeEditor"),
+        new("codeEditor.complete", "codeEditor"),
+
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
+        // ポインタとして移動 (INSP-20 の「呼び出し」。ショートカットは既定なし)。
+        new("inspector.followPointer", "inspector") { Condition = "documentOpen" },
 
         // ---- ブックマークのグループ・変換・インポート / エクスポート、位置マネージャ、注釈、色付けルール (INSP-27〜INSP-34) ----
         new("edit.selectionToBookmarks", "edit") { Condition = "documentOpen" },
@@ -468,6 +520,8 @@ public static class BuiltInCommands
         new("view.panel.positionManager", "view"),
         new("view.panel.coloringRules", "view"),
         new("view.panel.legend", "view"),
+        // 画像表示 (VIEW-36。ショートカットは既定なし)。
+        new("view.panel.visualizer", "view"),
         new("view.annotations.toggle", "view"),
         new("view.annotations.column", "view"),
         new("view.annotations.bookmark", "view"),
@@ -492,6 +546,48 @@ public static class BuiltInCommands
         new("window.new", "window") { DefaultBindings = [K("Ctrl+Shift+N")] },
         new("window.next", "window"),
         new("window.restoreSession", "window"),
+
+        // ---- ツール: スクリプト (08 の AUTO-01、AUTO-03) ----
+        // ID は scripting.* (script.<名前> は利用者のスクリプトのコマンドに使う。09 の UI-16 の仕様 3)。
+        new("scripting.run", "scripting") { DefaultBindings = [K("F5")] },
+        new("scripting.runFile", "scripting"),
+        new("scripting.stopAll", "scripting"),
+        new("scripting.addCSharpComponent", "scripting"),
+
+        // ---- スクリプトの作成と管理 (08 の AUTO-19〜AUTO-24) ----
+        // パネル: スクリプト一覧 (AUTO-19)・出力 (AUTO-24)・コンソール (AUTO-23)。表示切り替えは view.panel.*、「表示する」は scripting.show*。
+        new("view.panel.scripts", "view"),
+        new("view.panel.output", "view"),
+        new("view.panel.console", "view"),
+        new("scripting.showList", "scripting"),
+        new("scripting.showConsole", "scripting"),
+        new("scripting.new", "scripting"),
+        new("scripting.newCSharp", "scripting"),
+        new("scripting.openSample", "scripting"),
+        new("scripting.openFolder", "scripting"),
+        new("scripting.debug", "scripting") { Condition = "scriptEditor" },
+        new("scripting.pause", "scripting") { Condition = "scriptEditor" },
+        new("scripting.clearOutput", "scripting"),
+
+        // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
+        new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
+        new("macro.playLast", "macro"),
+        new("macro.repeat", "macro"),
+
+        // ---- ツール: プラグイン (08 の AUTO-32)。プラグインが追加するコマンドは plugin.<拡張ポイントの ID> (読み込み後に登録する) ----
+        new("plugins.manage", "plugins"),
+
+        // カーソル移動 (マクロの記録・再生に使う。メニュー・パレットには出さない。08 の AUTO-27 の仕様 2)。
+        new("cursor.left", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.right", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.up", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.down", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.pageUp", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.pageDown", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.lineStart", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.lineEnd", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.fileStart", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.fileEnd", "cursor") { Hidden = true, Condition = "documentOpen" },
 
         // ---- ツール・設定 ----
         new("settings.open", "settings") { Icon = IconSettings, DefaultBindings = [K("Ctrl+OemComma")] },

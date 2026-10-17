@@ -1,0 +1,226 @@
+{
+  "name": "TGA 画像",
+  "type": "application",
+  "offset": 0,
+  "size": 98,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 18,
+      "display": "Header (12)",
+      "children": [
+        {
+          "name": "id_length",
+          "path": "header.id_length",
+          "type": "u8",
+          "offset": 0,
+          "size": 1,
+          "value": 6,
+          "display": "6"
+        },
+        {
+          "name": "color_map_type",
+          "path": "header.color_map_type",
+          "type": "u8",
+          "offset": 1,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "image_type",
+          "path": "header.image_type",
+          "type": "ImageType",
+          "offset": 2,
+          "size": 1,
+          "value": 2,
+          "display": "TrueColor (0x2)"
+        },
+        {
+          "name": "color_map_first_entry",
+          "path": "header.color_map_first_entry",
+          "type": "u16",
+          "offset": 3,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "color_map_length",
+          "path": "header.color_map_length",
+          "type": "u16",
+          "offset": 5,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "color_map_entry_size",
+          "path": "header.color_map_entry_size",
+          "type": "u8",
+          "offset": 7,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "x_origin",
+          "path": "header.x_origin",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "y_origin",
+          "path": "header.y_origin",
+          "type": "u16",
+          "offset": 10,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "width",
+          "path": "header.width",
+          "type": "u16",
+          "offset": 12,
+          "size": 2,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "height",
+          "path": "header.height",
+          "type": "u16",
+          "offset": 14,
+          "size": 2,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "pixel_depth",
+          "path": "header.pixel_depth",
+          "type": "u8",
+          "offset": 16,
+          "size": 1,
+          "value": 24,
+          "display": "24"
+        },
+        {
+          "name": "descriptor",
+          "path": "header.descriptor",
+          "type": "Descriptor",
+          "offset": 17,
+          "size": 1,
+          "display": "Descriptor (4)",
+          "children": [
+            {
+              "name": "alpha_bits",
+              "path": "header.descriptor.alpha_bits",
+              "type": "4 bit",
+              "offset": 17,
+              "size": 1,
+              "bit_offset": 0,
+              "bit_size": 4,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "right_to_left",
+              "path": "header.descriptor.right_to_left",
+              "type": "1 bit",
+              "offset": 17,
+              "size": 1,
+              "bit_offset": 4,
+              "bit_size": 1,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "top_to_bottom",
+              "path": "header.descriptor.top_to_bottom",
+              "type": "1 bit",
+              "offset": 17,
+              "size": 1,
+              "bit_offset": 5,
+              "bit_size": 1,
+              "value": 1,
+              "display": "1 (0b1)"
+            },
+            {
+              "name": "interleave",
+              "path": "header.descriptor.interleave",
+              "type": "2 bit",
+              "offset": 17,
+              "size": 1,
+              "bit_offset": 6,
+              "bit_size": 2,
+              "value": 0,
+              "display": "0 (0b0)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "image_id",
+      "path": "image_id",
+      "type": "char[6]",
+      "offset": 18,
+      "size": 6,
+      "value": "HexTGA",
+      "display": "HexTGA"
+    },
+    {
+      "name": "image_data",
+      "path": "image_data",
+      "type": "u8[48]",
+      "offset": 24,
+      "size": 48,
+      "value": "00050A0F14191E23282D32373C41464B50555A5F64696E73787D82878C91969BA0A5AAAFB4B9BEC3C8CDD2D7DCE1E6EB",
+      "display": "00 05 0A 0F 14 19 1E 23 28 2D 32 37 3C 41 46 4B …"
+    },
+    {
+      "name": "footer",
+      "path": "footer",
+      "type": "Footer",
+      "offset": 72,
+      "size": 26,
+      "display": "Footer (3)",
+      "children": [
+        {
+          "name": "extension_area_offset",
+          "path": "footer.extension_area_offset",
+          "type": "u32",
+          "offset": 72,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "developer_directory_offset",
+          "path": "footer.developer_directory_offset",
+          "type": "u32",
+          "offset": 76,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "signature",
+          "path": "footer.signature",
+          "type": "char[18]",
+          "offset": 80,
+          "size": 18,
+          "value": "TRUEVISION-XFILE.",
+          "display": "TRUEVISION-XFILE."
+        }
+      ]
+    }
+  ]
+}

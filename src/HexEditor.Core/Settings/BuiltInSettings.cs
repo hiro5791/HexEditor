@@ -39,6 +39,8 @@ public static class BuiltInSettings
 
         // ---- 外観 ----
         new("ui.theme", SettingCategories.Appearance, SettingKind.Choice, "system") { Options = ["system", "light", "dark"], Order = 10 },
+        // アクセントカラー (UI-27 の仕様 1)。system か #RRGGBB。色のリソースは最初のウィンドウを作る前に上書きするため、反映は再起動後。
+        new("ui.accentColor", SettingCategories.Appearance, SettingKind.Color, "system") { Options = ["system"], Order = 15, RequiresRestart = true },
         new("ui.backdrop", SettingCategories.Appearance, SettingKind.Choice, "mica") { Options = ["mica", "micaAlt", "none"], Order = 20 },
 
         // Hex 表示のフォントと配色 (UI-28、UI-29)。フォントと配色は一覧から選ぶ専用の区画 (App の ViewSections) で変える。
@@ -209,6 +211,11 @@ public static class BuiltInSettings
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },
         new(ExternalChangeRules.AutoReloadKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 3 },
+        // ファイルのロック (ENG-15 の仕様 3)。新しく開くファイルから使う。
+        new(Engine.FileLockSettings.Key, SettingCategories.Files, SettingKind.Choice, Engine.FileLockSettings.WhileModified)
+        {
+            Options = Engine.FileLockSettings.Options, Order = 3,
+        },
         new(BackupSettings.EnabledKey, SettingCategories.Files, SettingKind.Bool, false) { Order = 4 },
         new(BackupSettings.LocationKey, SettingCategories.Files, SettingKind.Choice, "sameFolder") { Options = ["sameFolder", "folder"], Order = 5 },
         new(BackupSettings.FolderKey, SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, Order = 6 },
@@ -266,6 +273,42 @@ public static class BuiltInSettings
             Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
         },
         new("update.skippedVersion", SettingCategories.Update, SettingKind.String, string.Empty) { Order = 40, ShowInPage = false },
+
+        // ---- 自動化: スクリプト (08 の AUTO-01、AUTO-02、AUTO-34) ----
+        // 実行時間の上限 (秒)。0 は無制限 (AUTO-02 の仕様 4)。
+        new("scripts.js.timeoutSeconds", SettingCategories.Automation, SettingKind.Int, 60) { Min = 0, Max = 86400, Order = 10, Group = "scriptsJs" },
+        new("scripts.js.memoryMB", SettingCategories.Automation, SettingKind.Int, 512) { Min = 16, Max = 4096, Order = 20, Group = "scriptsJs" },
+        new("scripts.js.recursionDepth", SettingCategories.Automation, SettingKind.Int, 1000) { Min = 100, Max = 10000, Order = 30, Group = "scriptsJs" },
+        new("scripts.maxConcurrent", SettingCategories.Automation, SettingKind.Int, 4) { Min = 1, Max = 16, Order = 40 },
+        // スクリプトの作成と管理 (AUTO-19、AUTO-21、AUTO-24)。
+        new("scripts.output.maxLines", SettingCategories.Automation, SettingKind.Int, 10_000) { Min = 100, Max = 1_000_000, Order = 50, Group = "scriptsOutput" },
+        new("scripts.output.autoShow", SettingCategories.Automation, SettingKind.Bool, true) { Order = 60, Group = "scriptsOutput" },
+        new("scripts.debug.exceptions", SettingCategories.Automation, SettingKind.Choice, "uncaught")
+        {
+            Options = ["none", "uncaught", "all"], Order = 70, Group = "scriptsEditor",
+        },
+        // スクリプト一覧に加えるフォルダ (複数。チームで共有するフォルダなど。AUTO-19 の仕様 1)。専用の区画で編集する。
+        new("scripts.folders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 80, ShowInPage = false },
+        // 組織向けの設定 (AUTO-34 の仕様 9)。設定ファイルに書く。設定画面では変更できない。
+        new("scripts.policy", SettingCategories.Automation, SettingKind.Choice, "none")
+        {
+            Options = ["none", "disabled", "signedPluginsOnly"], Order = 90, ShowInPage = false, Exportable = false,
+        },
+
+        // ---- 自動化: プラグイン (08 の AUTO-33、AUTO-35) ----
+        // 署名されたプラグインだけを読み込む (AUTO-35 の仕様 2。既定オフ)。反映は再起動後 (読み込みは起動時だけ)。
+        new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
+        // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
+        new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+        // ---- 構造体テンプレート (07 の TPL-20、TPL-23、TPL-29、TPL-30、TPL-35) ----
+        new("templates.autoApply", SettingCategories.Templates, SettingKind.Choice, "suggest") { Options = ["suggest", "always", "none"], Order = 10 },
+        new("templates.autoReevaluate", SettingCategories.Templates, SettingKind.Bool, true) { Order = 20 },
+        new("templates.coloring", SettingCategories.Templates, SettingKind.Bool, true) { Order = 30 },
+        new("templates.coloringOpacity", SettingCategories.Templates, SettingKind.Int, 35) { Min = 5, Max = 100, Order = 40 },
+        // 利用者のテンプレートのフォルダ (既定の templates/ の後に探す)・インスペクタ用テンプレート・テンプレートごとの選択は管理画面で変える。
+        new("templates.folders", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 50, ShowInPage = false },
+        new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
+        new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },

@@ -51,9 +51,9 @@ public sealed partial class MainWindow
         Tabs.TabItemTemplateSelector = new TabTemplateSelector((DataTemplate)Tabs.Resources["DocumentTabTemplate"], (DataTemplate)Tabs.Resources["ToolPageTabTemplate"]);
         Tabs.TabItemsSource = _tabItems;
         Tabs.SelectionChanged += Tabs_SelectionChangedSync;
-        Tabs.TabCloseRequested += (_, e) =>
+        Tabs.TabCloseRequested += async (_, e) =>
         {
-            if (e.Item is ToolPageTab tab)
+            if (e.Item is ToolPageTab tab && await ConfirmCloseCodeEditorAsync(tab.Id))
             {
                 CloseToolPage(tab.Id);
             }
@@ -208,7 +208,13 @@ public sealed partial class MainWindow
         flyout.Items.Clear();
         var close = new MenuFlyoutItem { Text = Loc.Format("ToolPage_Close", tab.Title) };
         AutomationProperties.SetAutomationId(close, "ToolPageClose_" + tab.Id);
-        close.Click += (_, _) => CloseToolPage(tab.Id);
+        close.Click += async (_, _) =>
+        {
+            if (await ConfirmCloseCodeEditorAsync(tab.Id))
+            {
+                CloseToolPage(tab.Id);
+            }
+        };
         flyout.Items.Add(close);
     }
 

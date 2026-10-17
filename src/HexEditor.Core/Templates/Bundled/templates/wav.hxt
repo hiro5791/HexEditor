@@ -1,0 +1,70 @@
+// HexEditor 標準テンプレート (TPL-34): WAV 音声 (RIFF)
+// ライセンス: MIT。
+// fmt、fact、data、LIST (INFO) などのチャンクを読む。音声データの中身は読まない。
+#pragma name "WAV audio"
+#pragma name.ja "WAV 音声"
+#pragma description "WAV audio (RIFF): fmt chunk (PCM, float, extensible), fact, data and LIST INFO chunks."
+#pragma description.ja "WAV 音声 (RIFF): fmt チャンク (PCM、浮動小数点、拡張)、fact、data、LIST INFO のチャンク。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic_all 0 "52 49 46 46"
+#pragma magic_all 8 "57 41 56 45"
+#pragma mime "audio/wav"
+#pragma extensions "wav;wave"
+#pragma endian little
+
+enum WaveFormat : u16 {
+    Unknown = 0x0000, Pcm = 0x0001, AdPcm = 0x0002, IeeeFloat = 0x0003, ALaw = 0x0006, MuLaw = 0x0007, ImaAdPcm = 0x0011,
+    Gsm610 = 0x0031, Mpeg = 0x0050, Mp3 = 0x0055, Extensible = 0xFFFE,
+};
+
+struct RiffHeader {
+    char riff[4] [[expect(riff == "RIFF", "RIFF ではありません")]];
+    u32  size [[comment("この欄の後ろの大きさ")]];
+    char form[4] [[expect(form == "WAVE", "WAVE ではありません")]];
+};
+
+struct Format {
+    WaveFormat format_tag;
+    u16        channels;
+    u32        samples_per_second;
+    u32        average_bytes_per_second;
+    u16        block_align;
+    u16        bits_per_sample;
+    if (parent.size >= 18) {
+        u16    extension_size;
+        if (extension_size >= 22) {
+            u16  valid_bits_per_sample;
+            u32  channel_mask [[format("hex")]];
+            guid sub_format;
+        }
+    }
+};
+
+struct InfoEntry {
+    char id[4];
+    u32  size;
+    char text[size] [[encoding("utf-8")]];
+} [[size(8 + size + (size & 1))]];
+
+struct InfoList(u32 size) {
+    char list_type[4];
+    if (list_type == "INFO") {
+        InfoEntry entries[while($ < addressof(this) + size)];
+    }
+};
+
+struct Chunk {
+    char id[4] [[color("accent1")]];
+    u32  size;
+    switch (id) {
+        case "fmt ": Format format;
+        case "fact": u32 sample_length;
+        case "LIST": InfoList(size) list;
+        default:     u8 data[size] [[lazy]];
+    }
+} [[size(8 + size + (size & 1))]];
+
+RiffHeader header;
+Chunk chunks[until(endof(last) >= 8 + header.size || std::eof())];

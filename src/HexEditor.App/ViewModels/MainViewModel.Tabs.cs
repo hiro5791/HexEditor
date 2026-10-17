@@ -161,7 +161,7 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel AddPending(SessionTab tab)
     {
-        var doc = new Document(MemoryByteSource.CreateEmpty(tab.DisplayName), _options);
+        var doc = new Document(MemoryByteSource.CreateEmpty(tab.DisplayName), CurrentOptions);
         var vm = new DocumentViewModel(doc, null, tab.DisplayName) { PendingRecord = tab, Notifications = Notifications, IsPinned = tab.Pinned };
         vm.Editor.ReadOnly = true;
 

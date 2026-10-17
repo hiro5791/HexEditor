@@ -37,6 +37,10 @@ public static class SettingsSchema
                     p["type"] = "string";
                     p["enum"] = new JsonArray([.. s.Options.Select(o => (JsonNode?)o)]);
                     break;
+                case SettingKind.Color:
+                    p["type"] = "string";
+                    p["pattern"] = "^(" + string.Concat(s.Options.Select(o => System.Text.RegularExpressions.Regex.Escape(o) + "|")) + "#[0-9A-Fa-f]{6})$";
+                    break;
                 case SettingKind.List:
                     p["type"] = "array";
                     p["items"] = new JsonObject { ["type"] = "string" };

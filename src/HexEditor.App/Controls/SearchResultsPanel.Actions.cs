@@ -254,6 +254,9 @@ public sealed partial class SearchResultsPanel
 
     // ---- 読み込めなかった範囲 (FIND-01 の「エラー」) ----
 
+    /// <summary>元の情報の更新を見出しに反映する (テンプレートの値の検索の「古い結果」。FIND-29 の仕様 5)。</summary>
+    internal void RefreshState() => UpdateHeader();
+
     /// <summary>テスト用: 再検索のボタンを出しているか (古い結果)。</summary>
     internal bool ResearchVisible => ResearchButton.Visibility == Visibility.Visible;
 

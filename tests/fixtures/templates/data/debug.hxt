@@ -1,0 +1,12 @@
+fn twice(u8 v) -> u32 {
+    return v * 2;
+}
+u8 a;
+u8 b;
+local u32 sum = a + b;
+u8 c;
+local u32 d = twice(c);
+u8 pad[13];
+u8 block[16];
+u8 more[16];
+u8 last;

@@ -38,7 +38,8 @@ public sealed partial class HashAlgorithmItem(HashAlgorithmInfo info) : Observab
     public bool IsAvailable => Info.IsAvailable;
 
     /// <summary>使えない理由 (ANA-19 の「エラー」の「この環境では利用できません」) と安全でない注記。</summary>
-    public string? ToolTip => !Info.IsAvailable ? Loc.Get("Hash_Unavailable") : Info.IsInsecure ? Loc.Get("Hash_Insecure") : null;
+    public string? ToolTip => !Info.IsAvailable ? Loc.Get("Hash_Unavailable") : Info.IsInsecure ? Loc.Get("Hash_Insecure")
+        : Info.PluginName is { } plugin ? Loc.Format("Plugin_ToolTip", plugin) : null;
 
     [ObservableProperty]
     public partial bool IsChecked { get; set; }
@@ -523,7 +524,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     /// <summary>アルゴリズムの表示名 (チェックサムは訳す。それ以外はアルゴリズムの名前のまま)。</summary>
     public static string LocalizedName(HashAlgorithmInfo info) =>
-        info.Group == HashGroup.Checksum ? Loc.TryGet("Hash_Alg_" + info.Id) ?? info.Name : info.Name;
+        info.Group == HashGroup.Checksum && info.PluginName is null ? Loc.TryGet("Hash_Alg_" + info.Id) ?? info.Name : info.Name;
 
     /// <summary>これより要素の多いマルチ選択は、選択が変わるたびに要素を並べない (自動で計算しない)。</summary>
     private const long AutoRangeLimit = 100_000;

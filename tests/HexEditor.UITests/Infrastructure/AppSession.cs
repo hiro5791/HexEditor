@@ -34,6 +34,11 @@ public sealed record AppOptions
     /// (テストのプロセスが管理者として動くランナーで、アプリを「一般ユーザー (CI)」として動かす。テスト方針 6.5)。
     /// </summary>
     public bool Restricted { get; init; }
+
+    /// <summary>
+    /// true なら実際の権限のまま動かす (特権のテストが実際の昇格を確かめる)。false (既定) なら、フックで指定がなければ管理者でない扱いにする。
+    /// </summary>
+    public bool RealElevation { get; init; }
 }
 
 /// <summary>
@@ -130,7 +135,15 @@ public sealed class AppSession : IAsyncDisposable
             File.WriteAllText(marker, string.Empty);
         }
 
-        File.WriteAllText(hooksPath, (options.Hooks ?? new JsonObject()).ToJsonString());
+        // CI のランナーは管理者として動く。管理者のアプリは起動のたびにプラグインの読み込みを、信頼済みのスクリプトも実行のたびに確認する
+        // (AUTO-34 の仕様 8) ので、確認の画面を待ち続けるテストが出る。指定がなければ管理者でない扱いに固定する (実際の昇格を使うテストは RealElevation)。
+        JsonObject hooks = options.Hooks is null ? [] : (JsonObject)options.Hooks.DeepClone();
+        if (!options.RealElevation && !hooks.ContainsKey("elevated"))
+        {
+            hooks["elevated"] = false;
+        }
+
+        File.WriteAllText(hooksPath, hooks.ToJsonString());
         // 標準入出力はテストの実行環境から切り離す (受け継ぐと、アプリが残っている間 dotnet test が終わらない)。
         var info = new ProcessStartInfo(AppLocator.ExePath)
         {

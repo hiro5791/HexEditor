@@ -38,6 +38,27 @@ public enum FileLockPolicy
     None,
 }
 
+/// <summary>設定「ファイルのロック」(ENG-15 の仕様 3。設定画面「ファイルと保存」)。新しく開くファイルに使う。</summary>
+public static class FileLockSettings
+{
+    public const string Key = "files.lock";
+
+    public const string WhileModified = "whileModified";
+    public const string Always = "always";
+    public const string None = "none";
+
+    /// <summary>設定の選択肢 (先頭が既定)。</summary>
+    public static IReadOnlyList<string> Options { get; } = [WhileModified, Always, None];
+
+    /// <summary>設定の値をロックの方針にする。知らない値は既定 (編集中だけ禁止) にする。</summary>
+    public static FileLockPolicy Parse(string? value) => value switch
+    {
+        Always => FileLockPolicy.Always,
+        None => FileLockPolicy.None,
+        _ => FileLockPolicy.WhileModified,
+    };
+}
+
 /// <summary>書き込み禁止のハンドルの状態 (ENG-15。ドキュメントのプロパティに表示する)。</summary>
 public enum FileLockState
 {

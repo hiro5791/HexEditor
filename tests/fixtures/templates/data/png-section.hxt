@@ -1,0 +1,23 @@
+// TD-TPL-PNG-SECTION: TD-TPL-PNG-EX を元に、IDAT のチャンクをセクション pixels に展開する
+#pragma name "PNG image (sections)"
+#pragma endian big
+
+struct Row { u8 filter; u8 data[48]; };
+
+struct Chunk {
+    u32     length;
+    char    type[4];
+    switch (type) {
+        case "IDAT":
+            u8 data[length];
+            section pixels;
+            std::compress::zlib(pixels, addressof(data), length);
+            Row rows[16] @ 0 in pixels;
+        default:
+            u8 data[length] [[lazy]];
+    }
+    u32     crc [[format("hex")]];
+};
+
+u8    signature[8];
+Chunk chunks[until(last.type == "IEND" || std::eof())];

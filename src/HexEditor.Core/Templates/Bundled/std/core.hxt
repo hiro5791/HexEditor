@@ -1,0 +1,3 @@
+// HexEditor 標準ライブラリ (TPL-18)
+// std.core: print, assert, warn, eof, size, base_offset, set_endian, get_endian, raw, len, array_index, template_version (常に読み込む)
+// 関数は組み込み (C#) で、インポートしなくても使える。このファイルはインポートの互換のためにある。

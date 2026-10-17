@@ -73,6 +73,7 @@ public sealed partial class MainWindow
         }
 
         RegisterPhase2AnnotationPanels();
+        RegisterVisualizerPanel();
     }
 
     /// <summary>コンストラクターから呼ぶ (パネルとコマンドより先)。</summary>
@@ -98,6 +99,8 @@ public sealed partial class MainWindow
         }
 #endif
         _inspectorVm.HighlightChanged += (_, _) => SelectedView()?.RefreshHighlights();
+        InitializeInspectorNavigation();
+        InitializeTypedBookmarks();
 
         // 付随データの保存は、変更から 1 秒待ってまとめて書く。
         _annotationSaveTimer = DispatcherQueue.CreateTimer();
@@ -154,7 +157,11 @@ public sealed partial class MainWindow
     private BookmarkListPanel CreateBookmarkListPanel()
     {
         var list = new BookmarkListPanel(_bookmarksVm);
-        list.GoToRequested += (_, b) => GoToBookmark(b);
+        list.GoToRequested += (_, b) =>
+        {
+            GoToBookmark(b);
+            ShowBookmarkStruct(b);
+        };
         list.OpenInNewTabRequested += (_, b) =>
         {
             if (Vm.Selected is { } doc)
@@ -168,6 +175,7 @@ public sealed partial class MainWindow
         list.AddRequested += (_, _) => AddBookmarkAtCursor();
         list.UndoRequested += (_, _) => CurrentAnnotations()?.Bookmarks.UndoDelete();
         HookBookmarkListPhase2(list);
+        HookBookmarkListTyped(list);
         return list;
     }
 
@@ -200,6 +208,7 @@ public sealed partial class MainWindow
         }
 
         SyncPhase2Panels();
+        SyncVisualizer();
     }
 
     /// <summary>ブックマークのコマンド (INSP-23、INSP-25、INSP-26。キーは 00-overview.md 8.2)。</summary>
@@ -237,6 +246,7 @@ public sealed partial class MainWindow
         }, NeedsEditor);
 
         RegisterAnnotationCommands();
+        RegisterInspectorNavigationCommands();
 
         // コマンドパレットの「@」(UI-17 の仕様 2): 作業中の文書のブックマーク。
         PaletteBookmarks = doc => AnnotationsFor(doc).Bookmarks.All.Select(b => new PaletteBookmark(b.Name, b.Start));
@@ -368,8 +378,10 @@ public sealed partial class MainWindow
         doc.Document.Changed += documentChanged;
         doc.Document.DataLoaded += dataLoaded;
         doc.EditorChanged += editorChanged;
+        Action unhookTyped = HookTypedBookmarks(doc, annotations) + HookVisualizer(doc);
         _annotationHooks[doc] = () =>
         {
+            unhookTyped();
             annotations.Bookmarks.Changed -= bookmarksChanged;
             doc.Document.Changed -= documentChanged;
             doc.Document.DataLoaded -= dataLoaded;
@@ -418,6 +430,7 @@ public sealed partial class MainWindow
         _inspectorVm.Attach(doc, annotations);
         _bookmarksVm.Attach(annotations);
         AttachPhase2Panels(annotations);
+        AttachVisualizer(doc);
         foreach (HexView view in _views)
         {
             AttachAnnotations(view);
@@ -483,7 +496,9 @@ public sealed partial class MainWindow
         }
 
         view.SetHighlightSource("inspector", (start, end) => InspectorHighlights(view, start, end));
+        view.SetHighlightSource("inspectorArray", (start, end) => InspectorArrayBoundaries(view, start, end));
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
+        AttachTemplates(view);
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
 
         // スクロールバーの印 (VIEW-02 の仕様 9。設定でオン): その範囲から始まる最初のブックマークの色。木を引くので件数によらない。
@@ -514,8 +529,11 @@ public sealed partial class MainWindow
             ExtendHexViewDataMenu(menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
+            ExtendHexViewTemplateMenu(menu);
             ExtendHexViewReferenceMenu(menu);
             ExtendHexViewFilesMenu(menu);
+            ExtendHexViewScriptMenu(menu);
+            ExtendHexViewPluginMenu(menu);
         });
     }
 
@@ -854,6 +872,7 @@ public sealed partial class MainWindow
         _bookmarkFlyout = new Flyout { Content = _bookmarkEditor, Placement = FlyoutPlacementMode.Bottom };
         _bookmarkEditor.HighContrast = IsHighContrast;
         _bookmarkEditor.Load(a.Bookmarks, bookmark, editor);
+        HookBookmarkEditorTyped(_bookmarkEditor, a);
         _bookmarkFlyout!.ShowAt(anchor);
         if (rename)
         {

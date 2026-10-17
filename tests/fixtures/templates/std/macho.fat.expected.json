@@ -1,0 +1,620 @@
+{
+  "name": "Mach-O 実行形式",
+  "type": "application",
+  "offset": 0,
+  "size": 48,
+  "children": [
+    {
+      "name": "fat",
+      "path": "fat",
+      "type": "FatHeader",
+      "offset": 0,
+      "size": 8,
+      "display": "FatHeader (2)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "fat.magic",
+          "type": "u32",
+          "offset": 0,
+          "size": 4,
+          "value": 3405691582,
+          "display": "0xCAFEBABE"
+        },
+        {
+          "name": "nfat_arch",
+          "path": "fat.nfat_arch",
+          "type": "u32",
+          "offset": 4,
+          "size": 4,
+          "value": 2,
+          "display": "2"
+        }
+      ]
+    },
+    {
+      "name": "archs",
+      "path": "archs",
+      "type": "FatArch[2]",
+      "offset": 8,
+      "size": 40,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "archs[0]",
+          "type": "FatArch",
+          "offset": 8,
+          "size": 20,
+          "display": "FatArch (5)",
+          "children": [
+            {
+              "name": "cputype",
+              "path": "archs[0].cputype",
+              "type": "CpuType",
+              "offset": 8,
+              "size": 4,
+              "value": 16777223,
+              "display": "X86_64 (0x1000007)"
+            },
+            {
+              "name": "cpusubtype",
+              "path": "archs[0].cpusubtype",
+              "type": "s32",
+              "offset": 12,
+              "size": 4,
+              "value": 3,
+              "display": "0x3"
+            },
+            {
+              "name": "offset",
+              "path": "archs[0].offset",
+              "type": "u32",
+              "offset": 16,
+              "size": 4,
+              "value": 512,
+              "display": "0x200"
+            },
+            {
+              "name": "size",
+              "path": "archs[0].size",
+              "type": "u32",
+              "offset": 20,
+              "size": 4,
+              "value": 256,
+              "display": "256"
+            },
+            {
+              "name": "align",
+              "path": "archs[0].align",
+              "type": "u32",
+              "offset": 24,
+              "size": 4,
+              "value": 9,
+              "display": "9"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "archs[1]",
+          "type": "FatArch",
+          "offset": 28,
+          "size": 20,
+          "display": "FatArch (5)",
+          "children": [
+            {
+              "name": "cputype",
+              "path": "archs[1].cputype",
+              "type": "CpuType",
+              "offset": 28,
+              "size": 4,
+              "value": 16777228,
+              "display": "Arm64 (0x100000C)"
+            },
+            {
+              "name": "cpusubtype",
+              "path": "archs[1].cpusubtype",
+              "type": "s32",
+              "offset": 32,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "offset",
+              "path": "archs[1].offset",
+              "type": "u32",
+              "offset": 36,
+              "size": 4,
+              "value": 1024,
+              "display": "0x400"
+            },
+            {
+              "name": "size",
+              "path": "archs[1].size",
+              "type": "u32",
+              "offset": 40,
+              "size": 4,
+              "value": 256,
+              "display": "256"
+            },
+            {
+              "name": "align",
+              "path": "archs[1].align",
+              "type": "u32",
+              "offset": 44,
+              "size": 4,
+              "value": 9,
+              "display": "9"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "slices[0]",
+      "path": "slices[0]",
+      "type": "MachO",
+      "offset": 512,
+      "size": 80,
+      "display": "MachO (2)",
+      "children": [
+        {
+          "name": "header",
+          "path": "slices[0].header",
+          "type": "Header",
+          "offset": 512,
+          "size": 32,
+          "display": "Header (8)",
+          "children": [
+            {
+              "name": "magic",
+              "path": "slices[0].header.magic",
+              "type": "u32",
+              "offset": 512,
+              "size": 4,
+              "value": 4277009103,
+              "display": "0xFEEDFACF"
+            },
+            {
+              "name": "cputype",
+              "path": "slices[0].header.cputype",
+              "type": "CpuType",
+              "offset": 516,
+              "size": 4,
+              "value": 16777223,
+              "display": "X86_64 (0x1000007)"
+            },
+            {
+              "name": "cpusubtype",
+              "path": "slices[0].header.cpusubtype",
+              "type": "s32",
+              "offset": 520,
+              "size": 4,
+              "value": 3,
+              "display": "0x3"
+            },
+            {
+              "name": "filetype",
+              "path": "slices[0].header.filetype",
+              "type": "FileType",
+              "offset": 524,
+              "size": 4,
+              "value": 2,
+              "display": "Execute (0x2)"
+            },
+            {
+              "name": "ncmds",
+              "path": "slices[0].header.ncmds",
+              "type": "u32",
+              "offset": 528,
+              "size": 4,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "sizeofcmds",
+              "path": "slices[0].header.sizeofcmds",
+              "type": "u32",
+              "offset": 532,
+              "size": 4,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "flags",
+              "path": "slices[0].header.flags",
+              "type": "HeaderFlags",
+              "offset": 536,
+              "size": 4,
+              "value": 2097285,
+              "display": "NoUndefs | DyldLink | TwoLevel | Pie"
+            },
+            {
+              "name": "reserved",
+              "path": "slices[0].header.reserved",
+              "type": "u32",
+              "offset": 540,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "commands",
+          "path": "slices[0].commands",
+          "type": "LoadCommand[2]",
+          "offset": 544,
+          "size": 48,
+          "display": "[2]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "slices[0].commands[0]",
+              "type": "LoadCommand",
+              "offset": 544,
+              "size": 24,
+              "display": "LoadCommand (3)",
+              "children": [
+                {
+                  "name": "cmd",
+                  "path": "slices[0].commands[0].cmd",
+                  "type": "LoadCommandType",
+                  "offset": 544,
+                  "size": 4,
+                  "value": 27,
+                  "display": "Uuid (0x1B)"
+                },
+                {
+                  "name": "cmdsize",
+                  "path": "slices[0].commands[0].cmdsize",
+                  "type": "u32",
+                  "offset": 548,
+                  "size": 4,
+                  "value": 24,
+                  "display": "24"
+                },
+                {
+                  "name": "uuid",
+                  "path": "slices[0].commands[0].uuid",
+                  "type": "UuidCommand",
+                  "offset": 552,
+                  "size": 16,
+                  "display": "UuidCommand (1)",
+                  "children": [
+                    {
+                      "name": "uuid",
+                      "path": "slices[0].commands[0].uuid.uuid",
+                      "type": "uuid",
+                      "offset": 552,
+                      "size": 16,
+                      "value": "A0A1A2A3A4A5A6A7A8A9AAABACADAEAF",
+                      "display": "a0a1a2a3-a4a5-a6a7-a8a9-aaabacadaeaf"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "slices[0].commands[1]",
+              "type": "LoadCommand",
+              "offset": 568,
+              "size": 24,
+              "display": "LoadCommand (3)",
+              "children": [
+                {
+                  "name": "cmd",
+                  "path": "slices[0].commands[1].cmd",
+                  "type": "LoadCommandType",
+                  "offset": 568,
+                  "size": 4,
+                  "value": 50,
+                  "display": "BuildVersion (0x32)"
+                },
+                {
+                  "name": "cmdsize",
+                  "path": "slices[0].commands[1].cmdsize",
+                  "type": "u32",
+                  "offset": 572,
+                  "size": 4,
+                  "value": 24,
+                  "display": "24"
+                },
+                {
+                  "name": "build_version",
+                  "path": "slices[0].commands[1].build_version",
+                  "type": "BuildVersionCommand",
+                  "offset": 576,
+                  "size": 16,
+                  "display": "BuildVersionCommand (5)",
+                  "children": [
+                    {
+                      "name": "platform",
+                      "path": "slices[0].commands[1].build_version.platform",
+                      "type": "u32",
+                      "offset": 576,
+                      "size": 4,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "minos",
+                      "path": "slices[0].commands[1].build_version.minos",
+                      "type": "u32",
+                      "offset": 580,
+                      "size": 4,
+                      "value": 851968,
+                      "display": "13.0.0"
+                    },
+                    {
+                      "name": "sdk",
+                      "path": "slices[0].commands[1].build_version.sdk",
+                      "type": "u32",
+                      "offset": 584,
+                      "size": 4,
+                      "value": 852224,
+                      "display": "13.1.0"
+                    },
+                    {
+                      "name": "ntools",
+                      "path": "slices[0].commands[1].build_version.ntools",
+                      "type": "u32",
+                      "offset": 588,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "tools",
+                      "path": "slices[0].commands[1].build_version.tools",
+                      "type": "BuildToolVersion[0]",
+                      "offset": 592,
+                      "size": 0,
+                      "display": "[0]",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "slices[1]",
+      "path": "slices[1]",
+      "type": "MachO",
+      "offset": 1024,
+      "size": 80,
+      "display": "MachO (2)",
+      "children": [
+        {
+          "name": "header",
+          "path": "slices[1].header",
+          "type": "Header",
+          "offset": 1024,
+          "size": 32,
+          "display": "Header (8)",
+          "children": [
+            {
+              "name": "magic",
+              "path": "slices[1].header.magic",
+              "type": "u32",
+              "offset": 1024,
+              "size": 4,
+              "value": 4277009103,
+              "display": "0xFEEDFACF"
+            },
+            {
+              "name": "cputype",
+              "path": "slices[1].header.cputype",
+              "type": "CpuType",
+              "offset": 1028,
+              "size": 4,
+              "value": 16777228,
+              "display": "Arm64 (0x100000C)"
+            },
+            {
+              "name": "cpusubtype",
+              "path": "slices[1].header.cpusubtype",
+              "type": "s32",
+              "offset": 1032,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "filetype",
+              "path": "slices[1].header.filetype",
+              "type": "FileType",
+              "offset": 1036,
+              "size": 4,
+              "value": 2,
+              "display": "Execute (0x2)"
+            },
+            {
+              "name": "ncmds",
+              "path": "slices[1].header.ncmds",
+              "type": "u32",
+              "offset": 1040,
+              "size": 4,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "sizeofcmds",
+              "path": "slices[1].header.sizeofcmds",
+              "type": "u32",
+              "offset": 1044,
+              "size": 4,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "flags",
+              "path": "slices[1].header.flags",
+              "type": "HeaderFlags",
+              "offset": 1048,
+              "size": 4,
+              "value": 2097285,
+              "display": "NoUndefs | DyldLink | TwoLevel | Pie"
+            },
+            {
+              "name": "reserved",
+              "path": "slices[1].header.reserved",
+              "type": "u32",
+              "offset": 1052,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "commands",
+          "path": "slices[1].commands",
+          "type": "LoadCommand[2]",
+          "offset": 1056,
+          "size": 48,
+          "display": "[2]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "slices[1].commands[0]",
+              "type": "LoadCommand",
+              "offset": 1056,
+              "size": 24,
+              "display": "LoadCommand (3)",
+              "children": [
+                {
+                  "name": "cmd",
+                  "path": "slices[1].commands[0].cmd",
+                  "type": "LoadCommandType",
+                  "offset": 1056,
+                  "size": 4,
+                  "value": 27,
+                  "display": "Uuid (0x1B)"
+                },
+                {
+                  "name": "cmdsize",
+                  "path": "slices[1].commands[0].cmdsize",
+                  "type": "u32",
+                  "offset": 1060,
+                  "size": 4,
+                  "value": 24,
+                  "display": "24"
+                },
+                {
+                  "name": "uuid",
+                  "path": "slices[1].commands[0].uuid",
+                  "type": "UuidCommand",
+                  "offset": 1064,
+                  "size": 16,
+                  "display": "UuidCommand (1)",
+                  "children": [
+                    {
+                      "name": "uuid",
+                      "path": "slices[1].commands[0].uuid.uuid",
+                      "type": "uuid",
+                      "offset": 1064,
+                      "size": 16,
+                      "value": "A0A1A2A3A4A5A6A7A8A9AAABACADAEAF",
+                      "display": "a0a1a2a3-a4a5-a6a7-a8a9-aaabacadaeaf"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "slices[1].commands[1]",
+              "type": "LoadCommand",
+              "offset": 1080,
+              "size": 24,
+              "display": "LoadCommand (3)",
+              "children": [
+                {
+                  "name": "cmd",
+                  "path": "slices[1].commands[1].cmd",
+                  "type": "LoadCommandType",
+                  "offset": 1080,
+                  "size": 4,
+                  "value": 50,
+                  "display": "BuildVersion (0x32)"
+                },
+                {
+                  "name": "cmdsize",
+                  "path": "slices[1].commands[1].cmdsize",
+                  "type": "u32",
+                  "offset": 1084,
+                  "size": 4,
+                  "value": 24,
+                  "display": "24"
+                },
+                {
+                  "name": "build_version",
+                  "path": "slices[1].commands[1].build_version",
+                  "type": "BuildVersionCommand",
+                  "offset": 1088,
+                  "size": 16,
+                  "display": "BuildVersionCommand (5)",
+                  "children": [
+                    {
+                      "name": "platform",
+                      "path": "slices[1].commands[1].build_version.platform",
+                      "type": "u32",
+                      "offset": 1088,
+                      "size": 4,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "minos",
+                      "path": "slices[1].commands[1].build_version.minos",
+                      "type": "u32",
+                      "offset": 1092,
+                      "size": 4,
+                      "value": 851968,
+                      "display": "13.0.0"
+                    },
+                    {
+                      "name": "sdk",
+                      "path": "slices[1].commands[1].build_version.sdk",
+                      "type": "u32",
+                      "offset": 1096,
+                      "size": 4,
+                      "value": 852224,
+                      "display": "13.1.0"
+                    },
+                    {
+                      "name": "ntools",
+                      "path": "slices[1].commands[1].build_version.ntools",
+                      "type": "u32",
+                      "offset": 1100,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "tools",
+                      "path": "slices[1].commands[1].build_version.tools",
+                      "type": "BuildToolVersion[0]",
+                      "offset": 1104,
+                      "size": 0,
+                      "display": "[0]",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

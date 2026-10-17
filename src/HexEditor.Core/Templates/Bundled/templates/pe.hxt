@@ -1,0 +1,46 @@
+// HexEditor 標準テンプレート (TPL-34): PE (Windows の実行形式)
+// ライセンス: MIT。型は標準ライブラリ std.pe (TPL-18) にある。
+// ディレクトリ (インポートなど) は RVA からファイルの位置に変換して置く。どれも固定の位置を指すだけで、ファイル全体は走査しない。
+#pragma name "PE executable"
+#pragma name.ja "PE 実行形式"
+#pragma description "Windows executable (PE32 / PE32+): DOS header, Rich header, NT headers, section table, import / export / resource / relocation / debug directories, and the .NET CLI header with metadata streams."
+#pragma description.ja "Windows の実行形式 (PE32 / PE32+): DOS ヘッダ、リッチヘッダ、NT ヘッダ、セクション表、インポート・エクスポート・リソース・再配置・デバッグの各ディレクトリ、.NET の CLI ヘッダとメタデータのストリーム。"
+#pragma author "HexEditor"
+#pragma version "1.1.0"
+#pragma license "MIT"
+#pragma magic 0 "4D 5A"
+#pragma mime "application/vnd.microsoft.portable-executable"
+#pragma extensions "exe;dll;sys;ocx;scr;cpl;efi;mui;drv"
+#pragma endian little
+
+import std.pe;
+
+std::pe::DosHeader     header;
+if (std::pe::rich_start() >= 0) {
+    std::pe::RichHeader rich @ std::pe::rich_start();
+}
+std::pe::NtHeaders     nt @ header.e_lfanew;
+std::pe::SectionHeader sections[nt.FileHeader.NumberOfSections] @ header.e_lfanew + 24 + nt.FileHeader.SizeOfOptionalHeader;
+
+// データディレクトリが指す構造 (番号は IMAGE_DIRECTORY_ENTRY_*)
+if (std::pe::dir_rva(0) != 0) {
+    std::pe::ExportDirectory exports @ std::pe::dir_offset(0);
+}
+if (std::pe::dir_rva(1) != 0) {
+    std::pe::ImportDescriptor(std::pe::is_pe32_plus()) imports[until(last.Name == 0 && last.FirstThunk == 0)] @ std::pe::dir_offset(1);
+}
+if (std::pe::dir_rva(2) != 0) {
+    std::pe::ResourceDirectory(std::pe::dir_offset(2), 0) resources @ std::pe::dir_offset(2);
+}
+if (std::pe::dir_rva(5) != 0) {
+    std::pe::BaseRelocationBlock relocations[until(endof(last) >= std::pe::dir_offset(5) + std::pe::dir_size(5))] @ std::pe::dir_offset(5);
+}
+if (std::pe::dir_rva(6) != 0) {
+    std::pe::DebugDirectory debug[std::pe::dir_size(6) / 28] @ std::pe::dir_offset(6);
+}
+if (std::pe::dir_rva(14) != 0) {
+    std::pe::Cor20Header cli @ std::pe::dir_offset(14);
+    if (cli.MetaData.VirtualAddress != 0) {
+        std::pe::MetadataRoot metadata @ std::pe::rva_to_offset(cli.MetaData.VirtualAddress);
+    }
+}

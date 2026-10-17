@@ -16,6 +16,9 @@ public enum SettingKind
 
     /// <summary>文字列の配列 (例: ツールバーのコマンド ID)。</summary>
     List,
+
+    /// <summary>色 (<c>#RRGGBB</c>)。<see cref="SettingDefinition.Options"/> の名前 (例: <c>system</c>) も選べる。</summary>
+    Color,
 }
 
 /// <summary>
@@ -90,6 +93,8 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
                 return value is JsonValue c && c.TryGetValue(out string? choice) && Options.Contains(choice, StringComparer.Ordinal);
             case SettingKind.List:
                 return value is JsonArray a && a.All(e => e is JsonValue v && v.TryGetValue(out string? _));
+            case SettingKind.Color:
+                return value is JsonValue c2 && c2.TryGetValue(out string? color) && (Options.Contains(color, StringComparer.Ordinal) || IsColor(color));
             default:
                 return false;
         }
@@ -102,6 +107,10 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
         return node is JsonValue v && v.GetValueKind() == System.Text.Json.JsonValueKind.Number
             && double.TryParse(v.ToJsonString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value);
     }
+
+    /// <summary><c>#RRGGBB</c> (16 進 6 桁) か。</summary>
+    public static bool IsColor(string? text) =>
+        text is { Length: 7 } && text[0] == '#' && !text.AsSpan(1).ContainsAnyExcept("0123456789abcdefABCDEF");
 
     private bool InRange(double v) => (Min is not { } min || v >= min) && (Max is not { } max || v <= max);
 }
@@ -128,11 +137,12 @@ public static class SettingCategories
     public const string Language = "language";
     public const string Accessibility = "accessibility";
     public const string Automation = "automation";
+    public const string Templates = "templates";
     public const string Update = "update";
     public const string Privacy = "privacy";
     public const string Explorer = "explorer";
     public const string Advanced = "advanced";
 
     public static readonly string[] All =
-        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Update, Privacy, Explorer, Advanced];
+        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Templates, Update, Privacy, Explorer, Advanced];
 }

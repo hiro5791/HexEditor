@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TD-AUTO-PLG-DEP-B が依存するライブラリ TestLib 2.0.0 (TC-AUTO-30-01)。 -->
+  <PropertyGroup>
+    <AssemblyName>TestLib</AssemblyName>
+    <RootNamespace>TestLib</RootNamespace>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+  </PropertyGroup>
+
+</Project>

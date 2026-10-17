@@ -10,6 +10,13 @@ using System.Runtime.InteropServices;
 //   --text     UTF-16 LE の文字列を専用のページに置き、"TEXT 0x..." を出力する (TC-PKG-04-04 のメモ帳の代わり)。
 //   --out      出力をこのファイルにも書く (標準出力を受け取れない起動のしかたのため)。
 // 準備ができたら "READY" を出力し、標準入力が閉じられる (または "exit" の行を受け取る) まで待つ。
+//   --echo-args  残りの引数を JSON の文字列の配列で標準出力に出してすぐに終わる (TD-AUTO-ECHOARGS。TC-AUTO-18-03 の process.run の確認)。
+if (args.Length > 0 && args[0] == "--echo-args")
+{
+    Console.Out.Write(System.Text.Json.JsonSerializer.Serialize(args[1..]));
+    return 0;
+}
+
 string valueHex = "4845584544495421";
 int regions = 0;
 string? text = null;

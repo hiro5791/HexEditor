@@ -948,6 +948,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-ZBOMB-10G |
 | 環境 | 標準 |
+| 備考 | 単体テストでは、TD-TPL-ZBOMB-10G と同じ zlib ストリームを読まれた分だけ作る仮想のデータソースを使う (展開は 256 MB で打ち切るため、先頭の一部しか読まれない) |
 
 **前提**: テンプレートは `u32 len; section s; std::compress::zlib(s, 4, len); u8 tail @ 0 in s; u8 last @ std::section::size(s) - 1 in s;`。
 
@@ -1165,6 +1166,7 @@
 | フェーズ | 3 |
 | テストデータ | なし |
 | 環境 | 標準 (設定「テンプレートの上限の最大値」は既定) |
+| 備考 | 手順 1 で 1,000,000,000 ステップまで実行する確認は時間がかかるため毎晩 (Nightly) のテストにし、プルリクエストごとのテストでは設定の最大値を下げて同じ処理を確かめる |
 
 **前提**: なし。
 
@@ -1188,6 +1190,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-SLOW、TD-TPL-SLOW-DATA |
 | 環境 | 標準 (設定「自動適用」を「常に適用する」にする) |
+| 備考 | 速い PC では 5 秒より前に `limit.steps` (1 億) に達するため、テストでは回数の上限を外して時間の上限を確かめる |
 
 **前提**: テスト用の設定フォルダの `templates/` に TD-TPL-SLOW を置き、設定「自動適用」を「常に適用する」にしてある。
 
@@ -1261,6 +1264,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-STD-SAMPLES |
 | 環境 | 標準 |
+| 備考 | 時刻とタイムゾーンは、JSON の書き出しが en-US・UTC 固定の表示 (TPL-25) のため結果に影響しない。自動テストは同じプロセスで地域設定を en-US と ja-JP に変えて、TD-TPL-STD-SAMPLES のすべてのサンプルで比べる |
 
 **前提**: なし。
 
@@ -1285,6 +1289,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-EXT-JS |
 | 環境 | 標準 |
+| 備考 | 評価器の側は、テンプレート拡張の登録簿 (`TemplateExtensionRegistry`) に登録した関数で確かめる。JavaScript からの登録 (08) を通す結合テストはスクリプトの作業で加える |
 
 **前提**: TD-TPL-EXT-JS のスクリプト `myfmt.js` (書式関数 `myfmt` を「テンプレート拡張」として登録する) を実行し、実行の許可を与えてある。
 
@@ -1308,6 +1313,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-EXT-JS |
 | 環境 | 標準 |
+| 備考 | TC-TPL-19-01 と同じ |
 
 **前提**: 新しいテスト用の設定フォルダで、`myfmt.js` を登録したが、実行の許可は与えていない (許可の確認で「許可しない」を選んだ)。
 
@@ -1355,6 +1361,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-EXT-JS |
 | 環境 | 標準 |
+| 備考 | 評価器の側は `TemplateEngine.ApplyAndWait` と `FindByPath` で確かめる。ヘッドレス実行 (AUTO-41) を通す結合テストはスクリプトとコマンドラインの作業で加える |
 
 **前提**: なし。
 
@@ -2127,7 +2134,7 @@
 
 **手順**:
 
-1. テンプレート `struct H { u8 n; u8 m; }; H h; u32 big @ 0x100; u8 tail; struct L { u8 x; }; L *lazy : u8 [[lazy]];` を、データ `01 02 03 04 FF` に適用する。
+1. テンプレート `struct H { u8 n; u8 m; }; H h; u32 big @ 0x100; u8 tail; struct L { u8 x; }; L *lazy : u8 [[lazy]];` を、データ `01 02 03 FF` に適用する (`lazy` の値が 0xFF で、データの範囲外を指す)。
 2. 結果ツリーの `lazy` を開く。
 
 **期待結果**:
@@ -2197,6 +2204,7 @@
 | フェーズ | 3 |
 | テストデータ | なし (この文書のフィクスチャのテンプレートと、標準テンプレート集を種のコーパスにする) |
 | 環境 | 標準 |
+| 備考 | SharpFuzz のプロジェクト (HexEditor.Fuzz) ができるまでは、種のテンプレートを決まった乱数で変異させるテスト (Nightly) で代わりにする |
 
 **前提**: なし。
 
@@ -2221,6 +2229,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-GPT-100G、TD-TPL-MBR-100G |
 | 環境 | 標準 |
+| 備考 | 標準テンプレート集 (TPL-34) ができるまでは、テストの中に書いた GPT / MBR のテンプレートを使う。100 GiB のイメージは、TD-TPL-GPT-100G / TD-TPL-MBR-100G と同じ内容を計算する仮想のデータソースで代わりにする |
 
 **前提**: なし。
 
@@ -2733,6 +2742,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-KSY-FORMATS、TD-PNG、TD-ZIP、TD-ELF-X64、TD-PE-X64、TD-TPL-GIF |
 | 環境 | 標準 |
+| 備考 | kaitai_struct_formats の .ksy と公式のコンパイラによる期待値の JSON (TD-TPL-KSY-FORMATS) は、取り込み (ダウンロードとコンパイラの導入) がまだのため、自動テストにしていない。それまでは同じ書き方を使うテスト用の .ksy (`tests/fixtures/templates/data/ksy/png-lite.ksy`) の値をデータから求めた値と比べる |
 
 **前提**: TD-TPL-KSY-FORMATS の期待値の JSON (Kaitai Struct の公式のコンパイラと実行時ライブラリで解析した値。Web IDE と同じ実行時ライブラリを使う) がある。
 
@@ -2801,6 +2811,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-KSY-FORMATS、TD-PNG、TD-ZIP、TD-ELF-X64、TD-PE-X64、TD-TPL-GIF |
 | 環境 | 標準 |
+| 備考 | TD-TPL-KSY-FORMATS の取り込みまでは、テスト用の .ksy (png-lite、tiff-endian、instances) で行う |
 
 **前提**: なし。
 
@@ -2848,6 +2859,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-KSY-FORMATS (種のコーパス) |
 | 環境 | 標準 |
+| 備考 | TC-TPL-27-05 と同じ |
 
 **前提**: なし。
 
@@ -2917,6 +2929,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-VHDX-MBR、TD-VHDX-GPT |
 | 環境 | 管理者として実行 (CI のランナー) |
+| 備考 | CI で接続する仮想ディスクは TD-VHDX-MBR だけなので、手順 2 は環境変数 `HEXEDITOR_TEST_VHD_GPT_DISK` で GPT のディスクを指定したときだけ行う。GPT が保護 MBR より上位の候補になることは、同じ内容のディスクの先頭を作る Core のテストでも確かめる |
 
 **前提**: TD-VHDX-MBR と TD-VHDX-GPT を接続している。
 
@@ -3166,6 +3179,7 @@
 | フェーズ | 3 |
 | テストデータ | なし |
 | 環境 | 標準 (ファイルのアクセスを ETW (Microsoft-Windows-Kernel-File) で記録する) |
+| 備考 | ファイルのアクセスは ETW の代わりに、評価器がファイルを読む唯一の経路 (`ITemplateFileSystem`) の記録で確かめる |
 
 **前提**: なし。
 
@@ -3258,6 +3272,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-STD-SAMPLES、TD-TPL-MALICIOUS |
 | 環境 | 標準 (ETW でファイル・ネットワーク・プロセスの作成を記録する) |
+| 備考 | TC-TPL-37-01 と同じ。評価器はインポートの解決以外でファイルを開かない (標準ライブラリの関数はデータの読み込みと計算だけ) |
 
 **前提**: なし。
 
@@ -3282,6 +3297,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-ESCAPE |
 | 環境 | 標準 (ETW でファイル・ネットワークを記録する) |
+| 備考 | TC-TPL-37-01 と同じ。シンボリックリンクを作れない環境では (a) を省く |
 
 **前提**: TD-TPL-ESCAPE の検索パスの中に、検索パスの外を指すシンボリックリンクとジャンクションを作ってある (テストの開始時に作り、終了時に消す)。
 
@@ -3305,6 +3321,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-STD-SAMPLES (種のコーパス) |
 | 環境 | 標準 |
+| 備考 | TC-TPL-27-05 と同じ |
 
 **前提**: なし。
 
@@ -3359,7 +3376,7 @@
 | TD-TPL-KSY-INST | 約 200 バイト | `.ksy` のファイル `instances.ksy`: `meta: {id: inst_test, endian: le}`、`seq: [{id: first, type: u1}]`、`instances: {far: {pos: 0x80, type: u4}}` |
 | TD-TPL-KSY-ENDIAN | 約 500 バイト | `.ksy` のファイル `tiff-endian.ksy`: `meta/endian` を `switch-on: _root.order` (`[0x49, 0x49]` で `le`、`[0x4d, 0x4d]` で `be`) にし、`order` (2 バイト)、`magic` (u2)、`ifd_offset` (u4)、`ifd` (instances、`pos: ifd_offset`、項目数 u2 と項目の配列) を読む |
 | TD-TPL-KSY-BAD | 約 10 MiB (8 ファイル) | 不正な `.ksy` の一式: `indent.ksy` (インデントの誤り)、`quote.ksy` (閉じていない引用符)、`tab.ksy` (インデントにタブ文字)、`dupkey.ksy` (重複したキー)、`tag.ksy` (`!!python/object/apply:os.system` などの型の指定)、`deep.ksy` (10 万段の入れ子の配列)、`laughs.ksy` (別名 `&a` / `*a` を 9 段重ねて 10 億要素に展開するもの)、`opaque.ksy` (`opaque-types` を使う型 1 つと、通常の `u1` のフィールド 2 つ) |
-| TD-TPL-STD-SAMPLES | 約 30 MiB (フォルダ) | TPL-34 の 1 の表のすべての形式のサンプルファイルと、期待する結果の JSON (TPL-25 の形式)。サンプルは生成ツールのコードで組み立てるか、パブリックドメインのもの (出所を `tests/fixtures/templates/std/SOURCES.md` に記録) だけを使う。期待する結果の JSON はリポジトリに置き、テンプレートを直したときは差分を確認して更新する |
+| TD-TPL-STD-SAMPLES | 約 5 MiB (フォルダ。`<キー>.bin` と一覧 `_samples.txt`。Generate の戻り値は `_samples.txt` のパス) | TPL-34 の 1 の表のすべての形式のサンプルファイルと、期待する結果の JSON (TPL-25 の形式)。サンプルは生成ツールのコードで組み立てるか、パブリックドメインのもの (出所を `tests/fixtures/templates/std/SOURCES.md` に記録) だけを使う。期待する結果の JSON はリポジトリに置き、テンプレートを直したときは差分を確認して更新する |
 | TD-TPL-MACHO64 | 約 16 KiB | x86_64 の Mach-O の実行ファイル (fat ではない)。TD-ANA-MACHO-FAT の x86_64 のスライスと同じ内容 |
 | TD-TPL-REPO | 約 50 KiB (フォルダ) | テスト用のオンラインリポジトリ。索引 `index.json` (テンプレート "HXTest format" の版 `1.0.0`。`index-v1.1.json` は版 `1.1.0` を含む)、テスト用の Ed25519 の鍵 (秘密鍵はテストのフィクスチャだけに置く) による署名 `index.json.sig`、テンプレート `hxtest-1.0.0.hxt` と `hxtest-1.1.0.hxt` (`#pragma magic 0 "48 58 54 53"`)、改ざんした版 (1 バイトを変えた索引、別の鍵で署名した索引、1 バイトを変えたテンプレート) |
 | TD-TPL-REPO-DATA | 16 バイト | `48 58 54 53` (`HXTS`) の後に `00` を 12 バイト |

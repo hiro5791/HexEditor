@@ -656,7 +656,7 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
         BookmarkColumnLayout layout = Vm.Layout;
         Header.ColumnDefinitions.Clear();
         Header.Children.Clear();
-        foreach (Microsoft.UI.Xaml.GridLength width in new[] { layout.Width0, layout.Width1, layout.Width2, layout.Width3, layout.Width4, layout.Width5, layout.Width6, layout.Width7 })
+        foreach (Microsoft.UI.Xaml.GridLength width in new[] { layout.Width0, layout.Width1, layout.Width2, layout.Width3, layout.Width4, layout.Width5, layout.Width6, layout.Width7, layout.Width8 })
         {
             Header.ColumnDefinitions.Add(new ColumnDefinition { Width = width });
         }
