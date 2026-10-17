@@ -255,6 +255,16 @@ public sealed class TemplateFeatureTests
     }
 
     [Fact]
+    public void EncodingConvertReencodesTextIntoASection()
+    {
+        // TPL-18 の std.encoding の「文字コードの変換」: UTF-16LE の "AB" を UTF-8 にしたセクション
+        TemplateResult r = RunOk("section s; std::encoding::convert(s, 0, 4, \"utf-16le\", \"utf-8\"); char t[2] @ 0 in s; local u64 n = std::section::size(s) [[show]];",
+            Hex("41 00 42 00"));
+        Assert.Equal(2L, Long(r, "n"));
+        Assert.Equal("AB", Display(r, "@s.t"));
+    }
+
+    [Fact]
     [Trait(TC, "TC-TPL-17-02")]
     public void NegativeMagicOffsetIsFromTheEnd()
     {
@@ -416,16 +426,25 @@ public sealed class TemplateFeatureTests
     [Trait(TC, "TC-TPL-18-03")]
     public void SameTemplateTwiceGivesTheSameTree()
     {
-        // 標準テンプレート集 (TPL-34) の代わりに、仕様書の例と標準ライブラリの PE の型を使う
+        // TD-TPL-STD-SAMPLES のすべてのサンプルに対応する標準テンプレート (TPL-34) を適用し、すべて評価して JSON にする
+        TemplateCatalog catalog = TemplateCatalog.CreateDefault(null);
         string Json(CultureInfo culture)
         {
             CultureInfo save = CultureInfo.CurrentCulture;
             try
             {
                 CultureInfo.CurrentCulture = culture;
-                TemplateResult a = RunOk(TemplateExamplesTests.PngExample, TestDataCatalog.Png16());
-                TemplateResult b = RunOk("import std.pe; std::pe::DosHeader dos; std::pe::NtHeaders nt @ dos.e_lfanew;", TestDataCatalog.PeX64());
-                return TemplateJsonExporter.ToJson(a) + TemplateJsonExporter.ToJson(b);
+                var sb = new StringBuilder();
+                foreach ((string key, byte[] data) in StandardTemplateSamples.All)
+                {
+                    TemplateCatalogEntry entry = catalog.Find(StandardTemplateSamples.TemplateOf(key))!;
+                    TemplateResult r = Run(catalog.Load(entry), TemplateDataSource.FromBytes(data, key + ".bin"));
+                    r.EvaluateAll();
+                    sb.Append(key).Append('\n').Append(TemplateJsonExporter.ToJson(r));
+                    r.Dispose();
+                }
+
+                return sb.ToString();
             }
             finally
             {

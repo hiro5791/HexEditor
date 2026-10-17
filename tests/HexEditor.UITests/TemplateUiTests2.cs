@@ -184,6 +184,9 @@ public sealed class TemplateEditingUiTests
         Assert.Contains("1970", row["value"]!.GetValue<string>(), StringComparison.Ordinal);
         string tip = row["tooltip"]!.GetValue<string>();
         Assert.Contains("1970-01-01 00:00:00", tip, StringComparison.Ordinal);
+
+        // 地域の時刻 (テスト用のタイムゾーン UTC+9)
+        Assert.Contains("1970-01-01 09:00:00", tip, StringComparison.Ordinal);
     });
 
     [Fact]
@@ -436,5 +439,12 @@ public sealed class TemplateEditingUiTests
         JsonObject added = (await TemplateAsync(app, "state"))["applications"]!.AsArray().Last()!.AsObject();
         Assert.Equal(s1, added["offset"]!.GetValue<long>());
         Assert.Equal("Fixed", added["kind"]!.GetValue<string>());
+
+        // 4: カーソルを 0x0 に移しても、新しい固定の適用は 2 つ目のセクションの名前のまま
+        await WaitTemplatesAsync(app, 3);
+        await app.GoToAsync(0);
+        await app.WaitUntilAsync(async () => (await TemplateAsync(app, "state"))["applications"]![1]!["followOffset"]?.GetValue<long>() == 0
+            && (await TemplateAsync(app, "state"))["applications"]![1]!["completed"]!.GetValue<bool>(), Wait, "the follow application at 0x0");
+        Assert.Contains(Name(s1), await PeekAsync("SectionHeader.Name", 2), StringComparison.Ordinal);
     });
 }

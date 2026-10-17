@@ -72,37 +72,18 @@ internal sealed partial class Evaluator
 
                 case SequenceChildren seq:
                 {
-                    List<TemplateNode> items;
-                    lock (_result.SyncRoot)
-                    {
-                        items = seq.Items;
-                    }
-
-                    // 要素は位置の順に並んでいるので、最初に重なる要素を二分探索で探す
-                    int lo = 0;
-                    int hi = items.Count;
-                    while (lo < hi)
-                    {
-                        int mid = (lo + hi) / 2;
-                        if (items[mid].End <= offset)
-                        {
-                            lo = mid + 1;
-                        }
-                        else
-                        {
-                            hi = mid;
-                        }
-                    }
-
-                    int stop = lo;
-                    while (stop < items.Count && items[stop].Offset < end && stop - lo < maxNodes)
+                    // 要素は位置の順に並んでいるので、最初に重なる要素をチェックポイントで探す (要素を全部は作らない)
+                    long count = seq.Count;
+                    long lo = seq.FirstEndingAfter(offset);
+                    long stop = lo;
+                    while (stop < count && seq.Get(stop).Offset < end && stop - lo < maxNodes)
                     {
                         stop++;
                     }
 
-                    for (int i = stop - 1; i >= lo; i--)
+                    for (long i = stop - 1; i >= lo; i--)
                     {
-                        stack.Push((items[i], depth + 1));
+                        stack.Push((seq.Get(i), depth + 1));
                     }
 
                     break;

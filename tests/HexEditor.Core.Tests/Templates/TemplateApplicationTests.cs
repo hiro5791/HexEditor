@@ -123,6 +123,13 @@ public sealed class TemplateApplicationTests : IDisposable
         TemplateApplicationInfo fixedInfo = app.ToFixed();
         Assert.Equal(TemplateApplyKind.Fixed, fixedInfo.Kind);
         Assert.Equal(0x40L, fixedInfo.StartOffset);
+
+        // 固定の適用は、その型をその位置で評価し、カーソルを動かしても変わらない
+        using var fixedApp = new TemplateApplication(fixedInfo, () => TemplateDataSource.FromBytes(data), timeProvider: time, watchFiles: false);
+        fixedApp.Start();
+        TemplateResult f = Wait(fixedApp, _ => true, TimeSpan.FromSeconds(10));
+        Assert.Equal(0x40L, Long(f, "Pair.a"));
+        Assert.Null(f.FindByPath("p"));
     }
 
     [Fact]

@@ -828,7 +828,7 @@ public sealed class TemplateTreeModel
     {
         ListChildren l => [.. l.Items],
         LazyChildren { Items: { } items } => [.. items],
-        SequenceChildren s => [.. s.Items],
+        SequenceChildren s => s.Cached,
         OnDemandChildren od => od.Cached,
         PointerChildren { Resolved: true, Target: { } t } => [t],
         _ => [],

@@ -109,9 +109,9 @@ internal sealed partial class Evaluator
 
                     break;
                 case SequenceChildren seq:
-                    foreach (TemplateNode c in seq.Items.ToList())
+                    for (long i = 0; i < seq.Count; i++)
                     {
-                        EvaluateEagerly(c, level + 1);
+                        EvaluateEagerly(seq.Get(i), level + 1);
                     }
 
                     break;

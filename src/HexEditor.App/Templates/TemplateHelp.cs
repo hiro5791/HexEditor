@@ -10,5 +10,8 @@ internal static class TemplateHelp
 {
     public const string PagePath = "docs/help/template-errors.md";
 
+    /// <summary>標準ライブラリのリファレンス (TPL-18 の仕様 4)。</summary>
+    public static Uri LibraryUrl => new(AboutInfo.RepositoryUrl + "/blob/main/" + Core.Templates.Editing.TemplateLibraryReference.HelpPage);
+
     public static Uri UrlOf(string code) => new(AboutInfo.RepositoryUrl + "/blob/main/" + PagePath + "#" + code.ToLowerInvariant());
 }

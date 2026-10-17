@@ -302,7 +302,8 @@ public sealed class TemplateApplication : IDisposable
         {
             StartOffset = Info.Kind == TemplateApplyKind.Follow ? Interlocked.Read(ref _followOffset) : Info.StartOffset,
             BigEndian = Info.BigEndian ?? _applyOptions.BigEndian,
-            TypeName = Info.Kind == TemplateApplyKind.Follow ? Info.TypeName : null,
+            // 「固定に変換」した型の適用は、その型だけを開始オフセットで評価する (TPL-26 の仕様 6)
+            TypeName = Info.TypeName,
             LimitOverride = Info.Kind == TemplateApplyKind.Follow ? FollowLimits : _limitOverride ?? _applyOptions.LimitOverride,
         };
         TemplateResult? old;

@@ -305,7 +305,8 @@ public static class TemplateLanguageService
                 string full = qualifier + "::";
                 items.AddRange(StdFunctions.Where(f => f.StartsWith(full, StringComparison.Ordinal))
                     .Select(f => f[full.Length..]).Where(f => !f.Contains("::", StringComparison.Ordinal))
-                    .Select(f => new TemplateCompletion(f, TemplateCompletionKind.Function, full + f + "(…)")));
+                    .Select(f => new TemplateCompletion(f, TemplateCompletionKind.Function,
+                        TemplateLibraryReference.Signatures.TryGetValue(full + f, out string? signature) ? signature : full + f + "(…)")));
                 items.AddRange(program.Types.Keys.Where(t => t.StartsWith(full, StringComparison.Ordinal))
                     .Select(t => t[full.Length..]).Where(t => !t.Contains("::", StringComparison.Ordinal))
                     .Select(t => new TemplateCompletion(t, TemplateCompletionKind.Type, full + t)));

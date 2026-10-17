@@ -6149,6 +6149,8 @@
   <data name="CmdAlias_templates_manage" xml:space="preserve"><value>かんり</value></data>
   <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>テンプレート: .ksy を HXT に変換</value></data>
   <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>へんかん</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>テンプレート: 標準ライブラリのリファレンス</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>かんすう</value></data>
   <data name="Cmd_templates_tryRun" xml:space="preserve"><value>テンプレート: 試しに実行</value></data>
   <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>ためしに</value></data>
   <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>テンプレート: ここを読むときに止める</value></data>

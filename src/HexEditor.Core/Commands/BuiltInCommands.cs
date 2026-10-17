@@ -480,6 +480,7 @@ public static class BuiltInCommands
         new("templates.edit", "templates"),
         new("templates.manage", "templates"),
         new("templates.convertKsy", "templates"),
+        new("templates.libraryReference", "templates"),
         new("templates.tryRun", "templates"),
         new("templates.breakOnRead", "templates") { Condition = "documentOpen" },
         new("view.panel.templates", "view"),
