@@ -5481,4 +5481,1072 @@ Los detalles se escribieron en:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static read-only</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Codificación de texto (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Documento completo (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Carácter inesperado '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Se esperaba '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>'{0}' inesperado</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Número no válido '{0}'</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>El literal de cadena no está terminado</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Secuencia de escape no válida '{0}'</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>El comentario no está terminado</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>El anidamiento es demasiado profundo (límite {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Cadena de bytes no válida '{0}'</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>La plantilla no es UTF-8 válido</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>La plantilla es demasiado grande (límite 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Demasiados errores; solo se muestran los primeros {0}</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Valor '{1}' no válido para el pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Se ignoró el pragma desconocido '{0}'</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' ya está definido en {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>No se encontró '{0}' (buscado en: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Las plantillas no pueden realizar esta operación: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Esta plantilla requiere la versión {0} de la aplicación o posterior</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Se ignoró el atributo desconocido '{0}'</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} no cabe en {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>El valor {0} tiene más de un nombre (se usa '{1}')</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} supera el máximo; se usa {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Las plantillas, con las importaciones incluidas, son demasiado grandes (límite 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>'{0}' no está definido</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>División entre cero</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Tipos incompatibles: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>La recursión es demasiado profunda (límite {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>El número de instrucciones ejecutadas alcanzó el límite ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>El número de patrones alcanzó el límite ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>La memoria de evaluación alcanzó el límite ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>El tiempo de evaluación alcanzó el límite ({0} s)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>La ubicación 0x{0} está fuera de los datos</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) está fuera de los datos</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} bytes) está fuera de los datos</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>La posición no puede ser negativa ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>La matriz no puede terminar porque el tamaño del elemento es 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>La matriz terminó porque se llegó al final de los datos</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>La matriz se truncó en el límite ({0} elementos)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>No se incluyó el último elemento incompleto ({0} bytes)</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>No se encontró el terminador de la cadena</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 tiene más de 10 bytes (desplazamiento 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>El contenido de la estructura ({0} bytes) supera el tamaño especificado ({1} bytes)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>El tipo del puntero debe ser un tipo entero</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Fuera de rango (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>No se pueden declarar patrones dentro de funciones</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Error de aserción: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>La función de extensión '{0}' no está registrada</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>La función de extensión '{0}' falló: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>La función de extensión '{0}' no tiene permiso para ejecutarse</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>El índice {0} está fuera de rango (de 0 a {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>No se puede usar sizeof({0}) porque el tamaño del tipo no es fijo</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>El total de los campos de bits ({0} bits) supera {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Un campo de bits no puede tener más de 64 bits ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Error de descompresión de {0}: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>La descompresión se detuvo porque los datos alcanzaron el límite ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} no es compatible en esta versión</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>La longitud ({0}) supera el límite de 256 MB por llamada</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>No se puede asignar a '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>No se pueden leer los datos en 0x{0}</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Se canceló la evaluación</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} no cabe en {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' no es una función</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' admite {1} argumento(s)</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>La característica '{0}' de Kaitai Struct no es compatible</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>El contenido no coincide con los bytes esperados</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Error de validación: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>La salida se truncó porque es demasiado larga</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Las secciones alcanzaron el límite total ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' no es un patrón</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' no tiene el miembro '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Argumento no válido para '{0}': {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Los datos no coinciden con el número mágico {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>No se pudo escribir el archivo temporal: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Error de sintaxis de YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>No se permiten etiquetas YAML ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Demasiadas expansiones de alias de YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Clave duplicada '{0}'</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>No se pueden usar tabulaciones para la sangría</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy no válido: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>El anidamiento de YAML es demasiado profundo</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Error interno del evaluador de plantillas: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>¿quisiste decir '{0}'?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Información</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Advertencia</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Scripts</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Script: Ejecutar</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>ejecutar script de nuevo repetir run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Script: Ejecutar archivo de script...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>ejecutar archivo de script run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Script: Detener todos los scripts</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>detener cancelar scripts stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Script: Agregar componente de script de C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>componente script instalar agregar csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Scripts</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Ejecutar script...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Ejecutar el último script</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Detener todos los scripts</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Agregar componente de script de C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Ejecución automática (hooks)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook hooks ejecución automática inicio abrir guardar cerrar script automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Carpetas de scripts</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>carpeta de scripts biblioteca compartida script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Panel de salida</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Editor de scripts</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Número máximo de líneas en el panel de salida</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Las líneas más antiguas se eliminan al superar el límite (100-1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Mostrar el panel de salida cuando un script escribe salida</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Se muestra sin quitar el foco del teclado.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Interrumpir en excepciones al depurar</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Elige cuándo se detiene el depurador de JavaScript ante una excepción.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Nunca</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Solo excepciones no controladas</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Todas las excepciones</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Carpetas de scripts adicionales</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Carpetas que se agregan a la lista de scripts.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Los scripts registrados aquí se ejecutan automáticamente. No se ejecuta nada que no agregues aquí, y los scripts deben ser de confianza.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>El modo seguro está activado, por lo que la ejecución automática está desactivada.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>límite de tiempo {0} s</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>No hay scripts registrados.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Agregar script</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Agregar</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Elegir un archivo...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Elige el script que se ejecutará automáticamente.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Agrega “{0}” con el botón Agregar.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Activar {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Condición</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Subir</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Bajar</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Quitar</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Ejecutar solo para los datos que coincidan. Déjalo en blanco para que coincidan todos.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Extensión (p. ej. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Patrón de ruta (p. ej. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Primeros bytes (Hex, p. ej. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Origen de datos</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Cualquiera</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Las carpetas de esta lista se muestran en la lista de scripts además de la carpeta de scripts estándar.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>No hay carpetas adicionales.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Agregar carpeta...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Quitar</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Script</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Script</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Cursor</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Mostrar u ocultar el panel de lista de scripts</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>scripts macros lista panel scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Mostrar u ocultar el panel de salida</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>salida registro mensajes panel output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Mostrar u ocultar el panel de consola</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>consola panel console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Mostrar lista de scripts</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>scripts macros lista panel mostrar scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Mostrar consola</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>consola mostrar console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Nuevo script</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>nuevo crear create javascript js</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Nuevo script de C#</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>nuevo crear create csharp csx</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Abrir ejemplo</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>ejemplo ejemplos abrir examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Abrir la carpeta de scripts</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>carpeta abrir explorador folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Ejecutar con depuración</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>depurar depurador punto de interrupción paso debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Pausar</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>pausa interrumpir break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Borrar salida</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>borrar limpiar salida registro clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Iniciar / detener grabación</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>grabar grabación macro record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Reproducir la última macro</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>reproducir repetir macro replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Reproducir repetidamente</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>macro repetir bucle repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Cursor: Izquierda</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor mover izquierda cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Cursor: Derecha</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor mover derecha cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Cursor: Arriba</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor mover arriba cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Cursor: Abajo</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor mover abajo cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Cursor: Página arriba</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor mover página arriba cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Cursor: Página abajo</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor mover página abajo cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Cursor: Inicio de línea</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor mover inicio de línea cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Cursor: Fin de línea</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor mover fin de línea cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Cursor: Inicio del archivo</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor mover inicio del archivo cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Cursor: Fin del archivo</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor mover fin del archivo cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>No se muestra ningún editor de scripts.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Lista de scripts</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Consola</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Nuevo script</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Nuevo script de C#</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Ejemplos</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Abrir la carpeta de scripts</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Macro</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Iniciar / detener grabación</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Reproducir la última macro</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Reproducir repetidamente...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Lista de scripts</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Salida</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Consola</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Scripts</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Salida</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Consola</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Todo</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Complemento: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Origen de la salida</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Filtro</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Borrar</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Copiar todo</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Guardar en un archivo</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Ajustar líneas</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Se copió la salida.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Información</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Advertencia</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Error</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Lista de scripts</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Filtrar scripts</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Nuevo script</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Nuevo script de JavaScript</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Nuevo script de C#</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Abrir la carpeta de scripts</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Ejecutar</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Editar</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Abrir una copia para editar</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Cambiar nombre...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Nombre nuevo</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Eliminar (mover a la papelera de reciclaje)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Mostrar en la carpeta</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Asignar acceso directo...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Ejecutar automáticamente...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Scripts</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Macros</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Ejemplos</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>No se encontró la carpeta</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>residente</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Candidato a ejecución automática: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>Se movió “{0}” a la papelera de reciclaje.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>No se puede copiar el ejemplo: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>No se puede crear el script: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>No se puede cambiar el nombre: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>No se puede eliminar: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>No se puede abrir la carpeta: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Ejecutar</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Depurar</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Detener</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Pausar</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Paso por encima</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Paso al interior</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Paso al exterior</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Documento de destino</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(documento activo)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Editor de scripts: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Problemas</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Problemas ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Depuración</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Pila de llamadas</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Variables</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Inspección</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Agregar una expresión de inspección</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Local</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Closure</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Global</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Script</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Excepción: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Línea {0}, columna {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Modificado</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>En ejecución</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>En pausa en la línea {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Correcto ({0} s)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Detenido</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>No ejecutado</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Error</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>Se guardó “{0}”.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>No se puede guardar el script: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>No se puede leer el script: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>“{0}” supera los 10 MB. Edítalo con un editor externo.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Los scripts de C# no se pueden ejecutar paso a paso en la aplicación</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Punto de interrupción</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Punto de interrupción deshabilitado</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Punto de interrupción condicional</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>“{0}” tiene cambios sin guardar. ¿Guardarlo antes de cerrar?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Guardar</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>No guardar</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Depurar un script de C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Esperando a que se asocie un depurador. Id. de proceso: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Los scripts de C# no se pueden ejecutar paso a paso en la aplicación. Asocia un depurador externo (Visual Studio o Visual Studio Code) a este proceso y llama a System.Diagnostics.Debugger.Break() en el script para detenerlo.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Ejecutar sin asociar</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Lenguaje</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Restablecer sesión</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Borrar</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Escribe una expresión o instrucción (Enter: ejecutar, Shift+Enter: nueva línea)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Historial de la consola</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Se inició una sesión nueva.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Detenido.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Error en la entrada.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Agrega el componente de script de C# para usar C# en la consola.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>inicio</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>archivo abierto</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>antes de guardar</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>después de guardar</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>antes de cerrar</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Error en el script de ejecución automática “{0}” ({1}): {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Se detuvo el script de ejecución automática “{0}” ({1}): {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>El script de ejecución automática “{0}” ({1}) falló 3 veces seguidas y se deshabilitó.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Abrir configuración</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>El script “{0}” canceló el guardado: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Error en el script previo al guardado</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Error en el script “{0}”: {1}
+¿Guardar de todos modos?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Guardar</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>No guardar</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Grabar una macro</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Iniciar</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Elige cómo se graban las posiciones señaladas con el mouse.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Relativas al cursor (predeterminado)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Desplazamientos absolutos</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>No volver a preguntar (usar esta opción)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Grabación iniciada.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Grabando ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Grabando una macro, {0} operaciones. Haz clic para detener.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>No se puede grabar esta operación: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>selección con el teclado</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>eliminación</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>entrada en varios cursores</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>relleno con este contenido</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Ir al desplazamiento</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Seleccionar intervalo</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Buscar</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Reemplazar todo</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>No se encontró: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>No se grabó nada.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Aún no hay ninguna macro grabada.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Detén primero la grabación.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Última macro</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>No se puede leer la macro: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>La macro se detuvo: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>La macro se detuvo en la repetición {0}, operación “{1}”: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Guardar la macro ({0, plural, one {# operación} other {# operaciones}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Nombre</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Carpeta</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Método abreviado (opcional)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>por ejemplo, Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Guardar</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>No guardar</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Escribe un nombre.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>No se puede leer el método abreviado: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>No se puede guardar aquí: {0}. Elige otra carpeta.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Se guardó la macro “{0}”.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Reproducir una macro repetidamente</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Número de veces</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Veces (de 1 a 1.000.000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Hasta el final del archivo</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Para cada resultado de búsqueda</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>Dentro de la selección</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Reproducir</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Escribe un número de 1 a {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Límite de tiempo de ejecución (segundos)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Tiempo que un script de JavaScript puede ejecutarse antes de pausarse y preguntarte si debe continuar. 0 significa sin límite. No se cuenta la espera de las operaciones masivas ni de tu entrada.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Límite de memoria (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Memoria que puede usar un script de JavaScript (16-4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Límite de profundidad de recursión</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Profundidad máxima de las llamadas a funciones (100-10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Scripts en ejecución simultánea</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Los demás scripts esperan hasta que termine uno (1-16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Directiva de scripts (organización)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>La establece tu organización en el archivo de configuración. Deshabilita los scripts y los complementos, o permite solo los complementos firmados.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Sin restricciones</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Deshabilitar todos los scripts y complementos</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Solo complementos firmados</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Script: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Script: {0} (escribiendo)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>No hay ningún script en ejecución.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>El componente de script de C# ya está instalado.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Los scripts están deshabilitados por una configuración de tu organización (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Un script canceló el guardado: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>El script “{0}” se está ejecutando.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Detener</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>El script “{0}” terminó con un error.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Detalles</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>El script “{0}” no se ejecutó: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {# script en ejecución} other {# scripts en ejecución}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>El script “{0}” lleva más de {1} segundos en ejecución.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Continuar ({0} segundos más)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>¿Ejecutar el script “{0}”?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor se está ejecutando como administrador. Este script se ejecuta con derechos de administrador y puede hacer cosas que afectan a todo el equipo.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Nombre: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Autor: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Este código puede hacer cualquier cosa en tu equipo con tus derechos (incluido leer y escribir archivos y comunicarse por la red). Ejecuta solo código de autores de confianza.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Este script puede leer y escribir los documentos abiertos. También solicita estos permisos:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Este script puede leer y escribir los documentos abiertos. No solicita ningún otro permiso.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Este archivo procede de Internet. Ejecútalo solo si confías en su origen.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Ejecutar</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>No ejecutar</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Ejecutar una vez</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Permitir siempre</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Leer cualquier archivo</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Crear, escribir y eliminar cualquier archivo</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Comunicarse por la red (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Ejecutar programas externos</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Abrir discos, volúmenes y la memoria de procesos</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Leer el Portapapeles</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Cambiar la configuración de la aplicación</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>El script solicita el permiso “{0}” ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Permitir</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>No permitir</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Componente de script de C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Los scripts de C# necesitan el componente de script de C# (Roslyn), que no está instalado. ¿Agregarlo ahora?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Agregar</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Se descargará el componente.
+Tamaño: {0}
+Se guardará en: {1}
+Descargado desde: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Descargar</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>La descarga supera los {0} bytes esperados y se detuvo.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Agregando el componente de script de C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Se agregó el componente de script de C#.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>No se pudo agregar el componente de script de C#: {0} Puedes agregarlo manualmente: descarga el zip del componente desde la página de versiones y extráelo en la carpeta components\csharp\&lt;versión&gt;\ de la carpeta de datos.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>No se pudo agregar el componente de script de C#: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Codificación de caracteres desconocida “{0}”. No se cambió la columna de texto.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>No se puede usar {0} “{1}” (no se puede leer la expresión en la posición {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} “{1}” está fuera del archivo (longitud {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} no está disponible en esta versión.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Ningún disco coincide con “{0}”.</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Ningún volumen coincide con “{0}”.</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Ningún proceso coincide con “{0}”.</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>“{0}” coincide con {1} procesos. Especifica el id. de proceso con --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Abrir origen de datos de complemento</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Operaciones de complementos</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Complementos</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Administrar complementos...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Administrar</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>complemento complementos administrador extensiones plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Complemento</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Cargar solo complementos firmados</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Los complementos sin una firma válida no se cargan. Se aplica después de reiniciar.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Carpetas de desarrollo de complementos</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Carpetas de salida de compilación que se cargan directamente como complementos (se editan en el administrador de complementos).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Complementos</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Complementos</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Complementos</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Los complementos agregan tipos del inspector, hashes, formatos, comandos y paneles. Los complementos se ejecutan con los mismos derechos que tú; habilita solo complementos de autores de confianza. Los cambios se aplican después de reiniciar.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Modo seguro: no se carga ningún complemento. La lista y la configuración no cambian.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Agregar...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Reiniciar ahora</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Abrir la carpeta de complementos</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Quitar</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Configuración del complemento...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Habilitado</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Habilitado</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Deshabilitado</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>No hay complementos instalados. Agrega un archivo .hexplugin con Agregar... o suéltalo en la lista.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Carpetas de desarrollo</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Los complementos se cargan directamente desde estas carpetas de salida de compilación y se muestran como Desarrollo. Se te pregunta una vez por carpeta.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Agregar carpeta de desarrollo...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Se agregó la carpeta de desarrollo. Reinicia para cargarla.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Editores de confianza</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Los complementos firmados por estos editores se habilitan sin preguntar. Quita un editor para que se vuelva a preguntar.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Complementos instalados</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Suelta aquí un archivo .hexplugin para agregarlo.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Agregar complemento</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>editor desconocido</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Firmado por {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Firmado por {0} (no se pudo comprobar la revocación)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Firma no válida</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Firma aún sin comprobar</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Sin firmar</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Habilitado</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Deshabilitado</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>No se puede cargar ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Detenido ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>No cargado ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Cargando...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — cambia tras reiniciar</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Desarrollo</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Sin extensiones</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Agrega: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (deshabilitado: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>No se pueden agregar complementos en modo seguro.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>No se agregó el complemento: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Quitar complemento</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>¿Quitar “{0}”? Los complementos cargados se eliminan después de reiniciar.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Configuración de {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>tipo del inspector</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hash</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>formato de importación</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>formato de exportación</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>origen de datos</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>vista de transformación</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>operación de datos</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>comando</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>elemento de menú</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panel</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>página de configuración</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>función de plantilla</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>detección del tipo de archivo</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>desensamblador</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>reglas de coloreado</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API de scripts</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>desconocido</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>¿Habilitar el complemento “{0}”?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (actualización)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Editor: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Se carga desde una carpeta de desarrollo.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Este código puede hacer cualquier cosa en tu equipo con tus derechos (incluido leer y escribir archivos y acceder a la red). Habilita solo complementos de autores de confianza.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>El complemento declara: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Este complemento no está firmado. No se puede comprobar su editor.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Confiar siempre en los complementos de {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Habilitar</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>No habilitar</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor se está ejecutando como administrador. Este complemento se ejecuta con derechos de administrador y puede afectar a todo el equipo.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>¿Cargar los complementos como administrador?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor se está ejecutando como administrador. Estos complementos se ejecutan con derechos de administrador y pueden afectar a todo el equipo:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— aún sin confianza</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Cargar</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>No cargar</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Se detuvo el complemento “{0}” porque los errores continuaron.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Deshabilitar el complemento</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Volver a intentarlo al reiniciar</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>El complemento “{0}” no se cargará después de reiniciar.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>¿Deshabilitar el complemento?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor terminó inesperadamente la última vez, posiblemente por el complemento “{0}”. ¿Deshabilitarlo?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Mantener habilitado</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Este comando del complemento no se puede ejecutar ahora.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Error en el comando “{0}” del complemento “{1}”. Consulta el panel de salida.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Abrir: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>No se puede abrir {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Copiar como: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Copiado como {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Operación de datos: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Error en la operación de datos {0}: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Agregado por el complemento {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Panel de complemento</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>El complemento no pudo crear este panel.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Complementos</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(detenido)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Este tipo de complemento no se puede editar con este valor.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Estructura</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Salida de la plantilla</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Plantillas de estructura</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Aplicar plantilla...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Aplicar plantilla desde aquí...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Mostrar el tipo en el cursor...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Aplicar Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Buscar plantillas compatibles</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Ejecutar de nuevo</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Quitar aplicación</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Exportar resultados...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Nueva plantilla</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Abrir plantilla...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Editar plantilla</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Convertir .ksy a HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Administrar plantillas</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Coloreado de estructura</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Estructura</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Salida de la plantilla</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Resultados de estructura...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Aplicar plantilla desde aquí...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Interrumpir al leer aquí</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Plantilla</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Editor de código</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Plantilla: Aplicar</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>estructura;analizar;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Plantilla: Aplicar desde aquí</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;desde aquí</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Plantilla: Mostrar el tipo en el cursor</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>seguir;tipo;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Plantilla: Aplicar Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Plantilla: Ejecutar de nuevo</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluar;repetir;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Plantilla: Quitar aplicación</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>quitar;deshacer;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Plantilla: Detener evaluación</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancelar;detener;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Plantilla: Mostrar árbol de resultados</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>árbol;resultado;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Plantilla: Mostrar salida</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errores;salida;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Plantilla: Editar valor</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>cambiar;change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Plantilla: Ir a la definición</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaración;declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Plantilla: Ir al destino del puntero</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>puntero;destino;pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Plantilla: Copiar valor</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>portapapeles;clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Plantilla: Agregar a marcadores</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>marcador;bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Plantilla: Exportar resultados</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>exportar;json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Plantilla: Alternar coloreado</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>resaltar;highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Plantilla: Buscar plantillas compatibles</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detectar;detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Plantilla: Nueva</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>crear;create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Plantilla: Abrir</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>archivo;file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Plantilla: Editar</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Plantilla: Administrar</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>biblioteca;library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Plantilla: Convertir .ksy a HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>convertir;kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Plantilla: Referencia de la biblioteca estándar</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>ayuda;funciones;help;functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Plantilla: Ejecución de prueba</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>probar;sin guardar;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Plantilla: Interrumpir al leer aquí</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>punto de interrupción de datos;data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Ver: Panel de estructura</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>plantilla;resultados;template;results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Ver: Panel de salida de la plantilla</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errores;errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Editor de código: Iniciar depuración / continuar</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>ejecutar;depurar;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Editor de código: Detener depuración</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>fin;end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Editor de código: Alternar punto de interrupción</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>punto de interrupción;break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Editor de código: Paso por encima</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>siguiente;next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Editor de código: Paso al interior</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>entrar;enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Editor de código: Paso al exterior</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>salir;return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Editor de código: Ejecutar hasta el cursor</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Editor de código: Agregar expresión de inspección</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>inspección;watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Editor de código: Ir a la definición</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaración;declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Editor de código: Buscar referencias</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usos;usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Editor de código: Dar formato al documento</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>sangría;indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Editor de código: Alternar comentario</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comentario;comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Editor de código: Mostrar sugerencias de finalización</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>completar;intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Plantillas</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Aplicación automática</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Qué hacer cuando una plantilla coincide con un archivo que abres (número mágico, tipo MIME o extensión).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Sugerir</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Aplicar siempre</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>No hacer nada</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Volver a evaluar tras editar</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Evalúa de nuevo las plantillas aplicadas 500 ms después de la última edición. Si está desactivado, usa Ejecutar de nuevo en el árbol de resultados.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Coloreado de estructura</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Colorea los intervalos de los patrones de la plantilla en la vista Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Opacidad del coloreado (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Opacidad del coloreado de estructura sobre el fondo de la vista Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Carpetas de plantillas</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Carpetas adicionales donde se buscan plantillas del usuario.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Plantillas del inspector</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Plantillas cuyos tipos [[inspector]] se muestran en el inspector de datos.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Preferencias de plantillas</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Plantillas deshabilitadas, plantillas excluidas de la aplicación automática y sugerencias suprimidas.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Administrar plantillas</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Carpetas de plantillas</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Plantillas</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Plantillas del inspector</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Agregar carpeta...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Quitar</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>No se puede acceder a esta carpeta.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Filtrar por nombre</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Importar...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Nueva plantilla</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Habilitada</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Aplicación automática</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Editar</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Exportar...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Oculta por otra plantilla con el mismo nombre.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Sugerencias desactivadas</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Ninguna</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Mostrar de nuevo</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Agregar plantilla del inspector...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>tamaño no fijo</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Esta plantilla tiene tipos del inspector de tamaño no fijo o mayores de 4 KB. Se recomiendan tipos de tamaño fijo de 4 KB o menos.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Se importaron {0} archivo(s) de plantilla.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>No se pudo importar: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Se exportaron {0} archivo(s) a {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>No se pudo exportar: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Las plantillas estándar forman parte de la aplicación. Usa Duplicar y editar para exportar una copia.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Aplicar plantilla</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Aplicar plantilla</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Ejecutar de nuevo</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Ejecutar de nuevo</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Detener evaluación</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Detener evaluación</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Exportar</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Exportar</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Columnas</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Columnas</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Seguir el cursor</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Seguir el cursor</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Filtrar por nombre, valor o tipo</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtro</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Árbol de resultados</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Ruta (p. ej. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Ruta</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Evaluar todo y buscar</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} coincidencia(s)</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>No se encontró la ruta '{0}'.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Nombre</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Valor</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Desplazamiento</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Tamaño</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Comentario</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Orden</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Fin</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Color</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Orden de las columnas</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Mover {0} a la izquierda</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Mover {0} a la derecha</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Restablecer columnas</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Evaluando…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Evaluado: {0} patrones</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} error(es), {1} advertencia(s)</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>El número de patrones alcanzó el límite ({0}). Se muestran resultados parciales.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Aumentar el límite y ejecutar de nuevo</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} elementos</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bits</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bits {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / Hora local: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Valor sin definir</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Sin definir</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Seguir</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Apunta a {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>desplazamiento {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>tamaño {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(sin guardar)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(no se encontró el archivo de plantilla)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>No hay ninguna plantilla aplicada.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>No hay ninguna evaluación en curso.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Selecciona un nodo en el árbol de resultados.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>El nodo seleccionado no es un puntero.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>El destino del puntero es nulo o está fuera de los datos.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>No se encontró la plantilla '{0}'.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Un documento puede tener hasta {0} aplicaciones de plantilla.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>No se encontró el archivo de plantilla '{0}'.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Evaluando la plantilla {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>El JSON supera los 64 MB. Guárdalo en un archivo en su lugar.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Guardar en un archivo...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Plantilla: {0}
+Desplazamiento inicial: {1}
+Modo: {2}
+Orden de bytes: {3}
+Tipo: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Estándar</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Usuario</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Recientes</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Usa scripts</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Detalles</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Ir a los datos</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Ir al destino del puntero</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Ir a la definición</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Editar valor</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Copiar valor</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Copiar nombre y valor</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Copiar ruta</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Copiar bytes</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Copiar desplazamiento</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Copiar subárbol como JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Agregar a marcadores</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Agregar intervalos a la selección múltiple</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Abrir sección en una pestaña nueva</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Aplicar plantilla desde aquí...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Interrumpir al leer aquí</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Cambiar entre fijo / seguimiento</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Convertir en fijo</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Configuración de la aplicación</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Exportar...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Ejecutar de nuevo</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Quitar aplicación</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Valor</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>Aceptar</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Este patrón solo tiene una conversión de lectura, así que estás editando el valor sin procesar.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Escribe un número</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Verdadero</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Rellenar el resto con ceros</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Hora local</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Zona horaria</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Escribe un valor de 0 a {1} ({0} bits).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>El valor está fuera del rango del tipo.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>El texto es más largo que el campo ({0} bytes).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Error en la conversión de escritura: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>No se puede leer el valor.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Los patrones dentro de una sección no se pueden editar.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Este patrón es de solo lectura.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Los valores calculados no se pueden editar.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Los nodos de error no se pueden editar.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Este nodo no tiene un valor que editar.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Editar valor de plantilla</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Aplicar plantilla</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Aplicar Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Buscar plantillas</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Nombre, descripción, extensión o tipo MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Plantillas</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Desplazamiento inicial</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Escribe un desplazamiento dentro del documento.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Orden de bytes predeterminado</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Configuración del documento</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Configuración del documento (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Configuración del documento (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Modo</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Fijo</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Seguir el cursor</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Tipo (seguimiento)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Aplicar</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Versión {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Licencia: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Plantillas compatibles</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (puntuación {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>número mágico</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>extensión</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Ninguna plantilla coincide con este documento.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Este archivo parece {0}. ¿Aplicar la plantilla “{0}”?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(usa scripts)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Aplicar</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Otros candidatos...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>No volver a mostrar para este formato</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Se produjo un error al aplicar la plantilla “{0}”.</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Exportar resultados de estructura</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Destino</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Toda la aplicación</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>El subárbol seleccionado ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Máximo de elementos de matriz</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Profundidad máxima</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Sin límite</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Incluir patrones ocultos</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Escribir los desplazamientos como cadenas hexadecimales</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Guardar...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Exportando los resultados de estructura</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} nodos</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Se exportó a {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>No se pudo exportar a {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>No hay espacio suficiente en el disco.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Borrar</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Borrar</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Salida de la plantilla</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Ir al origen</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Ir a los datos</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Ayuda de {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Guardar</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Ejecución de prueba</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Documento de destino</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Documento de destino</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Iniciar depuración / continuar</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Paso por encima</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Paso al interior</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Paso al exterior</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Detener</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Evaluar en orden durante la depuración</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Dar formato al documento</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Alternar comentario</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Código fuente de la plantilla</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Sugerencias de finalización</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Variables</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Inspección</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Pila de llamadas</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Puntos de interrupción</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Variables</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Inspección</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Pila de llamadas</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Puntos de interrupción</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Agregar expresión de inspección</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Agregar</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Expresión (p. ej. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Problemas</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Referencia en la línea {0}, columna {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Nueva plantilla</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>No hay ningún editor de plantillas abierto.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>No se está depurando.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Abre un documento en el que ejecutar la plantilla.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>No se pudo abrir la plantilla {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>No se pudo guardar la plantilla: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Las plantillas estándar no se pueden guardar directamente. Usa Duplicar y editar para guardar una copia en tu carpeta de plantillas.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplicar y editar</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Corrige los errores de sintaxis antes de depurar.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>La evaluación diferida está desactivada durante la depuración. Las matrices grandes pueden tardar mucho.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Punto de interrupción de datos</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>El depurador se detiene cuando se crea un patrón que contiene {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>No se pudo convertir {0} a HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Evaluado: {0} patrones (detenido en el límite de {1}; se muestran resultados parciales)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>pasos</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>patrones</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memoria</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>tiempo</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Ir a la línea</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Número de línea (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>No se muestra ningún editor de código (plantilla o script).</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Este editor no admite este comando.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Seguir como puntero</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>puntero desplazamiento dirección saltar inspector pointer offset address jump</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Seguir como puntero</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absoluto (desplazamiento)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absoluto (dirección)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relativo al cursor</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relativo al final del valor</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relativo a una base…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Base (expresión)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Ir</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>El destino {0} está fuera del documento (longitud {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Esta fila no tiene un valor que se pueda usar como posición</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Escribe la base como una expresión, por ejemplo 0x400000 o bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Selecciona una fila de enteros en el inspector de datos</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Moverse como una matriz de este tipo</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Elemento anterior</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Elemento siguiente</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Salir del modo de matriz</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Número de elemento</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Tamaño del elemento</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(no está en el límite de un elemento)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>El elemento {0} está fuera del documento</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Valor</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Expr.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Referencia circular entre marcadores</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Las referencias bm.nombre están anidadas en más de {0} niveles</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>La posición {0} está fuera del documento</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Error en la expresión de posición: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Valor</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Editar valor del marcador</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(sin tipo)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Orden de bytes</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Documento</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Expresión de posición</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>p. ej. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Ver: Panel de vista de imagen</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizador mapa de bits píxeles imagen visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Vista de imagen</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Vista de imagen</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>Blanco y negro de 1 bit</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>Gris de 2 bits</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>Gris de 4 bits</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>Gris de 8 bits</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bits (colores del tema de bytes)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Seguir el cursor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Inicio de la selección</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Fijo</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>De arriba abajo</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>De abajo arriba (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Automático</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Formato de píxel</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Ancho (píxeles)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Bytes por fila</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Automático</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Posición inicial</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Posición inicial fija</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Orden de filas</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Más opciones</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Imagen</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Desplazar filas</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Guardar como imagen…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>El intervalo de vista es demasiado grande; solo se dibujan los primeros 64 MB</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Escribe la posición inicial fija como una expresión</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>No hay ninguna imagen que guardar</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Se guardó la imagen en {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>No se pudo guardar {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Imagen PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Predeterminado</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Tiempo agotado</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>El tipo tardó más de {0} ms; se vuelve a ejecutar cuando cambia la posición inicial</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Archivo de tipos del inspector {0}, línea {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>El modo sin conexión está activado (o las descargas están desactivadas), por lo que el componente no se descarga. Para agregarlo manualmente, obtén {0} en la página de versiones de esta versión (en otro equipo si es necesario) y extráelo en {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Se inició en modo seguro. Los complementos y los scripts de ejecución automática no se cargan.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Reiniciar normalmente</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Plantilla: Buscar valores de campo</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>buscar;campo;valor;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>No hay ninguna plantilla aplicada.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Error de sintaxis en el carácter {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>la condición está vacía</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>falta un valor</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>condición desconocida (usa name:, type: o value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>comparación desconocida (usa =, !=, &lt;, &lt;=, &gt;, &gt;= o ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>las comillas no están cerradas</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>la expresión regular no es válida</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Valores de plantilla</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Presiona Enter para buscar en los valores de campo. Los resultados aparecen en Resultados de la búsqueda.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Campo</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (definido por el usuario)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (plantilla {1})</value></data>
 </root>
