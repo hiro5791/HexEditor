@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Dibatalkan.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Jalankan 'hexed --help' (atau 'hexed &lt;command&gt; --help') untuk melihat cara penggunaan.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Kesalahan tak terduga ({0}). Detail ditulis ke {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Penggunaan: hexed &lt;command&gt; [argumen] [opsi]
+            hexed &lt;file&gt; [opsi]               (sama dengan: hexed open &lt;file&gt;)
+
+Perintah:
+  open      Membuka file, disk, atau proses di jendela HexEditor
+  hash      Menghitung dan memverifikasi hash dan checksum
+  dump      Mencetak hex dump
+  compare   Membandingkan dua file
+  run       Menjalankan skrip tanpa jendela
+  template  Menerapkan templat struktur dan mencetak hasilnya
+  patch     Menerapkan patch IPS ke file
+  convert   Mengonversi antar format (Intel HEX, S-record, Base64, kode sumber, ...)
+  find      Mencari di file dan mencetak kecocokan
+
+Opsi umum (semua perintah):
+  -h, --help           Menampilkan cara penggunaan (juga: hexed &lt;command&gt; --help)
+      --version        Menampilkan versi
+  -q, --quiet          Tidak mencetak apa pun selain hasil
+      --format &lt;f&gt;     Format keluaran: text (default) atau json
+  -o, --output &lt;path&gt;  Menulis hasil ke file, bukan ke layar
+      --lang &lt;tag&gt;     Bahasa pesan (misalnya en, ja)
+      --no-color       Tidak menggunakan warna
+      --unregister     Menghapus pendaftaran yang dibuat di PC ini (menu klik kanan,
+                       asosiasi file, jump list, PATH, folder sementara)
+
+Kode keluar: 0 berhasil, 1 hasil negatif (ada perbedaan, tidak ada kecocokan, tidak cocok), 2 kesalahan
+penggunaan, 3 kesalahan I/O, 4 kesalahan skrip atau templat, 5 tidak diizinkan, 6 dibatalkan,
+7 batas terlampaui, 8 kesalahan format, 10 kesalahan internal.
+
+Offset, panjang, dan rentang menerima ekspresi. Angka tanpa awalan adalah desimal; gunakan 0x
+untuk heksadesimal. Rentang berupa start:length atau start..end (end tidak termasuk); 'end' adalah
+panjang file (misalnya end-16:16). Di PowerShell, letakkan nilai yang berisi $ di dalam tanda
+kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Penggunaan: hexed open [paths...] [opsi]
+
+Membuka file di jendela HexEditor. Jika HexEditor sudah berjalan, file dibuka sebagai tab di
+sana. Jalur relatif diselesaikan dari folder saat ini.
+
+Opsi:
+  -g, --offset &lt;expr&gt;      Menaruh kursor di posisi ini (misalnya 0x1000 atau end-16)
+      --select &lt;range&gt;     Memilih rentang ini (start:length atau start..end)
+  -r, --readonly           Membuka sebagai hanya-baca
+      --disk &lt;n|path&gt;      Membuka disk fisik (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Membuka volume (--volume C:)
+      --process &lt;pid|name&gt; Membuka memori sebuah proses
+      --encoding &lt;name&gt;    Pengodean karakter kolom teks
+      --template &lt;name|path&gt;  Menerapkan templat struktur setelah membuka
+      --compare &lt;a&gt; &lt;b&gt;    Membuka dua file di tampilan perbandingan
+      --run &lt;script&gt;       Menjalankan skrip setelah membuka
+      --new-window         Membuka di jendela baru
+      --new-document       Membuka dokumen kosong baru
+      --open-disk          Menampilkan dialog Buka Disk
+      --new-instance       Memulai proses terpisah, bukan memakai yang sedang berjalan
+  -w, --wait               Tidak kembali sampai dokumen yang dibuka ditutup
+      --safe-mode          Memulai dalam mode aman (hanya proses baru)
+      --write-block        Memulai dengan proteksi tulis untuk seluruh aplikasi
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Menampilkan teks pseudo-terjemahan (build pratinjau)
+      --plugin-dev &lt;folder&gt; Memuat plugin yang sedang dikembangkan (hanya proses baru)
+      --ui-lang &lt;tag&gt;      Bahasa tampilan jendela (hanya proses baru)
+      --test-hooks &lt;file&gt;  Mengaktifkan fault injection (hanya build pengujian)
+
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Penggunaan: hexed hash [paths...] [opsi]
+            hexed hash --check &lt;checksum file&gt; [opsi]
+
+Menghitung hash dan checksum. Jalur dapat berisi wildcard (*.bin) atau berupa folder; gunakan - untuk membaca
+input standar. Beberapa algoritma dihitung dalam satu kali baca.
+
+Opsi:
+  -a, --algorithm &lt;id,...&gt;   ID algoritma, dipisahkan koma (default sha256).
+                             '--algorithm list' mencetak ID yang tersedia
+      --range &lt;range&gt;        Hash hanya rentang ini (start:length atau start..end)
+      --format &lt;f&gt;           text (default): algorithm  value  path
+                             gnu: value  path (sama dengan sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: satu objek per file
+      --check &lt;file&gt;         Memverifikasi file yang tercantum di file checksum (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) dan mencetak OK, FAILED, atau MISSING
+  -r, --recurse              Menyertakan subfolder jika folder diberikan
+
+Kode keluar: 0 berhasil, 1 ketidakcocokan dengan --check, 3 file tidak dapat dibaca.
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Penggunaan: hexed dump &lt;path&gt; [opsi]
+
+Mencetak hex dump file (atau sebuah rentang) ke output standar. Pemakaian memori tidak bergantung pada ukuran.
+
+Opsi:
+      --range &lt;range&gt;        Rentang yang dicetak (start:length atau start..end; default: seluruh file)
+      --width &lt;n&gt;            Byte per baris (default 16)
+      --group &lt;n&gt;            Byte per grup (default bergantung pada gaya; 0 untuk tanpa grup)
+      --encoding &lt;name&gt;      Pengodean karakter kolom teks (default ascii)
+      --base-address &lt;expr&gt;  Alamat yang ditampilkan untuk byte pertama (default 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              Mencetak * untuk baris yang sama dengan baris sebelumnya (seperti hexdump -C)
+
+Kode keluar: 2 jika rentang berada di luar file.
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Penggunaan: hexed compare &lt;path1&gt; &lt;path2&gt; [opsi]
+
+Membandingkan dua file dan mencetak perbedaannya.
+
+Opsi:
+      --mode &lt;byte|resync&gt;   byte (default): membandingkan byte pada offset yang sama
+                             resync: mengizinkan penyisipan dan penghapusan
+      --range1 &lt;range&gt;       Rentang file pertama (default: semua)
+      --range2 &lt;range&gt;       Rentang file kedua (default: semua)
+      --max &lt;n&gt;              Jumlah maksimum perbedaan yang dicetak (default 1000);
+                             sisanya hanya dihitung
+      --format &lt;text|json&gt;   Format keluaran
+      --brief                Mencetak satu baris (sama atau berbeda) dan berhenti pada perbedaan pertama
+
+Kode keluar: 0 sama, 1 berbeda, 3 file tidak dapat dibaca.
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Penggunaan: hexed run &lt;script&gt; [files...] [opsi]
+
+Menjalankan skrip tanpa membuka jendela. File dibuka secara berurutan (app.documents); yang pertama
+adalah app.activeDocument.
+
+Opsi:
+      --arg &lt;name=value&gt;   Parameter skrip (dapat diulang); juga tersedia di script.args
+      --trust              Menjalankan skrip yang tidak tepercaya tanpa bertanya
+      --allow &lt;perm,...&gt;   Izin yang diberikan (misalnya file-read)
+      --save               Menyimpan setiap dokumen yang berubah saat skrip berakhir
+      --save-as &lt;path&gt;     Menyimpan dokumen pertama ke jalur ini (aslinya tidak diubah)
+      --dry-run            Tidak menyimpan apa pun; mencetak ringkasan perubahan
+      --timeout &lt;seconds&gt;  Waktu jalan maksimum seluruh skrip
+  -r, --readonly           Membuka file sebagai hanya-baca
+
+Secara default hanya dokumen yang memanggil doc.save() di skrip yang disimpan.
+Kode keluar skrip dapat ditetapkan dengan app.exit(code). Kode 2 sampai 10 memiliki arti yang tercantum
+di 'hexed --help'; gunakan 64 atau lebih untuk arti Anda sendiri.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Penggunaan: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [opsi]
+
+Menerapkan templat struktur ke file dan mencetak hasilnya.
+
+Opsi:
+      --template &lt;name|path&gt;  Templat yang diterapkan
+      --auto                  Memilih templat secara otomatis (kode keluar 1 jika tidak ada yang cocok)
+  -g, --offset &lt;expr&gt;         Offset awal struktur (default 0)
+      --format &lt;f&gt;            json, csv, atau text (pohon berindentasi; default text)
+      --depth &lt;n&gt;             Kedalaman maksimum pohon
+      --fields &lt;path,...&gt;     Mencetak hanya bidang ini (misalnya header.e_lfanew,sections[*].name)
+
+Kode keluar: 4 untuk kesalahan templat.
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Penggunaan: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [opsi]
+
+Menerapkan file patch ke sebuah file. Salah satu dari -o dan --in-place wajib ada. Versi ini menerapkan patch
+IPS dan IPS32.
+
+Opsi:
+  -o, --output &lt;path&gt;       Menulis file hasil patch di sini (target tidak diubah)
+      --in-place            Mengganti target dengan aman (file sementara ditulis lebih dulu)
+      --format &lt;f&gt;          auto (default), ips, atau ips32
+      --verify-before &lt;a:v&gt; Memeriksa hash target lebih dulu (misalnya sha256:ab12...);
+                            kode keluar 1 dan tidak ada yang ditulis jika berbeda
+      --verify-after &lt;a:v&gt;  Memeriksa hash hasil sebelum menuliskannya
+      --dry-run             Mencetak jumlah record dan byte yang berubah; tidak menerapkan apa pun
+
+Kode keluar: 1 verifikasi gagal, 8 patch rusak.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Penggunaan: hexed convert &lt;input&gt; &lt;output&gt; [opsi]
+
+Mengonversi file antar format impor/ekspor HexEditor.
+
+Opsi:
+      --from &lt;format&gt;       Format input (default: dideteksi dari isi dan ekstensi)
+      --to &lt;format&gt;         Format output (default: dari ekstensi output; bin jika tidak dikenal)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Membaca file Intel HEX / S-record meskipun checksum salah
+      --fill &lt;hex&gt;          Byte yang dipakai untuk celah (default FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+Opsi format memiliki nama bidang dialog impor/ekspor, ditulis dengan
+huruf kecil dan tanda hubung, misalnya --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Kode keluar: 8 untuk kesalahan checksum atau format pada input.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Penggunaan: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [opsi]
+
+Mencari di file dan mencetak "path  offset  length" untuk setiap kecocokan.
+
+Opsi:
+      --hex &lt;pattern&gt;      Byte, misalnya "DE AD ?? EF" (?? adalah byte apa pun, ? nibble apa pun)
+      --text &lt;string&gt;      Teks
+      --regex &lt;expr&gt;       Ekspresi reguler (pada teks)
+      --encoding &lt;name&gt;    Pengodean karakter --text dan --regex (default utf-8)
+      --case-sensitive     Membedakan huruf besar dan kecil
+      --range &lt;range&gt;      Mencari hanya di rentang ini pada setiap file
+      --max &lt;n&gt;            Berhenti setelah n kecocokan
+      --format &lt;text|json&gt; Format keluaran
+  -r, --recurse            Menyertakan subfolder jika folder diberikan
+
+Kode keluar: 0 ditemukan, 1 tidak ditemukan, 3 file tidak dapat dibaca.
+Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misalnya '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Perintah atau file tidak dikenal: {0}. Perintah: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Bahasa tidak dikenal: {0}. Gunakan salah satu dari 23 tag bahasa tampilan (misalnya en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Opsi {0} tidak dikenal untuk '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>Opsi {0} tidak menerima nilai ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>Opsi {0} memerlukan nilai ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Jalur tidak ada: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Akses ditolak: {0}. Periksa izin file atau jalankan dari akun yang boleh mengaksesnya.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>Tidak dapat membaca {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>Tidak dapat menulis {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} adalah folder, bukan file.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Tidak ada file yang cocok dengan {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>Tidak dapat membaca {0} pada {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Ruang kosong di {0} tidak cukup (butuh {1} byte, tersedia {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>File terlalu besar untuk sistem file {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>Jalur output {0} juga merupakan input. Pilih jalur output lain.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: tidak dapat membaca ekspresi "{1}" pada posisi {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" berada di luar file (panjang {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" harus berupa angka dari {2} sampai {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>--format {0} tidak didukung oleh '{1}'. Gunakan: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' memerlukan setidaknya satu jalur input.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' menerima tepat satu jalur input.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' tidak tersedia di versi ini.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} tidak tersedia di versi ini.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Data tidak muat dalam format {0} (batas {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Pengodean karakter tidak dikenal: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>ekspresi kosong</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>kesalahan sintaks</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>tanda kurung tidak ditutup</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>nama tidak dikenal (gunakan end untuk panjang file)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>penanda tidak tersedia di command line</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>fungsi tidak dikenal</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>pembagian dengan nol</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>nilai terlalu besar</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>bukan angka yang valid</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>data tidak dapat dibaca di sini</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>tidak tersedia di command line</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu memerlukan tepat satu algoritma. Gunakan --format bsd atau text untuk beberapa algoritma.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range tidak dapat dipakai dengan input standar.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Algoritma tidak dikenal: {0}. Jalankan 'hexed hash --algorithm list' untuk melihat ID.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>Algoritma {0} tidak tersedia di PC ini.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} tidak berisi baris checksum yang dapat dibaca.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>Tidak dapat menentukan algoritma untuk {0}. Tentukan dengan --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} checksum yang dihitung TIDAK cocok.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>{0} file yang tercantum tidak ada.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Gaya tidak dikenal: {0}. Lihat 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' memerlukan tepat dua jalur.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Mode tidak dikenal: {0}. Gunakan byte atau resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>berubah</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>disisipkan</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>dihapus</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>tidak terbaca</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... {0} perbedaan lagi tidak ditampilkan (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} perbedaan, total {1} byte</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>File sama.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>File berbeda (perbedaan pertama pada {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>{0} rentang tidak dapat dibaca.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Tentukan tepat satu dari --hex, --text, dan --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>Pola pencarian tidak valid ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: {1} rentang tidak terbaca dilewati.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Penggunaan: hexed convert &lt;input&gt; &lt;output&gt; [opsi]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Patch IPS diterapkan dengan 'hexed patch', bukan 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Nilai tidak valid untuk: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Format tidak dikenal: {0}. Format: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" tidak valid. Gunakan: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} tidak berlaku untuk konversi dari {1} ke {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  baris {0}, kolom {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: kesalahan checksum pada baris {1}, kolom {2}. Gunakan --ignore-checksum untuk tetap membaca file.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: kesalahan format pada baris {1}, kolom {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>{0} kesalahan checksum diabaikan.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Penggunaan: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Tentukan -o &lt;output&gt; atau --in-place (agar file asli tidak berubah karena kesalahan).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o dan --in-place tidak dapat dipakai bersamaan.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Jalur output {0} adalah target atau patch. Gunakan --in-place untuk mengganti target.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} bukan format patch. Gunakan auto, ips, atau ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: patch UPS, BPS, dan .hexpatch tidak didukung di versi ini. IPS dan IPS32 didukung.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} bukan file patch yang dapat dikenali.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: patch rusak pada record {1} (offset file {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} bukan patch {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" harus berbentuk algoritma:nilai (misalnya sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} tidak memiliki hash yang diharapkan (--verify-before). Tidak ada yang ditulis.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} hasil patch tidak memiliki hash yang diharapkan (--verify-after). Tidak ada yang ditulis.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>{0} record diterapkan, {1} byte berubah, perubahan panjang {2}. {3} ditulis.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>format</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} record, {1} byte akan berubah, perubahan panjang {2}, panjang baru {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Tentukan tepat satu dari --template dan --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>Templat "{0}" tidak ditemukan. Gunakan nama templat standar (misalnya pe, png) atau jalur ke file .hxt atau .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Tidak ada templat yang cocok dengan {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Kesalahan templat: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Penggunaan: hexed run &lt;script&gt; [files...] [opsi]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Gunakan hanya satu dari --save, --save-as, dan --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly tidak dapat digabungkan dengan --save atau --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" harus berbentuk name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" harus berupa jumlah detik yang lebih besar dari 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as memerlukan file untuk dibuka (file pertama disimpan ke jalur baru).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} adalah file yang sedang dibuka. Gunakan --save untuk menimpanya.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: {1} byte berubah (tidak disimpan: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} memiliki perubahan yang belum disimpan. Perubahan tidak disimpan (gunakan --save atau doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Bahasa tampilan tidak dikenal: {0}. Gunakan salah satu dari 23 tag bahasa tampilan (misalnya ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Pseudo-locale tidak dikenal: {0}. Gunakan qps-ploc atau qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>HexEditor.exe tidak ditemukan di samping hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>Tidak dapat memulai {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor keluar dengan kode {0} sebelum dokumen ditutup.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Semua pendaftaran telah dihapus.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Dihapus: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Tidak dapat menghapus: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>menu klik kanan Explorer</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>asosiasi file</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>entri App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>entri PATH untuk hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>jump list taskbar</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>pendaftaran pemberitahuan</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>folder sementara</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>entri registry</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Pendaftaran versi ini dikelola oleh Windows. Tidak ada yang dihapus.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Tidak ada yang didaftarkan oleh salinan ini. Tidak ada yang dihapus.</value></data>
+</root>

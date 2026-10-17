@@ -5481,4 +5481,1072 @@ Detail ditulis ke:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static baca-saja</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Pengodean teks (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Dokumen lengkap (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Karakter tak terduga '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Diperlukan '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>'{0}' tak terduga</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Angka tidak valid '{0}'</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Literal string tidak diakhiri</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Urutan escape tidak valid '{0}'</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Komentar tidak diakhiri</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Penumpukan terlalu dalam (batas {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>String byte tidak valid '{0}'</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Templat bukan UTF-8 yang valid</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Templat terlalu besar (batas 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Terlalu banyak kesalahan; hanya {0} pertama yang ditampilkan</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Nilai '{1}' tidak valid untuk pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Pragma tidak dikenal '{0}' diabaikan</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' sudah didefinisikan di {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>'{0}' tidak ditemukan (dicari di: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Templat tidak dapat melakukan operasi ini: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Templat ini memerlukan aplikasi versi {0} atau lebih baru</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Atribut tidak dikenal '{0}' diabaikan</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} tidak muat dalam {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Nilai {0} memiliki lebih dari satu nama ('{1}' digunakan)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} melebihi nilai maksimum; {2} digunakan</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Templat termasuk impor terlalu besar (batas 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>'{0}' tidak didefinisikan</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Pembagian dengan nol</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Tipe tidak cocok: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Rekursi terlalu dalam (batas {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Jumlah pernyataan yang dijalankan mencapai batas ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Jumlah pola mencapai batas ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Memori evaluasi mencapai batas ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Waktu evaluasi mencapai batas ({0} dtk)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Penempatan 0x{0} berada di luar data</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) berada di luar data</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} byte) berada di luar data</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Posisi tidak boleh negatif ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Array tidak dapat diakhiri karena ukuran elemen adalah 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Array berakhir karena akhir data tercapai</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Array dipotong pada batas ({0} elemen)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Elemen terakhir yang tidak lengkap ({0} byte) tidak disertakan</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Terminator string tidak ditemukan</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 lebih panjang dari 10 byte (offset 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Isi struktur ({0} byte) melebihi ukuran yang ditentukan ({1} byte)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Tipe penunjuk harus berupa tipe bilangan bulat</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Di luar rentang (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Pola tidak dapat dideklarasikan di dalam fungsi</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Asersi gagal: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Fungsi ekstensi '{0}' tidak terdaftar</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Fungsi ekstensi '{0}' gagal: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Fungsi ekstensi '{0}' tidak diizinkan berjalan</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Indeks {0} di luar rentang (0 sampai {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>sizeof({0}) tidak dapat digunakan karena ukuran tipe tidak tetap</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Total bit field ({0} bit) melebihi {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Bit field tidak boleh lebih lebar dari 64 bit ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Dekompresi {0} gagal: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Dekompresi dihentikan karena data mencapai batas ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} tidak didukung di versi ini</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Panjang ({0}) melebihi batas 256 MB per panggilan</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Tidak dapat menetapkan nilai ke '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Data di 0x{0} tidak dapat dibaca</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Evaluasi dibatalkan</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} tidak muat dalam {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' bukan fungsi</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' menerima {1} argumen</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Fitur Kaitai Struct '{0}' tidak didukung</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Isi tidak cocok dengan byte yang diharapkan</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Validasi gagal: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Keluaran dipotong karena terlalu panjang</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Total bagian mencapai batas ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' bukan pola</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' tidak memiliki anggota '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Argumen tidak valid untuk '{0}': {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Data tidak cocok dengan magic {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>File sementara tidak dapat ditulis: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Kesalahan sintaks YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Tag YAML tidak diizinkan ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Terlalu banyak perluasan alias YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Kunci duplikat '{0}'</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Karakter tab tidak dapat digunakan untuk indentasi</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy tidak valid: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Penumpukan YAML terlalu dalam</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Kesalahan internal pada evaluator templat: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>maksud Anda '{0}'?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Info</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Kesalahan</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Skrip</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Skrip: Jalankan</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>jalankan skrip ulang jalankan lagi run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Skrip: Jalankan file skrip...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>jalankan file skrip run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Skrip: Hentikan semua skrip</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>hentikan batal skrip stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Skrip: Tambah komponen skrip C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>komponen skrip c# pasang csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Skrip</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Jalankan skrip...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Jalankan ulang skrip terakhir</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Hentikan semua skrip</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Tambah komponen skrip C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Jalan otomatis (hook)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook jalan otomatis startup buka simpan tutup skrip automatic run</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Folder skrip</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>folder skrip pustaka bersama script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Panel keluaran</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Editor skrip</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Jumlah baris maksimum yang disimpan di panel keluaran</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Baris yang lebih lama dihapus saat batas terlampaui (100-1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Tampilkan panel keluaran saat skrip menulis keluaran</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Ditampilkan tanpa mengambil fokus keyboard.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Berhenti pada pengecualian saat debug</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Pilih kapan debugger JavaScript berhenti pada pengecualian.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Tidak pernah</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Hanya pengecualian yang tidak tertangkap</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Semua pengecualian</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Folder skrip tambahan</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Folder yang ditambahkan ke daftar skrip.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Skrip yang didaftarkan di sini berjalan otomatis. Tidak ada yang berjalan kecuali Anda menambahkannya di sini, dan skrip harus tepercaya.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Mode aman aktif, sehingga jalan otomatis dinonaktifkan.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>batas waktu {0} dtk</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Tidak ada skrip yang terdaftar.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Tambah skrip</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Tambah</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Pilih file...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Pilih skrip yang akan dijalankan otomatis.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Tambahkan "{0}" dengan tombol Tambah.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Aktifkan {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Kondisi</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Naikkan</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Turunkan</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Hanya dijalankan untuk data yang cocok. Kosongkan agar cocok dengan semua.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Ekstensi (mis. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Pola jalur (mis. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Byte awal (hex, mis. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Sumber data</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Apa saja</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Folder yang tercantum di sini ditampilkan di daftar skrip selain folder skrip standar.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Tidak ada folder tambahan.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Tambah folder...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Skrip</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Makro</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Skrip</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Kursor</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Tampilkan/sembunyikan panel daftar skrip</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>skrip makro daftar panel scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Tampilkan/sembunyikan panel keluaran</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>keluaran log pesan panel output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Tampilkan/sembunyikan panel konsol</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>konsol repl panel console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Tampilkan daftar skrip</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>skrip makro daftar panel scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Tampilkan konsol</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>konsol repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Skrip baru</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>buat baru javascript js create</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Skrip C# baru</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>buat baru csharp csx create</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Buka contoh</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>contoh sampel examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Buka folder skrip</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>folder explorer buka</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Jalankan dengan debug</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>debugger breakpoint step debug langkah</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Jeda</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>jeda break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Hapus keluaran</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>bersihkan log keluaran clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Mulai / hentikan perekaman</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>rekam makro record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Putar makro terakhir</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>putar ulang makro terakhir replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Putar berulang</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>ulangi makro loop repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Kursor: Kiri</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>kursor pindah kiri cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Kursor: Kanan</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>kursor pindah kanan cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Kursor: Atas</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>kursor pindah atas cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Kursor: Bawah</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>kursor pindah bawah cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Kursor: Halaman ke atas</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>kursor pindah halaman atas cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Kursor: Halaman ke bawah</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>kursor pindah halaman bawah cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Kursor: Awal baris</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>kursor pindah awal baris cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Kursor: Akhir baris</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>kursor pindah akhir baris cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Kursor: Awal file</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>kursor pindah awal file cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Kursor: Akhir file</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>kursor pindah akhir file cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Tidak ada editor skrip yang ditampilkan.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Daftar skrip</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Konsol</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Skrip baru</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Skrip C# baru</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Contoh</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Buka folder skrip</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Makro</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Mulai / hentikan perekaman</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Putar makro terakhir</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Putar berulang...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Daftar skrip</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Keluaran</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Konsol</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Skrip</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Keluaran</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Konsol</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Semua</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Skrip: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Plugin: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Sumber keluaran</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Filter</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Salin semua</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Simpan ke file</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Bungkus baris</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Keluaran disalin.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Informasi</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Kesalahan</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Daftar skrip</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Filter skrip</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Baru</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Skrip JavaScript baru</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Skrip C# baru</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Buka folder skrip</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Jalankan</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Buka salinan untuk diedit</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Ganti nama...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Nama baru</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Hapus (pindahkan ke Recycle Bin)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Tampilkan di folder</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Tetapkan pintasan...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Jalankan otomatis...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Skrip</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Makro</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Contoh</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>skrip-baru</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Folder tidak ditemukan</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>resident</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Kandidat jalan otomatis: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>"{0}" dipindahkan ke Recycle Bin.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Tidak dapat menyalin contoh: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Tidak dapat membuat skrip: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Tidak dapat mengganti nama: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Tidak dapat menghapus: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Tidak dapat membuka folder: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Jalankan</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Debug</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Jeda</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Step over</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Step into</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Step out</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Dokumen target</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(dokumen aktif)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Editor skrip: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Masalah</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Masalah ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Debug</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Call stack</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Variabel</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Watch</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Tambah ekspresi watch</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Lokal</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Closure</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Global</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Skrip</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Pengecualian: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Baris {0}, kolom {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Dimodifikasi</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Berjalan</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Dijeda di baris {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Berhasil ({0} dtk)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Dihentikan</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Tidak dijalankan</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Gagal</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>"{0}" disimpan.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Tidak dapat menyimpan skrip: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Tidak dapat membaca skrip: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>"{0}" lebih besar dari 10 MB. Edit dengan editor eksternal.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Skrip C# tidak dapat dijalankan langkah demi langkah di aplikasi</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Breakpoint</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Breakpoint nonaktif</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Breakpoint bersyarat</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>"{0}" memiliki perubahan yang belum disimpan. Simpan sebelum menutup?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Simpan</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Jangan simpan</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Debug skrip C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Menunggu debugger terpasang. ID proses: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Skrip C# tidak dapat dijalankan langkah demi langkah di aplikasi. Pasang debugger eksternal (Visual Studio atau Visual Studio Code) ke proses ini, lalu panggil System.Diagnostics.Debugger.Break() di skrip untuk berhenti.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Jalankan tanpa memasang</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Bahasa</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Reset sesi</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Ketik ekspresi atau pernyataan (Enter: jalankan, Shift+Enter: baris baru)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Riwayat konsol</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Sesi baru dimulai.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Dihentikan.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Input gagal.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Tambahkan komponen skrip C# untuk menggunakan C# di konsol.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>saat startup</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>saat file dibuka</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>sebelum simpan</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>setelah simpan</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>sebelum ditutup</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Skrip jalan otomatis "{0}" ({1}) gagal: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Skrip jalan otomatis "{0}" ({1}) dihentikan: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Skrip jalan otomatis "{0}" ({1}) gagal 3 kali berturut-turut dan dinonaktifkan.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Buka pengaturan</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Skrip "{0}" membatalkan penyimpanan: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Skrip sebelum simpan gagal</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Skrip "{0}" gagal: {1}
+Tetap simpan?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Jangan simpan</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Rekam makro</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Mulai</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Pilih cara posisi yang dipilih dengan mouse direkam.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Relatif terhadap kursor (default)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Offset absolut</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Jangan tanya lagi (gunakan pilihan ini)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Perekaman dimulai.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Merekam ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Merekam makro, {0} operasi. Klik untuk menghentikan.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Operasi ini tidak dapat direkam: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>pemilihan dengan keyboard</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>hapus</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>input pada beberapa kursor</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>isi dengan konten ini</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Buka offset</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Pilih rentang</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Cari</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Ganti semua</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Tidak ditemukan: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Tidak ada yang direkam.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Belum ada makro yang direkam.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Hentikan perekaman terlebih dahulu.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Makro terakhir</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Tidak dapat membaca makro: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Makro berhenti: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Makro berhenti pada pengulangan ke-{0}, operasi "{1}": {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Simpan makro ({0, plural, other {# operasi}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Pintasan (opsional)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>misalnya Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Jangan simpan</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Masukkan nama.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Tidak dapat membaca pintasan: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Tidak dapat menyimpan di sini: {0}. Pilih folder lain.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Makro "{0}" disimpan.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Putar makro berulang</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Makro</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Jumlah pengulangan</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Kali (1 sampai 1.000.000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Sampai akhir file</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Untuk setiap hasil pencarian</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>Dalam pilihan</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Putar</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Masukkan angka dari 1 sampai {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Batas waktu eksekusi (detik)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Waktu yang boleh dipakai skrip JavaScript sebelum dijeda dan Anda ditanya apakah akan melanjutkan. 0 berarti tanpa batas. Menunggu operasi massal dan input Anda tidak dihitung.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Batas memori (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Memori yang boleh dipakai skrip JavaScript (16-4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Batas kedalaman rekursi</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Kedalaman maksimum pemanggilan fungsi (100-10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Skrip yang berjalan bersamaan</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Skrip berikutnya menunggu sampai salah satu selesai (1-16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Kebijakan skrip (organisasi)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Diatur di file pengaturan oleh organisasi Anda. Menonaktifkan skrip dan plugin, atau hanya mengizinkan plugin bertanda tangan.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Tanpa batasan</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Nonaktifkan semua skrip dan plugin</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Hanya plugin bertanda tangan</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Skrip: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Skrip: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Skrip: {0} (menulis)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Skrip: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Tidak ada skrip yang berjalan.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Komponen skrip C# sudah terpasang.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Skrip dinonaktifkan oleh pengaturan organisasi Anda (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Skrip membatalkan penyimpanan: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Skrip "{0}" sedang berjalan.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Skrip "{0}" berakhir dengan kesalahan.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Detail</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Skrip "{0}" tidak dijalankan: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Skrip: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, other {# skrip sedang berjalan}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Skrip "{0}" telah berjalan lebih dari {1} detik.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Lanjutkan ({0} detik lagi)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Jalankan skrip "{0}"?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor berjalan sebagai administrator. Skrip ini berjalan dengan hak administrator dan dapat melakukan hal yang memengaruhi seluruh PC.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Nama: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Pembuat: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Kode ini dapat melakukan apa saja di PC Anda dengan hak Anda (termasuk membaca dan menulis file serta komunikasi jaringan). Jalankan hanya kode dari pembuat yang Anda percayai.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Skrip ini dapat membaca dan menulis dokumen yang terbuka. Skrip ini juga meminta izin berikut:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Skrip ini dapat membaca dan menulis dokumen yang terbuka. Skrip ini tidak meminta izin lain.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>File ini berasal dari internet. Jalankan hanya jika Anda memercayai sumbernya.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Jalankan</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Jangan jalankan</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Jalankan sekali</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Selalu izinkan</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Membaca file apa pun</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Membuat, menulis, dan menghapus file apa pun</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Berkomunikasi lewat jaringan (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Menjalankan program eksternal</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Membuka disk, volume, dan memori proses</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Membaca papan klip</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Mengubah pengaturan aplikasi</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Skrip meminta izin "{0}" ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Izinkan</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Jangan izinkan</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Komponen skrip C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Skrip C# memerlukan komponen skrip C# (Roslyn), yang belum terpasang. Tambahkan sekarang?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Tambah</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Mengunduh komponen.
+Ukuran: {0}
+Disimpan ke: {1}
+Diunduh dari: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Unduh</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Unduhan lebih besar dari {0} byte yang diharapkan dan dihentikan.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Menambahkan komponen skrip C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Komponen skrip C# telah ditambahkan.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Komponen skrip C# tidak dapat ditambahkan: {0} Anda dapat menambahkannya secara manual: unduh zip komponen dari halaman rilis dan ekstrak ke folder components\csharp\&lt;versi&gt;\ di folder data.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Komponen skrip C# tidak dapat ditambahkan: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Pengodean karakter tidak dikenal "{0}". Kolom teks tidak diubah.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>{0} "{1}" tidak dapat digunakan (ekspresi tidak dapat dibaca pada posisi {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} "{1}" berada di luar file (panjang {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} tidak tersedia di versi ini.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Tidak ada disk yang cocok dengan "{0}".</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Tidak ada volume yang cocok dengan "{0}".</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Tidak ada proses yang cocok dengan "{0}".</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" cocok dengan {1} proses. Tentukan ID proses dengan --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Buka sumber data plugin</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Operasi plugin</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Kelola plugin...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Kelola</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>pengelola plugin ekstensi add-in plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Muat hanya plugin bertanda tangan</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Plugin tanpa tanda tangan valid tidak dimuat. Berlaku setelah restart.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Folder pengembangan plugin</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Folder keluaran build yang dimuat langsung sebagai plugin (diedit di pengelola plugin).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Plugin</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Plugin menambahkan tipe inspektur, hash, format, perintah, dan panel. Plugin berjalan dengan hak yang sama dengan Anda; aktifkan hanya plugin dari pembuat yang Anda percayai. Perubahan berlaku setelah restart.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Mode aman: tidak ada plugin yang dimuat. Daftar dan pengaturan tidak diubah.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Tambah...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Restart sekarang</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Buka folder plugin</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Pengaturan plugin...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Aktif</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Aktif</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Nonaktif</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Belum ada plugin yang terpasang. Tambahkan file .hexplugin dengan Tambah... atau jatuhkan ke daftar.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Folder pengembangan</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Plugin dimuat langsung dari folder keluaran build ini dan ditampilkan sebagai Pengembangan. Anda ditanya sekali per folder.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Tambah folder pengembangan...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Folder pengembangan ditambahkan. Restart untuk memuatnya.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Penerbit tepercaya</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Plugin yang ditandatangani penerbit ini diaktifkan tanpa bertanya. Hapus penerbit untuk ditanya lagi.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Plugin terpasang</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Jatuhkan file .hexplugin di sini untuk menambahkannya.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Tambah plugin</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>penerbit tidak dikenal</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Ditandatangani oleh {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Ditandatangani oleh {0} (pencabutan tidak dapat diperiksa)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Tanda tangan tidak valid</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Tanda tangan belum diperiksa</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Tidak ditandatangani</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Aktif</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Nonaktif</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Tidak dapat dimuat ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Dihentikan ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Tidak dimuat ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Memuat...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — berubah setelah restart</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Pengembangan</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Tanpa ekstensi</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Menambahkan: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (nonaktif: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>Plugin tidak dapat ditambahkan dalam mode aman.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Plugin tidak ditambahkan: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Hapus plugin</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Hapus "{0}"? Plugin yang dimuat dihapus setelah restart.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Pengaturan {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>tipe inspektur</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hash</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>format impor</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>format ekspor</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>sumber data</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>tampilan transformasi</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>operasi data</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>perintah</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>item menu</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panel</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>halaman pengaturan</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>fungsi templat</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>deteksi tipe file</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>disassembler</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>aturan pewarnaan</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API skrip</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>tidak dikenal</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Aktifkan plugin "{0}"?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (pembaruan)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Penerbit: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Dimuat dari folder pengembangan.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Kode ini dapat melakukan apa saja di PC Anda dengan hak Anda (termasuk membaca dan menulis file serta akses jaringan). Aktifkan hanya plugin dari pembuat yang Anda percayai.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Plugin mendeklarasikan: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Plugin ini tidak ditandatangani. Penerbitnya tidak dapat diverifikasi.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Selalu percayai plugin dari {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Aktifkan</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Jangan aktifkan</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor berjalan sebagai administrator. Plugin ini berjalan dengan hak administrator dan dapat memengaruhi seluruh PC.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Muat plugin sebagai administrator?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor berjalan sebagai administrator. Plugin berikut berjalan dengan hak administrator dan dapat memengaruhi seluruh PC:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— belum dipercaya</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Muat</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Jangan muat</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Plugin "{0}" dihentikan karena kesalahan terus terjadi.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Nonaktifkan plugin</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Coba lagi saat restart</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Plugin "{0}" tidak akan dimuat setelah restart.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Nonaktifkan plugin?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor berakhir tiba-tiba terakhir kali, mungkin karena plugin "{0}". Nonaktifkan?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Tetap aktif</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Perintah plugin ini tidak dapat dijalankan sekarang.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Perintah "{0}" dari plugin "{1}" gagal. Lihat panel keluaran.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Buka: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>Tidak dapat membuka {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Salin sebagai: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Disalin sebagai {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Operasi data: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Operasi data {0} gagal: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Ditambahkan oleh plugin {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Panel plugin</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Plugin tidak dapat membuat panel ini.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(dihentikan)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Tipe plugin ini tidak dapat diedit dengan nilai ini.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Struktur</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Keluaran templat</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Templat struktur</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Terapkan templat...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Terapkan templat dari sini...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Tampilkan tipe di kursor...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Terapkan Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Cari templat yang cocok</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Jalankan ulang</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Hapus penerapan</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Ekspor hasil...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Templat baru</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Buka templat...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Edit templat</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Konversi .ksy ke HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Kelola templat</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Pewarnaan struktur</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Struktur</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Keluaran templat</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Hasil struktur...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Terapkan templat dari sini...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Berhenti saat membaca di sini</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Templat</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Editor kode</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Templat: Terapkan</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>struktur;parse;terapkan;structure</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Templat: Terapkan dari sini</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>kursor;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Templat: Tampilkan tipe di kursor</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>ikuti;tipe;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Templat: Terapkan Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy;kaitai</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Templat: Jalankan ulang</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>evaluasi ulang;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Templat: Hapus penerapan</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>batalkan penerapan;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Templat: Hentikan evaluasi</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>batal;hentikan;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Templat: Tampilkan pohon hasil</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>pohon;hasil;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Templat: Tampilkan keluaran</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>kesalahan;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Templat: Edit nilai</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>ubah;change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Templat: Buka definisi</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>deklarasi;declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Templat: Buka target penunjuk</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>penunjuk;pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Templat: Salin nilai</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>papan klip;clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Templat: Tambah ke penanda</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>penanda;bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Templat: Ekspor hasil</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>ekspor;json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Templat: Alihkan pewarnaan</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>sorot;highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Templat: Cari templat yang cocok</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>deteksi;detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Templat: Baru</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>buat;create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Templat: Buka</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;buka</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Templat: Edit</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;edit</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Templat: Kelola</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>pustaka;library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Templat: Konversi .ksy ke HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;konversi</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Templat: Referensi pustaka standar</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>bantuan;fungsi;help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Templat: Coba jalankan</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>uji;belum disimpan;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Templat: Berhenti saat membaca di sini</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>breakpoint data;data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Tampilan: Panel struktur</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>hasil templat;template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Tampilan: Panel keluaran templat</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>kesalahan;errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Editor kode: Mulai debug / lanjutkan</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>jalankan;debug;run</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Editor kode: Hentikan debug</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>akhiri;end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Editor kode: Alihkan breakpoint</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>breakpoint;break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Editor kode: Step over</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>berikutnya;next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Editor kode: Step into</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>masuk;enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Editor kode: Step out</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>keluar;return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Editor kode: Jalankan sampai kursor</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>kursor;cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Editor kode: Tambah ekspresi watch</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;pantau</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Editor kode: Buka definisi</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>deklarasi;declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Editor kode: Cari referensi</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>penggunaan;usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Editor kode: Format dokumen</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indentasi;indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Editor kode: Alihkan komentar</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>komentar;comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Editor kode: Tampilkan pelengkapan</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>pelengkapan;intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Templat</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Terapkan otomatis</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Tindakan saat templat cocok dengan file yang Anda buka (magic number, tipe MIME, atau ekstensi).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Sarankan</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Selalu terapkan</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Tidak melakukan apa pun</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Evaluasi ulang setelah mengedit</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Mengevaluasi ulang templat yang diterapkan 500 ms setelah edit terakhir. Jika nonaktif, gunakan Jalankan ulang di pohon hasil.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Pewarnaan struktur</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Mewarnai rentang pola templat di tampilan Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Opasitas pewarnaan (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Opasitas pewarnaan struktur di atas latar belakang tampilan Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Folder templat</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Folder tambahan yang dicari untuk templat pengguna.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Templat inspektur</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Templat yang tipe [[inspector]]-nya ditampilkan di inspektur data.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Preferensi templat</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Templat yang dinonaktifkan, templat yang dikecualikan dari penerapan otomatis, dan saran yang disembunyikan.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Kelola templat</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Folder templat</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Templat</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Templat inspektur</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Tambah folder...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Hapus</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Tidak dapat mengakses folder ini.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Filter menurut nama</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Impor...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Templat baru</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Aktif</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Terapkan otomatis</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Ekspor...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Tersembunyi oleh templat lain dengan nama yang sama.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Saran dimatikan</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Tidak ada</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Tampilkan lagi</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Tambah templat inspektur...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>bukan ukuran tetap</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Templat ini memiliki tipe inspektur yang bukan berukuran tetap atau lebih besar dari 4 KB. Tipe berukuran tetap 4 KB atau kurang disarankan.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>{0} file templat diimpor.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Tidak dapat mengimpor: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>{0} file diekspor ke {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Tidak dapat mengekspor: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Templat standar adalah bagian dari aplikasi. Gunakan Duplikat dan edit untuk mengekspor salinan.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Terapkan templat</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Terapkan templat</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Jalankan ulang</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Jalankan ulang</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Hentikan evaluasi</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Hentikan evaluasi</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Ekspor</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Ekspor</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Kolom</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Kolom</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Ikuti kursor</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Ikuti kursor</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Filter menurut nama, nilai, atau tipe</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filter</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Pohon hasil</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Jalur (mis. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Jalur</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Evaluasi semua dan cari</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} kecocokan</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Jalur '{0}' tidak ditemukan.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Nilai</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Tipe</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Ukuran</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Komentar</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Urutan byte</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Akhir</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Warna</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Urutan kolom</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Pindahkan {0} ke kiri</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Pindahkan {0} ke kanan</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Atur ulang kolom</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Mengevaluasi…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Dievaluasi: {0} pola</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} kesalahan, {1} peringatan</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Jumlah pola mencapai batas ({0}). Menampilkan hasil sebagian.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Naikkan batas dan jalankan ulang</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} elemen</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bit {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / Lokal: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Nilai tidak terdefinisi</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Tidak terdefinisi</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Ikuti</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Menunjuk ke {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>offset {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>ukuran {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(belum disimpan)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(file templat tidak ditemukan)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Tidak ada templat yang diterapkan.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Tidak ada evaluasi yang berjalan.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Pilih sebuah simpul di pohon hasil.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Simpul yang dipilih bukan penunjuk.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Target penunjuk adalah null atau di luar data.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Templat '{0}' tidak ditemukan.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Sebuah dokumen dapat memiliki hingga {0} penerapan templat.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>File templat '{0}' tidak ditemukan.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Mengevaluasi templat {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON lebih besar dari 64 MB. Simpan ke file saja.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Simpan ke file...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Templat: {0}
+Offset awal: {1}
+Jenis: {2}
+Urutan byte: {3}
+Tipe: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Standar</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Pengguna</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Terbaru</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Menggunakan skrip</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Detail</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Buka data</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Buka target penunjuk</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Buka definisi</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Edit nilai</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Salin nilai</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Salin nama dan nilai</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Salin jalur</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Salin byte</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Salin offset</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Salin subpohon sebagai JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Tambah ke penanda</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Tambah rentang ke multi-pilihan</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Buka bagian di tab baru</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Terapkan templat dari sini...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Berhenti saat membaca di sini</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Alihkan tetap / ikuti</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Ubah menjadi tetap</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Pengaturan penerapan</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Ekspor...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Jalankan ulang</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Hapus penerapan</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Nilai</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Pola ini hanya memiliki konversi baca, sehingga Anda mengedit nilai mentah.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Masukkan angka</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Benar</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Isi sisanya dengan nol</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Waktu lokal</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Zona waktu</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Masukkan nilai dari 0 sampai {1} ({0} bit).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Nilai di luar rentang untuk tipe ini.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Teks lebih panjang dari bidang ({0} byte).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Konversi tulis gagal: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Nilai tidak dapat dibaca.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Pola di dalam bagian tidak dapat diedit.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Pola ini hanya-baca.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Nilai terhitung tidak dapat diedit.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Simpul kesalahan tidak dapat diedit.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Simpul ini tidak memiliki nilai untuk diedit.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Edit nilai templat</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Terapkan templat</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Terapkan Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Cari templat</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Nama, deskripsi, ekstensi, atau tipe MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Templat</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Offset awal</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Masukkan offset di dalam dokumen.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Urutan byte default</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Pengaturan dokumen</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Pengaturan dokumen (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Pengaturan dokumen (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Jenis</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Tetap</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Ikuti kursor</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Tipe (ikuti)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Terapkan</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Versi {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Lisensi: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Templat yang cocok</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (skor {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>ekstensi</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Tidak ada templat yang cocok dengan dokumen ini.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>File ini tampak seperti {0}. Terapkan templat "{0}"?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(menggunakan skrip)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Terapkan</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Kandidat lain...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Jangan tampilkan untuk format ini</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Terjadi kesalahan saat menerapkan templat "{0}".</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Ekspor hasil struktur</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Seluruh penerapan</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Subpohon yang dipilih ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Elemen array maksimum</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Kedalaman maksimum</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Tanpa batas</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Sertakan pola hidden</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Tulis offset sebagai string heksadesimal</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Simpan...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Mengekspor hasil struktur</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} simpul</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Diekspor ke {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Tidak dapat mengekspor ke {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Ruang di disk tidak cukup.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Hapus</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Hapus</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Keluaran templat</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Buka sumber</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Buka data</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Bantuan untuk {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Coba jalankan</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Dokumen target</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Dokumen target</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Mulai debug / lanjutkan</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Step over</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Step into</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Step out</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Evaluasi berurutan saat debug</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Format dokumen</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Alihkan komentar</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Sumber templat</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Pelengkapan</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Variabel</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Watch</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Call stack</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Breakpoint</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Variabel</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Watch</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Call stack</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Breakpoint</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Tambah ekspresi watch</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Tambah</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Ekspresi (mis. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Masalah</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Referensi di baris {0}, kolom {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Templat baru</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Tidak ada editor templat yang terbuka.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Tidak sedang debug.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Buka dokumen untuk menjalankan templat.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Tidak dapat membuka templat {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Tidak dapat menyimpan templat: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Templat standar tidak dapat disimpan langsung. Gunakan Duplikat dan edit untuk menyimpan salinan di folder templat Anda.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplikat dan edit</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Perbaiki kesalahan sintaks sebelum debug.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Evaluasi lazy nonaktif saat debug. Array besar mungkin memerlukan waktu lama.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Breakpoint data</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Debugger berhenti saat pola yang berisi {0} dibuat.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Tidak dapat mengonversi {0} ke HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Dievaluasi: {0} pola (berhenti di batas {1}; menampilkan hasil sebagian)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>langkah</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>pola</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memori</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>waktu</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Buka baris</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Nomor baris (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Tidak ada editor kode (templat atau skrip) yang ditampilkan.</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Editor ini tidak mendukung perintah ini.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Ikuti sebagai penunjuk</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>penunjuk offset alamat lompat inspektur pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Ikuti sebagai penunjuk</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absolut (offset)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absolut (alamat)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relatif terhadap kursor</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relatif terhadap akhir nilai</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relatif terhadap basis…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Basis (ekspresi)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Buka</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Target {0} berada di luar dokumen (panjang {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Baris ini tidak memiliki nilai yang dapat dipakai sebagai posisi</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Masukkan basis sebagai ekspresi, misalnya 0x400000 atau bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Pilih baris bilangan bulat di inspektur data</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Bergerak sebagai array tipe ini</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Elemen sebelumnya</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Elemen berikutnya</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Keluar dari mode array</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Nomor elemen</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Ukuran elemen</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(tidak di batas elemen)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Elemen {0} berada di luar dokumen</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Nilai</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Ekspr</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Referensi melingkar antar penanda</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Referensi bm.nama bersarang lebih dari {0} tingkat</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Posisi {0} berada di luar dokumen</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Kesalahan ekspresi posisi: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Nilai</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Edit nilai penanda</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(tanpa tipe)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Tipe</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Urutan byte</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Dokumen</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Ekspresi posisi</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>mis. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Tampilan: Panel tampilan gambar</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap piksel gambar citra visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Tampilan gambar</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Tampilan gambar</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>Hitam-putih 1-bit</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>Abu-abu 2-bit</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>Abu-abu 4-bit</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>Abu-abu 8-bit</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8-bit (warna tema byte)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Ikuti kursor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Awal pilihan</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Tetap</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Atas ke bawah</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Bawah ke atas (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Otomatis</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Format piksel</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Lebar (piksel)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Byte per baris</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Otomatis</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Posisi awal</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Posisi awal tetap</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Urutan baris</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Opsi lainnya</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Gambar</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Gulir baris</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Simpan sebagai gambar…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Rentang tampilan terlalu besar; hanya 64 MB pertama yang digambar</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Masukkan posisi awal tetap sebagai ekspresi</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Tidak ada gambar untuk disimpan</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Gambar disimpan ke {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Tidak dapat menyimpan {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Gambar PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Waktu habis</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Tipe memerlukan waktu lebih dari {0} ms; dijalankan lagi saat posisi awal berubah</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Kesalahan: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>File tipe inspektur {0}, baris {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Mode offline aktif (atau unduhan dimatikan), sehingga komponen tidak diunduh. Untuk menambahkannya secara manual, ambil {0} dari halaman rilis versi ini (di PC lain jika perlu) dan ekstrak ke {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Dimulai dalam mode aman. Plugin dan skrip jalan otomatis tidak dimuat.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Restart secara normal</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Templat: Cari nilai bidang</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>cari;bidang;nilai;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Tidak ada templat yang diterapkan.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Kesalahan sintaks pada karakter {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>kondisi kosong</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>nilai tidak ada</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>kondisi tidak dikenal (gunakan name:, type: atau value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>perbandingan tidak dikenal (gunakan =, !=, &lt;, &lt;=, &gt;, &gt;= atau ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>tanda kutip tidak ditutup</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>ekspresi reguler tidak valid</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Nilai templat</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Tekan Enter untuk mencari nilai bidang. Hasil muncul di Hasil pencarian.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Bidang</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ditentukan pengguna)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (templat {1})</value></data>
 </root>
