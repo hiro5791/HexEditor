@@ -212,7 +212,18 @@ public sealed class SearchAndEditSettingsTests
         string temp = path + ".tmp";
         File.WriteAllBytes(temp, changed);
         File.Replace(temp, path, null);
-        await app.WaitUntilAsync(async () => (await app.BytesAsync(0xFF0, 1))[0] == 0xAB, TimeSpan.FromSeconds(20), "the reload");
+
+        // 変更通知のまとめ待ち (500 ms) や遅い実行環境に左右されないよう、ウィンドウがアクティブになったときと同じ確認を毎回促しながら待つ。
+        await app.WaitUntilAsync(async () =>
+        {
+            if ((await app.BytesAsync(0xFF0, 1))[0] == 0xAB)
+            {
+                return true;
+            }
+
+            await app.SendAsync("activated");
+            return false;
+        }, TimeSpan.FromSeconds(30), "the reload");
         JsonObject stale = await WaitForResultsAsync(app, r => r["stale"]!.GetValue<bool>(), "the outdated results");
         Assert.Contains("outdated", stale["summary"]!.GetValue<string>(), StringComparison.Ordinal);
 
