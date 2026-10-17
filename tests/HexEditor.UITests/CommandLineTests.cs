@@ -15,7 +15,7 @@ public sealed class CommandLineTests
 {
     private static readonly TimeSpan Wait = TimeSpan.FromSeconds(30);
 
-    /// <summary>テスト用のビルドの hexed.exe (環境変数 HEXED_PATH、なければ src/HexEditor.Cli/bin の下で最も新しいもの)。</summary>
+    /// <summary>テスト用のビルドの hexed.exe (環境変数 HEXED_PATH、なければ src/HexEditor.Cli/bin の下で最も新しいもの。UI テストは Debug でも Release でもビルドされる)。</summary>
     internal static string HexedPath()
     {
         if (Environment.GetEnvironmentVariable("HEXED_PATH") is { Length: > 0 } configured)
@@ -25,7 +25,7 @@ public sealed class CommandLineTests
 
         string bin = Path.Combine(AppLocator.RepositoryRoot, "src", "HexEditor.Cli", "bin");
         return Directory.Exists(bin)
-            ? Directory.EnumerateFiles(bin, "hexed.exe", SearchOption.AllDirectories).Where(p => p.Contains("Debug", StringComparison.Ordinal)).OrderByDescending(File.GetLastWriteTimeUtc).First()
+            ? Directory.EnumerateFiles(bin, "hexed.exe", SearchOption.AllDirectories).OrderByDescending(File.GetLastWriteTimeUtc).First()
             : throw new FileNotFoundException($"hexed.exe was not found. Build src/HexEditor.Cli first ({bin}).");
     }
 

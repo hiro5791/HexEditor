@@ -15,7 +15,7 @@ Japanese text). The automation API that scripts use is described in [reference.e
 
 ## Quick start
 
-```
+```text
 dotnet new install HexEditor.Sdk.Templates
 dotnet new hexeditor-plugin -n MyPlugin
 cd MyPlugin

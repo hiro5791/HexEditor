@@ -15,7 +15,7 @@ C# で HexEditor のプラグインを作る方法 (機能仕様書: 08-automati
 
 ## はじめかた
 
-```
+```text
 dotnet new install HexEditor.Sdk.Templates
 dotnet new hexeditor-plugin -n MyPlugin
 cd MyPlugin

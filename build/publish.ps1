@@ -257,7 +257,7 @@ switch ($Distro) {
             Write-Warning "The Visual C++ build tools ($vcComponent) are not installed: the package has no Windows 11 context menu (UI-55)."
         }
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
-        $msixExtra = if ($shellExtension) { @("-p:HexShellExtensionDir=$shellExtension") } else { @() }
+        $msixExtra = @(if ($shellExtension) { "-p:HexShellExtensionDir=$shellExtension" })
         # hexed.exe (AUTO-36): the manifest declares it as the second application with the execution alias hexed.exe.
         Build-Cli | Out-Null
         $msixExtra += "-p:HexCliDir=$script:CliDir"

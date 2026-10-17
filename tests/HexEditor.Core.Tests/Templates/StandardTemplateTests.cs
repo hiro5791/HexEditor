@@ -38,9 +38,22 @@ public sealed class StandardTemplateTests
     [MemberData(nameof(SampleKeys))]
     public void SampleMatchesTheExpectedJsonWithoutErrorsOrWarnings(string key)
     {
-        TemplateResult r = Apply(key);
-        Assert.Equal(TemplateRunState.Completed, r.State);
-        string json = TemplateJsonExporter.ToJson(r);
+        // 期待値の JSON は日本語の表示名で作ってある。実行する環境の言語 (CI は英語) に左右されないよう、表示言語を ja-JP に固定する。
+        System.Globalization.CultureInfo saved = System.Globalization.CultureInfo.CurrentUICulture;
+        TemplateResult r;
+        string json;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo("ja-JP");
+            r = Apply(key);
+            Assert.Equal(TemplateRunState.Completed, r.State);
+            json = TemplateJsonExporter.ToJson(r);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = saved;
+        }
+
         string[] problems = [.. r.Diagnostics.Where(d => d.Severity is TemplateSeverity.Error or TemplateSeverity.Warning).Select(d => d.ToString())];
         Assert.True(problems.Length == 0, $"{key}: {string.Join("; ", problems)}");
         Assert.DoesNotContain("\"error\":", json, StringComparison.Ordinal);
