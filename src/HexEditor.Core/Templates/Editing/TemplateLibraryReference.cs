@@ -2,11 +2,12 @@ namespace HexEditor.Core.Templates.Editing;
 
 /// <summary>
 /// 標準ライブラリの組み込み関数の署名 (TPL-18 の仕様 4)。補完の候補の説明に出す。説明の文 (英語・日本語) は
-/// <c>docs/help/template-library.md</c> (同じ表から作る)。
+/// マニュアルのページ <c>docs/manual/&lt;言語&gt;/template-library.md</c> (英語と日本語。同じ表から作る。09 の UI-59)。
 /// </summary>
 public static class TemplateLibraryReference
 {
-    public const string HelpPage = "docs/help/template-library.md";
+    /// <summary>マニュアルのページ (<see cref="Help.ManualTopic.TemplateLibrary"/>)。</summary>
+    public const string HelpPage = "template-library";
 
     public static IReadOnlyDictionary<string, string> Signatures { get; } = new Dictionary<string, string>(System.StringComparer.Ordinal)
     {

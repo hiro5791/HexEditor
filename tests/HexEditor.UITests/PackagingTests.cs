@@ -53,10 +53,11 @@ public sealed class PackagingTests
     });
 
     [Fact]
-    public Task Offline_mode_shows_the_url_before_opening_the_documentation() => UiTestContext.RunAsync(async ctx =>
+    public Task Offline_mode_shows_the_url_before_opening_a_web_page() => UiTestContext.RunAsync(async ctx =>
     {
+        // ヘルプ > ドキュメントはオフラインでは同梱のマニュアルを開く (UI-59。ManualTests) ため、問題の報告のページで確かめる。
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = await ProfileWithSettings(ctx, "{\"$schemaVersion\": 1, \"network.offline\": true}") });
-        await app.CommandAsync("Command_Documentation");
+        await app.CommandAsync("Command_ReportProblem");
         AutomationElement dialog = await app.WaitForDialogAsync("OpenUrlDialog");
         Assert.NotNull(dialog);
         Assert.Contains("github.com/hiro5791/HexEditor", (await app.WaitForAsync("OpenUrlDialog_Url")).Patterns.Value.Pattern.Value.Value);

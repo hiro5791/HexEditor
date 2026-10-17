@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>Ш</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Проверить наличие обновлений</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Справочник по API сценариев</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>Р</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Доступна версия {0}.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Версия {0} готова к установке.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Выполнено обновление до версии {0}.</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>перевод язык ошибка translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Проверить наличие обновлений</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>обновление версия update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Справочник по API сценариев</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api сценарии справочник автоматизация script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Показывать ключи ресурсов во всплывающих подсказках</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Для переводчиков: показывать ключ ресурса каждой строки во всплывающей подсказке.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Автоматически проверять наличие обновлений</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Ожидание подключения отладчика. Идентификатор процесса: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Скрипты C# нельзя выполнять по шагам в приложении. Подключите внешний отладчик (Visual Studio или Visual Studio Code) к этому процессу и вызовите System.Diagnostics.Debugger.Break() в скрипте, чтобы остановиться.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Выполнить без подключения</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Как отлаживать сценарии C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Язык</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Сбросить сеанс</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Очистить</value></data>

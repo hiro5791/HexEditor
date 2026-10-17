@@ -9,6 +9,7 @@
     TC-PKG-04-01  the Store package declares runFullTrust, not allowElevation, and has no elevated helper process
     TC-UI-46-03   a stable build contains no pseudo-locale resources (only with -Stable)
     TC-AUTO-03-01 no Roslyn (C# script component) in the distributions
+    TC-UI-59-08   the user manual is bundled in every distribution
   Also checks the portable zip layout (PKG-05 spec 1) and the generated MSIX version (PKG-03 spec 4).
 #>
 [CmdletBinding()]
@@ -133,6 +134,18 @@ Invoke-TestCase 'PKG-03-5' 'MSIX: hexed.exe is packaged and declared as an App E
         Assert-True ($aliases -contains 'hexed.exe') "$arch msix has no alias hexed.exe ($($aliases -join ', '))"
         Assert-True ($aliases -contains 'hexeditor.exe') "$arch msix has no alias hexeditor.exe ($($aliases -join ', '))"
         Assert-True ($text -match 'Subsystem="console"') "$arch msix does not declare the console subsystem for hexed.exe"
+    }
+}
+
+Invoke-TestCase 'TC-UI-59-08' 'the user manual (en, ja) is bundled in every distribution' {
+    foreach ($arch in 'x64', 'arm64') {
+        $full = Get-ChildItem (Join-Path $ArtifactsDir "Installer/$arch") -Filter '*-full.nupkg' | Select-Object -First 1
+        foreach ($f in (Join-Path $ArtifactsDir "Portable/$arch/HexEditor-$Version-$arch-portable.zip"), (Join-Path $ArtifactsDir "Msix/$arch/HexEditor-$Version-$arch.msix"), $full.FullName) {
+            $entries = @(Get-ZipEntries $f)
+            foreach ($required in 'manual/en/index.html', 'manual/ja/index.html', 'manual/en/scripting.html', 'manual/assets/manual.css', 'manual/manual-index.json') {
+                Assert-True (@($entries | Where-Object { $_ -match ('(^|/)' + [regex]::Escape($required) + '$') }).Count -eq 1) "$required missing in $f"
+            }
+        }
     }
 }
 

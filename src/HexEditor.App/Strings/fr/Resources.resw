@@ -1287,6 +1287,8 @@ Les détails ont été écrits dans :
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Référence de l'API de script</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Update_Available" xml:space="preserve"><value>La version {0} est disponible.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>La version {0} est prête à être installée.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Mise à jour vers la version {0} effectuée.</value></data>
@@ -1350,6 +1352,8 @@ Les détails ont été écrits dans :
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>traduction langue erreur translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>mise à jour version update upgrade</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Référence de l'API de script</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api script référence reference automatisation scripting</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Afficher les clés de ressource dans les info-bulles</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Pour les traducteurs : affiche la clé de ressource de chaque chaîne dans son info-bulle.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Rechercher automatiquement les mises à jour</value></data>
@@ -5801,6 +5805,7 @@ Les détails ont été écrits dans :
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>En attente de l'attachement d'un débogueur. ID du processus : {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Les scripts C# ne peuvent pas être exécutés pas à pas dans l'application. Attachez un débogueur externe (Visual Studio ou Visual Studio Code) à ce processus et appelez System.Diagnostics.Debugger.Break() dans le script pour l'arrêter.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Exécuter sans attacher</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Comment déboguer des scripts C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Langage</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Réinitialiser la session</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Effacer</value></data>

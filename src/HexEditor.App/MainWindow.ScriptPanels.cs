@@ -396,6 +396,11 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
         var body = new StackPanel { Spacing = 8, MinWidth = 380 };
         body.Children.Add(new TextBlock { Text = Loc.Format("CSharpDebug_Waiting", processId), TextWrapping = TextWrapping.Wrap });
         body.Children.Add(new TextBlock { Text = Loc.Get("CSharpDebug_Limitation"), TextWrapping = TextWrapping.Wrap });
+        // マニュアルの「C# スクリプトのデバッグ」(AUTO-22 の受け入れ基準 3、UI-59)。
+        var help = new HyperlinkButton { Content = Loc.Get("CSharpDebug_Help"), Padding = new Thickness(0) };
+        AutomationProperties.SetAutomationId(help, "CSharpDebug_Help");
+        help.Click += async (_, _) => await OpenManualAsync(Core.Help.ManualTopic.CSharpScriptDebugging);
+        body.Children.Add(help);
         ContentDialog dialog = Controls.DialogParts.Dialog(Root, "CSharpDebugDialog", Loc.Get("CSharpDebug_Title"), body, Loc.Get("CSharpDebug_RunWithout"));
         // デバッガがアタッチされたら自動で閉じて実行を始める。
         using var cts = new CancellationTokenSource();

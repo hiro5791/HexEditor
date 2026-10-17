@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>检查更新(U)</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>脚本 API 参考(S)</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>版本 {0} 已可用。</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已准备好安装。</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>已更新到版本 {0}。</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>翻译 语言 错误 问题 translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>检查更新</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>更新 升级 版本 update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>脚本 API 参考</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>脚本 api 参考 自动化 script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>在工具提示中显示资源键</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>面向翻译人员：在每个字符串的工具提示中显示其资源键。</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>自动检查更新</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>正在等待调试器附加。进程 ID: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>应用内无法对 C# 脚本单步执行。请将外部调试器 (Visual Studio 或 Visual Studio Code) 附加到此进程，并在脚本中调用 System.Diagnostics.Debugger.Break() 以停止。</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>不附加直接运行</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>如何调试 C# 脚本</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>语言</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>重置会话</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>清除</value></data>

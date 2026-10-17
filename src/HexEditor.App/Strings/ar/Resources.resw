@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>ط</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>التحقق من التحديثات</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>ق</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>مرجع واجهة برمجة السكربتات</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>ر</value></data>
   <data name="Update_Available" xml:space="preserve"><value>الإصدار {0} متاح.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>الإصدار {0} جاهز للتثبيت.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>تم التحديث إلى الإصدار {0}.</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>translation language issue ترجمة لغة مشكلة</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>التحقق من التحديثات</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>update upgrade version تحديث ترقية إصدار</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>مرجع واجهة برمجة السكربتات</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api scripting reference مرجع واجهة برمجة سكربت أتمتة</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>إظهار مفاتيح الموارد في تلميحات الأدوات</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>للمترجمين: إظهار مفتاح المورد لكل سلسلة في تلميح الأداة الخاص بها.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>التحقق من التحديثات تلقائياً</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>في انتظار إرفاق مصحح الأخطاء. معرّف العملية: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>لا يمكن تنفيذ برامج C# النصية خطوة بخطوة في التطبيق. أرفق مصحح أخطاء خارجيًا (Visual Studio أو Visual Studio Code) بهذه العملية، واستدعِ System.Diagnostics.Debugger.Break() في البرنامج النصي للتوقف.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>تشغيل دون إرفاق</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>كيفية تصحيح أخطاء سكربتات C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>اللغة</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>إعادة تعيين الجلسة</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>مسح</value></data>

@@ -1,0 +1,62 @@
+{
+  "defaultLanguage": "en",
+  "languages": [
+    { "code": "en", "name": "English" },
+    { "code": "ja", "name": "日本語" }
+  ],
+  "pages": [
+    "index",
+    "getting-started",
+    "opening-files",
+    "hex-view",
+    "editing",
+    "selection-clipboard",
+    "search-replace",
+    "go-to",
+    "inspector",
+    "bookmarks",
+    "compare",
+    "statistics",
+    "hashes",
+    "data-operations",
+    "import-export",
+    "templates",
+    "template-library",
+    "template-error-codes",
+    "scripting",
+    "macros",
+    "plugins",
+    "api-reference",
+    "api-plugins",
+    "command-line",
+    "settings",
+    "accessibility",
+    "troubleshooting"
+  ],
+  "strings": {
+    "en": {
+      "siteTitle": "HexEditor manual",
+      "skipToContent": "Skip to content",
+      "contents": "Contents",
+      "onThisPage": "On this page",
+      "language": "Language",
+      "previous": "Previous",
+      "next": "Next",
+      "notTranslated": "This page is not available in {language} yet. It is shown in English.",
+      "chooseLanguage": "Choose a language",
+      "generatedPage": "This page is generated from the HexEditor SDK and is not edited by hand. It is available in English and Japanese."
+    },
+    "ja": {
+      "siteTitle": "HexEditor マニュアル",
+      "skipToContent": "本文へ移動",
+      "contents": "目次",
+      "onThisPage": "このページの内容",
+      "language": "言語",
+      "previous": "前へ",
+      "next": "次へ",
+      "notTranslated": "このページはまだ{language}に翻訳されていません。英語で表示しています。",
+      "chooseLanguage": "言語を選ぶ",
+      "generatedPage": "このページは HexEditor の SDK から自動生成されたもので、手では編集しません。"
+    }
+  }
+}

@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>خ</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>بررسی به‌روزرسانی‌ها</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>مرجع API اسکریپت‌نویسی</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>ر</value></data>
   <data name="Update_Available" xml:space="preserve"><value>نسخهٔ {0} در دسترس است.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>نسخهٔ {0} آمادهٔ نصب است.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>به نسخهٔ {0} به‌روزرسانی شد.</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>ترجمه زبان مشکل, translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>بررسی به‌روزرسانی‌ها</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>به‌روزرسانی ارتقا نسخه, update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>مرجع API اسکریپت‌نویسی</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api اسکریپت مرجع خودکارسازی script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>نمایش کلیدهای منبع در راهنمای ابزار</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>برای مترجمان: کلید منبع هر رشته در راهنمای ابزار آن نمایش داده شود.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>بررسی خودکار به‌روزرسانی‌ها</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>در انتظار اتصال اشکال‌زدا. شناسهٔ فرایند: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>اسکریپت‌های C# در برنامه گام‌به‌گام اجرا نمی‌شوند. یک اشکال‌زدای خارجی (Visual Studio یا Visual Studio Code) را به این فرایند متصل کنید و برای توقف، در اسکریپت System.Diagnostics.Debugger.Break() را فراخوانی کنید.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>اجرا بدون اتصال</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>نحوه اشکال‌زدایی اسکریپت‌های C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>زبان</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>بازنشانی نشست</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>پاک‌کردن</value></data>

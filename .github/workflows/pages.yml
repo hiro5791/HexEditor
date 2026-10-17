@@ -1,0 +1,50 @@
+# 利用者向けマニュアルの公開 (09 の UI-59 の仕様 6): main に push したときだけ、docs/manual から HTML を作って
+# GitHub Pages (https://hiro5791.github.io/HexEditor/) に公開する。ほかのブランチ・Pull Request では動かない
+# (作って検査するのは ci.yml の manual のジョブ)。
+# 前提: リポジトリの Settings > Pages で、Source に「GitHub Actions」を選んでおく (このワークフローからは有効にしない)。
+name: pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# 公開は 1 つずつ行い、実行中の公開は取り消さない。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Build and check the manual
+        run: dotnet run --project tools/ManualBuilder -c Release -- build --source docs/manual --out artifacts/manual
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/manual/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
