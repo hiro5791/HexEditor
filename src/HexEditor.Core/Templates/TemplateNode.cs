@@ -453,7 +453,7 @@ public sealed class TemplateNode
         {
             get
             {
-                if (_flat is null && node.Children0 is not OnDemandChildren)
+                if (_flat is null && node.Children0 is not (OnDemandChildren or SequenceChildren))
                 {
                     _flat = node.Result.Run(() => node.Result.Evaluator.DisplayChildren(node));
                 }

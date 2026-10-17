@@ -76,6 +76,13 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
     {
         var vm = new TemplatePanelViewModel(DispatcherQueue);
         vm.ResultsChanged += (_, _) => TemplateResultsChanged();
+#if HEX_TEST_HOOKS
+        // テスト用のタイムゾーン (OS の設定を変えない): ツールチップの地域の時刻 (TPL-03 の仕様 5)
+        if (TestHooks.Settings.TimeZone is { Length: > 0 } zone)
+        {
+            vm.Model.DisplayContext = vm.Model.DisplayContext with { TimeZone = TimeZoneInfo.FindSystemTimeZoneById(zone) };
+        }
+#endif
         return vm;
     }
 

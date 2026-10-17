@@ -246,6 +246,52 @@ public sealed class TemplateLanguageTests
     }
 
     [Fact]
+    public void VariableLengthArraysKeepCheckpointsInsteadOfEveryElement()
+    {
+        // TPL-07 の仕様 4: 可変長の要素の配列は 1,024 要素ごとに開始位置を記録し、要素を全部は持たない。後ろの要素は直前のチェックポイントから作り直す。
+        const int Count = 60_000;
+        var data = new List<byte>();
+        var starts = new long[Count];
+        for (int i = 0; i < Count; i++)
+        {
+            starts[i] = data.Count;
+            int n = i % 3;
+            data.Add((byte)n);
+            for (int k = 0; k < n; k++)
+            {
+                data.Add((byte)(i + k));
+            }
+        }
+
+        data.Add(0xEE);
+        TemplateResult r = RunOk("struct E { u8 n; u8 d[n]; }; E e[while($ < std::core::size() - 1)]; u8 tail;", [.. data]);
+        TemplateNode e = Node(r, "e");
+        Assert.Equal(Count, e.ChildCount);
+        Assert.Equal(0xEEL, Long(r, "tail"));
+        Assert.True(r.PatternCount < 20_000, $"評価済み {r.PatternCount}");
+
+        // 捨てた要素も同じ位置・同じ値で作り直せる (前から・後ろから・飛び飛びに)
+        foreach (long i in new long[] { 0, 1, 1023, 1024, 1025, 30_001, 59_999, 7, 40_000, 2 })
+        {
+            TemplateNode el = e.GetChild(i);
+            Assert.Equal($"[{i}]", el.Name);
+            Assert.Equal(starts[i], el.Offset);
+            Assert.Equal(1 + (i % 3), el.Size);
+            Assert.Equal(i % 3, Convert.ToInt64(el.FindChild("n")!.Value, System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        Assert.Equal(starts[50_000], Node(r, "e[50000]").Offset);
+        Assert.StartsWith("e[50002].d", r.DeepestAt(starts[50_002] + 1)!.Path, StringComparison.Ordinal);
+        Assert.Contains(r.NodesInRange(starts[23_456], 1), n => n.Node.Path == "e[23456]");
+
+        // すべて評価してエクスポートしても、評価済みのパターンの数は増え続けない
+        r.EvaluateAll();
+        Assert.True(r.PatternCount < 20_000, $"評価済み {r.PatternCount}");
+        Assert.Contains("\"path\": \"e[59999].n\"", TemplateJsonExporter.ToJson(r), StringComparison.Ordinal);
+        Assert.True(r.PatternCount < 20_000, $"評価済み {r.PatternCount}");
+    }
+
+    [Fact]
     [Trait(TC, "TC-TPL-07-03")]
     public void ZeroSizeElementsStopWithAnError()
     {
@@ -386,6 +432,20 @@ public sealed class TemplateLanguageTests
         TemplateResult r = Run("#pragma limit.steps 1000\nu8 a; while (true) {}", Hex("01"), timeout: TimeSpan.FromSeconds(10));
         Assert.Equal(TemplateRunState.LimitReached, r.State);
         Assert.Equal(TemplateLimitKind.Steps, r.LimitReached);
+        Assert.Equal(1L, Long(r, "a"));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-TPL-11-02")]
+    [Trait("Category", "Nightly")]
+    public void InfiniteLoopStopsAtTheDefaultStepLimit()
+    {
+        // 手順 1: プラグマなしでは既定の上限 (1 億ステップ) で止まり、それまでのパターンが残る
+        TemplateResult r = Run("u8 a; while (true) {}", Hex("01"), timeout: TimeSpan.FromSeconds(60));
+        Assert.Equal(TemplateRunState.LimitReached, r.State);
+        Assert.Equal(TemplateLimitKind.Steps, r.LimitReached);
+        Assert.Equal(100_000_000L, r.Limits.Steps);
+        Assert.InRange(r.StepCount, 100_000_000, 100_000_002);
         Assert.Equal(1L, Long(r, "a"));
     }
 }

@@ -142,6 +142,15 @@ internal sealed partial class Evaluator
             amount = (int)(LongArg(c, f, 3) & 7);
         }
 
+        // convert(s, offset, length, "変換元", "変換先"): 文字コードの変換 (TPL-18 の std.encoding)。変換先を省くと UTF-8
+        System.Text.Encoding? from = null;
+        System.Text.Encoding? to = null;
+        if (kind == "convert")
+        {
+            from = EncodingByName(c.Args.Count > 3 ? StrArg(c, f, 3) : f.Encoding);
+            to = EncodingByName(c.Args.Count > 4 ? StrArg(c, f, 4) : "utf-8");
+        }
+
         TemplateSourceLocation at = c.Location;
         s.PendingProducers.Add(() =>
         {
@@ -195,6 +204,9 @@ internal sealed partial class Evaluator
                         output[i] = kind == "rol" ? (byte)((b << amount) | (b >> (8 - amount))) : (byte)((b >> amount) | (b << (8 - amount)));
                     }
 
+                    break;
+                case "convert":
+                    output = to!.GetBytes(from!.GetString(data));
                     break;
                 default:
                     output = data;

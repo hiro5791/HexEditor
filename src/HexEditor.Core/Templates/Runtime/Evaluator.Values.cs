@@ -976,7 +976,7 @@ internal sealed partial class Evaluator
                 case OnDemandChildren od:
                     return od.Count;
                 case SequenceChildren s:
-                    return s.Items.Count;
+                    return s.Count;
                 case PointerChildren pc:
                     return pc.Target is { } t ? (t.Children0 is null ? 1 : ChildCount(t)) : 0;
             }
@@ -1023,10 +1023,7 @@ internal sealed partial class Evaluator
 
                 return od.Get(index);
             case SequenceChildren s:
-                lock (_result.SyncRoot)
-                {
-                    return s.Items[(int)index];
-                }
+                return s.Get(index);
 
             case PointerChildren pc when pc.Target is { } t:
                 return t.Children0 is null ? t : GetChildRaw(t, index);
@@ -1063,10 +1060,7 @@ internal sealed partial class Evaluator
 
                     return t.Children0 is null ? [t] : DisplayChildren(t);
                 case SequenceChildren s:
-                    lock (_result.SyncRoot)
-                    {
-                        return [.. s.Items];
-                    }
+                    return new SequenceList(s);
 
                 default:
                     return [];
@@ -1103,6 +1097,13 @@ internal sealed partial class Evaluator
     {
         try
         {
+            // 配列の要素 ([i]) は添字で読む (要素を順に全部は作らない)
+            if (Resolve(node).Children0 is SequenceChildren seq && name.Length > 2 && name[0] == '[' && name[^1] == ']')
+            {
+                return long.TryParse(name.AsSpan(1, name.Length - 2), NumberStyles.None, CultureInfo.InvariantCulture, out long index) && index < seq.Count
+                    ? seq.Get(index) : null;
+            }
+
             return MemberOf(Resolve(node), name) ?? DisplayChildren(node).FirstOrDefault(c => c.Name == name);
         }
         catch (TemplateError e) when (!e.IsLimit)
@@ -1204,22 +1205,27 @@ internal sealed partial class Evaluator
         _token = token;
         try
         {
-            var stack = new Stack<TemplateNode>();
-            stack.Push(node);
+            // 子を順に読む列挙子を積む (可変長の要素の配列は要素を 1 つずつ作る。全部の要素を同時に持たない)
+            var stack = new Stack<IEnumerator<TemplateNode>>();
+            stack.Push(((IEnumerable<TemplateNode>)[node]).GetEnumerator());
             while (stack.Count > 0)
             {
                 CheckCancel();
-                TemplateNode n = stack.Pop();
+                IEnumerator<TemplateNode> e = stack.Peek();
+                if (!e.MoveNext())
+                {
+                    e.Dispose();
+                    stack.Pop();
+                    continue;
+                }
+
+                TemplateNode n = e.Current;
                 if (n.Children0 is OnDemandChildren)
                 {
                     continue; // 固定長の要素の配列は必要になったときに作る (1 億要素でもメモリを使わない)
                 }
 
-                IReadOnlyList<TemplateNode> children = DisplayChildren(n);
-                for (int i = children.Count - 1; i >= 0; i--)
-                {
-                    stack.Push(children[i]);
-                }
+                stack.Push(DisplayChildren(n).GetEnumerator());
             }
         }
         finally

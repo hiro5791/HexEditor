@@ -546,6 +546,25 @@ public sealed class TemplateToolingTests : IDisposable
     }
 
     [Fact]
+    public void EveryStandardLibraryFunctionHasASignatureAndAHelpSection()
+    {
+        // TPL-18 の仕様 4: 引数・戻り値・エラーをリファレンス (補完の説明と docs/help/template-library.md。英語と日本語) に書く
+        string help = File.ReadAllText(Core.Tests.Engine.SourceTests.FindRepoFile(TemplateLibraryReference.HelpPage)).ReplaceLineEndings("\n");
+        Assert.Equal(TemplateLanguageService.StdFunctions.Order(StringComparer.Ordinal), TemplateLibraryReference.Signatures.Keys.Order(StringComparer.Ordinal));
+        foreach (string name in TemplateLanguageService.StdFunctions)
+        {
+            int at = help.IndexOf("\n### " + name + "\n", StringComparison.Ordinal);
+            Assert.True(at >= 0, "No help section: " + name);
+            string section = help[at..(help.IndexOf("\n#", at + 5, StringComparison.Ordinal) is int next and > 0 ? next : help.Length)];
+            Assert.Contains("- English: ", section, StringComparison.Ordinal);
+            Assert.Contains("- 日本語: ", section, StringComparison.Ordinal);
+        }
+
+        TemplateCompletionResult c = TemplateLanguageService.Complete("local u32 x = std::mem::re", 26, "t.hxt");
+        Assert.Equal("read_u32(offset, endian?) -> u32", c.Items.Single(i => i.Label == "read_u32").Detail);
+    }
+
+    [Fact]
     public void FormatAndToggleComment()
     {
         Assert.Equal("struct A {\n    u8 a;\n};\nA x;", TemplateLanguageService.Format("struct A {\nu8 a;   \n  };\nA x;"));
@@ -624,13 +643,14 @@ public sealed class TemplateToolingTests : IDisposable
         TemplateCatalog catalog = TemplateCatalog.CreateDefault(null);
         byte[] zip = File.ReadAllBytes(TestDataCatalog.Get("TD-ZIP"));
         TemplateAutoApplyDecision d = TemplateAutoApply.Decide(catalog, Snapshot(zip), "a.zip", TemplateAutoApplyMode.Always, null, false);
-        if (catalog.Find("zip") is null)
-        {
-            return; // 標準テンプレートの ZIP は TPL-34 の作業で加わる
-        }
-
         Assert.Equal(TemplateAutoApplyAction.Apply, d.Action);
         Assert.Equal("zip", d.Top!.Entry.Name);
+
+        // 適用した結果の 1 つ目のローカルファイルヘッダのファイル名が、TD-ZIP の 1 つ目のファイル名と一致する
+        int nameLength = BitConverter.ToUInt16(zip, 26);
+        string firstName = Encoding.UTF8.GetString(zip, 30, nameLength);
+        TemplateResult r = Run(catalog.Load(d.Top.Entry), TemplateDataSource.FromBytes(zip));
+        Assert.Equal(firstName, Value(r, "local_files[0].header.file_name"));
     }
 
     [Fact]

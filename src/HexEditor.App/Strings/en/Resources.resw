@@ -6150,6 +6150,8 @@ Downloaded from: {2}</value></data>
   <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library</value></data>
   <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Template: Convert .ksy to HXT</value></data>
   <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Template: Standard library reference</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions</value></data>
   <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Template: Try run</value></data>
   <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved</value></data>
   <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Template: Break when reading here</value></data>

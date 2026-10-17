@@ -409,6 +409,18 @@ public sealed class TemplateRobustnessTests
             Assert.Contains(Load2("#include \"../outside/evil.hxt\"\nu8 x;").Diagnostics, d => d.Code == TemplateMessages.NotPermitted);
             Assert.DoesNotContain(fs.Reads, f => f.StartsWith(outside, StringComparison.OrdinalIgnoreCase) || f.EndsWith("secret.txt", StringComparison.OrdinalIgnoreCase));
 
+            // (h) .ksy の imports での ../ と絶対パス
+            foreach (string import in new[] { "../outside/evil", "C:/Windows/win" })
+            {
+                string ksy = Path.Combine(templates, "escape-" + Guid.NewGuid().ToString("N") + ".ksy");
+                File.WriteAllText(ksy, $"meta:\n  id: escape\n  imports:\n    - {import}\nseq:\n  - id: a\n    type: u1\n");
+                TemplateProgram k = TemplateLoader.LoadFile(ksy, options);
+                Assert.Contains(k.Diagnostics, d => d.Code == TemplateMessages.NotPermitted);
+            }
+
+            Assert.DoesNotContain(fs.Reads, f => f.StartsWith(outside, StringComparison.OrdinalIgnoreCase)
+                || f.EndsWith("win.ksy", StringComparison.OrdinalIgnoreCase) || f.EndsWith("evil.ksy", StringComparison.OrdinalIgnoreCase));
+
             // (d) ファイル名だけでフォルダのパスを含まない
             TemplateResult d = Run(Load("std::core::print(std::sys::file_name());"),
                 TemplateDataSource.FromBytes([1], Path.Combine(root, "HXSECRET7F3A-report.bin")));

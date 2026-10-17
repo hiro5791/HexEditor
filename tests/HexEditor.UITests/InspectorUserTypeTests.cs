@@ -133,6 +133,34 @@ public sealed class InspectorUserTypeTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-TPL-29-01")]
+    public Task Registered_template_type_shows_follows_the_cursor_and_writes() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: 設定「インスペクタ用テンプレート」に TD-TPL-INSPECTOR を登録し、TD-TPL-RGB565-DATA を開く (カーソルは 0x0)。
+        string profile = ctx.NewProfile();
+        ViewOps.WriteSettings(profile, new JsonObject { ["templates.inspector"] = new JsonArray(TemplateUiTests.Fixture("inspector-rgb565.hxt")) });
+        AppSession app = await InspectorTests.StartAsync(ctx, data: "TD-TPL-RGB565-DATA", profile: profile);
+
+        // 1: 「RGB565 色」の行があり、値は 0x0 の 00 F8 = #FF0000。
+        JsonObject row = await UserRowAsync(app, "RGB565 色");
+        Assert.Equal("#FF0000", row["value"]!.GetValue<string>());
+
+        // 2: カーソルを 0x2 に動かすと #00FF00 (E0 07)。
+        await InspectorTests.GoAsync(app, 2);
+        await app.WaitUntilAsync(async () => (await UserRowAsync(app, "RGB565 色"))["value"]!.GetValue<string>() == "#00FF00",
+            TimeSpan.FromSeconds(15), "the value at 0x2");
+
+        // 3・4: #0000FF に書き換えると 0x2〜0x3 が 1F 00 になり、Ctrl+Z で E0 07 に戻る。
+        string type = row["id"]!.GetValue<string>()["Inspector_Row_".Length..];
+        await InspectorTests.WriteAsync(app, type, "#0000FF");
+        Assert.Equal(new byte[] { 0x1F, 0x00 }, await app.BytesAsync(2, 2));
+        await app.FocusAsync("editor");
+        await app.KeyAsync("Z", ctrl: true);
+        await app.IdleAsync();
+        Assert.Equal(new byte[] { 0xE0, 0x07 }, await app.BytesAsync(2, 2));
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-INSP-22-03")]
     public Task Saving_the_definition_file_again_updates_the_rows() => UiTestContext.RunAsync(async ctx =>
     {

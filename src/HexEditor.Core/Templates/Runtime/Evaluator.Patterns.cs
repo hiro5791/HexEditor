@@ -727,8 +727,14 @@ internal sealed partial class Evaluator
             return node;
         }
 
-        // 可変長の要素、while / until / 終端値の配列: 先頭から順に評価する (TPL-07 の仕様 4)
-        var seq = new SequenceChildren();
+        // 可変長の要素、while / until / 終端値の配列: 先頭から順に評価する (TPL-07 の仕様 4)。ビット単位の要素は位置がビットで進むため
+        // 作り直さず、すべて持つ
+        bool bitElements = elem is PrimType { Kind: PrimKind.Bits };
+        var seq = new SequenceChildren
+        {
+            Recreate = bitElements ? null : (i, start) => CreateElementLazy(elem, node, i, start, space, f, big, elemAttrs, args),
+            Evicted = ReleaseElements,
+        };
         node.Children0 = seq;
         attach(node);
         long fixedCount = -1;
@@ -803,7 +809,7 @@ internal sealed partial class Evaluator
 
                 lock (_result.SyncRoot)
                 {
-                    seq.Items.Add(el);
+                    seq.Add(el, pos);
                 }
 
                 long next = isBits ? (f.BitPos + 7) / 8 : el.End;
@@ -854,7 +860,7 @@ internal sealed partial class Evaluator
             }
         }
 
-        node.TypeName = $"{elem.Name}[{seq.Items.Count}]";
+        node.TypeName = $"{elem.Name}[{seq.Count}]";
         return node;
     }
 
