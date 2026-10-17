@@ -5933,6 +5933,7 @@
 保存先: {1}
 通信先: {2}</value></data>
   <data name="CSharpComponent_Download" xml:space="preserve"><value>ダウンロードする</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>ダウンロードが想定の大きさ ({0} バイト) を超えたため中止しました。</value></data>
   <data name="CSharpComponent_Operation" xml:space="preserve"><value>C# スクリプト コンポーネントの追加</value></data>
   <data name="CSharpComponent_Installed" xml:space="preserve"><value>C# スクリプト コンポーネントを追加しました。</value></data>
   <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>C# スクリプト コンポーネントを追加できませんでした: {0} 手動で入れることもできます: リリースのページからコンポーネントの zip をダウンロードし、データフォルダの components\csharp\&lt;バージョン&gt;\ に展開してください。</value></data>

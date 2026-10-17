@@ -25,7 +25,7 @@
   for the distribution tests in build/tests/. Never release a test build.
   -CSharpComponentManifest is the csharp-component.json written by build/Build-CSharpComponent.ps1 (AUTO-03 spec 3).
   The app embeds it so that it can verify and add the C# script component. Without it the script looks for
-  artifacts/CSharpComponent/csharp-component.json; when that is missing too, the app is built without the manifest
+  artifacts/CSharpComponent/<arch>/csharp-component.json (or artifacts/CSharpComponent/csharp-component.json); when that is missing too, the app is built without the manifest
   (C# scripts cannot be added) and a warning is printed.
 #>
 [CmdletBinding()]
@@ -69,11 +69,17 @@ if ($Commit) { $common += "-p:HexCommit=$Commit" }
 if ($TestHooks) { $common += '-p:HexTestHooks=true' }
 # C# script component manifest (AUTO-03 spec 3): embedded into the app so that it can verify the component it adds.
 if (-not $CSharpComponentManifest) {
-    $defaultManifest = Join-Path (Split-Path -Parent $PSScriptRoot) 'artifacts/CSharpComponent/csharp-component.json'
-    if (Test-Path $defaultManifest) { $CSharpComponentManifest = $defaultManifest }
+    foreach ($candidate in "artifacts/CSharpComponent/$Arch/csharp-component.json", 'artifacts/CSharpComponent/csharp-component.json') {
+        $defaultManifest = Join-Path (Split-Path -Parent $PSScriptRoot) $candidate
+        if (Test-Path $defaultManifest) { $CSharpComponentManifest = $defaultManifest; break }
+    }
 }
 if ($CSharpComponentManifest) {
     if (-not (Test-Path $CSharpComponentManifest)) { throw "The C# component manifest does not exist: $CSharpComponentManifest" }
+    # The component is paired with the app version (AUTO-03 spec 3); the app downloads the zip named in the manifest from the same release.
+    $componentManifest = Get-Content -Raw -Encoding utf8 $CSharpComponentManifest | ConvertFrom-Json
+    if ($componentManifest.version -ne $Version) { throw "The C# component manifest is for version $($componentManifest.version), not $Version." }
+    if ($componentManifest.packageName -ne "HexEditor-$Version-$Arch-csharp.zip") { Write-Warning "The C# component zip is named $($componentManifest.packageName), not HexEditor-$Version-$Arch-csharp.zip (PKG-26)." }
     $common += "-p:HexCSharpComponentManifest=$((Resolve-Path $CSharpComponentManifest).Path)"
 } else {
     Write-Warning 'No C# script component manifest (run build/Build-CSharpComponent.ps1 or pass -CSharpComponentManifest). C# scripts cannot be added in this build.'
