@@ -5481,4 +5481,1072 @@ Detaliile au fost scrise în:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static doar în citire</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Codificare text (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Document complet (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Caracter neașteptat „{0}”</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Se aștepta „{0}”</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>„{0}” neașteptat</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Număr nevalid „{0}”</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Literalul șir nu este încheiat</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Secvență escape nevalidă „{0}”</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Comentariul nu este încheiat</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Imbricare prea adâncă (limită: {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Șir de octeți nevalid „{0}”</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Șablonul nu este UTF-8 valid</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Șablonul este prea mare (limită: 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Prea multe erori; sunt afișate doar primele {0}</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Valoare nevalidă „{1}” pentru pragma „{0}”</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Pragma necunoscută „{0}” a fost ignorată</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>„{0}” este deja definit la {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>„{0}” nu a fost găsit (căutat în: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Șabloanele nu pot efectua această operație: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Acest șablon necesită versiunea {0} sau mai nouă a aplicației</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Atributul necunoscut „{0}” a fost ignorat</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} nu încape în {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Valoarea {0} are mai multe nume (se folosește „{1}”)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} depășește maximul; se folosește {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Șabloanele, inclusiv importurile, sunt prea mari (limită: 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>„{0}” nu este definit</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Împărțire la zero</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Tipuri incompatibile: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Recursivitate prea adâncă (limită: {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Numărul de instrucțiuni executate a atins limita ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Numărul de modele a atins limita ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Memoria de evaluare a atins limita ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Timpul de evaluare a atins limita ({0} s)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Plasarea 0x{0} este în afara datelor</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) este în afara datelor</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>„{0}” (0x{1}, {2} octeți) este în afara datelor</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Poziția nu poate fi negativă ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Tabloul nu se poate încheia deoarece dimensiunea elementului este 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Tabloul s-a încheiat deoarece s-a ajuns la sfârșitul datelor</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Tabloul a fost trunchiat la limită ({0} elemente)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Ultimul element incomplet ({0} octeți) nu a fost inclus</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Terminatorul șirului nu a fost găsit</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 depășește 10 octeți (deplasament 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Conținutul structurii ({0} octeți) depășește dimensiunea specificată ({1} octeți)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Tipul pointerului trebuie să fie un tip întreg</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>În afara intervalului (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Modelele nu pot fi declarate în interiorul funcțiilor</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Aserțiunea a eșuat: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Funcția de extensie „{0}” nu este înregistrată</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Funcția de extensie „{0}” a eșuat: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Funcția de extensie „{0}” nu are permisiunea de a rula</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Indexul {0} este în afara intervalului (0 – {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>sizeof({0}) nu poate fi folosit deoarece dimensiunea tipului nu este fixă</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Totalul câmpurilor de biți ({0} biți) depășește {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Un câmp de biți nu poate depăși 64 de biți ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Decompresia {0} a eșuat: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Decompresia s-a oprit deoarece datele au atins limita ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} nu este acceptat în această versiune</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Lungimea ({0}) depășește limita de 256 MB per apel</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Nu se poate atribui lui „{0}”</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Datele de la 0x{0} nu pot fi citite</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Evaluarea a fost anulată</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} nu încape în {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>„{0}” nu este o funcție</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>„{0}” primește {1} argumente</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Funcția Kaitai Struct „{0}” nu este acceptată</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Conținutul nu se potrivește cu octeții așteptați</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Validarea a eșuat: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Ieșirea a fost trunchiată deoarece este prea lungă</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Secțiunile au atins limita totală ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>„{0}” nu este un model</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>„{0}” nu are membrul „{1}”</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Argument nevalid pentru „{0}”: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Datele nu se potrivesc cu semnătura magică {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Fișierul temporar nu a putut fi scris: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Eroare de sintaxă YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Etichetele YAML nu sunt permise ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Prea multe expandări de alias YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Cheie duplicată „{0}”</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Caracterele tab nu pot fi folosite pentru indentare</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Fișier .ksy nevalid: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Imbricare YAML prea adâncă</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Eroare internă în evaluatorul de șabloane: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>ați vrut să spuneți „{0}”?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Informații</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Avertisment</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Eroare</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Scripturi</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Script: rulare</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>rulare script din nou repetare run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Script: rulare fișier script...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>rulare fișier script run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Script: oprire toate scripturile</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>oprire anulare scripturi stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Script: adăugare componentă script C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>componentă instalare adăugare csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Scripturi</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Rulare script...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Rulare ultimul script</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Oprire toate scripturile</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Adăugare componentă script C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Rulare automată (hook-uri)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook rulare automată pornire deschidere salvare închidere script hook automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Foldere de scripturi</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>folder scripturi bibliotecă partajat script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Panou de ieșire</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Editor de scripturi</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Numărul maxim de linii păstrate în panoul de ieșire</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Liniile mai vechi se elimină la depășirea limitei (100–1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Afișare panou de ieșire când un script scrie ieșire</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Se afișează fără a prelua focalizarea tastaturii.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Oprire la excepții în timpul depanării</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Alegeți când se oprește depanatorul JavaScript la o excepție.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Niciodată</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Doar excepțiile neprinse</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Toate excepțiile</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Foldere de scripturi suplimentare</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Foldere adăugate în lista de scripturi.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Scripturile înregistrate aici rulează automat. Nu rulează nimic dacă nu este adăugat aici, iar scripturile trebuie să fie de încredere.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Modul sigur este activat, așa că rularea automată este dezactivată.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>limită de timp {0} s</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Niciun script înregistrat.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Adăugare script</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Adăugare</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Alegere fișier...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Alegeți scriptul care va rula automat.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Adăugați „{0}” cu butonul Adăugare.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Activare {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Condiție</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Mutare în sus</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Mutare în jos</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Eliminare</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Rulează doar pentru datele care se potrivesc. Lăsați necompletat pentru a se potrivi toate.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Extensie (de ex. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Model de cale (de ex. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Octeții de început (hex, de ex. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Sursă de date</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Oricare</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Folderele listate aici sunt afișate în lista de scripturi, pe lângă folderul standard de scripturi.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Niciun folder suplimentar.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Adăugare folder...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Eliminare</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Script</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Script</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Cursor</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Comutare listă de scripturi</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>scripturi macro-uri listă panou scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Comutare panou de ieșire</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>ieșire jurnal mesaje panou output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Comutare panou consolă</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>consolă repl panou console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Afișare listă de scripturi</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>scripturi macro-uri listă panou scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Afișare consolă</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>consolă repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Script nou</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>creare script nou javascript js create javascript js</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Script C# nou</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>creare script nou csharp csx create csharp csx</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Deschidere exemplu</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>exemple mostre examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Deschidere folder de scripturi</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>folder explorator folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Rulare cu depanare</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>depanator punct de întrerupere pas debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Pauză</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>pauză întrerupere depanator break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Golire ieșire</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>golire jurnal ieșire clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Pornire / oprire înregistrare</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>înregistrare macro record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Redare ultimul macro</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>redare ultimul macro din nou replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Redare repetată</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repetare macro buclă repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Cursor: stânga</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor mutare stânga cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Cursor: dreapta</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor mutare dreapta cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Cursor: sus</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor mutare sus cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Cursor: jos</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor mutare jos cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Cursor: pagină în sus</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor pagină sus cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Cursor: pagină în jos</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor pagină jos cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Cursor: începutul rândului</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor început rând cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Cursor: sfârșitul rândului</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor sfârșit rând cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Cursor: începutul fișierului</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor început fișier cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Cursor: sfârșitul fișierului</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor sfârșit fișier cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Nu este afișat niciun editor de scripturi.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Listă de scripturi</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Consolă</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Script nou</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Script C# nou</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Exemple</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Deschidere folder de scripturi</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Macro</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Pornire / oprire înregistrare</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Redare ultimul macro</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Redare repetată...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Listă de scripturi</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Consolă</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Scripturi</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Consolă</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Toate</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Plugin: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Sursa ieșirii</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Filtru</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Golire</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Copiere totală</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Salvare în fișier</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Încadrare rânduri</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Ieșirea a fost copiată.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Informații</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Avertisment</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Eroare</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Listă de scripturi</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Filtrare scripturi</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Script nou</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Script JavaScript nou</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Script C# nou</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Deschidere folder de scripturi</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Rulare</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Editare</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Deschidere copie pentru editare</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Redenumire...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Nume nou</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Ștergere (în Coșul de reciclare)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Afișare în folder</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Atribuire comandă rapidă...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Rulare automată...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Scripturi</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Macro-uri</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Exemple</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Folderul nu a fost găsit</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>rezident</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Candidat pentru rulare automată: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>„{0}” a fost mutat în Coșul de reciclare.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Exemplul nu poate fi copiat: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Scriptul nu poate fi creat: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Redenumirea nu a reușit: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Ștergerea nu a reușit: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Folderul nu poate fi deschis: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Rulare</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Depanare</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Oprire</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Pauză</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Pas peste</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Pas în</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Pas în afară</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Document țintă</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(documentul activ)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Editor de scripturi: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Probleme</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Probleme ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Depanare</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Stivă de apeluri</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Variabile</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Inspectare</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Adăugare expresie de inspectat</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Locale</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Closure</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Globale</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Script</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Excepție: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Rândul {0}, coloana {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Modificat</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Se execută</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Întrerupt la rândul {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Reușit ({0} s)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Oprit</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Nerulat</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Eșuat</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>„{0}” a fost salvat.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Scriptul nu poate fi salvat: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Scriptul nu poate fi citit: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>„{0}” depășește 10 MB. Editați-l cu un editor extern.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Scripturile C# nu pot fi executate pas cu pas în aplicație</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Punct de întrerupere</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Punct de întrerupere dezactivat</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Punct de întrerupere condițional</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>„{0}” are modificări nesalvate. Le salvați înainte de închidere?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Salvare</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Nu salva</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Depanarea unui script C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Se așteaptă atașarea unui depanator. ID proces: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Scripturile C# nu pot fi executate pas cu pas în aplicație. Atașați un depanator extern (Visual Studio sau Visual Studio Code) la acest proces și apelați System.Diagnostics.Debugger.Break() în script pentru a opri execuția.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Rulare fără atașare</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Limbă</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Resetare sesiune</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Golire</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Introduceți o expresie sau o instrucțiune (Enter: rulare, Shift+Enter: rând nou)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Istoricul consolei</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>A început o sesiune nouă.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Oprit.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Intrarea a eșuat.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Pentru a folosi C# în consolă, adăugați componenta de script C#.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>pornire</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>deschiderea fișierului</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>înainte de salvare</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>după salvare</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>înainte de închidere</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Scriptul de rulare automată „{0}” ({1}) a eșuat: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Scriptul de rulare automată „{0}” ({1}) a fost oprit: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Scriptul de rulare automată „{0}” ({1}) a eșuat de 3 ori la rând și a fost dezactivat.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Deschidere setări</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Scriptul „{0}” a anulat salvarea: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Scriptul dinaintea salvării a eșuat</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Scriptul „{0}” a eșuat: {1}
+Salvați oricum?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Salvare</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Nu salva</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Înregistrare macro</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Pornire</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Alegeți cum se înregistrează pozițiile alese cu mouse-ul.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Relativ la cursor (implicit)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Deplasamente absolute</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Nu mai întreba (se folosește această alegere)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Înregistrarea a început.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Înregistrare ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Se înregistrează un macro, {0} operații. Faceți clic pentru a opri.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Această operație nu poate fi înregistrată: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>selecția cu tastatura</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>ștergerea</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>introducerea la mai multe cursoare</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>umplerea cu acest conținut</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Salt la deplasament</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Selectare interval</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Căutare</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Înlocuire totală</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Nu s-a găsit: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Nu s-a înregistrat nimic.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Nu există încă niciun macro înregistrat.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Opriți mai întâi înregistrarea.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Ultimul macro</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Macroul nu poate fi citit: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Macroul s-a oprit: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Macroul s-a oprit la repetarea {0}, operația „{1}”: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Salvare macro ({0, plural, one {# operație} few {# operații} other {# de operații}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Comandă rapidă (opțional)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>de exemplu, Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Salvare</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Nu salva</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Introduceți un nume.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Comanda rapidă nu poate fi citită: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Nu se poate salva aici: {0}. Alegeți alt folder.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Macroul „{0}” a fost salvat.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Redarea repetată a unui macro</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Număr de repetări</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Ori (de la 1 la 1.000.000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Până la sfârșitul fișierului</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Pentru fiecare rezultat al căutării</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>În cadrul selecției</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Redare</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Introduceți un număr de la 1 la {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Limită de timp de execuție (secunde)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Timpul cât poate rula un script JavaScript înainte de a fi întrerupt și de a vi se cere să decideți dacă continuă. 0 înseamnă fără limită. Așteptarea operațiilor în bloc și a intrării dvs. nu se numără.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Limită de memorie (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Memoria pe care o poate folosi un script JavaScript (16–4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Limită de adâncime a recursivității</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Adâncimea maximă a apelurilor de funcții (100–10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Scripturi care rulează simultan</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Celelalte scripturi așteaptă până se termină unul (1–16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Politica scripturilor (organizație)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Setată de organizația dvs. în fișierul de setări. Dezactivează scripturile și pluginurile sau permite doar pluginuri semnate.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Fără restricții</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Dezactivare scripturi și pluginuri</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Doar pluginuri semnate</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Script: {0} – {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Script: {0} (scriere)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Niciun script nu rulează.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Componenta de script C# este deja instalată.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Scripturile sunt dezactivate de setarea organizației dvs. (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Un script a anulat salvarea: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Scriptul „{0}” rulează.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Oprire</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Scriptul „{0}” s-a încheiat cu o eroare.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Detalii</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Scriptul „{0}” nu a fost rulat: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {Rulează # script} few {Rulează # scripturi} other {Rulează # de scripturi}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Scriptul „{0}” rulează de mai mult de {1} secunde.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Continuare (încă {0} s)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Rulați scriptul „{0}”?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor rulează ca administrator. Acest script rulează cu drepturi de administrator și poate face lucruri care afectează întregul PC.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Nume: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Autor: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Acest cod poate face orice pe PC-ul dvs. cu drepturile dvs. (inclusiv citirea și scrierea fișierelor și comunicarea în rețea). Rulați doar cod de la autori în care aveți încredere.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Acest script poate citi și scrie documentele deschise. De asemenea, solicită aceste permisiuni:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Acest script poate citi și scrie documentele deschise. Nu solicită alte permisiuni.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Acest fișier provine de pe internet. Rulați-l doar dacă aveți încredere în sursa lui.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Rulare</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Nu rula</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Rulare o dată</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Permite întotdeauna</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Citirea oricărui fișier</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Crearea, scrierea și ștergerea oricărui fișier</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Comunicare în rețea (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Rularea programelor externe</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Deschiderea discurilor, volumelor și a memoriei proceselor</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Citirea clipboardului</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Modificarea setărilor aplicației</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Scriptul solicită permisiunea „{0}” ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Permite</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Nu permite</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Componenta de script C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Scripturile C# necesită componenta de script C# (Roslyn), care nu este instalată. O adăugați acum?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Adăugare</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Descărcarea componentei.
+Dimensiune: {0}
+Se salvează în: {1}
+Descărcat de la: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Descărcare</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Descărcarea depășește cei {0} octeți așteptați și a fost oprită.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Se adaugă componenta de script C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Componenta de script C# a fost adăugată.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Componenta de script C# nu a putut fi adăugată: {0} O puteți adăuga manual: descărcați arhiva zip a componentei de pe pagina versiunii și extrageți-o în folderul components\csharp\&lt;versiune&gt;\ din folderul de date.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Componenta de script C# nu a putut fi adăugată: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Codificare de caractere necunoscută „{0}”. Coloana text nu a fost modificată.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>{0} „{1}” nu poate fi folosit (expresia nu poate fi citită la poziția {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} „{1}” este în afara fișierului (lungime {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} nu este disponibil în această versiune.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Niciun disc nu corespunde cu „{0}”.</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Niciun volum nu corespunde cu „{0}”.</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Niciun proces nu corespunde cu „{0}”.</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>„{0}” corespunde la {1} procese. Specificați ID-ul procesului cu --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Deschidere sursă de date plugin</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Operații ale pluginurilor</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Pluginuri</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Gestionare pluginuri...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Gestionare</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>manager pluginuri extensii suplimente plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Se încarcă doar pluginurile semnate</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Pluginurile fără o semnătură validă nu se încarcă. Intră în vigoare după repornire.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Foldere de dezvoltare pentru pluginuri</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Foldere de ieșire ale compilării încărcate direct ca pluginuri (se editează în managerul de pluginuri).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Pluginuri</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Pluginuri</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Pluginuri</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Pluginurile adaugă tipuri de inspector, hashuri, formate, comenzi și panouri. Pluginurile rulează cu aceleași drepturi ca dvs.; activați doar pluginuri de la autori în care aveți încredere. Modificările intră în vigoare după repornire.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Mod sigur: nu se încarcă niciun plugin. Lista și setările nu se modifică.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Adăugare...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Repornire acum</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Deschidere folder de pluginuri</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Eliminare</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Setări plugin...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Activat</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Activat</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Dezactivat</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Nu este instalat niciun plugin. Adăugați un fișier .hexplugin cu Adăugare... sau trageți-l în listă.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Foldere de dezvoltare</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Pluginurile se încarcă direct din aceste foldere de ieșire ale compilării și sunt afișate ca Dezvoltare. Vi se cere confirmarea o singură dată pentru fiecare folder.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Adăugare folder de dezvoltare...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Folderul de dezvoltare a fost adăugat. Reporniți pentru a-l încărca.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Editori de încredere</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Pluginurile semnate de acești editori sunt activate fără întrebare. Eliminați un editor pentru a fi întrebat din nou.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Pluginuri instalate</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Trageți aici un fișier .hexplugin pentru a-l adăuga.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Adăugare plugin</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>editor necunoscut</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Semnat de {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Semnat de {0} (revocarea nu a putut fi verificată)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Semnătură nevalidă</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Semnătura nu a fost încă verificată</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Nesemnat</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Activat</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Dezactivat</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Nu poate fi încărcat ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Oprit ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Neîncărcat ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Se încarcă...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} – modificări după repornire</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Dezvoltare</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Nicio extensie</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Adaugă: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (dezactivat: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>În modul sigur nu se pot adăuga pluginuri.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Pluginul nu a fost adăugat: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Eliminare plugin</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Eliminați „{0}”? Pluginurile încărcate se șterg după repornire.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Setările pluginului {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>tip de inspector</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hash</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>format de import</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>format de export</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>sursă de date</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>vizualizare de transformare</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>operație cu date</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>comandă</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>element de meniu</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panou</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>pagină de setări</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>funcție de șablon</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>detectare tip de fișier</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>dezasamblor</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>reguli de colorare</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API de scripting</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>necunoscut</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Activați pluginul „{0}”?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (actualizare)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Editor: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Încărcat dintr-un folder de dezvoltare.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Acest cod poate face orice pe PC-ul dvs. cu drepturile dvs. (inclusiv citirea și scrierea fișierelor și accesul la rețea). Activați doar pluginuri de la autori în care aveți încredere.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Pluginul declară: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Acest plugin nu este semnat. Editorul său nu poate fi verificat.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Aveți întotdeauna încredere în pluginurile de la {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Activare</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Nu activa</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor rulează ca administrator. Acest plugin rulează cu drepturi de administrator și poate afecta întregul PC.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Încărcați pluginurile ca administrator?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor rulează ca administrator. Aceste pluginuri rulează cu drepturi de administrator și pot afecta întregul PC:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>– încă fără încredere</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Încărcare</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Nu încărca</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Pluginul „{0}” a fost oprit deoarece erorile au continuat.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Dezactivare plugin</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Reîncercare la repornire</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Pluginul „{0}” nu se va încărca după repornire.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Dezactivați pluginul?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor s-a închis neașteptat data trecută, posibil din cauza pluginului „{0}”. Îl dezactivați?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Păstrare activat</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Această comandă a pluginului nu poate rula acum.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Comanda „{0}” a pluginului „{1}” a eșuat. Consultați panoul de ieșire.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Deschidere: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>{0} nu poate fi deschis: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Copiere ca: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Copiat ca {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Operație cu date: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Operația cu date {0} a eșuat: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Adăugat de pluginul {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Panou de plugin</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Pluginul nu a putut crea acest panou.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Pluginuri</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(oprit)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Acest tip de plugin nu poate fi editat cu această valoare.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Structură</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Ieșire șablon</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Șabloane de structură</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Aplicare șablon...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Aplicare șablon de aici...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Afișare tip la cursor...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Aplicare Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Căutare șabloane potrivite</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Rulare din nou</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Eliminare aplicare</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Export rezultate...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Șablon nou</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Deschidere șablon...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Editare șablon</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Conversie .ksy în HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Gestionare șabloane</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Colorare structură</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Structură</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Ieșire șablon</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Rezultate structură...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Aplicare șablon de aici...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Oprire la citirea de aici</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Șablon</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Editor de cod</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Șablon: aplicare</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structură;analiză;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Șablon: aplicare de aici</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Șablon: afișare tip la cursor</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>urmărire tip;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Șablon: aplicare Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Șablon: rulare din nou</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluare;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Șablon: eliminare aplicare</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>anulare aplicare;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Șablon: oprire evaluare</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>anulare;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Șablon: afișare arbore de rezultate</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>arbore;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Șablon: afișare ieșire</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>erori;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Șablon: editare valoare</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>modificare editare change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Șablon: salt la definiție</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declarație declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Șablon: salt la ținta pointerului</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Șablon: copiere valoare</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Șablon: adăugare la marcaje</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>marcaj bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Șablon: export rezultate</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Șablon: comutare colorare</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>evidențiere highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Șablon: căutare șabloane potrivite</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detectare detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Șablon: nou</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>creare create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Șablon: deschidere</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>fișier file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Șablon: editare</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Șablon: gestionare</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>bibliotecă library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Șablon: conversie .ksy în HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Șablon: referință pentru biblioteca standard</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>ajutor funcții help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Șablon: rulare de probă</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;nesalvat;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Șablon: oprire la citirea de aici</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>punct de întrerupere date data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Vizualizare: panou structură</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>rezultate șablon template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Vizualizare: panou ieșire șablon</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>erori errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Editor de cod: pornire depanare / continuare</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>rulare;depanare;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Editor de cod: oprire depanare</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>încheiere end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Editor de cod: comutare punct de întrerupere</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>punct de întrerupere break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Editor de cod: pas peste</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>următorul next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Editor de cod: pas în</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>intrare enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Editor de cod: pas în afară</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>revenire return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Editor de cod: rulare până la cursor</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Editor de cod: adăugare expresie de inspectat</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>inspectare watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Editor de cod: salt la definiție</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declarație declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Editor de cod: căutare referințe</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>utilizări usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Editor de cod: formatare document</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indentare indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Editor de cod: comutare comentariu</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comentariu comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Editor de cod: afișare completări</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>completare automată intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Șabloane</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Aplicare automată</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Ce se întâmplă când un șablon se potrivește cu un fișier deschis (număr magic, tip MIME sau extensie).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Sugerare</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Aplicare întotdeauna</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Nu face nimic</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Reevaluare după editare</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Evaluează din nou șabloanele aplicate la 500 ms după ultima editare. Când este dezactivat, folosiți Rulare din nou în arborele de rezultate.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Colorare structură</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Colorează intervalele modelelor șablonului în vizualizarea Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Opacitatea colorării (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Opacitatea colorării structurii peste fundalul vizualizării Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Foldere de șabloane</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Foldere suplimentare în care se caută șabloane ale utilizatorului.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Șabloane de inspector</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Șabloane ale căror tipuri [[inspector]] sunt afișate în inspectorul de date.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Preferințe pentru șabloane</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Șabloane dezactivate, șabloane excluse de la aplicarea automată și sugestii suprimate.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Gestionare șabloane</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Foldere de șabloane</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Șabloane</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Șabloane de inspector</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Adăugare folder...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Eliminare</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Nu se poate accesa acest folder.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Filtrare după nume</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Șablon nou</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Activat</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Aplicare automată</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Editare</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Ascuns de un alt șablon cu același nume.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Sugestii dezactivate</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Niciuna</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Afișare din nou</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Adăugare șablon de inspector...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>dimensiune nefixă</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Acest șablon are tipuri de inspector fără dimensiune fixă sau mai mari de 4 KB. Se recomandă tipuri cu dimensiune fixă de cel mult 4 KB.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Fișiere de șabloane importate: {0}.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Importul nu a reușit: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Fișiere exportate: {0} în {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Exportul nu a reușit: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Șabloanele standard fac parte din aplicație. Folosiți Duplicare și editare pentru a exporta o copie.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Aplicare șablon</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Aplicare șablon</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Rulare din nou</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Rulare din nou</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Oprire evaluare</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Oprire evaluare</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Coloane</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Coloane</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Urmărire cursor</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Urmărire cursor</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Filtrare după nume, valoare sau tip</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtru</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Arbore de rezultate</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Cale (de ex. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Cale</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Evaluare totală și căutare</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>Potriviri: {0}</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Calea „{0}” nu a fost găsită.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Valoare</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Deplasament</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Dimensiune</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Comentariu</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Ordine octeți</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Sfârșit</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Culoare</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Ordinea coloanelor</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Mutare {0} la stânga</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Mutare {0} la dreapta</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Resetare coloane</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Se evaluează…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Modele evaluate: {0}</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>Erori: {0}, avertismente: {1}</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Numărul de modele a atins limita ({0}). Se afișează rezultate parțiale.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Creștere limită și rulare din nou</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} elemente</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} biți</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Biții {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / local: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Valoare nedefinită</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Nedefinit</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Urmărire</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Indică spre {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>deplasament {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>dimensiune {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(nesalvat)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(fișierul șablon nu a fost găsit)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Niciun șablon nu este aplicat.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Nu rulează nicio evaluare.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Selectați un nod în arborele de rezultate.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Nodul selectat nu este un pointer.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Ținta pointerului este null sau în afara datelor.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Șablonul „{0}” nu a fost găsit.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Un document poate avea cel mult {0} aplicări de șabloane.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>Fișierul șablon „{0}” nu a fost găsit.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Evaluare șablon {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON-ul depășește 64 MB. Salvați-l în schimb într-un fișier.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Salvare în fișier...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Șablon: {0}
+Deplasament de început: {1}
+Mod: {2}
+Ordinea octeților: {3}
+Tip: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Standard</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Al utilizatorului</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Recente</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Folosește scripturi</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Detalii</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Salt la date</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Salt la ținta pointerului</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Salt la definiție</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Editare valoare</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Copiere valoare</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Copiere nume și valoare</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Copiere cale</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Copiere octeți</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Copiere deplasament</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Copiere subarbore ca JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Adăugare la marcaje</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Adăugare intervale la selecția multiplă</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Deschidere secțiune într-o filă nouă</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Aplicare șablon de aici...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Oprire la citirea de aici</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Comutare fix / urmărire</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Conversie în fix</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Setări de aplicare</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Rulare din nou</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Eliminare aplicare</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Valoare</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Acest model are doar conversie la citire, așa că editați valoarea brută.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Introduceți un număr</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Adevărat</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Completare restului cu zerouri</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Ora locală</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Fus orar</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Introduceți o valoare de la 0 la {1} ({0} biți).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Valoarea este în afara intervalului pentru acest tip.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Textul este mai lung decât câmpul ({0} octeți).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Conversia la scriere a eșuat: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Valoarea nu poate fi citită.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Modelele dintr-o secțiune nu pot fi editate.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Acest model este doar pentru citire.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Valorile calculate nu pot fi editate.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Nodurile cu eroare nu pot fi editate.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Acest nod nu are o valoare de editat.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Editare valoare șablon</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Aplicare șablon</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Aplicare Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Căutare șabloane</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Nume, descriere, extensie sau tip MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Șabloane</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Deplasament de început</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Introduceți un deplasament din interiorul documentului.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Ordinea implicită a octeților</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Setarea documentului</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Setarea documentului (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Setarea documentului (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Mod</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Fix</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Urmărește cursorul</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Tip (urmărire)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Aplicare</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Versiunea {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Licență: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Șabloane potrivite</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} – {1} (scor {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>semnătură</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>extensie</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Niciun șablon nu se potrivește cu acest document.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Acest fișier arată ca {0}. Aplicați șablonul „{0}”?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(folosește scripturi)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Aplicare</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Alți candidați...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Nu afișa pentru acest format</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>A apărut o eroare la aplicarea șablonului „{0}”.</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Export rezultate structură</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Țintă</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Întreaga aplicare</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Subarborele selectat ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Număr maxim de elemente de tablou</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Adâncime maximă</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Nelimitat</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Includere modelele ascunse</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Scrierea deplasamentelor ca șiruri hexazecimale</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Salvare...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Export rezultate structură</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>Noduri: {0}</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Exportat în {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Exportul în {0} nu a reușit: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Nu există suficient spațiu pe disc.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Golire</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Golire</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Ieșire șablon</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Salt la sursă</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Salt la date</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Ajutor pentru {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Salvare</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Rulare de probă</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Document țintă</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Document țintă</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Pornire depanare / continuare</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Pas peste</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Pas în</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Pas în afară</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Oprire</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Evaluare în ordine la depanare</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Formatare document</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Comutare comentariu</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Sursa șablonului</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Completări</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Variabile</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Inspectare</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Stivă de apeluri</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Puncte de întrerupere</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Variabile</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Inspectare</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Stivă de apeluri</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Puncte de întrerupere</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Adăugare expresie de inspectat</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Adăugare</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Expresie (de ex. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Probleme</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Referință la rândul {0}, coloana {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Șablon nou</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Nu este deschis niciun editor de șabloane.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Nu se face depanare.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Deschideți un document pe care să rulați șablonul.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Șablonul {0} nu poate fi deschis: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Șablonul nu a putut fi salvat: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Șabloanele standard nu pot fi salvate direct. Folosiți Duplicare și editare pentru a salva o copie în folderul dvs. de șabloane.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplicare și editare</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Remediați erorile de sintaxă înainte de depanare.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Evaluarea leneșă este dezactivată în timpul depanării. Tablourile mari pot dura mult.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Punct de întrerupere date</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Depanatorul se oprește când este creat un model care conține {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>{0} nu a putut fi convertit în HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Modele evaluate: {0} (oprit la limita de {1}; se afișează rezultate parțiale)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>pași</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>modele</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memorie</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>timp</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Salt la rând</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Număr de rând (1–{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Nu este afișat niciun editor de cod (șablon sau script).</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Acest editor nu acceptă această comandă.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Urmărire ca pointer</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer deplasament adresă salt inspector pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Urmărire ca pointer</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absolut (deplasament)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absolut (adresă)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relativ la cursor</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relativ la sfârșitul valorii</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relativ la o bază…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Bază (expresie)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Salt</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Ținta {0} este în afara documentului (lungime {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Acest rând nu are o valoare utilizabilă ca poziție</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Introduceți baza ca expresie, de exemplu 0x400000 sau bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Selectați un rând cu număr întreg în inspectorul de date</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Deplasare ca într-un tablou de acest tip</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Elementul anterior</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Elementul următor</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Ieșire din modul tablou</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Număr element</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Dimensiune element</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(nu este la limita unui element)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Elementul {0} este în afara documentului</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Valoare</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Expr.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Referință circulară între marcaje</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Referințele bm.name sunt imbricate pe mai mult de {0} niveluri</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Poziția {0} este în afara documentului</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Eroare în expresia poziției: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Valoare</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Editare valoare marcaj</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(fără tip)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Tip</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Ordinea octeților</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Document</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Expresie de poziție</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>de ex. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Vizualizare: panou vizualizare imagine</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>vizualizator bitmap pixeli imagine visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Vizualizare imagine</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Vizualizare imagine</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1 bit, alb-negru</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2 biți, gri</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4 biți, gri</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8 biți, gri</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 biți (culorile temei octeților)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Urmărire cursor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Începutul selecției</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Fix</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>De sus în jos</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>De jos în sus (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Automat</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Format pixel</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Lățime (pixeli)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Octeți pe rând</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Automat</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Poziție de început</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Poziție de început fixă</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Ordinea rândurilor</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Mărire</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Mai multe opțiuni</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Imagine</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Derulare rânduri</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Salvare ca imagine…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Intervalul de vizualizare este prea mare; se desenează doar primii 64 MB</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Introduceți poziția de început fixă ca expresie</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Nu există nicio imagine de salvat</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Imaginea a fost salvată în {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>{0} nu a putut fi salvat: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Imagine PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Implicit</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Timp expirat</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Tipul a durat mai mult de {0} ms; rulează din nou când se schimbă poziția de început</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Eroare: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Fișier de tip inspector {0}, rândul {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Modul offline este activat (sau descărcările sunt dezactivate), așa că componenta nu se descarcă. Pentru a o adăuga manual, obțineți {0} de pe pagina versiunii (pe alt PC, dacă este nevoie) și extrageți-l în {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Pornit în modul sigur. Pluginurile și scripturile cu rulare automată nu se încarcă.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Repornire normală</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Șablon: căutare valori de câmpuri</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>căutare;câmp;valoare;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Niciun șablon nu este aplicat.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Eroare de sintaxă la caracterul {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>condiția este goală</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>lipsește o valoare</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>condiție necunoscută (folosiți name:, type: sau value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>comparație necunoscută (folosiți =, !=, &lt;, &lt;=, &gt;, &gt;= sau ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>ghilimelele nu sunt închise</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>expresia regulată nu este validă</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Valori de șablon</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Apăsați Enter pentru a căuta valorile câmpurilor. Rezultatele apar în Rezultate căutare.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Câmp</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (definit de utilizator)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (șablon {1})</value></data>
 </root>

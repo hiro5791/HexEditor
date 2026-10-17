@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Megszakítva.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>A használatról a 'hexed --help' (vagy a 'hexed &lt;command&gt; --help') parancs ad tájékoztatást.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Váratlan hiba ({0}). A részleteket a(z) {1} fájlba írtuk.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Használat: hexed &lt;command&gt; [arguments] [options]
+           hexed &lt;file&gt; [options]          (ugyanaz, mint: hexed open &lt;file&gt;)
+
+Parancsok:
+  open      Fájlok, lemezek vagy folyamatok megnyitása a HexEditor ablakában
+  hash      Kivonatok és ellenőrző összegek számítása és ellenőrzése
+  dump      Hex kiírás
+  compare   Két fájl összehasonlítása
+  run       Szkript futtatása ablak nélkül
+  template  Struktúrasablon alkalmazása és az eredmény kiírása
+  patch     IPS-javítócsomag alkalmazása egy fájlon
+  convert   Átalakítás formátumok között (Intel HEX, S-record, Base64, forráskód, ...)
+  find      Keresés fájlokban és a találatok kiírása
+
+Közös kapcsolók (minden parancsnál):
+  -h, --help           A használat megjelenítése (szintén: hexed &lt;command&gt; --help)
+      --version        A verzió megjelenítése
+  -q, --quiet          Csak az eredményt írja ki
+      --format &lt;f&gt;     Kimeneti formátum: text (alapértelmezett) vagy json
+  -o, --output &lt;path&gt;  Az eredmény fájlba írása a képernyő helyett
+      --lang &lt;tag&gt;     Az üzenetek nyelve (például en, ja)
+      --no-color       Ne használjon színeket
+      --unregister     A számítógépen végzett regisztrációk eltávolítása (helyi menü, fájltársítások,
+                       ugrólista, PATH, ideiglenes mappa)
+
+Kilépési kódok: 0 siker, 1 negatív eredmény (eltérések, nincs találat, eltérő érték), 2 használati hiba,
+3 I/O-hiba, 4 szkript- vagy sablonhiba, 5 nem engedélyezett, 6 megszakítva, 7 korlát túllépve,
+8 formátumhiba, 10 belső hiba.
+
+Az eltolások, hosszok és tartományok kifejezéseket fogadnak el. Az előtag nélküli szám tízes
+számrendszerű; a hexadecimálishoz használjon 0x előtagot. A tartomány start:length vagy start..end
+(az end nem tartozik bele); az 'end' a fájl hossza (például end-16:16). PowerShellben a $ jelet
+tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Használat: hexed open [paths...] [options]
+
+Megnyitja a fájlokat a HexEditor ablakában. Ha a HexEditor már fut, a fájlok lapokként nyílnak meg
+benne. A relatív útvonalak az aktuális mappához viszonyítva értendők.
+
+Kapcsolók:
+  -g, --offset &lt;expr&gt;      A kurzor ezen a pozíción lesz (például 0x1000 vagy end-16)
+      --select &lt;range&gt;     Ennek a tartománynak a kijelölése (start:length vagy start..end)
+  -r, --readonly           Megnyitás csak olvasásra
+      --disk &lt;n|path&gt;      Fizikai lemez megnyitása (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Kötet megnyitása (--volume C:)
+      --process &lt;pid|name&gt; Egy folyamat memóriájának megnyitása
+      --encoding &lt;name&gt;    A szövegoszlop karakterkódolása
+      --template &lt;name|path&gt;  Struktúrasablon alkalmazása megnyitás után
+      --compare &lt;a&gt; &lt;b&gt;    Két fájl megnyitása az összehasonlító nézetben
+      --run &lt;script&gt;       Szkript futtatása megnyitás után
+      --new-window         Megnyitás új ablakban
+      --new-document       Új üres dokumentum megnyitása
+      --open-disk          A Lemez megnyitása párbeszédpanel megjelenítése
+      --new-instance       Külön folyamat indítása a futó használata helyett
+  -w, --wait               Ne térjen vissza, amíg a megnyitott dokumentumok be nem záródnak
+      --safe-mode          Indítás csökkentett módban (csak új folyamatnál)
+      --write-block        Indítás írásvédelemmel az egész alkalmazásra
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Pszeudo-fordított szöveg megjelenítése (előnézeti buildek)
+      --plugin-dev &lt;folder&gt; Fejlesztés alatt álló bővítmény betöltése (csak új folyamatnál)
+      --ui-lang &lt;tag&gt;      Az ablak megjelenítési nyelve (csak új folyamatnál)
+      --test-hooks &lt;file&gt;  Hibainjektálás engedélyezése (csak tesztbuildeknél)
+
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Használat: hexed hash [paths...] [options]
+           hexed hash --check &lt;checksum file&gt; [options]
+
+Kivonatokat és ellenőrző összegeket számít. Az útvonalak tartalmazhatnak helyettesítő karaktereket
+(*.bin) vagy lehetnek mappák; a - a szabványos bemenet olvasását jelenti. Több algoritmus is
+számítható egyetlen menetben.
+
+Kapcsolók:
+  -a, --algorithm &lt;id,...&gt;   Algoritmusazonosítók vesszővel elválasztva (alapértelmezett: sha256).
+                             Az '--algorithm list' kiírja az elérhető azonosítókat
+      --range &lt;range&gt;        Csak ennek a tartománynak a kivonata (start:length vagy start..end)
+      --format &lt;f&gt;           text (alapértelmezett): algorithm  value  path
+                             gnu: value  path (ugyanaz, mint a sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: egy objektum fájlonként
+      --check &lt;file&gt;         Az ellenőrzőösszeg-fájlban felsorolt fájlok ellenőrzése (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) és OK, FAILED vagy MISSING kiírása
+  -r, --recurse              Almappák bevonása, ha mappát adtak meg
+
+Kilépési kódok: 0 siker, 1 eltérés a --check használatakor, 3 egy fájl nem olvasható.
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Használat: hexed dump &lt;path&gt; [options]
+
+Kiírja egy fájl (vagy tartomány) Hex tartalmát a szabványos kimenetre. A memóriahasználat nem függ a mérettől.
+
+Kapcsolók:
+      --range &lt;range&gt;        A kiírandó tartomány (start:length vagy start..end; alapértelmezett: az egész fájl)
+      --width &lt;n&gt;            Bájtok száma soronként (alapértelmezett: 16)
+      --group &lt;n&gt;            Bájtok száma csoportonként (alapértelmezett: a stílustól függ; 0: nincs csoportosítás)
+      --encoding &lt;name&gt;      A szövegoszlop karakterkódolása (alapértelmezett: ascii)
+      --base-address &lt;expr&gt;  Az első bájtnál megjelenített cím (alapértelmezett: 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              * kiírása az előző sort ismétlő sorok helyett (mint a hexdump -C)
+
+Kilépési kódok: 2, ha a tartomány a fájlon kívül esik.
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Használat: hexed compare &lt;path1&gt; &lt;path2&gt; [options]
+
+Összehasonlít két fájlt és kiírja a különbségeket.
+
+Kapcsolók:
+      --mode &lt;byte|resync&gt;   byte (alapértelmezett): azonos eltolásokon lévő bájtok összehasonlítása
+                             resync: beszúrások és törlések megengedése
+      --range1 &lt;range&gt;       Az első fájl tartománya (alapértelmezett: az egész)
+      --range2 &lt;range&gt;       A második fájl tartománya (alapértelmezett: az egész)
+      --max &lt;n&gt;              A kiírt különbségek legnagyobb száma (alapértelmezett: 1000);
+                             a többit csak megszámolja
+      --format &lt;text|json&gt;   Kimeneti formátum
+      --brief                Egy sor kiírása (azonos vagy eltérő), és megállás az első különbségnél
+
+Kilépési kódok: 0 azonos, 1 eltérő, 3 egy fájl nem olvasható.
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Használat: hexed run &lt;script&gt; [files...] [options]
+
+Szkriptet futtat ablak megnyitása nélkül. A fájlok sorrendben nyílnak meg (app.documents); az első
+az app.activeDocument.
+
+Kapcsolók:
+      --arg &lt;name=value&gt;   Szkriptparaméter (ismételhető); elérhető a script.args-ban is
+      --trust              Nem megbízható szkript futtatása kérdezés nélkül
+      --allow &lt;perm,...&gt;   Megadandó engedélyek (például file-read)
+      --save               Minden módosított dokumentum mentése a szkript végén
+      --save-as &lt;path&gt;     Az első dokumentum mentése erre az útvonalra (az eredeti nem változik)
+      --dry-run            Semmit sem ment; a módosítások összegzését írja ki
+      --timeout &lt;seconds&gt;  A teljes szkript legnagyobb futási ideje
+  -r, --readonly           A fájlok megnyitása csak olvasásra
+
+Alapértelmezés szerint csak azok a dokumentumok kerülnek mentésre, amelyekre a szkript a doc.save()
+függvényt hívja. A szkript kilépési kódja az app.exit(code) hívással állítható be. A 2–10 közötti
+kódok a 'hexed --help' parancs által felsorolt jelentéssel bírnak; saját jelentésekhez 64 vagy
+nagyobb értéket használjon.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Használat: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [options]
+
+Struktúrasablont alkalmaz egy fájlra, és kiírja az eredményt.
+
+Kapcsolók:
+      --template &lt;name|path&gt;  Az alkalmazandó sablon
+      --auto                  A sablon automatikus kiválasztása (1-es kilépési kód, ha egy sem felel meg)
+  -g, --offset &lt;expr&gt;         A struktúra kezdő eltolása (alapértelmezett: 0)
+      --format &lt;f&gt;            json, csv vagy text (behúzott fa; alapértelmezett: text)
+      --depth &lt;n&gt;             A fa legnagyobb mélysége
+      --fields &lt;path,...&gt;     Csak ezeknek a mezőknek a kiírása (például header.e_lfanew,sections[*].name)
+
+Kilépési kódok: 4 sablonhiba esetén.
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Használat: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
+
+Javítófájlt alkalmaz egy fájlra. A -o és a --in-place közül az egyik kötelező. Ez a verzió az IPS és
+az IPS32 javításokat alkalmazza.
+
+Kapcsolók:
+  -o, --output &lt;path&gt;       A javított fájl írása ide (a célfájl nem változik)
+      --in-place            A célfájl biztonságos lecserélése (előbb egy ideiglenes fájl készül)
+      --format &lt;f&gt;          auto (alapértelmezett), ips vagy ips32
+      --verify-before &lt;a:v&gt; A célfájl kivonatának előzetes ellenőrzése (például sha256:ab12...);
+                            eltérés esetén 1-es kilépési kód, és semmi sem íródik
+      --verify-after &lt;a:v&gt;  Az eredmény kivonatának ellenőrzése írás előtt
+      --dry-run             A rekordok és a módosított bájtok számának kiírása; semmi sem alkalmazódik
+
+Kilépési kódok: 1 az ellenőrzés sikertelen, 8 a javítás sérült.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Használat: hexed convert &lt;input&gt; &lt;output&gt; [options]
+
+Átalakít egy fájlt a HexEditor importálási és exportálási formátumai között.
+
+Kapcsolók:
+      --from &lt;format&gt;       Bemeneti formátum (alapértelmezett: a tartalomból és a kiterjesztésből ismeri fel)
+      --to &lt;format&gt;         Kimeneti formátum (alapértelmezett: a kimenet kiterjesztéséből; ismeretlen esetén bin)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Intel HEX / S-record fájlok olvasása hibás ellenőrző összeg esetén is
+      --fill &lt;hex&gt;          A hézagokhoz használt bájt (alapértelmezett: FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+A formátumkapcsolók neve megegyezik az importálási és exportálási párbeszédpanelek mezőinek
+nevével, kisbetűkkel és kötőjelekkel írva, például --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Kilépési kódok: 8 a bemenetben található ellenőrzőösszeg- vagy formátumhiba esetén.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Használat: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [options]
+
+Fájlokban keres, és minden találatnál kiírja: „path  offset  length”.
+
+Kapcsolók:
+      --hex &lt;pattern&gt;      Bájtok, például "DE AD ?? EF" (a ?? bármely bájt, a ? bármely félbájt)
+      --text &lt;string&gt;      Szöveg
+      --regex &lt;expr&gt;       Reguláris kifejezés (szövegre)
+      --encoding &lt;name&gt;    A --text és a --regex karakterkódolása (alapértelmezett: utf-8)
+      --case-sensitive     Kis- és nagybetűk megkülönböztetése
+      --range &lt;range&gt;      Csak az egyes fájlok ezen tartományában keres
+      --max &lt;n&gt;            Megállás n találat után
+      --format &lt;text|json&gt; Kimeneti formátum
+  -r, --recurse            Almappák bevonása, ha mappát adtak meg
+
+Kilépési kódok: 0 van találat, 1 nincs találat, 3 egy fájl nem olvasható.
+PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek közé (például '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Ismeretlen parancs vagy fájl: {0}. Parancsok: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Ismeretlen nyelv: {0}. Használja a 23 megjelenítési nyelvi címke egyikét (például en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Ismeretlen kapcsoló: {0} (itt: '{1}').</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>A(z) {0} kapcsoló nem fogad értéket ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>A(z) {0} kapcsolóhoz érték szükséges ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Az útvonal nem létezik: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>A hozzáférés megtagadva: {0}. Ellenőrizze a fájl engedélyeit, vagy olyan fiókból futtassa, amely hozzáférhet.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>A(z) {0} nem olvasható: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>A(z) {0} nem írható: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>A(z) {0} mappa, nem fájl.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Egyetlen fájl sem felel meg ennek: {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>A(z) {0} nem olvasható itt: {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Nincs elég szabad hely itt: {0} (szükséges bájtok: {1}, elérhető: {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>A fájl túl nagy a(z) {0} fájlrendszeréhez ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>A(z) {0} kimeneti útvonal egyben bemenet is. Válasszon másik kimeneti útvonalat.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: a(z) „{1}” kifejezés nem értelmezhető a(z) {2}. pozíciónál: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: a(z) „{1}” a fájlon kívül esik (hossz: {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: a(z) „{1}” értéknek {2} és {3} közötti számnak kell lennie.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>A --format {0} nem támogatott a(z) '{1}' parancsnál. Használja: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>A(z) '{0}' parancshoz legalább egy bemeneti útvonal szükséges.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>A(z) '{0}' pontosan egy bemeneti útvonalat fogad.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>A(z) '{0}' ebben a verzióban nem érhető el.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>A(z) {0} ebben a verzióban nem érhető el.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Az adatok nem férnek el a(z) {0} formátumban (korlát: {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Ismeretlen karakterkódolás: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>a kifejezés üres</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>szintaktikai hiba</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>egy zárójel nincs lezárva</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>ismeretlen név (a fájl hosszához használja az end-et)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>a könyvjelzők nem érhetők el a parancssorban</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>ismeretlen függvény</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>nullával való osztás</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>az érték túl nagy</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>nem érvényes szám</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>az adatok itt nem olvashatók</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>nem érhető el a parancssorban</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>A --format gnu pontosan egy algoritmust igényel. Többhöz használja a --format bsd vagy text kapcsolót.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>A --range nem használható szabványos bemenettel.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Ismeretlen algoritmus: {0}. Az azonosítókat a 'hexed hash --algorithm list' parancs írja ki.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>A(z) {0} algoritmus nem érhető el ezen a számítógépen.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>A(z) {0} nem tartalmaz olvasható ellenőrzőösszeg-sorokat.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>A(z) {0} algoritmusa nem állapítható meg. Adja meg az --algorithm kapcsolóval.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} kiszámított ellenőrző összeg NEM egyezett.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>{0} felsorolt fájl hiányzik.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Ismeretlen stílus: {0}. Lásd: 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>A 'compare' pontosan két útvonalat igényel.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Ismeretlen mód: {0}. Használja a byte vagy a resync módot.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>módosítva</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>beszúrva</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>törölve</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>olvashatatlan</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... további {0} különbség nem látható (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} különbség, összesen {1} bájt</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>A fájlok azonosak.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>A fájlok eltérnek (az első különbség itt: {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>{0} tartomány nem olvasható.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Adja meg a --hex, --text és --regex közül pontosan az egyiket.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>A keresési minta érvénytelen ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: {1} olvashatatlan tartomány kihagyva.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Használat: hexed convert &lt;input&gt; &lt;output&gt; [options]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Az IPS-javításokat a 'hexed patch' alkalmazza, nem a 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Érvénytelen érték ehhez: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Ismeretlen formátum: {0}. Formátumok: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: a(z) „{1}” érvénytelen. Használja: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>A(z) {0} nem vonatkozik a(z) {1} → {2} átalakításra.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  {0}. sor, {1}. oszlop: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: ellenőrzőösszeg-hiba a(z) {1}. sor {2}. oszlopában. A fájl ennek ellenére történő olvasásához használja az --ignore-checksum kapcsolót.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: formátumhiba a(z) {1}. sor {2}. oszlopában ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>{0} ellenőrzőösszeg-hiba figyelmen kívül hagyva.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Használat: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Adja meg a -o &lt;output&gt; vagy a --in-place kapcsolót (hogy az eredeti fájl ne módosuljon véletlenül).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>A -o és a --in-place nem használható együtt.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>A(z) {0} kimeneti útvonal a célfájl vagy a javítás. A célfájl lecseréléséhez használja a --in-place kapcsolót.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>A --format {0} nem javítási formátum. Használja az auto, ips vagy ips32 értéket.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: az UPS, BPS és .hexpatch javítások ebben a verzióban nem támogatottak. Az IPS és az IPS32 igen.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>A(z) {0} nem felismerhető javítófájl.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: a javítás sérült a(z) {1}. rekordnál (fájleltolás: {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>A(z) {0} nem {1} javítás.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: a(z) „{1}” értéknek algorithm:value alakúnak kell lennie (például sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>A(z) {0} kivonata nem a várt (--verify-before). Semmi sem íródott.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>A javított {0} kivonata nem a várt (--verify-after). Semmi sem íródott.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Alkalmazott rekordok: {0}, módosított bájtok: {1}, hosszváltozás: {2}. Kiírva: {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>formátum</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>rekordok: {0}, módosuló bájtok: {1}, hosszváltozás: {2}, új hossz: {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Adja meg a --template és az --auto közül pontosan az egyiket.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>A(z) „{0}” sablon nem található. Használja egy szabványos sablon nevét (például pe, png) vagy egy .hxt vagy .ksy fájl útvonalát.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Egyetlen sablon sem felel meg ennek: {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Sablonhiba: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Használat: hexed run &lt;script&gt; [files...] [options]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>A --save, --save-as és --dry-run közül csak az egyiket használja.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>A --readonly nem kombinálható a --save vagy --save-as kapcsolóval.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>A --arg „{0}” értékének name=value alakúnak kell lennie.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>A --timeout „{0}” értékének 0-nál nagyobb másodpercszámnak kell lennie.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>A --save-as kapcsolóhoz megnyitandó fájl szükséges (az első fájl az új útvonalra kerül mentésre).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>A --save-as {0} a megnyitott fájl. Felülírásához használja a --save kapcsolót.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: módosított bájtok: {1} (nincs mentve: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>A(z) {0} nem mentett módosításokat tartalmaz. Nem lettek mentve (használja a --save kapcsolót vagy a doc.save() függvényt).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Ismeretlen megjelenítési nyelv: {0}. Használja a 23 megjelenítési nyelvi címke egyikét (például ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Ismeretlen pszeudo-területi beállítás: {0}. Használja a qps-ploc vagy qps-plocm értéket.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>A HexEditor.exe nem található a hexed.exe mellett.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>A(z) {0} nem indítható: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>A HexEditor a dokumentumok bezárása előtt kilépett a(z) {0} kóddal.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Minden regisztráció eltávolítva.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Eltávolítva: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Nem távolítható el: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>Intéző helyi menüje</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>fájltársítások</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>App Paths bejegyzés</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>PATH-bejegyzés a hexedhez</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>tálca ugrólistája</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>értesítési regisztráció</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>ideiglenes mappa</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>beállításjegyzék-bejegyzések</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Ennek a verziónak a regisztrációit a Windows kezeli. Semmi sem lett eltávolítva.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Ez a példány semmit sem regisztrált. Semmi sem lett eltávolítva.</value></data>
+</root>
