@@ -428,6 +428,7 @@ public sealed class TemplateEditingUiTests
         await app.WaitUntilAsync(async () => (await FollowNameAsync()).Contains(Name(s1), StringComparison.Ordinal), Wait, "the second section name");
         Assert.Equal(fixedName, await PeekAsync("sections[0].Name", 0));
 
+        // 追従の適用は、カーソルの移動の後に評価し直す。その間は行の状態が空になるので、評価が終わって「追従」になるのを待つ
         await TemplateAsync(app, "reveal", new JsonObject { ["path"] = "@app", ["app"] = 1, ["select"] = false });
         async Task<string> SecondApplicationStatusAsync()
         {

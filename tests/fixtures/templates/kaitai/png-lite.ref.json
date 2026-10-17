@@ -1,0 +1,44 @@
+{
+ "key": "png-lite",
+ "ksy": "png-lite.ksy",
+ "data": "TD-PNG",
+ "sha256": null,
+ "ksySha256": null,
+ "toolchain": { "compiler": "handmade (comparer unit test)", "runtime": null, "yaml": null, "formatsCommit": null, "node": null },
+ "compileError": null,
+ "error": null,
+ "root": {
+  "kind": "struct", "offset": 0, "size": 558,
+  "fields": [
+   { "name": "magic", "offset": 0, "size": 8, "kind": "bytes", "value": "89504E470D0A1A0A" },
+   { "name": "ihdrLen", "offset": 8, "size": 4, "kind": "number", "value": 13 },
+   { "name": "ihdrType", "offset": 12, "size": 4, "kind": "bytes", "value": "49484452" },
+   { "name": "ihdr", "offset": 16, "size": 13, "kind": "struct", "fields": [
+    { "name": "width", "offset": 16, "size": 4, "kind": "number", "value": 16 },
+    { "name": "height", "offset": 20, "size": 4, "kind": "number", "value": 16 },
+    { "name": "bitDepth", "offset": 24, "size": 1, "kind": "number", "value": 8 },
+    { "name": "colorType", "offset": 25, "size": 1, "enum": "PngLite.ColorType", "kind": "number", "value": 2 },
+    { "name": "compressionMethod", "offset": 26, "size": 1, "kind": "number", "value": 0 },
+    { "name": "filterMethod", "offset": 27, "size": 1, "kind": "number", "value": 0 },
+    { "name": "interlaceMethod", "offset": 28, "size": 1, "kind": "number", "value": 0 }
+   ] },
+   { "name": "ihdrCrc", "offset": 29, "size": 4, "kind": "bytes", "value": "90916836" },
+   { "name": "chunks", "offset": 33, "size": 525, "kind": "array", "items": [
+    { "offset": 33, "size": 513, "kind": "struct", "fields": [
+     { "name": "len", "offset": 33, "size": 4, "kind": "number", "value": 501 },
+     { "name": "type", "offset": 37, "size": 4, "kind": "string", "value": "IDAT" },
+     { "name": "body", "offset": 41, "size": 501, "kind": "bytes", "value": "789C05C191A2EC400C00D0E0C5C18B838BC1C56031580C1683C56031580C16838BC1C5C18B830FE713DE3900000D7E3A34845F82CEF0124085B701396C019CB017C88063822E3801DA4F6BADB75F6C9DDA8B1B4A7B6B236B9B378EB667936AC7683ADBB99A01F4D6FA6FEF1DFB8B3A727F4B27ED9B75F6BE4797EC47751DFD9CDD56BF00F0B761EFF84244C23723096E8A6CB83B4AE091A885E7409B782D7400EA8D5E9D10E94D444C9B102BED46E2740469D2596483AE49BEE806E05763ECFC4626E28D99857765313E9C35F84CB6E26BB04FBE1707806093771742D9489865171195C3445DCE104BB94A7CC83D25963C00FA6E4A5D375426DD5945F45055D3D3D542AF542FBD87C6D46769021835DBBA31DA4E266C8798AA9D66E6768579DA5D16C39E69B9EC03E05B73EEBEA30BF9C1AEE2A7BA995FEE1E7EA747F9333CA77F961740708BBD87601C14CA714A98C665E11E7744643C1539E233A3567C01726F293D0F4CA53C394DF2D274CBDB33229FCCACFC8CAC99DF9503A0A4D5D14BB14E2AE3BAA45CEBB60AAF272AB33E5535EA3B6BACFA0318471BDAC789C3685C3C5CC6AD236C3C3E32C62747D5F88E31E6F85B63024C6DF3ECD3705E349DE72D33743E36D3E72766E5FCD61C63FECD39D7FC07B0CEB6ACAF0B97D3BA7985AC4757DAFAF8AA58DF5CA3D6DF5873AE7F6BADFFC5416810" },
+     { "name": "crc", "offset": 542, "size": 4, "kind": "bytes", "value": "80D60325" },
+     { "name": "isLast", "instance": true, "kind": "bool", "value": false }
+    ] },
+    { "offset": 546, "size": 12, "kind": "struct", "fields": [
+     { "name": "len", "offset": 546, "size": 4, "kind": "number", "value": 0 },
+     { "name": "type", "offset": 550, "size": 4, "kind": "string", "value": "IEND" },
+     { "name": "body", "offset": 554, "size": 0, "kind": "struct", "fields": [] },
+     { "name": "crc", "offset": 554, "size": 4, "kind": "bytes", "value": "AE426082" },
+     { "name": "isLast", "instance": true, "kind": "bool", "value": true }
+    ] }
+   ] }
+  ]
+ }
+}

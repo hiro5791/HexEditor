@@ -68,7 +68,15 @@ public sealed class UiTestContext : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            await context.SaveArtifactsAsync(ex);
+            // 失敗したアプリが止まっていると (例外の処理の途中で終わらないなど)、成果物の保存 (状態の問い合わせ・UIA) も止まりうる。
+            // 時間を区切り、過ぎたらアプリを止めて続ける (テストホストが止まって、ジョブの残りのテストの結果がなくならないようにする)
+            Task save = Task.Run(() => context.SaveArtifactsAsync(ex));
+            if (await Task.WhenAny(save, Task.Delay(TimeSpan.FromSeconds(60))) != save)
+            {
+                context.KillAll();
+                await Task.WhenAny(save, Task.Delay(TimeSpan.FromSeconds(15)));
+            }
+
             throw;
         }
     }

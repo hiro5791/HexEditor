@@ -1,0 +1,12 @@
+{
+  "name": "hexeditor-kaitai-reference",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reference dumps for TC-TPL-33-01 made with the official Kaitai Struct compiler and JavaScript runtime (CI only)",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "4.1.1",
+    "kaitai-struct": "0.11.0",
+    "kaitai-struct-compiler": "0.11.0"
+  }
+}

@@ -2741,20 +2741,21 @@
 | 優先度 | 中 |
 | フェーズ | 3 |
 | テストデータ | TD-TPL-KSY-FORMATS、TD-PNG、TD-ZIP、TD-ELF-X64、TD-PE-X64、TD-TPL-GIF |
-| 環境 | 標準 |
-| 備考 | kaitai_struct_formats の .ksy と公式のコンパイラによる期待値の JSON (TD-TPL-KSY-FORMATS) は、取り込み (ダウンロードとコンパイラの導入) がまだのため、自動テストにしていない。それまでは同じ書き方を使うテスト用の .ksy (`tests/fixtures/templates/data/ksy/png-lite.ksy`) の値をデータから求めた値と比べる |
+| 環境 | CI だけ (ci.yml のジョブ `kaitai-reference`。毎晩と手動の実行) |
+| 備考 | CI だけで動く (`KaitaiTests.KaitaiStructFormatsRunUnchanged`)。ランナーが、固定のコミットの kaitai_struct_formats と、`tools/KaitaiReference/package-lock.json` で版とハッシュを固定した公式のコンパイラ・実行時ライブラリを入れ、`tools/KaitaiReference/dump.js` で期待値の JSON を作り、フォルダを環境変数 `HEXEDITOR_KAITAI_REF` で渡す。変数がない (開発者の PC) ときはスキップする。結果の報告 (`kaitai-report.md`、形式ごとの不一致の一覧) はジョブの概要と成果物 `kaitai-results` に出す。成果物には、参照の JSON・生成した JavaScript と、使った `.ksy` (`kaitai-formats/`)・サンプル (`kaitai-data/`) も入れる (不一致を開発者の PC で調べるため。これらを `formats/`・`data/`・`ref/` に置いたフォルダを `HEXEDITOR_KAITAI_REF` に指定すると、同じ照合をローカルで動かせる)。見つかった違いは、その機能の小さな `.ksy` のテスト (`KaitaiEngineTests`) を足して毎回のテストで確かめる。比べ方の確認 (手で書いた期待値の JSON。`tests/fixtures/templates/kaitai/`) と、同じ書き方を使うテスト用の .ksy (`png-lite.ksy`) の確認は毎回のテストで動く。仕様で近似と決めた機能による違いだけは、許容リスト (`tests/fixtures/templates/kaitai/allowlist.tsv`。各行に仕様の項目を書く) で失敗にしない |
 
 **前提**: TD-TPL-KSY-FORMATS の期待値の JSON (Kaitai Struct の公式のコンパイラと実行時ライブラリで解析した値。Web IDE と同じ実行時ライブラリを使う) がある。
 
 **手順**:
 
 1. `png.ksy` を TD-PNG、`zip.ksy` を TD-ZIP、`elf.ksy` を TD-ELF-X64、`microsoft_pe.ksy` を TD-PE-X64、`gif.ksy` を TD-TPL-GIF に適用し、`instances` を含めてすべて評価して JSON でエクスポートする。
-2. 期待値の JSON と、各フィールドのパス・オフセット・サイズ・値を比べる。
+2. 期待値の JSON と、各フィールドのパス・オフセット・サイズ・値を比べる。期待値のすべてのフィールド (instances を含む) について、同じ名前 (JavaScript の名前は lowerCamelCase なので、.ksy の名前を同じ規則で変換して対応させる) のフィールドがあること、エラーがないこと、オフセットとサイズ (期待値に位置がある場合。ビットフィールドとセクションの中は除く)、値 (整数・文字列・真偽値・バイト列。列挙型は数値)、配列の要素の数を比べる。期待値の側で評価がエラーになったフィールドは比べない。こちらにだけあるフィールドは数を報告する。
 
 **期待結果**:
 
 - 5 つとも、`.ksy` の内容を変更せずにエラーなく実行できる。
 - すべてのフィールドのパス・オフセット・サイズ・値が期待値と一致する (列挙型の名前の表記の差を除く)。
+- 期待値を作る公式のツールも、5 つのデータをエラーなく最後まで解析できる (できない場合はデータが形式に合っていないので、データを直す)。
 
 ### TC-TPL-33-02 instances は結果ツリーで開くまで評価しない
 
@@ -3371,7 +3372,7 @@
 | TD-TPL-RGB565-DATA | 8 バイト | `00 F8 E0 07 1F 00 FF FF` (赤、緑、青、白) |
 | TD-TPL-1000-TEMPLATES | 約 200 KiB (1,000 ファイル) | テンプレート 1,000 個 (`gen-0000.hxt`〜`gen-0999.hxt`)。それぞれ `#pragma magic 0 "<8 バイト>"` (固定の種の乱数で、互いに異なり、PNG・PE などの既知のシグネチャと先頭が一致しないもの)、`#pragma extensions "gen<番号>"`、`u64 magic;` を持つ |
 | TD-TPL-DEBUG | 約 300 バイト | 12 行のテンプレート `debug.hxt`: 1 行目 `fn twice(u8 v) -> u32 {`、2 行目 `    return v * 2;`、3 行目 `}`、4 行目 `u8 a;`、5 行目 `u8 b;`、6 行目 `local u32 sum = a + b;`、7 行目 `u8 c;`、8 行目 `local u32 d = twice(c);`、9 行目 `u8 pad[13];`、10 行目 `u8 block[16];`、11 行目 `u8 more[16];`、12 行目 `u8 last;` |
-| TD-TPL-KSY-FORMATS | 約 200 KiB (フォルダ) | kaitai_struct_formats の `image/png.ksy`、`archive/zip.ksy`、`executable/elf.ksy`、`executable/microsoft_pe.ksy`、`image/gif.ksy` と、それらが `imports` で使うファイル。リポジトリの固定のコミット (ID を `tests/fixtures/ksy/SOURCE.md` に記録) から取り込み、ライセンスの表示を同梱する。期待値の JSON は、同じコミットの `.ksy` を Kaitai Struct の公式のコンパイラ (0.10) で JavaScript に変換し、公式の JavaScript の実行時ライブラリ (Web IDE と同じもの) で各データを解析して作る |
+| TD-TPL-KSY-FORMATS | 約 200 KiB (フォルダ) | kaitai_struct_formats の `image/png.ksy`、`archive/zip.ksy`、`executable/elf.ksy`、`executable/microsoft_pe.ksy`、`image/gif.ksy` と、それらが `imports` で使うファイル。リポジトリには取り込まず、CI のジョブ `kaitai-reference` が固定のコミット (ID は ci.yml の `KSF_COMMIT`) を取り出す。5 つの形式とデータの対応は `tools/KaitaiReference/formats.json`。期待値の JSON は、同じコミットの `.ksy` を Kaitai Struct の公式のコンパイラ (npm の kaitai-struct-compiler 0.11.0。Web IDE と同じ JavaScript 版) で位置の記録付きの JavaScript に変換し、公式の JavaScript の実行時ライブラリ (npm の kaitai-struct 0.11.0) で各データを解析して作る (`tools/KaitaiReference/dump.js`。版とハッシュは `package-lock.json` で固定) |
 | TD-TPL-GIF | 約 200 バイト | 4×4 の GIF89a (グローバルカラーテーブル 4 色、画像 1 つ、LZW の最小コードサイズ 2)。生成ツールが固定のバイト列として書き出す |
 | TD-TPL-KSY-INST | 約 200 バイト | `.ksy` のファイル `instances.ksy`: `meta: {id: inst_test, endian: le}`、`seq: [{id: first, type: u1}]`、`instances: {far: {pos: 0x80, type: u4}}` |
 | TD-TPL-KSY-ENDIAN | 約 500 バイト | `.ksy` のファイル `tiff-endian.ksy`: `meta/endian` を `switch-on: _root.order` (`[0x49, 0x49]` で `le`、`[0x4d, 0x4d]` で `be`) にし、`order` (2 バイト)、`magic` (u2)、`ifd_offset` (u4)、`ifd` (instances、`pos: ifd_offset`、項目数 u2 と項目の配列) を読む |

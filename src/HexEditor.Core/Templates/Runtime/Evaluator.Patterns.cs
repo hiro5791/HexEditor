@@ -173,7 +173,14 @@ internal sealed partial class Evaluator
         }
 
         CloseBitGroup(f);
-        AlignToByte(f);
+
+        // ビット単位の整数 (.ksy の b1〜b64) が続くときは、バイト境界にそろえずにビットの位置から読み続ける (Kaitai Struct と同じ。
+        // バイト単位の読み込みの前にだけそろえる)
+        if (type is not PrimType { Kind: PrimKind.Bits })
+        {
+            AlignToByte(f);
+        }
+
         if (Attr(d.Attributes, "align") is { Args.Count: > 0 } align)
         {
             long n = EvalLong(align.Args[0], f);
@@ -1563,7 +1570,9 @@ internal sealed partial class Evaluator
 
         try
         {
-            _pos = f.Start;
+            // pos のない instances は、Kaitai Struct と同じくストリームの今の位置 (その型でそこまで読んだ末尾。seq を読み終えていれば
+            // seq の末尾) から読む
+            _pos = f.HasPattern ? f.MaxEnd : f.Start;
             _space = f.Space;
             lock (_result.SyncRoot)
             {
