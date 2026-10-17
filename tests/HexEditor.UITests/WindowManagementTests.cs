@@ -78,7 +78,9 @@ public sealed class WindowManagementTests
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = CommandTests.Profile(ctx, """{ "$schemaVersion": 1, "ui.theme": "light" }""") });
         await NewWindowAsync(app, 2);
-        uint lightBackground = Background(await WindowsAsync(app), 1);
+        // 新しいウィンドウは最初の描画が終わるまで黒く写るので、ライトテーマの背景が写るまで待つ。
+        uint lightBackground = 0;
+        await app.WaitUntilAsync(async () => Luminance(lightBackground = Background(await WindowsAsync(app), 1)) > 0.7, Wait, "the light background of window 2");
 
         // 1. ウィンドウ 1 の設定画面でテーマを「ダーク」にする。
         await SendToAsync(app, 0, "settingsPage", new JsonObject { ["category"] = "appearance" });
