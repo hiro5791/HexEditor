@@ -16,6 +16,9 @@ public sealed class CliServices
     /// <summary>スクリプトの実行 (AUTO-41)。</summary>
     public IScriptRunner? Scripts { get; init; }
 
+    /// <summary>プラグインの読み込み (<c>hexed hash</c> のプラグインのアルゴリズム。AUTO-38 の仕様 2)。null なら読み込まない。</summary>
+    public IPluginLoader? Plugins { get; init; }
+
     /// <summary>GUI (HexEditor.exe) の起動 (AUTO-37)。</summary>
     public IGuiLauncher Gui { get; init; } = new GuiLauncher();
 
@@ -24,6 +27,7 @@ public sealed class CliServices
     {
         Templates = new Services.CoreTemplateService(),
         Scripts = new Services.CoreScriptRunner(),
+        Plugins = new Services.CorePluginLoader(),
     };
 }
 
@@ -79,6 +83,13 @@ public sealed record ScriptRunRequest(
     IReadOnlyList<string>? DocumentPaths = null,
     bool DryRun = false,
     string Language = "en");
+
+/// <summary>信頼済みのプラグインを読み込む (AUTO-30。<c>hexed hash</c> 用)。</summary>
+public interface IPluginLoader
+{
+    /// <summary>読み込んで、プラグインのハッシュのアルゴリズムを使えるようにする。戻り値を破棄すると元に戻す。</summary>
+    IDisposable Load(string language);
+}
 
 /// <summary>GUI の起動 (AUTO-37)。</summary>
 public interface IGuiLauncher

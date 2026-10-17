@@ -174,17 +174,44 @@ public sealed class ScriptTrustTests
         ScriptTestHost.AssertSucceeded(await t.RunCodeAsync("console.log('console');"));
         ScriptTestHost.AssertSucceeded(await t.Host.RunAndWaitAsync(new ScriptRunRequest { Code = "1;", Origin = ScriptOrigin.UnsavedMacro }, t.Env));
 
-        // エディタの未保存の内容は確認しない。開いたファイルを書き換えずに実行した場合はファイルと同じく確認する。
+        // エディタの未保存の内容は、新しいスクリプトと信頼済みのファイルを書き換えたものは確認しない。
+        // 開いたファイルを書き換えずに実行した場合はファイルと同じく確認する。
         string file = t.WriteScript("e.js", "console.log('file');");
+        t.TrustScript(file);
         ScriptTestHost.AssertSucceeded(await t.RunEditorAsync("console.log('edited');", file));
+        ScriptTestHost.AssertSucceeded(await t.RunEditorAsync("console.log('new');", Path.Combine(t.Folders.Scripts, "new.js")));
         Assert.Empty(t.Ui.TrustPrompts);
+        string untrusted = t.WriteScript("u.js", "console.log('file');");
         t.Ui.TrustAnswer = TrustAnswer.Deny;
-        await t.RunEditorAsync(File.ReadAllText(file), file);
+        await t.RunEditorAsync(File.ReadAllText(untrusted), untrusted);
         Assert.Single(t.Ui.TrustPrompts);
 
         // 変更されたマクロは確認する (AUTO-28 の仕様 7)。
         File.AppendAllText(macro, "\n// edited outside");
         await t.RunFileAsync(macro);
+        Assert.Equal(2, t.Ui.TrustPrompts.Count);
+    }
+
+    [Fact]
+    [Trait("TC", "TC-AUTO-34-02")]
+    public async Task Editing_an_untrusted_script_in_the_editor_does_not_skip_the_confirmation()
+    {
+        using var t = new ScriptTestHost();
+        string file = t.WriteScript("downloaded.js", "// @permission file-write\nconsole.log('original');");
+        t.Ui.TrustAnswer = TrustAnswer.Deny;
+
+        // 信頼されていないファイルを開いて 1 文字書き換えても、確認が出て、拒否すると実行しない。
+        ScriptRunResult denied = await t.RunEditorAsync(File.ReadAllText(file) + " ", file);
+        Assert.NotEqual(ScriptRunStatus.Succeeded, denied.Status);
+        TrustPrompt prompt = Assert.Single(t.Ui.TrustPrompts);
+        Assert.Equal(file, prompt.Path);
+        Assert.DoesNotContain(t.OutputText, l => l.Contains("original", StringComparison.Ordinal));
+
+        // 「常に許可する」で信頼すると、その後の書き換えは利用者が書いたものとして確認しない。
+        t.Ui.TrustAnswer = TrustAnswer.AlwaysAllow;
+        ScriptTestHost.AssertSucceeded(await t.RunEditorAsync(File.ReadAllText(file), file));
+        Assert.Equal(2, t.Ui.TrustPrompts.Count);
+        ScriptTestHost.AssertSucceeded(await t.RunEditorAsync(File.ReadAllText(file) + "\nconsole.log('more');", file));
         Assert.Equal(2, t.Ui.TrustPrompts.Count);
     }
 

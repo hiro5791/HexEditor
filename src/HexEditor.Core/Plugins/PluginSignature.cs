@@ -44,7 +44,8 @@ public sealed record PluginSignatureInfo(PluginSignatureState State, string? Pub
 public static class PluginSignatures
 {
     /// <summary>
-    /// フォルダ内のすべての <c>.dll</c> の署名を確かめてまとめる:
+    /// フォルダ内のすべての実行できるファイル (<see cref="IsExecutable"/>: <c>.dll</c>・<c>.exe</c>・<c>.winmd</c> などと、
+    /// 拡張子にかかわらず PE の形式のもの) の署名を確かめてまとめる:
     /// 1 つでも無効なら無効、1 つでも署名なしなら署名なし、すべて有効なら有効 (発行者は入口のアセンブリの署名者。
     /// 全 DLL が同じ証明書で署名されている場合だけ <see cref="PluginSignatureInfo.Thumbprint"/> を持つ)。
     /// 確認の途中の例外は無効として扱う。
@@ -52,7 +53,7 @@ public static class PluginSignatures
     public static PluginSignatureInfo VerifyFolder(string folder, string entry, IPluginSignatureVerifier verifier)
     {
         var files = new SortedDictionary<string, FileSignature>(StringComparer.OrdinalIgnoreCase);
-        foreach (string file in Directory.EnumerateFiles(folder, "*.dll", SearchOption.AllDirectories))
+        foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Where(IsExecutable))
         {
             string relative = Path.GetRelativePath(folder, file).Replace('\\', '/');
             FileSignature result;
@@ -87,5 +88,33 @@ public static class PluginSignatures
         FileSignature main = files.TryGetValue(entry, out FileSignature? e) ? e : files.Values.First();
         string? thumbprint = files.Values.Select(f => f.Thumbprint).Distinct(StringComparer.OrdinalIgnoreCase).Count() == 1 ? main.Thumbprint : null;
         return new PluginSignatureInfo(PluginSignatureState.Valid, main.Publisher, thumbprint, null, files.Values.Any(f => f.RevocationUnchecked), files);
+    }
+
+    private static readonly HashSet<string> ExecutableExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".dll", ".exe", ".winmd", ".sys", ".ocx", ".cpl", ".scr", ".drv", ".node", ".com", ".efi", ".mui",
+    };
+
+    /// <summary>
+    /// 署名を確かめるファイルか: 実行できる拡張子か、拡張子にかかわらず PE (先頭が <c>MZ</c>) のもの
+    /// (拡張子を変えた DLL を NativeLibrary などで読み込ませる差し替えのため)。読めないファイルは確かめる側に入れる (確認で無効になる)。
+    /// </summary>
+    public static bool IsExecutable(string path)
+    {
+        if (ExecutableExtensions.Contains(Path.GetExtension(path)))
+        {
+            return true;
+        }
+
+        try
+        {
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Span<byte> head = stackalloc byte[2];
+            return stream.ReadAtLeast(head, 2, throwOnEndOfStream: false) == 2 && head[0] == (byte)'M' && head[1] == (byte)'Z';
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return true;
+        }
     }
 }

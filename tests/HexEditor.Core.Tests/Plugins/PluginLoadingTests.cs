@@ -470,6 +470,60 @@ public sealed class PluginLoadingTests
         Assert.Equal(PluginSignatureState.Invalid, PluginSignatures.VerifyFolder(folder, "Plugin.DepA.dll", new ThrowingVerifier()).State);
     }
 
+    [Fact]
+    [Trait("TC", "TC-AUTO-35-02")]
+    public void Every_executable_file_is_verified_not_only_dlls()
+    {
+        using var t = new PluginTestHost();
+        string folder = InstallSigned(t, "test.signed");
+        var verifier = new PluginTestHost.TestRootVerifier(t.Certificates.Root);
+        Assert.Equal(PluginSignatureState.Valid, PluginSignatures.VerifyFolder(folder, "Plugin.Sample.dll", verifier).State);
+
+        // 署名のない .exe・.winmd を加えると、全体は署名なし (発行者の信頼で読み込まない)。
+        foreach (string name in new[] { "helper.exe", "Types.winmd", Path.Combine("native", "lib.bin") })
+        {
+            string path = Path.Combine(folder, name);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllBytes(path, [(byte)'M', (byte)'Z', 0x90, 0x00, 0x03]);
+            PluginSignatureInfo info = PluginSignatures.VerifyFolder(folder, "Plugin.Sample.dll", verifier);
+            Assert.NotEqual(PluginSignatureState.Valid, info.State);
+            Assert.Contains(name.Replace('\\', '/'), info.Files.Keys);
+            File.Delete(path);
+        }
+
+        // 拡張子を変えた PE (先頭が MZ) も確かめる。PE でないデータは署名の対象にしない (内容のハッシュで守る)。
+        File.WriteAllText(Path.Combine(folder, "readme.txt"), "plain text: not a PE file (no MZ at the start)");
+        Assert.Equal(PluginSignatureState.Valid, PluginSignatures.VerifyFolder(folder, "Plugin.Sample.dll", verifier).State);
+        File.WriteAllBytes(Path.Combine(folder, "data.bin"), [(byte)'M', (byte)'Z', 0x90, 0x00]);
+        Assert.NotEqual(PluginSignatureState.Valid, PluginSignatures.VerifyFolder(folder, "Plugin.Sample.dll", verifier).State);
+    }
+
+    [Fact]
+    public async Task Publisher_trust_reconfirms_when_an_unsignable_file_is_swapped_after_loading()
+    {
+        using var t = new PluginTestHost();
+        InstallSigned(t, "test.signed");
+        t.Prompts.Answer = PluginTrustAnswer.EnableAndTrustPublisher;
+        await t.StartAsync();
+        Assert.Single(t.Prompts.Trust);
+
+        // 同じ発行者の別のプラグインは、発行者の信頼で確認なしに読み込む (そのときの内容を記録する)。
+        string second = InstallSigned(t, "test.signed2");
+        await t.StartAsync();
+        Assert.Single(t.Prompts.Trust);
+        Assert.Equal(PluginState.Enabled, t.Manager!.Find("test.signed2")!.State);
+        await t.StartAsync();
+        Assert.Single(t.Prompts.Trust);
+
+        // 署名で守られないファイル (マニフェストの横の設定・スクリプト) を差し替えると、どちらも再確認になる。
+        File.WriteAllText(Path.Combine(second, "extra.js"), "// swapped");
+        File.AppendAllText(Path.Combine(t.PluginsRoot, "test.signed", "1.0.0", "plugin.json"), " ");
+        t.Prompts.Answer = PluginTrustAnswer.DontEnable;
+        await t.StartAsync();
+        Assert.Equal(["test.signed", "test.signed2"], t.Prompts.Trust.Skip(1).Select(p => p.Id).Order());
+        Assert.False(t.Manager!.Find("test.signed2")!.AssemblyLoaded);
+    }
+
     private sealed class ThrowingVerifier : IPluginSignatureVerifier
     {
         public FileSignature Verify(string path) => throw new InvalidOperationException("verifier broke");

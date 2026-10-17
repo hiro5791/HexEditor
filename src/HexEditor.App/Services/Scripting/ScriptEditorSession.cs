@@ -61,7 +61,8 @@ internal sealed class ScriptEditorSession : IDisposable
     /// <summary>終わった。UI のスレッドで発生する。</summary>
     public event EventHandler<ScriptRunResult>? Ended;
 
-    /// <summary>実行する (F5)。未保存の本文もそのまま実行する (利用者が書いたもの。AUTO-34 の仕様 1)。</summary>
+    /// <summary>実行する (F5)。未保存の本文もそのまま実行する (利用者が書いたもの。AUTO-34 の仕様 1。
+    /// ただし信頼されていないファイルを書き換えた本文は、ファイルと同じく信頼の確認を通す。ScriptTrustCheck)。</summary>
     public ScriptRun? Start(string code, bool debug, DebugStart start = DebugStart.Run)
     {
         if (State != EditorRunState.Idle)

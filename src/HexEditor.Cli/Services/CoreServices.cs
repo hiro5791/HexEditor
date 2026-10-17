@@ -199,63 +199,8 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         };
         env.Ui = new CliScriptUi(env, request.Error);
         env.Templates = new TemplateScriptEngine(TemplateCatalog.CreateDefault(Path.Combine(scriptFolders.Settings, "templates")));
-        PluginManager? previousPlugins = PluginManager.Current;
-        try
-        {
-            LoadPlugins(scriptFolders, trust, env, request, settings);
-            return RunCore(request, cancellationToken, scriptFolders, host, env);
-        }
-        finally
-        {
-            PluginManager.Current = previousPlugins;
-        }
-    }
-
-    /// <summary>
-    /// プラグイン (AUTO-30) を読み込む: アプリで「有効にする」を選んで信頼済みにしたものだけ (確認を出せないため)。管理者として実行中は
-    /// <c>--trust</c> がある場合だけ (AUTO-34 の仕様 8)。署名の失効の確認はキャッシュだけを使い、通信しない。
-    /// </summary>
-    private static void LoadPlugins(ScriptFolders folders, TrustStore trust, CoreScriptEnvironment env, ScriptRunRequest request, CliSettings settings)
-    {
-        string root = Path.Combine(folders.Settings, "plugins");
-        if (!Directory.Exists(root))
-        {
-            return;
-        }
-
-        var manager = new PluginManager(new PluginHostOptions
-        {
-            PluginsRoot = root,
-            AppVersion = env.AppVersion,
-            Trust = trust,
-            Verifier = new PluginVerifier(),
-            Policy = () => settings.String(ScriptSettingKeys.Policy, "none"),
-            SignedOnly = () => settings.Bool("plugins.signedOnly", false),
-            Prompts = null,
-            CommandLineTrust = request.Trust,
-            IsElevated = env.IsElevated,
-            HasUi = false,
-            UiLanguage = request.Language ?? "en",
-            Output = env.Output,
-        });
-        PluginManager.Current = manager;
-        PluginIntegration.Attach(manager);
-        manager.Discover();
-        manager.LoadAllAsync().GetAwaiter().GetResult();
-    }
-
-    private sealed class PluginVerifier : IPluginSignatureVerifier
-    {
-        public FileSignature Verify(string path)
-        {
-            Platform.Security.AuthenticodeVerifier.SignatureResult r = Platform.Security.AuthenticodeVerifier.VerifyPluginFile(path, offline: true);
-            return r.Status switch
-            {
-                Platform.Security.AuthenticodeVerifier.SignatureStatus.Valid => new FileSignature(PluginSignatureState.Valid, r.Publisher, r.Thumbprint, null, r.RevocationUnchecked),
-                Platform.Security.AuthenticodeVerifier.SignatureStatus.Unsigned => FileSignature.Unsigned,
-                _ => new FileSignature(PluginSignatureState.Invalid, Problem: $"0x{r.Code:X8}"),
-            };
-        }
+        using IDisposable plugins = CliPluginHost.Load(scriptFolders, trust, settings, env.AppVersion, env.IsElevated, request.Trust, request.Language ?? "en", env.Output);
+        return RunCore(request, cancellationToken, scriptFolders, host, env);
     }
 
     private static int RunCore(ScriptRunRequest request, CancellationToken cancellationToken, ScriptFolders scriptFolders, ScriptHost host, CoreScriptEnvironment env)
@@ -324,7 +269,7 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         return result.ProcessExitCode;
     }
 
-    private static ScriptFolders DefaultFolders()
+    internal static ScriptFolders DefaultFolders()
     {
         DataLocations? l = CliLocations.Current;
         string root = l?.Root ?? Path.Combine(Path.GetTempPath(), "HexEditor", "cli");
@@ -378,5 +323,105 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         public override void Status(string text)
         {
         }
+    }
+}
+
+/// <summary>
+/// コマンドラインでのプラグイン (AUTO-30) の読み込み (<c>hexed run</c>、<c>hexed hash</c>): アプリで「有効にする」を選んで信頼済みにしたものだけ
+/// (確認を出せないため)。管理者として実行中は <c>--trust</c> がある場合だけ (AUTO-34 の仕様 8)。組織の設定 <c>scripts.policy</c> と
+/// 「署名されたプラグインだけ」(<c>plugins.signedOnly</c>) は GUI と同じ設定ファイルから読む。署名の失効の確認はキャッシュだけを使い、通信しない。
+/// </summary>
+internal static class CliPluginHost
+{
+    /// <summary>読み込み、本体の一覧 (ハッシュ・形式の判定) につなぐ。戻り値を破棄すると元に戻す (同じプロセスで続けて実行するテストのため)。</summary>
+    public static IDisposable Load(ScriptFolders folders, TrustStore trust, CliSettings settings, string appVersion, bool elevated, bool commandLineTrust,
+        string language, ScriptOutputLog? output)
+    {
+        var scope = new Scope();
+        string root = Path.Combine(folders.Settings, "plugins");
+        if (!Directory.Exists(root))
+        {
+            return scope;
+        }
+
+        var manager = new PluginManager(new PluginHostOptions
+        {
+            PluginsRoot = root,
+            AppVersion = appVersion,
+            Trust = trust,
+            Verifier = new PluginVerifier(),
+            Policy = () => settings.String(ScriptSettingKeys.Policy, "none"),
+            SignedOnly = () => settings.Bool("plugins.signedOnly", false),
+            Prompts = null,
+            CommandLineTrust = commandLineTrust,
+            IsElevated = elevated,
+            HasUi = false,
+            UiLanguage = language,
+            Output = output,
+        });
+        PluginManager.Current = manager;
+        scope.Attached = true;
+        PluginIntegration.Attach(manager);
+        manager.Discover();
+        manager.LoadAllAsync().GetAwaiter().GetResult();
+        return scope;
+    }
+
+    private sealed class Scope : IDisposable
+    {
+        private readonly PluginManager? _previous = PluginManager.Current;
+        private readonly Func<IEnumerable<Core.FileTypes.IFileTypeDetector>>? _previousDetectors = Core.FileTypes.FileTypeDetector.GlobalDetectors;
+
+        public bool Attached { get; set; }
+
+        public void Dispose()
+        {
+            if (!Attached)
+            {
+                return;
+            }
+
+            Attached = false;
+            PluginManager.Current = _previous;
+            if (_previous is not null)
+            {
+                PluginIntegration.Apply(_previous);
+            }
+            else
+            {
+                Core.Hashing.HashCatalog.SetPlugins([]);
+                Core.FileTypes.FileTypeDetector.GlobalDetectors = _previousDetectors;
+            }
+        }
+    }
+
+    private sealed class PluginVerifier : IPluginSignatureVerifier
+    {
+        public FileSignature Verify(string path)
+        {
+            Platform.Security.AuthenticodeVerifier.SignatureResult r = Platform.Security.AuthenticodeVerifier.VerifyPluginFile(path, offline: true);
+            return r.Status switch
+            {
+                Platform.Security.AuthenticodeVerifier.SignatureStatus.Valid => new FileSignature(PluginSignatureState.Valid, r.Publisher, r.Thumbprint, null, r.RevocationUnchecked),
+                Platform.Security.AuthenticodeVerifier.SignatureStatus.Unsigned => FileSignature.Unsigned,
+                _ => new FileSignature(PluginSignatureState.Invalid, Problem: $"0x{r.Code:X8}"),
+            };
+        }
+    }
+}
+
+/// <summary>
+/// <c>hexed hash</c> (AUTO-38 の仕様 2) のプラグインのアルゴリズム: <c>hexed run</c> と同じく信頼の記録のあるプラグインだけを読み込む
+/// (<c>hash</c> には <c>--trust</c> がないため、管理者として実行中は読み込まない)。
+/// </summary>
+public sealed class CorePluginLoader(Func<ScriptFolders>? folders = null) : IPluginLoader
+{
+    private readonly Func<ScriptFolders> _folders = folders ?? CoreScriptRunner.DefaultFolders;
+
+    public IDisposable Load(string language)
+    {
+        ScriptFolders f = _folders();
+        string appVersion = typeof(CorePluginLoader).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.0.0";
+        return CliPluginHost.Load(f, new TrustStore(f.TrustFile), new CliSettings(f.Settings), appVersion, elevated: false, commandLineTrust: false, language, output: null);
     }
 }

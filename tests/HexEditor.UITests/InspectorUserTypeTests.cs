@@ -153,7 +153,9 @@ public sealed class InspectorUserTypeTests
         // 3・4: #0000FF に書き換えると 0x2〜0x3 が 1F 00 になり、Ctrl+Z で E0 07 に戻る。
         string type = row["id"]!.GetValue<string>()["Inspector_Row_".Length..];
         await InspectorTests.WriteAsync(app, type, "#0000FF");
-        Assert.Equal(new byte[] { 0x1F, 0x00 }, await app.BytesAsync(2, 2));
+        // テンプレートの型の書き込みは評価のあとに反映されるため、書き換わるのを待つ。
+        await app.WaitUntilAsync(async () => (await app.BytesAsync(2, 2)).SequenceEqual(new byte[] { 0x1F, 0x00 }),
+            TimeSpan.FromSeconds(15), "the written bytes at 0x2");
         await app.FocusAsync("editor");
         await app.KeyAsync("Z", ctrl: true);
         await app.IdleAsync();

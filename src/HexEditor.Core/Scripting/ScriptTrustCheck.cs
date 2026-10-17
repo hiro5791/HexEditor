@@ -12,7 +12,9 @@ internal sealed record TrustDecision(bool Allowed, IReadOnlyCollection<string> P
 /// 実行前の信頼の確認 (AUTO-34 の仕様 1・2・6・8)。
 /// <list type="bullet">
 /// <item>確認を出さないもの: 同梱のサンプル、アプリ内のエディタで保存したもの・記録したマクロ (信頼済みの一覧に登録済みで内容が同じ)、
-/// コンソールの入力、保存していない直前のマクロ、エディタの未保存の内容。宣言した許可を与える (コンソールは許可なし)。</item>
+/// コンソールの入力、保存していない直前のマクロ、エディタの未保存の内容 (新しいスクリプトか、元のファイルが信頼済みのもの)。
+/// 宣言した許可を与える (コンソールは許可なし)。</item>
+/// <item>信頼されていないファイルをエディタで開いて書き換えた内容は、ファイルと同じく確認する (書き換えで確認を省けないように)。</item>
 /// <item>「常に許可する」の記録があり内容が同じなら確認を出さない。</item>
 /// <item>管理者として実行中は、確認を出さないもの以外は毎回確認する (仕様 8。「常に許可する」の記録があっても省略しない)。</item>
 /// <item>ヘッドレス実行: 記録があるか、<c>--trust</c> があれば実行する (<c>--allow</c> の許可を与える)。管理者として実行中は <c>--trust</c> が必要。</item>
@@ -30,7 +32,10 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
         }
 
         // エディタの内容は利用者が書いたものとして扱う。ただし開いたファイルを書き換えずに実行した場合はファイルと同じ扱い。
-        if ((request.Origin == ScriptOrigin.Editor && !SameAsFile(request.Path, code)) || request.Origin == ScriptOrigin.UnsavedMacro
+        // 信頼されていないファイル (外部から持ち込んだものなど) を開いて書き換えた内容も、利用者が書いたものとはみなさない
+        // (1 文字書き換えるだけで確認を省けてしまうため。AUTO-34 の実装の注記)。
+        if ((request.Origin == ScriptOrigin.Editor && !SameAsFile(request.Path, code) && EditedFromTrustedFile(request.Path))
+            || request.Origin == ScriptOrigin.UnsavedMacro
             || IsBundledSample(request.Path))
         {
             return TrustDecision.Allow(declared);
@@ -90,6 +95,32 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
         try
         {
             return path is not null && File.Exists(path) && File.ReadAllText(path) == code;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// エディタの未保存の内容を利用者が書いたものとみなせるか: まだファイルがない (新しいスクリプト)、
+    /// 元のファイルが同梱のサンプル、またはディスク上の元のファイルの内容が信頼済みの一覧にある。読めないファイルは信頼しない。
+    /// </summary>
+    private bool EditedFromTrustedFile(string? path)
+    {
+        if (path is null || IsBundledSample(path))
+        {
+            return true;
+        }
+
+        try
+        {
+            if (!File.Exists(path))
+            {
+                return true;
+            }
+
+            return host.Trust.Find(TrustStore.ScriptKind, TrustStore.ScriptKey(path), TrustStore.HashOf(File.ReadAllText(path))) is not null;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

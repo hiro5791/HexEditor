@@ -28,6 +28,8 @@ internal sealed class HashCommand : ISubcommand
             throw CliException.Usage("Cli_Error_FormatNotSupported", ctx.Format, Name, string.Join(", ", Formats));
         }
 
+        // プラグインのアルゴリズムも使える (信頼済みのプラグインだけ。仕様 2)。
+        using IDisposable? plugins = ctx.Host.Services.Plugins?.Load(ctx.M.Language);
         IReadOnlyList<string> algorithmArgs = ctx.Args.Values("algorithm");
         if (algorithmArgs.Count == 1 && algorithmArgs[0].Equals("list", StringComparison.OrdinalIgnoreCase))
         {

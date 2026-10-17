@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
@@ -111,6 +111,12 @@ public sealed class PluginManager : IPluginGuardHost
 {
     public const string TrustKindDevFolder = "plugin-dev";
     public const string TrustKindPublisher = "publisher";
+
+    /// <summary>
+    /// 発行者の信頼で読み込んだバージョンの内容 (キーは「id/バージョン」、ハッシュは全ファイルのハッシュ)。
+    /// Authenticode で署名できないファイル (マニフェスト、.deps.json、スクリプトなど) を信頼の後に差し替えたら再確認にするため。
+    /// </summary>
+    public const string TrustKindPublisherContent = "plugin-publisher-content";
     private const string StateFile = "state.json";
     private const string StagingFolder = ".staging";
 
@@ -452,6 +458,11 @@ public sealed class PluginManager : IPluginGuardHost
         foreach (PluginRecord p in toLoad)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (IsTrustedByPublisher(p))
+            {
+                PinPublisherContent(p);
+            }
+
             await Task.Run(() => LoadOne(p), cancellationToken).ConfigureAwait(false);
             Registry.RaiseChanged();
             Changed?.Invoke(this, EventArgs.Empty);
@@ -536,8 +547,36 @@ public sealed class PluginManager : IPluginGuardHost
             return true;
         }
 
-        return p.Signature is { State: PluginSignatureState.Valid, Thumbprint: { } thumbprint } && IsPublisherTrusted(thumbprint);
+        return IsTrustedByPublisher(p);
     }
+
+    /// <summary>
+    /// 信頼済みの発行者の署名で信頼できるか: 署名できるファイル (PE) はすべて同じ証明書で有効に署名されていて、
+    /// このバージョンを前に読み込んだときから、署名で守られないファイルを含む全ファイルが変わっていないこと
+    /// (初めて見るバージョンは発行者の信頼で読み込み、そのときの内容を記録する)。
+    /// </summary>
+    private bool IsTrustedByPublisher(PluginRecord p)
+    {
+        if (p.IsDevelopment || p.Signature is not { State: PluginSignatureState.Valid, Thumbprint: { } thumbprint } || !IsPublisherTrusted(thumbprint))
+        {
+            return false;
+        }
+
+        string key = PublisherContentKey(p);
+        TrustRecord? pinned = Options.Trust.Records.FirstOrDefault(r => r.Kind == TrustKindPublisherContent && r.Key == key);
+        return pinned is null || pinned.Hash == p.ContentHash;
+    }
+
+    private void PinPublisherContent(PluginRecord p)
+    {
+        string key = PublisherContentKey(p);
+        if (Options.Trust.Find(TrustKindPublisherContent, key, p.ContentHash) is null)
+        {
+            Options.Trust.Add(TrustKindPublisherContent, key, p.ContentHash, TrustSource.UserAllowed, []);
+        }
+    }
+
+    private static string PublisherContentKey(PluginRecord p) => p.Id + "/" + p.Version;
 
     /// <summary>「この発行者を常に信頼する」を選んだ発行者か (証明書の SHA-256 で識別する)。</summary>
     public bool IsPublisherTrusted(string thumbprint) =>
@@ -556,6 +595,12 @@ public sealed class PluginManager : IPluginGuardHost
         if (answer == PluginTrustAnswer.EnableAndTrustPublisher && p.Signature is { State: PluginSignatureState.Valid, Thumbprint: { } thumbprint })
         {
             Options.Trust.Add(TrustKindPublisher, thumbprint.ToUpperInvariant(), p.Signature.Publisher ?? thumbprint, TrustSource.UserAllowed, []);
+        }
+
+        if (p.Signature is { State: PluginSignatureState.Valid, Thumbprint: not null })
+        {
+            // 利用者が確認した内容で記録し直す (差し替えで再確認になったものを「有効にする」で受け入れた場合を含む)。
+            Options.Trust.Add(TrustKindPublisherContent, PublisherContentKey(p), p.ContentHash, TrustSource.UserAllowed, []);
         }
     }
 
@@ -821,6 +866,11 @@ public sealed class PluginManager : IPluginGuardHost
         }
 
         Options.Trust.Revoke(TrustStore.PluginKind, id);
+        foreach (TrustRecord r in Options.Trust.Records.Where(r => r.Kind == TrustKindPublisherContent && r.Key.StartsWith(id + "/", StringComparison.Ordinal)))
+        {
+            Options.Trust.Revoke(TrustKindPublisherContent, r.Key);
+        }
+
         SetDisabledInState(id, false);
         Changed?.Invoke(this, EventArgs.Empty);
         return true;
