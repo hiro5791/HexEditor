@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>Μ</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Έλεγχος για ενημερώσεις</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Αναφορά API σεναρίων</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>Ρ</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Η έκδοση {0} είναι διαθέσιμη.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Η έκδοση {0} είναι έτοιμη για εγκατάσταση.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Έγινε ενημέρωση στην έκδοση {0}.</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>μετάφραση γλώσσα πρόβλημα translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Έλεγχος για ενημερώσεις</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>ενημέρωση αναβάθμιση έκδοση update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Αναφορά API σεναρίων</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api σενάρια αναφορά αυτοματοποίηση script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Εμφάνιση κλειδιών πόρων στις επεξηγήσεις εργαλείων</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Για μεταφραστές: εμφάνιση του κλειδιού πόρου κάθε συμβολοσειράς στην επεξήγηση εργαλείου της.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Αυτόματος έλεγχος για ενημερώσεις</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Αναμονή για σύνδεση προγράμματος εντοπισμού σφαλμάτων. Αναγνωριστικό διεργασίας: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Τα σενάρια C# δεν μπορούν να εκτελεστούν βήμα προς βήμα στην εφαρμογή. Συνδέστε ένα εξωτερικό πρόγραμμα εντοπισμού σφαλμάτων (Visual Studio ή Visual Studio Code) σε αυτήν τη διεργασία και καλέστε το System.Diagnostics.Debugger.Break() στο σενάριο για να σταματήσει.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Εκτέλεση χωρίς σύνδεση</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Πώς γίνεται η αποσφαλμάτωση σεναρίων C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Γλώσσα</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Επαναφορά συνεδρίας</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Εκκαθάριση</value></data>

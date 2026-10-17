@@ -32,6 +32,8 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Scripts](scripting.md)
 - [Macros](macros.md)
 - [Plugins](plugins.md)
+- [Automation API reference](api-reference.md)
+- [HexEditor plugin SDK](api-plugins.md)
 - [Command line (hexed)](command-line.md)
 
 ## Settings and help {#settings-and-help}

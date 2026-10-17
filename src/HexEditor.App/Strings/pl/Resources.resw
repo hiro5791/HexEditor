@@ -1287,6 +1287,8 @@ Szczegóły zapisano w:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>B</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Sprawdź aktualizacje</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Opis API skryptów</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Dostępna jest wersja {0}.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Wersja {0} jest gotowa do zainstalowania.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Zaktualizowano do wersji {0}.</value></data>
@@ -1350,6 +1352,8 @@ Szczegóły zapisano w:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>tłumaczenie język problem translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Sprawdź aktualizacje</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>aktualizuj aktualizacja wersja update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Opis API skryptów</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api skrypty opis dokumentacja automatyzacja script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Pokazuj klucze zasobów w etykietkach</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Dla tłumaczy: pokazuje klucz zasobu każdego ciągu w jego etykietce.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Automatycznie sprawdzaj aktualizacje</value></data>
@@ -5801,6 +5805,7 @@ Szczegóły zapisano w:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Oczekiwanie na dołączenie debugera. Identyfikator procesu: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Skryptów C# nie można wykonywać krok po kroku w aplikacji. Dołącz zewnętrzny debuger (Visual Studio lub Visual Studio Code) do tego procesu i wywołaj w skrypcie System.Diagnostics.Debugger.Break(), aby go zatrzymać.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Uruchom bez dołączania</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Jak debugować skrypty C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Język</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Resetuj sesję</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Wyczyść</value></data>

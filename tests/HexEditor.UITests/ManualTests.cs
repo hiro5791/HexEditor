@@ -54,4 +54,29 @@ public sealed class ManualTests
             // 同梱のページを開くときは URL の確認 (UI-58 の仕様 3) を出さない (ネットワークを使わないため)。
             Assert.False(await app.IsShownAsync("OpenUrlDialog"));
         });
+
+    [Theory]
+    [Trait(UiTest.TC, "TC-UI-59-11")]
+    [InlineData("ja", "ja")]
+    [InlineData("de", "en")]
+    public Task Scripting_api_reference_opens_the_online_page_of_the_display_language(string uiLanguage, string manualLanguage) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = uiLanguage, Hooks = new JsonObject { ["networkAvailable"] = true } });
+        await app.CommandAsync("Command_ScriptingApi");
+        Assert.Equal($"{Online}{manualLanguage}/api-reference.html", await LaunchedAsync(app));
+        Assert.False(await app.IsShownAsync("OpenUrlDialog"));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-59-11")]
+    public Task Scripting_api_reference_opens_the_bundled_page_offline() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja", Hooks = new JsonObject { ["networkAvailable"] = false } });
+        await app.SendAsync("execute", new JsonObject { ["id"] = "help.scriptingApi" });
+        var page = new Uri(await LaunchedAsync(app));
+        Assert.True(page.IsFile, page.AbsoluteUri);
+        Assert.EndsWith("/ja/api-reference.html", page.AbsolutePath, StringComparison.Ordinal);
+        Assert.True(File.Exists(page.LocalPath), page.LocalPath);
+        Assert.False(await app.IsShownAsync("OpenUrlDialog"));
+    });
 }

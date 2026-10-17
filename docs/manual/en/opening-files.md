@@ -146,7 +146,7 @@ You can open the memory of a running process, with virtual addresses as offsets.
 3. Choose what to open: **Whole address space** (default), **Choose a module**, or **Specify a range**.
 4. Select **Open**.
 
-The name looks like **notepad.exe (PID 1234)**. Unallocated areas are not read. When you open a process, a **Memory map** panel appears at the bottom with the regions and modules (if you close it, bring it back with **Toggle memory map** in the command palette). Double-click a row to jump to the start of that region.
+The name looks like **notepad.exe (PID 1234)**. Unallocated areas are not read. When you open a process, a **Memory map** panel appears at the bottom with the regions and modules (if you close it, bring it back with **View > Panels > Memory Map** or with **Toggle memory map** in the command palette). Double-click a row to jump to the start of that region.
 
 - It is read-only by default. If you allow editing, saving (<kbd>Ctrl</kbd>+<kbd>S</kbd>) writes the changed bytes into the process. HexEditor asks before the first write.
 - If the target page is read-only, HexEditor asks whether to remove the protection temporarily for the write.
@@ -208,6 +208,7 @@ If saving fails, the original file is unchanged. The message explains why.
 - An **untitled document**, or one whose file was deleted, uses **Save as**.
 - Even after saving, you can press <kbd>Ctrl</kbd>+<kbd>Z</kbd> to go back to the state before the save.
 - You cannot save over a file that is open in another tab. Close that tab first.
+- If another app is using the file, you see "name can't be saved because it's being used by app name." Close that app and select **Retry**. The original file is unchanged.
 
 If you close a tab or window without saving, HexEditor asks whether to save. When several tabs have changes, they are listed in one dialog. A tab whose save fails is not closed.
 

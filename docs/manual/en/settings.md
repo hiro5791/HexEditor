@@ -88,9 +88,28 @@ Change the look in **Tools > Settings > Appearance**.
 - **Window background**: **Mica** (default), **Mica Alt** or **None**. Where Mica is not available, a plain color is used automatically.
 - **Color scheme**: the colors of the hex view. You can duplicate a built-in scheme to make your own. If text and background do not contrast enough, a warning appears.
 - **Font**, **Font size (pt)** and **Line height**: the hex view's text. Only monospaced fonts are listed (**Show all fonts** shows all). The default is Cascadia Mono.
+- **Accent color**: the color of the selection, focus rectangles and accent buttons. Choose **Windows accent color** (default) or a **Custom color**. It takes effect after a restart. It is not used in high contrast.
 - With **Follow the Windows text size** on, the hex view gets larger along with the Windows "Text size" setting.
 
 The font of menus and dialogs is the Windows standard and cannot be changed.
+
+## File handling {#files-and-saving}
+
+Change how files are handled in **Tools > Settings > Files and saving**.
+
+- **File lock**: whether other apps can write to a file while it is open in HexEditor. A change applies to files you open afterwards. Files that are already open do not change.
+  - **Block writes by other apps only while there are unsaved changes** (default): other apps cannot write only while the file has unsaved changes.
+  - **Always block writes by other apps while open**: other apps cannot write for as long as the file is open.
+  - **Don't lock (always allow other apps to write)**: other apps can always write.
+
+For the backup and recovery settings, see [Backups and recovery](opening-files.md#backups-and-recovery).
+
+## Automation settings {#automation-settings}
+
+**Tools > Settings > Automation** has the settings for scripts and plugins. You can change the number of scripts that run at once, the time and memory limits, the folders to add scripts from, the hooks that run scripts automatically, and more.
+
+- **Trust and permissions**: the list of scripts for which you chose "Always allow". **Revoke** brings back the confirmation from the next run. The organization policy is shown as read-only. See [Review and revoke "Always allow"](scripting.md#revoke-trust).
+- **C# script component**: shows the installed version, and has **Add...**, **Remove** and **Clear compile cache**. See [Manage the component](scripting.md#csharp-component-manage).
 
 ## Display language {#display-language}
 

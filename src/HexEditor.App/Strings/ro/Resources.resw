@@ -1287,6 +1287,8 @@ Detaliile au fost scrise în:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Căutare actualizări</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Referință API pentru scripturi</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Versiunea {0} este disponibilă.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Versiunea {0} este gata de instalare.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Actualizat la versiunea {0}.</value></data>
@@ -1350,6 +1352,8 @@ Detaliile au fost scrise în:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>traducere limba limbă eroare translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Căutare actualizări</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>actualizare versiune upgrade update version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Referință API pentru scripturi</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api scripturi referință referinta automatizare script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Afișare chei de resurse în sfaturile ecran</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Pentru traducători: afișează cheia de resursă a fiecărui șir în sfatul ecran.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Căutare automată a actualizărilor</value></data>
@@ -5801,6 +5805,7 @@ Detaliile au fost scrise în:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Se așteaptă atașarea unui depanator. ID proces: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Scripturile C# nu pot fi executate pas cu pas în aplicație. Atașați un depanator extern (Visual Studio sau Visual Studio Code) la acest proces și apelați System.Diagnostics.Debugger.Break() în script pentru a opri execuția.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Rulare fără atașare</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Cum se depanează scripturile C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Limbă</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Resetare sesiune</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Golire</value></data>

@@ -1287,6 +1287,8 @@ Details wurden hier gespeichert:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>M</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Nach Updates suchen</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Skript-API-Referenz</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Version {0} ist verfügbar.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Version {0} ist zur Installation bereit.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Auf Version {0} aktualisiert.</value></data>
@@ -1350,6 +1352,8 @@ Details wurden hier gespeichert:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>übersetzung sprache fehler translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Nach Updates suchen</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>update aktualisierung version upgrade</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Skript-API-Referenz</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api skript referenz skripting script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Ressourcenschlüssel in QuickInfos anzeigen</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Für Übersetzer: Den Ressourcenschlüssel jeder Zeichenfolge in ihrer QuickInfo anzeigen.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Automatisch nach Updates suchen</value></data>
@@ -5801,6 +5805,7 @@ Details wurden hier gespeichert:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Es wird auf das Anfügen eines Debuggers gewartet. Prozess-ID: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>C#-Skripte können in der App nicht schrittweise ausgeführt werden. Fügen Sie einen externen Debugger (Visual Studio oder Visual Studio Code) an diesen Prozess an und rufen Sie im Skript System.Diagnostics.Debugger.Break() auf, um anzuhalten.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Ohne Anfügen ausführen</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>So debuggen Sie C#-Skripte</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Sprache</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Sitzung zurücksetzen</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Leeren</value></data>

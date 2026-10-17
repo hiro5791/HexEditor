@@ -1287,6 +1287,8 @@ Details were written to:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Check for updates</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Scripting API reference</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Version {0} is available.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Version {0} is ready to install.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Updated to version {0}.</value></data>
@@ -1350,6 +1352,8 @@ Details were written to:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Check for updates</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Scripting API reference</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>script api reference sdk automation</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Show resource keys in tooltips</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>For translators: show the resource key of each string in its tooltip.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Check for updates automatically</value></data>

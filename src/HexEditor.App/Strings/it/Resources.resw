@@ -1287,6 +1287,8 @@ I dettagli sono stati scritti in:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Verifica disponibilità aggiornamenti</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Riferimento API per script</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Update_Available" xml:space="preserve"><value>È disponibile la versione {0}.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>La versione {0} è pronta per l'installazione.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Aggiornato alla versione {0}.</value></data>
@@ -1350,6 +1352,8 @@ I dettagli sono stati scritti in:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>traduzione lingua problema translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Verifica disponibilità aggiornamenti</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>aggiorna aggiornamento versione update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Riferimento API per script</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api script riferimento automazione reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Mostra le chiavi delle risorse nelle descrizioni comandi</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Per i traduttori: mostra la chiave della risorsa di ogni stringa nella relativa descrizione comando.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Verifica automaticamente la disponibilità di aggiornamenti</value></data>
@@ -5801,6 +5805,7 @@ I dettagli sono stati scritti in:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>In attesa del collegamento di un debugger. ID processo: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Gli script C# non possono essere eseguiti passo per passo nell'app. Collega un debugger esterno (Visual Studio o Visual Studio Code) a questo processo e chiama System.Diagnostics.Debugger.Break() nello script per fermarlo.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Esegui senza collegare</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Come eseguire il debug degli script C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Linguaggio</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Reimposta sessione</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Cancella</value></data>

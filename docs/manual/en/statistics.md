@@ -4,6 +4,8 @@ The statistics panel shows which values a document, or part of it, contains and 
 
 Open the statistics panel with **Analysis > Statistics**. You can also use **View > Panels > Statistics** or run **Analysis: Show statistics** from the command palette.
 
+You can also select bytes, right-click and choose **Statistics**. This item is available only when something is selected, and the selection becomes the **Range**.
+
 In the upper part of the panel you choose the range and the settings. Below are the tabs: **Histogram**, **Descriptive**, **Entropy**, **Digram**, **Patterns** and **Classification**.
 
 - **Range**: choose **Selection**, **Multiple selection**, **Whole document** or **Specify range**. When you specify a range, enter **Start** and **Length or end**.

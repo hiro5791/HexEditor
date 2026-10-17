@@ -80,7 +80,7 @@ Even if a save fails, the original file is unchanged. The message gives the reas
 | --- | --- |
 | Not enough free space at the destination | Free some space, or choose **Save to another location**. **Save in place by shifting data** risks damaging the file if it stops halfway |
 | No permission to write | Use **Save As** to save to a place you can write |
-| Another app is using it | The message names the app. Close it and **Retry** |
+| "Can't be saved because ... is using it" | The message names the app that is using the file. Close it and select **Retry** |
 | Over the limit of the drive's file system | On FAT32, files over 4 GB cannot be written. Save to another drive |
 | An error while writing | The reason is shown. Check your USB drive or network connection |
 | Contains unreadable ranges | Data with bad sectors and the like cannot be saved. The ranges are listed |

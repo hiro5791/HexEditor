@@ -53,6 +53,8 @@ Add cursors with <kbd>Alt</kbd>+click to type the same thing in several places. 
 - **No selection**: <kbd>Delete</kbd> removes the byte at the cursor. In insert mode, <kbd>Backspace</kbd> removes the byte before the cursor.
 - **With a selection**: both <kbd>Delete</kbd> and <kbd>Backspace</kbd> remove the selection. **Delete** in the right-click menu does too.
 
+**Edit > Delete** does the same as <kbd>Delete</kbd>. It removes the selection, or the byte at the cursor if nothing is selected. If there is nothing to delete, you are told so.
+
 Deleting makes the file shorter, and the later bytes move up.
 
 - In overwrite mode, <kbd>Backspace</kbd> deletes nothing and only moves the cursor back by one.

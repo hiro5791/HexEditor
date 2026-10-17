@@ -48,8 +48,9 @@ How you call `hexed` depends on the edition:
 | `--new-instance` | Starts a separate process instead of using the running one |
 | `--wait`, `-w` | Does not return until all the opened documents are closed (`hexed` only) |
 | `--safe-mode` | Starts in safe mode ([Safe mode](plugins.md#safe-mode)) |
-| `--write-block` | Starts with write protection for the whole app |
 | `--ui-lang language` | Starts with the given display language (for example `--ui-lang ja`) |
+
+`--template` and `--run` run after the file is opened. `--write-block` (write protection for the whole app) is not available in this version.
 
 Disks and processes opened from the command line are read-only. If you need to write, allow writing after opening. If administrator rights are needed, the usual steps and confirmations apply. See [Administrator rights](opening-files.md#administrator).
 

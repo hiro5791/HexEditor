@@ -1287,6 +1287,8 @@ A részletek helye:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Frissítések keresése</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Szkript API referencia</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Elérhető a(z) {0} verzió.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>A(z) {0} verzió készen áll a telepítésre.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Frissítve a(z) {0} verzióra.</value></data>
@@ -1350,6 +1352,8 @@ A részletek helye:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>fordítás forditas nyelv hiba translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Frissítések keresése</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>frissítés frissites verzió verzio update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Szkript API referencia</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api szkript referencia automatizálás script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Erőforráskulcsok megjelenítése az elemleírásokban</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Fordítóknak: minden karakterlánc erőforráskulcsának megjelenítése az elemleírásában.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Frissítések automatikus keresése</value></data>
@@ -5801,6 +5805,7 @@ A részletek helye:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Várakozás a hibakereső csatlakozására. Folyamatazonosító: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>A C# szkriptek az alkalmazásban nem léptethetők. Csatlakoztasson külső hibakeresőt (Visual Studio vagy Visual Studio Code) ehhez a folyamathoz, és a szkriptben hívja meg a System.Diagnostics.Debugger.Break() metódust a megállításhoz.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Futtatás csatlakozás nélkül</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>C#-szkriptek hibakeresése</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Nyelv</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Munkamenet visszaállítása</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Törlés</value></data>

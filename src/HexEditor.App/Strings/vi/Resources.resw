@@ -1287,6 +1287,8 @@ Chi tiết đã được ghi vào:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Kiểm tra Bản cập nhật</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Tham chiếu API tập lệnh</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Đã có phiên bản {0}.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Phiên bản {0} đã sẵn sàng để cài đặt.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Đã cập nhật lên phiên bản {0}.</value></data>
@@ -1350,6 +1352,8 @@ Chi tiết đã được ghi vào:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>báo cáo lỗi dịch thuật ngôn ngữ translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Kiểm tra bản cập nhật</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>kiểm tra cập nhật nâng cấp phiên bản update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Tham chiếu API tập lệnh</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api tập lệnh tham chiếu tự động hóa script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Hiện khóa tài nguyên trong chú giải công cụ</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Dành cho người dịch: hiện khóa tài nguyên của từng chuỗi trong chú giải công cụ của chuỗi đó.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Tự động kiểm tra bản cập nhật</value></data>
@@ -5801,6 +5805,7 @@ Chi tiết đã được ghi vào:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Đang chờ trình gỡ lỗi gắn vào. ID tiến trình: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Không thể chạy từng bước tập lệnh C# trong ứng dụng. Hãy gắn trình gỡ lỗi bên ngoài (Visual Studio hoặc Visual Studio Code) vào tiến trình này và gọi System.Diagnostics.Debugger.Break() trong tập lệnh để dừng.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Chạy mà không gắn</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Cách gỡ lỗi tập lệnh C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Ngôn ngữ</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Đặt lại phiên</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Xóa</value></data>

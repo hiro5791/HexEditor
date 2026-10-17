@@ -92,10 +92,10 @@ internal static partial class SiteBuilder
         {
             foreach (string page in config.Pages)
             {
-                string own = Path.Combine(sourceDirectory, language.Code, page + ".md");
+                string own = PagePath(sourceDirectory, language.Code, page);
                 bool fallback = !File.Exists(own);
                 string sourceLanguage = fallback ? config.DefaultLanguage : language.Code;
-                string path = fallback ? Path.Combine(sourceDirectory, config.DefaultLanguage, page + ".md") : own;
+                string path = fallback ? PagePath(sourceDirectory, config.DefaultLanguage, page) : own;
                 if (!File.Exists(path))
                 {
                     var missing = new ManualProblem(Relative(sourceDirectory, path), 0, $"The page '{page}' is listed in manual.json but does not exist.");
@@ -109,6 +109,12 @@ internal static partial class SiteBuilder
 
                 // 既定の言語のページは、言語ごとに 1 回ずつ読む (リンクの書き換えが言語で変わらないため、同じ結果になる)。
                 string markdown = File.ReadAllText(path).ReplaceLineEndings("\n");
+                if (GeneratedPages.ContainsKey(page))
+                {
+                    string notice = config.Text(language.Code, "generatedPage");
+                    markdown = PrepareGenerated(markdown, notice == "generatedPage" ? "This page is generated automatically from the HexEditor SDK." : notice);
+                }
+
                 MarkdownDocument document = Markdown.Parse(markdown, pipeline);
                 parsed[(language.Code, page)] = new ParsedPage(language.Code, page, sourceLanguage, Relative(sourceDirectory, path), document, fallback);
             }
@@ -173,6 +179,29 @@ internal static partial class SiteBuilder
             pages = config.Pages.ToArray(),
         }, new JsonSerializerOptions { WriteIndented = true }).ReplaceLineEndings("\n") + "\n");
         return new(problems, pages, files);
+    }
+
+    /// <summary>
+    /// 自動生成のページ (docs/api の英語・日本語の API リファレンス。手で直さない)。ページの ID → docs/api のファイル名の前半
+    /// (<c>reference.en.md</c> など)。原稿のフォルダ (docs/manual) の隣の docs/api から読む。ない言語は英語のものを出す。
+    /// </summary>
+    internal static readonly Dictionary<string, string> GeneratedPages = new(StringComparer.Ordinal)
+    {
+        ["api-reference"] = "reference",
+        ["api-plugins"] = "plugins",
+    };
+
+    private static string PagePath(string sourceDirectory, string language, string page) =>
+        GeneratedPages.TryGetValue(page, out string? name)
+            ? Path.GetFullPath(Path.Combine(sourceDirectory, "..", "api", $"{name}.{language}.md"))
+            : Path.Combine(sourceDirectory, language, page + ".md");
+
+    /// <summary>生成されたページの原稿を整える: 見出し 1 の次に「自動生成」の注意を足し、docs/api どうしのリンクをページのリンクにする。</summary>
+    private static string PrepareGenerated(string markdown, string notice)
+    {
+        markdown = GeneratedLink().Replace(markdown, m => "](" + (m.Groups[1].Value == "reference" ? "api-reference" : "api-plugins") + ".md");
+        int end = markdown.IndexOf('\n');
+        return end < 0 ? markdown : markdown[..end] + "\n\n> " + notice + "\n" + markdown[end..];
     }
 
     /// <summary>作った結果を <paramref name="outputDirectory"/> に書き出す。前の出力は消す。</summary>
@@ -612,6 +641,9 @@ internal static partial class SiteBuilder
 
         return text.ToString();
     }
+
+    [GeneratedRegex(@"\]\((reference|plugins)\.(?:en|ja)\.md")]
+    private static partial Regex GeneratedLink();
 
     [GeneratedRegex("^[a-z0-9]+(-[a-z0-9]+)*$")]
     private static partial Regex PageId();

@@ -21,7 +21,7 @@ If you drag the pointer above or below the view, it scrolls automatically. You c
 Hold <kbd>Shift</kbd> while moving the cursor to extend the selection. The movement keys are the same as in [The hex view](hex-view.md#moving-the-cursor). <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>←</kbd> / <kbd>→</kbd> work by group, and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Home</kbd> / <kbd>End</kbd> go to the start and end.
 
 - <kbd>Ctrl</kbd>+<kbd>A</kbd> (**Edit > Select All**): selects the whole file.
-- <kbd>Esc</kbd>: clears the selection. **Clear selection** in the right-click menu does too.
+- <kbd>Esc</kbd>: clears the selection. **Edit > Clear Selection** and **Clear selection** in the right-click menu do too.
 
 The position and length of the selection show in the status bar ([Status bar](hex-view.md#status-bar)). The end position is the last byte (that byte is included).
 

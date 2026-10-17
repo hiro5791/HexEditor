@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>更新の確認(U)</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>スクリプトの API リファレンス(S)</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>版 {0} があります。</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>版 {0} の準備ができました。</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>版 {0} に更新しました。</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>ほんやくのあやまりをほうこく</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>更新の確認</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>こうしんのかくにん</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>スクリプトの API リファレンス</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>すくりぷとのえーぴーあいりふぁれんす script api reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>ツールチップにリソースキーを表示する</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>翻訳者向け: 各文字列のツールチップにリソースキーを表示する。</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>更新を自動で確認する</value></data>

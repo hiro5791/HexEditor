@@ -4,9 +4,7 @@ The **Data** menu has features that rewrite the selected bytes in one go. For ex
 
 Every operation treats the bytes as a row of equally sized "elements" and calculates each element. The result is one edit, so one <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes it. The file length does not change. The exceptions are inserting and deleting bits (described below) and converting the character encoding, which can change the length.
 
-## Arithmetic and bitwise operations {#arithmetic}
-
-### Using the data operations dialog {#dialog}
+## Using the data operations dialog {#dialog}
 
 1. Select the bytes to work on. To work on the whole document, you do not need a selection.
 2. Select **Data > Data operations...**.
@@ -34,6 +32,17 @@ The preview shows the first 64 bytes of the target before and after, and how man
 The result is applied to the document only after it is completely ready. If you cancel, or if something fails, the document does not change. Ranges over 4 MiB run in the background with progress. Large ranges need temporary free space of the same size. If there is not enough, the operation does not run and tells you how much is needed. If the settings would not change any data, you see "The data does not change."
 
 Data operations are not available in a read-only document.
+
+### Using the right-click menu {#context-menu}
+
+Select bytes, right-click and choose **Data operation** to open a submenu.
+
+- **Data operations...**: opens the data operations dialog.
+- **Arithmetic**, **Bitwise**, **Shift / rotate**, **Reorder**, **Clamp** and **Insert / delete bits**: the operations of each category. Choosing one opens the dialog with that operation already selected.
+
+Operations in **Reorder** run at once, without opening the dialog, when something is selected. **Data operation** is not available for a read-only document.
+
+## Arithmetic and bitwise operations {#arithmetic}
 
 ### Arithmetic operations {#arithmetic-ops}
 
@@ -114,7 +123,7 @@ Choose the **Clamp** category. It keeps each element inside the range you give.
 
 For example, with an unsigned byte, minimum `0x10` and maximum `0x80`, `00 50 FF` becomes `10 50 80`. NaN in floating point is left alone. If the minimum is larger than the maximum, it cannot run. When it finishes, you are told how many elements changed.
 
-### Inserting and deleting bits {#bit-insert-delete}
+## Inserting and deleting bits {#bit-insert-delete}
 
 Choose the **Insert / delete bits** category to treat the data as one string of bits and shift it bit by bit. Use it to realign data that is off by some bits.
 
@@ -150,7 +159,7 @@ With some encodings the length changes. In that case the selection is replaced b
 
 If it stops with an error, the document does not change. The offset and the character of the first problem are shown, and **Go to the offset** takes you there.
 
-### Changing case {#case-conversion}
+## Changing case {#case-conversion}
 
 Change the case of letters with **Data > Change case**. Choose **Uppercase**, **Lowercase** or **Swap case**.
 

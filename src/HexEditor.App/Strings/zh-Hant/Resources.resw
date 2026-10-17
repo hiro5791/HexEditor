@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>檢查更新(U)</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>指令碼 API 參考(S)</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>有可用的版本 {0}。</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已可安裝。</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>已更新至版本 {0}。</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>回報 翻譯 錯誤 語言 問題 translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>檢查更新</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>檢查更新 更新 升級 版本 update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>指令碼 API 參考</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>指令碼 api 參考 自動化 script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>在工具提示中顯示資源索引鍵</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>供翻譯人員使用：在每個字串的工具提示中顯示其資源索引鍵。</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>自動檢查更新</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>正在等候偵錯工具附加。處理序識別碼: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>應用程式內無法對 C# 指令碼逐步執行。請將外部偵錯工具 (Visual Studio 或 Visual Studio Code) 附加到此處理序，並在指令碼中呼叫 System.Diagnostics.Debugger.Break() 以停止。</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>不附加直接執行</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>如何偵錯 C# 指令碼</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>語言</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>重設工作階段</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>清除</value></data>

@@ -74,10 +74,11 @@ Use the script editor to write scripts. It opens as a tab next to your documents
 - Syntax highlighting that follows the theme.
 - Completion. Type `doc.` to see the available methods with descriptions. C# completion needs the C# script component.
 - Error display. When you stop typing, the script is checked and errors get a wavy underline. They are also listed under **Problems** below the editor. Select one to jump to its line.
-- Go to line, folding, toggling comments, and find and replace.
+- Go to line (<kbd>Ctrl</kbd>+<kbd>G</kbd>).
+- Folding, bracket matching, toggling comments (<kbd>Ctrl</kbd>+<kbd>/</kbd>), formatting (<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>F</kbd>), and find and replace.
 - Save with <kbd>Ctrl</kbd>+<kbd>S</kbd>.
 
-The exact set of editing features can differ between versions of the editor.
+On a PC without the WebView2 runtime, the script opens in a basic editor without highlighting or completion, and a bar at the top tells you. You can still edit and run scripts.
 
 The toolbar has **Run**, **Debug**, **Stop**, **Pause** and the **Target document** choice. Use **Target document** to pick the document the script works on. <kbd>F5</kbd> runs the contents of the editor as they are, even if you have not saved them.
 
@@ -135,7 +136,7 @@ The output of `console.log` and similar calls, and errors, appear in the **Outpu
 
 ## The script API {#script-api}
 
-Scripts use objects like these:
+Scripts use objects like these (every object and method is in the [Automation API reference](api-reference.md), which you can also open with **Help > Scripting API reference**):
 
 | Object | What it does |
 | --- | --- |
@@ -219,6 +220,17 @@ When HexEditor runs as administrator, you are asked every time a script runs, ev
 
 If your organization has turned scripts off in the settings file, the script menus are disabled.
 
+### Review and revoke "Always allow" {#revoke-trust}
+
+Scripts for which you chose "Always allow" are listed in **Trust and permissions** under **Settings > Automation**. The list shows the name, the permissions and the date you allowed it.
+
+1. Open **Settings > Automation** and find **Trust and permissions**.
+2. Select **Revoke** for the script you want to remove.
+
+A revoked script asks again the next time it runs. If no script is always allowed, the list says "No scripts are always allowed."
+
+If your organization has set the script policy, the policy is shown in **Trust and permissions** as read-only. You cannot change it here. Plugin trust is not in this list. It is managed in the plugin manager ([Plugin permissions and trust](plugins.md#plugin-permissions)).
+
 ## The script console {#console}
 
 The **Console** lets you try things one line at a time without creating a script file. Open it with **Tools > Scripts > Console** (or **View > Panels > Console**).
@@ -273,6 +285,16 @@ On a PC that is offline or cannot download, you can add it by hand:
 
 If you have turned off network use (**Settings > Privacy**), nothing is downloaded. Use the manual way.
 
+### Manage the component {#csharp-component-manage}
+
+To check and manage the component you added, use **C# script component** under **Settings > Automation**.
+
+- When it is installed, "Installed version" is shown. If the installed version is different from this version of HexEditor, you are told so. Add the component for this version.
+- When it is not installed, it says "Not installed. C# scripts need this component."
+- **Add...** adds the component. It does the same as **Tools > Scripts > Add C# script component**.
+- **Remove** removes the component. C# scripts cannot run until you add it again.
+- **Clear compile cache** deletes the compiled results of C# scripts. They are compiled again the next time they run.
+
 ## Debugging JavaScript {#debugging-javascript}
 
 You can step through JavaScript scripts in the script editor.
@@ -307,7 +329,7 @@ C# scripts cannot be stepped through in the app. In the script editor, <kbd>F9</
 To debug a C# script, attach an external debugger to HexEditor:
 
 1. Open the script in the script editor.
-2. On the toolbar, select **Debug run**. HexEditor compiles the script with debug information and shows the process ID.
+2. On the toolbar, select **Debug**. HexEditor compiles the script with debug information and shows the process ID.
 3. In Visual Studio or Visual Studio Code (with the C# extension), attach to the process with that ID.
 4. Set breakpoints in the `.csx` file. To stop at a fixed place, call `System.Diagnostics.Debugger.Break()` in the script.
 5. When the debugger is attached, the script starts. To start without a debugger, select **Run without attaching**.

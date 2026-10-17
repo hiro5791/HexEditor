@@ -601,6 +601,7 @@ public static class BuiltInCommands
         new("help.commandPalette", "help") { Icon = IconPalette, DefaultBindings = [K("Ctrl+Shift+P"), K("F1")] },
         new("help.shortcuts", "help") { Icon = IconKeyboard },
         new("help.documentation", "help") { Icon = IconHelp },
+        new("help.scriptingApi", "help"),
         new("help.reportProblem", "help"),
         new("help.reportTranslation", "help"),
         new("help.checkForUpdates", "help"),

@@ -21,7 +21,7 @@
 <kbd>Shift</kbd> を押しながらカーソルを動かすと、選択範囲が広がります。移動のキーは、[Hex ビュー](hex-view.md#moving-the-cursor) と同じです。<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>←</kbd> / <kbd>→</kbd> はグループ単位、<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Home</kbd> / <kbd>End</kbd> は先頭と末尾までです。
 
 - <kbd>Ctrl</kbd>+<kbd>A</kbd> (**編集 > すべて選択**): ファイル全体を選びます。
-- <kbd>Esc</kbd>: 選択を解除します。右クリックの **選択の解除** でも解除できます。
+- <kbd>Esc</kbd>: 選択を解除します。**編集 > 選択の解除** や、右クリックの **選択の解除** でも解除できます。
 
 選択範囲の位置と長さは、ステータスバーに出ます ([ステータスバー](hex-view.md#status-bar))。終わりの位置は、最後のバイトです (そのバイトを含みます)。
 

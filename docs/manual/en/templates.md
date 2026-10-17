@@ -195,7 +195,7 @@ Item   items[header.count];
 - Go to definition (<kbd>F12</kbd>). On a type name, it opens the line that defines the type.
 - Save with <kbd>Ctrl</kbd>+<kbd>S</kbd>. Applications that use the template are evaluated again. The same happens when you save the file in another editor.
 
-The exact set of editing features can differ between versions of the editor.
+On a PC without the WebView2 runtime, the template opens in a basic editor without highlighting or completion, and a bar at the top tells you. You can still edit and save templates.
 
 ### Try it without saving {#try-run}
 

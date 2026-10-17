@@ -17,11 +17,14 @@ public sealed record ManualTopic(string Page, string? Anchor = null)
     /// <summary>テンプレートの標準ライブラリのリファレンス (07 の TPL-18 の仕様 4)。</summary>
     public static ManualTopic TemplateLibrary { get; } = new("template-library");
 
+    /// <summary>スクリプトの自動化 API のリファレンス (docs/api から ManualBuilder が作る生成ページ。08 の AUTO-04)。</summary>
+    public static ManualTopic ScriptingApi { get; } = new("api-reference");
+
     /// <summary>テンプレートのエラーのコードの説明 (07 の TPL-27 の仕様 7)。見出しはコード (例: HXT1004 → hxt1004)。</summary>
     public static ManualTopic TemplateError(string code) => new("template-error-codes", code.ToLowerInvariant());
 
     /// <summary>アプリから開く見出し (マニュアルのすべての言語にあることを Core のテストで確かめる)。</summary>
-    public static IReadOnlyList<ManualTopic> Linked { get; } = [Home, CSharpScriptDebugging, TemplateLibrary];
+    public static IReadOnlyList<ManualTopic> Linked { get; } = [Home, CSharpScriptDebugging, TemplateLibrary, ScriptingApi];
 }
 
 /// <summary>開くマニュアルのページ。<see cref="IsLocal"/> なら同梱の HTML (file:)、そうでなければオンラインのページ。</summary>

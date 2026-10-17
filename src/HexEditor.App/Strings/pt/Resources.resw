@@ -1287,6 +1287,8 @@ Os detalhes foram gravados em:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Verificar atualizações</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Referência da API de scripts</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Update_Available" xml:space="preserve"><value>A versão {0} está disponível.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>A versão {0} está pronta para ser instalada.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Atualizado para a versão {0}.</value></data>
@@ -1350,6 +1352,8 @@ Os detalhes foram gravados em:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>tradução idioma problema translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Verificar atualizações</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>atualizar atualização versão update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Referência da API de scripts</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api scripts referência referencia automação script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Mostrar chaves de recurso nas dicas de ferramenta</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Para tradutores: mostra a chave de recurso de cada cadeia na dica de ferramenta.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Verificar atualizações automaticamente</value></data>
@@ -5801,6 +5805,7 @@ Os detalhes foram gravados em:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Aguardando a anexação de um depurador. ID do processo: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Scripts C# não podem ser executados passo a passo no aplicativo. Anexe um depurador externo (Visual Studio ou Visual Studio Code) a este processo e chame System.Diagnostics.Debugger.Break() no script para parar.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Executar sem anexar</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Como depurar scripts C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Linguagem</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Redefinir sessão</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Limpar</value></data>

@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>ตรวจหาการอัปเดต(U)</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>เอกสารอ้างอิง API สคริปต์(S)</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>มีเวอร์ชัน {0} พร้อมใช้งาน</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>เวอร์ชัน {0} พร้อมติดตั้งแล้ว</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>อัปเดตเป็นเวอร์ชัน {0} แล้ว</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>รายงาน การแปล ภาษา ปัญหา translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>อัปเดต อัปเกรด เวอร์ชัน update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>เอกสารอ้างอิง API สคริปต์</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api สคริปต์ เอกสารอ้างอิง ระบบอัตโนมัติ script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>แสดงคีย์ทรัพยากรในคำแนะนำเครื่องมือ</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>สำหรับผู้แปล: แสดงคีย์ทรัพยากรของแต่ละสตริงในคำแนะนำเครื่องมือ</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>ตรวจหาการอัปเดตโดยอัตโนมัติ</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>กำลังรอตัวแก้ไขข้อบกพร่องมาแนบ รหัสโปรเซส: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>ไม่สามารถทำงานทีละขั้นกับสคริปต์ C# ในแอปได้ ให้แนบตัวแก้ไขข้อบกพร่องภายนอก (Visual Studio หรือ Visual Studio Code) กับโปรเซสนี้ และเรียก System.Diagnostics.Debugger.Break() ในสคริปต์เพื่อหยุด</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>เรียกใช้โดยไม่แนบ</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>วิธีดีบักสคริปต์ C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>ภาษา</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>รีเซ็ตเซสชัน</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>ล้าง</value></data>

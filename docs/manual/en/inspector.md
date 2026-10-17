@@ -100,7 +100,7 @@ You can show only the rows you need and change their order.
 
 1. Select **Rows** on the panel.
 2. Check the rows you want to see.
-3. To change the order, select a row and use **Move up** or **Move down**. You can also drag rows.
+3. To change the order, select a row and use **Move up** or **Move down**. In the **Rows** list you can also drag rows.
 
 You can also hide a row with **Hide this row** in its right-click menu.
 

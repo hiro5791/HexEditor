@@ -111,4 +111,4 @@ Plugins can add things like the following. What a plugin adds appears in the sam
 
 On the **Plugins** screen, **Adds** shows what each plugin provides.
 
-How to build a plugin is described in the developer documentation (the SDK documentation).
+How to build a plugin is described in the developer documentation (the SDK documentation). You can also read it on the [HexEditor plugin SDK](api-plugins.md) page. **Help > Scripting API reference** opens the page for the script API.

@@ -294,6 +294,41 @@ public sealed class ManualBuilderTests : IDisposable
         Assert.Contains("<a href=\"editing.html#undo\">", result.Text("ar/index.html"), StringComparison.Ordinal);
     }
 
+    // ---- API リファレンス (docs/api の生成物) ----
+
+    [Fact]
+    [Trait(TC, "TC-UI-59-10")]
+    public void ApiReferenceAndPluginSdkAreGeneratedPagesOfTheSite()
+    {
+        ManualBuildResult result = BuildRepository();
+        Assert.True(result.Succeeded, Problems(result));
+        foreach ((string page, string file) in new[] { ("api-reference", "reference"), ("api-plugins", "plugins") })
+        {
+            // 手で書いた原稿はない (docs/api の生成物だけが元)。
+            Assert.False(File.Exists(Path.Combine(RepositoryManual, "en", page + ".md")));
+            foreach (string language in new[] { "en", "ja" })
+            {
+                string source = File.ReadAllText(Engine.SourceTests.FindRepoFile($"docs/api/{file}.{language}.md")).ReplaceLineEndings("\n");
+                string title = source.Split('\n')[0][2..];
+                string html = result.Text($"{language}/{page}.html");
+                Assert.Contains(System.Net.WebUtility.HtmlEncode(title), html, StringComparison.Ordinal);
+                Assert.Contains(language == "en" ? "generated from the HexEditor SDK" : "自動生成されたもの", html, StringComparison.Ordinal);
+                Assert.False(result.Pages.Single(p => p.Language == language && p.Id == page).IsFallback);
+            }
+        }
+
+        // 利用者向けのページと目次からリンクする。docs/api どうしのリンクはサイトのページへのリンクになる。
+        foreach (string language in new[] { "en", "ja" })
+        {
+            Assert.Contains("href=\"api-reference.html\"", result.Text($"{language}/scripting.html"), StringComparison.Ordinal);
+            Assert.Contains("href=\"api-plugins.html\"", result.Text($"{language}/plugins.html"), StringComparison.Ordinal);
+            Assert.Contains("href=\"api-reference.html\"", result.Text($"{language}/api-plugins.html"), StringComparison.Ordinal);
+            string index = result.Text($"{language}/index.html");
+            Assert.Contains("href=\"api-reference.html\"", index, StringComparison.Ordinal);
+            Assert.Contains("href=\"api-plugins.html\"", index, StringComparison.Ordinal);
+        }
+    }
+
     // ---- 機能から開く見出し ----
 
     [Fact]
