@@ -150,10 +150,16 @@ public sealed class ComparePerformanceTests(ITestOutputHelper output)
         TimeLimit(MaxExceptFirst(times) <= TimeSpan.FromMilliseconds(100), Summary(times));
     }
 
-    /// <summary>処理の間、100 ms ごとにプライベートバイトを記録し、最大値を返す。</summary>
+    /// <summary>
+    /// 処理の間、100 ms ごとにプライベートバイトを記録し、最大値を返す。先に動いた性能テストが残したメモリ (GC の後も OS に返らない分。
+    /// 処理の開始時のプライベートバイトのうち起動時を超える分) は、アプリのプロセスでは起きないため最大値から除く
+    /// (SearchPerformanceTests と同じ扱い)。単独で動かすと約 180 MiB のところ、全体を動かすと先に動いたテストの残りで 1 GB 近くになっていた。
+    /// </summary>
     private static async Task<long> SampleMemoryAsync(Action work)
     {
         using var process = Process.GetCurrentProcess();
+        process.Refresh();
+        long leftover = Math.Max(0, process.PrivateMemorySize64 - StartupPrivateBytes);
         long max = 0;
         using var stop = new CancellationTokenSource();
         Task sampler = Task.Run(async () =>
@@ -176,7 +182,7 @@ public sealed class ComparePerformanceTests(ITestOutputHelper output)
         }
 
         process.Refresh();
-        return Math.Max(max, process.PrivateMemorySize64);
+        return Math.Max(max, process.PrivateMemorySize64) - leftover;
     }
 
     /// <summary>乱数を計算で作るデータ (TestDataCatalog.Random と同じ値)。</summary>
