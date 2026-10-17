@@ -2742,7 +2742,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-TPL-KSY-FORMATS、TD-PNG、TD-ZIP、TD-ELF-X64、TD-PE-X64、TD-TPL-GIF |
 | 環境 | CI だけ (ci.yml のジョブ `kaitai-reference`。毎晩と手動の実行) |
-| 備考 | CI だけで動く (`KaitaiTests.KaitaiStructFormatsRunUnchanged`)。ランナーが、固定のコミットの kaitai_struct_formats と、`tools/KaitaiReference/package-lock.json` で版とハッシュを固定した公式のコンパイラ・実行時ライブラリを入れ、`tools/KaitaiReference/dump.js` で期待値の JSON を作り、フォルダを環境変数 `HEXEDITOR_KAITAI_REF` で渡す。変数がない (開発者の PC) ときはスキップする。結果の報告 (`kaitai-report.md`、形式ごとの不一致の一覧) はジョブの概要と成果物 `kaitai-results` に出す。比べ方の確認 (手で書いた期待値の JSON。`tests/fixtures/templates/kaitai/`) と、同じ書き方を使うテスト用の .ksy (`png-lite.ksy`) の確認は毎回のテストで動く。仕様で近似と決めた機能による違いだけは、許容リスト (`tests/fixtures/templates/kaitai/allowlist.tsv`。各行に仕様の項目を書く) で失敗にしない |
+| 備考 | CI だけで動く (`KaitaiTests.KaitaiStructFormatsRunUnchanged`)。ランナーが、固定のコミットの kaitai_struct_formats と、`tools/KaitaiReference/package-lock.json` で版とハッシュを固定した公式のコンパイラ・実行時ライブラリを入れ、`tools/KaitaiReference/dump.js` で期待値の JSON を作り、フォルダを環境変数 `HEXEDITOR_KAITAI_REF` で渡す。変数がない (開発者の PC) ときはスキップする。結果の報告 (`kaitai-report.md`、形式ごとの不一致の一覧) はジョブの概要と成果物 `kaitai-results` に出す。成果物には、参照の JSON・生成した JavaScript と、使った `.ksy` (`kaitai-formats/`)・サンプル (`kaitai-data/`) も入れる (不一致を開発者の PC で調べるため。これらを `formats/`・`data/`・`ref/` に置いたフォルダを `HEXEDITOR_KAITAI_REF` に指定すると、同じ照合をローカルで動かせる)。見つかった違いは、その機能の小さな `.ksy` のテスト (`KaitaiEngineTests`) を足して毎回のテストで確かめる。比べ方の確認 (手で書いた期待値の JSON。`tests/fixtures/templates/kaitai/`) と、同じ書き方を使うテスト用の .ksy (`png-lite.ksy`) の確認は毎回のテストで動く。仕様で近似と決めた機能による違いだけは、許容リスト (`tests/fixtures/templates/kaitai/allowlist.tsv`。各行に仕様の項目を書く) で失敗にしない |
 
 **前提**: TD-TPL-KSY-FORMATS の期待値の JSON (Kaitai Struct の公式のコンパイラと実行時ライブラリで解析した値。Web IDE と同じ実行時ライブラリを使う) がある。
 

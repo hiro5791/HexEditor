@@ -168,6 +168,7 @@ internal static class KsyConverter
 
             var rootScope = new TypeScope { HxtName = RootName, Spec = spec };
             Collect(rootScope, spec);
+            CollectSeqWords(spec, inSeq: false);
             Line(string.Empty);
             EmitEnums(rootScope);
             EmitType(rootScope, spec, isRoot: true);
@@ -334,6 +335,14 @@ internal static class KsyConverter
                 EmitEndianSwitch(tsw, scope);
             }
 
+            // instances は seq の後に置く (結果ツリーの並びを Kaitai Struct の Web IDE と同じにする)。ただし seq の式 (if・size など) が
+            // instances を参照する型では、参照の時点で宣言されているよう seq の前に置く (instances は遅延評価なので、置く位置で値は変わらない)
+            bool instancesFirst = spec["instances"] is YamlMapping early && early.Entries.Any(e => _seqWords.Contains(e.Key.Value));
+            if (instancesFirst)
+            {
+                EmitInstances(spec, scope);
+            }
+
             if (spec["seq"] is YamlSequence seq)
             {
                 int i = 0;
@@ -359,6 +368,17 @@ internal static class KsyConverter
                 EmitEndianSwitch((YamlMapping)_endianSwitch!, scope);
             }
 
+            if (!instancesFirst)
+            {
+                EmitInstances(spec, scope);
+            }
+
+            Line("};");
+            Line(string.Empty);
+        }
+
+        private void EmitInstances(YamlMapping spec, TypeScope scope)
+        {
             if (spec["instances"] is YamlMapping instances)
             {
                 foreach ((YamlScalar key, YamlNode value) in instances.Entries)
@@ -371,9 +391,43 @@ internal static class KsyConverter
                     EmitAttribute(attr, scope, instance: true, index: 0, name: key.Value);
                 }
             }
+        }
 
-            Line("};");
-            Line(string.Empty);
+        /// <summary>seq の中 (どの型でも) の式に出てくる名前。instances を seq の前に置くかどうかを決める。</summary>
+        private readonly HashSet<string> _seqWords = new(StringComparer.Ordinal);
+
+        private void CollectSeqWords(YamlNode node, bool inSeq)
+        {
+            switch (node)
+            {
+                case YamlScalar sc when inSeq:
+                    foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(sc.Value, "[A-Za-z_][A-Za-z0-9_]*"))
+                    {
+                        _seqWords.Add(m.Value);
+                    }
+
+                    break;
+                case YamlMapping map:
+                    foreach ((YamlScalar key, YamlNode value) in map.Entries)
+                    {
+                        // seq の項目の id・doc は式ではない
+                        if (inSeq && key.Value is "id" or "doc" or "doc-ref" or "encoding" or "-orig-id")
+                        {
+                            continue;
+                        }
+
+                        CollectSeqWords(value, inSeq || key.Value == "seq");
+                    }
+
+                    break;
+                case YamlSequence list:
+                    foreach (YamlNode item in list.Items)
+                    {
+                        CollectSeqWords(item, inSeq);
+                    }
+
+                    break;
+            }
         }
 
         private static bool NeedsEndian(YamlMapping attr)
@@ -493,7 +547,8 @@ internal static class KsyConverter
             // process: セクションに展開してから型を置く (TPL-15)
             if (Scalar(attr["process"]) is { } process)
             {
-                string size = SizeExpr(attr, scope) ?? throw new KsyError("process requires size", attr);
+                string size = SizeExpr(attr, scope)
+                    ?? (Truthy(attr["size-eos"]) ? "std::ksy::io_size() - std::ksy::io_pos()" : throw new KsyError("process requires size or size-eos", attr));
                 string raw = id + "__raw";
                 string sec = id + "__s";
                 yield return $"u8 {raw}[{size}] [[hidden]];";
