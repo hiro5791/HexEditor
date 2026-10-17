@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Đã hủy.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Chạy 'hexed --help' (hoặc 'hexed &lt;command&gt; --help') để xem cách dùng.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Lỗi không mong đợi ({0}). Chi tiết đã được ghi vào {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Cách dùng: hexed &lt;command&gt; [đối số] [tùy chọn]
+        hexed &lt;file&gt; [tùy chọn]          (giống: hexed open &lt;file&gt;)
+
+Lệnh:
+  open      Mở tệp, đĩa hoặc tiến trình trong cửa sổ HexEditor
+  hash      Tính và xác minh hàm băm và tổng kiểm tra
+  dump      In hex dump
+  compare   So sánh hai tệp
+  run       Chạy tập lệnh không cần cửa sổ
+  template  Áp dụng mẫu cấu trúc và in kết quả
+  patch     Áp dụng bản vá IPS vào tệp
+  convert   Chuyển đổi giữa các định dạng (Intel HEX, S-record, Base64, mã nguồn, ...)
+  find      Tìm trong tệp và in các kết quả khớp
+
+Tùy chọn chung (mọi lệnh):
+  -h, --help           Hiện cách dùng (cũng có: hexed &lt;command&gt; --help)
+      --version        Hiện phiên bản
+  -q, --quiet          Chỉ in kết quả
+      --format &lt;f&gt;     Định dạng đầu ra: text (mặc định) hoặc json
+  -o, --output &lt;path&gt;  Ghi kết quả vào tệp thay vì màn hình
+      --lang &lt;tag&gt;     Ngôn ngữ của thông báo (ví dụ en, ja)
+      --no-color       Không dùng màu
+      --unregister     Xóa các đăng ký đã thực hiện trên máy này (menu chuột phải, liên kết tệp,
+                       jump list, PATH, thư mục tạm)
+
+Mã thoát: 0 thành công, 1 kết quả phủ định (có khác biệt, không khớp), 2 lỗi cách dùng,
+3 lỗi I/O, 4 lỗi tập lệnh hoặc mẫu, 5 không được phép, 6 đã hủy, 7 vượt giới hạn,
+8 lỗi định dạng, 10 lỗi nội bộ.
+
+Độ lệch, độ dài và phạm vi chấp nhận biểu thức. Số không có tiền tố là thập phân; dùng 0x cho
+thập lục phân. Phạm vi là start:length hoặc start..end (không gồm end); 'end' là độ dài tệp
+(ví dụ end-16:16). Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Cách dùng: hexed open [paths...] [tùy chọn]
+
+Mở tệp trong cửa sổ HexEditor. Nếu HexEditor đang chạy, các tệp sẽ mở thành tab trong đó.
+Đường dẫn tương đối được tính từ thư mục hiện tại.
+
+Tùy chọn:
+  -g, --offset &lt;expr&gt;      Đặt con trỏ tại vị trí này (ví dụ 0x1000 hoặc end-16)
+      --select &lt;range&gt;     Chọn phạm vi này (start:length hoặc start..end)
+  -r, --readonly           Mở ở chế độ chỉ đọc
+      --disk &lt;n|path&gt;      Mở ổ đĩa vật lý (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Mở một ổ (volume) (--volume C:)
+      --process &lt;pid|name&gt; Mở bộ nhớ của một tiến trình
+      --encoding &lt;name&gt;    Bảng mã ký tự của cột văn bản
+      --template &lt;name|path&gt;  Áp dụng mẫu cấu trúc sau khi mở
+      --compare &lt;a&gt; &lt;b&gt;    Mở hai tệp trong chế độ xem so sánh
+      --run &lt;script&gt;       Chạy tập lệnh sau khi mở
+      --new-window         Mở trong cửa sổ mới
+      --new-document       Mở tài liệu trống mới
+      --open-disk          Hiện hộp thoại Mở đĩa
+      --new-instance       Khởi động tiến trình riêng thay vì dùng tiến trình đang chạy
+  -w, --wait               Không trả về cho đến khi các tài liệu đã mở được đóng
+      --safe-mode          Khởi động ở chế độ an toàn (chỉ tiến trình mới)
+      --write-block        Khởi động với chế độ chống ghi cho toàn ứng dụng
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Hiện văn bản dịch giả (bản xem trước)
+      --plugin-dev &lt;folder&gt; Tải plugin đang phát triển (chỉ tiến trình mới)
+      --ui-lang &lt;tag&gt;      Ngôn ngữ hiển thị của cửa sổ (chỉ tiến trình mới)
+      --test-hooks &lt;file&gt;  Bật chèn lỗi (chỉ bản thử nghiệm)
+
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Cách dùng: hexed hash [paths...] [tùy chọn]
+        hexed hash --check &lt;checksum file&gt; [tùy chọn]
+
+Tính hàm băm và tổng kiểm tra. Đường dẫn có thể chứa ký tự đại diện (*.bin) hoặc là thư mục; dùng - để đọc
+đầu vào chuẩn. Nhiều thuật toán được tính trong một lần đọc.
+
+Tùy chọn:
+  -a, --algorithm &lt;id,...&gt;   ID thuật toán, phân cách bằng dấu phẩy (mặc định sha256).
+                             '--algorithm list' in các ID có sẵn
+      --range &lt;range&gt;        Chỉ băm phạm vi này (start:length hoặc start..end)
+      --format &lt;f&gt;           text (mặc định): algorithm  value  path
+                             gnu: value  path (giống sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: một đối tượng cho mỗi tệp
+      --check &lt;file&gt;         Xác minh các tệp liệt kê trong tệp tổng kiểm tra (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) và in OK, FAILED hoặc MISSING
+  -r, --recurse              Gồm thư mục con khi chỉ định thư mục
+
+Mã thoát: 0 thành công, 1 không khớp với --check, 3 không đọc được tệp.
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Cách dùng: hexed dump &lt;path&gt; [tùy chọn]
+
+In hex dump của một tệp (hoặc một phạm vi) ra đầu ra chuẩn. Mức dùng bộ nhớ không phụ thuộc vào kích thước.
+
+Tùy chọn:
+      --range &lt;range&gt;        Phạm vi cần in (start:length hoặc start..end; mặc định: cả tệp)
+      --width &lt;n&gt;            Số byte mỗi dòng (mặc định 16)
+      --group &lt;n&gt;            Số byte mỗi nhóm (mặc định tùy kiểu; 0 là không nhóm)
+      --encoding &lt;name&gt;      Bảng mã ký tự của cột văn bản (mặc định ascii)
+      --base-address &lt;expr&gt;  Địa chỉ hiển thị cho byte đầu tiên (mặc định 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              In * cho các dòng lặp lại dòng trước (như hexdump -C)
+
+Mã thoát: 2 nếu phạm vi nằm ngoài tệp.
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Cách dùng: hexed compare &lt;path1&gt; &lt;path2&gt; [tùy chọn]
+
+So sánh hai tệp và in các điểm khác biệt.
+
+Tùy chọn:
+      --mode &lt;byte|resync&gt;   byte (mặc định): so sánh các byte ở cùng độ lệch
+                             resync: cho phép chèn và xóa
+      --range1 &lt;range&gt;       Phạm vi của tệp thứ nhất (mặc định: tất cả)
+      --range2 &lt;range&gt;       Phạm vi của tệp thứ hai (mặc định: tất cả)
+      --max &lt;n&gt;              Số khác biệt tối đa được in (mặc định 1000);
+                             phần còn lại chỉ được đếm
+      --format &lt;text|json&gt;   Định dạng đầu ra
+      --brief                In một dòng (giống hoặc khác) và dừng ở điểm khác biệt đầu tiên
+
+Mã thoát: 0 giống nhau, 1 khác nhau, 3 không đọc được tệp.
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Cách dùng: hexed run &lt;script&gt; [files...] [tùy chọn]
+
+Chạy tập lệnh mà không mở cửa sổ. Các tệp được mở theo thứ tự (app.documents); tệp đầu tiên
+là app.activeDocument.
+
+Tùy chọn:
+      --arg &lt;name=value&gt;   Tham số của tập lệnh (lặp lại được); cũng có trong script.args
+      --trust              Chạy tập lệnh chưa tin cậy mà không hỏi
+      --allow &lt;perm,...&gt;   Các quyền cần cấp (ví dụ file-read)
+      --save               Lưu mọi tài liệu đã thay đổi khi tập lệnh kết thúc
+      --save-as &lt;path&gt;     Lưu tài liệu đầu tiên vào đường dẫn này (bản gốc không đổi)
+      --dry-run            Không lưu gì; in bản tóm tắt các thay đổi
+      --timeout &lt;seconds&gt;  Thời gian chạy tối đa của toàn bộ tập lệnh
+  -r, --readonly           Mở các tệp ở chế độ chỉ đọc
+
+Mặc định chỉ lưu các tài liệu mà tập lệnh gọi doc.save().
+Mã thoát của tập lệnh có thể đặt bằng app.exit(code). Mã 2 đến 10 có ý nghĩa như liệt kê trong
+'hexed --help'; dùng 64 trở lên cho ý nghĩa riêng của bạn.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Cách dùng: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [tùy chọn]
+
+Áp dụng mẫu cấu trúc vào tệp và in kết quả.
+
+Tùy chọn:
+      --template &lt;name|path&gt;  Mẫu cần áp dụng
+      --auto                  Tự động chọn mẫu (mã thoát 1 nếu không có mẫu phù hợp)
+  -g, --offset &lt;expr&gt;         Độ lệch bắt đầu của cấu trúc (mặc định 0)
+      --format &lt;f&gt;            json, csv hoặc text (cây thụt lề; mặc định text)
+      --depth &lt;n&gt;             Độ sâu tối đa của cây
+      --fields &lt;path,...&gt;     Chỉ in các trường này (ví dụ header.e_lfanew,sections[*].name)
+
+Mã thoát: 4 cho lỗi mẫu.
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Cách dùng: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [tùy chọn]
+
+Áp dụng tệp bản vá vào một tệp. Bắt buộc có một trong -o và --in-place. Phiên bản này áp dụng bản vá IPS
+và IPS32.
+
+Tùy chọn:
+  -o, --output &lt;path&gt;       Ghi tệp đã vá vào đây (tệp đích không đổi)
+      --in-place            Thay thế tệp đích một cách an toàn (ghi tệp tạm trước)
+      --format &lt;f&gt;          auto (mặc định), ips hoặc ips32
+      --verify-before &lt;a:v&gt; Kiểm tra trước hàm băm của tệp đích (ví dụ sha256:ab12...);
+                            nếu khác thì mã thoát 1 và không ghi gì
+      --verify-after &lt;a:v&gt;  Kiểm tra hàm băm của kết quả trước khi ghi
+      --dry-run             In số bản ghi và số byte thay đổi; không áp dụng gì
+
+Mã thoát: 1 xác minh thất bại, 8 bản vá bị hỏng.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Cách dùng: hexed convert &lt;input&gt; &lt;output&gt; [tùy chọn]
+
+Chuyển đổi tệp giữa các định dạng nhập/xuất của HexEditor.
+
+Tùy chọn:
+      --from &lt;format&gt;       Định dạng đầu vào (mặc định: phát hiện từ nội dung và phần mở rộng)
+      --to &lt;format&gt;         Định dạng đầu ra (mặc định: theo phần mở rộng đầu ra; bin nếu không rõ)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Đọc tệp Intel HEX / S-record dù tổng kiểm tra sai
+      --fill &lt;hex&gt;          Byte dùng để lấp khoảng trống (mặc định FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+Tùy chọn định dạng có tên là tên các trường của hộp thoại nhập/xuất, viết chữ thường có gạch nối, ví dụ --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Mã thoát: 8 cho lỗi tổng kiểm tra hoặc định dạng ở đầu vào.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Cách dùng: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [tùy chọn]
+
+Tìm trong tệp và in "path  offset  length" cho mỗi kết quả khớp.
+
+Tùy chọn:
+      --hex &lt;pattern&gt;      Các byte, ví dụ "DE AD ?? EF" (?? là byte bất kỳ, ? là nibble bất kỳ)
+      --text &lt;string&gt;      Văn bản
+      --regex &lt;expr&gt;       Biểu thức chính quy (trên văn bản)
+      --encoding &lt;name&gt;    Bảng mã ký tự của --text và --regex (mặc định utf-8)
+      --case-sensitive     Phân biệt chữ hoa và chữ thường
+      --range &lt;range&gt;      Chỉ tìm trong phạm vi này của mỗi tệp
+      --max &lt;n&gt;            Dừng sau n kết quả khớp
+      --format &lt;text|json&gt; Định dạng đầu ra
+  -r, --recurse            Gồm thư mục con khi chỉ định thư mục
+
+Mã thoát: 0 tìm thấy, 1 không tìm thấy, 3 không đọc được tệp.
+Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Lệnh hoặc tệp không xác định: {0}. Các lệnh: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Ngôn ngữ không xác định: {0}. Hãy dùng một trong 23 thẻ ngôn ngữ hiển thị (ví dụ en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Tùy chọn {0} không xác định cho '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>Tùy chọn {0} không nhận giá trị ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>Tùy chọn {0} cần một giá trị ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Đường dẫn không tồn tại: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Truy cập bị từ chối: {0}. Hãy kiểm tra quyền của tệp hoặc chạy từ tài khoản có quyền truy cập.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>Không thể đọc {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>Không thể ghi {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} là thư mục, không phải tệp.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Không có tệp nào khớp với {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>Không thể đọc {0} tại {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Không đủ dung lượng trống trên {0} (cần {1} byte, có {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>Tệp quá lớn đối với hệ thống tệp của {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>Đường dẫn đầu ra {0} cũng là đầu vào. Hãy chọn đường dẫn đầu ra khác.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: không đọc được biểu thức "{1}" tại vị trí {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" nằm ngoài tệp (độ dài {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" phải là số từ {2} đến {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>'{1}' không hỗ trợ --format {0}. Dùng: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' cần ít nhất một đường dẫn đầu vào.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' chỉ nhận đúng một đường dẫn đầu vào.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>Phiên bản này không có '{0}'.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>Phiên bản này không có {0}.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Dữ liệu không vừa với định dạng {0} (giới hạn {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Không rõ bảng mã ký tự: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>biểu thức trống</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>lỗi cú pháp</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>dấu ngoặc chưa được đóng</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>tên không xác định (dùng end cho độ dài tệp)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>không dùng được dấu trang trên dòng lệnh</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>hàm không xác định</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>chia cho 0</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>giá trị quá lớn</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>không phải số hợp lệ</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>không đọc được dữ liệu ở đây</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>không có trên dòng lệnh</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu cần đúng một thuật toán. Dùng --format bsd hoặc text cho nhiều thuật toán.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>Không dùng được --range với đầu vào chuẩn.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Thuật toán không xác định: {0}. Chạy 'hexed hash --algorithm list' để xem các ID.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>Thuật toán {0} không có trên máy này.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} không có dòng tổng kiểm tra nào đọc được.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>Không xác định được thuật toán của {0}. Hãy chỉ định bằng --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} tổng kiểm tra đã tính KHÔNG khớp.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>Thiếu {0} tệp được liệt kê.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Kiểu không xác định: {0}. Xem 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' cần đúng hai đường dẫn.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Chế độ không xác định: {0}. Dùng byte hoặc resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>đã thay đổi</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>đã chèn</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>đã xóa</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>không đọc được</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... {0} khác biệt nữa không được hiển thị (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} khác biệt, tổng cộng {1} byte</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Hai tệp giống nhau.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Hai tệp khác nhau (khác biệt đầu tiên tại {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>Không đọc được {0} phạm vi.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Hãy chỉ định đúng một trong --hex, --text và --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>Mẫu tìm kiếm không hợp lệ ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: đã bỏ qua {1} phạm vi không đọc được.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Cách dùng: hexed convert &lt;input&gt; &lt;output&gt; [tùy chọn]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Bản vá IPS được áp dụng bằng 'hexed patch', không phải 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Giá trị không hợp lệ cho: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Định dạng không xác định: {0}. Các định dạng: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" không hợp lệ. Dùng: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} không áp dụng khi chuyển từ {1} sang {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  dòng {0}, cột {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: lỗi tổng kiểm tra tại dòng {1}, cột {2}. Dùng --ignore-checksum để vẫn đọc tệp.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: lỗi định dạng tại dòng {1}, cột {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>Đã bỏ qua {0} lỗi tổng kiểm tra.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Cách dùng: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Hãy chỉ định -o &lt;output&gt; hoặc --in-place (để không làm đổi tệp gốc do nhầm).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>Không dùng -o và --in-place cùng lúc.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Đường dẫn đầu ra {0} là tệp đích hoặc bản vá. Dùng --in-place để thay thế tệp đích.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} không phải định dạng bản vá. Dùng auto, ips hoặc ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: phiên bản này không hỗ trợ bản vá UPS, BPS và .hexpatch. Hỗ trợ IPS và IPS32.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} không phải tệp bản vá nhận dạng được.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: bản vá bị hỏng tại bản ghi {1} (độ lệch tệp {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} không phải bản vá {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" phải có dạng algorithm:value (ví dụ sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} không có hàm băm như mong đợi (--verify-before). Không có gì được ghi.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} sau khi vá không có hàm băm như mong đợi (--verify-after). Không có gì được ghi.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Đã áp dụng {0} bản ghi, thay đổi {1} byte, độ dài thay đổi {2}. Đã ghi {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>định dạng</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} bản ghi, sẽ thay đổi {1} byte, độ dài thay đổi {2}, độ dài mới {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Hãy chỉ định đúng một trong --template và --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>Không tìm thấy mẫu "{0}". Hãy dùng tên của mẫu chuẩn (ví dụ pe, png) hoặc đường dẫn tới tệp .hxt hay .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Không có mẫu nào khớp với {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Lỗi mẫu: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Cách dùng: hexed run &lt;script&gt; [files...] [tùy chọn]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Chỉ dùng một trong --save, --save-as và --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>Không dùng --readonly cùng với --save hoặc --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" phải có dạng name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" phải là số giây lớn hơn 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as cần một tệp để mở (tệp đầu tiên được lưu vào đường dẫn mới).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} là tệp đang mở. Dùng --save để ghi đè.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: đã thay đổi {1} byte (chưa lưu: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} có thay đổi chưa lưu. Chúng chưa được lưu (dùng --save hoặc doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Ngôn ngữ hiển thị không xác định: {0}. Hãy dùng một trong 23 thẻ ngôn ngữ hiển thị (ví dụ ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Pseudo-locale không xác định: {0}. Dùng qps-ploc hoặc qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>Không tìm thấy HexEditor.exe cạnh hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>Không thể khởi động {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor đã thoát với mã {0} trước khi các tài liệu được đóng.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Đã xóa tất cả các đăng ký.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Đã xóa: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Không thể xóa: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>menu chuột phải của Explorer</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>liên kết tệp</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>mục App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>mục PATH của hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>jump list trên thanh tác vụ</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>đăng ký thông báo</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>thư mục tạm</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>mục registry</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Các đăng ký của phiên bản này do Windows quản lý. Không có gì bị xóa.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Bản sao này không đăng ký gì. Không có gì bị xóa.</value></data>
+</root>

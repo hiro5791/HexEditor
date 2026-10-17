@@ -5481,4 +5481,1072 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static อ่านอย่างเดียว</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>การเข้ารหัสข้อความ (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>เอกสารสมบูรณ์ (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>พบอักขระที่ไม่คาดคิด '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>ต้องมี '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>พบ '{0}' ที่ไม่คาดคิด</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>ตัวเลข '{0}' ไม่ถูกต้อง</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>สตริงลิเทอรัลไม่ได้ปิด</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>ลำดับ escape '{0}' ไม่ถูกต้อง</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>ข้อคิดเห็นไม่ได้ปิด</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>ซ้อนกันลึกเกินไป (ขีดจำกัด {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>สตริงไบต์ '{0}' ไม่ถูกต้อง</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>เทมเพลตไม่ใช่ UTF-8 ที่ถูกต้อง</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>เทมเพลตใหญ่เกินไป (ขีดจำกัด 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>ข้อผิดพลาดมากเกินไป แสดงเฉพาะ {0} รายการแรก</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>ค่า '{1}' ของ pragma '{0}' ไม่ถูกต้อง</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>ข้ามการใช้ pragma '{0}' ที่ไม่รู้จัก</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' ถูกกำหนดไว้แล้วที่ {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>ไม่พบ '{0}' (ค้นหาใน: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>เทมเพลตไม่สามารถทำการนี้ได้: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>เทมเพลตนี้ต้องใช้แอปเวอร์ชัน {0} ขึ้นไป</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>ข้ามแอตทริบิวต์ '{0}' ที่ไม่รู้จัก</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} ไม่พอดีกับ {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>ค่า {0} มีหลายชื่อ (ใช้ '{1}')</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} เกินค่าสูงสุด จึงใช้ {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>เทมเพลตรวมการนำเข้าใหญ่เกินไป (ขีดจำกัด 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>ไม่ได้กำหนด '{0}'</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>หารด้วยศูนย์</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>ชนิดไม่ตรงกัน: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>การเรียกซ้ำลึกเกินไป (ขีดจำกัด {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>จำนวนคำสั่งที่ทำงานถึงขีดจำกัดแล้ว ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>จำนวนแพตเทิร์นถึงขีดจำกัดแล้ว ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>หน่วยความจำของการประเมินถึงขีดจำกัดแล้ว ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>เวลาในการประเมินถึงขีดจำกัดแล้ว ({0} วินาที)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>ตำแหน่งวาง 0x{0} อยู่นอกข้อมูล</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) อยู่นอกข้อมูล</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} ไบต์) อยู่นอกข้อมูล</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>ตำแหน่งต้องไม่เป็นค่าลบ ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>ขนาดองค์ประกอบเป็น 0 จึงสิ้นสุดอาร์เรย์ไม่ได้</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>ถึงจุดสิ้นสุดของข้อมูลแล้ว จึงสิ้นสุดอาร์เรย์</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>อาร์เรย์ถูกตัดที่ขีดจำกัด ({0} องค์ประกอบ)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>ไม่รวมองค์ประกอบสุดท้ายที่ไม่สมบูรณ์ ({0} ไบต์)</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>ไม่พบตัวสิ้นสุดสตริง</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 ยาวเกิน 10 ไบต์ (ออฟเซ็ต 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>เนื้อหาของโครงสร้าง ({0} ไบต์) เกินขนาดที่กำหนด ({1} ไบต์)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>ชนิดของพอยน์เตอร์ต้องเป็นชนิดจำนวนเต็ม</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>อยู่นอกช่วง (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>ไม่สามารถประกาศแพตเทิร์นภายในฟังก์ชันได้</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>การยืนยัน (assert) ล้มเหลว: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>ไม่ได้ลงทะเบียนฟังก์ชันส่วนขยาย '{0}'</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>ฟังก์ชันส่วนขยาย '{0}' ล้มเหลว: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>ไม่อนุญาตให้เรียกใช้ฟังก์ชันส่วนขยาย '{0}'</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>ดัชนี {0} อยู่นอกช่วง (0 ถึง {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>ไม่สามารถใช้ sizeof({0}) ได้เพราะขนาดของชนิดไม่คงที่</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>ผลรวมบิตฟิลด์ ({0} บิต) เกิน {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>บิตฟิลด์กว้างเกิน 64 บิตไม่ได้ ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>การคลายการบีบอัด {0} ล้มเหลว: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>หยุดการคลายการบีบอัดเพราะข้อมูลถึงขีดจำกัด ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>เวอร์ชันนี้ไม่รองรับ {0}</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>ความยาว ({0}) เกินขีดจำกัด 256 MB ต่อการเรียกหนึ่งครั้ง</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>ไม่สามารถกำหนดค่าให้ '{0}' ได้</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>ไม่สามารถอ่านข้อมูลที่ 0x{0} ได้</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>ยกเลิกการประเมินแล้ว</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} ไม่พอดีกับ {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' ไม่ใช่ฟังก์ชัน</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' รับอาร์กิวเมนต์ {1} ตัว</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>ไม่รองรับฟีเจอร์ '{0}' ของ Kaitai Struct</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>เนื้อหาไม่ตรงกับไบต์ที่คาดไว้</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>การตรวจสอบล้มเหลว: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>ผลลัพธ์ยาวเกินไปจึงถูกตัด</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>ผลรวมของเซกชันถึงขีดจำกัดแล้ว ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' ไม่ใช่แพตเทิร์น</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' ไม่มีสมาชิก '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>อาร์กิวเมนต์ของ '{0}' ไม่ถูกต้อง: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>ข้อมูลไม่ตรงกับ magic {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>ไม่สามารถเขียนไฟล์ชั่วคราวได้: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>ข้อผิดพลาดทางไวยากรณ์ YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>ไม่อนุญาตให้ใช้แท็ก YAML ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>การขยายนามแฝง YAML มากเกินไป</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>คีย์ '{0}' ซ้ำกัน</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>ไม่สามารถใช้อักขระแท็บเพื่อย่อหน้าได้</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy ไม่ถูกต้อง: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>YAML ซ้อนกันลึกเกินไป</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>ข้อผิดพลาดภายในของตัวประเมินเทมเพลต: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>หมายถึง '{0}' หรือไม่?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>ข้อมูล</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>สคริปต์: เรียกใช้</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 เรียกใช้ สคริปต์ เรียกใช้ซ้ำ</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>สคริปต์: เรียกใช้ไฟล์สคริปต์...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx เรียกใช้ ไฟล์สคริปต์</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>สคริปต์: หยุดทั้งหมด</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts หยุด ยกเลิก สคริปต์</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>สคริปต์: เพิ่มคอมโพเนนต์สคริปต์ C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install เพิ่ม คอมโพเนนต์สคริปต์ ติดตั้ง</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>สคริปต์(R)</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>เรียกใช้สคริปต์(R)...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>เรียกใช้สคริปต์ล่าสุดอีกครั้ง(L)</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>หยุดสคริปต์ทั้งหมด(S)</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>เพิ่มคอมโพเนนต์สคริปต์ C#(C)...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>เรียกใช้อัตโนมัติ (ฮุก)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook automatic run startup open save close script ฮุก เรียกใช้อัตโนมัติ เริ่มต้น เปิด บันทึก ปิด สคริปต์</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>โฟลเดอร์สคริปต์</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>script folder library shared สคริปต์ โฟลเดอร์ แชร์ ไลบรารี</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>แผงเอาต์พุต</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>ตัวแก้ไขสคริปต์</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>จำนวนบรรทัดสูงสุดที่เก็บในแผงเอาต์พุต</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>เมื่อเกินขีดจำกัด บรรทัดเก่าจะถูกลบออกก่อน (100-1000000)</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>แสดงแผงเอาต์พุตเมื่อสคริปต์เขียนเอาต์พุต</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>แสดงโดยไม่แย่งโฟกัสแป้นพิมพ์</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>หยุดเมื่อเกิดข้อยกเว้นระหว่างแก้ไขข้อบกพร่อง</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>เลือกเวลาที่ตัวแก้ไขข้อบกพร่อง JavaScript หยุดเมื่อเกิดข้อยกเว้น</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>ไม่หยุดเลย</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>เฉพาะข้อยกเว้นที่ไม่ได้ดักจับ</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>ข้อยกเว้นทั้งหมด</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>โฟลเดอร์สคริปต์เพิ่มเติม</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>โฟลเดอร์ที่เพิ่มในรายการสคริปต์</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>สคริปต์ที่ลงทะเบียนที่นี่จะทำงานโดยอัตโนมัติ หากไม่เพิ่มที่นี่จะไม่ทำงาน และสคริปต์ต้องเป็นสคริปต์ที่เชื่อถือได้</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>โหมดปลอดภัยเปิดอยู่ จึงปิดใช้งานการเรียกใช้อัตโนมัติ</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>จำกัดเวลา {0} วินาที</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>ไม่มีสคริปต์ที่ลงทะเบียน</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>เพิ่มสคริปต์</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>เลือกไฟล์...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>เลือกสคริปต์ที่จะเรียกใช้อัตโนมัติ</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>เพิ่ม "{0}" ด้วยปุ่มเพิ่ม</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>เปิดใช้ {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>เงื่อนไข</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>เลื่อนขึ้น</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>เลื่อนลง</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>เรียกใช้เฉพาะกับข้อมูลที่ตรงเงื่อนไข เว้นว่างไว้เพื่อให้ตรงทั้งหมด</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>นามสกุลไฟล์ (เช่น .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>รูปแบบพาธ (เช่น C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>ไบต์นำหน้า (เลขฐานสิบหก เช่น 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>แหล่งข้อมูล</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>โฟลเดอร์ที่แสดงที่นี่จะปรากฏในรายการสคริปต์ นอกเหนือจากโฟลเดอร์สคริปต์มาตรฐาน</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>ไม่มีโฟลเดอร์เพิ่มเติม</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>เพิ่มโฟลเดอร์...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>มาโคร</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>เคอร์เซอร์</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>สลับแผงรายการสคริปต์</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>scripts macros list panel สคริปต์ มาโคร รายการ แผง</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>สลับแผงเอาต์พุต</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>output log messages panel เอาต์พุต บันทึก ข้อความ แผง</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>สลับแผงคอนโซล</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>console repl panel คอนโซล แผง</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>แสดงรายการสคริปต์</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>scripts macros list panel สคริปต์ มาโคร รายการ แผง</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>แสดงคอนโซล</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>console repl คอนโซล</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>สร้างสคริปต์ใหม่</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>create javascript js สร้าง สคริปต์</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>สร้างสคริปต์ C# ใหม่</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>create csharp csx สร้าง สคริปต์</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>เปิดตัวอย่าง</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>examples samples ตัวอย่าง</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>เปิดโฟลเดอร์สคริปต์</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>folder explorer โฟลเดอร์ เอ็กซ์พลอเรอร์</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>เรียกใช้เพื่อแก้ไขข้อบกพร่อง</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>debugger breakpoint step แก้ไขข้อบกพร่อง จุดหยุด ทีละขั้น</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>หยุดชั่วคราว</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>break debugger หยุดชั่วคราว</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>ล้างเอาต์พุต</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>clear log output ล้าง บันทึก เอาต์พุต</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>เริ่ม / หยุดการบันทึก</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>record macro บันทึก มาโคร</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>เล่นมาโครล่าสุด</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro เล่นซ้ำ มาโคร</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>เล่นซ้ำหลายครั้ง</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop ซ้ำ มาโคร วนซ้ำ</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>เคอร์เซอร์: ซ้าย</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left เคอร์เซอร์ ย้าย ซ้าย</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>เคอร์เซอร์: ขวา</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right เคอร์เซอร์ ย้าย ขวา</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>เคอร์เซอร์: ขึ้น</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up เคอร์เซอร์ ย้าย ขึ้น</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>เคอร์เซอร์: ลง</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down เคอร์เซอร์ ย้าย ลง</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>เคอร์เซอร์: หน้าก่อนหน้า</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up เคอร์เซอร์ ย้าย หน้าก่อนหน้า</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>เคอร์เซอร์: หน้าถัดไป</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down เคอร์เซอร์ ย้าย หน้าถัดไป</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>เคอร์เซอร์: ต้นบรรทัด</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start เคอร์เซอร์ ย้าย ต้นบรรทัด</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>เคอร์เซอร์: ท้ายบรรทัด</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end เคอร์เซอร์ ย้าย ท้ายบรรทัด</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>เคอร์เซอร์: ต้นไฟล์</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start เคอร์เซอร์ ย้าย ต้นไฟล์</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>เคอร์เซอร์: ท้ายไฟล์</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end เคอร์เซอร์ ย้าย ท้ายไฟล์</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>ไม่มีตัวแก้ไขสคริปต์ที่แสดงอยู่</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>รายการสคริปต์(I)</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>คอนโซล(O)</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>สร้างสคริปต์ใหม่(N)</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>สร้างสคริปต์ C# ใหม่(W)</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>ตัวอย่าง(M)</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>เปิดโฟลเดอร์สคริปต์(F)</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>มาโคร(M)</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>เริ่ม / หยุดการบันทึก(R)</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>เล่นมาโครล่าสุด(P)</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>เล่นซ้ำหลายครั้ง(T)...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>รายการสคริปต์(J)</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>เอาต์พุต(T)</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>คอนโซล(Z)</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>เอาต์พุต</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>คอนโซล</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>สคริปต์: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>ปลั๊กอิน: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>แหล่งเอาต์พุต</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>กรอง</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>คัดลอกทั้งหมด</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>บันทึกเป็นไฟล์</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>ตัดบรรทัด</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>คัดลอกเอาต์พุตแล้ว</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>ข้อมูล</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>รายการสคริปต์</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>กรองสคริปต์</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>สร้างสคริปต์ใหม่</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>สร้างสคริปต์ JavaScript ใหม่</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>สร้างสคริปต์ C# ใหม่</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>เปิดโฟลเดอร์สคริปต์</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>เรียกใช้</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>แก้ไข</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>เปิดสำเนาเพื่อแก้ไข</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>เปลี่ยนชื่อ...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>ชื่อใหม่</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>ลบ (ย้ายไปที่ถังขยะ)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>แสดงในโฟลเดอร์</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>กำหนดแป้นลัด...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>เรียกใช้อัตโนมัติ...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>มาโคร</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>ตัวอย่าง</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>ไม่พบโฟลเดอร์</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>ทำงานค้างอยู่</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>ตัวเลือกการเรียกใช้อัตโนมัติ: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>ย้าย "{0}" ไปที่ถังขยะแล้ว</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>ไม่สามารถคัดลอกตัวอย่างได้: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>ไม่สามารถสร้างสคริปต์ได้: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>ไม่สามารถเปลี่ยนชื่อได้: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>ไม่สามารถลบได้: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>ไม่สามารถเปิดโฟลเดอร์ได้: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>เรียกใช้</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>แก้ไขข้อบกพร่อง</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>หยุดชั่วคราว</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>ข้ามไปทีละขั้น</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>ก้าวเข้า</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>ก้าวออก</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>เอกสารเป้าหมาย</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(เอกสารที่ใช้งานอยู่)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>ตัวแก้ไขสคริปต์: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>ปัญหา</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>ปัญหา ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>แก้ไขข้อบกพร่อง</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>call stack</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>ตัวแปร</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>เฝ้าดู</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>เพิ่มนิพจน์เฝ้าดู</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>ภายในเครื่อง</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>คลอเชอร์</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>ส่วนกลาง</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>สคริปต์</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>ข้อยกเว้น: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>บรรทัด {0}, คอลัมน์ {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>แก้ไขแล้ว</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>กำลังทำงาน</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>หยุดชั่วคราวที่บรรทัด {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>สำเร็จ ({0} วินาที)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>หยุดแล้ว</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>ยังไม่ได้เรียกใช้</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>ล้มเหลว</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>บันทึก "{0}" แล้ว</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>ไม่สามารถบันทึกสคริปต์ได้: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>ไม่สามารถอ่านสคริปต์ได้: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>"{0}" ใหญ่กว่า 10 MB โปรดแก้ไขด้วยโปรแกรมแก้ไขภายนอก</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>ไม่สามารถทำงานทีละขั้นกับสคริปต์ C# ในแอปได้</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>จุดหยุด</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>จุดหยุดที่ปิดใช้งาน</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>จุดหยุดแบบมีเงื่อนไข</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>"{0}" มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก บันทึกก่อนปิดหรือไม่?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>ไม่บันทึก</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>แก้ไขข้อบกพร่องสคริปต์ C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>กำลังรอตัวแก้ไขข้อบกพร่องมาแนบ รหัสโปรเซส: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>ไม่สามารถทำงานทีละขั้นกับสคริปต์ C# ในแอปได้ ให้แนบตัวแก้ไขข้อบกพร่องภายนอก (Visual Studio หรือ Visual Studio Code) กับโปรเซสนี้ และเรียก System.Diagnostics.Debugger.Break() ในสคริปต์เพื่อหยุด</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>เรียกใช้โดยไม่แนบ</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>ภาษา</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>รีเซ็ตเซสชัน</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>พิมพ์นิพจน์หรือคำสั่ง (Enter: เรียกใช้, Shift+Enter: ขึ้นบรรทัดใหม่)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>ประวัติคอนโซล</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>เริ่มเซสชันใหม่แล้ว</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>หยุดแล้ว</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>อินพุตล้มเหลว</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>หากต้องการใช้ C# ในคอนโซล ให้เพิ่มคอมโพเนนต์สคริปต์ C# ก่อน</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>เมื่อเริ่มต้น</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>เมื่อเปิดไฟล์</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>ก่อนบันทึก</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>หลังบันทึก</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>ก่อนปิด</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>สคริปต์ที่เรียกใช้อัตโนมัติ "{0}" ({1}) ล้มเหลว: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>สคริปต์ที่เรียกใช้อัตโนมัติ "{0}" ({1}) ถูกหยุด: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>สคริปต์ที่เรียกใช้อัตโนมัติ "{0}" ({1}) ล้มเหลวติดต่อกัน 3 ครั้ง จึงถูกปิดใช้งาน</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>เปิดการตั้งค่า</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>สคริปต์ "{0}" ยกเลิกการบันทึก: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>สคริปต์ก่อนบันทึกล้มเหลว</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>สคริปต์ "{0}" ล้มเหลว: {1}
+บันทึกต่อไปหรือไม่?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>ไม่บันทึก</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>บันทึกมาโคร</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>เริ่ม</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>เลือกวิธีบันทึกตำแหน่งที่เลือกด้วยเมาส์</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>สัมพันธ์กับเคอร์เซอร์ (ค่าเริ่มต้น)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>ออฟเซ็ตสัมบูรณ์</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>ไม่ต้องถามอีก (ใช้ตัวเลือกนี้)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>เริ่มบันทึกแล้ว</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>กำลังบันทึก ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>กำลังบันทึกมาโคร {0} การดำเนินการ คลิกเพื่อหยุด</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>ไม่สามารถบันทึกการดำเนินการนี้ได้: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>การเลือกด้วยแป้นพิมพ์</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>การป้อนที่หลายเคอร์เซอร์</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>เติมด้วยเนื้อหานี้</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>ไปที่ออฟเซ็ต</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>เลือกช่วง</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>ค้นหา</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>แทนที่ทั้งหมด</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>ไม่พบ: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>ไม่มีอะไรถูกบันทึก</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>ยังไม่มีมาโครที่บันทึกไว้</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>หยุดการบันทึกก่อน</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>มาโครล่าสุด</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>ไม่สามารถอ่านมาโครได้: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>มาโครหยุดทำงาน: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>มาโครหยุดทำงานที่การเล่นซ้ำครั้งที่ {0} การดำเนินการ "{1}": {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>บันทึกมาโคร ({0, plural, other {# การดำเนินการ}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>โฟลเดอร์</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>แป้นลัด (ไม่บังคับ)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>เช่น Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>ไม่บันทึก</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>ป้อนชื่อ</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>ไม่สามารถอ่านแป้นลัดได้: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>ไม่สามารถบันทึกที่นี่ได้: {0} เลือกโฟลเดอร์อื่น</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>บันทึกมาโคร "{0}" แล้ว</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>เล่นมาโครซ้ำ</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>มาโคร</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>จำนวนครั้ง</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>จำนวนครั้ง (1 ถึง 1,000,000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>จนถึงท้ายไฟล์</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>สำหรับแต่ละผลการค้นหา</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>ภายในส่วนที่เลือก</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>เล่น</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>ป้อนตัวเลขตั้งแต่ 1 ถึง {0}</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>ขีดจำกัดเวลาทำงาน (วินาที)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>เวลาที่สคริปต์ JavaScript ทำงานได้ก่อนจะหยุดชั่วคราวและถามว่าจะทำต่อหรือไม่ 0 หมายถึงไม่จำกัด ไม่นับเวลารอการดำเนินการจำนวนมากและเวลารอการป้อนของคุณ</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>ขีดจำกัดหน่วยความจำ (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>หน่วยความจำที่สคริปต์ JavaScript ใช้ได้ (16-4096 MB)</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>ขีดจำกัดความลึกของการเรียกซ้ำ</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>ความลึกสูงสุดของการเรียกฟังก์ชัน (100-10000)</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>จำนวนสคริปต์ที่ทำงานพร้อมกัน</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>สคริปต์ที่เหลือจะรอจนกว่าสคริปต์หนึ่งจะสิ้นสุด (1-16)</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>นโยบายสคริปต์ (องค์กร)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>กำหนดโดยองค์กรของคุณในไฟล์การตั้งค่า ปิดใช้งานสคริปต์และปลั๊กอิน หรืออนุญาตเฉพาะปลั๊กอินที่ลงนามแล้ว</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>ไม่จำกัด</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>ปิดใช้งานสคริปต์และปลั๊กอินทั้งหมด</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>เฉพาะปลั๊กอินที่ลงนามแล้ว</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>สคริปต์: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>สคริปต์: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>สคริปต์: {0} (กำลังเขียน)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>สคริปต์: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>ไม่มีสคริปต์ที่กำลังทำงาน</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>ติดตั้งคอมโพเนนต์สคริปต์ C# แล้ว</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>สคริปต์ถูกปิดใช้งานโดยการตั้งค่าขององค์กรของคุณ (scripts.policy)</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>สคริปต์ยกเลิกการบันทึก: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>กำลังเรียกใช้สคริปต์ "{0}"</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>สคริปต์ "{0}" สิ้นสุดด้วยข้อผิดพลาด</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>รายละเอียด</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>ไม่ได้เรียกใช้สคริปต์ "{0}": {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>สคริปต์: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, other {กำลังเรียกใช้ # สคริปต์}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>สคริปต์ "{0}" ทำงานเกิน {1} วินาทีแล้ว</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>ทำต่อ (อีก {0} วินาที)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>เรียกใช้สคริปต์ "{0}" หรือไม่?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor กำลังทำงานในฐานะผู้ดูแลระบบ สคริปต์นี้จะทำงานด้วยสิทธิ์ผู้ดูแลระบบและสามารถทำสิ่งที่มีผลต่อทั้งพีซีได้</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>ชื่อ: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>ผู้เขียน: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>โค้ดนี้สามารถทำอะไรก็ได้บนพีซีของคุณด้วยสิทธิ์ของคุณ (รวมถึงการอ่านและเขียนไฟล์และการสื่อสารผ่านเครือข่าย) เรียกใช้เฉพาะโค้ดจากผู้เขียนที่คุณเชื่อถือ</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>สคริปต์นี้สามารถอ่านและเขียนเอกสารที่เปิดอยู่ และยังขอสิทธิ์เหล่านี้ด้วย:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>สคริปต์นี้สามารถอ่านและเขียนเอกสารที่เปิดอยู่ และไม่ขอสิทธิ์อื่น</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>ไฟล์นี้มาจากอินเทอร์เน็ต เรียกใช้เฉพาะเมื่อคุณเชื่อถือแหล่งที่มา</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>เรียกใช้</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>ไม่เรียกใช้</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>เรียกใช้ครั้งเดียว</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>อนุญาตเสมอ</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>อ่านไฟล์ใดก็ได้</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>สร้าง เขียน และลบไฟล์ใดก็ได้</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>สื่อสารผ่านเครือข่าย (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>เรียกใช้โปรแกรมภายนอก</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>เปิดดิสก์ วอลุ่ม และหน่วยความจำของโปรเซส</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>อ่านคลิปบอร์ด</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>เปลี่ยนการตั้งค่าแอป</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>สคริปต์ขอสิทธิ์ "{0}" ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>อนุญาต</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>ไม่อนุญาต</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>คอมโพเนนต์สคริปต์ C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>สคริปต์ C# ต้องใช้คอมโพเนนต์สคริปต์ C# (Roslyn) ซึ่งยังไม่ได้ติดตั้ง เพิ่มตอนนี้หรือไม่?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>ดาวน์โหลดคอมโพเนนต์
+ขนาด: {0}
+บันทึกที่: {1}
+ดาวน์โหลดจาก: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>ดาวน์โหลด</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>ข้อมูลที่ดาวน์โหลดใหญ่กว่าที่คาดไว้ {0} ไบต์ จึงหยุด</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>กำลังเพิ่มคอมโพเนนต์สคริปต์ C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>เพิ่มคอมโพเนนต์สคริปต์ C# แล้ว</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>ไม่สามารถเพิ่มคอมโพเนนต์สคริปต์ C# ได้: {0} คุณเพิ่มด้วยตนเองได้: ดาวน์โหลด zip ของคอมโพเนนต์จากหน้ารีลีส แล้วแตกไฟล์ไปที่โฟลเดอร์ components\csharp\&lt;version&gt;\ ในโฟลเดอร์ข้อมูล</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>ไม่สามารถเพิ่มคอมโพเนนต์สคริปต์ C# ได้: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>ไม่รู้จักการเข้ารหัสอักขระ "{0}" ไม่ได้เปลี่ยนคอลัมน์ข้อความ</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>ไม่สามารถใช้ {0} "{1}" ได้ (อ่านนิพจน์ที่ตำแหน่ง {2} ไม่ได้)</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} "{1}" อยู่นอกไฟล์ (ความยาว {2})</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>เวอร์ชันนี้ไม่มี {0}</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>ไม่มีดิสก์ที่ตรงกับ "{0}"</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>ไม่มีวอลุ่มที่ตรงกับ "{0}"</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>ไม่มีโปรเซสที่ตรงกับ "{0}"</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" ตรงกับ {1} โปรเซส ระบุรหัสโปรเซสด้วย --process</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>เปิดแหล่งข้อมูลปลั๊กอิน(U)</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>การดำเนินการของปลั๊กอิน(P)</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>ปลั๊กอิน(P)</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>จัดการปลั๊กอิน(M)...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>จัดการ</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>plugin manager extensions add-ins ปลั๊กอิน จัดการ ส่วนขยาย</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>ปลั๊กอิน</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>โหลดเฉพาะปลั๊กอินที่ลงนามแล้ว</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>ปลั๊กอินที่ไม่มีลายเซ็นที่ถูกต้องจะไม่ถูกโหลด มีผลหลังรีสตาร์ต</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>โฟลเดอร์พัฒนาปลั๊กอิน</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>โฟลเดอร์ผลลัพธ์การบิลด์ที่โหลดโดยตรงเป็นปลั๊กอิน (แก้ไขในตัวจัดการปลั๊กอิน)</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>ปลั๊กอิน</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>ปลั๊กอิน</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>ปลั๊กอิน</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>ปลั๊กอินเพิ่มชนิดตัวตรวจสอบ แฮช รูปแบบ คำสั่ง และแผง ปลั๊กอินทำงานด้วยสิทธิ์เดียวกับคุณ เปิดใช้เฉพาะปลั๊กอินจากผู้เขียนที่คุณเชื่อถือ การเปลี่ยนแปลงมีผลหลังรีสตาร์ต</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>โหมดปลอดภัย: ไม่โหลดปลั๊กอินใดๆ รายการและการตั้งค่าไม่เปลี่ยนแปลง</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>เพิ่ม...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>รีสตาร์ตตอนนี้</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>เปิดโฟลเดอร์ปลั๊กอิน</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>การตั้งค่าปลั๊กอิน...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>เปิดใช้งาน</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>เปิดใช้งาน</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>ปิดใช้งาน</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>ไม่มีปลั๊กอินที่ติดตั้ง เพิ่มไฟล์ .hexplugin ด้วย เพิ่ม... หรือลากมาวางบนรายการ</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>โฟลเดอร์พัฒนา</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>ปลั๊กอินจะถูกโหลดโดยตรงจากโฟลเดอร์ผลลัพธ์การบิลด์เหล่านี้ และแสดงเป็น "การพัฒนา" ระบบจะถามหนึ่งครั้งต่อโฟลเดอร์</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>เพิ่มโฟลเดอร์พัฒนา...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>เพิ่มโฟลเดอร์พัฒนาแล้ว รีสตาร์ตเพื่อโหลด</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>ผู้เผยแพร่ที่เชื่อถือได้</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>ปลั๊กอินที่ลงนามโดยผู้เผยแพร่เหล่านี้จะเปิดใช้งานโดยไม่ถาม ลบผู้เผยแพร่เพื่อให้ถามอีกครั้ง</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>ปลั๊กอินที่ติดตั้ง</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>ลากไฟล์ .hexplugin มาวางที่นี่เพื่อเพิ่ม</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>เพิ่มปลั๊กอิน</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>ผู้เผยแพร่ที่ไม่รู้จัก</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>ลงนามโดย {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>ลงนามโดย {0} (ตรวจสอบการเพิกถอนไม่ได้)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>ลายเซ็นไม่ถูกต้อง</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>ยังไม่ได้ตรวจสอบลายเซ็น</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>ไม่ได้ลงนาม</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>เปิดใช้งาน</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>ปิดใช้งาน</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>ไม่สามารถโหลดได้ ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>หยุดแล้ว ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>ยังไม่ได้โหลด ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>กำลังโหลด...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — เปลี่ยนแปลงหลังรีสตาร์ต</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>การพัฒนา</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>ไม่มีส่วนขยาย</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>เพิ่ม: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (ปิดใช้งาน: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>ไม่สามารถเพิ่มปลั๊กอินในโหมดปลอดภัยได้</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>ไม่ได้เพิ่มปลั๊กอิน: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>เอาปลั๊กอินออก</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>เอา "{0}" ออกหรือไม่? ปลั๊กอินที่โหลดอยู่จะถูกลบหลังรีสตาร์ต</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>การตั้งค่าของ {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>ชนิดตัวตรวจสอบ</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>แฮช</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>รูปแบบการนำเข้า</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>รูปแบบการส่งออก</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>แหล่งข้อมูล</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>มุมมองการแปลง</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>การดำเนินการข้อมูล</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>คำสั่ง</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>รายการเมนู</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>แผง</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>หน้าการตั้งค่า</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>ฟังก์ชันเทมเพลต</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>การตรวจหาชนิดไฟล์</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>ดิสแอสเซมเบลอร์</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>กฎการระบายสี</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API สคริปต์</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>ไม่รู้จัก</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>เปิดใช้ปลั๊กอิน "{0}" หรือไม่?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (อัปเดต)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>ผู้เผยแพร่: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>โหลดจากโฟลเดอร์พัฒนา</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>โค้ดนี้สามารถทำอะไรก็ได้บนพีซีของคุณด้วยสิทธิ์ของคุณ (รวมถึงการอ่านและเขียนไฟล์และการเข้าถึงเครือข่าย) เปิดใช้เฉพาะปลั๊กอินจากผู้เขียนที่คุณเชื่อถือ</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>ปลั๊กอินประกาศว่า: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>ปลั๊กอินนี้ไม่ได้ลงนาม ไม่สามารถตรวจสอบผู้เผยแพร่ได้</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>เชื่อถือปลั๊กอินจาก {0} เสมอ</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>เปิดใช้</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>ไม่เปิดใช้</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor กำลังทำงานในฐานะผู้ดูแลระบบ ปลั๊กอินนี้จะทำงานด้วยสิทธิ์ผู้ดูแลระบบและอาจมีผลต่อทั้งพีซี</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>โหลดปลั๊กอินในฐานะผู้ดูแลระบบหรือไม่?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor กำลังทำงานในฐานะผู้ดูแลระบบ ปลั๊กอินเหล่านี้จะทำงานด้วยสิทธิ์ผู้ดูแลระบบและอาจมีผลต่อทั้งพีซี:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— ยังไม่เชื่อถือ</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>โหลด</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>ไม่โหลด</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>ปลั๊กอิน "{0}" ถูกหยุดเพราะเกิดข้อผิดพลาดต่อเนื่อง</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>ปิดใช้งานปลั๊กอิน</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>ลองอีกครั้งเมื่อรีสตาร์ต</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>ปลั๊กอิน "{0}" จะไม่ถูกโหลดหลังรีสตาร์ต</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>ปิดใช้งานปลั๊กอินหรือไม่?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>ครั้งก่อน HexEditor สิ้นสุดการทำงานโดยไม่คาดคิด อาจเป็นเพราะปลั๊กอิน "{0}" ปิดใช้งานหรือไม่?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>เปิดใช้งานต่อไป</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>ตอนนี้ไม่สามารถเรียกใช้คำสั่งปลั๊กอินนี้ได้</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>คำสั่ง "{0}" ของปลั๊กอิน "{1}" ล้มเหลว ดูที่แผงเอาต์พุต</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>เปิด: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>คัดลอกเป็น: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>คัดลอกเป็น {0} แล้ว</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>การดำเนินการข้อมูล: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>การดำเนินการข้อมูล {0} ล้มเหลว: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>เพิ่มโดยปลั๊กอิน {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>แผงปลั๊กอิน</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>ปลั๊กอินไม่สามารถสร้างแผงนี้ได้</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>ปลั๊กอิน</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(หยุดแล้ว)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>ชนิดปลั๊กอินนี้แก้ไขด้วยค่านี้ไม่ได้</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>โครงสร้าง</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>เอาต์พุตเทมเพลต</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>เทมเพลตโครงสร้าง(T)</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>ใช้เทมเพลต(A)...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>ใช้เทมเพลตจากตำแหน่งนี้(H)...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>แสดงชนิดที่เคอร์เซอร์(Y)...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>ใช้ Kaitai Struct(K)...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>ค้นหาเทมเพลตที่ตรงกัน(F)</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>เรียกใช้อีกครั้ง(R)</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>เอาการใช้ออก(V)</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>ส่งออกผลลัพธ์(X)...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>สร้างเทมเพลตใหม่(N)</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>เปิดเทมเพลต(O)...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>แก้ไขเทมเพลต(E)</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>แปลง .ksy เป็น HXT(C)...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>จัดการเทมเพลต(M)</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>การระบายสีโครงสร้าง(K)</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>โครงสร้าง(A)</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>เอาต์พุตเทมเพลต(W)</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>ผลลัพธ์โครงสร้าง(T)...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>ใช้เทมเพลตจากตำแหน่งนี้...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>หยุดเมื่ออ่านตรงนี้</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>เทมเพลต</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>ตัวแก้ไขโค้ด</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>เทมเพลต: ใช้</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;โครงสร้าง;แยกวิเคราะห์</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>เทมเพลต: ใช้จากตำแหน่งนี้</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;เคอร์เซอร์</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>เทมเพลต: แสดงชนิดที่เคอร์เซอร์</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;ติดตาม</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>เทมเพลต: ใช้ Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>เทมเพลต: เรียกใช้อีกครั้ง</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;ประเมินใหม่</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>เทมเพลต: เอาการใช้ออก</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;ยกเลิกการใช้</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>เทมเพลต: หยุดการประเมิน</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;ยกเลิก</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>เทมเพลต: แสดงแผนผังผลลัพธ์</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;แผนผัง</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>เทมเพลต: แสดงเอาต์พุต</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;ข้อผิดพลาด</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>เทมเพลต: แก้ไขค่า</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;เปลี่ยน</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>เทมเพลต: ไปที่คำจำกัดความ</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;การประกาศ</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>เทมเพลต: ไปที่เป้าหมายของพอยน์เตอร์</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;พอยน์เตอร์</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>เทมเพลต: คัดลอกค่า</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard;คลิปบอร์ด</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>เทมเพลต: เพิ่มในบุ๊กมาร์ก</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;บุ๊กมาร์ก</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>เทมเพลต: ส่งออกผลลัพธ์</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;ส่งออก</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>เทมเพลต: สลับการระบายสี</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;ไฮไลต์</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>เทมเพลต: ค้นหาเทมเพลตที่ตรงกัน</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;ตรวจหา</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>เทมเพลต: สร้างใหม่</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;สร้าง</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>เทมเพลต: เปิด</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;ไฟล์</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>เทมเพลต: แก้ไข</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;ตัวแก้ไข</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>เทมเพลต: จัดการ</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;ไลบรารี</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>เทมเพลต: แปลง .ksy เป็น HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;แปลง</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>เทมเพลต: เอกสารอ้างอิงไลบรารีมาตรฐาน</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;วิธีใช้ ฟังก์ชัน</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>เทมเพลต: ทดลองเรียกใช้</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;ทดสอบ;ยังไม่ได้บันทึก</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>เทมเพลต: หยุดเมื่ออ่านตรงนี้</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;จุดหยุดข้อมูล</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>มุมมอง: แผงโครงสร้าง</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;เทมเพลต ผลลัพธ์</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>มุมมอง: แผงเอาต์พุตเทมเพลต</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;ข้อผิดพลาด</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เริ่มแก้ไขข้อบกพร่อง / ทำต่อ</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;เรียกใช้;แก้ไขข้อบกพร่อง</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>ตัวแก้ไขโค้ด: หยุดแก้ไขข้อบกพร่อง</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;สิ้นสุด</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>ตัวแก้ไขโค้ด: สลับจุดหยุด</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;จุดหยุด</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ข้ามไปทีละขั้น</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;ถัดไป</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ก้าวเข้า</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;เข้า</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ก้าวออก</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;ย้อนกลับ</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เรียกใช้ถึงเคอร์เซอร์</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;เคอร์เซอร์</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เพิ่มนิพจน์เฝ้าดู</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;เฝ้าดู</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ไปที่คำจำกัดความ</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;การประกาศ</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ค้นหาการอ้างอิง</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;การใช้งาน</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>ตัวแก้ไขโค้ด: จัดรูปแบบเอกสาร</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;ย่อหน้า</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>ตัวแก้ไขโค้ด: สลับข้อคิดเห็น</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;ข้อคิดเห็น</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>ตัวแก้ไขโค้ด: แสดงการเติมโค้ดอัตโนมัติ</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;เติมอัตโนมัติ</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>เทมเพลต</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>ใช้อัตโนมัติ</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>สิ่งที่จะทำเมื่อเทมเพลตตรงกับไฟล์ที่คุณเปิด (ตามหมายเลข magic, ชนิด MIME หรือนามสกุล)</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>แนะนำ</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>ใช้เสมอ</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>ไม่ทำอะไร</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>ประเมินใหม่หลังแก้ไข</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>ประเมินเทมเพลตที่ใช้อีกครั้งหลังจากแก้ไขครั้งสุดท้าย 500 มิลลิวินาที เมื่อปิด ให้ใช้ เรียกใช้อีกครั้ง ในแผนผังผลลัพธ์</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>การระบายสีโครงสร้าง</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>ระบายสีช่วงของแพตเทิร์นเทมเพลตในมุมมอง Hex</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>ความทึบของการระบายสี (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>ความทึบของการระบายสีโครงสร้างที่ซ้อนบนพื้นหลังมุมมอง Hex</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>โฟลเดอร์เทมเพลต</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>โฟลเดอร์เพิ่มเติมที่ค้นหาเทมเพลตของผู้ใช้</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>เทมเพลตตัวตรวจสอบ</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>เทมเพลตที่ชนิด [[inspector]] จะแสดงในตัวตรวจสอบข้อมูล</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>การกำหนดลักษณะเทมเพลต</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>เทมเพลตที่ปิดใช้งาน เทมเพลตที่ยกเว้นจากการใช้อัตโนมัติ และคำแนะนำที่ระงับ</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>จัดการเทมเพลต</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>โฟลเดอร์เทมเพลต</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>เทมเพลต</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>เทมเพลตตัวตรวจสอบ</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>เพิ่มโฟลเดอร์...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>ไม่สามารถเข้าถึงโฟลเดอร์นี้ได้</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>กรองตามชื่อ</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>นำเข้า...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>สร้างเทมเพลตใหม่</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>เปิดใช้งาน</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>ใช้อัตโนมัติ</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>แก้ไข</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>ส่งออก...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>ถูกซ่อนโดยเทมเพลตอื่นที่ชื่อเดียวกัน</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>ปิดคำแนะนำแล้ว</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>แสดงอีกครั้ง</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>เพิ่มเทมเพลตตัวตรวจสอบ...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>ขนาดไม่คงที่</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>เทมเพลตนี้มีชนิดตัวตรวจสอบที่ขนาดไม่คงที่หรือใหญ่กว่า 4 KB แนะนำให้ใช้ชนิดขนาดคงที่ไม่เกิน 4 KB</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>นำเข้าไฟล์เทมเพลต {0} ไฟล์แล้ว</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>ไม่สามารถนำเข้าได้: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>ส่งออก {0} ไฟล์ไปที่ {1} แล้ว</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>ไม่สามารถส่งออกได้: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>เทมเพลตมาตรฐานเป็นส่วนหนึ่งของแอป ใช้ ทำซ้ำและแก้ไข เพื่อส่งออกสำเนา</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>ใช้เทมเพลต</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>ใช้เทมเพลต</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>เรียกใช้อีกครั้ง</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>เรียกใช้อีกครั้ง</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>หยุดการประเมิน</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>หยุดการประเมิน</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>คอลัมน์</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>คอลัมน์</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>ติดตามเคอร์เซอร์</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>ติดตามเคอร์เซอร์</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>กรองตามชื่อ ค่า หรือชนิด</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>กรอง</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>แผนผังผลลัพธ์</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>พาธ (เช่น chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>พาธ</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>ประเมินทั้งหมดและค้นหา</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>ตรงกัน {0} รายการ</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>ไม่พบพาธ '{0}'</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>ค่า</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>ข้อคิดเห็น</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>สิ้นสุด</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>สี</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>ลำดับคอลัมน์</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>ย้าย {0} ไปทางซ้าย</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>ย้าย {0} ไปทางขวา</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>รีเซ็ตคอลัมน์</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>กำลังประเมิน…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>ประเมินแล้ว: {0} แพตเทิร์น</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>ข้อผิดพลาด {0} รายการ, คำเตือน {1} รายการ</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>จำนวนแพตเทิร์นถึงขีดจำกัดแล้ว ({0}) แสดงผลลัพธ์บางส่วน</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>เพิ่มขีดจำกัดแล้วเรียกใช้อีกครั้ง</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} องค์ประกอบ</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} บิต</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>บิต {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / ท้องถิ่น: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>ค่าที่ไม่ได้กำหนด</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>ไม่ได้กำหนด</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>ติดตาม</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>ชี้ไปที่ {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>ออฟเซ็ต {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>ขนาด {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(ยังไม่ได้บันทึก)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(ไม่พบไฟล์เทมเพลต)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>ไม่ได้ใช้เทมเพลตใดๆ</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>ไม่มีการประเมินที่กำลังทำงาน</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>เลือกโหนดในแผนผังผลลัพธ์</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>โหนดที่เลือกไม่ใช่พอยน์เตอร์</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>เป้าหมายของพอยน์เตอร์เป็น null หรืออยู่นอกข้อมูล</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>ไม่พบเทมเพลต '{0}'</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>เอกสารหนึ่งใช้เทมเพลตได้สูงสุด {0} รายการ</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>ไม่พบไฟล์เทมเพลต '{0}'</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>กำลังประเมินเทมเพลต {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON ใหญ่กว่า 64 MB ให้บันทึกเป็นไฟล์แทน</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>บันทึกเป็นไฟล์...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>เทมเพลต: {0}
+ออฟเซ็ตเริ่มต้น: {1}
+ประเภท: {2}
+ลำดับไบต์: {3}
+ชนิด: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>มาตรฐาน</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>ผู้ใช้</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>ล่าสุด</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>ใช้สคริปต์</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>รายละเอียด</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>ไปที่ข้อมูล</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>ไปที่เป้าหมายของพอยน์เตอร์</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>ไปที่คำจำกัดความ</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>แก้ไขค่า</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>คัดลอกค่า</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>คัดลอกชื่อและค่า</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>คัดลอกพาธ</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>คัดลอกไบต์</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>คัดลอกออฟเซ็ต</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>คัดลอกแผนผังย่อยเป็น JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>เพิ่มในบุ๊กมาร์ก</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>เพิ่มช่วงในการเลือกหลายรายการ</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>เปิดเซกชันในแท็บใหม่</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>ใช้เทมเพลตจากตำแหน่งนี้...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>หยุดเมื่ออ่านตรงนี้</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>สลับแบบคงที่ / ติดตาม</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>แปลงเป็นแบบคงที่</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>การตั้งค่าการใช้</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>ส่งออก...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>เรียกใช้อีกครั้ง</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>เอาการใช้ออก</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>ค่า</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>ตกลง</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>แพตเทิร์นนี้มีเฉพาะการแปลงสำหรับอ่าน คุณจึงกำลังแก้ไขค่าดิบ</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>ป้อนตัวเลข</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>จริง</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>เติมส่วนที่เหลือด้วยศูนย์</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>เวลาท้องถิ่น</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>เขตเวลา</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>ป้อนค่าตั้งแต่ 0 ถึง {1} ({0} บิต)</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>ค่าอยู่นอกช่วงของชนิดนี้</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>ข้อความยาวกว่าฟิลด์ ({0} ไบต์)</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>การแปลงสำหรับเขียนล้มเหลว: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>ไม่สามารถอ่านค่าได้</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>ไม่สามารถแก้ไขแพตเทิร์นภายในเซกชันได้</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>แพตเทิร์นนี้เป็นแบบอ่านอย่างเดียว</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>ไม่สามารถแก้ไขค่าที่คำนวณได้</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>ไม่สามารถแก้ไขโหนดข้อผิดพลาดได้</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>โหนดนี้ไม่มีค่าที่แก้ไขได้</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>แก้ไขค่าเทมเพลต</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>ใช้เทมเพลต</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>ใช้ Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>ค้นหาเทมเพลต</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>ชื่อ คำอธิบาย นามสกุล หรือชนิด MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>เทมเพลต</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>ออฟเซ็ตเริ่มต้น</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>ป้อนออฟเซ็ตที่อยู่ภายในเอกสาร</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>ลำดับไบต์เริ่มต้น</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>การตั้งค่าเอกสาร</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>การตั้งค่าเอกสาร (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>การตั้งค่าเอกสาร (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>คงที่</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>ติดตามเคอร์เซอร์</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>ชนิด (ติดตาม)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>เวอร์ชัน {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>สัญญาอนุญาต: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>เทมเพลตที่ตรงกัน</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (คะแนน {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>หมายเลข magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>นามสกุล</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>ไม่มีเทมเพลตที่ตรงกับเอกสารนี้</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>ไฟล์นี้ดูเหมือน {0} ใช้เทมเพลต "{0}" หรือไม่?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(ใช้สคริปต์)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>ตัวเลือกอื่น...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>ไม่ต้องแสดงสำหรับรูปแบบนี้</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>เกิดข้อผิดพลาดขณะใช้เทมเพลต "{0}"</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>ส่งออกผลลัพธ์โครงสร้าง</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>เป้าหมาย</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>ทั้งหมดที่ใช้</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>แผนผังย่อยที่เลือก ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>จำนวนองค์ประกอบอาร์เรย์สูงสุด</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>ความลึกสูงสุด</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>ไม่จำกัด</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>รวมแพตเทิร์นที่ซ่อน</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>เขียนออฟเซ็ตเป็นสตริงเลขฐานสิบหก</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>บันทึก...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>กำลังส่งออกผลลัพธ์โครงสร้าง</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} โหนด</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>ส่งออกไปที่ {0} แล้ว</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>ไม่สามารถส่งออกไปที่ {0} ได้: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>พื้นที่ดิสก์ไม่เพียงพอ</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>เอาต์พุตเทมเพลต</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>ไปที่ซอร์ส</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>ไปที่ข้อมูล</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>วิธีใช้สำหรับ {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>ทดลองเรียกใช้</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>เอกสารเป้าหมาย</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>เอกสารเป้าหมาย</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>เริ่มแก้ไขข้อบกพร่อง / ทำต่อ</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>ข้ามไปทีละขั้น</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>ก้าวเข้า</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>ก้าวออก</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>ประเมินตามลำดับขณะแก้ไขข้อบกพร่อง</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>จัดรูปแบบเอกสาร</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>สลับข้อคิดเห็น</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>ซอร์สเทมเพลต</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>การเติมอัตโนมัติ</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>ตัวแปร</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>เฝ้าดู</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>call stack</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>จุดหยุด</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>ตัวแปร</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>เฝ้าดู</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>call stack</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>จุดหยุด</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>เพิ่มนิพจน์เฝ้าดู</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>นิพจน์ (เช่น c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>ปัญหา</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>การอ้างอิงที่บรรทัด {0} คอลัมน์ {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>เทมเพลตใหม่</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>ไม่มีตัวแก้ไขเทมเพลตที่เปิดอยู่</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>ไม่ได้แก้ไขข้อบกพร่อง</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>เปิดเอกสารที่จะเรียกใช้เทมเพลต</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>ไม่สามารถเปิดเทมเพลต {0} ได้: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>ไม่สามารถบันทึกเทมเพลตได้: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>ไม่สามารถบันทึกเทมเพลตมาตรฐานโดยตรงได้ ใช้ ทำซ้ำและแก้ไข เพื่อบันทึกสำเนาในโฟลเดอร์เทมเพลตของคุณ</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>ทำซ้ำและแก้ไข</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>แก้ไขข้อผิดพลาดทางไวยากรณ์ก่อนแก้ไขข้อบกพร่อง</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>ปิดการประเมินแบบขี้เกียจขณะแก้ไขข้อบกพร่อง อาร์เรย์ขนาดใหญ่อาจใช้เวลานาน</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>จุดหยุดข้อมูล</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>ตัวแก้ไขข้อบกพร่องจะหยุดเมื่อสร้างแพตเทิร์นที่มี {0}</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>ไม่สามารถแปลง {0} เป็น HXT ได้</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>ประเมินแล้ว: {0} แพตเทิร์น (หยุดที่ขีดจำกัด{1} แสดงผลลัพธ์บางส่วน)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>ขั้นตอน</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>แพตเทิร์น</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>หน่วยความจำ</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>เวลา</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>ไปที่บรรทัด</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>หมายเลขบรรทัด (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>ไม่มีตัวแก้ไขโค้ด (เทมเพลตหรือสคริปต์) ที่แสดงอยู่</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>ตัวแก้ไขนี้ไม่รองรับคำสั่งนี้</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>ติดตามเป็นพอยน์เตอร์</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer offset address jump inspector พอยน์เตอร์ ออฟเซ็ต ที่อยู่ กระโดด ตัวตรวจสอบ</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>ติดตามเป็นพอยน์เตอร์</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>สัมบูรณ์ (ออฟเซ็ต)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>สัมบูรณ์ (ที่อยู่)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>สัมพันธ์กับเคอร์เซอร์</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>สัมพันธ์กับท้ายค่า</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>สัมพันธ์กับฐาน…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>ฐาน (นิพจน์)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>ไป</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>เป้าหมาย {0} อยู่นอกเอกสาร (ความยาว {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>แถวนี้ไม่มีค่าที่ใช้เป็นตำแหน่งได้</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>ป้อนฐานเป็นนิพจน์ เช่น 0x400000 หรือ bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>เลือกแถวจำนวนเต็มในตัวตรวจสอบข้อมูล</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>เลื่อนเป็นอาร์เรย์ของชนิดนี้</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>องค์ประกอบก่อนหน้า</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>องค์ประกอบถัดไป</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>ออกจากโหมดอาร์เรย์</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>ลำดับองค์ประกอบ</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>ขนาดองค์ประกอบ</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(ไม่อยู่ที่ขอบเขตขององค์ประกอบ)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>องค์ประกอบ {0} อยู่นอกเอกสาร</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>ค่า</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>นิพจน์</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>มีการอ้างอิงแบบวงกลมระหว่างบุ๊กมาร์ก</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>การอ้างอิง bm.name ซ้อนกันเกิน {0} ระดับ</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>ตำแหน่ง {0} อยู่นอกเอกสาร</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>ข้อผิดพลาดของนิพจน์ตำแหน่ง: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>ค่า</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>แก้ไขค่าบุ๊กมาร์ก</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(ไม่มีชนิด)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>เอกสาร</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>นิพจน์ตำแหน่ง</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>เช่น u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>มุมมอง: แผงมุมมองภาพ</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image ภาพ บิตแมป พิกเซล รูปภาพ</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>มุมมองภาพ(V)</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>มุมมองภาพ</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>ขาวดำ 1 บิต</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>เทา 2 บิต</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>เทา 4 บิต</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>เทา 8 บิต</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 บิต (สีธีมไบต์)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>ติดตามเคอร์เซอร์</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>จุดเริ่มต้นของส่วนที่เลือก</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>คงที่</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>บนลงล่าง</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>ล่างขึ้นบน (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>รูปแบบพิกเซล</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>ความกว้าง (พิกเซล)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>ไบต์ต่อแถว</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>ตำแหน่งเริ่มต้น</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>ตำแหน่งเริ่มต้นคงที่</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>ลำดับแถว</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>ซูม</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>ตัวเลือกเพิ่มเติม</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>ภาพ</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>เลื่อนแถว</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>บันทึกเป็นภาพ…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>ช่วงที่ดูใหญ่เกินไป วาดเฉพาะ 64 MB แรก</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>ป้อนตำแหน่งเริ่มต้นคงที่เป็นนิพจน์</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>ไม่มีภาพที่จะบันทึก</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>บันทึกภาพไปที่ {0} แล้ว</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>ไม่สามารถบันทึก {0} ได้: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>ภาพ PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>ค่าเริ่มต้น</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>หมดเวลา</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>ชนิดนี้ใช้เวลานานกว่า {0} มิลลิวินาที จะทำงานอีกครั้งเมื่อตำแหน่งเริ่มต้นเปลี่ยน</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>ข้อผิดพลาด: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>ไฟล์ชนิดตัวตรวจสอบ {0} บรรทัด {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>โหมดออฟไลน์เปิดอยู่ (หรือปิดการดาวน์โหลด) จึงไม่ดาวน์โหลดคอมโพเนนต์ หากต้องการเพิ่มด้วยตนเอง ให้รับ {0} จากหน้ารีลีสของเวอร์ชันนี้ (บนพีซีเครื่องอื่นก็ได้หากจำเป็น) แล้วแตกไฟล์ไปที่ {1}</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>เริ่มในโหมดปลอดภัย ไม่โหลดปลั๊กอินและสคริปต์ที่เรียกใช้อัตโนมัติ</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>รีสตาร์ตตามปกติ</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>เทมเพลต: ค้นหาค่าของฟิลด์</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;ค้นหา;ฟิลด์;ค่า</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>ไม่ได้ใช้เทมเพลตใดๆ</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>ข้อผิดพลาดทางไวยากรณ์ที่อักขระ {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>เงื่อนไขว่างเปล่า</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>ไม่มีค่า</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>ไม่รู้จักเงื่อนไข (ใช้ name:, type: หรือ value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>ไม่รู้จักการเปรียบเทียบ (ใช้ =, !=, &lt;, &lt;=, &gt;, &gt;= หรือ ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>เครื่องหมายอัญประกาศไม่ได้ปิด</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>นิพจน์ทั่วไปไม่ถูกต้อง</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>ค่าเทมเพลต</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>กด Enter เพื่อค้นหาค่าของฟิลด์ ผลลัพธ์จะแสดงในผลการค้นหา</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>ฟิลด์</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ผู้ใช้กำหนด)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (เทมเพลต {1})</value></data>
 </root>

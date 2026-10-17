@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>已取消。</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>使用方式請執行 'hexed --help' (或 'hexed &lt;command&gt; --help')。</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: 發生非預期的錯誤 ({0})。詳細資料已寫入 {1}。</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>用法: hexed &lt;command&gt; [引數] [選項]
+      hexed &lt;file&gt; [選項]          (等同於: hexed open &lt;file&gt;)
+
+命令:
+  open      在 HexEditor 視窗中開啟檔案、磁碟或處理序
+  hash      計算並驗證雜湊與總和檢查碼
+  dump      輸出十六進位傾印
+  compare   比較兩個檔案
+  run       不顯示視窗執行指令碼
+  template  套用結構範本並輸出結果
+  patch     將 IPS 修補檔套用到檔案
+  convert   在各種格式之間轉換 (Intel HEX、S-record、Base64、原始程式碼等)
+  find      搜尋檔案並輸出相符項目
+
+共用選項 (所有命令):
+  -h, --help           顯示用法 (也可用: hexed &lt;command&gt; --help)
+      --version        顯示版本
+  -q, --quiet          只輸出結果
+      --format &lt;f&gt;     輸出格式: text (預設) 或 json
+  -o, --output &lt;path&gt;  將結果寫入檔案而不是畫面
+      --lang &lt;tag&gt;     訊息的語言 (例如 en, ja)
+      --no-color       不使用色彩
+      --unregister     移除在此電腦上所做的登錄 (快顯功能表、檔案關聯、跳躍清單、PATH、
+                       暫存資料夾)
+
+結束代碼: 0 成功, 1 否定結果 (有差異、無相符項目、不一致), 2 用法錯誤,
+3 I/O 錯誤, 4 指令碼或範本錯誤, 5 不允許, 6 已取消, 7 超出限制,
+8 格式錯誤, 10 內部錯誤。
+
+位移、長度和範圍可以使用運算式。沒有前綴的數字為十進位; 十六進位請加 0x。範圍寫作 start:length
+或 start..end (不含 end); 'end' 表示檔案長度 (例如 end-16:16)。在 PowerShell 中,
+含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>用法: hexed open [paths...] [選項]
+
+在 HexEditor 視窗中開啟檔案。如果 HexEditor 已在執行，檔案會以索引標籤的形式在其中開啟。
+相對路徑從目前資料夾解析。
+
+選項:
+  -g, --offset &lt;expr&gt;      將游標放到此位置 (例如 0x1000 或 end-16)
+      --select &lt;range&gt;     選取此範圍 (start:length 或 start..end)
+  -r, --readonly           以唯讀方式開啟
+      --disk &lt;n|path&gt;      開啟實體磁碟 (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     開啟磁碟區 (--volume C:)
+      --process &lt;pid|name&gt; 開啟處理序的記憶體
+      --encoding &lt;name&gt;    文字欄的字元編碼
+      --template &lt;name|path&gt;  開啟後套用結構範本
+      --compare &lt;a&gt; &lt;b&gt;    在比較檢視中開啟兩個檔案
+      --run &lt;script&gt;       開啟後執行指令碼
+      --new-window         在新視窗中開啟
+      --new-document       開啟新的空白檔案
+      --open-disk          顯示「開啟磁碟」對話方塊
+      --new-instance       啟動獨立的處理序，而不使用執行中的處理序
+  -w, --wait               在所開啟的檔案關閉之前不返回
+      --safe-mode          以安全模式啟動 (僅新處理序)
+      --write-block        啟動時對整個應用程式啟用寫入保護
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   顯示偽翻譯文字 (預覽版)
+      --plugin-dev &lt;folder&gt; 載入開發中的外掛程式 (僅新處理序)
+      --ui-lang &lt;tag&gt;      視窗的顯示語言 (僅新處理序)
+      --test-hooks &lt;file&gt;  啟用錯誤注入 (僅測試版)
+
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>用法: hexed hash [paths...] [選項]
+      hexed hash --check &lt;checksum file&gt; [選項]
+
+計算雜湊與總和檢查碼。路徑可含萬用字元 (*.bin) 或為資料夾; 用 - 從標準輸入讀取。
+多個演算法在一次讀取中完成計算。
+
+選項:
+  -a, --algorithm &lt;id,...&gt;   演算法 ID，以逗號分隔 (預設 sha256)。
+                             '--algorithm list' 會輸出可用的 ID
+      --range &lt;range&gt;        只對此範圍計算雜湊 (start:length 或 start..end)
+      --format &lt;f&gt;           text (預設): algorithm  value  path
+                             gnu: value  path (與 sha256sum 相同)
+                             bsd: SHA256 (path) = value
+                             json: 每個檔案一個物件
+      --check &lt;file&gt;         驗證總和檢查碼檔案 (.sha256、.md5、
+                             SHA256SUMS、.sfv 等) 中列出的檔案，並輸出 OK、FAILED 或 MISSING
+  -r, --recurse              指定資料夾時包含子資料夾
+
+結束代碼: 0 成功, 1 與 --check 不一致, 3 無法讀取檔案。
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>用法: hexed dump &lt;path&gt; [選項]
+
+將檔案 (或某個範圍) 的十六進位傾印輸出到標準輸出。記憶體用量與檔案大小無關。
+
+選項:
+      --range &lt;range&gt;        要輸出的範圍 (start:length 或 start..end; 預設: 整個檔案)
+      --width &lt;n&gt;            每行位元組數 (預設 16)
+      --group &lt;n&gt;            每組位元組數 (預設值取決於樣式; 0 表示不分組)
+      --encoding &lt;name&gt;      文字欄的字元編碼 (預設 ascii)
+      --base-address &lt;expr&gt;  首位元組顯示的位址 (預設 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              與上一行重複的行輸出 * (類似 hexdump -C)
+
+結束代碼: 範圍在檔案之外時為 2。
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>用法: hexed compare &lt;path1&gt; &lt;path2&gt; [選項]
+
+比較兩個檔案並輸出差異。
+
+選項:
+      --mode &lt;byte|resync&gt;   byte (預設): 比較相同位移處的位元組
+                             resync: 允許插入和刪除
+      --range1 &lt;range&gt;       第一個檔案的範圍 (預設: 全部)
+      --range2 &lt;range&gt;       第二個檔案的範圍 (預設: 全部)
+      --max &lt;n&gt;              最多輸出的差異數 (預設 1000);
+                             其餘只計數
+      --format &lt;text|json&gt;   輸出格式
+      --brief                輸出一行 (相同或不同)，並在第一處差異處停止
+
+結束代碼: 0 相同, 1 不同, 3 無法讀取檔案。
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>用法: hexed run &lt;script&gt; [files...] [選項]
+
+不開啟視窗執行指令碼。檔案依序開啟 (app.documents); 第一個
+檔案為 app.activeDocument。
+
+選項:
+      --arg &lt;name=value&gt;   指令碼參數 (可重複); 也可在 script.args 中取得
+      --trust              不詢問直接執行不受信任的指令碼
+      --allow &lt;perm,...&gt;   要授與的權限 (例如 file-read)
+      --save               指令碼結束時儲存所有已變更的檔案
+      --save-as &lt;path&gt;     將第一個檔案儲存到此路徑 (不變更原檔案)
+      --dry-run            不儲存任何內容; 輸出變更的摘要
+      --timeout &lt;seconds&gt;  整個指令碼的最長執行時間
+  -r, --readonly           以唯讀方式開啟檔案
+
+預設情況下，只儲存指令碼呼叫了 doc.save() 的檔案。
+指令碼的結束代碼可用 app.exit(code) 設定。代碼 2 到 10 的意義見
+'hexed --help'; 自訂意義請使用 64 或更大的值。</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>用法: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [選項]
+
+將結構範本套用到檔案並輸出結果。
+
+選項:
+      --template &lt;name|path&gt;  要套用的範本
+      --auto                  自動選擇範本 (沒有合適的範本時結束代碼為 1)
+  -g, --offset &lt;expr&gt;         結構的起始位移 (預設 0)
+      --format &lt;f&gt;            json、csv 或 text (縮排的樹狀; 預設 text)
+      --depth &lt;n&gt;             樹狀的最大深度
+      --fields &lt;path,...&gt;     只輸出這些欄位 (例如 header.e_lfanew,sections[*].name)
+
+結束代碼: 範本錯誤時為 4。
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>用法: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [選項]
+
+將修補檔套用到檔案。-o 和 --in-place 必須指定其一。此版本可套用 IPS
+和 IPS32 修補檔。
+
+選項:
+  -o, --output &lt;path&gt;       將修補後的檔案寫到這裡 (不變更目標檔案)
+      --in-place            安全地取代目標檔案 (先寫入暫存檔)
+      --format &lt;f&gt;          auto (預設)、ips 或 ips32
+      --verify-before &lt;a:v&gt; 先檢查目標檔案的雜湊 (例如 sha256:ab12...);
+                            不一致時結束代碼為 1，且不寫入任何內容
+      --verify-after &lt;a:v&gt;  在寫入前檢查結果的雜湊
+      --dry-run             輸出記錄數和變更的位元組數; 不套用任何內容
+
+結束代碼: 1 驗證失敗, 8 修補檔已損毀。</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>用法: hexed convert &lt;input&gt; &lt;output&gt; [選項]
+
+在 HexEditor 的匯入/匯出格式之間轉換檔案。
+
+選項:
+      --from &lt;format&gt;       輸入格式 (預設: 依內容和副檔名偵測)
+      --to &lt;format&gt;         輸出格式 (預設: 依輸出副檔名; 未知時為 bin)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     即使總和檢查碼錯誤也讀取 Intel HEX / S-record 檔案
+      --fill &lt;hex&gt;          用於填補空隙的位元組 (預設 FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+格式選項的名稱是匯入/匯出對話方塊中各欄位的名稱，以小寫加連字號書寫，例如 --record-length 32、--start-address 0x08000000、
+--bytes-per-line 16、--line-length 64、--url-safe、--no-upper-case、--new-line lf、
+--encoding utf8。
+
+結束代碼: 輸入有總和檢查碼或格式錯誤時為 8。</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>用法: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [選項]
+
+搜尋檔案，並為每個相符項目輸出 "path  offset  length"。
+
+選項:
+      --hex &lt;pattern&gt;      位元組，例如 "DE AD ?? EF" (?? 表示任意位元組，? 表示任意半位元組)
+      --text &lt;string&gt;      文字
+      --regex &lt;expr&gt;       規則運算式 (針對文字)
+      --encoding &lt;name&gt;    --text 和 --regex 的字元編碼 (預設 utf-8)
+      --case-sensitive     區分大小寫
+      --range &lt;range&gt;      只搜尋每個檔案的此範圍
+      --max &lt;n&gt;            在 n 個相符項目後停止
+      --format &lt;text|json&gt; 輸出格式
+  -r, --recurse            指定資料夾時包含子資料夾
+
+結束代碼: 0 找到, 1 找不到, 3 無法讀取檔案。
+在 PowerShell 中，含有 $ 的值請放在單引號中 (例如 '$1F00')。</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>未知的命令或檔案: {0}。命令: open, hash, dump, compare, run, template, patch, convert, find。</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>未知的語言: {0}。請使用 23 種顯示語言標記之一 (例如 en, ja, zh-Hans)。</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>'{1}' 沒有選項 {0}。</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>選項 {0} 不接受值 ('{1}')。</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>選項 {0} 需要一個值 ('{1}')。</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>路徑不存在: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>存取被拒: {0}。請檢查檔案的權限，或使用有權存取的帳戶執行。</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>無法讀取 {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>無法寫入 {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} 是資料夾，不是檔案。</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>沒有檔案符合 {0}。</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>無法讀取 {0} 的 {1} 處。</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>{0} 上的可用空間不足 (需要 {1} 位元組，可用 {2})。</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>檔案對 {0} 的檔案系統來說過大 ({1})。</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>輸出路徑 {0} 同時也是輸入。請選擇其他輸出路徑。</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: 無法辨識位置 {2} 處的運算式 "{1}": {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" 在檔案之外 (長度 {2})。</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" 必須是 {2} 到 {3} 之間的數字。</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>'{1}' 不支援 --format {0}。可用: {2}。</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' 需要至少一個輸入路徑。</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' 只接受一個輸入路徑。</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>此版本不提供 '{0}'。</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>此版本不提供 {0}。</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>資料不符合格式 {0} (上限 {1})。</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>未知的字元編碼: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>運算式為空</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>語法錯誤</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>括號未閉合</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>未知的名稱 (檔案長度請用 end)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>命令列中無法使用書籤</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>未知的函式</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>除以零</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>值過大</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>不是有效的數字</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>此處的資料無法讀取</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>命令列中無法使用</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu 只能使用一個演算法。要使用多個演算法，請用 --format bsd 或 text。</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range 不能與標準輸入一起使用。</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>未知的演算法: {0}。執行 'hexed hash --algorithm list' 查看 ID。</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>此電腦上無法使用演算法 {0}。</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} 中沒有可讀取的總和檢查碼行。</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>無法判斷 {0} 使用的演算法。請用 --algorithm 指定。</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} 個計算出的總和檢查碼與清單不一致。</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>列出的 {0} 個檔案遺失。</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>未知的樣式: {0}。請參閱 'hexed dump --help'。</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' 需要兩個路徑。</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>未知的模式: {0}。請使用 byte 或 resync。</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>已變更</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>已插入</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>已刪除</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>無法讀取</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... 還有 {0} 處差異未顯示 (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>共 {0} 處差異，{1} 位元組</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>兩個檔案相同。</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>兩個檔案不同 (第一處差異在 {0})。</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>有 {0} 個範圍無法讀取。</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>請只指定 --hex、--text 和 --regex 中的一個。</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>搜尋模式無效 ({0})。</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: 已略過 {1} 個無法讀取的範圍。</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>用法: hexed convert &lt;input&gt; &lt;output&gt; [選項]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>IPS 修補檔請用 'hexed patch' 套用，而不是 'hexed convert'。</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>以下選項的值無效: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>未知的格式: {0}。可用格式: {1}。</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" 無效。請使用: {2}。</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} 不適用於從 {1} 轉換為 {2}。</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  第 {0} 行，第 {1} 欄: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: 第 {1} 行第 {2} 欄有總和檢查碼錯誤。若仍要讀取該檔案，請使用 --ignore-checksum。
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: 第 {1} 行第 {2} 欄有格式錯誤 ({3})。
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>已忽略 {0} 個總和檢查碼錯誤。</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>用法: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>請指定 -o &lt;output&gt; 或 --in-place (以免誤改原檔案)。</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o 和 --in-place 不能同時使用。</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>輸出路徑 {0} 是目標檔案或修補檔。要取代目標檔案，請使用 --in-place。</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} 不是修補檔格式。請使用 auto、ips 或 ips32。</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: 此版本不支援 UPS、BPS 和 .hexpatch 修補檔，支援 IPS 和 IPS32。</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} 不是可辨識的修補檔。</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: 修補檔在記錄 {1} (檔案位移 {2}) 處已損毀。</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} 不是 {1} 修補檔。</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" 必須形如 algorithm:value (例如 sha256:ab12...)。</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} 的雜湊與預期不符 (--verify-before)。未寫入任何內容。</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>修補後的 {0} 的雜湊與預期不符 (--verify-after)。未寫入任何內容。</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>已套用 {0} 筆記錄，變更了 {1} 位元組，長度變化 {2}。已寫入 {3}。</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} 筆記錄，將變更 {1} 位元組，長度變化 {2}，新長度 {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>請只指定 --template 和 --auto 中的一個。</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>找不到範本 "{0}"。請使用標準範本的名稱 (例如 pe、png) 或 .hxt、.ksy 檔案的路徑。</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>沒有與 {0} 相符的範本。</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>範本錯誤: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>用法: hexed run &lt;script&gt; [files...] [選項]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>--save、--save-as 和 --dry-run 只能使用其中一個。</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly 不能與 --save 或 --save-as 一起使用。</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" 必須形如 name=value。</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" 必須是大於 0 的秒數。</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as 需要一個要開啟的檔案 (第一個檔案會儲存到新路徑)。</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} 是目前開啟的檔案。要覆寫它，請使用 --save。</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: 變更了 {1} 位元組 (未儲存: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} 有未儲存的變更。這些變更未被儲存 (請使用 --save 或 doc.save())。</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>未知的顯示語言: {0}。請使用 23 種顯示語言標記之一 (例如 ar, ja)。</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>未知的虛擬地區設定: {0}。請使用 qps-ploc 或 qps-plocm。</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>在 hexed.exe 旁邊找不到 HexEditor.exe。</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>無法啟動 {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor 在檔案關閉之前就以代碼 {0} 結束了。</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>已移除所有登錄。</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>已移除: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>無法移除: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>檔案總管快顯功能表</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>檔案關聯</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>App Paths 項目</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>hexed 的 PATH 項目</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>工作列跳躍清單</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>通知登錄</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>暫存資料夾</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>登錄項目</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>此版本的登錄由 Windows 管理。未移除任何內容。</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>此複本沒有登錄任何內容。未移除任何內容。</value></data>
+</root>

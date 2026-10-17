@@ -5481,4 +5481,1072 @@ Chi tiết đã được ghi vào:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static chỉ đọc</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Bảng mã văn bản (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Tài liệu hoàn chỉnh (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Ký tự không mong đợi '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Thiếu '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>'{0}' không mong đợi</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Số '{0}' không hợp lệ</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Chuỗi ký tự chưa được kết thúc</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Chuỗi thoát '{0}' không hợp lệ</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Chú thích chưa được kết thúc</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Lồng nhau quá sâu (giới hạn {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Chuỗi byte '{0}' không hợp lệ</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Mẫu không phải là UTF-8 hợp lệ</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Mẫu quá lớn (giới hạn 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Quá nhiều lỗi; chỉ hiển thị {0} lỗi đầu tiên</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Giá trị '{1}' không hợp lệ cho pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Đã bỏ qua pragma '{0}' không xác định</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' đã được định nghĩa tại {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>Không tìm thấy '{0}' (đã tìm trong: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Mẫu không thể thực hiện thao tác này: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Mẫu này yêu cầu ứng dụng phiên bản {0} trở lên</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Đã bỏ qua thuộc tính '{0}' không xác định</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} không vừa với {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Giá trị {0} có nhiều tên (dùng '{1}')</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} vượt quá giá trị tối đa; dùng {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Các mẫu gồm cả phần nhập quá lớn (giới hạn 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>'{0}' chưa được định nghĩa</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Chia cho 0</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Kiểu không khớp: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Đệ quy quá sâu (giới hạn {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Số câu lệnh đã chạy đạt giới hạn ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Số mẫu dữ liệu (pattern) đạt giới hạn ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Bộ nhớ đánh giá đạt giới hạn ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Thời gian đánh giá đạt giới hạn ({0} giây)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Vị trí đặt 0x{0} nằm ngoài dữ liệu</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) nằm ngoài dữ liệu</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} byte) nằm ngoài dữ liệu</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Vị trí không được âm ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Kích thước phần tử là 0 nên không thể kết thúc mảng</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Mảng kết thúc vì đã đến cuối dữ liệu</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Mảng bị cắt ở giới hạn ({0} phần tử)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Phần tử cuối chưa đầy đủ ({0} byte) không được đưa vào</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Không tìm thấy ký tự kết thúc chuỗi</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 dài hơn 10 byte (độ lệch 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Nội dung của cấu trúc ({0} byte) vượt quá kích thước chỉ định ({1} byte)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Kiểu con trỏ phải là kiểu số nguyên</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Ngoài phạm vi (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Không thể khai báo mẫu dữ liệu (pattern) bên trong hàm</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Xác nhận (assert) thất bại: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Hàm mở rộng '{0}' chưa được đăng ký</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Hàm mở rộng '{0}' thất bại: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Hàm mở rộng '{0}' không được phép chạy</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Chỉ số {0} ngoài phạm vi (0 đến {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>Không thể dùng sizeof({0}) vì kích thước kiểu không cố định</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Tổng trường bit ({0} bit) vượt quá {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Trường bit không được rộng hơn 64 bit ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Giải nén {0} thất bại: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Đã dừng giải nén vì dữ liệu đạt giới hạn ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>Phiên bản này không hỗ trợ {0}</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Độ dài ({0}) vượt quá giới hạn 256 MB cho mỗi lần gọi</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Không thể gán giá trị cho '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Không đọc được dữ liệu tại 0x{0}</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Đã hủy việc đánh giá</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} không vừa với {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' không phải là hàm</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' nhận {1} đối số</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Không hỗ trợ tính năng '{0}' của Kaitai Struct</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Nội dung không khớp với các byte mong đợi</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Xác thực thất bại: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Đầu ra quá dài nên đã bị cắt bớt</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Tổng số phần đạt giới hạn ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' không phải là mẫu dữ liệu (pattern)</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' không có thành viên '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Đối số của '{0}' không hợp lệ: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Dữ liệu không khớp với magic {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Không ghi được tệp tạm: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Lỗi cú pháp YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Không cho phép thẻ YAML ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Quá nhiều lần mở rộng bí danh YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Khóa '{0}' bị trùng</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Không thể dùng ký tự Tab để thụt lề</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy không hợp lệ: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>YAML lồng nhau quá sâu</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Lỗi nội bộ của bộ đánh giá mẫu: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>Có phải bạn muốn nhập '{0}'?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Thông tin</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Lỗi</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Tập lệnh: Chạy</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 chạy tập lệnh chạy lại</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Tập lệnh: Chạy tệp tập lệnh...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx chạy tệp tập lệnh</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Tập lệnh: Dừng tất cả</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts dừng hủy tập lệnh</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Tập lệnh: Thêm thành phần tập lệnh C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install thêm thành phần tập lệnh cài đặt</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Chạy tập lệnh...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Chạy lại tập lệnh gần nhất</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Dừng tất cả tập lệnh</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Thêm thành phần tập lệnh C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Tự động chạy (hook)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook automatic run startup open save close script tự động chạy khởi động mở lưu đóng tập lệnh</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Thư mục tập lệnh</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>script folder library shared tập lệnh thư mục chia sẻ thư viện</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Bảng đầu ra</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Trình soạn thảo tập lệnh</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Số dòng tối đa giữ trong bảng đầu ra</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Khi vượt giới hạn, các dòng cũ nhất sẽ bị xóa (100-1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Hiện bảng đầu ra khi tập lệnh ghi đầu ra</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Hiển thị mà không chiếm tiêu điểm bàn phím.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Dừng khi có ngoại lệ lúc gỡ lỗi</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Chọn thời điểm trình gỡ lỗi JavaScript tạm dừng khi có ngoại lệ.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Không bao giờ</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Chỉ ngoại lệ chưa được bắt</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Tất cả ngoại lệ</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Thư mục tập lệnh bổ sung</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Các thư mục được thêm vào danh sách tập lệnh.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Các tập lệnh đăng ký ở đây sẽ tự động chạy. Không có gì chạy nếu bạn không thêm vào đây, và tập lệnh phải được tin cậy.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Chế độ an toàn đang bật nên tính năng tự động chạy bị tắt.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>giới hạn thời gian {0} giây</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Chưa đăng ký tập lệnh nào.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Thêm tập lệnh</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Thêm</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Chọn tệp...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Hãy chọn tập lệnh sẽ tự động chạy.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Thêm "{0}" bằng nút Thêm.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Bật {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Điều kiện</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Di chuyển lên</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Di chuyển xuống</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Chỉ chạy với dữ liệu khớp điều kiện. Để trống để khớp tất cả.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Phần mở rộng (ví dụ .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Mẫu đường dẫn (ví dụ C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Các byte đầu (hex, ví dụ 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Nguồn dữ liệu</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Bất kỳ</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Các thư mục liệt kê ở đây sẽ hiện trong danh sách tập lệnh, ngoài thư mục tập lệnh chuẩn.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Không có thư mục bổ sung.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Thêm thư mục...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Xóa</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Con trỏ</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Bật/tắt bảng danh sách tập lệnh</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>scripts macros list panel tập lệnh macro danh sách bảng</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Bật/tắt bảng đầu ra</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>output log messages panel đầu ra nhật ký thông báo bảng</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Bật/tắt bảng console</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>console repl panel bảng</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Hiện danh sách tập lệnh</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>scripts macros list panel tập lệnh macro danh sách bảng</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Hiện console</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Tập lệnh mới</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>create javascript js tạo tập lệnh</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Tập lệnh C# mới</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>create csharp csx tạo tập lệnh</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Mở mẫu</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>examples samples ví dụ mẫu</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Mở thư mục tập lệnh</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>folder explorer thư mục</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Chạy gỡ lỗi</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>debugger breakpoint step gỡ lỗi điểm dừng từng bước</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Tạm dừng</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>break debugger tạm dừng ngắt</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Xóa đầu ra</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>clear log output xóa nhật ký đầu ra</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Bắt đầu / dừng ghi</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>record macro ghi macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Phát macro gần nhất</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro phát lại macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Phát lặp lại</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop lặp macro vòng lặp</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Con trỏ: Sang trái</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left con trỏ di chuyển trái</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Con trỏ: Sang phải</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right con trỏ di chuyển phải</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Con trỏ: Lên</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up con trỏ di chuyển lên</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Con trỏ: Xuống</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down con trỏ di chuyển xuống</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Con trỏ: Lên một trang</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up con trỏ di chuyển lên trang</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Con trỏ: Xuống một trang</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down con trỏ di chuyển xuống trang</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Con trỏ: Đầu dòng</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start con trỏ di chuyển đầu dòng</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Con trỏ: Cuối dòng</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end con trỏ di chuyển cuối dòng</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Con trỏ: Đầu tệp</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start con trỏ di chuyển đầu tệp</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Con trỏ: Cuối tệp</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end con trỏ di chuyển cuối tệp</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Không có trình soạn thảo tập lệnh nào đang hiển thị.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Danh sách tập lệnh</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Console</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Tập lệnh mới</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Tập lệnh C# mới</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Mở thư mục tập lệnh</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Macro</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Bắt đầu / dừng ghi</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Phát macro gần nhất</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Phát lặp lại...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Danh sách tập lệnh</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Đầu ra</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Console</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Đầu ra</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Console</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Tất cả</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Tập lệnh: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Plugin: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Nguồn đầu ra</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Lọc</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Sao chép tất cả</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Lưu vào tệp</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Xuống dòng tự động</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Đã sao chép đầu ra.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Thông tin</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Lỗi</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Danh sách tập lệnh</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Lọc tập lệnh</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Tập lệnh mới</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Tập lệnh JavaScript mới</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Tập lệnh C# mới</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Mở thư mục tập lệnh</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Chạy</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Chỉnh sửa</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Mở bản sao để chỉnh sửa</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Đổi tên...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Tên mới</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Xóa (chuyển vào thùng rác)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Hiện trong thư mục</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Gán phím tắt...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Tự động chạy...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Macro</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Không tìm thấy thư mục</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>thường trú</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Ứng viên tự động chạy: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>Đã chuyển "{0}" vào thùng rác.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Không thể sao chép mẫu: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Không thể tạo tập lệnh: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Không thể đổi tên: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Không thể xóa: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Không thể mở thư mục: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Chạy</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Gỡ lỗi</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Dừng</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Tạm dừng</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Bước qua</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Bước vào</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Bước ra</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Tài liệu đích</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(tài liệu đang dùng)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Trình soạn thảo tập lệnh: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Sự cố</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Sự cố ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Gỡ lỗi</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Ngăn xếp lời gọi</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Biến</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Theo dõi</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Thêm biểu thức theo dõi</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Cục bộ</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Closure</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Toàn cục</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Tập lệnh</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Ngoại lệ: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Dòng {0}, cột {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Đã sửa đổi</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Đang chạy</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Đã tạm dừng ở dòng {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Thành công ({0} giây)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Đã dừng</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Chưa chạy</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Thất bại</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>Đã lưu "{0}".</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Không thể lưu tập lệnh: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Không thể đọc tập lệnh: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>"{0}" lớn hơn 10 MB. Hãy chỉnh sửa bằng trình soạn thảo bên ngoài.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Không thể chạy từng bước tập lệnh C# trong ứng dụng</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Điểm dừng</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Điểm dừng đã tắt</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Điểm dừng có điều kiện</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>"{0}" có thay đổi chưa lưu. Lưu trước khi đóng?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Lưu</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Không lưu</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Gỡ lỗi tập lệnh C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Đang chờ trình gỡ lỗi gắn vào. ID tiến trình: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Không thể chạy từng bước tập lệnh C# trong ứng dụng. Hãy gắn trình gỡ lỗi bên ngoài (Visual Studio hoặc Visual Studio Code) vào tiến trình này và gọi System.Diagnostics.Debugger.Break() trong tập lệnh để dừng.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Chạy mà không gắn</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Ngôn ngữ</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Đặt lại phiên</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Nhập biểu thức hoặc câu lệnh (Enter: chạy, Shift+Enter: xuống dòng)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Lịch sử console</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Đã bắt đầu phiên mới.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Đã dừng.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Đầu vào thất bại.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Hãy thêm thành phần tập lệnh C# để dùng C# trong console.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>khi khởi động</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>khi mở tệp</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>trước khi lưu</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>sau khi lưu</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>trước khi đóng</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Tập lệnh tự động chạy "{0}" ({1}) thất bại: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Tập lệnh tự động chạy "{0}" ({1}) đã bị dừng: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Tập lệnh tự động chạy "{0}" ({1}) thất bại 3 lần liên tiếp và đã bị tắt.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Mở cài đặt</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Tập lệnh "{0}" đã hủy việc lưu: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Tập lệnh trước khi lưu thất bại</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Tập lệnh "{0}" thất bại: {1}
+Vẫn lưu?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Không lưu</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Ghi macro</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Bắt đầu</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Chọn cách ghi các vị trí được chọn bằng chuột.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Tương đối so với con trỏ (mặc định)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Độ lệch tuyệt đối</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Không hỏi lại (dùng lựa chọn này)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Đã bắt đầu ghi.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Đang ghi ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Đang ghi macro, {0} thao tác. Bấm để dừng.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Không thể ghi thao tác này: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>chọn bằng bàn phím</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>xóa</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>nhập tại nhiều con trỏ</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>điền bằng nội dung này</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Đi tới độ lệch</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Chọn phạm vi</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Tìm</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Thay thế tất cả</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Không tìm thấy: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Không có gì được ghi.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Chưa có macro nào được ghi.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Hãy dừng ghi trước.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Macro gần nhất</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Không thể đọc macro: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Macro đã dừng: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Macro đã dừng ở lần lặp {0}, thao tác "{1}": {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Lưu macro ({0, plural, other {# thao tác}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Thư mục</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Phím tắt (tùy chọn)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>ví dụ Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Không lưu</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Hãy nhập tên.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Không đọc được phím tắt: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Không thể lưu ở đây: {0}. Hãy chọn thư mục khác.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Đã lưu macro "{0}".</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Phát lặp lại macro</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Macro</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Số lần</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Số lần (1 đến 1.000.000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Đến cuối tệp</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Với mỗi kết quả tìm kiếm</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>Trong vùng chọn</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Phát</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Hãy nhập một số từ 1 đến {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Giới hạn thời gian chạy (giây)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Thời gian một tập lệnh JavaScript được chạy trước khi tạm dừng và hỏi bạn có tiếp tục không. 0 nghĩa là không giới hạn. Thời gian chờ thao tác hàng loạt và chờ bạn nhập không được tính.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Giới hạn bộ nhớ (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Bộ nhớ tập lệnh JavaScript được dùng (16-4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Giới hạn độ sâu đệ quy</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Độ sâu tối đa của lời gọi hàm (100-10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Số tập lệnh chạy cùng lúc</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Các tập lệnh khác sẽ chờ đến khi một tập lệnh kết thúc (1-16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Chính sách tập lệnh (tổ chức)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Do tổ chức của bạn đặt trong tệp cài đặt. Tắt tập lệnh và plugin, hoặc chỉ cho phép plugin đã ký.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Không hạn chế</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Tắt tất cả tập lệnh và plugin</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Chỉ plugin đã ký</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Tập lệnh: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Tập lệnh: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Tập lệnh: {0} (đang ghi)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Tập lệnh: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Không có tập lệnh nào đang chạy.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Thành phần tập lệnh C# đã được cài đặt.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Tập lệnh bị tắt bởi cài đặt của tổ chức bạn (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Một tập lệnh đã hủy việc lưu: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Tập lệnh "{0}" đang chạy.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Dừng</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Tập lệnh "{0}" kết thúc với lỗi.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Chi tiết</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Tập lệnh "{0}" không được chạy: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Tập lệnh: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, other {# tập lệnh đang chạy}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Tập lệnh "{0}" đã chạy hơn {1} giây.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Tiếp tục (thêm {0} giây)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Chạy tập lệnh "{0}"?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor đang chạy với quyền quản trị viên. Tập lệnh này chạy với quyền quản trị viên và có thể làm những việc ảnh hưởng đến cả máy tính.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Tên: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Tác giả: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Mã này có thể làm bất cứ điều gì trên máy tính của bạn với quyền của bạn (kể cả đọc/ghi tệp và giao tiếp mạng). Chỉ chạy mã từ tác giả bạn tin cậy.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Tập lệnh này có thể đọc và ghi các tài liệu đang mở. Nó còn yêu cầu các quyền sau:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Tập lệnh này có thể đọc và ghi các tài liệu đang mở. Nó không yêu cầu quyền nào khác.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Tệp này đến từ internet. Chỉ chạy nếu bạn tin cậy nguồn gốc của nó.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Chạy</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Không chạy</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Chạy một lần</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Luôn cho phép</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Đọc bất kỳ tệp nào</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Tạo, ghi và xóa bất kỳ tệp nào</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Giao tiếp qua mạng (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Chạy chương trình bên ngoài</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Mở ổ đĩa, ổ (volume) và bộ nhớ tiến trình</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Đọc clipboard</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Thay đổi cài đặt ứng dụng</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Tập lệnh yêu cầu quyền "{0}" ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Cho phép</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Không cho phép</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Thành phần tập lệnh C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Tập lệnh C# cần thành phần tập lệnh C# (Roslyn) nhưng chưa được cài đặt. Thêm ngay bây giờ?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Thêm</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Tải xuống thành phần.
+Kích thước: {0}
+Lưu tại: {1}
+Tải từ: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Tải xuống</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Dữ liệu tải xuống lớn hơn {0} byte dự kiến nên đã dừng.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Đang thêm thành phần tập lệnh C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Đã thêm thành phần tập lệnh C#.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Không thể thêm thành phần tập lệnh C#: {0} Bạn có thể thêm thủ công: tải tệp zip của thành phần từ trang phát hành và giải nén vào thư mục components\csharp\&lt;version&gt;\ trong thư mục dữ liệu.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Không thể thêm thành phần tập lệnh C#: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Không rõ bảng mã ký tự "{0}". Cột văn bản không thay đổi.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>Không thể dùng {0} "{1}" (không đọc được biểu thức tại vị trí {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} "{1}" nằm ngoài tệp (độ dài {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>Phiên bản này không có {0}.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Không có ổ đĩa nào khớp với "{0}".</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Không có ổ (volume) nào khớp với "{0}".</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Không có tiến trình nào khớp với "{0}".</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" khớp với {1} tiến trình. Hãy chỉ định ID tiến trình bằng --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Mở nguồn dữ liệu plugin</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Thao tác plugin</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Quản lý plugin...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Quản lý</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>plugin manager extensions add-ins quản lý plugin tiện ích mở rộng</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Chỉ tải plugin đã ký</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Plugin không có chữ ký hợp lệ sẽ không được tải. Có hiệu lực sau khi khởi động lại.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Thư mục phát triển plugin</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Các thư mục đầu ra của bản dựng được tải trực tiếp làm plugin (chỉnh sửa trong trình quản lý plugin).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Plugin</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Plugin thêm các kiểu trình kiểm tra, hàm băm, định dạng, lệnh và bảng. Plugin chạy với cùng quyền của bạn; chỉ bật plugin từ tác giả bạn tin cậy. Thay đổi có hiệu lực sau khi khởi động lại.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Chế độ an toàn: không tải plugin nào. Danh sách và cài đặt không thay đổi.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Thêm...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Khởi động lại ngay</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Mở thư mục plugin</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Xóa</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Cài đặt plugin...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Đã bật</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Đã bật</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Đã tắt</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Chưa cài plugin nào. Thêm tệp .hexplugin bằng Thêm... hoặc thả vào danh sách.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Thư mục phát triển</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Plugin được tải trực tiếp từ các thư mục đầu ra của bản dựng này và hiện là Phát triển. Bạn chỉ được hỏi một lần cho mỗi thư mục.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Thêm thư mục phát triển...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Đã thêm thư mục phát triển. Khởi động lại để tải.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Nhà phát hành tin cậy</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Plugin do các nhà phát hành này ký sẽ được bật mà không hỏi. Xóa nhà phát hành để được hỏi lại.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Plugin đã cài</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Thả tệp .hexplugin vào đây để thêm.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Thêm plugin</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>nhà phát hành không rõ</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Được ký bởi {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Được ký bởi {0} (không kiểm tra được việc thu hồi)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Chữ ký không hợp lệ</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Chưa kiểm tra chữ ký</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Chưa ký</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Đã bật</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Đã tắt</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Không thể tải ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Đã dừng ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Chưa tải ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Đang tải...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — thay đổi sau khi khởi động lại</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Phát triển</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Không có tiện ích mở rộng</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Thêm: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (đã tắt: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>Không thể thêm plugin trong chế độ an toàn.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Plugin chưa được thêm: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Xóa plugin</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Xóa "{0}"? Plugin đã tải sẽ bị xóa sau khi khởi động lại.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Cài đặt của {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>kiểu trình kiểm tra</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hàm băm</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>định dạng nhập</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>định dạng xuất</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>nguồn dữ liệu</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>chế độ xem chuyển đổi</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>thao tác dữ liệu</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>lệnh</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>mục menu</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>bảng</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>trang cài đặt</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>hàm mẫu</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>phát hiện loại tệp</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>trình dịch ngược (disassembler)</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>quy tắc tô màu</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API tập lệnh</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>không rõ</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Bật plugin "{0}"?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (cập nhật)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Nhà phát hành: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Được tải từ thư mục phát triển.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Mã này có thể làm bất cứ điều gì trên máy tính của bạn với quyền của bạn (kể cả đọc/ghi tệp và truy cập mạng). Chỉ bật plugin từ tác giả bạn tin cậy.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Plugin khai báo: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Plugin này chưa được ký. Không thể xác minh nhà phát hành của nó.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Luôn tin cậy plugin từ {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Bật</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Không bật</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor đang chạy với quyền quản trị viên. Plugin này chạy với quyền quản trị viên và có thể ảnh hưởng đến cả máy tính.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Tải plugin với quyền quản trị viên?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor đang chạy với quyền quản trị viên. Các plugin này chạy với quyền quản trị viên và có thể ảnh hưởng đến cả máy tính:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— chưa tin cậy</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Tải</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Không tải</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Plugin "{0}" đã bị dừng vì lỗi liên tục xảy ra.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Tắt plugin</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Thử lại khi khởi động lại</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Plugin "{0}" sẽ không được tải sau khi khởi động lại.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Tắt plugin?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>Lần trước HexEditor kết thúc bất ngờ, có thể do plugin "{0}". Tắt nó?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Giữ bật</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Hiện không thể chạy lệnh plugin này.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Lệnh "{0}" của plugin "{1}" thất bại. Xem bảng đầu ra.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Mở: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>Không thể mở {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Sao chép dưới dạng: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Đã sao chép dưới dạng {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Thao tác dữ liệu: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Thao tác dữ liệu {0} thất bại: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Do plugin {0} thêm</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Bảng plugin</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Plugin không thể tạo bảng này.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(đã dừng)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Không thể sửa kiểu plugin này bằng giá trị này.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Cấu trúc</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Đầu ra mẫu</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Mẫu cấu trúc</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Áp dụng mẫu...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Áp dụng mẫu từ vị trí này...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Hiện kiểu tại con trỏ...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Áp dụng Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Tìm mẫu phù hợp</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Chạy lại</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Bỏ áp dụng</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Xuất kết quả...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Mẫu mới</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Mở mẫu...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Sửa mẫu</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Chuyển .ksy sang HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Quản lý mẫu</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Tô màu cấu trúc dữ liệu</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Cấu trúc</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Đầu ra mẫu</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Kết quả cấu trúc...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Áp dụng mẫu từ vị trí này...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Dừng khi đọc ở đây</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Trình soạn thảo mã</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Mẫu: Áp dụng</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;cấu trúc;phân tích</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Mẫu: Áp dụng từ vị trí này</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;con trỏ</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Mẫu: Hiện kiểu tại con trỏ</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;theo dõi</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Mẫu: Áp dụng Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Mẫu: Chạy lại</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;đánh giá lại</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Mẫu: Bỏ áp dụng</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;bỏ áp dụng</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Mẫu: Dừng đánh giá</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;hủy</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Mẫu: Hiện cây kết quả</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;cây</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Mẫu: Hiện đầu ra</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;lỗi</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Mẫu: Sửa giá trị</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;thay đổi</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Mẫu: Đi tới định nghĩa</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;khai báo</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Mẫu: Đi tới đích của con trỏ</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;con trỏ</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Mẫu: Sao chép giá trị</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Mẫu: Thêm vào dấu trang</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;dấu trang</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Mẫu: Xuất kết quả</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;xuất</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Mẫu: Bật/tắt tô màu</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;đánh dấu</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Mẫu: Tìm mẫu phù hợp</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;phát hiện</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Mẫu: Mới</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;tạo</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Mẫu: Mở</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;tệp</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Mẫu: Sửa</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;trình soạn thảo</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Mẫu: Quản lý</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;thư viện</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Mẫu: Chuyển .ksy sang HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;chuyển đổi</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Mẫu: Tham chiếu thư viện chuẩn</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;trợ giúp hàm</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Mẫu: Chạy thử</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;kiểm thử;chưa lưu</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Mẫu: Dừng khi đọc ở đây</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;điểm dừng dữ liệu</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Xem: Bảng cấu trúc</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;mẫu kết quả</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Xem: Bảng đầu ra mẫu</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;lỗi</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Trình soạn thảo mã: Bắt đầu gỡ lỗi / tiếp tục</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;chạy;gỡ lỗi</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Trình soạn thảo mã: Dừng gỡ lỗi</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;kết thúc</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Trình soạn thảo mã: Bật/tắt điểm dừng</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;điểm dừng</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Trình soạn thảo mã: Bước qua</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;tiếp</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Trình soạn thảo mã: Bước vào</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;vào</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Trình soạn thảo mã: Bước ra</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;trả về</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Trình soạn thảo mã: Chạy đến con trỏ</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;con trỏ</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Trình soạn thảo mã: Thêm biểu thức theo dõi</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;theo dõi</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Trình soạn thảo mã: Đi tới định nghĩa</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;khai báo</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Trình soạn thảo mã: Tìm tham chiếu</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;nơi dùng</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Trình soạn thảo mã: Định dạng tài liệu</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;thụt lề</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Trình soạn thảo mã: Bật/tắt chú thích</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;chú thích</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Trình soạn thảo mã: Hiện gợi ý hoàn thành</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;tự hoàn thành</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Tự động áp dụng</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Việc cần làm khi một mẫu khớp với tệp bạn mở (theo số magic, kiểu MIME hoặc phần mở rộng).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Gợi ý</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Luôn áp dụng</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Không làm gì</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Đánh giá lại sau khi sửa</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Đánh giá lại các mẫu đã áp dụng 500 ms sau lần sửa cuối. Khi tắt, hãy dùng Chạy lại trong cây kết quả.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Tô màu cấu trúc</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Tô màu các phạm vi mẫu dữ liệu (pattern) của mẫu trong chế độ xem Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Độ mờ đục của màu (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Độ mờ đục của màu cấu trúc phủ lên nền chế độ xem Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Thư mục mẫu</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Các thư mục bổ sung được tìm mẫu của người dùng.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Mẫu trình kiểm tra</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Các mẫu có kiểu [[inspector]] được hiện trong trình kiểm tra dữ liệu.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Tùy chọn mẫu</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Các mẫu bị tắt, mẫu bị loại khỏi tự động áp dụng và các gợi ý bị ẩn.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Quản lý mẫu</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Thư mục mẫu</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Mẫu trình kiểm tra</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Thêm thư mục...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Xóa</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Không thể truy cập thư mục này.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Lọc theo tên</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Nhập...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Mẫu mới</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Đã bật</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Tự động áp dụng</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Sửa</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Xuất...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Bị ẩn bởi mẫu khác cùng tên.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Đã tắt gợi ý</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Không có</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Hiện lại</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Thêm mẫu trình kiểm tra...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>kích thước không cố định</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Mẫu này có các kiểu trình kiểm tra có kích thước không cố định hoặc lớn hơn 4 KB. Nên dùng kiểu kích thước cố định từ 4 KB trở xuống.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Đã nhập {0} tệp mẫu.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Không thể nhập: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Đã xuất {0} tệp tới {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Không thể xuất: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Mẫu chuẩn là một phần của ứng dụng. Dùng Nhân bản và sửa để xuất một bản sao.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Áp dụng mẫu</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Áp dụng mẫu</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Chạy lại</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Chạy lại</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Dừng đánh giá</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Dừng đánh giá</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Xuất</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Xuất</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Cột</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Cột</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Theo con trỏ</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Theo con trỏ</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Lọc theo tên, giá trị hoặc kiểu</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Lọc</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Cây kết quả</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Đường dẫn (ví dụ chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Đánh giá tất cả và tìm kiếm</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} kết quả khớp</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Không tìm thấy đường dẫn '{0}'.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Giá trị</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Kiểu</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Độ lệch</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Kích thước</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Chú thích</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Thứ tự byte</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Kết thúc</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Màu</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Thứ tự cột</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Chuyển {0} sang trái</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Chuyển {0} sang phải</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Đặt lại cột</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Đang đánh giá…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Đã đánh giá: {0} mẫu dữ liệu (pattern)</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} lỗi, {1} cảnh báo</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Số mẫu dữ liệu (pattern) đạt giới hạn ({0}). Đang hiện kết quả một phần.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Tăng giới hạn và chạy lại</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} phần tử</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bit {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / Cục bộ: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Giá trị chưa định nghĩa</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Chưa định nghĩa</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Theo</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Trỏ đến {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>độ lệch {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>kích thước {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(chưa lưu)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(không tìm thấy tệp mẫu)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Chưa áp dụng mẫu nào.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Không có đánh giá nào đang chạy.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Hãy chọn một nút trong cây kết quả.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Nút đã chọn không phải là con trỏ.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Đích của con trỏ là null hoặc nằm ngoài dữ liệu.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Không tìm thấy mẫu '{0}'.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Một tài liệu có thể áp dụng tối đa {0} mẫu.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>Không tìm thấy tệp mẫu '{0}'.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Đang đánh giá mẫu {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON lớn hơn 64 MB. Hãy lưu vào tệp thay thế.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Lưu vào tệp...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Mẫu: {0}
+Độ lệch bắt đầu: {1}
+Loại: {2}
+Thứ tự byte: {3}
+Kiểu: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Chuẩn</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Người dùng</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Gần đây</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Dùng tập lệnh</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Chi tiết</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Đi tới dữ liệu</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Đi tới đích của con trỏ</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Đi tới định nghĩa</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Sửa giá trị</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Sao chép giá trị</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Sao chép tên và giá trị</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Sao chép đường dẫn</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Sao chép byte</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Sao chép độ lệch</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Sao chép cây con dưới dạng JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Thêm vào dấu trang</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Thêm các phạm vi vào vùng chọn nhiều</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Mở phần trong tab mới</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Áp dụng mẫu từ vị trí này...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Dừng khi đọc ở đây</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Chuyển cố định / theo dõi</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Chuyển thành cố định</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Cài đặt áp dụng</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Xuất...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Chạy lại</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Bỏ áp dụng</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Giá trị</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Mẫu dữ liệu này chỉ có chuyển đổi khi đọc nên bạn đang sửa giá trị thô.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Nhập một số</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Đúng</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Điền phần còn lại bằng số 0</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Giờ địa phương</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Múi giờ</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Hãy nhập giá trị từ 0 đến {1} ({0} bit).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Giá trị nằm ngoài phạm vi của kiểu.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Văn bản dài hơn trường ({0} byte).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Chuyển đổi khi ghi thất bại: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Không đọc được giá trị.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Không thể sửa mẫu dữ liệu bên trong một phần.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Mẫu dữ liệu này chỉ đọc.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Không thể sửa giá trị được tính toán.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Không thể sửa nút lỗi.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Nút này không có giá trị để sửa.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Sửa giá trị mẫu</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Áp dụng mẫu</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Áp dụng Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Tìm mẫu</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Tên, mô tả, phần mở rộng hoặc kiểu MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Độ lệch bắt đầu</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Hãy nhập độ lệch nằm trong tài liệu.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Thứ tự byte mặc định</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Theo cài đặt tài liệu</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Theo cài đặt tài liệu (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Theo cài đặt tài liệu (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Loại</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Cố định</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Theo con trỏ</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Kiểu (theo dõi)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Áp dụng</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Phiên bản {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Giấy phép: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Mẫu phù hợp</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (điểm {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>số magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>phần mở rộng</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Không có mẫu nào khớp với tài liệu này.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Tệp này trông giống {0}. Áp dụng mẫu "{0}"?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(dùng tập lệnh)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Áp dụng</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Ứng viên khác...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Không hiện cho định dạng này</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Đã xảy ra lỗi khi áp dụng mẫu "{0}".</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Xuất kết quả cấu trúc</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Đích</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Toàn bộ phần áp dụng</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Cây con đã chọn ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Số phần tử mảng tối đa</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Độ sâu tối đa</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Không giới hạn</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Gồm cả mẫu dữ liệu bị ẩn</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Ghi độ lệch dưới dạng chuỗi thập lục phân</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Lưu...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Đang xuất kết quả cấu trúc</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} nút</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Đã xuất tới {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Không thể xuất tới {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Không đủ dung lượng đĩa.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Xóa</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Xóa</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Đầu ra mẫu</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Đi tới mã nguồn</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Đi tới dữ liệu</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Trợ giúp về {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Chạy thử</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Tài liệu đích</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Tài liệu đích</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Bắt đầu gỡ lỗi / tiếp tục</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Bước qua</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Bước vào</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Bước ra</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Dừng</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Đánh giá theo thứ tự khi gỡ lỗi</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Định dạng tài liệu</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Bật/tắt chú thích</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Mã nguồn mẫu</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Gợi ý hoàn thành</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Biến</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Theo dõi</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Ngăn xếp lời gọi</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Điểm dừng</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Biến</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Theo dõi</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Ngăn xếp lời gọi</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Điểm dừng</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Thêm biểu thức theo dõi</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Thêm</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Biểu thức (ví dụ c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Sự cố</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Tham chiếu tại dòng {0}, cột {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Mẫu mới</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Không có trình soạn thảo mẫu nào đang mở.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Không đang gỡ lỗi.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Hãy mở tài liệu để chạy mẫu.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Không thể mở mẫu {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Không thể lưu mẫu: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Không thể lưu trực tiếp mẫu chuẩn. Dùng Nhân bản và sửa để lưu một bản sao vào thư mục mẫu của bạn.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Nhân bản và sửa</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Hãy sửa các lỗi cú pháp trước khi gỡ lỗi.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Đánh giá lười bị tắt khi gỡ lỗi. Mảng lớn có thể mất nhiều thời gian.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Điểm dừng dữ liệu</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Trình gỡ lỗi sẽ dừng khi một mẫu dữ liệu (pattern) chứa {0} được tạo.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Không thể chuyển {0} sang HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Đã đánh giá: {0} mẫu dữ liệu (pattern) (dừng ở giới hạn {1}; hiện kết quả một phần)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>bước</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>mẫu dữ liệu</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>bộ nhớ</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>thời gian</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Đi tới dòng</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Số dòng (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Không có trình soạn thảo mã (mẫu hoặc tập lệnh) nào đang hiển thị.</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Trình soạn thảo này không hỗ trợ lệnh này.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Theo như con trỏ</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer offset address jump inspector con trỏ độ lệch địa chỉ nhảy trình kiểm tra</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Theo như con trỏ</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Tuyệt đối (độ lệch)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Tuyệt đối (địa chỉ)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Tương đối so với con trỏ</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Tương đối so với cuối giá trị</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Tương đối so với một cơ sở…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Cơ sở (biểu thức)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Đi</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Đích {0} nằm ngoài tài liệu (độ dài {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Hàng này không có giá trị để dùng làm vị trí</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Hãy nhập cơ sở dưới dạng biểu thức, ví dụ 0x400000 hoặc bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Hãy chọn một hàng số nguyên trong trình kiểm tra dữ liệu</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Di chuyển như mảng kiểu này</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Phần tử trước</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Phần tử sau</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Thoát chế độ mảng</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Số thứ tự phần tử</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Kích thước phần tử</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(không nằm trên ranh giới phần tử)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Phần tử {0} nằm ngoài tài liệu</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Giá trị</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Biểu thức</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Có tham chiếu vòng giữa các dấu trang</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Tham chiếu bm.name lồng nhau quá {0} cấp</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Vị trí {0} nằm ngoài tài liệu</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Lỗi biểu thức vị trí: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Giá trị</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Sửa giá trị dấu trang</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(không có kiểu)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Kiểu</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Thứ tự byte</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Tài liệu</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Biểu thức vị trí</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>ví dụ u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Xem: Bảng xem ảnh</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image trực quan ảnh điểm ảnh hình ảnh</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Xem ảnh</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Xem ảnh</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>Đen trắng 1 bit</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>Xám 2 bit</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>Xám 4 bit</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>Xám 8 bit</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bit (màu chủ đề byte)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Theo con trỏ</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Đầu vùng chọn</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Cố định</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Từ trên xuống</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Từ dưới lên (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Tự động</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Định dạng điểm ảnh</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Chiều rộng (điểm ảnh)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Byte mỗi hàng</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Tự động</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Vị trí bắt đầu</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Vị trí bắt đầu cố định</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Thứ tự hàng</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Thu phóng</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Thêm tùy chọn</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Ảnh</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Cuộn hàng</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Lưu thành ảnh…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Phạm vi xem quá lớn; chỉ vẽ 64 MB đầu tiên</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Hãy nhập vị trí bắt đầu cố định dưới dạng biểu thức</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Không có ảnh để lưu</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Đã lưu ảnh vào {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Không thể lưu {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Ảnh PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Mặc định</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Hết thời gian</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Kiểu này mất hơn {0} ms; sẽ chạy lại khi vị trí bắt đầu thay đổi</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Lỗi: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Tệp kiểu trình kiểm tra {0}, dòng {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Chế độ ngoại tuyến đang bật (hoặc đã tắt tải xuống) nên thành phần không được tải. Để thêm thủ công, hãy lấy {0} từ trang phát hành của phiên bản này (trên máy khác nếu cần) và giải nén vào {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Đã khởi động ở chế độ an toàn. Plugin và tập lệnh tự động chạy không được tải.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Khởi động lại bình thường</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Mẫu: Tìm giá trị trường</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;tìm kiếm;trường;giá trị</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Chưa áp dụng mẫu nào.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Lỗi cú pháp tại ký tự {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>điều kiện trống</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>thiếu giá trị</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>điều kiện không xác định (dùng name:, type: hoặc value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>phép so sánh không xác định (dùng =, !=, &lt;, &lt;=, &gt;, &gt;= hoặc ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>dấu ngoặc kép chưa được đóng</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>biểu thức chính quy không hợp lệ</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Giá trị mẫu</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Nhấn Enter để tìm giá trị trường. Kết quả hiện trong Kết quả tìm kiếm.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Trường</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (do người dùng định nghĩa)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (mẫu {1})</value></data>
 </root>

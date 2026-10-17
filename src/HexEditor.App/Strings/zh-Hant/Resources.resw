@@ -5481,4 +5481,1072 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static 唯讀</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>文字編碼（ascii、utf-8、cp932 等）</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>完整文件（\documentclass ... \end{document}）</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>非預期的字元 '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>缺少 '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>非預期的 '{0}'</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>無效的數字 '{0}'</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>字串常值未結束</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>無效的逸出序列 '{0}'</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>註解未結束</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>巢狀過深 (上限 {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>無效的位元組字串 '{0}'</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>範本不是有效的 UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>範本過大 (上限 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>錯誤過多，僅顯示前 {0} 個</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>pragma '{0}' 的值 '{1}' 無效</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>已忽略未知的 pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' 已在 {1} 定義</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>找不到 '{0}' (已搜尋: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>範本無法執行此作業: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>此範本需要應用程式版本 {0} 或更新版本</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>已忽略未知的屬性 '{0}'</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} 無法放入 {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>值 {0} 有多個名稱 (使用 '{1}')</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} 超過最大值，改用 {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>包含匯入的範本過大 (上限 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>'{0}' 未定義</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>除以零</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>型別不符: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>遞迴過深 (上限 {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>已執行的陳述式數達到上限 ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>模式數達到上限 ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>評估記憶體達到上限 ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>評估時間達到上限 ({0} 秒)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>放置位置 0x{0} 在資料範圍之外</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) 在資料範圍之外</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} 位元組) 在資料範圍之外</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>位置不能為負數 ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>元素大小為 0，陣列無法結束</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>已到達資料結尾，陣列結束</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>陣列在上限處被截斷 ({0} 個元素)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>結尾不完整的元素 ({0} 位元組) 未包含</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>找不到字串結束字元</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 超過 10 位元組 (位移 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>結構的內容 ({0} 位元組) 超過指定大小 ({1} 位元組)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>指標型別必須是整數型別</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>超出範圍 (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>無法在函式內宣告模式</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>斷言失敗: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>擴充函式 '{0}' 未註冊</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>擴充函式 '{0}' 失敗: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>不允許執行擴充函式 '{0}'</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>索引 {0} 超出範圍 (0 到 {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>型別大小不固定，無法使用 sizeof({0})</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>位元欄位總計 ({0} 位元) 超過 {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>位元欄位不能超過 64 位元 ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>{0} 解壓縮失敗: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>解壓縮後的資料達到上限 ({0})，已中止解壓縮</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>此版本不支援 {0}</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>長度 ({0}) 超過每次呼叫 256 MB 的上限</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>無法指派給 '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>無法讀取 0x{0} 處的資料</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>評估已取消</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} 無法放入 {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' 不是函式</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' 需要 {1} 個引數</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>不支援 Kaitai Struct 功能 '{0}'</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>內容與預期的位元組不一致</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>驗證失敗: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>輸出過長，已截斷</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>各區段的總數達到上限 ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' 不是模式</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' 沒有成員 '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>'{0}' 的引數無效: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>資料與魔術數字 {0} 不一致</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>無法寫入暫存檔: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>YAML 語法錯誤: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>不允許使用 YAML 標籤 ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>YAML 別名展開過多</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>索引鍵 '{0}' 重複</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>縮排不能使用定位字元</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy 無效: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>YAML 巢狀過深</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>範本評估器內部錯誤: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>您是不是想輸入 '{0}'?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>資訊</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>錯誤</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>指令碼</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>指令碼: 執行</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 執行 指令碼 重新執行</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>指令碼: 執行指令碼檔案...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx 執行 指令碼檔案</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>指令碼: 全部停止</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts 停止 取消 指令碼</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>指令碼: 新增 C# 指令碼元件...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install 新增 指令碼元件 安裝</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>指令碼(R)</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>執行指令碼(R)...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>重新執行上一個指令碼(L)</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>停止所有指令碼(S)</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>新增 C# 指令碼元件(C)...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>自動執行 (掛鉤)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook automatic run startup open save close script 掛鉤 自動執行 啟動 開啟 儲存 關閉 指令碼</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>指令碼資料夾</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>script folder library shared 指令碼 資料夾 共用 程式庫</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>輸出面板</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>指令碼編輯器</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>輸出面板保留的最大行數</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>超過上限時，會從最舊的行開始移除 (100-1000000)。</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>指令碼有輸出時顯示輸出面板</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>顯示時不會搶佔鍵盤焦點。</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>偵錯時遇到例外就中斷</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>選擇 JavaScript 偵錯工具在何時因例外而暫停。</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>永不中斷</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>僅未攔截的例外</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>所有例外</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>其他指令碼資料夾</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>加入指令碼清單的資料夾。</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>在此註冊的指令碼會自動執行。未在此新增的指令碼不會執行，且指令碼必須是受信任的。</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>安全模式已開啟，因此自動執行已停用。</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>時間限制 {0} 秒</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>尚未註冊任何指令碼。</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>新增指令碼</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>新增</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>選擇檔案...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>請選擇要自動執行的指令碼。</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>按一下「新增」按鈕即可新增「{0}」。</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>啟用 {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>條件</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>上移</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>下移</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>僅對符合條件的資料執行。留空表示全部符合。</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>副檔名 (例如 .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>路徑模式 (例如 C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>開頭的位元組 (十六進位，例如 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>資料來源</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>任何</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>除標準指令碼資料夾外，這裡列出的資料夾也會顯示在指令碼清單中。</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>沒有其他資料夾。</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>新增資料夾...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>指令碼</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>巨集</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>指令碼</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>游標</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>切換指令碼清單面板</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>scripts macros list panel 指令碼 巨集 清單 面板</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>切換輸出面板</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>output log messages panel 輸出 記錄 訊息 面板</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>切換主控台面板</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>console repl panel 主控台 面板</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>顯示指令碼清單</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>scripts macros list panel 指令碼 巨集 清單 面板</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>顯示主控台</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>console repl 主控台</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>新增指令碼</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>create javascript js 新增 指令碼</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>新增 C# 指令碼</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>create csharp csx 新增 指令碼</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>開啟範例</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>examples samples 範例 示例</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>開啟指令碼資料夾</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>folder explorer 資料夾 檔案總管</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>偵錯執行</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>debugger breakpoint step 偵錯 中斷點 逐步執行</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>暫停</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>break debugger 暫停 中斷</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>清除輸出</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>clear log output 清除 記錄 輸出</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>開始 / 停止錄製</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>record macro 錄製 巨集</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>播放上一個巨集</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro 重播 巨集</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>重複播放</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop 重複 巨集 迴圈</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>游標: 向左</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left 游標 移動 向左</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>游標: 向右</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right 游標 移動 向右</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>游標: 向上</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up 游標 移動 向上</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>游標: 向下</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down 游標 移動 向下</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>游標: 上一頁</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up 游標 移動 上一頁</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>游標: 下一頁</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down 游標 移動 下一頁</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>游標: 行首</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start 游標 移動 行首</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>游標: 行尾</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end 游標 移動 行尾</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>游標: 檔案開頭</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start 游標 移動 檔案開頭</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>游標: 檔案結尾</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end 游標 移動 檔案結尾</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>未顯示指令碼編輯器。</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>指令碼清單(I)</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>主控台(O)</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>新增指令碼(N)</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>新增 C# 指令碼(W)</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>範例(M)</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>開啟指令碼資料夾(F)</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>巨集(M)</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>開始 / 停止錄製(R)</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>播放上一個巨集(P)</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>重複播放(T)...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>指令碼清單(J)</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>輸出(A)</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>主控台(Z)</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>指令碼</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>輸出</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>主控台</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>全部</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>指令碼: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>外掛程式: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>輸出來源</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>篩選</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>清除</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>全部複製</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>儲存到檔案</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>自動換行</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>已複製輸出。</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>資訊</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>警告</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>錯誤</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>指令碼清單</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>篩選指令碼</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>新增指令碼</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>新增 JavaScript 指令碼</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>新增 C# 指令碼</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>開啟指令碼資料夾</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>執行</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>編輯</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>開啟複本進行編輯</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>重新命名...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>新名稱</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>刪除 (移到資源回收筒)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>在資料夾中顯示</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>指定快速鍵...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>自動執行...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>指令碼</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>巨集</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>範例</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>找不到資料夾</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>常駐</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>自動執行候選: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>已將「{0}」移到資源回收筒。</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>無法複製範例: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>無法建立指令碼: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>無法重新命名: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>無法刪除: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>無法開啟資料夾: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>執行</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>偵錯</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>暫停</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>逐程序</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>逐步執行</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>跳出</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>目標檔案</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(目前檔案)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>指令碼編輯器: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>問題</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>問題 ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>偵錯</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>呼叫堆疊</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>變數</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>監看</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>新增監看運算式</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>區域</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>閉包</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>全域</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>指令碼</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>例外: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>第 {0} 行，第 {1} 欄</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>已修改</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>執行中</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>已在第 {0} 行暫停</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>成功 ({0} 秒)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>已停止</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>未執行</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>已儲存「{0}」。</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>無法儲存指令碼: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>無法讀取指令碼: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>「{0}」超過 10 MB，請使用外部編輯器編輯。</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>應用程式內無法對 C# 指令碼逐步執行</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>中斷點</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>已停用的中斷點</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>條件中斷點</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>「{0}」有未儲存的變更。關閉前要儲存嗎?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>儲存</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>不儲存</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>偵錯 C# 指令碼</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>正在等候偵錯工具附加。處理序識別碼: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>應用程式內無法對 C# 指令碼逐步執行。請將外部偵錯工具 (Visual Studio 或 Visual Studio Code) 附加到此處理序，並在指令碼中呼叫 System.Diagnostics.Debugger.Break() 以停止。</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>不附加直接執行</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>語言</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>重設工作階段</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>清除</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>輸入運算式或陳述式 (Enter: 執行，Shift+Enter: 換行)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>主控台歷程記錄</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>已開始新工作階段。</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>已停止。</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>輸入執行失敗。</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>若要在主控台中使用 C#，請先新增 C# 指令碼元件。</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>啟動時</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>開啟檔案時</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>儲存前</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>儲存後</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>關閉前</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>自動執行指令碼「{0}」({1}) 失敗: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>自動執行指令碼「{0}」({1}) 已被停止: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>自動執行指令碼「{0}」({1}) 連續失敗 3 次，已被停用。</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>開啟設定</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>指令碼「{0}」取消了儲存: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>儲存前執行的指令碼失敗</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>指令碼「{0}」失敗: {1}
+仍要儲存嗎?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>儲存</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>不儲存</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>錄製巨集</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>選擇如何記錄用滑鼠指定的位置。</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>相對於游標 (預設)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>絕對位移</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>不再詢問 (使用此選擇)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>已開始錄製。</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>正在錄製 ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>正在錄製巨集，已記錄 {0} 個作業。按一下即可停止。</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>無法錄製此作業: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>用鍵盤選取</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>在多個游標處輸入</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>用此內容填滿</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>移至位移</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>選取範圍</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>尋找</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>全部取代</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>找不到: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>沒有錄製任何內容。</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>尚無已錄製的巨集。</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>請先停止錄製。</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>上一個巨集</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>無法讀取巨集: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>巨集已停止: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>巨集在第 {0} 次重複、作業「{1}」處停止: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>儲存巨集 ({0, plural, other {# 個作業}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>資料夾</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>快速鍵 (選用)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>例如 Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>不儲存</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>請輸入名稱。</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>無法辨識該快速鍵: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>無法儲存到此處: {0}。請選擇其他資料夾。</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>已儲存巨集「{0}」。</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>重複播放巨集</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>巨集</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>次數</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>次數 (1 到 1,000,000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>直到檔案結尾</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>對每個搜尋結果</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>在選取範圍內</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>播放</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>請輸入 1 到 {0} 之間的數字。</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>執行時間限制 (秒)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>JavaScript 指令碼執行超過此時間後會暫停，並詢問是否繼續。0 表示無限制。等待大量作業和等待您輸入的時間不計入。</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>記憶體限制 (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>JavaScript 指令碼可使用的記憶體 (16-4096 MB)。</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>遞迴深度限制</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>函式呼叫的最大深度 (100-10000)。</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>同時執行的指令碼數</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>其餘指令碼會等待，直到有指令碼結束 (1-16)。</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>指令碼原則 (組織)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>由您的組織在設定檔中設定。可停用指令碼和外掛程式，或僅允許已簽署的外掛程式。</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>無限制</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>停用所有指令碼和外掛程式</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>僅限已簽署的外掛程式</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>指令碼: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>指令碼: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>指令碼: {0} (寫入中)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>指令碼: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>沒有正在執行的指令碼。</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>已安裝 C# 指令碼元件。</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>指令碼已被您的組織設定 (scripts.policy) 停用。</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>指令碼取消了儲存: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>指令碼「{0}」正在執行。</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>指令碼「{0}」因錯誤而結束。</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>詳細資料</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>指令碼「{0}」未執行: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>指令碼: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, other {# 個指令碼正在執行}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>指令碼「{0}」已執行超過 {1} 秒。</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>繼續 (再執行 {0} 秒)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>要執行指令碼「{0}」嗎?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor 正以系統管理員身分執行。此指令碼將以系統管理員權限執行，可執行影響整台電腦的作業。</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>名稱: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>作者: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>此程式碼可以用您的權限在電腦上執行任何作業 (包括讀寫檔案和網路通訊)。請只執行來自您信任的作者的程式碼。</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>此指令碼可以讀寫已開啟的檔案，並且還要求下列權限:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>此指令碼可以讀寫已開啟的檔案，不要求其他權限。</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>此檔案來自網際網路。僅當您信任其來源時才執行。</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>執行</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>不執行</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>執行一次</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>一律允許</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>讀取任意檔案</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>建立、寫入及刪除任意檔案</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>透過網路通訊 (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>執行外部程式</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>開啟磁碟、磁碟區和處理序記憶體</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>讀取剪貼簿</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>變更應用程式設定</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>指令碼要求權限「{0}」({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>允許</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>不允許</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>C# 指令碼元件</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>C# 指令碼需要 C# 指令碼元件 (Roslyn)，但尚未安裝。要現在新增嗎?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>新增</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>下載元件。
+大小: {0}
+儲存位置: {1}
+下載來源: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>下載</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>下載內容超過預期的 {0} 位元組，已停止。</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>正在新增 C# 指令碼元件</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>已新增 C# 指令碼元件。</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>無法新增 C# 指令碼元件: {0} 您可以手動新增: 從發行頁面下載元件 zip，並解壓縮到資料資料夾的 components\csharp\&lt;version&gt;\ 資料夾中。</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>無法新增 C# 指令碼元件: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>未知的字元編碼「{0}」。文字欄未變更。</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>無法使用 {0}「{1}」(位置 {2} 處的運算式無法辨識)。</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0}「{1}」在檔案之外 (長度 {2})。</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>此版本不提供 {0}。</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>沒有符合「{0}」的磁碟。</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>沒有符合「{0}」的磁碟區。</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>沒有符合「{0}」的處理序。</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>「{0}」符合 {1} 個處理序。請用 --process 指定處理序識別碼。</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>開啟外掛程式資料來源(U)</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>外掛程式作業(P)</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>外掛程式(P)</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>管理外掛程式(M)...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>管理</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>plugin manager extensions add-ins 外掛程式 管理 擴充功能</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>外掛程式</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>僅載入已簽署的外掛程式</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>不會載入沒有有效簽章的外掛程式。重新啟動後生效。</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>外掛程式開發資料夾</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>作為外掛程式直接載入的建置輸出資料夾 (在外掛程式管理員中編輯)。</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>外掛程式</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>外掛程式</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>外掛程式</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>外掛程式可新增檢查器型別、雜湊、格式、命令和面板。外掛程式以與您相同的權限執行，請只啟用來自您信任的作者的外掛程式。變更在重新啟動後生效。</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>安全模式: 不載入任何外掛程式。清單和設定不會變更。</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>新增...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>立即重新啟動</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>開啟外掛程式資料夾</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>外掛程式設定...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>已啟用</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>已啟用</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>已停用</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>未安裝任何外掛程式。請透過「新增...」新增 .hexplugin 檔案，或將其拖曳到清單上。</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>開發資料夾</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>外掛程式會直接從這些建置輸出資料夾載入，並顯示為「開發」。每個資料夾只詢問一次。</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>新增開發資料夾...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>已新增開發資料夾。重新啟動後載入。</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>受信任的發行者</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>由這些發行者簽署的外掛程式會直接啟用而不詢問。移除發行者後將再次詢問。</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>已安裝的外掛程式</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>將 .hexplugin 檔案拖曳到此處即可新增。</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>新增外掛程式</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>未知的發行者</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>由 {0} 簽署</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>由 {0} 簽署 (無法檢查撤銷狀態)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>簽章無效</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>尚未檢查簽章</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>未簽署</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>已啟用</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>已停用</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>無法載入 ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>已停止 ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>未載入 ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>正在載入...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — 重新啟動後變更</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>開發</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>無擴充功能</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>新增: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (已停用: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>安全模式下無法新增外掛程式。</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>未新增外掛程式: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>移除外掛程式</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>要移除「{0}」嗎? 已載入的外掛程式將在重新啟動後刪除。</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>{0} 的設定</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>檢查器型別</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>雜湊</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>匯入格式</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>匯出格式</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>資料來源</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>轉換檢視</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>資料作業</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>命令</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>功能表項目</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>面板</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>設定頁面</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>範本函式</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>檔案類型偵測</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>反組譯器</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>著色規則</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>指令碼 API</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>未知</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>要啟用外掛程式「{0}」嗎?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (更新)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>發行者: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>從開發資料夾載入。</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>此程式碼可以用您的權限在電腦上執行任何作業 (包括讀寫檔案和存取網路)。請只啟用來自您信任的作者的外掛程式。</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>外掛程式宣告: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>此外掛程式未簽署，無法驗證其發行者。</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>一律信任來自 {0} 的外掛程式</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>啟用</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>不啟用</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor 正以系統管理員身分執行。此外掛程式將以系統管理員權限執行，可能影響整台電腦。</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>要以系統管理員身分載入外掛程式嗎?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor 正以系統管理員身分執行。這些外掛程式將以系統管理員權限執行，可能影響整台電腦:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— 尚未信任</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>載入</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>不載入</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>外掛程式「{0}」因錯誤持續發生而被停止。</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>停用該外掛程式</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>重新啟動時重試</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>重新啟動後將不再載入外掛程式「{0}」。</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>停用該外掛程式?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor 上次意外結束，可能是由外掛程式「{0}」引起的。要停用它嗎?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>保持啟用</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>此外掛程式命令現在無法執行。</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>外掛程式「{1}」的命令「{0}」失敗。請查看輸出面板。</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>開啟: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>無法開啟 {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>複製為: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>已複製為 {0}。</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>資料作業: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>資料作業 {0} 失敗: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>由外掛程式 {0} 新增</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>外掛程式面板</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>外掛程式無法建立此面板。</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>外掛程式</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(已停止)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>此外掛程式型別無法用該值編輯。</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>結構</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>範本輸出</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>結構範本(T)</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>套用範本(A)...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>從此處套用範本(H)...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>顯示游標處的型別(Y)...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>套用 Kaitai Struct(K)...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>尋找相符的範本(F)</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>重新執行(R)</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>移除套用(V)</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>匯出結果(X)...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>新增範本(N)</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>開啟範本(O)...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>編輯範本(E)</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>將 .ksy 轉換為 HXT(C)...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>管理範本(M)</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>結構著色(K)</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>結構(E)</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>範本輸出(W)</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>結構結果(T)...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>從此處套用範本...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>讀取此處時中斷</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>範本</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>程式碼編輯器</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>範本: 套用</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;結構;剖析</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>範本: 從此處套用</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;游標</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>範本: 顯示游標處的型別</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;跟隨</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>範本: 套用 Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>範本: 重新執行</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;重新評估</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>範本: 移除套用</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;取消套用</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>範本: 停止評估</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;取消</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>範本: 顯示結果樹狀目錄</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;樹狀目錄</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>範本: 顯示輸出</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;錯誤</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>範本: 編輯值</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;變更</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>範本: 移至定義</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;宣告</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>範本: 移至指標目標</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;指標</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>範本: 複製值</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard;剪貼簿</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>範本: 加入書籤</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;書籤</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>範本: 匯出結果</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;匯出</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>範本: 切換著色</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;醒目提示</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>範本: 尋找相符的範本</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;偵測</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>範本: 新增</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;建立</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>範本: 開啟</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;檔案</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>範本: 編輯</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;編輯器</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>範本: 管理</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;程式庫</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>範本: 將 .ksy 轉換為 HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;轉換</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>範本: 標準程式庫參考</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;說明 函式</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>範本: 試執行</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;測試;未儲存</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>範本: 讀取此處時中斷</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;資料中斷點</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>檢視: 結構面板</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;範本 結果</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>檢視: 範本輸出面板</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;錯誤</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>程式碼編輯器: 開始偵錯 / 繼續</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;執行;偵錯</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>程式碼編輯器: 停止偵錯</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;結束</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>程式碼編輯器: 切換中斷點</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;中斷點</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>程式碼編輯器: 逐程序</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;下一步</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>程式碼編輯器: 逐步執行</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;進入</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>程式碼編輯器: 跳出</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;傳回</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>程式碼編輯器: 執行至游標處</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;游標</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>程式碼編輯器: 新增監看運算式</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;監看</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>程式碼編輯器: 移至定義</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;宣告</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>程式碼編輯器: 尋找參考</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;參考</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>程式碼編輯器: 格式化文件</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;縮排</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>程式碼編輯器: 切換註解</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;註解</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>程式碼編輯器: 顯示自動完成</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;自動完成</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>範本</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>自動套用</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>當範本與您開啟的檔案相符時 (依魔術數字、MIME 類型或副檔名) 要執行的動作。</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>建議</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>一律套用</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>不執行任何動作</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>編輯後重新評估</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>最後一次編輯 500 毫秒後重新評估已套用的範本。關閉時，請在結果樹狀目錄中使用「重新執行」。</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>結構著色</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>在十六進位檢視中為範本模式的範圍著色。</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>著色不透明度 (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>結構著色疊加在十六進位檢視背景上的不透明度。</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>範本資料夾</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>搜尋使用者範本的其他資料夾。</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>檢查器範本</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>其 [[inspector]] 型別會顯示在資料檢查器中的範本。</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>範本喜好設定</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>已停用的範本、從自動套用中排除的範本，以及已隱藏的建議。</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>管理範本</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>範本資料夾</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>範本</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>檢查器範本</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>新增資料夾...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>移除</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>無法存取此資料夾。</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>依名稱篩選</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>匯入...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>新增範本</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>已啟用</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>自動套用</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>編輯</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>匯出...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>被同名的另一個範本隱藏。</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>已關閉建議</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>無</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>重新顯示</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>新增檢查器範本...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>大小不固定</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>此範本包含大小不固定或超過 4 KB 的檢查器型別。建議使用不超過 4 KB 的固定大小型別。</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>已匯入 {0} 個範本檔案。</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>無法匯入: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>已將 {0} 個檔案匯出到 {1}。</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>無法匯出: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>標準範本是應用程式的一部分。請使用「複製並編輯」來匯出複本。</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>套用範本</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>套用範本</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>重新執行</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>重新執行</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>停止評估</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>停止評估</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>匯出</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>匯出</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>欄</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>欄</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>跟隨游標</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>跟隨游標</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>依名稱、值或型別篩選</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>篩選</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>結果樹狀目錄</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>路徑 (例如 chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>路徑</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>全部評估並搜尋</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} 個相符項目</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>找不到路徑 '{0}'。</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>值</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>型別</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>註解</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>結束</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>色彩</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>欄順序</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>將 {0} 左移</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>將 {0} 右移</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>重設欄</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>正在評估…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>已評估: {0} 個模式</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} 個錯誤，{1} 個警告</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>模式數達到上限 ({0})。顯示的是部分結果。</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>提高上限並重新執行</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} 個元素</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} 位元</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>位元 {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / 本機: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>未定義的值</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>未定義</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>跟隨</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>指向 {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>位移 {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>大小 {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(未儲存)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(找不到範本檔案)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>未套用任何範本。</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>沒有正在進行的評估。</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>請在結果樹狀目錄中選取一個節點。</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>所選節點不是指標。</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>指標目標為空或在資料範圍之外。</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>找不到範本 '{0}'。</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>一個檔案最多可套用 {0} 個範本。</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>找不到範本檔案 '{0}'。</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>正在評估範本 {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON 超過 64 MB。請改為儲存到檔案。</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>儲存到檔案...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>範本: {0}
+起始位移: {1}
+種類: {2}
+位元組順序: {3}
+型別: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>標準</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>使用者</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>最近使用</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>使用指令碼</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>詳細資料</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>移至資料</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>移至指標目標</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>移至定義</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>編輯值</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>複製值</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>複製名稱和值</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>複製路徑</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>複製位元組</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>複製位移</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>將子樹複製為 JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>加入書籤</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>將範圍加入多重選取</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>在新索引標籤中開啟區段</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>從此處套用範本...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>讀取此處時中斷</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>切換固定 / 跟隨</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>轉換為固定</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>套用設定</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>匯出...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>重新執行</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>移除套用</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>值</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>確定</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>此模式只有讀取轉換，因此您正在編輯原始值。</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>輸入數字</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>真</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>其餘部分用零填滿</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>本機時間</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>時區</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>請輸入 0 到 {1} 之間的值 ({0} 位元)。</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>該值超出此型別的範圍。</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>文字比欄位長 ({0} 位元組)。</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>寫入轉換失敗: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>無法辨識該值。</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>無法編輯區段內的模式。</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>此模式為唯讀。</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>無法編輯計算出的值。</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>無法編輯錯誤節點。</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>此節點沒有可編輯的值。</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>編輯範本值</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>套用範本</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>套用 Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>搜尋範本</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>名稱、說明、副檔名或 MIME 類型</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>範本</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>起始位移</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>請輸入檔案範圍內的位移。</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>預設位元組順序</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>檔案設定</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>檔案設定 (小端序)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>檔案設定 (大端序)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>小端序</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>大端序</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>固定</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>跟隨游標</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>型別 (跟隨)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>套用</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>版本 {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>授權: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>相符的範本</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (分數 {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>魔術數字</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>副檔名</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>沒有與此檔案相符的範本。</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>此檔案看起來像 {0}。要套用範本「{0}」嗎?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(使用指令碼)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>套用</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>其他候選項目...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>不再對此格式顯示</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>套用範本「{0}」時發生錯誤。</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>匯出結構結果</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>目標</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>整個套用</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>所選子樹 ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>陣列元素上限</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>最大深度</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>無限制</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>包含隱藏的模式</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>將位移寫為十六進位字串</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>儲存...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>正在匯出結構結果</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} 個節點</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>已匯出到 {0}。</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>無法匯出到 {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>磁碟空間不足。</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>清除</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>清除</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>範本輸出</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>移至原始程式碼</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>移至資料</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>{0} 的說明</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>試執行</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>目標檔案</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>目標檔案</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>開始偵錯 / 繼續</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>逐程序</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>逐步執行</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>跳出</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>偵錯時依序評估</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>格式化文件</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>切換註解</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>範本原始程式碼</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>自動完成</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>變數</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>監看</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>呼叫堆疊</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>中斷點</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>變數</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>監看</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>呼叫堆疊</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>中斷點</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>新增監看運算式</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>新增</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>運算式 (例如 c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>問題</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>第 {0} 行第 {1} 欄處的參考</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>新增範本</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>未開啟範本編輯器。</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>未在偵錯。</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>請開啟要執行範本的檔案。</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>無法開啟範本 {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>無法儲存範本: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>標準範本無法直接儲存。請使用「複製並編輯」將複本儲存到您的範本資料夾。</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>複製並編輯</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>偵錯前請先修正語法錯誤。</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>偵錯時已關閉延遲評估。大型陣列可能耗時很長。</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>資料中斷點</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>偵錯工具會在建立包含 {0} 的模式時停止。</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>無法將 {0} 轉換為 HXT。</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>已評估: {0} 個模式 (在 {1} 上限處停止，顯示的是部分結果)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>步驟</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>模式</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>記憶體</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>時間</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>移至行</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>行號 (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>未顯示程式碼編輯器 (範本或指令碼)。</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>此編輯器不支援該命令。</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>作為指標跟隨</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer offset address jump inspector 指標 位移 位址 跳轉 檢查器</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>作為指標跟隨</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>絕對 (位移)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>絕對 (位址)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>相對於游標</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>相對於該值的結尾</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>相對於基底…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>基底 (運算式)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>移至</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>目標 {0} 在檔案之外 (長度 {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>此列沒有可用作位置的值</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>請以運算式形式輸入基底，例如 0x400000 或 bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>請在資料檢查器中選取一個整數列</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>依此型別的陣列移動</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>上一個元素</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>下一個元素</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>結束陣列模式</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>元素編號</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>元素大小</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(不在元素邊界上)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>元素 {0} 在檔案之外</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>值</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>運算式</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>書籤之間存在循環參考</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>bm.name 參考的巢狀超過 {0} 層</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>位置 {0} 在檔案之外</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>位置運算式錯誤: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>值</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>編輯書籤值</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(無型別)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>型別</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>檔案</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>位置運算式</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>例如 u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>檢視: 影像檢視面板</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image 視覺化 點陣圖 像素 圖片 影像</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>影像檢視(V)</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>影像檢視</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1 位元黑白</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2 位元灰階</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4 位元灰階</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8 位元灰階</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 位元 (位元組佈景主題色彩)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>跟隨游標</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>選取範圍的起點</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>固定</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>由上到下</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>由下到上 (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>自動</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>像素格式</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>寬度 (像素)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>每列位元組數</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>自動</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>起始位置</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>固定的起始位置</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>列順序</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>縮放</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>更多選項</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>影像</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>捲動列</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>另存為影像…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>檢視範圍過大，僅繪製前 64 MB</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>請以運算式形式輸入固定的起始位置</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>沒有可儲存的影像</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>已將影像儲存到 {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>無法儲存 {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG 影像</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>預設</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>已逾時</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>該型別耗時超過 {0} 毫秒；起始位置變更後會重新執行</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>錯誤: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>檢查器型別檔案 {0}，第 {1} 行: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>離線模式已開啟 (或已關閉下載)，因此不會下載該元件。若要手動新增，請從此版本的發行頁面取得 {0} (必要時可在另一台電腦上)，並解壓縮到 {1}。</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>已在安全模式下啟動。不會載入外掛程式和自動執行的指令碼。</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>正常重新啟動</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>範本: 尋找欄位值</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;搜尋;欄位;值</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>未套用任何範本。</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>第 {0} 個字元處有語法錯誤: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>條件為空</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>缺少值</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>未知的條件 (請使用 name:、type: 或 value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>未知的比較運算子 (請使用 =、!=、&lt;、&lt;=、&gt;、&gt;= 或 ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>引號未閉合</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>規則運算式無效</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>範本值</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>按 Enter 搜尋欄位值。結果會顯示在「搜尋結果」中。</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>欄位</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (使用者定義)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (範本 {1})</value></data>
 </root>
