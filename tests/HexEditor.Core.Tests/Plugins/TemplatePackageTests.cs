@@ -110,6 +110,11 @@ public sealed class TemplatePackageTests
         Ok(work, "new", "install", templatePackage, "--debug:custom-hive", hive);
         Ok(work, "new", "hexeditor-plugin", "-n", "TplTest", "-o", Path.Combine(work, "TplTest"), "--debug:custom-hive", hive);
         string solution = Path.Combine(work, "TplTest");
+
+        // 依存パッケージを探すフォルダ。CI は NUGET_PACKAGES でユーザーのフォルダ以外に置く (実在するフォルダでないと NU1301)。
+        string cacheFolder = Environment.GetEnvironmentVariable("NUGET_PACKAGES") is { Length: > 0 } fromEnv
+            ? fromEnv
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
         File.WriteAllText(Path.Combine(solution, "nuget.config"), $"""
             <?xml version="1.0" encoding="utf-8"?>
             <configuration>
@@ -122,7 +127,7 @@ public sealed class TemplatePackageTests
               </packageSources>
               <fallbackPackageFolders>
                 <clear />
-                <add key="cache" value="{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages")}" />
+                <add key="cache" value="{cacheFolder}" />
               </fallbackPackageFolders>
             </configuration>
             """);

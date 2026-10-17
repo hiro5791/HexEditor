@@ -235,7 +235,20 @@ public sealed class TemplateToolingTests : IDisposable
         {
             long start = GC.GetTotalMemory(true);
             long peak = start;
-            var options = new TemplateExportOptions { Indented = false, Progress = _ => peak = Math.Max(peak, GC.GetTotalMemory(false)) };
+            // 回収済みでないごみ (世代 0 の予算は環境で大きく違う) を数えないよう、一定の件数ごとに回収してから測る。
+            long nextSample = 250_000;
+            var options = new TemplateExportOptions
+            {
+                Indented = false,
+                Progress = n =>
+                {
+                    if (n >= nextSample)
+                    {
+                        nextSample = n + 250_000;
+                        peak = Math.Max(peak, GC.GetTotalMemory(true));
+                    }
+                },
+            };
             var sink = new CountingStream();
             TemplateResultExporter.Write(r.Root, sink, format, options);
             Assert.True(peak - start < 256L * 1024 * 1024, $"{format}: {(peak - start) / 1024 / 1024} MB");

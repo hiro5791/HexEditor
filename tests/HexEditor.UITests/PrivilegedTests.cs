@@ -25,7 +25,7 @@ public sealed class PrivilegedTests
     /// <summary>アプリを起動し、昇格の状態が期待どおりか確かめる (「管理者 (CI)」か「一般ユーザー (CI)」)。</summary>
     private static async Task<AppSession> StartAsync(UiTestContext ctx, bool elevated, JsonObject? hooks = null, IReadOnlyList<string>? files = null)
     {
-        AppSession app = await ctx.StartAsync(new AppOptions { Restricted = !elevated, Hooks = hooks, Files = files ?? [] });
+        AppSession app = await ctx.StartAsync(new AppOptions { Restricted = !elevated, RealElevation = true, Hooks = hooks, Files = files ?? [] });
         JsonObject info = await app.SendAsync("helperInfo");
         string expected = $"The app should run {(elevated ? "as administrator" : "without administrator rights")}";
         Assert.True(info["elevated"]!.GetValue<bool>() == elevated, $"{expected} (the app's own check; {CiPrivileged.Describe(app.Pid)}).");

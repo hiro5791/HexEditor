@@ -12,7 +12,8 @@ internal static class Golden
     public static void Check(string id, string actual, string fileName = "expected.json")
     {
         string path = Path.Combine(Folder(id), fileName);
-        actual = actual.ReplaceLineEndings("\n");
+        // 末尾は改行 1 つにそろえる (EditorConfig の insert_final_newline)
+        actual = actual.ReplaceLineEndings("\n").TrimEnd('\n') + "\n";
         if (Environment.GetEnvironmentVariable("HEXEDITOR_UPDATE_GOLDEN") == "1" || !File.Exists(path))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -25,7 +26,7 @@ internal static class Golden
             return;
         }
 
-        string expected = File.ReadAllText(path).ReplaceLineEndings("\n");
+        string expected = File.ReadAllText(path).ReplaceLineEndings("\n").TrimEnd('\n') + "\n";
         Assert.True(expected == actual, $"{path} と一致しません。\n--- 実際 ---\n{actual[..Math.Min(4000, actual.Length)]}");
     }
 }

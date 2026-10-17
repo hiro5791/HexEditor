@@ -71,7 +71,7 @@ internal static class ScriptingService
 
         _settingsFolder = env.Locations.Settings;
         Folders = new ScriptFolders(env.Locations.Settings, env.Locations.Root);
-        Environment = new AppScriptEnvironment(queue, env.AppVersion, env.IsElevated);
+        Environment = new AppScriptEnvironment(queue, env.AppVersion, TestHooks.ElevationOverride ?? env.IsElevated);
         Environment.Templates = new LazyTemplateEngine();
         _components = new Lazy<CSharpComponentManager>(() => CreateComponents(env), LazyThreadSafetyMode.ExecutionAndPublication);
         _host = new Lazy<ScriptHost>(() => CreateHost(env, queue), LazyThreadSafetyMode.ExecutionAndPublication);

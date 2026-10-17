@@ -58,7 +58,7 @@ declare namespace HexEditor {
         /** Ends the script with an exit code for headless runs (0-255; use 64 or more for script-specific meanings). */
         exit(code: number): void;
     }
-    
+
     /** One bookmark. */
     interface Bookmark {
         /** Name. */
@@ -74,7 +74,7 @@ declare namespace HexEditor {
         /** The number of a numbered bookmark (1-9), or null. */
         readonly number: number | null;
     }
-    
+
     /** The bookmarks of a document (AUTO-11). Enumerable like an array; bookmarks added by scripts are saved like the user's. */
     interface Bookmarks extends Iterable<Bookmark> {
         readonly length: number;
@@ -91,7 +91,7 @@ declare namespace HexEditor {
         /** Adds one bookmark per result (at most 1,000,000). `{index}` in `nameFormat` becomes 1, 2, 3, ... */
         addFromResults(results: ByteRange[], nameFormat?: string): number;
     }
-    
+
     /** The clipboard (AUTO-15). */
     interface Clipboard {
         /** Puts text. */
@@ -107,7 +107,7 @@ declare namespace HexEditor {
         /** Returns the Copy As text without using the clipboard. */
         formatAs(document: Document, range: RangeArg, formatId: string, options?: CopyAsOptions): string;
     }
-    
+
     /** Runs application commands by ID (AUTO-06). */
     interface Commands {
         /** Runs the command `id`. Commands that ask for confirmation take the answer in `args.confirm`; without it, interactive runs show the dialog and headless runs choose the safe answer (cancel). */
@@ -115,7 +115,7 @@ declare namespace HexEditor {
         /** All commands (IDs, display names, arguments). */
         list(): CommandInfo[];
     }
-    
+
     /** One open document (AUTO-07). Synchronous reads and writes are limited to 16 MB per call (AUTO-05); use `chunks` and the bulk APIs (AUTO-09) for more. */
     interface Document {
         /** Identifier unique during the session. */
@@ -225,13 +225,13 @@ declare namespace HexEditor {
         /** Applies a structure template (AUTO-13) and returns the root of the result tree. */
         applyTemplate(nameOrPath: string, options?: ApplyTemplateOptions): Promise<TemplateNode>;
     }
-    
+
     /** A subscription returned by `on`. */
     interface EventSubscription {
         /** Stops receiving the event. */
         off(): void;
     }
-    
+
     /** Files (AUTO-18). Needs `file-read` / `file-write`, except for paths the user picked and reading below the script folder. */
     interface FileSystem {
         /** Reads up to 16 MB of a file. */
@@ -253,7 +253,7 @@ declare namespace HexEditor {
         /** Creates a folder. */
         createFolder(path: string): void;
     }
-    
+
     /** Hashes and checksums (AUTO-14). */
     interface Hash {
         /** The available algorithms. */
@@ -265,7 +265,7 @@ declare namespace HexEditor {
         /** Hashes a file without opening it (permission `file-read` or a path the user picked). */
         computeFile(path: string, algorithms: HashAlgorithmSpec[], options?: AsyncOptions): Promise<HashResult[]>;
     }
-    
+
     /** Temporary highlights (AUTO-07). */
     interface Highlights {
         /** Highlights a range with a named color. */
@@ -273,7 +273,7 @@ declare namespace HexEditor {
         /** Removes all highlights of this script. */
         clear(): void;
     }
-    
+
     /** Data inspector types and value conversion (AUTO-12). */
     interface Inspector {
         /** The available types, including plugin types. */
@@ -287,13 +287,13 @@ declare namespace HexEditor {
         /** Hides a type in the inspector panel. */
         hide(typeId: string): void;
     }
-    
+
     /** Network access of scripts (AUTO-18, permission `network`). */
     interface Net {
         /** HTTP(S) GET or POST. The response body is limited to 100 MB. */
         fetch(url: string, options?: FetchOptions): Promise<FetchResponse>;
     }
-    
+
     /** One plugin seen from scripts. */
     interface PluginHandle {
         /** The plugin ID. */
@@ -307,7 +307,7 @@ declare namespace HexEditor {
         /** The object the plugin provides to scripts (`IScriptApiProvider`), or null. */
         readonly api: any | null;
     }
-    
+
     /** Installed plugins (AUTO-31, AUTO-32). */
     interface Plugins {
         /** All plugins with their state. */
@@ -315,13 +315,13 @@ declare namespace HexEditor {
         /** A plugin by ID, or null when it is not installed. */
         get(id: string): PluginHandle | null;
     }
-    
+
     /** External programs (AUTO-18, permission `process`). */
     interface ProcessRunner {
         /** Runs a program without a shell; each element of `args` is passed as one argument. */
         run(path: string, args: string[], options?: ProcessOptions): Promise<ProcessResult>;
     }
-    
+
     /** The running script (AUTO-17). */
     interface Script {
         /** Display name. */
@@ -335,7 +335,7 @@ declare namespace HexEditor {
         /** Persistent storage of this script (1 MB). */
         readonly storage: ScriptStorage;
     }
-    
+
     /** Persistent key-value storage of one script (AUTO-17). */
     interface ScriptStorage {
         /** Reads a value, or null. */
@@ -345,7 +345,7 @@ declare namespace HexEditor {
         /** Removes a value. */
         remove(key: string): void;
     }
-    
+
     /** The cursor selection including multi and rectangular selections (AUTO-10). */
     interface Selection {
         /** Start of the primary range. */
@@ -371,7 +371,7 @@ declare namespace HexEditor {
         /** Turns results of a bulk API into a multi-selection (at most 1,000,000). */
         fromResults(results: ByteRange[]): void;
     }
-    
+
     /** Application settings (AUTO-17). */
     interface Settings {
         /** Reads a setting (keys of the settings reference). */
@@ -379,7 +379,7 @@ declare namespace HexEditor {
         /** Changes a setting; takes effect at once. */
         set(key: string, value?: unknown): void;
     }
-    
+
     /** One node of a template result tree (AUTO-13). */
     interface TemplateNode {
         /** Name. */
@@ -401,7 +401,7 @@ declare namespace HexEditor {
         /** The node as JSON (the same form as the command line `template` output). */
         toJSON(): unknown;
     }
-    
+
     /** Structure templates (AUTO-13). */
     interface Templates {
         /** The available templates. */
@@ -411,7 +411,7 @@ declare namespace HexEditor {
         /** Registers a function that templates can call (template extension, TPL-19). The script stays resident while it is registered; `off` or the end of the script removes it. */
         registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription;
     }
-    
+
     /** Text encoding conversion (AUTO-12). */
     interface Text {
         /** All encodings the application supports. */
@@ -421,7 +421,7 @@ declare namespace HexEditor {
         /** Decodes bytes. */
         decode(bytes: BytePattern, encoding: EncodingArg, options?: DecodeOptions): string;
     }
-    
+
     /** Dialogs, progress and output (AUTO-16). */
     interface Ui {
         /** Progress in the operation center. */
@@ -449,13 +449,13 @@ declare namespace HexEditor {
         /** Writes a line to the output panel. `kind`: `info`, `warning`, `error`. */
         output(text: string, kind?: string): void;
     }
-    
+
     /** Operation center progress of the running script. */
     interface UiProgress {
         /** Reports the fraction done (0-1) and a description. */
         report(fraction: number, text?: string): void;
     }
-    
+
     /** The argument passed to event handlers (`on`). */
     interface ScriptEventArgs {
         /** The event name (for example `beforeSave`). */
@@ -465,7 +465,7 @@ declare namespace HexEditor {
         /** Cancels the operation (`beforeSave` only). The reason is shown to the user. */
         cancel(reason: string): void;
     }
-    
+
     /** Options of `applyTemplate`. */
     interface ApplyTemplateOptions {
         /** Offset to apply the template at (default 0). */
@@ -477,7 +477,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Options every asynchronous API accepts (AUTO-05). When omitted, the call follows the cancellation of the whole script and reports its progress to the operation center. */
     interface AsyncOptions {
         /** Cancellation (JavaScript: an `AbortSignal` such as `script.signal` or `new AbortController().signal`). */
@@ -485,7 +485,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** A new bookmark for `add`. */
     interface BookmarkSpec {
         /** Start offset. */
@@ -499,13 +499,13 @@ declare namespace HexEditor {
         /** Comment. */
         comment?: string | null;
     }
-    
+
     /** Options of `close`. */
     interface CloseOptions {
         /** Discard unsaved changes without asking. */
         discard?: boolean;
     }
-    
+
     /** A command of the application. */
     interface CommandInfo {
         /** The fixed English identifier (for example `edit.fill`). */
@@ -517,7 +517,7 @@ declare namespace HexEditor {
         /** Names of the arguments the command accepts. */
         readonly arguments: string[];
     }
-    
+
     /** Options of `compare`. */
     interface CompareOptions {
         /** Maximum number of difference ranges (default 1,000,000). */
@@ -527,7 +527,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Options of `copyAs` and `formatAs`. */
     interface CopyAsOptions {
         /** Bytes per line (0: the Copy As setting). */
@@ -535,7 +535,7 @@ declare namespace HexEditor {
         /** Uppercase Hex digits (null: the Copy As setting). */
         uppercase?: boolean | null;
     }
-    
+
     /** Options of `copyRange`. */
     interface CopyRangeOptions {
         /** Insert instead of overwriting. */
@@ -545,7 +545,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Custom CRC parameters (the Rocksoft model). `id` is always `"crc"`. */
     interface CustomCrc {
         /** Always `"crc"`. */
@@ -563,7 +563,7 @@ declare namespace HexEditor {
         /** Value XORed with the output. */
         xorOut?: number;
     }
-    
+
     /** One chunk read by `chunks`. */
     interface DataChunk {
         /** Offset of the first byte. */
@@ -571,13 +571,13 @@ declare namespace HexEditor {
         /** The bytes. */
         readonly data: Uint8Array;
     }
-    
+
     /** Options of `decode`. */
     interface DecodeOptions {
         /** `"replace"` (default; invalid bytes become U+FFFD) or `"error"` (throw `ArgumentError`). */
         invalid?: string | null;
     }
-    
+
     /** A text encoding the application supports. */
     interface EncodingInfo {
         /** Code page number. */
@@ -587,7 +587,7 @@ declare namespace HexEditor {
         /** Display name. */
         readonly displayName: string;
     }
-    
+
     /** Options of `entropy`. */
     interface EntropyOptions {
         /** When set, returns one value per block of this size. */
@@ -597,7 +597,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Options of `exportRange`. */
     interface ExportRangeOptions {
         /** Overwrite an existing file (default false). */
@@ -611,7 +611,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Options of `fetch`. */
     interface FetchOptions {
         /** `"GET"` (default) or `"POST"`. */
@@ -629,7 +629,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** The response of `fetch`. */
     interface FetchResponse {
         /** HTTP status code. */
@@ -639,7 +639,7 @@ declare namespace HexEditor {
         /** The body (`Uint8Array` or string, by `responseType`). */
         readonly body: Uint8Array | string;
     }
-    
+
     /** File information. */
     interface FileStat {
         /** Size in bytes (0 for folders). */
@@ -649,13 +649,13 @@ declare namespace HexEditor {
         /** True for folders. */
         readonly isFolder: boolean;
     }
-    
+
     /** Options of `fill`. */
     interface FillOptions {
         /** Insert instead of overwriting. */
         insert?: boolean;
     }
-    
+
     /** Options of the search APIs. */
     interface FindOptions {
         /** How a string pattern is read: `"hex"` (default; wildcards allowed), `"text"`, `"regex"`, `"int"` or `"float"`. Byte patterns are searched as they are. */
@@ -683,7 +683,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** One field of `form`. */
     interface FormField {
         /** The key of the value in the result. */
@@ -697,7 +697,7 @@ declare namespace HexEditor {
         /** The choices of a `choice` field. */
         choices?: string[] | null;
     }
-    
+
     /** A string found by `strings`. */
     interface FoundString {
         /** Start offset. */
@@ -709,7 +709,7 @@ declare namespace HexEditor {
         /** The encoding name. */
         readonly encoding: string;
     }
-    
+
     /** A hash algorithm. */
     interface HashAlgorithmInfo {
         /** Algorithm ID (for example `sha256`). */
@@ -719,7 +719,7 @@ declare namespace HexEditor {
         /** Output size in bits. */
         readonly bits: number;
     }
-    
+
     /** A hash result. */
     interface HashResult {
         /** Algorithm ID. */
@@ -729,13 +729,13 @@ declare namespace HexEditor {
         /** The value as bytes. */
         readonly bytes: Uint8Array;
     }
-    
+
     /** Options of the inspector APIs. */
     interface InspectorOptions {
         /** `"le"` or `"be"` (default: the inspector setting). */
         endian?: string | null;
     }
-    
+
     /** A data inspector type. */
     interface InspectorTypeInfo {
         /** Type ID. */
@@ -745,7 +745,7 @@ declare namespace HexEditor {
         /** Size in bytes (0 when variable). */
         readonly size: number;
     }
-    
+
     /** A decoded inspector value. */
     interface InspectorValue {
         /** The text shown in the inspector panel. */
@@ -753,7 +753,7 @@ declare namespace HexEditor {
         /** The raw value (number, bigint, string or boolean; null when it cannot be decoded). */
         readonly value: number | bigint | string | boolean | null | null;
     }
-    
+
     /** Options of `message`. */
     interface MessageOptions {
         /** `"info"` (default), `"warning"` or `"error"`. */
@@ -761,7 +761,7 @@ declare namespace HexEditor {
         /** Show a dialog instead of an InfoBar. */
         modal?: boolean;
     }
-    
+
     /** Options of `newDocument`. */
     interface NewDocumentOptions {
         /** Initial length in bytes. */
@@ -769,7 +769,7 @@ declare namespace HexEditor {
         /** Pattern for the initial content (default zero bytes). */
         fill?: BytePattern | null;
     }
-    
+
     /** Options of `open`. */
     interface OpenOptions {
         /** Open read-only. */
@@ -783,7 +783,7 @@ declare namespace HexEditor {
         /** Do not activate the new tab. */
         background?: boolean;
     }
-    
+
     /** Options of the file pickers. */
     interface PickOptions {
         /** File type filters such as `"*.bin"`. */
@@ -793,7 +793,7 @@ declare namespace HexEditor {
         /** The dialog title. */
         title?: string | null;
     }
-    
+
     /** A plugin and its state. */
     interface PluginInfo {
         /** Plugin ID. */
@@ -807,7 +807,7 @@ declare namespace HexEditor {
         /** Why it is not enabled, or null. */
         readonly reason: string | null;
     }
-    
+
     /** Options of `run`. */
     interface ProcessOptions {
         /** Time limit in seconds (default 60). */
@@ -821,7 +821,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** The result of `run`. */
     interface ProcessResult {
         /** Exit code. */
@@ -831,7 +831,7 @@ declare namespace HexEditor {
         /** Standard error. */
         readonly stderr: string;
     }
-    
+
     /** Options of `prompt` and one field of `form`. */
     interface PromptOptions {
         /** `"text"` (default), `"number"` (input expressions), `"offset"`, `"range"`, `"hex"`, `"choice"` and, in forms, `"checkbox"`. */
@@ -841,20 +841,20 @@ declare namespace HexEditor {
         /** The choices of a `choice` field. */
         choices?: string[] | null;
     }
-    
+
     /** Options of `readString`. */
     interface ReadStringOptions {
         /** Stop at the first NUL character (default true). */
         stopAtNull?: boolean;
     }
-    
+
     /** The results of a bulk search: the matched ranges in order. `truncated` is true when the search stopped at the maximum count. */
     interface SearchResults {
         readonly truncated: boolean;
         readonly length: number;
         [index: number]: ByteRange;
     }
-    
+
     /** Options of `strings`. */
     interface StringsOptions {
         /** Minimum length in characters (default 4). */
@@ -870,7 +870,7 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Options of `registerExtension`. */
     interface TemplateExtensionOptions {
         /** Extension point: `"format"`, `"read"`, `"write"`, `"pointerMap"`, `"section"` or `"function"` (default). */
@@ -880,7 +880,7 @@ declare namespace HexEditor {
         /** Return type (the same names as `params`; default `"any"`). */
         returns?: string;
     }
-    
+
     /** A structure template. */
     interface TemplateInfo {
         /** Template name. */
@@ -890,7 +890,7 @@ declare namespace HexEditor {
         /** File extensions the template is for. */
         readonly extensions: string[];
     }
-    
+
     /** Options of `transform`. */
     interface TransformOptions {
         /** Element size: 1, 2, 4 or 8 bytes (default 1). */
@@ -904,10 +904,10 @@ declare namespace HexEditor {
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** A byte sequence argument: bytes (JavaScript: `Uint8Array` or an array of numbers) or a Hex string (for example `"DE AD"`). Some arguments also accept the word `"random"`. */
     type BytePattern = Uint8Array | number[] | string;
-    
+
     /** A byte range: start offset and length. The end (`end`) is exclusive. */
     interface ByteRange {
         /** Start offset. */
@@ -917,19 +917,19 @@ declare namespace HexEditor {
         /** The offset just after the range. */
         readonly end: number;
     }
-    
+
     /** A text encoding argument: a code page number (for example `932`) or a name (for example `"shift_jis"`, `"utf-16le"`). */
     type EncodingArg = number | string;
-    
+
     /** A hash algorithm: an ID (for example `"sha256"`) or a custom CRC (`CustomCrc`). */
     type HashAlgorithmSpec = string | CustomCrc;
-    
+
     /** A numeric argument (offset, length): either a number or a text in the input expression syntax (for example `"end-0x10"`). */
     type OffsetArg = number | string;
-    
+
     /** A range argument: either a `ByteRange` or a text in the input expression syntax (for example `"sel"`, `"0x100:0x20"` (start:length) or `"0x100..0x120"` (start..end, end exclusive)). */
     type RangeArg = ByteRange | string;
-    
+
     /** The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a repeating key as a Hex string (JavaScript: a `Uint8Array`, such as the value of a `hex` script parameter, is the same key). */
     type TransformOperand = number | bigint | string | Uint8Array;
 }

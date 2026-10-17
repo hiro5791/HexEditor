@@ -59,7 +59,8 @@ public sealed class StandardTemplateTests
         Assert.DoesNotContain("\"error\":", json, StringComparison.Ordinal);
         Assert.DoesNotContain("\"warning\":", json, StringComparison.Ordinal);
 
-        json = json.ReplaceLineEndings("\n");
+        // 末尾は改行 1 つにそろえる (EditorConfig の insert_final_newline)
+        json = json.ReplaceLineEndings("\n").TrimEnd('\n') + "\n";
         string path = ExpectedPath(key);
         if (Environment.GetEnvironmentVariable("HEXEDITOR_UPDATE_TEMPLATE_GOLDEN") == "1")
         {
@@ -69,7 +70,7 @@ public sealed class StandardTemplateTests
         }
 
         Assert.True(File.Exists(path), $"{path} がありません。HEXEDITOR_UPDATE_TEMPLATE_GOLDEN=1 を付けて作り、内容を確かめてください。");
-        string expected = File.ReadAllText(path).ReplaceLineEndings("\n");
+        string expected = File.ReadAllText(path).ReplaceLineEndings("\n").TrimEnd('\n') + "\n";
         Assert.True(expected == json, $"{key}: 結果が {path} と一致しません (先頭 {FirstDifference(expected, json)})。");
     }
 
