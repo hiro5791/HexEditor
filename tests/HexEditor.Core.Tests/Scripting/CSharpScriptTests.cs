@@ -205,6 +205,23 @@ public sealed class CSharpScriptTests(ComponentFeedFixture feed) : IClassFixture
     }
 
     [Fact]
+    public async Task A_dll_planted_in_an_extracted_component_is_rejected_when_loading()
+    {
+        (ScriptTestHost t, CSharpComponentManager manager, _) = Create(install: false);
+        using (t)
+        {
+            // 一覧のファイルはすべて正しいが、一覧にない DLL が置かれている (読み込みの解決で拾われうる)。
+            ZipFile.ExtractToDirectory(feed.ZipPath, manager.VersionFolder!);
+            File.Copy(Path.Combine(manager.VersionFolder!, CSharpComponentManager.EntryAssembly), Path.Combine(manager.VersionFolder!, "System.Planted.dll"));
+            string path = t.WriteScript("hello.csx", "Console.WriteLine(1);");
+            t.TrustScript(path);
+            ScriptRunResult r = await t.RunFileAsync(path);
+            Assert.Equal(ScriptFailure.Io, r.Failure);
+            Assert.Contains("System.Planted.dll", r.Message);
+        }
+    }
+
+    [Fact]
     public async Task Unsigned_roslyn_assemblies_are_rejected()
     {
         (ScriptTestHost t, CSharpComponentManager manager, _) = Create(install: false, signed: false);

@@ -62,6 +62,13 @@ public static class CliApp
 
             return ExitCodes.Cancelled;
         }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // 処理の途中の読み書きの失敗も共通の終了コードで返す (AUTO-36 の仕様 7: 入出力のエラーは 3、アクセス拒否は 5)。
+            context?.CloseOutput(keep: false);
+            host.Err.WriteLine(messages.Format("Cli_Error_Prefix", ex.Message));
+            return ex is UnauthorizedAccessException ? ExitCodes.Denied : ExitCodes.Io;
+        }
         catch (Exception ex)
         {
             context?.CloseOutput(keep: false);

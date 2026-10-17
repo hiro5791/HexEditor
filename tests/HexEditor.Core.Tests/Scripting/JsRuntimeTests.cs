@@ -71,6 +71,31 @@ public sealed class JsRuntimeTests
             """);
         ScriptTestHost.AssertSucceeded(r);
         Assert.Contains("ReferenceError,ReferenceError,ReferenceError,ReferenceError,undefined,undefined,ok", t.OutputText);
+
+        // API のオブジェクトのプロトタイプ・コンストラクタ・文字列化から .NET の型に届かない。ファイルも作れない (TC-AUTO-02-02 の期待結果 2・3)。
+        string escape = Path.Combine(t.Root, "clr-escape.txt");
+        ScriptRunResult probes = await t.RunCodeAsync($$"""
+            const out = [];
+            const tries = [
+              () => Object.getPrototypeOf(app).constructor,
+              () => Object.getPrototypeOf(app).constructor.name,
+              () => app.constructor.constructor('return this')().System,
+              () => String(app),
+              () => String(app.documents),
+              () => String(Object.getPrototypeOf(app.hash)),
+              () => JSON.stringify(Object.getOwnPropertyNames(Object.getPrototypeOf(app))),
+              () => importNamespace('System.IO').File.WriteAllText({{System.Text.Json.JsonSerializer.Serialize(escape)}}, 'x'),
+            ];
+            for (const f of tries) {
+              try { out.push('probe:' + String(f())); } catch (e) { out.push('probe:blocked ' + e.name); }
+            }
+            console.log(out.join('\n'));
+            """);
+        ScriptTestHost.AssertSucceeded(probes);
+        IReadOnlyList<string> lines = [.. t.OutputText.SelectMany(l => l.Split('\n')).Where(l => l.StartsWith("probe:", StringComparison.Ordinal))];
+        Assert.Equal(8, lines.Count);
+        Assert.DoesNotContain(lines, l => l.Contains("System.", StringComparison.Ordinal) || l.Contains("HexEditor.", StringComparison.Ordinal));
+        Assert.False(File.Exists(escape));
     }
 
     [Fact]

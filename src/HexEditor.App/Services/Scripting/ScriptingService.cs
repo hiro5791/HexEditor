@@ -188,9 +188,16 @@ internal sealed class GitHubComponentFeed(Func<NetworkClient> network, Func<Upda
         long total = response.Content.Headers.ContentLength ?? manifest.PackageSize;
         byte[] buffer = new byte[81920];
         long done = 0;
+        // 一覧の大きさより長い応答は途中で打ち切る (ハッシュの確認の前に、際限なく書き込まないため)。
+        long limit = manifest.PackageSize > 0 ? manifest.PackageSize : 512L * 1024 * 1024;
         int n;
         while ((n = await stream.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
         {
+            if (done + n > limit)
+            {
+                throw new IOException(Loc.Format("CSharpComponent_DownloadTooLarge", limit));
+            }
+
             await destination.WriteAsync(buffer.AsMemory(0, n), cancellationToken).ConfigureAwait(false);
             done += n;
             progress?.Report(total > 0 ? (double)done / total : 0);

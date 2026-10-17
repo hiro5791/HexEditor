@@ -238,6 +238,8 @@ public sealed partial class ScriptDocument : IDocument
             throw new ReadOnlyError(Msg.T($"ドキュメント「{Name}」は読み取り専用です。", $"The document \"{Name}\" is read-only."));
         }
 
+        // スクリプトが app.open で開いたファイルへの保存は file-write を求める (AUTO-34 の仕様 3)。
+        _ctx.RequireSaveToOpenedFile(Host);
         _ctx.ReleaseWrite(this);
         using CancellationTokenSource cts = _ctx.LinkedToken(options?.Signal);
         using (_ctx.Clock.Pause())

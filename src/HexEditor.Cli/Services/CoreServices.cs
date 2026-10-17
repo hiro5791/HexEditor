@@ -32,6 +32,38 @@ internal static class CliLocations
 }
 
 /// <summary>
+/// GUI と同じ設定ファイル (<c>&lt;設定フォルダ&gt;/settings.json</c>) を読み取り専用で読む (AUTO-36 の仕様 8)。書き換えない。
+/// 組織の設定 <c>scripts.policy</c> (AUTO-34 の仕様 9)、スクリプトの上限 (AUTO-02 の仕様 4)、「署名されたプラグインだけ」(AUTO-35 の仕様 2) に使う。
+/// 読めない場合は既定値にする。
+/// </summary>
+internal sealed class CliSettings
+{
+    private readonly System.Text.Json.Nodes.JsonObject? _data;
+
+    public CliSettings(string settingsFolder)
+    {
+        try
+        {
+            string path = Path.Combine(settingsFolder, "settings.json");
+            _data = File.Exists(path) ? System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path)) as System.Text.Json.Nodes.JsonObject : null;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        {
+            _data = null;
+        }
+    }
+
+    public string String(string key, string fallback) =>
+        _data?[key] is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out string? s) ? s : fallback;
+
+    public double? Number(string key) =>
+        _data?[key] is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out double d) ? d : null;
+
+    public bool Bool(string key, bool fallback) =>
+        _data?[key] is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out bool b) ? b : fallback;
+}
+
+/// <summary>
 /// <c>hexed template</c> (AUTO-42) の実装: Core のテンプレートエンジン (07) で適用し、JSON (AUTO-13 の <c>toJSON()</c> と同じ構造に
 /// <c>schema</c> を加えたもの)・CSV・テキストをストリームに書く。
 /// </summary>
@@ -156,7 +188,10 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
     {
         ScriptFolders scriptFolders = _folders();
         var trust = new TrustStore(scriptFolders.TrustFile);
-        using var host = new ScriptHost(scriptFolders, trust, () => new ScriptLimits(), () => string.Empty, _csharp());
+        var settings = new CliSettings(scriptFolders.Settings);
+        // 組織の設定 (scripts.policy) と上限は GUI と同じ設定ファイルから読む (AUTO-34 の仕様 9、AUTO-36 の仕様 8)。
+        using var host = new ScriptHost(scriptFolders, trust, () => ScriptLimits.FromSettings(settings.Number),
+            () => settings.String(ScriptSettingKeys.Policy, "none"), _csharp());
         using var env = new CoreScriptEnvironment(language: request.Language)
         {
             AppVersion = typeof(CoreScriptRunner).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.0.0",
@@ -167,7 +202,7 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         PluginManager? previousPlugins = PluginManager.Current;
         try
         {
-            LoadPlugins(scriptFolders, trust, env, request);
+            LoadPlugins(scriptFolders, trust, env, request, settings);
             return RunCore(request, cancellationToken, scriptFolders, host, env);
         }
         finally
@@ -180,7 +215,7 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
     /// プラグイン (AUTO-30) を読み込む: アプリで「有効にする」を選んで信頼済みにしたものだけ (確認を出せないため)。管理者として実行中は
     /// <c>--trust</c> がある場合だけ (AUTO-34 の仕様 8)。署名の失効の確認はキャッシュだけを使い、通信しない。
     /// </summary>
-    private static void LoadPlugins(ScriptFolders folders, TrustStore trust, CoreScriptEnvironment env, ScriptRunRequest request)
+    private static void LoadPlugins(ScriptFolders folders, TrustStore trust, CoreScriptEnvironment env, ScriptRunRequest request, CliSettings settings)
     {
         string root = Path.Combine(folders.Settings, "plugins");
         if (!Directory.Exists(root))
@@ -194,6 +229,8 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
             AppVersion = env.AppVersion,
             Trust = trust,
             Verifier = new PluginVerifier(),
+            Policy = () => settings.String(ScriptSettingKeys.Policy, "none"),
+            SignedOnly = () => settings.Bool("plugins.signedOnly", false),
             Prompts = null,
             CommandLineTrust = request.Trust,
             IsElevated = env.IsElevated,

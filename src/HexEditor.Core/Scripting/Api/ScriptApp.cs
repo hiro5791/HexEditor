@@ -55,8 +55,30 @@ public sealed class ScriptApp : IApp
         }
     }
 
-    public Task<IDocument> OpenAsync(string path, OpenOptions? options = null) =>
-        OpenCoreAsync(() => Env.OpenFileAsync(Path.GetFullPath(path), options?.ReadOnly ?? false, options?.Background ?? false), options);
+    /// <summary>
+    /// ファイルを開く。開いていないファイルを開くのは任意のファイルの読み取りに当たるため、<c>file-read</c> (または選んだパス・スクリプトの
+    /// フォルダ以下) を求める (AUTO-34 の仕様 3。<c>app.open</c> でサンドボックスを迂回しないため)。既に開いているファイルは許可なしで扱える。
+    /// 開いたファイルへの保存は <see cref="ScriptContext.RequireSaveToOpenedFile"/> で <c>file-write</c> を求める。
+    /// </summary>
+    public Task<IDocument> OpenAsync(string path, OpenOptions? options = null) => ScriptErrorMap.GuardAsync(async () =>
+    {
+        string full = Path.GetFullPath(path);
+        bool alreadyOpen = _ctx.Dispatcher.Invoke(() => Env.Documents.Any(d => !d.IsClosed && d.Path is { } p && string.Equals(Path.GetFullPath(p), full, StringComparison.OrdinalIgnoreCase)));
+        if (!alreadyOpen)
+        {
+            _ctx.RequireFileRead(full);
+        }
+
+        IScriptDocumentHost? opened = null;
+        IDocument doc = await OpenCoreAsync(async () => opened = await Env.OpenFileAsync(full, options?.ReadOnly ?? false, options?.Background ?? false).ConfigureAwait(true), options)
+            .ConfigureAwait(false);
+        if (!alreadyOpen && opened is not null)
+        {
+            _ctx.MarkOpenedByScript(opened);
+        }
+
+        return doc;
+    });
 
     public Task<IDocument> OpenDiskAsync(string id, OpenOptions? options = null)
     {

@@ -287,12 +287,21 @@ internal sealed class ScriptProcessRunner(ScriptContext ctx) : IProcessRunner
 /// <summary><c>app.commands</c> (AUTO-06 の仕様 1〜3)。</summary>
 internal sealed class ScriptCommands(ScriptContext ctx) : ICommands
 {
+    /// <summary>開いているファイルに書き込むコマンド (スクリプトが開いたファイルがあれば file-write を求める)。</summary>
+    private static readonly HashSet<string> SavingCommands = new(StringComparer.Ordinal) { "file.save", "file.saveAll", "file.toggleImmediateWrite" };
+
     public Task<object?> ExecuteAsync(string id, IReadOnlyDictionary<string, object?>? args = null) => ScriptErrorMap.GuardAsync(async () =>
     {
         IScriptCommandService commands = ctx.Environment.Commands;
         if (!commands.Exists(id))
         {
             throw new Sdk.ArgumentError(Msg.T($"コマンドが見つかりません: {id} (app.commands.list() で一覧できます)", $"Command not found: {id} (see app.commands.list() for the list)"));
+        }
+
+        if (SavingCommands.Contains(id))
+        {
+            // コマンドを経由して、スクリプトが開いたファイルへの保存の確認 (file-write) を迂回しない (AUTO-34 の仕様 3)。
+            ctx.RequireSaveToOpenedFiles();
         }
 
         using (ctx.Clock.Pause())

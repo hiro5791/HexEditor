@@ -5933,6 +5933,7 @@ Size: {0}
 Saved to: {1}
 Downloaded from: {2}</value></data>
   <data name="CSharpComponent_Download" xml:space="preserve"><value>Download</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>The download is larger than the expected {0} bytes and was stopped.</value></data>
   <data name="CSharpComponent_Operation" xml:space="preserve"><value>Adding the C# script component</value></data>
   <data name="CSharpComponent_Installed" xml:space="preserve"><value>The C# script component was added.</value></data>
   <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>The C# script component could not be added: {0} You can add it by hand: download the component zip from the release page and extract it into the data folder's components\csharp\&lt;version&gt;\ folder.</value></data>

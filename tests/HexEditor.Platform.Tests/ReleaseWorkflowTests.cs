@@ -181,8 +181,14 @@ public sealed partial class ReleaseWorkflowTests
         Assert.Contains("--notes-file release-notes.md", publish, StringComparison.Ordinal);
         Assert.Contains("foreach ($arch in 'x64', 'arm64')", publish, StringComparison.Ordinal);
 
-        // C# スクリプト コンポーネントの zip (*-csharp.zip) は AUTO-03 (フェーズ 3) の実装時に加える (release.yml の冒頭の「まだないもの」)。
-        Assert.Contains("C# スクリプト コンポーネントの zip (AUTO-03)", Release, StringComparison.Ordinal);
+        // C# スクリプト コンポーネントの zip (*-csharp.zip。AUTO-03、PKG-17 の 7): アーキテクチャごとに 1 回作り、同じ一覧を各ビルドに埋め込んで載せる。
+        string component = Job(Release, "component");
+        Assert.Contains("./build/Build-CSharpComponent.ps1", component, StringComparison.Ordinal);
+        Assert.Contains("-CSharpComponentManifest artifacts/CSharpComponent/${{ matrix.arch }}/csharp-component.json", Job(Release, "build"), StringComparison.Ordinal);
+        Assert.Contains("-like '*-csharp.zip'", publish, StringComparison.Ordinal);
+        // SDK のパッケージ (AUTO-29) は作るだけで、公開のレジストリには送らない (公開の手順は未決定)。
+        Assert.Contains("dotnet pack", Job(Release, "sdk"), StringComparison.Ordinal);
+        Assert.DoesNotContain("nuget push", Release, StringComparison.Ordinal);
     }
 
     // ---- テスト用のリポジトリの結果 (読むだけ) ----

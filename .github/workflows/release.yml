@@ -7,8 +7,11 @@
 #   8-10. SHA256SUMS.txt、リリースノート、GitHub Releases (安定版は下書き、プレビュー版は Pre-release)
 #   11. できたリリースの確認 (build/tests/Test-Release.ps1)
 # どこかで失敗したら Releases には何も作らず、失敗した手順を Issue にする。
-# まだないもの: C# スクリプト コンポーネントの zip (AUTO-03)、補助プロセス (PKG-14) のハッシュの埋め込み。
-# それぞれの機能を作るときに加える。winget の提出 (PKG-27) は、リリースの公開のときに .github/workflows/winget.yml が行う。
+#   C# スクリプト コンポーネント (AUTO-03、PKG-17 の 7): アーキテクチャごとに 1 回だけ作り (component)、同じ一覧を 3 種類のビルドに埋め込み、
+#   HexEditor-<版>-<アーキテクチャ>-csharp.zip を Releases に載せる (PKG-26)。
+#   SDK のパッケージ (AUTO-29): HexEditor.Sdk / .Sdk.UI / .Sdk.Templates / .Sdk.Testing を作り、ワークフローの成果物に残す。
+#   NuGet への公開は未決定 (公開の手順を決めるまで、このワークフローは送らない)。
+# まだないもの: 補助プロセス (PKG-14) のハッシュの埋め込み。機能を作るときに加える。winget の提出 (PKG-27) は、リリースの公開のときに .github/workflows/winget.yml が行う。
 name: release
 
 on:
@@ -90,8 +93,52 @@ jobs:
           name: release-notes
           path: release-notes.md
 
-  build:
+  component:
     needs: prepare
+    runs-on: windows-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: true
+      matrix:
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: C# script component (AUTO-03)
+        shell: pwsh
+        run: ./build/Build-CSharpComponent.ps1 -Version ${{ needs.prepare.outputs.version }} -Arch ${{ matrix.arch }} -OutDir artifacts/CSharpComponent/${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CSharpComponent-${{ matrix.arch }}
+          path: |
+            artifacts/CSharpComponent/${{ matrix.arch }}/csharp-component.json
+            artifacts/CSharpComponent/${{ matrix.arch }}/HexEditor-*-csharp.zip
+
+  sdk:
+    needs: prepare
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: SDK packages (AUTO-29)
+        shell: pwsh
+        run: |
+          foreach ($p in 'HexEditor.Sdk', 'HexEditor.Sdk.UI', 'HexEditor.Sdk.Templates', 'HexEditor.Sdk.Testing') {
+            dotnet pack "src/$p/$p.csproj" -c Release -o artifacts/sdk -nologo "-p:HexVersion=${{ needs.prepare.outputs.version }}"
+            if ($LASTEXITCODE -ne 0) { throw "dotnet pack failed ($p)" }
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-packages
+          path: artifacts/sdk/*.nupkg
+
+  build:
+    needs: [prepare, component]
     runs-on: windows-latest
     timeout-minutes: 40
     strategy:
@@ -121,9 +168,13 @@ jobs:
           dotnet vpk download github --repoUrl "${{ github.server_url }}/${{ github.repository }}" --token "${{ github.token }}" --channel $channel @preArgs --outputDir previous
           if ($LASTEXITCODE -ne 0) { Write-Host 'No previous release; no delta package this time.' }
           $global:LASTEXITCODE = 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: CSharpComponent-${{ matrix.arch }}
+          path: artifacts/CSharpComponent/${{ matrix.arch }}
       - name: Publish
         shell: pwsh
-        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }} -Version ${{ needs.prepare.outputs.version }} -Commit ${{ needs.prepare.outputs.commit }} -PreviousReleaseDir previous
+        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }} -Version ${{ needs.prepare.outputs.version }} -Commit ${{ needs.prepare.outputs.commit }} -PreviousReleaseDir previous -CSharpComponentManifest artifacts/CSharpComponent/${{ matrix.arch }}/csharp-component.json
       - uses: actions/upload-artifact@v4
         with:
           name: HexEditor-${{ matrix.distro }}-${{ matrix.arch }}
@@ -253,7 +304,7 @@ jobs:
           path: sizes.json
 
   publish:
-    needs: [prepare, build, bundle, verify, size]
+    needs: [prepare, component, sdk, build, bundle, verify, size]
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
@@ -264,6 +315,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: HexEditor-*
+          path: downloaded
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: CSharpComponent-*
           path: downloaded
       - uses: actions/download-artifact@v4
         with:
@@ -308,7 +363,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $tag = '${{ github.ref_name }}'
-          $files = Get-ChildItem release -File | Where-Object { $_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' }
+          $files = Get-ChildItem release -File | Where-Object { $_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' -or $_.Name -like '*-csharp.zip' }
           gh release upload $tag @($files.FullName) --clobber
           if ($LASTEXITCODE -ne 0) { throw 'gh release upload failed' }
           # SHA256SUMS.txt is made from the files that are actually in the release (Velopack and gh both upload),
@@ -353,7 +408,7 @@ jobs:
           if ($r -and $r.isDraft) { gh release delete '${{ github.ref_name }}' --yes }
 
   report-failure:
-    needs: [prepare, build, bundle, verify, size, publish]
+    needs: [prepare, component, sdk, build, bundle, verify, size, publish]
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -363,4 +418,4 @@ jobs:
         run: |
           gh issue create --repo "${{ github.repository }}" \
             --title "Release ${{ github.ref_name }} failed" \
-            --body "The release workflow failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. Jobs: prepare=${{ needs.prepare.result }}, build=${{ needs.build.result }}, bundle=${{ needs.bundle.result }}, verify=${{ needs.verify.result }}, size=${{ needs.size.result }}, publish=${{ needs.publish.result }}."
+            --body "The release workflow failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. Jobs: prepare=${{ needs.prepare.result }}, component=${{ needs.component.result }}, sdk=${{ needs.sdk.result }}, build=${{ needs.build.result }}, bundle=${{ needs.bundle.result }}, verify=${{ needs.verify.result }}, size=${{ needs.size.result }}, publish=${{ needs.publish.result }}."

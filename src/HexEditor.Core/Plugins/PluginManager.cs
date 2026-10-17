@@ -397,7 +397,26 @@ public sealed class PluginManager : IPluginGuardHost
                 return;
             }
 
-            toLoad.AddRange(ready);
+            if (Options.Prompts is null)
+            {
+                // ヘッドレス実行は信頼の記録のあるものだけ (AUTO-34 の実装の注記。--trust は管理者として実行中の確認の代わりで、信頼の代わりではない)。
+                foreach (PluginRecord p in ready)
+                {
+                    if (IsTrusted(p))
+                    {
+                        toLoad.Add(p);
+                    }
+                    else
+                    {
+                        p.Reason = Msg.T("信頼されていないため読み込んでいません (アプリで「有効にする」を選ぶと信頼済みになります)。",
+                            "Not loaded because it is not trusted (choose \"Enable\" in the application to trust it).");
+                    }
+                }
+            }
+            else
+            {
+                toLoad.AddRange(ready);
+            }
         }
         else
         {
