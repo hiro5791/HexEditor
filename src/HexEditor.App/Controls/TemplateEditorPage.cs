@@ -124,7 +124,10 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         AutomationProperties.SetAutomationId(_info, "TplEd_Message");
 
         // ---- エディタ本体 ----
-        _editor = CodeEditorFactory.Create("TplEd_Text", Loc.Get("TplEd_TextName"));
+        _editor = CodeEditorFactory.Create("TplEd_Text", Loc.Get("TplEd_TextName"), CodeLanguage.Template, System.IO.Path.GetFileName(Path));
+        // Monaco の補完の一覧と整形の操作から呼ばれる (テンプレート言語の部品。TPL-31 の仕様 3)
+        _editor.CompletionProvider = (offset, _) => Task.FromResult<CodeCompletionList?>(MonacoCompletion(offset));
+        _editor.Formatter = TemplateLanguageService.Format;
         _editor.TextChanged += (_, _) => Editor_TextChanged();
         _editor.CaretMoved += (_, _) => UpdateDecorations();
         _editor.PreviewKey = Editor_PreviewKey;
@@ -257,8 +260,11 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>今のエディタの装飾 (波線と行の印。テスト用の命令)。</summary>
     public IReadOnlyList<TemplateEditorDiagnostic> Decorations { get; private set; } = [];
 
-    /// <summary>補完の候補 (開いていれば。テスト用の命令)。</summary>
-    public TemplateCompletionResult? Completion => _completionPopup.IsOpen ? _completion : null;
+    /// <summary>補完の候補 (開いていれば。Monaco では最後に一覧に渡した候補。テスト用の命令)。</summary>
+    public TemplateCompletionResult? Completion => _completionPopup.IsOpen || _editor.IsMonaco ? _completion : null;
+
+    /// <summary>コードエディタの部品 (テスト用の命令が Monaco の状態を読む)。</summary>
+    internal IScriptCodeEditor CodeEditor => _editor;
 
     /// <summary>タブの見出し。</summary>
     public string Title => System.IO.Path.GetFileName(TemplateCatalog.IsStandardPath(Path) ? Path[(Path.IndexOf(':') + 1)..] : Path) + (IsDirty ? " ●" : string.Empty);
@@ -377,9 +383,13 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>色分けと波線・現在の行を付け直す (テーマの色。ハイコントラストではシステム色だけにする。描くのはエディタの部品)。</summary>
     private void ApplyFormatting()
     {
-        // 大きなテンプレートは色分けしない (入力の遅れを抑える。TPL-31 の「巨大ファイル」)
-        _editor.SetClassification(_text.Length > 1024 * 1024 ? []
-            : [.. TemplateLanguageService.Classify(_text).Select(s => new CodeSpan(s.Start, s.Length, s.Class.ToString()))]);
+        // 色分けは Monaco の字句解析がする。代替の入力欄だけ色の範囲を渡す (大きなテンプレートは色分けしない。TPL-31 の「巨大ファイル」)
+        if (!_editor.IsMonaco)
+        {
+            _editor.SetClassification(_text.Length > 1024 * 1024 ? []
+                : [.. TemplateLanguageService.Classify(_text).Select(s => new CodeSpan(s.Start, s.Length, s.Class.ToString()))]);
+        }
+
         _editor.SetMarkers([.. Decorations.Select(d => new CodeMarker(d.Line, d.Column, Math.Max(1, d.Length),
             d.Diagnostic.Severity == TemplateSeverity.Error, TemplateDiagnosticText.Line(d.Diagnostic)))]);
         _editor.SetCurrentLine(_debugLine);
@@ -413,9 +423,37 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         }
     }
 
+    /// <summary>Monaco の補完の一覧に渡す候補 (<c>.</c>・<c>::</c>・<c>[</c> の入力と Ctrl+Space)。</summary>
+    private CodeCompletionList MonacoCompletion(int offset)
+    {
+        _text = _editor.Text;
+        TemplateCompletionResult result = TemplateLanguageService.Complete(_text, Math.Clamp(offset, 0, _text.Length), Path, TemplateService.LoadOptions);
+        _completion = result;
+        return new CodeCompletionList(result.ReplaceStart, result.ReplaceLength,
+            [.. result.Items.Take(500).Select(i => new CodeCompletionItem(i.Label, CompletionKind(i.Kind), i.Detail))]);
+    }
+
+    private static string CompletionKind(TemplateCompletionKind kind) => kind switch
+    {
+        TemplateCompletionKind.Keyword => "keyword",
+        TemplateCompletionKind.BuiltinType => "builtinType",
+        TemplateCompletionKind.Type => "type",
+        TemplateCompletionKind.Function => "function",
+        TemplateCompletionKind.Member => "member",
+        TemplateCompletionKind.Pattern => "pattern",
+        TemplateCompletionKind.Attribute => "attribute",
+        TemplateCompletionKind.Pragma => "pragma",
+        _ => "constant",
+    };
+
     /// <summary>補完の候補を出す (Ctrl+Space、または <c>.</c> の入力の後)。</summary>
     public void ShowCompletion(bool automatic = false)
     {
+        if (!automatic && _editor.TryExecute(CodeEditorAction.Complete))
+        {
+            return; // Monaco の補完の一覧 (候補は MonacoCompletion)
+        }
+
         _text = _editor.Text;
         TemplateCompletionResult result = TemplateLanguageService.Complete(_text, Caret, Path, TemplateService.LoadOptions);
         _completion = result;
@@ -487,9 +525,9 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// </summary>
     public bool HandleEditorKey(VirtualKey key, bool ctrl, bool shift, bool alt)
     {
-        if (!_editor.HasFocus)
+        if (_editor.IsMonaco || !_editor.HasFocus)
         {
-            return false; // ウォッチ式の入力欄など、エディタ以外の部品
+            return false; // Monaco は自分で処理する。ウォッチ式の入力欄など、エディタ以外の部品
         }
 
         switch (key)
@@ -515,6 +553,11 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>Ctrl+G: 行番号を入力して移動する (エディタの上に小さな入力欄を出す)。</summary>
     internal void ShowGoToLine()
     {
+        if (_editor.TryExecute(CodeEditorAction.GoToLine))
+        {
+            return;
+        }
+
         var box = new TextBox { PlaceholderText = Loc.Format("TplEd_GoToLineRange", LineCount), MinWidth = 200, FlowDirection = FlowDirection.LeftToRight };
         AutomationProperties.SetAutomationId(box, "TplEd_GoToLineInput");
         AutomationProperties.SetName(box, Loc.Get("TplEd_GoToLine"));
@@ -552,6 +595,11 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
 
     public void FormatDocument()
     {
+        if (_editor.TryExecute(CodeEditorAction.Format))
+        {
+            return; // Monaco の整形の操作 (元に戻せる。結果は Formatter)
+        }
+
         int line = CaretLine;
         SetText(TemplateLanguageService.Format(_text));
         MoveCaret(line, 1);
@@ -559,6 +607,11 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
 
     public void ToggleComment()
     {
+        if (_editor.TryExecute(CodeEditorAction.ToggleComment))
+        {
+            return;
+        }
+
         int first = LineOf(_editor.Selection.Start);
         int last = LineOf(_editor.Selection.End);
         SetText(TemplateLanguageService.ToggleComment(_text, first, last));
@@ -950,6 +1003,15 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             case CodeEditorCommands.ToggleComment: ToggleComment(); break;
             case CodeEditorCommands.Complete: ShowCompletion(); break;
         }
+    }
+
+    /// <summary>タブを閉じた後の後始末 (エディタの部品の WebView2 を閉じる)。</summary>
+    public void Close()
+    {
+        Debugger.Paused -= Debugger_Paused;
+        Debugger.Resumed -= Debugger_Resumed;
+        _checkTimer.Stop();
+        _editor.Dispose();
     }
 
     // ───────────── 部品 ─────────────

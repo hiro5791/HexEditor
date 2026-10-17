@@ -75,6 +75,20 @@ public sealed partial class MainWindow
                     : new JsonObject { ["open"] = false };
             case "editorText":
                 return new JsonObject { ["text"] = ActiveScriptEditor?.Text };
+            case "problems":
+                return new JsonObject
+                {
+                    ["rows"] = new JsonArray([.. (ActiveScriptEditor?.ProblemRows ?? []).Select(r => (JsonNode?)new JsonObject
+                    {
+                        ["message"] = r.Diagnostic.Message,
+                        ["line"] = r.Diagnostic.Line,
+                        ["column"] = r.Diagnostic.Column,
+                        ["error"] = r.Diagnostic.IsError,
+                    })]),
+                };
+            case "selectProblem":
+                ActiveScriptEditor!.SelectProblem(request["index"]?.GetValue<int>() ?? 0);
+                return new JsonObject();
             case "setEditorText":
                 ActiveScriptEditor!.Text = request["text"]!.GetValue<string>();
                 return new JsonObject();

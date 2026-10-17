@@ -130,6 +130,46 @@ public sealed class CSharpScriptTests(ComponentFeedFixture feed) : IClassFixture
         }
     }
 
+    /// <summary>スクリプトエディタの C# の補完 (AUTO-20 の仕様 3): コンポーネントの Roslyn で、グローバル・式のメンバーを返す。</summary>
+    [Fact]
+    public void Completion_lists_the_globals_and_the_members_of_an_expression()
+    {
+        (ScriptTestHost t, CSharpComponentManager manager, _) = Create();
+        using (t)
+        {
+            IReadOnlyList<HexEditor.Sdk.Hosting.CSharpCompletionItem>? top = CSharpScriptCompletion.Complete(manager, "var x = 1;\n", 11, null, [], CancellationToken.None);
+            Assert.NotNull(top);
+            Assert.Contains(top!, i => i.Label == "App" && i.Kind == "property");
+            Assert.Contains(top!, i => i.Label == "Doc");
+            Assert.Contains(top!, i => i.Label == "x"); // スクリプトのトップレベルの変数 (投稿のクラスのフィールド)
+
+            const string code = "var d = Doc;\nd.";
+            IReadOnlyList<HexEditor.Sdk.Hosting.CSharpCompletionItem>? members = CSharpScriptCompletion.Complete(manager, code, code.Length, null, [], CancellationToken.None);
+            Assert.NotNull(members);
+            HexEditor.Sdk.Hosting.CSharpCompletionItem read = Assert.Single(members!, i => i.Label == "ReadBytes");
+            Assert.Equal("method", read.Kind);
+            Assert.Contains("offset", read.Detail, StringComparison.Ordinal);
+            Assert.DoesNotContain(members!, i => i.Label == "App");
+
+            // 入力中の名前の途中でも同じ型のメンバー (置き換える範囲は入力中の名前)
+            const string partial = "Doc.Rea";
+            IReadOnlyList<HexEditor.Sdk.Hosting.CSharpCompletionItem>? filtered = CSharpScriptCompletion.Complete(manager, partial, partial.Length, null, [], CancellationToken.None);
+            Assert.Contains(filtered!, i => i.Label == "ReadBytes");
+            Assert.Equal((4, 3), CSharpScriptCompletion.WordBefore(partial, partial.Length));
+        }
+    }
+
+    [Fact]
+    public void Completion_needs_the_component()
+    {
+        (ScriptTestHost t, CSharpComponentManager manager, _) = Create(install: false);
+        using (t)
+        {
+            Assert.False(CSharpScriptCompletion.IsAvailable(manager));
+            Assert.Null(CSharpScriptCompletion.Complete(manager, "App.", 4, null, [], CancellationToken.None));
+        }
+    }
+
     [Fact]
     public async Task Canceling_the_offer_does_not_run_the_script()
     {

@@ -129,6 +129,7 @@ public sealed partial class MainWindow : ITemplateEditorHost
         if (_templateEditors.Remove(id, out TemplateEditorPage? page))
         {
             page.StopDebug();
+            page.Close();
         }
     }
 

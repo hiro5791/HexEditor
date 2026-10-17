@@ -172,9 +172,9 @@ public sealed partial class MainWindow
                 return Region.SecondPane;
             }
 
-            if (node is Controls.HexView || node == StartPage)
+            if (node is Controls.HexView || node == StartPage || node == ToolPageHost)
             {
-                return Region.Editor;
+                return Region.Editor; // ページのタブ (スクリプト・テンプレートのエディタ、設定など) は編集の領域
             }
 
             if (node is TabViewItem)
@@ -198,6 +198,11 @@ public sealed partial class MainWindow
 
                 break;
             case Region.Editor:
+                if (_activeToolPage is not null && ToolPageHost.Visibility == Visibility.Visible && FocusActiveToolPage())
+                {
+                    break; // 表示中のページのタブ (コードエディタなら入力欄。F6 で戻れる)
+                }
+
                 if (Vm.Documents.Count == 0)
                 {
                     // スタートページの「開く」にフォーカスを置く (初回起動の「はじめに」の欄より先)。
@@ -233,6 +238,24 @@ public sealed partial class MainWindow
             case Region.StatusBar:
                 StatusButtons.FirstOrDefault(b => b.Visibility == Visibility.Visible)?.Focus(FocusState.Keyboard);
                 break;
+        }
+    }
+
+    /// <summary>表示中のページのタブにフォーカスを置く (コードエディタは入力欄、ほかは最初のフォーカスできる部品)。</summary>
+    private bool FocusActiveToolPage()
+    {
+        FrameworkElement? page = _toolPages.FirstOrDefault(p => p.Id == _activeToolPage).Page;
+        switch (page)
+        {
+            case Controls.TemplateEditorPage template:
+                template.FocusEditor();
+                return true;
+            case Panels.IPanelContent content when content.FocusContent():
+                return true;
+            case not null when FocusManager.FindFirstFocusableElement(page) is Control first:
+                return first.Focus(FocusState.Keyboard);
+            default:
+                return false;
         }
     }
 }

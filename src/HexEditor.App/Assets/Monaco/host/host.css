@@ -1,0 +1,70 @@
+/* コードエディタのページ。色はアプリのテーマから受け取った CSS 変数 (host.js の applyTheme) で決める。 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  direction: ltr;
+  background: var(--hex-background, transparent);
+}
+
+#container {
+  position: absolute;
+  inset: 0;
+  direction: ltr;
+}
+
+/* ブレークポイント (AUTO-21 の画面: 赤い丸。無効は白抜き、条件付きは中に「=」。色だけで区別しない) */
+.hex-bp, .hex-bp-disabled, .hex-bp-cond, .hex-bp-cond-disabled {
+  box-sizing: border-box;
+  border-radius: 50%;
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 4px;
+  margin-top: 3px;
+  border: 2px solid var(--hex-bp, #e51400);
+  color: var(--hex-bp-text, #ffffff);
+  font: bold 9px/8px sans-serif;
+  text-align: center;
+}
+
+.hex-bp, .hex-bp-cond {
+  background: var(--hex-bp, #e51400);
+}
+
+.hex-bp-disabled, .hex-bp-cond-disabled {
+  background: var(--hex-background, transparent);
+  color: var(--hex-bp, #e51400);
+}
+
+.hex-bp-cond::after, .hex-bp-cond-disabled::after {
+  content: "=";
+}
+
+/* 一時停止中の現在の行 (矢印と行の帯) */
+.hex-current-arrow::before {
+  content: "\25B6";
+  color: var(--hex-current, #0078d4);
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.hex-current-line {
+  background: var(--hex-current-line, rgba(255, 238, 0, 0.25));
+  outline: 1px solid var(--hex-current, transparent);
+}
+
+/* エラー・警告の行の印 (行番号の右の細い帯。波線と合わせて示す) */
+.hex-line-error, .hex-line-warning {
+  width: 3px !important;
+  margin-left: 3px;
+}
+
+.hex-line-error {
+  background: var(--hex-error, #e51400);
+}
+
+.hex-line-warning {
+  background: var(--hex-warning, #bf8803);
+}

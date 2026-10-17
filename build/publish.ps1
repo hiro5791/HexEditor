@@ -160,6 +160,28 @@ function Copy-Cli($cliDir, $destination) {
     foreach ($name in $CliFiles) { Copy-Item (Join-Path $cliDir $name) (Join-Path $destination $name) -Force }
 }
 
+# The code editor (AUTO-20, TPL-31) bundles Monaco: every distribution must contain these files (the app never loads them from the internet).
+$MonacoFiles = @('Assets/Monaco/vs/loader.js', 'Assets/Monaco/vs/editor/editor.main.js', 'Assets/Monaco/host/index.html', 'Assets/Monaco/host/host.js',
+    'Assets/Monaco/host/hexeditor.d.ts', 'Assets/Monaco/LICENSE.txt', 'Assets/Monaco/ThirdPartyNotices.txt')
+
+function Assert-Monaco($folder) {
+    foreach ($name in $MonacoFiles) {
+        if (-not (Test-Path (Join-Path $folder $name))) { throw "The output is missing $name (Monaco, AUTO-20)." }
+    }
+}
+
+function Assert-MonacoInPackage($package) {
+    Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($package)
+    try {
+        $names = @($archive.Entries | ForEach-Object { [System.Uri]::UnescapeDataString($_.FullName).Replace('\', '/') })
+        foreach ($name in $MonacoFiles) {
+            if ($names -notcontains $name) { throw "The package is missing $name (Monaco, AUTO-20)." }
+        }
+    }
+    finally { $archive.Dispose() }
+}
+
 switch ($Distro) {
     'Portable' {
         $helper = Build-ElevatedHelper
@@ -169,6 +191,7 @@ switch ($Distro) {
         Copy-ElevatedHelper $helper $publishDir
         Build-Cli | Out-Null
         Copy-Cli $script:CliDir $publishDir
+        Assert-Monaco $publishDir
 
         # The marker tells the app to keep its data next to the exe (PKG-05, PKG-12, PKG-13).
         Set-Content -Path (Join-Path $publishDir 'portable.marker') -Value '' -Encoding ascii -NoNewline
@@ -201,6 +224,7 @@ switch ($Distro) {
         Copy-ElevatedHelper $helper $publishDir
         Build-Cli | Out-Null
         Copy-Cli $script:CliDir $publishDir
+        Assert-Monaco $publishDir
         Push-Location $root
         try {
             Invoke-Checked 'dotnet' @('tool', 'restore')
@@ -269,6 +293,7 @@ switch ($Distro) {
         $msix = Get-ChildItem (Join-Path $staging 'AppPackages') -Recurse -Filter '*.msix' |
             Where-Object { $_.FullName -notmatch '\\Dependencies\\' } | Select-Object -First 1
         if (-not $msix) { throw 'No .msix was produced.' }
+        Assert-MonacoInPackage $msix.FullName
         Copy-Item $msix.FullName (Join-Path $out "HexEditor-$Version-$Arch.msix")
     }
 }
