@@ -2,6 +2,8 @@ using System.Text.Json.Nodes;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.App.Services.Scripting;
+using HexEditor.Core.Scripting;
+using HexEditor.Core.Scripting.CSharp;
 using HexEditor.Core.Scripting.Hooks;
 using HexEditor.Core.Settings;
 using Microsoft.UI.Xaml;
@@ -11,7 +13,8 @@ using Microsoft.UI.Xaml.Controls;
 namespace HexEditor.App.Views;
 
 /// <summary>
-/// 設定「スクリプト」(自動化) の専用の区画: 自動実行 (フック。AUTO-25 の画面) とスクリプトのフォルダ (AUTO-19 の仕様 1)。
+/// 設定「自動化」の専用の区画: 自動実行 (フック。AUTO-25 の画面)、スクリプトのフォルダ (AUTO-19 の仕様 1)、信頼と許可 (AUTO-34 の仕様 5)、
+/// C# スクリプト コンポーネント (AUTO-03 の「画面」)。
 /// 自動実行はフックごとにスクリプトを追加・削除・並べ替え・有効 / 無効にできる。
 /// </summary>
 public static class ScriptSections
@@ -25,6 +28,14 @@ public static class ScriptSections
         SettingsSections.Register(new SettingsSection(SettingCategories.Automation, "scriptFolders", "SetSection_ScriptFolders", Folders, 30)
         {
             SearchKeys = ["SetSearch_ScriptFolders"],
+        });
+        SettingsSections.Register(new SettingsSection(SettingCategories.Automation, "scriptTrust", "SetSection_ScriptTrust", Trust, 40)
+        {
+            SearchKeys = ["SetSearch_ScriptTrust"],
+        });
+        SettingsSections.Register(new SettingsSection(SettingCategories.Automation, "csharpComponent", "SetSection_CSharpComponent", CSharpComponent, 50)
+        {
+            SearchKeys = ["SetSearch_CSharpComponent"],
         });
     }
 
@@ -309,6 +320,172 @@ public static class ScriptSections
         };
         Render();
         panel.Children.Add(add);
+        return panel;
+    }
+
+    // ---- 信頼と許可 (AUTO-34 の仕様 5・9) ----
+
+    /// <summary>
+    /// 「常に許可する」を選んだスクリプトの一覧と取り消し。取り消すと、次の実行で再び確認が出る。組織の設定 (<c>scripts.policy</c>) があれば、
+    /// その内容を示す (設定ファイルで決まり、ここでは変えられない)。プラグインの信頼はプラグインマネージャで扱う。
+    /// </summary>
+    private static FrameworkElement Trust(MainWindow window)
+    {
+        var panel = new StackPanel { Spacing = 8 };
+        AutomationProperties.SetAutomationId(panel, "ScriptTrust");
+        panel.Children.Add(Secondary(Loc.Get("TrustList_Intro")));
+        string policy = App.Settings.GetString(ScriptSettingKeys.Policy, "none");
+        if (policy != "none")
+        {
+            TextBlock managed = Secondary(Loc.Format("TrustList_Policy", Loc.TryGet("SetOpt_scripts_policy_" + policy) ?? policy));
+            AutomationProperties.SetAutomationId(managed, "ScriptTrust_Policy");
+            panel.Children.Add(managed);
+        }
+
+        var rows = new StackPanel { Spacing = 6 };
+        AutomationProperties.SetAutomationId(rows, "ScriptTrust_List");
+        panel.Children.Add(rows);
+        void Render()
+        {
+            rows.Children.Clear();
+            IReadOnlyList<TrustRecord> records = ScriptingService.Trust.AllowedScripts;
+            if (records.Count == 0)
+            {
+                TextBlock none = Secondary(Loc.Get("TrustList_None"));
+                AutomationProperties.SetAutomationId(none, "ScriptTrust_None");
+                rows.Children.Add(none);
+            }
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                rows.Children.Add(TrustRow(records[i], i, Render));
+            }
+        }
+
+        Render();
+        var plugins = new HyperlinkButton { Content = Loc.Get("TrustList_Plugins"), Padding = new Thickness(0) };
+        AutomationProperties.SetAutomationId(plugins, "ScriptTrust_Plugins");
+        plugins.Click += (_, _) => _ = window.Commands.ExecuteAsync("plugins.manage");
+        panel.Children.Add(plugins);
+        return panel;
+    }
+
+    private static FrameworkElement TrustRow(TrustRecord record, int index, Action refresh)
+    {
+        string path = record.DisplayPath ?? record.Key;
+        string name = System.IO.Path.GetFileName(path);
+        var row = new Grid { ColumnSpacing = 8 };
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        AutomationProperties.SetAutomationId(row, "ScriptTrust_Row_" + index);
+        var text = new StackPanel { Spacing = 2 };
+        var title = new TextBlock { Text = name, TextWrapping = TextWrapping.Wrap };
+        AutomationProperties.SetAutomationId(title, "ScriptTrust_Name_" + index);
+        text.Children.Add(title);
+        TextBlock location = Secondary(path);
+        location.FontFamily = Controls.DialogParts.Mono;
+        text.Children.Add(location);
+        string permissions = record.Permissions.Count == 0
+            ? Loc.Get("TrustList_NoPermissions")
+            : Loc.Format("TrustList_Permissions", string.Join(", ", record.Permissions.Select(p => Loc.TryGet("Script_Permission_" + p.Replace('-', '_')) ?? p)));
+        TextBlock granted = Secondary(Loc.Format("TrustList_Granted", permissions, record.Time.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture)));
+        AutomationProperties.SetAutomationId(granted, "ScriptTrust_Permissions_" + index);
+        text.Children.Add(granted);
+        row.Children.Add(text);
+
+        var revoke = new Button { Content = Loc.Get("TrustList_Revoke"), VerticalAlignment = VerticalAlignment.Center };
+        AutomationProperties.SetAutomationId(revoke, "ScriptTrust_Revoke_" + index);
+        AutomationProperties.SetName(revoke, Loc.Format("TrustList_RevokeName", name));
+        revoke.Click += (_, _) =>
+        {
+            ScriptingService.Trust.Revoke(record.Kind, record.Key);
+            refresh();
+        };
+        Grid.SetColumn(revoke, 1);
+        row.Children.Add(revoke);
+        return row;
+    }
+
+    // ---- C# スクリプト コンポーネント (AUTO-03 の「画面」) ----
+
+    /// <summary>コンポーネントのバージョン (入っていなければその旨と「追加」)、削除ボタン、コンパイル結果のキャッシュの削除ボタン。</summary>
+    private static FrameworkElement CSharpComponent(MainWindow window)
+    {
+        var panel = new StackPanel { Spacing = 8 };
+        AutomationProperties.SetAutomationId(panel, "CSharpComponent");
+        var status = new TextBlock { TextWrapping = TextWrapping.Wrap };
+        AutomationProperties.SetAutomationId(status, "CSharpComponent_Status");
+        TextBlock message = Secondary(string.Empty);
+        AutomationProperties.SetAutomationId(message, "CSharpComponent_Message");
+        message.Visibility = Visibility.Collapsed;
+        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        var add = new Button { Content = Loc.Get("CSharpComponent_AddButton") };
+        AutomationProperties.SetAutomationId(add, "CSharpComponent_AddButton");
+        var remove = new Button { Content = Loc.Get("CSharpComponent_Remove") };
+        AutomationProperties.SetAutomationId(remove, "CSharpComponent_Remove");
+        var clear = new Button { Content = Loc.Get("CSharpComponent_ClearCache") };
+        AutomationProperties.SetAutomationId(clear, "CSharpComponent_ClearCache");
+        buttons.Children.Add(add);
+        buttons.Children.Add(remove);
+        buttons.Children.Add(clear);
+        panel.Children.Add(status);
+        panel.Children.Add(buttons);
+        panel.Children.Add(message);
+
+        void Show(string text)
+        {
+            message.Text = text;
+            message.Visibility = text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        void Render()
+        {
+            CSharpComponentManager components = ScriptingService.Components;
+            IReadOnlyList<string> installed = components.InstalledVersions;
+            status.Text = components.IsInstalled
+                ? Loc.Format("CSharpComponent_InstalledVersion", components.Manifest?.Version ?? string.Empty)
+                : installed.Count > 0 ? Loc.Format("CSharpComponent_OtherVersion", string.Join(", ", installed))
+                : Loc.Get("CSharpComponent_NotInstalled");
+            add.IsEnabled = !components.IsInstalled;
+            remove.IsEnabled = installed.Count > 0;
+            clear.IsEnabled = Directory.Exists(ScriptingService.Folders.CSharpCache);
+        }
+
+        add.Click += async (_, _) =>
+        {
+            Show(string.Empty);
+            await window.Commands.ExecuteAsync("scripting.addCSharpComponent");
+            Render();
+        };
+        remove.Click += (_, _) =>
+        {
+            try
+            {
+                ScriptingService.Components.Remove();
+                Show(Loc.Get("CSharpComponent_Removed"));
+            }
+            catch (Exception ex) when (ex is CSharpComponentException or IOException or UnauthorizedAccessException)
+            {
+                Show(ex.Message);
+            }
+
+            Render();
+        };
+        clear.Click += (_, _) =>
+        {
+            try
+            {
+                Directory.Delete(ScriptingService.Folders.CSharpCache, recursive: true);
+                Show(Loc.Get("CSharpComponent_CacheCleared"));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                Show(ex.Message);
+            }
+
+            Render();
+        };
+        Render();
         return panel;
     }
 

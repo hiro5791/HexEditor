@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>فیلد</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (تعریف‌شده توسط کاربر)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (الگوی {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>حذف</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>پاک کردن انتخاب</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>پاک کردن بایت</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>پاک کردن انتخاب</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>لغو انتخاب هیچ</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>در مکان‌نما چیزی برای حذف وجود ندارد.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>نقشهٔ حافظه</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>قفل فایل</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>اینکه برنامه‌های دیگر هنگام باز بودن فایل در اینجا بتوانند در آن بنویسند یا نه. برای فایل‌هایی که پس از تغییر باز می‌شوند اعمال می‌شود.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>مسدود کردن نوشتن برنامه‌های دیگر فقط هنگام وجود تغییرات ذخیره‌نشده</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>همیشه مسدود کردن نوشتن برنامه‌های دیگر هنگام باز بودن</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>قفل نکن (همیشه به برنامه‌های دیگر اجازهٔ نوشتن بده)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>رنگ تأکید</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>رنگ مورد استفاده برای انتخاب، کادرهای فوکوس و دکمه‌های تأکیدی. در کنتراست بالا نادیده گرفته می‌شود. پس از راه‌اندازی مجدد اعمال می‌شود.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>رنگ تأکید Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>رنگ سفارشی</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0} ذخیره نمی‌شود، زیرا برنامهٔ دیگری از آن استفاده می‌کند.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0} ذخیره نمی‌شود، زیرا {1} از آن استفاده می‌کند.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>تلاش مجدد</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>اعتماد و مجوزها</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>اعتماد مجوز همیشه مجاز لغو امنیت اسکریپت</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>اسکریپت‌هایی که برای آن‌ها «همیشه مجاز باشد» را انتخاب کرده‌اید بدون پرسش اجرا می‌شوند. برای اینکه دفعهٔ بعد دوباره پرسیده شود، مجوز را لغو کنید.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>سازمان شما خط‌مشی اسکریپت را تعیین کرده است: {0}. در اینجا قابل تغییر نیست.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>هیچ اسکریپتی همیشه مجاز نیست.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>اعتماد افزونه‌ها در مدیر افزونه‌ها مدیریت می‌شود</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>بدون مجوز اضافی</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>مجوزها: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · مجاز شده در {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>لغو</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>لغو اعتماد برای {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>مؤلفهٔ اسکریپت C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn مؤلفه حافظهٔ نهان نسخه حذف</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>نسخهٔ نصب‌شده: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>نسخهٔ دیگری نصب شده است ({0}). مؤلفهٔ مخصوص این نسخهٔ HexEditor را اضافه کنید.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>نصب نشده است. اسکریپت‌های C# به این مؤلفه نیاز دارند.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>افزودن...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>حذف</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>پاک کردن حافظهٔ نهان کامپایل</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>مؤلفه حذف شد.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>حافظهٔ نهان کامپایل پاک شد.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>ق</value></data>
 </root>

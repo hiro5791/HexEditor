@@ -6549,4 +6549,48 @@ Tipo: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Campo</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (definido por el usuario)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (plantilla {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Borrar la selección</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>quitar borrar bytes</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Borrar la selección</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>deseleccionar ninguno</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>No hay nada que eliminar en el cursor.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Mapa de memoria</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Bloqueo de archivos</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Si otras aplicaciones pueden escribir en un archivo mientras está abierto aquí. Se aplica a los archivos que se abran después del cambio.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Bloquear la escritura de otras aplicaciones solo mientras haya cambios sin guardar</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Bloquear siempre la escritura de otras aplicaciones mientras esté abierto</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>No bloquear (permitir siempre que otras aplicaciones escriban)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Color de énfasis</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Color de la selección, los rectángulos de foco y los botones de énfasis. Se ignora en contraste alto. Surte efecto después de reiniciar.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Color de énfasis de Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Color personalizado</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>No se puede guardar {0} porque lo está usando otra aplicación.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>No se puede guardar {0} porque lo está usando {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Reintentar</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Confianza y permisos</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>confianza permiso permitir siempre revocar seguridad script</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Los scripts para los que eligió "Permitir siempre" se ejecutan sin preguntar. Revoque uno para que se le pregunte de nuevo la próxima vez que se ejecute.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Su organización estableció la directiva de scripts: {0}. No se puede cambiar aquí.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>No hay scripts permitidos siempre.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>La confianza de los complementos se administra en el administrador de complementos</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Sin permisos adicionales</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Permisos: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · permitido el {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Revocar</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Revocar la confianza en {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Componente de script de C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn componente caché versión quitar</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Versión instalada: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Hay otra versión instalada ({0}). Agregue el componente para esta versión de HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>No instalado. Los scripts de C# necesitan este componente.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Agregar...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Quitar</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Borrar la caché de compilación</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Se quitó el componente.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Se borró la caché de compilación.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Y</value></data>
 </root>

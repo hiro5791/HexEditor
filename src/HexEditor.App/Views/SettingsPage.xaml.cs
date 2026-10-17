@@ -316,6 +316,9 @@ public sealed partial class SettingsPage : UserControl
                 return box;
             }
 
+            case SettingKind.Color:
+                return BuildColorControl(def, value is JsonValue cv && cv.TryGetValue(out string? cs) ? cs : string.Empty, error);
+
             default:
             {
                 var box = new TextBox { Text = value is JsonValue v && v.TryGetValue(out string? s) ? s : string.Empty, MinWidth = 240 };
@@ -332,6 +335,75 @@ public sealed partial class SettingsPage : UserControl
                 return box;
             }
         }
+    }
+
+    /// <summary>
+    /// 色の項目 (アクセントカラー。UI-27 の「画面」): 今の色の見本と名前のボタン。押すと、名前の付いた選択肢 (例: Windows のアクセントカラー)
+    /// と「指定した色」の選択と、<see cref="ColorPicker"/> を含むフライアウトを開き、「OK」で保存する。
+    /// </summary>
+    private FrameworkElement BuildColorControl(SettingDefinition def, string current, TextBlock error)
+    {
+        bool named = def.Options.Contains(current, StringComparer.Ordinal) || !Appearance.TryParseColor(current, out _);
+        var swatch = new Border
+        {
+            Width = 16,
+            Height = 16,
+            CornerRadius = new CornerRadius(3),
+            BorderThickness = new Thickness(1),
+            BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"],
+            // 利用者が選んだ色をそのまま見本に出す (テーマの色ではない)。名前の選択肢はアクセントの色のリソース。
+            Background = !named && Appearance.TryParseColor(current, out Windows.UI.Color chosen)
+                ? new Microsoft.UI.Xaml.Media.SolidColorBrush(chosen)
+                : (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AccentFillColorDefaultBrush"],
+        };
+        string label = named ? OptionLabel(def, def.Options.FirstOrDefault(o => o == current) ?? def.Options.FirstOrDefault() ?? string.Empty) : current.ToUpperInvariant();
+        var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        content.Children.Add(swatch);
+        content.Children.Add(new TextBlock { Text = label, VerticalAlignment = VerticalAlignment.Center });
+
+        var choices = new RadioButtons();
+        AutomationProperties.SetAutomationId(choices, "SettingColorChoice_" + def.Key);
+        foreach (string option in def.Options)
+        {
+            choices.Items.Add(new RadioButton { Content = OptionLabel(def, option), Tag = option });
+        }
+
+        choices.Items.Add(new RadioButton { Content = Loc.Get("Settings_ColorCustom"), Tag = string.Empty });
+        choices.SelectedIndex = named ? Math.Max(0, def.Options.ToList().IndexOf(current)) : def.Options.Count;
+        var picker = new ColorPicker
+        {
+            IsAlphaEnabled = false,
+            IsMoreButtonVisible = false,
+            IsColorSliderVisible = true,
+            IsHexInputVisible = true,
+            Color = !named && Appearance.TryParseColor(current, out Windows.UI.Color c) ? c
+                : Application.Current.Resources["SystemAccentColor"] is Windows.UI.Color accent ? accent : default,
+            IsEnabled = !named,
+        };
+        AutomationProperties.SetAutomationId(picker, "SettingColorPicker_" + def.Key);
+        AutomationProperties.SetName(picker, Loc.Get("Settings_ColorCustom"));
+        choices.SelectionChanged += (_, _) => picker.IsEnabled = choices.SelectedIndex == def.Options.Count;
+
+        var ok = new Button { Content = Loc.Get("Common_Ok"), Style = (Style)Application.Current.Resources["AccentButtonStyle"], HorizontalAlignment = HorizontalAlignment.Right };
+        AutomationProperties.SetAutomationId(ok, "SettingColorOk_" + def.Key);
+        var panel = new StackPanel { Spacing = 12 };
+        panel.Children.Add(choices);
+        panel.Children.Add(picker);
+        panel.Children.Add(ok);
+        var flyout = new Flyout { Content = panel };
+        var button = new DropDownButton { Content = content, Flyout = flyout, MinWidth = 200 };
+
+        // 名前は項目名 (BuildCard が付ける)。今の値はスクリーンリーダーが読めるように補足の説明にする。
+        AutomationProperties.SetHelpText(button, label);
+        ok.Click += (_, _) =>
+        {
+            flyout.Hide();
+            string value = choices.SelectedIndex < def.Options.Count && choices.SelectedIndex >= 0
+                ? def.Options[choices.SelectedIndex]
+                : $"#{picker.Color.R:X2}{picker.Color.G:X2}{picker.Color.B:X2}";
+            Commit(def, value, error, button);
+        };
+        return button;
     }
 
     /// <summary>

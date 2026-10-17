@@ -62,6 +62,12 @@ public sealed partial record CommandDefinition
     /// <summary>メニュー・パレットに出さない内部用のコマンドなら true。</summary>
     public bool Hidden { get; init; }
 
+    /// <summary>
+    /// 部品が自分で処理する固定のキー (例: Hex ビューの Delete・Esc)。割り当てではないので変えられず、キーの振り分けにも使わない。
+    /// 割り当てがないときに、メニューとコマンドパレットのショートカットの表示にだけ使う。
+    /// </summary>
+    public string? FixedKey { get; init; }
+
     public string NameKey => "Cmd_" + KeyPart(Id);
 
     public string AliasKey => "CmdAlias_" + KeyPart(Id);

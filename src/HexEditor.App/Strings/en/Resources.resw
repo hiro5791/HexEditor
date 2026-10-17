@@ -6549,4 +6549,48 @@ Type: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Field</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (user-defined)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (template {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Delete</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Clear Selection</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>remove erase bytes</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>deselect unselect select none</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>There is nothing to delete at the cursor.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Memory Map</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>File lock</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Whether other apps can write to a file while it is open here. Applies to files opened after the change.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Block writes by other apps only while there are unsaved changes</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Always block writes by other apps while open</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Don't lock (always allow other apps to write)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Accent color</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Color used for the selection, focus rectangles and accent buttons. Ignored in high contrast. Takes effect after a restart.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Windows accent color</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Custom color</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0} can't be saved because another app is using it.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0} can't be saved because it's being used by {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Trust and permissions</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>trust permission always allow revoke security script</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Scripts for which you chose "Always allow" run without asking. Revoke one to be asked again the next time it runs.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Your organization has set the script policy: {0}. It can't be changed here.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>No scripts are always allowed.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Plugin trust is managed in the plugin manager</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>No additional permissions</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Permissions: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · allowed on {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Revoke trust for {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>C# script component</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>csharp c# roslyn component cache version remove</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Installed version: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>A different version is installed ({0}). Add the component for this version of HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Not installed. C# scripts need this component.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Add...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Clear compile cache</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>The component was removed.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>The compile cache was cleared.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
 </root>

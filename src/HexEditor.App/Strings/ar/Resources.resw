@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>الحقل</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (معرّف من المستخدم)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (القالب {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>حذف</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>مسح التحديد</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>إزالة مسح بايتات</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>مسح التحديد</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>إلغاء التحديد لا شيء</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>لا يوجد ما يمكن حذفه عند المؤشر.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>خريطة الذاكرة</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>قفل الملف</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>ما إذا كان بإمكان التطبيقات الأخرى الكتابة في الملف أثناء فتحه هنا. ينطبق على الملفات المفتوحة بعد التغيير.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>منع الكتابة من التطبيقات الأخرى فقط أثناء وجود تغييرات غير محفوظة</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>منع الكتابة من التطبيقات الأخرى دائمًا أثناء الفتح</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>بدون قفل (السماح دائمًا للتطبيقات الأخرى بالكتابة)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>لون التمييز</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>اللون المستخدم للتحديد ومستطيلات التركيز وأزرار التمييز. يتم تجاهله في التباين العالي. يسري بعد إعادة التشغيل.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>لون التمييز في Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>لون مخصص</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>لا يمكن حفظ {0} لأنه قيد الاستخدام بواسطة تطبيق آخر.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>لا يمكن حفظ {0} لأنه قيد الاستخدام بواسطة {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>إعادة المحاولة</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>الثقة والأذونات</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>الثقة الإذن السماح دائمًا إلغاء الأمان برنامج نصي</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>تعمل البرامج النصية التي اخترت لها "السماح دائمًا" دون سؤال. ألغِ السماح لأحدها ليُطلب منك التأكيد مرة أخرى عند تشغيله في المرة التالية.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>عيّنت مؤسستك نهج البرامج النصية: {0}. لا يمكن تغييره هنا.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>لا توجد برامج نصية مسموح بها دائمًا.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>تتم إدارة الثقة في المكونات الإضافية في إدارة المكونات الإضافية</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>لا أذونات إضافية</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>الأذونات: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · تم السماح في {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>إلغاء الثقة في {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>مكوّن برنامج C# النصي</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn مكوّن ذاكرة تخزين مؤقت إصدار إزالة</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>الإصدار المثبت: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>تم تثبيت إصدار مختلف ({0}). أضف المكوّن الخاص بهذا الإصدار من HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>غير مثبت. تحتاج برامج C# النصية إلى هذا المكوّن.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>إضافة...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>إزالة</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>مسح ذاكرة التخزين المؤقت للترجمة</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>تمت إزالة المكوّن.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>تم مسح ذاكرة التخزين المؤقت للترجمة.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>ذ</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>ي</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>ذ</value></data>
 </root>

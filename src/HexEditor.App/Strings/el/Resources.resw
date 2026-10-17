@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Πεδίο</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ορισμένο από τον χρήστη)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (πρότυπο {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Διαγραφή</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Απαλοιφή επιλογής</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Διαγραφή</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>αφαίρεση byte</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Απαλοιφή επιλογής</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>αποεπιλογή καμία</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>Δεν υπάρχει τίποτα για διαγραφή στη θέση του δρομέα.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Χάρτης μνήμης</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Κλείδωμα αρχείου</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Αν άλλες εφαρμογές μπορούν να γράφουν σε ένα αρχείο ενώ είναι ανοιχτό εδώ. Ισχύει για αρχεία που ανοίγουν μετά την αλλαγή.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Αποκλεισμός εγγραφής από άλλες εφαρμογές μόνο όσο υπάρχουν μη αποθηκευμένες αλλαγές</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Πάντα αποκλεισμός εγγραφής από άλλες εφαρμογές όσο είναι ανοιχτό</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Χωρίς κλείδωμα (να επιτρέπεται πάντα η εγγραφή από άλλες εφαρμογές)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Χρώμα έμφασης</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Χρώμα της επιλογής, των πλαισίων εστίασης και των κουμπιών έμφασης. Αγνοείται σε υψηλή αντίθεση. Τίθεται σε ισχύ μετά την επανεκκίνηση.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Χρώμα έμφασης των Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Προσαρμοσμένο χρώμα</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>Δεν είναι δυνατή η αποθήκευση του {0}, επειδή το χρησιμοποιεί άλλη εφαρμογή.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>Δεν είναι δυνατή η αποθήκευση του {0}, επειδή το χρησιμοποιεί η εφαρμογή {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Επανάληψη</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Αξιοπιστία και δικαιώματα</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>αξιοπιστία δικαίωμα να επιτρέπεται πάντα ανάκληση ασφάλεια σενάριο</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Τα σενάρια για τα οποία επιλέξατε «Να επιτρέπεται πάντα» εκτελούνται χωρίς ερώτηση. Ανακαλέστε ένα για να ερωτηθείτε ξανά την επόμενη φορά που θα εκτελεστεί.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Ο οργανισμός σας έχει ορίσει την πολιτική σεναρίων: {0}. Δεν μπορεί να αλλάξει εδώ.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Δεν υπάρχουν σενάρια που επιτρέπονται πάντα.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Η αξιοπιστία των πρόσθετων διαχειρίζεται στη διαχείριση πρόσθετων</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Χωρίς πρόσθετα δικαιώματα</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Δικαιώματα: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · επιτράπηκε στις {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Ανάκληση</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Ανάκληση αξιοπιστίας για {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Στοιχείο σεναρίων C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn στοιχείο προσωρινή μνήμη έκδοση αφαίρεση</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Εγκατεστημένη έκδοση: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Είναι εγκατεστημένη διαφορετική έκδοση ({0}). Προσθέστε το στοιχείο για αυτή την έκδοση του HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Δεν είναι εγκατεστημένο. Τα σενάρια C# χρειάζονται αυτό το στοιχείο.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Προσθήκη...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Απαλοιφή προσωρινής μνήμης μεταγλώττισης</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Το στοιχείο αφαιρέθηκε.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Η προσωρινή μνήμη μεταγλώττισης απαλείφθηκε.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Φ</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ή</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ά</value></data>
 </root>

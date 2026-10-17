@@ -6549,4 +6549,48 @@ Kiểu: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Trường</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (do người dùng định nghĩa)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (mẫu {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Bỏ chọn</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Xóa</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>loại bỏ xóa byte</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Bỏ chọn</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>hủy chọn không chọn</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>Không có gì để xóa tại con trỏ.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Bản đồ bộ nhớ</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Khóa tệp</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Các ứng dụng khác có thể ghi vào tệp trong khi tệp đang mở ở đây hay không. Áp dụng cho các tệp mở sau khi thay đổi.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Chỉ chặn ứng dụng khác ghi khi có thay đổi chưa lưu</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Luôn chặn ứng dụng khác ghi khi đang mở</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Không khóa (luôn cho phép ứng dụng khác ghi)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Màu nhấn</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Màu dùng cho vùng chọn, khung tiêu điểm và nút nhấn. Bị bỏ qua ở chế độ tương phản cao. Có hiệu lực sau khi khởi động lại.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Màu nhấn của Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Màu tùy chỉnh</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>Không thể lưu {0} vì một ứng dụng khác đang sử dụng tệp này.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>Không thể lưu {0} vì {1} đang sử dụng tệp này.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Thử lại</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Tin cậy và quyền</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>tin cậy quyền luôn cho phép thu hồi bảo mật tập lệnh</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Các tập lệnh bạn đã chọn "Luôn cho phép" sẽ chạy mà không hỏi. Thu hồi để được hỏi lại vào lần chạy tiếp theo.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Tổ chức của bạn đã đặt chính sách tập lệnh: {0}. Không thể thay đổi ở đây.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Không có tập lệnh nào luôn được cho phép.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Độ tin cậy của plugin được quản lý trong trình quản lý plugin</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Không có quyền bổ sung</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Quyền: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · cho phép vào {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Thu hồi</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Thu hồi tin cậy cho {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Thành phần tập lệnh C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn thành phần bộ nhớ đệm phiên bản xóa</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Phiên bản đã cài đặt: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Đã cài đặt phiên bản khác ({0}). Hãy thêm thành phần cho phiên bản HexEditor này.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Chưa cài đặt. Tập lệnh C# cần thành phần này.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Thêm...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Xóa</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Xóa bộ nhớ đệm biên dịch</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Đã xóa thành phần.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Đã xóa bộ nhớ đệm biên dịch.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ỏ</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ả</value></data>
 </root>

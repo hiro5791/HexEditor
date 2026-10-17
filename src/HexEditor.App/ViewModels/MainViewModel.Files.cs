@@ -359,7 +359,7 @@ public sealed partial class MainViewModel
     /// <summary>見つからないファイルのタブ (UI-31 の「エラー」)。内容は空で、編集できない。</summary>
     public DocumentViewModel AddMissing(SessionTab tab, int? insertAt = null)
     {
-        var doc = new Document(MemoryByteSource.CreateEmpty(tab.DisplayName), _options);
+        var doc = new Document(MemoryByteSource.CreateEmpty(tab.DisplayName), CurrentOptions);
         var vm = new DocumentViewModel(doc, null, tab.DisplayName) { MissingPath = tab.Path, MissingRecord = tab, Notifications = Notifications, IsPinned = tab.Pinned };
         vm.Editor.ReadOnly = true;
         return AddViewModel(vm, insertAt);

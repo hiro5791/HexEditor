@@ -39,6 +39,8 @@ public static class BuiltInSettings
 
         // ---- 外観 ----
         new("ui.theme", SettingCategories.Appearance, SettingKind.Choice, "system") { Options = ["system", "light", "dark"], Order = 10 },
+        // アクセントカラー (UI-27 の仕様 1)。system か #RRGGBB。色のリソースは最初のウィンドウを作る前に上書きするため、反映は再起動後。
+        new("ui.accentColor", SettingCategories.Appearance, SettingKind.Color, "system") { Options = ["system"], Order = 15, RequiresRestart = true },
         new("ui.backdrop", SettingCategories.Appearance, SettingKind.Choice, "mica") { Options = ["mica", "micaAlt", "none"], Order = 20 },
 
         // Hex 表示のフォントと配色 (UI-28、UI-29)。フォントと配色は一覧から選ぶ専用の区画 (App の ViewSections) で変える。
@@ -209,6 +211,11 @@ public static class BuiltInSettings
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },
         new(ExternalChangeRules.AutoReloadKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 3 },
+        // ファイルのロック (ENG-15 の仕様 3)。新しく開くファイルから使う。
+        new(Engine.FileLockSettings.Key, SettingCategories.Files, SettingKind.Choice, Engine.FileLockSettings.WhileModified)
+        {
+            Options = Engine.FileLockSettings.Options, Order = 3,
+        },
         new(BackupSettings.EnabledKey, SettingCategories.Files, SettingKind.Bool, false) { Order = 4 },
         new(BackupSettings.LocationKey, SettingCategories.Files, SettingKind.Choice, "sameFolder") { Options = ["sameFolder", "folder"], Order = 5 },
         new(BackupSettings.FolderKey, SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, Order = 6 },

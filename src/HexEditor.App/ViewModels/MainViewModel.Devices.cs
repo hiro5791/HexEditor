@@ -28,7 +28,7 @@ public sealed partial class MainViewModel
             return existing;
         }
 
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, null, source.DisplayName);
         doc.SetReadOnly(readOnly || !source.Handle.Writable ? ReadOnlyReason.Device : ReadOnlyReason.None);
         WatchDisconnect(vm, source);
@@ -52,7 +52,7 @@ public sealed partial class MainViewModel
             return existing;
         }
 
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
 
         // プロセスメモリは復旧しない (プロセスが終了しているため。ENG-27 の仕様 6)。
         DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
@@ -71,7 +71,7 @@ public sealed partial class MainViewModel
             return existing;
         }
 
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, null, source.DisplayName);
 
         // ディスクイメージとして開いたファイルを、セクタサイズ付きで最近使ったファイルに記録する (ENG-31、ENG-16)。
@@ -94,7 +94,7 @@ public sealed partial class MainViewModel
             return existing;
         }
 
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
         doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
         return vm;

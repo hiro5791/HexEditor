@@ -18,7 +18,7 @@ public sealed partial class MainViewModel
     {
         string full = Path.GetFullPath(path);
         FileByteSource source = FileByteSource.OpenRange(full, start, length, resizable);
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, full, Path.GetFileName(full));
         vm.RangeLabel = DocumentViewModel.FormatRange(start, source.Length);
         doc.SetReadOnly(readOnly ? ReadOnlyReason.OpenedReadOnly
@@ -50,7 +50,7 @@ public sealed partial class MainViewModel
         EncodedFileSettings settings = result.Settings ?? new EncodedFileSettings { Format = format };
         long baseAddress = result.BaseAddress;
         IReadOnlyList<ImportIssue> issues = result.Issues.Items;
-        Document doc = EncodedFile.CreateDocument(result, format, _options);
+        Document doc = EncodedFile.CreateDocument(result, format, CurrentOptions);
 
         // 復旧用データは、元のファイルをデコードし直して変更を戻す (ENG-27。デコードの結果の一時ファイルは異常終了で消えるため)。
         DocumentViewModel vm = Add(doc, full, Path.GetFileName(full));
@@ -73,7 +73,7 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel AddDecodingPreview(SparseImage preview, string name)
     {
-        var doc = new Document(preview, _options);
+        var doc = new Document(preview, CurrentOptions);
         doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
         return Add(doc, null, name, recovery: false);
     }
@@ -82,7 +82,7 @@ public sealed partial class MainViewModel
     public DocumentViewModel AddImported(SparseImage image, string name)
     {
         // 無題のドキュメントに、デコードした内容 (一時ファイル) を参照のピースとして入れる (復旧用データにも書き出せる)。
-        var doc = new Document(MemoryByteSource.CreateEmpty(name), _options);
+        var doc = new Document(MemoryByteSource.CreateEmpty(name), CurrentOptions);
         doc.InsertContent(0, EditContent.FromSource(image, 0, image.Length, owns: true), Loc.Get("Import_Title"));
         doc.ClearHistory();
         return Add(doc, null, name);
@@ -109,7 +109,7 @@ public sealed partial class MainViewModel
     public DocumentViewModel OpenAsCopy(DocumentViewModel parent, long offset, long length, string? name = null)
     {
         string title = name ?? Loc.Format("Untitled_Name", ++_app.UntitledCount);
-        Document copy = Document.CreateCopy(parent.Document.Current, offset, length, title, _options);
+        Document copy = Document.CreateCopy(parent.Document.Current, offset, length, title, CurrentOptions);
         return Add(copy, null, title);
     }
 

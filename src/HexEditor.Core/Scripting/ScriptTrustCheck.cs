@@ -83,7 +83,8 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
             case TrustAnswer.Deny:
                 return TrustDecision.Deny(Msg.T("実行を許可しませんでした。", "Running was not permitted."));
             case TrustAnswer.AlwaysAllow when request.Path is not null:
-                host.Trust.Add(TrustStore.ScriptKind, TrustStore.ScriptKey(request.Path), TrustStore.HashOf(code), TrustSource.UserAllowed, declared);
+                host.Trust.Add(TrustStore.ScriptKind, TrustStore.ScriptKey(request.Path), TrustStore.HashOf(code), TrustSource.UserAllowed, declared,
+                    Path.GetFullPath(request.Path));
                 break;
         }
 

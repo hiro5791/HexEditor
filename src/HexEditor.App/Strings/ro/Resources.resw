@@ -6549,4 +6549,48 @@ Tip: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Câmp</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (definit de utilizator)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (șablon {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Ștergere</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Anulare selecție</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Ștergere</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>eliminare octeți</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Anulare selecție</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>deselectare nimic</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>Nu există nimic de șters la cursor.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Hartă memorie</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Blocarea fișierului</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Dacă alte aplicații pot scrie într-un fișier cât timp este deschis aici. Se aplică fișierelor deschise după modificare.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Blocare scriere de către alte aplicații doar cât există modificări nesalvate</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Blocare întotdeauna a scrierii de către alte aplicații cât timp este deschis</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Fără blocare (permite întotdeauna scrierea de către alte aplicații)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Culoare de accent</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Culoarea selecției, a chenarelor de focalizare și a butoanelor de accent. Ignorată în contrast ridicat. Intră în vigoare după repornire.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Culoarea de accent Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Culoare personalizată</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0} nu poate fi salvat, deoarece este utilizat de altă aplicație.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0} nu poate fi salvat, deoarece este utilizat de {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Reîncercare</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Încredere și permisiuni</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>încredere permisiune permite întotdeauna revocare securitate script</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Scripturile pentru care ați ales „Permite întotdeauna” rulează fără confirmare. Revocați unul pentru a fi întrebat din nou la următoarea rulare.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Organizația dvs. a setat politica pentru scripturi: {0}. Nu poate fi modificată aici.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Nu există scripturi permise întotdeauna.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Încrederea în pluginuri se gestionează în managerul de pluginuri</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Fără permisiuni suplimentare</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Permisiuni: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · permis la {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Revocare</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Revocare încredere pentru {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Componenta de script C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn componentă cache versiune eliminare</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Versiunea instalată: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Este instalată altă versiune ({0}). Adăugați componenta pentru această versiune de HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Nu este instalată. Scripturile C# au nevoie de această componentă.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Adăugare...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Eliminare</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Golire cache de compilare</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Componenta a fost eliminată.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Cache-ul de compilare a fost golit.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ă</value></data>
 </root>

@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>欄位</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (使用者定義)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (範本 {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>刪除(X)</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>取消選取(J)</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>移除 清除 位元組</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>取消選取</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>取消選定 不選取</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>游標處沒有可刪除的內容。</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>記憶體對應(X)</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>檔案鎖定</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>在此處開啟檔案時，其他應用程式是否可以寫入該檔案。對變更後開啟的檔案生效。</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>僅在有未儲存的變更時禁止其他應用程式寫入</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>開啟期間一律禁止其他應用程式寫入</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>不鎖定 (一律允許其他應用程式寫入)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>輔色</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>用於選取範圍、焦點框和強調按鈕的色彩。在高對比下忽略。重新啟動後生效。</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Windows 輔色</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>自訂色彩</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>另一個應用程式正在使用 {0}，因此無法儲存。</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{1} 正在使用 {0}，因此無法儲存。</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>重試</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>信任與權限</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>信任 權限 一律允許 撤銷 安全性 指令碼</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>您選擇「一律允許」的指令碼會直接執行而不詢問。撤銷後，下次執行時會再次詢問。</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>您的組織已設定指令碼原則：{0}。無法在此處變更。</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>沒有一律允許的指令碼。</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>外掛程式的信任在外掛程式管理員中管理</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>無其他權限</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>權限：{0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · 允許於 {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>撤銷</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>撤銷對 {0} 的信任</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>C# 指令碼元件</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn 元件 快取 版本 移除</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>已安裝的版本：{0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>已安裝其他版本 ({0})。請新增適用於此版本 HexEditor 的元件。</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>未安裝。C# 指令碼需要此元件。</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>新增...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>清除編譯快取</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>已移除該元件。</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>已清除編譯快取。</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
 </root>

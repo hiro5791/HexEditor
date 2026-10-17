@@ -1162,13 +1162,7 @@ public sealed partial class HexView
         menu.Items.Add(MenuItem("Paste", Loc.Get("Menu_Edit_Paste/Text"), "edit.paste", () => CommandRequested?.Invoke(this, EditorCommand.Paste)));
         menu.Items.Add(MenuItem("PasteOverwrite", Loc.Get("Menu_Edit_PasteOverwrite/Text"), "edit.pasteOverwrite",
             () => CommandRequested?.Invoke(this, EditorCommand.PasteOverwrite)));
-        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "key:Delete", () =>
-        {
-            if (_editor is not null)
-            {
-                DeleteWithAnnouncement(_editor.Delete);
-            }
-        }));
+        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "key:Delete", DeleteForward));
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(MenuItem("SelectAll", Loc.Get("Menu_Edit_SelectAll/Text"), "edit.selectAll",
             () => CommandRequested?.Invoke(this, EditorCommand.SelectAll)));
@@ -1423,6 +1417,26 @@ public sealed partial class HexView
         }
 
         return handled;
+    }
+
+    /// <summary>
+    /// Delete キーと同じ削除 (編集 > 削除、右クリックメニュー「削除」。EDIT-13 の「呼び出し」)。要素数の多いマルチ選択・矩形の削除は
+    /// キーと同じく長時間処理にする。
+    /// </summary>
+    public void DeleteForward()
+    {
+        if (_editor is null)
+        {
+            return;
+        }
+
+        if (LongRangeDeleteRequested is { } longDelete && _editor.LongRangeDeleteAction(backspace: false) is var action && action != RangeDeleteAction.None)
+        {
+            longDelete(this, action);
+            return;
+        }
+
+        DeleteWithAnnouncement(_editor.Delete);
     }
 
     /// <summary>削除して、削除したバイト数を読み上げる (EDIT-13 の仕様 6)。</summary>

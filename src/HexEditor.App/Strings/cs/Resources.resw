@@ -6549,4 +6549,48 @@ Typ: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Pole</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (uživatelský)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (šablona {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Odstranit</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Zrušit výběr</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Odstranit</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>smazat bajty</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Zrušit výběr</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>nic nevybrat</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>Na pozici kurzoru není co odstranit.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Mapa paměti</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Zámek souboru</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Zda mohou jiné aplikace zapisovat do souboru, když je zde otevřený. Platí pro soubory otevřené po změně.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Blokovat zápis jinými aplikacemi jen při neuložených změnách</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Vždy blokovat zápis jinými aplikacemi, dokud je soubor otevřený</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Nezamykat (vždy povolit zápis jiným aplikacím)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Barva zvýraznění</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Barva výběru, rámečků fokusu a zvýrazněných tlačítek. V režimu vysokého kontrastu se nepoužije. Projeví se po restartu.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Barva zvýraznění systému Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Vlastní barva</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0} nelze uložit, protože ho používá jiná aplikace.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0} nelze uložit, protože ho používá {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Opakovat</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Důvěra a oprávnění</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>důvěra oprávnění vždy povolit odvolat zabezpečení skript</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Skripty, pro které jste zvolili „Vždy povolit“, se spouštějí bez dotazu. Odvolejte povolení, aby se při dalším spuštění znovu zobrazil dotaz.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Vaše organizace nastavila zásady skriptů: {0}. Zde je nelze změnit.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Žádné skripty nejsou vždy povoleny.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Důvěra v pluginy se spravuje ve správci pluginů</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Žádná další oprávnění</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Oprávnění: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · povoleno {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Odvolat</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Odvolat důvěru pro {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Komponenta skriptů C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn komponenta mezipaměť verze odebrat</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Nainstalovaná verze: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Je nainstalována jiná verze ({0}). Přidejte komponentu pro tuto verzi HexEditoru.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Není nainstalováno. Skripty C# tuto komponentu potřebují.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Přidat...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Vymazat mezipaměť kompilace</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Komponenta byla odebrána.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Mezipaměť kompilace byla vymazána.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Š</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ě</value></data>
 </root>

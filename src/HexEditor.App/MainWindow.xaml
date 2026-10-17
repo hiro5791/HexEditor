@@ -164,6 +164,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Edit_Paste" cmd:CommandUi.Id="edit.paste" AutomationProperties.AutomationId="Command_Paste" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteOverwrite" cmd:CommandUi.Id="edit.pasteOverwrite" AutomationProperties.AutomationId="Command_PasteOverwrite" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteSpecial" cmd:CommandUi.Id="edit.pasteSpecial" AutomationProperties.AutomationId="Command_PasteSpecial" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Delete" cmd:CommandUi.Id="edit.delete" AutomationProperties.AutomationId="Command_Delete" />
                         <!--  ユーザークリップボード (EDIT-28)。番号 1〜9 の項目はコードで作る。  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Edit_UserClipboard" AutomationProperties.AutomationId="Command_UserClipboardMenu">
                             <MenuFlyoutSubItem x:Name="UserCopyMenu" x:Uid="Menu_UserClipboard_Copy" AutomationProperties.AutomationId="Command_UserClipboardCopy" />
@@ -173,6 +174,7 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" cmd:CommandUi.Id="edit.selectAll" AutomationProperties.AutomationId="Command_SelectAll" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectRange" cmd:CommandUi.Id="edit.selectRange" AutomationProperties.AutomationId="Command_SelectRange" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_ClearSelection" cmd:CommandUi.Id="edit.clearSelection" AutomationProperties.AutomationId="Command_ClearSelection" />
                         <!--  選択 (EDIT-05〜EDIT-09、EDIT-17)  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Edit_Selection" AutomationProperties.AutomationId="Command_SelectionMenu">
                             <MenuFlyoutItem x:Uid="Menu_Selection_ShiftNext" cmd:CommandUi.Id="edit.selection.shiftNext" AutomationProperties.AutomationId="Command_Selection_ShiftNext" />
@@ -306,6 +308,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_MemoryMapPanel" cmd:CommandUi.Id="view.panel.memoryMap" AutomationProperties.AutomationId="Command_ToggleMemoryMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ScriptsPanel" cmd:CommandUi.Id="view.panel.scripts" AutomationProperties.AutomationId="Command_ToggleScripts" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_OutputPanel" cmd:CommandUi.Id="view.panel.output" AutomationProperties.AutomationId="Command_ToggleOutput" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />

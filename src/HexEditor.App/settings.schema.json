@@ -355,6 +355,16 @@
       "type": "boolean",
       "default": true
     },
+    "files.lock": {
+      "description": "File lock",
+      "type": "string",
+      "enum": [
+        "whileModified",
+        "always",
+        "none"
+      ],
+      "default": "whileModified"
+    },
     "formats.gapFill": {
       "description": "Fill value for gaps in Intel HEX and S-record files",
       "type": "string",
@@ -786,6 +796,12 @@
       "description": "Template preferences",
       "type": "string",
       "default": ""
+    },
+    "ui.accentColor": {
+      "description": "Accent color",
+      "type": "string",
+      "pattern": "^(system|#[0-9A-Fa-f]{6})$",
+      "default": "system"
     },
     "ui.backdrop": {
       "description": "Window background",

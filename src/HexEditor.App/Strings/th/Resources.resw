@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>ฟิลด์</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ผู้ใช้กำหนด)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (เทมเพลต {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>ลบ(X)</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>ยกเลิกการเลือก(J)</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>นำออก ลบ ไบต์</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>ยกเลิกการเลือก</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>ไม่เลือก ยกเลิกเลือก</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>ไม่มีสิ่งที่จะลบที่เคอร์เซอร์</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>แผนที่หน่วยความจำ(X)</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>การล็อกไฟล์</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>แอปอื่นสามารถเขียนไฟล์ได้หรือไม่ขณะที่ไฟล์เปิดอยู่ที่นี่ มีผลกับไฟล์ที่เปิดหลังการเปลี่ยนแปลง</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>บล็อกการเขียนจากแอปอื่นเฉพาะเมื่อมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>บล็อกการเขียนจากแอปอื่นเสมอขณะที่เปิดอยู่</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>ไม่ล็อก (อนุญาตให้แอปอื่นเขียนได้เสมอ)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>สีเน้น</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>สีที่ใช้กับส่วนที่เลือก กรอบโฟกัส และปุ่มเน้น ไม่ใช้ในโหมดคอนทราสต์สูง มีผลหลังจากเริ่มใหม่</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>สีเน้นของ Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>สีที่กำหนดเอง</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>ไม่สามารถบันทึก {0} ได้ เนื่องจากแอปอื่นกำลังใช้งานอยู่</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>ไม่สามารถบันทึก {0} ได้ เนื่องจาก {1} กำลังใช้งานอยู่</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>ลองอีกครั้ง</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>ความเชื่อถือและสิทธิ์</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>ความเชื่อถือ สิทธิ์ อนุญาตเสมอ เพิกถอน ความปลอดภัย สคริปต์</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>สคริปต์ที่คุณเลือก "อนุญาตเสมอ" จะทำงานโดยไม่ถาม เพิกถอนเพื่อให้ถามอีกครั้งในการเรียกใช้ครั้งถัดไป</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>องค์กรของคุณได้ตั้งค่านโยบายสคริปต์ไว้: {0} ไม่สามารถเปลี่ยนแปลงได้ที่นี่</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>ไม่มีสคริปต์ที่อนุญาตเสมอ</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>ความเชื่อถือของปลั๊กอินจัดการในตัวจัดการปลั๊กอิน</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>ไม่มีสิทธิ์เพิ่มเติม</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>สิทธิ์: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · อนุญาตเมื่อ {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>เพิกถอน</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>เพิกถอนความเชื่อถือสำหรับ {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>คอมโพเนนต์สคริปต์ C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn คอมโพเนนต์ แคช เวอร์ชัน เอาออก</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>เวอร์ชันที่ติดตั้ง: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>มีการติดตั้งเวอร์ชันอื่นอยู่ ({0}) โปรดเพิ่มคอมโพเนนต์สำหรับ HexEditor เวอร์ชันนี้</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>ยังไม่ได้ติดตั้ง สคริปต์ C# ต้องใช้คอมโพเนนต์นี้</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>เพิ่ม...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>ล้างแคชการคอมไพล์</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>เอาคอมโพเนนต์ออกแล้ว</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>ล้างแคชการคอมไพล์แล้ว</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
 </root>

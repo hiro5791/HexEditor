@@ -195,9 +195,26 @@ public static class InPlaceSaver
         AfterJournalWritten?.Invoke();
 
         // 2. 変更した範囲をオフセットの昇順に書き、ディスクへの反映を待つ。ここからはキャンセルしない (ジャーナルで戻せる)。
+        // 書き込み用に開けない (他のアプリが使用中など) ときは、まだ何も書いていない: ジャーナルを消して元の誤りのまま返す
+        // (呼び出し元が「使用中」と「再試行」を示す。ENG-20 の「エラー」)。
+        SafeFileHandle handle;
         try
         {
-            using SafeFileHandle handle = File.OpenHandle(file.Path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+            handle = File.OpenHandle(file.Path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            if (journal is not null)
+            {
+                TryDelete(journal);
+            }
+
+            throw;
+        }
+
+        try
+        {
+            using SafeFileHandle owned = handle;
             for (int i = 0; i < ranges.Count; i++)
             {
                 (long offset, long length) = ranges[i];

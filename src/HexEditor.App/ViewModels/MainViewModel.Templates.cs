@@ -9,7 +9,7 @@ public sealed partial class MainViewModel
     /// <summary>セクションの内容を読み取り専用のタブで開く (書き戻す先がないので保存の対象にしない)。</summary>
     public DocumentViewModel AddTemplateSection(IByteSource source, string name, DocumentViewModel parent)
     {
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
         return Add(doc, null, name, Documents.IndexOf(parent) + 1, recovery: false);
     }

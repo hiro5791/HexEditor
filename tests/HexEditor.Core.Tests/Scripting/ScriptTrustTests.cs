@@ -476,4 +476,29 @@ public sealed class ScriptTrustTests
         ScriptRunResult exit = await t.RunCodeAsync("app.exit(70);");
         Assert.Equal(70, exit.ProcessExitCode);
     }
+
+    [Fact]
+    [Trait("TC", "TC-AUTO-34-10")]
+    public async Task Always_allowed_scripts_are_listed_and_revoking_asks_again()
+    {
+        using var t = new ScriptTestHost();
+        string path = t.WriteScript("Hello.js", Perms);
+        string saved = t.WriteScript("saved.js", "console.log('saved');");
+        t.Trust.TrustSavedScript(saved, File.ReadAllText(saved), TrustSource.SavedInApp);
+        t.Ui.TrustAnswer = TrustAnswer.AlwaysAllow;
+        ScriptTestHost.AssertSucceeded(await t.RunFileAsync(path));
+
+        // 「常に許可する」の記録だけを一覧する (アプリ内で保存したものは出さない)。表示用のパスは元の大文字・小文字のまま。
+        TrustRecord record = Assert.Single(t.Trust.AllowedScripts);
+        Assert.Equal(Path.GetFullPath(path), record.DisplayPath);
+        Assert.Equal(["file-read", "network"], record.Permissions);
+        Assert.Equal(Path.GetFullPath(path), Assert.Single(new TrustStore(t.Folders.TrustFile).AllowedScripts).DisplayPath);
+
+        // 取り消すと次の実行で再び確認が出る。
+        Assert.True(t.Trust.Revoke(record.Kind, record.Key));
+        Assert.Empty(t.Trust.AllowedScripts);
+        t.Ui.TrustAnswer = TrustAnswer.RunOnce;
+        ScriptTestHost.AssertSucceeded(await t.RunFileAsync(path));
+        Assert.Equal(2, t.Ui.TrustPrompts.Count);
+    }
 }

@@ -111,6 +111,9 @@ public partial class App : Application
         Devices = new Services.DeviceService(env);
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
 
+        // 設定「ファイルのロック」(ENG-15 の仕様 3)。変えたら、その後に開くファイルから使う。
+        MainViewModel.LockPolicySource = () => Core.Engine.FileLockSettings.Parse(Settings.GetString(Core.Engine.FileLockSettings.Key, Core.Engine.FileLockSettings.WhileModified));
+
         // 最近使ったファイル・前回の位置・セッション・初回起動の状態 (ENG-16、UI-31、UI-38)。ポータブル版では exe と同じドライブの
         // ファイルを exe からの相対パスで記録する (UI-32 の仕様 8)。
         string exeFolder = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);

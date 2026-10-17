@@ -11,7 +11,7 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel OpenPluginSource(PluginByteSource source)
     {
-        var doc = new Document(source, _options);
+        var doc = new Document(source, CurrentOptions);
         DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
         if (!source.Capabilities.HasFlag(Core.Sources.SourceCapabilities.CanWrite))
         {

@@ -165,6 +165,10 @@ public sealed partial class MainWindow
         Commands.Register("edit.pasteOverwrite", () => RunEditorCommandAsync(EditorCommand.PasteOverwrite), () => NeedsEditable());
         Commands.Register("edit.selectAll", () => SelectAll_Click(this, e),
             () => NeedsDocument(d => d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
+        // 編集 > 削除・選択の解除 (EDIT-13、EDIT-03)。Delete・Esc キーと同じ処理 (キーは Hex ビューが処理する)。
+        Commands.Register("edit.delete", () => CurrentView()?.DeleteForward(),
+            () => NeedsEditable(d => d.Editor.HasSelection || d.Editor.Cursor < d.Document.Length ? null : Loc.Get("Command_NothingToDelete")));
+        Commands.Register("edit.clearSelection", () => Editor?.ClearSelection(), () => NeedsDocument(d => d.Editor.HasSelection ? null : noSelection));
         Commands.Register("edit.toggleInsert", () => ToggleInsert_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         RegisterEditCommands();

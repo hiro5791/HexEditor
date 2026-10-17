@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Поле</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (користувацький)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (шаблон {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Видалити</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Зняти виділення</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Видалити</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>стерти байти</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Зняти виділення</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>скасувати виділення нічого</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>У позиції курсора нічого видаляти.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Карта пам’яті</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Блокування файлу</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Чи можуть інші програми записувати у файл, поки він відкритий тут. Застосовується до файлів, відкритих після зміни.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Забороняти запис іншим програмам, лише поки є незбережені зміни</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Завжди забороняти запис іншим програмам, поки файл відкритий</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Не блокувати (завжди дозволяти запис іншим програмам)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Колір акценту</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Колір виділення, рамок фокуса й акцентних кнопок. Не використовується в режимі високої контрастності. Набере чинності після перезапуску.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Колір акценту Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Інший колір</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>Не вдається зберегти {0}, оскільки його використовує інша програма.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>Не вдається зберегти {0}, оскільки його використовує {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Повторити</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Довіра й дозволи</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>довіра дозвіл завжди дозволяти відкликати безпека скрипт</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Скрипти, для яких вибрано «Завжди дозволяти», запускаються без запиту. Відкличте дозвіл, щоб під час наступного запуску знову з’явився запит.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Ваша організація задала політику скриптів: {0}. Її не можна змінити тут.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Немає скриптів, яким завжди дозволено запуск.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Довіра до плагінів налаштовується в диспетчері плагінів</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Без додаткових дозволів</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Дозволи: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · дозволено {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Відкликати</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Відкликати довіру до {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Компонент скриптів C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn компонент кеш версія видалити</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Установлена версія: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Установлено іншу версію ({0}). Додайте компонент для цієї версії HexEditor.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Не встановлено. Цей компонент потрібен для скриптів C#.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Додати...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Видалити</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Очистити кеш компіляції</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Компонент видалено.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Кеш компіляції очищено.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>A</value></data>
 </root>

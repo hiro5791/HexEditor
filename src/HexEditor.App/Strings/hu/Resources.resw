@@ -6549,4 +6549,48 @@ Típus: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Mező</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (felhasználói)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} ({1} sablon)</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Kijelölés megszüntetése</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Törlés</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>eltávolítás bájtok</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Kijelölés megszüntetése</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>kijelölés törlése semmi</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>A kurzor helyén nincs mit törölni.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Memóriatérkép</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Fájlzárolás</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Írhatnak-e más alkalmazások a fájlba, amíg itt meg van nyitva. A módosítás után megnyitott fájlokra érvényes.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Más alkalmazások írásának tiltása csak nem mentett módosítások esetén</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Más alkalmazások írásának tiltása mindig, amíg a fájl meg van nyitva</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Nincs zárolás (más alkalmazások mindig írhatnak)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Kiemelőszín</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>A kijelölés, a fókuszkeretek és a kiemelt gombok színe. Nagy kontraszt esetén figyelmen kívül marad. Újraindítás után lép érvénybe.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>A Windows kiemelőszíne</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Egyéni szín</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>A(z) {0} nem menthető, mert egy másik alkalmazás használja.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>A(z) {0} nem menthető, mert a(z) {1} használja.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Újra</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Megbízhatóság és engedélyek</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>megbízhatóság engedély mindig engedélyez visszavonás biztonság szkript</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>A „Mindig engedélyez” beállítású szkriptek kérdés nélkül futnak. Vonja vissza az engedélyt, ha a következő futtatáskor újra kérdezni szeretne.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>A szervezete beállította a szkriptházirendet: {0}. Itt nem módosítható.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Nincs mindig engedélyezett szkript.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>A bővítmények megbízhatóságát a bővítménykezelőben kezelheti</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Nincsenek további engedélyek</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Engedélyek: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · engedélyezve: {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Visszavonás</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>A(z) {0} megbízhatóságának visszavonása</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>C# szkriptkomponens</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn komponens gyorsítótár verzió eltávolítás</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Telepített verzió: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Egy másik verzió van telepítve ({0}). Adja hozzá a HexEditor ezen verziójához tartozó komponenst.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Nincs telepítve. A C# szkriptekhez szükség van erre a komponensre.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Hozzáadás...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Fordítási gyorsítótár törlése</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>A komponens eltávolítva.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>A fordítási gyorsítótár törölve.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ó</value></data>
 </root>

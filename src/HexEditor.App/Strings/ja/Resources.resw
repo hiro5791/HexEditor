@@ -6549,4 +6549,48 @@
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>フィールド</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ユーザー定義)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (テンプレート {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>削除(X)</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>選択の解除(J)</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>削除</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>さくじょ けす</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>選択の解除</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>せんたくのかいじょ せんたくなし</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>カーソル位置に削除するものがありません。</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>メモリマップ(X)</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>ファイルのロック</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>開いているファイルに他のアプリが書き込めるかどうか。変更後に開いたファイルから反映されます。</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>編集中だけ他のアプリの書き込みを禁止する</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>開いている間、常に他のアプリの書き込みを禁止する</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>ロックしない (他のアプリの書き込みを常に許可する)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>アクセントカラー</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>選択範囲・フォーカスの枠・強調のボタンに使う色。ハイコントラストでは使いません。再起動後に反映されます。</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Windows のアクセントカラー</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>指定した色</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>他のアプリが使用中のため、{0} を保存できません。</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>他のアプリ ({1}) が使用中のため、{0} を保存できません。</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>信頼と許可</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>信頼 許可 常に許可 取り消し セキュリティ スクリプト</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>「常に許可する」を選んだスクリプトは確認なしで実行されます。取り消すと、次に実行するときに再び確認します。</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>組織の設定でスクリプトの方針が決められています: {0}。ここでは変更できません。</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>常に許可しているスクリプトはありません。</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>プラグインの信頼はプラグインマネージャで管理します</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>追加の許可なし</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>許可: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · {1} に許可</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>取り消す</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>{0} の信頼を取り消す</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>C# スクリプト コンポーネント</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn コンポーネント キャッシュ バージョン 削除</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>インストール済みのバージョン: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>別のバージョン ({0}) が入っています。この版の HexEditor 用のコンポーネントを追加してください。</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>入っていません。C# スクリプトを使うにはこのコンポーネントが必要です。</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>追加...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>コンパイル結果のキャッシュを削除</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>コンポーネントを削除しました。</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>コンパイル結果のキャッシュを削除しました。</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
 </root>

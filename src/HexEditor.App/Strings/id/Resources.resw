@@ -6549,4 +6549,48 @@ Tipe: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Bidang</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ditentukan pengguna)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (templat {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Hapus pilihan</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Hapus</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>buang hapus byte</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Hapus pilihan</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>batal pilih tanpa pilihan</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>Tidak ada yang dapat dihapus di kursor.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Peta memori</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Penguncian file</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Apakah aplikasi lain dapat menulis ke file selama file terbuka di sini. Berlaku untuk file yang dibuka setelah perubahan.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Blokir penulisan oleh aplikasi lain hanya saat ada perubahan yang belum disimpan</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Selalu blokir penulisan oleh aplikasi lain selama terbuka</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Jangan kunci (selalu izinkan aplikasi lain menulis)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Warna aksen</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Warna untuk pilihan, kotak fokus, dan tombol aksen. Diabaikan dalam kontras tinggi. Berlaku setelah dimulai ulang.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Warna aksen Windows</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Warna kustom</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0} tidak dapat disimpan karena sedang digunakan oleh aplikasi lain.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0} tidak dapat disimpan karena sedang digunakan oleh {1}.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Coba lagi</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Kepercayaan dan izin</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>kepercayaan izin selalu izinkan cabut keamanan skrip</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>Skrip yang Anda pilih "Selalu izinkan" berjalan tanpa bertanya. Cabut agar ditanya lagi saat dijalankan berikutnya.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Organisasi Anda telah menetapkan kebijakan skrip: {0}. Ini tidak dapat diubah di sini.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Tidak ada skrip yang selalu diizinkan.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Kepercayaan plugin dikelola di pengelola plugin</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Tanpa izin tambahan</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>Izin: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · diizinkan pada {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>Cabut</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>Cabut kepercayaan untuk {0}</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>Komponen skrip C#</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn komponen cache versi hapus</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Versi terinstal: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Versi lain terinstal ({0}). Tambahkan komponen untuk versi HexEditor ini.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Belum terinstal. Skrip C# memerlukan komponen ini.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Tambahkan...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Hapus cache kompilasi</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Komponen telah dihapus.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Cache kompilasi telah dihapus.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
 </root>

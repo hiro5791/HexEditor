@@ -75,7 +75,7 @@ Visual Studio で F5 を押すと、起動設定が HexEditor を `--plugin-dev 
 | `IDataTransform` | データ > プラグインのデータ演算 | チャンクごとにその場で変換する。長さは変えない |
 | `ICommand` | コマンドパレット、ショートカット | `CanExecute` は UI スレッド (10 ms) |
 | `IMenuContribution` | ツール > プラグイン、右クリックメニュー > プラグイン | 同じプラグインのコマンドを指す |
-| `IPanelProvider` (SDK.UI) | 表示 > パネル | `context.HasUi` のときだけ登録する |
+| `IPanelProvider` (SDK.UI) | 表示 > パネルの表示切り替え | `context.HasUi` のときだけ登録する |
 | `IPluginSettingsProvider` (SDK.UI) | プラグインマネージャ > プラグインの設定 | |
 | `ITemplateFunction` | テンプレート言語 (`extern fn`) | |
 | `IFileTypeDetector` | ファイル形式の判定、テンプレートの自動適用 | 先頭 64 KB を受け取る |

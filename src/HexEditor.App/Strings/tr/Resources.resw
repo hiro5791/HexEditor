@@ -6549,4 +6549,48 @@ Tür: {4}</value></data>
   <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Alan</value></data>
   <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (kullanıcı tanımlı)</value></data>
   <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (şablon {1})</value></data>
+  <data name="Menu_Edit_Delete.Text" xml:space="preserve"><value>Sil</value></data>
+  <data name="Menu_Edit_ClearSelection.Text" xml:space="preserve"><value>Seçimi kaldır</value></data>
+  <data name="Cmd_edit_delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="CmdAlias_edit_delete" xml:space="preserve"><value>kaldır bayt</value></data>
+  <data name="Cmd_edit_clearSelection" xml:space="preserve"><value>Seçimi kaldır</value></data>
+  <data name="CmdAlias_edit_clearSelection" xml:space="preserve"><value>seçimi iptal hiçbiri</value></data>
+  <data name="Command_NothingToDelete" xml:space="preserve"><value>İmleç konumunda silinecek bir şey yok.</value></data>
+  <data name="Menu_View_MemoryMapPanel.Text" xml:space="preserve"><value>Bellek haritası</value></data>
+  <data name="Set_files_lock" xml:space="preserve"><value>Dosya kilidi</value></data>
+  <data name="SetDesc_files_lock" xml:space="preserve"><value>Dosya burada açıkken diğer uygulamaların dosyaya yazıp yazamayacağı. Değişiklikten sonra açılan dosyalara uygulanır.</value></data>
+  <data name="SetOpt_files_lock_whileModified" xml:space="preserve"><value>Diğer uygulamaların yazmasını yalnızca kaydedilmemiş değişiklikler varken engelle</value></data>
+  <data name="SetOpt_files_lock_always" xml:space="preserve"><value>Açıkken diğer uygulamaların yazmasını her zaman engelle</value></data>
+  <data name="SetOpt_files_lock_none" xml:space="preserve"><value>Kilitleme (diğer uygulamaların yazmasına her zaman izin ver)</value></data>
+  <data name="Set_ui_accentColor" xml:space="preserve"><value>Vurgu rengi</value></data>
+  <data name="SetDesc_ui_accentColor" xml:space="preserve"><value>Seçim, odak dikdörtgenleri ve vurgu düğmeleri için kullanılan renk. Yüksek karşıtlıkta yok sayılır. Yeniden başlatıldıktan sonra geçerli olur.</value></data>
+  <data name="SetOpt_ui_accentColor_system" xml:space="preserve"><value>Windows vurgu rengi</value></data>
+  <data name="Settings_ColorCustom" xml:space="preserve"><value>Özel renk</value></data>
+  <data name="Error_SaveInUse" xml:space="preserve"><value>{0}, başka bir uygulama tarafından kullanıldığından kaydedilemiyor.</value></data>
+  <data name="Error_SaveInUseBy" xml:space="preserve"><value>{0}, {1} tarafından kullanıldığından kaydedilemiyor.</value></data>
+  <data name="Common_Retry" xml:space="preserve"><value>Yeniden dene</value></data>
+  <data name="SetSection_ScriptTrust" xml:space="preserve"><value>Güven ve izinler</value></data>
+  <data name="SetSearch_ScriptTrust" xml:space="preserve"><value>güven izin her zaman izin ver iptal güvenlik betik</value></data>
+  <data name="TrustList_Intro" xml:space="preserve"><value>"Her zaman izin ver" seçtiğiniz betikler sormadan çalışır. Bir sonraki çalıştırmada yeniden sorulması için izni iptal edin.</value></data>
+  <data name="TrustList_Policy" xml:space="preserve"><value>Kuruluşunuz betik ilkesini ayarladı: {0}. Burada değiştirilemez.</value></data>
+  <data name="TrustList_None" xml:space="preserve"><value>Her zaman izin verilen betik yok.</value></data>
+  <data name="TrustList_Plugins" xml:space="preserve"><value>Eklenti güveni eklenti yöneticisinde yönetilir</value></data>
+  <data name="TrustList_NoPermissions" xml:space="preserve"><value>Ek izin yok</value></data>
+  <data name="TrustList_Permissions" xml:space="preserve"><value>İzinler: {0}</value></data>
+  <data name="TrustList_Granted" xml:space="preserve"><value>{0} · izin verildi: {1}</value></data>
+  <data name="TrustList_Revoke" xml:space="preserve"><value>İptal et</value></data>
+  <data name="TrustList_RevokeName" xml:space="preserve"><value>{0} için güveni iptal et</value></data>
+  <data name="SetSection_CSharpComponent" xml:space="preserve"><value>C# betik bileşeni</value></data>
+  <data name="SetSearch_CSharpComponent" xml:space="preserve"><value>C# Roslyn bileşen önbellek sürüm kaldır</value></data>
+  <data name="CSharpComponent_InstalledVersion" xml:space="preserve"><value>Yüklü sürüm: {0}</value></data>
+  <data name="CSharpComponent_OtherVersion" xml:space="preserve"><value>Farklı bir sürüm yüklü ({0}). HexEditor'ın bu sürümü için bileşeni ekleyin.</value></data>
+  <data name="CSharpComponent_NotInstalled" xml:space="preserve"><value>Yüklü değil. C# betikleri bu bileşene ihtiyaç duyar.</value></data>
+  <data name="CSharpComponent_AddButton" xml:space="preserve"><value>Ekle...</value></data>
+  <data name="CSharpComponent_Remove" xml:space="preserve"><value>Kaldır</value></data>
+  <data name="CSharpComponent_ClearCache" xml:space="preserve"><value>Derleme önbelleğini temizle</value></data>
+  <data name="CSharpComponent_Removed" xml:space="preserve"><value>Bileşen kaldırıldı.</value></data>
+  <data name="CSharpComponent_CacheCleared" xml:space="preserve"><value>Derleme önbelleği temizlendi.</value></data>
+  <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ç</value></data>
+  <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>C</value></data>
 </root>

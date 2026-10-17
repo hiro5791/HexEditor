@@ -106,6 +106,11 @@ public static class BuiltInCommands
             Condition = "documentOpen",
         },
         new("edit.selectRange", "edit") { DefaultBindings = [K("Ctrl+E", KeyScope.Editor)], Condition = "documentOpen" },
+
+        // 編集 > 削除・選択の解除 (EDIT-13、EDIT-03 の「呼び出し」)。キー (Delete・Esc) は Hex ビューが処理するので割り当てにしない
+        // (00-overview.md 8.3 の表の「Hex ビューが処理する」)。メニューには固定のキーとして表示する。
+        new("edit.delete", "edit") { FixedKey = "Delete", Condition = "documentOpen && !readOnly" },
+        new("edit.clearSelection", "edit") { FixedKey = "Escape", Condition = "documentOpen && hasSelection" },
         new("edit.insertBytes", "edit") { Condition = "documentOpen && !readOnly && canResize" },
         new("edit.insertFile", "edit") { Condition = "documentOpen && !readOnly" },
         new("edit.fill", "edit") { Condition = "documentOpen && !readOnly" },

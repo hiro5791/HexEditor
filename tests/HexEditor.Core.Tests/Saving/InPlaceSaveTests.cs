@@ -177,6 +177,33 @@ public sealed class InPlaceSaveTests : IDisposable
         Assert.Equal(File.ReadAllBytes(TestDataCatalog.Get("TD-SEQ-1M")), File.ReadAllBytes(path));
     }
 
+    [Fact]
+    public void FileInUseByAnotherAppFailsWithTheSharingErrorAndWritesNothing()
+    {
+        // 他のアプリが書き込みを許さずに開いている (ENG-20 の「エラー」の「他のアプリが使用中」)。まだ何も書いていないので、
+        // 「一部だけ書き換わった」ではなく使用中の誤りのまま返し、ジャーナルを残さない (アプリが「再試行」を出す)。
+        string path = Path.Combine(_dir, "inuse.bin");
+        File.Copy(TestDataCatalog.Get("TD-SEQ-1M"), path);
+        byte[] original = File.ReadAllBytes(path);
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.Overwrite(0x10, [0xAA]);
+        using (new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete))
+        {
+            IOException error = Assert.ThrowsAny<IOException>(() => InPlaceSaver.Save(doc.Current, Journals));
+            Assert.IsNotType<InPlaceSavePartiallyWrittenException>(error);
+            Assert.IsNotType<InPlaceSaveRolledBackException>(error);
+            Assert.Equal(unchecked((int)0x80070020), error.HResult);
+        }
+
+        Assert.Equal(original, File.ReadAllBytes(path));
+        Assert.Empty(Directory.Exists(Journals) ? Directory.GetFiles(Journals) : []);
+        Assert.True(doc.IsModified);
+
+        // 使用が終われば保存できる (再試行)。
+        doc.CompleteInPlaceSave(InPlaceSaver.Save(doc.Current, Journals));
+        Assert.Equal(0xAA, File.ReadAllBytes(path)[0x10]);
+    }
+
     public void Dispose()
     {
         try
