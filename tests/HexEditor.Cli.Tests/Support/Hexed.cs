@@ -83,15 +83,31 @@ public static class Hexed
         }
 
         info.Environment["HEXED_TEST_PROFILE"] = Profile;
+
+        // CI の実行環境は管理者として動くため、管理者でない扱いに固定する (AUTO-34 の仕様 8。管理者のテストは上書きする)。
+        info.Environment[HexEditor.Cli.Services.CliElevation.TestVariable] = "0";
         return info;
     }
 
     /// <summary>実行して終了を待つ。標準出力・標準エラー出力をバイト列で取る。</summary>
     public static CliResult Run(string workingDirectory, params string[] args) => Run(workingDirectory, null, TimeSpan.FromSeconds(120), args);
 
-    public static CliResult Run(string workingDirectory, byte[]? input, TimeSpan timeout, params string[] args)
+    public static CliResult Run(string workingDirectory, byte[]? input, TimeSpan timeout, params string[] args) =>
+        Run(workingDirectory, input, timeout, null, args);
+
+    /// <summary>環境変数を足して実行する (<paramref name="environment"/> の値で上書きする)。</summary>
+    public static CliResult RunWithEnvironment(string workingDirectory, IReadOnlyDictionary<string, string> environment, params string[] args) =>
+        Run(workingDirectory, null, TimeSpan.FromSeconds(120), environment, args);
+
+    private static CliResult Run(string workingDirectory, byte[]? input, TimeSpan timeout, IReadOnlyDictionary<string, string>? environment, string[] args)
     {
-        using var process = new Process { StartInfo = StartInfo(workingDirectory, args) };
+        ProcessStartInfo info = StartInfo(workingDirectory, args);
+        foreach ((string key, string value) in environment ?? new Dictionary<string, string>())
+        {
+            info.Environment[key] = value;
+        }
+
+        using var process = new Process { StartInfo = info };
         process.Start();
         Task<byte[]> output = ReadAll(process.StandardOutput.BaseStream);
         Task<byte[]> error = ReadAll(process.StandardError.BaseStream);

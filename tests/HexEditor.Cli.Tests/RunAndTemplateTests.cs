@@ -195,10 +195,11 @@ public sealed class RunAndTemplateTests
 
     // ---- 本物のスクリプトのホスト (Core の ScriptHost + CoreScriptEnvironment) ----
 
-    /// <summary>本物のスクリプトのホスト・テンプレートエンジン。信頼の一覧・保存領域はテストの一時フォルダ (普段の設定を読まない・書かない)。</summary>
-    private static CliServices RealServices(TempDir dir) => new()
+    /// <summary>本物のスクリプトのホスト・テンプレートエンジン。信頼の一覧・保存領域はテストの一時フォルダ (普段の設定を読まない・書かない)。
+    /// 管理者として実行中かは <paramref name="elevated"/> で決める (CI の実行環境は管理者として動くため、実際の権限に頼らない)。</summary>
+    private static CliServices RealServices(TempDir dir, bool elevated = false) => new()
     {
-        Scripts = new CoreScriptRunner(() => new ScriptFolders(dir.File("settings"), dir.File("data")), () => null),
+        Scripts = new CoreScriptRunner(() => new ScriptFolders(dir.File("settings"), dir.File("data")), () => null, () => elevated),
         Templates = new CoreTemplateService(() => TemplateCatalog.CreateDefault(dir.File("templates"))),
     };
 
@@ -255,6 +256,61 @@ public sealed class RunAndTemplateTests
         Assert.Equal(5, result.ExitCode);
         Assert.Contains("--trust", result.Err);
         Assert.Equal(before, Sha256(a));
+    }
+
+    /// <summary>AUTO-34 の仕様 8: 管理者として実行中は「常に許可する」の記録があっても --trust がなければ実行しない (終了コード 5)。</summary>
+    [Fact]
+    public void Real_script_host_needs_trust_when_elevated_even_with_an_always_allow_record()
+    {
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-SEQ-1M", "a.bin");
+        string before = Sha256(a);
+        string script = dir.File("xor.js");
+        File.WriteAllText(script, XorScript);
+        new TrustStore(Path.Combine(dir.File("settings"), "scripts", "trust.json"))
+            .Add(TrustStore.ScriptKind, TrustStore.ScriptKey(script), TrustStore.HashOf(XorScript), TrustSource.UserAllowed, []);
+
+        // 管理者でなければ記録だけで実行する。
+        CliResult user = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--dry-run", "--lang", "en"]);
+        Assert.True(user.ExitCode == 0, user.Err);
+
+        CliResult denied = Hexed.RunInProcess(dir.Path, RealServices(dir, elevated: true), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--save", "--lang", "en"]);
+        Assert.Equal(5, denied.ExitCode);
+        Assert.Contains("--trust is required when running as administrator", denied.Err);
+        Assert.Equal(before, Sha256(a));
+
+        CliResult trusted = Hexed.RunInProcess(dir.Path, RealServices(dir, elevated: true), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--save", "--trust"]);
+        Assert.True(trusted.ExitCode == 0, trusted.Err);
+        Assert.Equal(0x5A, File.ReadAllBytes(a)[0]);
+    }
+
+    /// <summary>
+    /// AUTO-34 の仕様 8 を実際の hexed.exe で: 管理者として実行中か (テスト用のビルドでは環境変数 HEXED_TEST_ELEVATED で模擬する) を
+    /// 判定し、--trust がなければスクリプトを実行しない。
+    /// </summary>
+    [Fact]
+    public void Hexed_exe_needs_trust_when_running_as_administrator()
+    {
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-BYTES-256", "a.bin");
+        string before = Sha256(a);
+        File.WriteAllText(dir.File("log.js"), "console.log('ran');");
+        var elevated = new Dictionary<string, string> { [CliElevation.TestVariable] = "1" };
+
+        CliResult denied = Hexed.RunWithEnvironment(dir.Path, elevated, "run", "log.js", "a.bin", "--lang", "en");
+        Assert.Equal(5, denied.ExitCode);
+        Assert.Equal(string.Empty, denied.Out);
+        Assert.Contains("--trust is required when running as administrator", denied.Err);
+        Assert.Equal(before, Sha256(a));
+
+        CliResult trusted = Hexed.RunWithEnvironment(dir.Path, elevated, "run", "log.js", "a.bin", "--trust");
+        Assert.True(trusted.ExitCode == 0, trusted.Err);
+        Assert.Equal(["ran"], trusted.OutLines);
+
+        // 管理者でない扱い (テストの既定) では、記録も --trust もないスクリプトは「信頼されていない」で終わる (管理者の案内ではない)。
+        CliResult user = Hexed.Run(dir.Path, "run", "log.js", "a.bin", "--lang", "en");
+        Assert.Equal(5, user.ExitCode);
+        Assert.DoesNotContain("administrator", user.Err);
     }
 
     [Fact]

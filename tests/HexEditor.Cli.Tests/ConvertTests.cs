@@ -11,6 +11,13 @@ namespace HexEditor.Cli.Tests;
 /// <summary>形式の変換 (AUTO-44 の 1、TOOL-04)。</summary>
 public sealed class ConvertTests
 {
+    /// <summary>
+    /// ソースコードの形式の先頭のコメントにある書き出しの時刻 (yyyy-MM-dd HH:mm:ss zzz) を除いた内容。別々に書き出したファイルを比べると、
+    /// 負荷で秒の境目をまたぐと時刻だけが違うため (時刻以外が同じことを確かめる)。
+    /// </summary>
+    private static byte[] WithoutTimestamp(string path) => System.Text.Encoding.Latin1.GetBytes(System.Text.RegularExpressions.Regex.Replace(
+        System.Text.Encoding.Latin1.GetString(File.ReadAllBytes(path)), @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}", "<time>"));
+
     [Fact]
     [Trait("TC", "TC-AUTO-44-01")]
     public void Intel_hex_to_bin_equals_importing_in_the_gui_and_saving()
@@ -103,7 +110,7 @@ public sealed class ConvertTests
             string cli = dir.File("cli." + format);
             CliResult result = Hexed.Run(dir.Path, ["convert", firmware, cli, "--from", "bin", "--to", format, .. cliOptions]);
             Assert.True(result.ExitCode == 0, $"{format}: {result.Err}");
-            Assert.Equal(File.ReadAllBytes(gui), File.ReadAllBytes(cli));
+            Assert.Equal(WithoutTimestamp(gui), WithoutTimestamp(cli));
         }
     }
 
@@ -122,7 +129,7 @@ public sealed class ConvertTests
         var services = new CliServices
         {
             Scripts = new HexEditor.Cli.Services.CoreScriptRunner(
-                () => new HexEditor.Core.Scripting.ScriptFolders(dir.File("settings"), dir.File("data")), () => null),
+                () => new HexEditor.Core.Scripting.ScriptFolders(dir.File("settings"), dir.File("data")), () => null, () => false),
         };
         (string Format, string[] Cli, string Options)[] cases =
         [
@@ -142,7 +149,7 @@ public sealed class ConvertTests
             CliResult run = Hexed.RunInProcess(dir.Path, services,
                 ["run", "export.js", firmware, "--trust", "--allow", "file-write", "--arg", "out=" + script, "--arg", "format=" + format, "--arg", "options=" + json]);
             Assert.True(run.ExitCode == 0, $"{format}: {run.Err}");
-            Assert.Equal(File.ReadAllBytes(cli), File.ReadAllBytes(script));
+            Assert.Equal(WithoutTimestamp(cli), WithoutTimestamp(script));
         }
     }
 

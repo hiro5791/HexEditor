@@ -654,7 +654,10 @@ public sealed class ScriptApiTests
     [Fact]
     public async Task Selection_limits_rectangle_and_active_column()
     {
-        using var t = new ScriptTestHost();
+        // 件数の上限 (1,000,001 件) を確かめる配列は大きい。メモリの上限はプロセス全体のマネージドヒープの増加で数えるため
+        // (ExecutionBudget)、全体のテストと並行に走ると他のテストの割り当てで上限を超え、実行時間も負荷で延びる。
+        // この確認は上限の機能のテストではないため、時間とメモリの上限を外し、要素は 1 つのオブジェクトを共有して小さくする。
+        using var t = new ScriptTestHost(new ScriptLimits { Time = null, MemoryBytes = ScriptLimits.MaxMemory });
         CoreDocumentHost doc = t.Open(new byte[4096]);
         IReadOnlyList<string> output = await RunOk(t, """
             doc.selection.setRectangle(0x20, 3, 4);
@@ -663,7 +666,8 @@ public sealed class ScriptApiTests
             console.log(doc.selection.isEmpty);
             doc.activeColumn = "text"; console.log(doc.activeColumn);
             doc.cursor = 0x30; console.log(doc.cursor);
-            try { doc.selection.fromResults(Array.from({ length: 1000001 }, (_, i) => ({ start: 0, length: 1 }))); } catch (e) { console.log(e.name); }
+            const one = { start: 0, length: 1 };
+            try { doc.selection.fromResults(new Array(1000001).fill(one)); } catch (e) { console.log(e.name); }
             try { doc.selection.set("0:5000"); } catch (e) { console.log(e.name); }
             """);
         Assert.Equal(["true 3", "true", "text", "48", "LimitError", "RangeError"], output.Take(6));

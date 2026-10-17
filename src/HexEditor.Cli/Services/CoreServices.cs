@@ -176,13 +176,16 @@ public sealed class CoreTemplateService(Func<TemplateCatalog>? catalog = null) :
 /// <c>hexed run</c> (AUTO-41) の実装: Core のスクリプトのホスト (<see cref="ScriptHost"/>) と UI のない環境 (<see cref="CoreScriptEnvironment"/>)
 /// で実行する。<c>console.log</c> は標準出力、警告・エラー・<c>ui.message</c> は標準エラー出力に出す (仕様 6)。終了コードは
 /// <see cref="ScriptRunResult.ProcessExitCode"/> (<c>app.exit</c> の値が優先。仕様 8)。
+/// 管理者として実行中は <c>--trust</c> がある場合だけ実行し、プラグインを読み込む (AUTO-34 の仕様 8)。<paramref name="elevated"/> の既定は
+/// <see cref="CliElevation.Current"/> (テストは結果を与える)。
 /// </summary>
-public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<CSharpComponentManager?>? csharp = null) : IScriptRunner
+public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<CSharpComponentManager?>? csharp = null, Func<bool>? elevated = null) : IScriptRunner
 {
     private const string ManifestResource = "HexEditor.CSharpComponent.json";
 
     private readonly Func<ScriptFolders> _folders = folders ?? DefaultFolders;
     private readonly Func<CSharpComponentManager?> _csharp = csharp ?? DefaultComponents;
+    private readonly Func<bool> _elevated = elevated ?? (() => CliElevation.Current);
 
     public int Run(ScriptRunRequest request, CancellationToken cancellationToken)
     {
@@ -196,6 +199,7 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         {
             AppVersion = typeof(CoreScriptRunner).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.0.0",
             DryRun = request.DryRun,
+            IsElevated = _elevated(),
         };
         env.Ui = new CliScriptUi(env, request.Error);
         env.Templates = new TemplateScriptEngine(TemplateCatalog.CreateDefault(Path.Combine(scriptFolders.Settings, "templates")));
@@ -412,16 +416,18 @@ internal static class CliPluginHost
 
 /// <summary>
 /// <c>hexed hash</c> (AUTO-38 の仕様 2) のプラグインのアルゴリズム: <c>hexed run</c> と同じく信頼の記録のあるプラグインだけを読み込む
-/// (<c>hash</c> には <c>--trust</c> がないため、管理者として実行中は読み込まない)。
+/// (<c>hash</c> には <c>--trust</c> がないため、管理者として実行中は読み込まない。AUTO-34 の仕様 8)。<paramref name="elevated"/> の既定は
+/// <see cref="CliElevation.Current"/> (テストは結果を与える)。
 /// </summary>
-public sealed class CorePluginLoader(Func<ScriptFolders>? folders = null) : IPluginLoader
+public sealed class CorePluginLoader(Func<ScriptFolders>? folders = null, Func<bool>? elevated = null) : IPluginLoader
 {
     private readonly Func<ScriptFolders> _folders = folders ?? CoreScriptRunner.DefaultFolders;
+    private readonly Func<bool> _elevated = elevated ?? (() => CliElevation.Current);
 
     public IDisposable Load(string language)
     {
         ScriptFolders f = _folders();
         string appVersion = typeof(CorePluginLoader).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.0.0";
-        return CliPluginHost.Load(f, new TrustStore(f.TrustFile), new CliSettings(f.Settings), appVersion, elevated: false, commandLineTrust: false, language, output: null);
+        return CliPluginHost.Load(f, new TrustStore(f.TrustFile), new CliSettings(f.Settings), appVersion, _elevated(), commandLineTrust: false, language, output: null);
     }
 }

@@ -66,6 +66,9 @@ public sealed class CommandLineTests
         }
 
         info.Environment["HEXED_GUI_PATH"] = AppLocator.ExePath;
+
+        // CI の実行環境は管理者として動くため、hexed を管理者でない扱いに固定する (AUTO-34 の仕様 8。テスト用のビルドだけが読む)。
+        info.Environment["HEXED_TEST_ELEVATED"] = "0";
         return info;
     }
 

@@ -30,7 +30,7 @@ public sealed class PluginRunTests
         new TrustStore(Path.Combine(settings, "scripts", "trust.json")).Add(TrustStore.PluginKind, "test.sample", PluginManager.ContentHash(folder), TrustSource.UserAllowed, []);
         File.WriteAllBytes(dir.File("bytes.bin"), [.. Enumerable.Range(0, 256).Select(i => (byte)i)]);
         File.WriteAllText(dir.File("plgtype.js"), PlgType);
-        var services = new CliServices { Scripts = new CoreScriptRunner(() => new ScriptFolders(settings, dir.File("data")), () => null) };
+        var services = new CliServices { Scripts = new CoreScriptRunner(() => new ScriptFolders(settings, dir.File("data")), () => null, () => false) };
 
         CliResult result = Hexed.RunInProcess(dir.Path, services, ["run", "plgtype.js", "bytes.bin", "--trust"]);
 
@@ -47,7 +47,7 @@ public sealed class PluginRunTests
         TestPlugins.Install(Path.Combine(settings, "plugins"), TestPlugins.Sample);
         File.WriteAllBytes(dir.File("bytes.bin"), [0x12]);
         File.WriteAllText(dir.File("plgtype.js"), """console.log("found=" + inspector.types.some(t => t.id === "test.sample.nibble-swap8"));""");
-        var services = new CliServices { Scripts = new CoreScriptRunner(() => new ScriptFolders(settings, dir.File("data")), () => null) };
+        var services = new CliServices { Scripts = new CoreScriptRunner(() => new ScriptFolders(settings, dir.File("data")), () => null, () => false) };
 
         CliResult result = Hexed.RunInProcess(dir.Path, services, ["run", "plgtype.js", "bytes.bin", "--trust"]);
 
@@ -63,7 +63,7 @@ public sealed class PluginRunTests
         string settings = dir.File("settings");
         string folder = TestPlugins.Install(Path.Combine(settings, "plugins"), TestPlugins.Sample);
         File.WriteAllBytes(dir.File("bytes.bin"), [.. Enumerable.Range(0, 256).Select(i => (byte)i)]);
-        var services = new CliServices { Plugins = new CorePluginLoader(() => new ScriptFolders(settings, dir.File("data"))) };
+        var services = new CliServices { Plugins = new CorePluginLoader(() => new ScriptFolders(settings, dir.File("data")), () => false) };
 
         // 信頼されていないプラグインのアルゴリズムは使えない (知らない ID は使い方の誤り)。
         CliResult untrusted = Hexed.RunInProcess(dir.Path, services, ["hash", "bytes.bin", "-a", "test.sample.sum8", "--format", "gnu", "--lang", "en"]);
@@ -85,6 +85,42 @@ public sealed class PluginRunTests
         Assert.Equal(2, Hexed.RunInProcess(dir.Path, services, ["hash", "bytes.bin", "-a", "test.sample.sum8"]).ExitCode);
         File.WriteAllText(Path.Combine(settings, "settings.json"), """{ "scripts.policy": "disabled" }""");
         Assert.Equal(2, Hexed.RunInProcess(dir.Path, services, ["hash", "bytes.bin", "-a", "test.sample.sum8"]).ExitCode);
+    }
+
+    /// <summary>
+    /// AUTO-34 の仕様 8: 管理者として実行中は、信頼の記録のあるプラグインも --trust がある場合だけ読み込む
+    /// (hexed run の --trust なしは終了コード 5 でスクリプトもプラグインも動かない。--trust のない hexed hash は読み込まない)。
+    /// </summary>
+    [Fact]
+    public void Elevated_headless_runs_load_plugins_only_with_trust()
+    {
+        using var dir = new TempDir();
+        string settings = dir.File("settings");
+        string folder = TestPlugins.Install(Path.Combine(settings, "plugins"), TestPlugins.Sample);
+        var trust = new TrustStore(Path.Combine(settings, "scripts", "trust.json"));
+        trust.Add(TrustStore.PluginKind, "test.sample", PluginManager.ContentHash(folder), TrustSource.UserAllowed, []);
+        File.WriteAllBytes(dir.File("bytes.bin"), [.. Enumerable.Range(0, 256).Select(i => (byte)i)]);
+        string script = dir.File("plgtype.js");
+        File.WriteAllText(script, PlgType);
+        trust.Add(TrustStore.ScriptKind, TrustStore.ScriptKey(script), TrustStore.HashOf(PlgType), TrustSource.UserAllowed, []);
+        var services = new CliServices
+        {
+            Scripts = new CoreScriptRunner(() => new ScriptFolders(settings, dir.File("data")), () => null, () => true),
+            Plugins = new CorePluginLoader(() => new ScriptFolders(settings, dir.File("data")), () => true),
+        };
+
+        CliResult denied = Hexed.RunInProcess(dir.Path, services, ["run", "plgtype.js", "bytes.bin", "--lang", "en"]);
+        Assert.Equal(5, denied.ExitCode);
+        Assert.Equal(string.Empty, denied.Out);
+        Assert.Null(PluginManager.Current);
+
+        CliResult trusted = Hexed.RunInProcess(dir.Path, services, ["run", "plgtype.js", "bytes.bin", "--trust"]);
+        Assert.True(trusted.ExitCode == 0, trusted.Err);
+        Assert.Equal(["found=true", "21"], trusted.OutLines);
+
+        // hexed hash には --trust がないため、管理者として実行中はプラグインのアルゴリズムを使えない (知らない ID は使い方の誤り)。
+        Assert.Equal(2, Hexed.RunInProcess(dir.Path, services, ["hash", "bytes.bin", "-a", "test.sample.sum8", "--lang", "en"]).ExitCode);
+        Assert.Null(PluginManager.Current);
     }
 }
 
