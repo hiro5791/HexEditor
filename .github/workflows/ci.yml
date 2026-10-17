@@ -1,6 +1,6 @@
 # ビルドとテスト (PKG-23、テスト方針 9 章)
 #   プッシュ・プルリクエスト: build (3 種類 × 2 アーキテクチャ)、test-x64、test-arm64、i18n、lint、size、配布物の検査
-#   毎晩: 性能テストと全規模のテスト (Category=Nightly)、ポータブル版を起動する配布のテスト
+#   毎晩: 性能テストと全規模のテスト (Category=Nightly)、ポータブル版を起動する配布のテスト、Kaitai Struct の照合 (TC-TPL-33-01)
 # フォークからの PR にも Secrets を使う手順はない (PKG-23 の仕様 5)。
 name: ci
 
@@ -408,8 +408,84 @@ jobs:
 
   # テストの網羅の一覧 (test-coverage.md。テスト方針 6.2、10 章の 4)。完了したフェーズ (0) に、テストケースのない受け入れ基準、
   # 自動テストのない「自動」のテストケース、失敗したテストケースがあれば失敗にする。
+  # TC-TPL-33-01: kaitai_struct_formats の 5 つの .ksy を変更せずに実行し、Kaitai Struct の公式のコンパイラ (JavaScript 版。Web IDE と
+  # 同じもの) と公式の JavaScript の実行時ライブラリで解析した値と照合する (TPL-33 の受け入れ基準 1)。毎晩と手動の実行だけ。
+  # ダウンロードはこのランナーの中だけで行い、版を固定する: フォーマット集はコミット ID (取り出した後に確かめる)、コンパイラ・実行時
+  # ライブラリ・YAML の読み込みは tools/KaitaiReference/package-lock.json の sha512 (npm ci が検証する)。開発者の PC ではこのテストは
+  # スキップされる (HEXEDITOR_KAITAI_REF がない)。報告 (kaitai-report.md) はジョブの概要と成果物 kaitai-results に出す。
+  kaitai-reference:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      # kaitai_struct_formats の固定のコミット (2025-10-21。コンパイラ 0.11 の公開後)
+      KSF_COMMIT: 5f37c8178a631ae1d50e044be7af58dced0d0b69
+      HEXEDITOR_KAITAI_REF: ${{ github.workspace }}\..\kaitai-ref
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+      - name: Fetch kaitai_struct_formats (pinned commit)
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:HEXEDITOR_KAITAI_REF formats
+          git init --quiet $dir
+          git -C $dir fetch --quiet --depth 1 https://github.com/kaitai-io/kaitai_struct_formats.git $env:KSF_COMMIT
+          if ($LASTEXITCODE -ne 0) { throw 'fetch failed' }
+          git -C $dir checkout --quiet FETCH_HEAD
+          $head = git -C $dir rev-parse HEAD
+          if ($head -ne $env:KSF_COMMIT) { throw "unexpected commit $head" }
+      - name: Install the Kaitai Struct compiler and runtime (pinned by package-lock.json)
+        working-directory: tools/KaitaiReference
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build
+        run: |
+          dotnet build tests/HexEditor.Core.Tests -c Release
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          dotnet build tools/TestDataGen -c Release
+      - name: Sample data (TestDataGen)
+        shell: pwsh
+        run: |
+          $data = Join-Path $env:HEXEDITOR_KAITAI_REF data
+          foreach ($id in (Get-Content tools/KaitaiReference/formats.json -Raw | ConvertFrom-Json).data) {
+            dotnet run --project tools/TestDataGen -c Release --no-build -- $id $data
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+      - name: Reference dumps (official compiler and JavaScript runtime)
+        run: node tools/KaitaiReference/dump.js "$env:HEXEDITOR_KAITAI_REF\formats" "$env:HEXEDITOR_KAITAI_REF\data" "$env:HEXEDITOR_KAITAI_REF\ref" $env:KSF_COMMIT
+      - name: Compare (TC-TPL-33-01)
+        run: dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "FullyQualifiedName~HexEditor.Core.Tests.Templates.KaitaiTests" --logger "trx;LogFileName=kaitai.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Report
+        if: always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force TestResults | Out-Null
+          $report = Join-Path $env:HEXEDITOR_KAITAI_REF report/kaitai-report.md
+          if (Test-Path $report) {
+            Get-Content $report -TotalCount 40 | Add-Content $env:GITHUB_STEP_SUMMARY
+            Copy-Item $report TestResults/
+          }
+          $ref = Join-Path $env:HEXEDITOR_KAITAI_REF ref
+          if (Test-Path $ref) { Copy-Item $ref TestResults/kaitai-ref -Recurse }
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaitai-results
+          retention-days: 7
+          path: TestResults/
+
   coverage:
-    needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged]
+    needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged, kaitai-reference]
     if: always()
     runs-on: windows-latest
     timeout-minutes: 15
@@ -449,6 +525,12 @@ jobs:
         with:
           pattern: ui-privileged-*
           path: results/ui-privileged
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: kaitai-results
+          path: results/kaitai
 
       - name: Test coverage
         shell: pwsh

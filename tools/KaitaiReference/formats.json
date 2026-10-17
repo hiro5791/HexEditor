@@ -1,0 +1,7 @@
+[
+  { "key": "png", "ksy": "image/png.ksy", "data": "TD-PNG" },
+  { "key": "zip", "ksy": "archive/zip.ksy", "data": "TD-ZIP" },
+  { "key": "elf", "ksy": "executable/elf.ksy", "data": "TD-ELF-X64" },
+  { "key": "microsoft_pe", "ksy": "executable/microsoft_pe.ksy", "data": "TD-PE-X64" },
+  { "key": "gif", "ksy": "image/gif.ksy", "data": "TD-TPL-GIF" }
+]
