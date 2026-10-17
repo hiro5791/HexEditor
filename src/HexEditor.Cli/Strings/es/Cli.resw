@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Cancelado.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Ejecuta 'hexed --help' (o 'hexed &lt;command&gt; --help') para ver el uso.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Error inesperado ({0}). Los detalles se escribieron en {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Uso: hexed &lt;command&gt; [arguments] [options]
+     hexed &lt;file&gt; [options]          (equivale a: hexed open &lt;file&gt;)
+
+Comandos:
+  open      Abrir archivos, discos o procesos en la ventana de HexEditor
+  hash      Calcular y verificar hashes y sumas de comprobación
+  dump      Imprimir un volcado hexadecimal
+  compare   Comparar dos archivos
+  run       Ejecutar un script sin ventana
+  template  Aplicar una plantilla de estructura e imprimir el resultado
+  patch     Aplicar un parche IPS a un archivo
+  convert   Convertir entre formatos (Intel HEX, S-record, Base64, código fuente, ...)
+  find      Buscar en archivos e imprimir las coincidencias
+
+Opciones comunes (todos los comandos):
+  -h, --help           Mostrar el uso (también: hexed &lt;command&gt; --help)
+      --version        Mostrar la versión
+  -q, --quiet          Imprimir solo el resultado
+      --format &lt;f&gt;     Formato de salida: text (predeterminado) o json
+  -o, --output &lt;path&gt;  Escribir el resultado en un archivo en lugar de en la pantalla
+      --lang &lt;tag&gt;     Idioma de los mensajes (por ejemplo en, ja)
+      --no-color       No usar colores
+      --unregister     Quitar los registros hechos en este equipo (menú contextual,
+                       asociaciones de archivos, lista de accesos rápidos, PATH, carpeta temporal)
+
+Códigos de salida: 0 correcto, 1 resultado negativo (diferencias, sin coincidencias, discrepancia), 2 error de uso,
+3 error de E/S, 4 error de script o de plantilla, 5 no permitido, 6 cancelado, 7 límite superado,
+8 error de formato, 10 error interno.
+
+Los desplazamientos, longitudes e intervalos aceptan expresiones. Un número sin prefijo es decimal; usa
+0x para hexadecimal. Un intervalo es start:length o start..end (end no se incluye); 'end' es
+la longitud del archivo (por ejemplo end-16:16). En PowerShell, pon entre comillas simples los valores
+que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Uso: hexed open [paths...] [options]
+
+Abre archivos en la ventana de HexEditor. Si HexEditor ya se está ejecutando, los archivos se abren
+allí como pestañas. Las rutas relativas se resuelven desde la carpeta actual.
+
+Opciones:
+  -g, --offset &lt;expr&gt;      Colocar el cursor en esta posición (por ejemplo 0x1000 o end-16)
+      --select &lt;range&gt;     Seleccionar este intervalo (start:length o start..end)
+  -r, --readonly           Abrir en modo de solo lectura
+      --disk &lt;n|path&gt;      Abrir un disco físico (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Abrir un volumen (--volume C:)
+      --process &lt;pid|name&gt; Abrir la memoria de un proceso
+      --encoding &lt;name&gt;    Codificación de caracteres de la columna de texto
+      --template &lt;name|path&gt;  Aplicar una plantilla de estructura después de abrir
+      --compare &lt;a&gt; &lt;b&gt;    Abrir dos archivos en la vista de comparación
+      --run &lt;script&gt;       Ejecutar un script después de abrir
+      --new-window         Abrir en una ventana nueva
+      --new-document       Abrir un documento vacío nuevo
+      --open-disk          Mostrar el cuadro de diálogo Abrir disco
+      --new-instance       Iniciar un proceso independiente en lugar de usar el que está en ejecución
+  -w, --wait               No volver hasta que se cierren los documentos abiertos
+      --safe-mode          Iniciar en modo seguro (solo proceso nuevo)
+      --write-block        Iniciar con protección contra escritura para toda la aplicación
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Mostrar texto pseudotraducido (compilaciones de versión preliminar)
+      --plugin-dev &lt;folder&gt; Cargar un complemento en desarrollo (solo proceso nuevo)
+      --ui-lang &lt;tag&gt;      Idioma de la ventana (solo proceso nuevo)
+      --test-hooks &lt;file&gt;  Habilitar la inyección de fallos (solo compilaciones de prueba)
+
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Uso: hexed hash [paths...] [options]
+     hexed hash --check &lt;checksum file&gt; [options]
+
+Calcula hashes y sumas de comprobación. Las rutas pueden contener comodines (*.bin) o ser carpetas; usa - para leer la
+entrada estándar. Se calculan varios algoritmos en una sola pasada.
+
+Opciones:
+  -a, --algorithm &lt;id,...&gt;   Id. de algoritmos, separados por comas (predeterminado sha256).
+                             '--algorithm list' imprime los id. disponibles
+      --range &lt;range&gt;        Calcular el hash solo de este intervalo (start:length o start..end)
+      --format &lt;f&gt;           text (predeterminado): algorithm  value  path
+                             gnu: value  path (igual que sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: un objeto por archivo
+      --check &lt;file&gt;         Verificar los archivos de un archivo de sumas de comprobación (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) e imprimir OK, FAILED o MISSING
+  -r, --recurse              Incluir subcarpetas cuando se indica una carpeta
+
+Códigos de salida: 0 correcto, 1 discrepancia con --check, 3 no se pudo leer un archivo.
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Uso: hexed dump &lt;path&gt; [options]
+
+Imprime un volcado hexadecimal de un archivo (o de un intervalo) en la salida estándar. El uso de memoria no depende del tamaño.
+
+Opciones:
+      --range &lt;range&gt;        Intervalo que imprimir (start:length o start..end; predeterminado: todo el archivo)
+      --width &lt;n&gt;            Bytes por línea (predeterminado 16)
+      --group &lt;n&gt;            Bytes por grupo (el valor predeterminado depende del estilo; 0 para ninguno)
+      --encoding &lt;name&gt;      Codificación de caracteres de la columna de texto (predeterminado ascii)
+      --base-address &lt;expr&gt;  Dirección mostrada para el primer byte (predeterminado 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              Imprimir * en las líneas que repiten la anterior (como hexdump -C)
+
+Códigos de salida: 2 si el intervalo está fuera del archivo.
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Uso: hexed compare &lt;path1&gt; &lt;path2&gt; [options]
+
+Compara dos archivos e imprime las diferencias.
+
+Opciones:
+      --mode &lt;byte|resync&gt;   byte (predeterminado): comparar bytes en los mismos desplazamientos
+                             resync: permitir inserciones y eliminaciones
+      --range1 &lt;range&gt;       Intervalo del primer archivo (predeterminado: todo)
+      --range2 &lt;range&gt;       Intervalo del segundo archivo (predeterminado: todo)
+      --max &lt;n&gt;              Número máximo de diferencias que imprimir (predeterminado 1000);
+                             el resto solo se cuenta
+      --format &lt;text|json&gt;   Formato de salida
+      --brief                Imprimir una línea (iguales o distintos) y detenerse en la primera diferencia
+
+Códigos de salida: 0 iguales, 1 distintos, 3 no se pudo leer un archivo.
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Uso: hexed run &lt;script&gt; [files...] [options]
+
+Ejecuta un script sin abrir una ventana. Los archivos se abren en orden (app.documents); el primero
+es app.activeDocument.
+
+Opciones:
+      --arg &lt;name=value&gt;   Parámetro del script (repetible); también disponible en script.args
+      --trust              Ejecutar un script que no es de confianza sin preguntar
+      --allow &lt;perm,...&gt;   Permisos que conceder (por ejemplo file-read)
+      --save               Guardar cada documento modificado cuando termine el script
+      --save-as &lt;path&gt;     Guardar el primer documento en esta ruta (el original no se modifica)
+      --dry-run            No guardar nada; imprimir un resumen de los cambios
+      --timeout &lt;seconds&gt;  Tiempo máximo de ejecución de todo el script
+  -r, --readonly           Abrir los archivos en modo de solo lectura
+
+De forma predeterminada solo se guardan los documentos para los que el script llama a doc.save().
+El código de salida de un script se puede establecer con app.exit(code). Los códigos del 2 al 10 tienen los significados
+indicados en 'hexed --help'; usa 64 o más para tus propios significados.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Uso: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [options]
+
+Aplica una plantilla de estructura a un archivo e imprime el resultado.
+
+Opciones:
+      --template &lt;name|path&gt;  Plantilla que aplicar
+      --auto                  Elegir la plantilla automáticamente (código de salida 1 si ninguna encaja)
+  -g, --offset &lt;expr&gt;         Desplazamiento inicial de la estructura (predeterminado 0)
+      --format &lt;f&gt;            json, csv o text (un árbol con sangría; predeterminado text)
+      --depth &lt;n&gt;             Profundidad máxima del árbol
+      --fields &lt;path,...&gt;     Imprimir solo estos campos (por ejemplo header.e_lfanew,sections[*].name)
+
+Códigos de salida: 4 para un error de plantilla.
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Uso: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
+
+Aplica un archivo de parche a un archivo. Se requiere una de las opciones -o y --in-place. Esta versión aplica parches IPS
+e IPS32.
+
+Opciones:
+  -o, --output &lt;path&gt;       Escribir aquí el archivo con el parche (el destino no se modifica)
+      --in-place            Reemplazar el destino de forma segura (primero se escribe un archivo temporal)
+      --format &lt;f&gt;          auto (predeterminado), ips o ips32
+      --verify-before &lt;a:v&gt; Comprobar primero el hash del destino (por ejemplo sha256:ab12...);
+                            código de salida 1 y no se escribe nada si difiere
+      --verify-after &lt;a:v&gt;  Comprobar el hash del resultado antes de escribirlo
+      --dry-run             Imprimir el número de registros y de bytes modificados; no aplicar nada
+
+Códigos de salida: 1 error de verificación, 8 el parche está dañado.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Uso: hexed convert &lt;input&gt; &lt;output&gt; [options]
+
+Convierte un archivo entre los formatos de importación y exportación de HexEditor.
+
+Opciones:
+      --from &lt;format&gt;       Formato de entrada (predeterminado: se detecta por el contenido y la extensión)
+      --to &lt;format&gt;         Formato de salida (predeterminado: según la extensión de salida; bin si se desconoce)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Leer archivos Intel HEX / S-record aunque una suma de comprobación sea incorrecta
+      --fill &lt;hex&gt;          Byte que se usa en los huecos (predeterminado FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+Las opciones de formato tienen los nombres de los campos de los cuadros de diálogo de importación y exportación, escritos en
+minúsculas con guiones, por ejemplo --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Códigos de salida: 8 para un error de suma de comprobación o de formato en la entrada.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Uso: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [options]
+
+Busca en archivos e imprime "path  offset  length" por cada coincidencia.
+
+Opciones:
+      --hex &lt;pattern&gt;      Bytes, por ejemplo "DE AD ?? EF" (?? es cualquier byte, ? cualquier nibble)
+      --text &lt;string&gt;      Texto
+      --regex &lt;expr&gt;       Expresión regular (sobre texto)
+      --encoding &lt;name&gt;    Codificación de caracteres de --text y --regex (predeterminado utf-8)
+      --case-sensitive     Distinguir mayúsculas de minúsculas
+      --range &lt;range&gt;      Buscar solo en este intervalo de cada archivo
+      --max &lt;n&gt;            Detenerse tras n coincidencias
+      --format &lt;text|json&gt; Formato de salida
+  -r, --recurse            Incluir subcarpetas cuando se indica una carpeta
+
+Códigos de salida: 0 encontrado, 1 no encontrado, 3 no se pudo leer un archivo.
+En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemplo '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Comando o archivo desconocido: {0}. Comandos: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Idioma desconocido: {0}. Usa una de las 23 etiquetas de idioma de visualización (por ejemplo en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Opción {0} desconocida para '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>La opción {0} no admite un valor ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>La opción {0} necesita un valor ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>La ruta no existe: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Acceso denegado: {0}. Comprueba los permisos del archivo o ejecuta el comando desde una cuenta que pueda acceder a él.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>No se puede leer {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>No se puede escribir {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} es una carpeta, no un archivo.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Ningún archivo coincide con {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>No se puede leer {0} en {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>No hay espacio libre suficiente en {0} (se necesitan {1} bytes, disponibles {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>El archivo es demasiado grande para el sistema de archivos de {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>La ruta de salida {0} también es una entrada. Elige otra ruta de salida.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: no se puede leer la expresión "{1}" en la posición {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" está fuera del archivo (longitud {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" debe ser un número de {2} a {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>'{1}' no admite --format {0}. Usa: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' necesita al menos una ruta de entrada.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' admite exactamente una ruta de entrada.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' no está disponible en esta versión.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} no está disponible en esta versión.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Los datos no caben en el formato {0} (límite {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Codificación de caracteres desconocida: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>la expresión está vacía</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>error de sintaxis</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>un paréntesis no está cerrado</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>nombre desconocido (usa end para la longitud del archivo)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>los marcadores no están disponibles en la línea de comandos</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>función desconocida</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>división entre cero</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>el valor es demasiado grande</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>número no válido</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>no se pueden leer los datos aquí</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>no disponible en la línea de comandos</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu necesita exactamente un algoritmo. Usa --format bsd o text para varios.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range no se puede usar con la entrada estándar.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Algoritmo desconocido: {0}. Ejecuta 'hexed hash --algorithm list' para ver los id.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>El algoritmo {0} no está disponible en este equipo.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} no contiene líneas de suma de comprobación legibles.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>No se puede determinar el algoritmo de {0}. Indícalo con --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} suma(s) de comprobación calculada(s) NO coincidieron.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>Faltan {0} archivo(s) de la lista.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Estilo desconocido: {0}. Consulta 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' necesita exactamente dos rutas.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Modo desconocido: {0}. Usa byte o resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>modificado</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>insertado</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>eliminado</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>ilegible</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... {0} diferencia(s) más no mostrada(s) (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} diferencia(s), {1} byte(s) en total</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Los archivos son iguales.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Los archivos son distintos (primera diferencia en {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>No se pudieron leer {0} intervalo(s).</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Indica exactamente una de las opciones --hex, --text y --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>El patrón de búsqueda no es válido ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: se omitieron {1} intervalo(s) ilegible(s).</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Uso: hexed convert &lt;input&gt; &lt;output&gt; [options]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Los parches IPS se aplican con 'hexed patch', no con 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Valor no válido para: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Formato desconocido: {0}. Formatos: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" no es válido. Usa: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} no se aplica a la conversión de {1} a {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  línea {0}, columna {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: error de suma de comprobación en la línea {1}, columna {2}. Usa --ignore-checksum para leer el archivo de todos modos.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: error de formato en la línea {1}, columna {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>Se ignoraron {0} error(es) de suma de comprobación.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Uso: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Indica -o &lt;output&gt; o --in-place (para que el archivo original no se modifique por error).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o y --in-place no se pueden usar juntos.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>La ruta de salida {0} es el destino o el parche. Usa --in-place para reemplazar el destino.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} no es un formato de parche. Usa auto, ips o ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: los parches UPS, BPS y .hexpatch no son compatibles en esta versión. IPS e IPS32 sí.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} no es un archivo de parche reconocible.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: el parche está dañado en el registro {1} (desplazamiento en el archivo {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} no es un parche {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" debe tener la forma algorithm:value (por ejemplo sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} no tiene el hash esperado (--verify-before). No se escribió nada.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} con el parche aplicado no tiene el hash esperado (--verify-after). No se escribió nada.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Se aplicaron {0} registro(s), {1} byte(s) modificado(s), cambio de longitud {2}. Se escribió {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>formato</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} registro(s), {1} byte(s) cambiarían, cambio de longitud {2}, longitud nueva {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Indica exactamente una de las opciones --template y --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>No se encontró la plantilla "{0}". Usa el nombre de una plantilla estándar (por ejemplo pe, png) o la ruta de un archivo .hxt o .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Ninguna plantilla coincide con {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Error de plantilla: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Uso: hexed run &lt;script&gt; [files...] [options]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Usa solo una de las opciones --save, --save-as y --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly no se puede combinar con --save ni con --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" debe tener la forma name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" debe ser un número de segundos mayor que 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as necesita un archivo que abrir (el primer archivo se guarda en la ruta nueva).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} es el archivo abierto. Usa --save para sobrescribirlo.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: {1} byte(s) modificado(s) (no guardado: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} tiene cambios sin guardar. No se guardaron (usa --save o doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Idioma de visualización desconocido: {0}. Usa una de las 23 etiquetas de idioma de visualización (por ejemplo ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Pseudoconfiguración regional desconocida: {0}. Usa qps-ploc o qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>No se encontró HexEditor.exe junto a hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>No se puede iniciar {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor terminó con el código {0} antes de que se cerraran los documentos.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Se quitaron todos los registros.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Quitado: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>No se pudo quitar: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>menú contextual del Explorador</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>asociaciones de archivos</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>entrada App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>entrada PATH de hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>lista de accesos rápidos de la barra de tareas</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>registro de notificaciones</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>carpeta temporal</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>entradas del Registro</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Windows administra los registros de esta versión. No se quitó nada.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Esta copia no registra nada. No se quitó nada.</value></data>
+</root>
