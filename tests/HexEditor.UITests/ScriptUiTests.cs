@@ -153,6 +153,10 @@ public sealed class ScriptUiTests
         await UiAsync(app, "start", new JsonObject { ["id"] = "scripting.debug" });
         var dialog = await app.WaitForDialogAsync("CSharpDebugDialog");
         await app.WaitForDialogTextAsync(dialog, "cannot be stepped through in the app", "external debugger");
+        // ダイアログのリンクは、マニュアルの「C# スクリプトのデバッグ」の見出しを開く (UI-59)。
+        await app.UiaInvokeAsync("CSharpDebug_Help");
+        string launched = await app.WaitForLogAsync(l => l.Contains("Test hooks: launch ", StringComparison.Ordinal), "the manual page");
+        Assert.Contains("/en/scripting.html#debugging-csharp-scripts", launched, StringComparison.Ordinal);
         await app.InvokeDialogButtonAsync("Cancel");
 
         // 2. F10 で、アプリ内ではステップ実行できない旨がステータスバーに出る。
@@ -160,7 +164,14 @@ public sealed class ScriptUiTests
         await app.WaitUntilAsync(async () => (await UiAsync(app, "status"))["text"]!.GetValue<string>().Contains("cannot be stepped", StringComparison.OrdinalIgnoreCase),
             UiTest.Scaled(TimeSpan.FromSeconds(10)), "the status message");
 
-        // 3. 同梱のヘルプ (英語・日本語) は、ヘルプの仕組み自体がまだないため、この手順は保留 (ヘルプができたら足す)。
+        // 3. 同梱のヘルプ (マニュアル。英語・日本語) の「C# スクリプトのデバッグ」に同じ制限が書かれている。
+        string manual = Path.Combine(Path.GetDirectoryName(AppLocator.ExePath)!, "manual");
+        string en = File.ReadAllText(Path.Combine(manual, "en", "scripting.html"));
+        string ja = File.ReadAllText(Path.Combine(manual, "ja", "scripting.html"));
+        Assert.Contains("id=\"debugging-csharp-scripts\"", en, StringComparison.Ordinal);
+        Assert.Contains("C# scripts cannot be stepped through in the app", en, StringComparison.Ordinal);
+        Assert.Contains("id=\"debugging-csharp-scripts\"", ja, StringComparison.Ordinal);
+        Assert.Contains("C# スクリプトは、アプリ内でステップ実行できません", ja, StringComparison.Ordinal);
     });
 
     [Fact]

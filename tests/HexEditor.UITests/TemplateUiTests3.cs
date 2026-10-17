@@ -90,15 +90,19 @@ public sealed class TemplateToolUiTests(ITestOutputHelper output)
 
         await TemplateAsync(app, "outputInvoke", new JsonObject { ["index"] = index, ["id"] = "TplOut_HelpItem" });
         string url = (await app.WaitForLogAsync(l => l.Contains("Test hooks: launch ", StringComparison.Ordinal), "the help page")).Split("Test hooks: launch ", 2)[1].Trim();
-        Assert.Contains("template-errors.md#" + code.ToLowerInvariant(), url, StringComparison.Ordinal);
+        // マニュアル (UI-59) のエラーのコードのページの、そのコードの見出し。
+        Assert.Contains("/en/template-error-codes.html#" + code.ToLowerInvariant(), url, StringComparison.Ordinal);
 
-        // 3. すべてのコード (Core の TemplateMessages) に説明の節がある
+        // 3. すべてのコード (Core の TemplateMessages) に説明の節がある (英語と日本語のマニュアル)
         string source = File.ReadAllText(Path.Combine(AppLocator.RepositoryRoot, "src", "HexEditor.Core", "Templates", "TemplateDiagnostics.cs"));
         string[] codes = [.. System.Text.RegularExpressions.Regex.Matches(source, "= \"(HXT[0-9]{4})\";").Select(m => m.Groups[1].Value).Distinct()];
         Assert.True(codes.Length > 50);
-        string help = File.ReadAllText(Path.Combine(AppLocator.RepositoryRoot, "docs", "help", "template-errors.md"));
-        string[] missing = [.. codes.Where(c => !help.Contains("\n### " + c + "\n", StringComparison.Ordinal))];
-        Assert.True(missing.Length == 0, "No help section: " + string.Join(", ", missing));
+        foreach (string language in new[] { "en", "ja" })
+        {
+            string help = File.ReadAllText(Path.Combine(AppLocator.RepositoryRoot, "docs", "manual", language, "template-error-codes.md")).ReplaceLineEndings("\n");
+            string[] missing = [.. codes.Where(c => !help.Contains("\n### " + c + "\n", StringComparison.Ordinal))];
+            Assert.True(missing.Length == 0, $"No help section ({language}): " + string.Join(", ", missing));
+        }
     });
 
     // ───────────── TPL-30 ─────────────

@@ -67,7 +67,7 @@ public sealed partial class MainWindow
 
     // ---- ヘルプ (UI-40) ----
 
-    private async void Documentation_Click(object sender, RoutedEventArgs e) => await OpenUriAsync(new Uri(AboutInfo.DocumentationUrl));
+    private async void Documentation_Click(object sender, RoutedEventArgs e) => await OpenManualAsync(Core.Help.ManualTopic.Home);
 
     private async void ReportProblem_Click(object sender, RoutedEventArgs e) => await OpenUriAsync(AboutInfo.IssueUrl(Program.Environment));
 

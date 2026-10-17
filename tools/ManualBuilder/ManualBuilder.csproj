@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    利用者向けマニュアル (09 の UI-59) の HTML を作るツール。docs/manual/<言語>/*.md を静的な HTML にし、ページ間のリンクと
+    見出しのアンカーを検査する (壊れたリンクがあれば終了コード 1)。アプリのビルド (HexEditor.App.csproj の HexBuildManual)、
+    CI の manual のジョブ、GitHub Pages の公開 (.github/workflows/pages.yml) から呼ぶ。使い方は Program.cs の先頭のコメント。
+    テストは tests/HexEditor.Core.Tests/Manual。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HexEditor.ManualBuilder</RootNamespace>
+    <!-- アプリのビルドから呼ぶとき、アプリの RuntimeIdentifier などを受け継がない。 -->
+    <RuntimeIdentifier />
+    <SelfContained>false</SelfContained>
+    <!-- アプリのビルドは出力先を obj\manual\tool に変えて呼ぶ。そのときもこのフォルダの bin・obj の生成物をソースに含めない。 -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Markdown の解析 (BSD-2-Clause)。ビルドのときだけ使い、アプリには入れない。 -->
+    <PackageReference Include="Markdig" Version="0.42.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HexEditor.Core.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\manual.css" LogicalName="HexEditor.ManualBuilder.manual.css" />
+  </ItemGroup>
+
+</Project>

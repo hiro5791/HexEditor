@@ -133,6 +133,38 @@
     <Warning Text="HexCliDir が指定されていないため、hexed.exe をパッケージに入れません (マニフェストの Application 'Hexed' が指す実行ファイルがないため、MSIX を作れません。build/publish.ps1 を使ってください)。" />
   </Target>
 
+  <!--
+    利用者向けマニュアル (09 の UI-59): docs/manual の Markdown を tools/ManualBuilder で HTML にし、アプリのフォルダの manual\ に入れる。
+    開発中・テスト用・3 種類の配布形態のどのビルドにも入る (同じ HTML を GitHub Pages にも公開する)。原稿かツールが変わったときだけ作り直す。
+    壊れたリンクがあればビルドを失敗にする。-p:HexBuildManual=false で作らない (マニュアルなしのビルド。ヘルプはオンラインのページを開く)。
+  -->
+  <PropertyGroup>
+    <HexBuildManual Condition="'$(HexBuildManual)' == ''">true</HexBuildManual>
+    <_HexManualSource>$(MSBuildThisFileDirectory)..\..\docs\manual</_HexManualSource>
+    <_HexManualTool>$(MSBuildThisFileDirectory)..\..\tools\ManualBuilder</_HexManualTool>
+    <_HexManualOut>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)', 'manual', 'site'))</_HexManualOut>
+    <_HexManualStamp>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)', 'manual', 'site.stamp'))</_HexManualStamp>
+    <!-- ツール自身のビルドの出力。ソリューションのビルド・テストのビルドと同時に動いてもぶつからないよう、アプリの obj の下に分ける。 -->
+    <_HexManualToolOut>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)', 'manual', 'tool').Replace('\', '/'))</_HexManualToolOut>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(HexBuildManual)' == 'true'">
+    <_HexManualInputs Include="$(_HexManualSource)\**\*" />
+    <_HexManualInputs Include="$(_HexManualTool)\**\*.cs;$(_HexManualTool)\**\*.css;$(_HexManualTool)\ManualBuilder.csproj" Exclude="$(_HexManualTool)\bin\**;$(_HexManualTool)\obj\**" />
+  </ItemGroup>
+  <Target Name="HexBuildManualSite" BeforeTargets="BeforeBuild" Condition="'$(HexBuildManual)' == 'true'"
+          Inputs="@(_HexManualInputs)" Outputs="$(_HexManualStamp)">
+    <!-- 別のプロセスの dotnet で実行する (アプリの RuntimeIdentifier・Platform などを受け継がない)。 -->
+    <Exec Command="dotnet run --project &quot;$(_HexManualTool)&quot; -c Release -p:BaseOutputPath=&quot;$(_HexManualToolOut)bin/&quot; -p:BaseIntermediateOutputPath=&quot;$(_HexManualToolOut)obj/&quot; -- build --source &quot;$(_HexManualSource)&quot; --out &quot;$(_HexManualOut.TrimEnd('\'))&quot;" />
+    <Touch Files="$(_HexManualStamp)" AlwaysCreate="true" />
+  </Target>
+  <Target Name="HexIncludeManualSite" AfterTargets="HexBuildManualSite" BeforeTargets="BeforeBuild" Condition="'$(HexBuildManual)' == 'true'">
+    <ItemGroup>
+      <_HexManualFiles Include="$(_HexManualOut)**\*" Exclude="$(_HexManualOut).nojekyll" />
+      <Content Include="@(_HexManualFiles)" Link="manual\%(_HexManualFiles.RecursiveDir)%(_HexManualFiles.Filename)%(_HexManualFiles.Extension)"
+               CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>

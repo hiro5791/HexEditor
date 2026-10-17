@@ -5801,6 +5801,7 @@ Details were written to:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Waiting for a debugger to attach. Process ID: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>C# scripts cannot be stepped through in the app. Attach an external debugger (Visual Studio or Visual Studio Code) to this process, and call System.Diagnostics.Debugger.Break() in the script to stop.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Run without attaching</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>How to debug C# scripts</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Language</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Reset session</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Clear</value></data>

@@ -5801,6 +5801,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>デバッガのアタッチを待っています。プロセス ID: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>C# スクリプトはアプリ内でステップ実行できません。外部のデバッガ (Visual Studio、Visual Studio Code) をこのプロセスにアタッチし、スクリプトの中で System.Diagnostics.Debugger.Break() を呼ぶと止まります。</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>アタッチせずに実行</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>C# スクリプトのデバッグの方法</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>言語</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>リセット</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>クリア</value></data>

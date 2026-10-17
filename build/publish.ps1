@@ -174,8 +174,8 @@ switch ($Distro) {
         Set-Content -Path (Join-Path $publishDir 'portable.marker') -Value '' -Encoding ascii -NoNewline
         Copy-Item (Join-Path $PSScriptRoot 'portable/README.txt') $publishDir
         Copy-Item (Join-Path $root 'LICENSE') (Join-Path $publishDir 'LICENSE.txt')
-        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'hexed.exe', 'hexed.dll', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
-            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14, AUTO-36)." }
+        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'hexed.exe', 'hexed.dll', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt', 'manual\en\index.html', 'manual\ja\index.html') {
+            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14, AUTO-36, UI-59)." }
         }
 
         $zip = Join-Path $out "HexEditor-$Version-$Arch-portable.zip"
@@ -197,6 +197,8 @@ switch ($Distro) {
         $helper = Build-ElevatedHelper
         Invoke-Checked 'dotnet' (@('publish') + $common + @("-p:HexHelperSha256=$($helper.Hash)", '-o', $publishDir))
         if (-not (Get-ChildItem $publishDir -Filter 'Velopack*.dll')) { throw 'Installer output must contain Velopack (PKG-10).' }
+        # The user manual (UI-59) is built by HexEditor.App.csproj (HexBuildManual) into manual\.
+        if (-not (Test-Path (Join-Path $publishDir 'manual/en/index.html'))) { throw 'Installer output is missing the user manual (UI-59).' }
         & $sign -Path $publishDir
         Copy-ElevatedHelper $helper $publishDir
         Build-Cli | Out-Null

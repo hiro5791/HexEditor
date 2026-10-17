@@ -1306,8 +1306,8 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         }
     }
 
-    /// <summary>ヘルプの説明ページを開く (URL にコードを含む。TPL-27 の仕様 7)。</summary>
-    public async Task OpenTemplateHelpAsync(string code) => await OpenUriAsync(TemplateHelp.UrlOf(code));
+    /// <summary>マニュアルのエラーのコードのページの、そのコードの節を開く (TPL-27 の仕様 7、UI-59)。</summary>
+    public async Task OpenTemplateHelpAsync(string code) => await OpenManualAsync(Core.Help.ManualTopic.TemplateError(code));
 
     // ───────────── 出力パネル (ITemplateOutputHost) ─────────────
 

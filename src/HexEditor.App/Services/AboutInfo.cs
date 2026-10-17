@@ -10,9 +10,6 @@ public static class AboutInfo
 {
     public const string RepositoryUrl = "https://github.com/hiro5791/HexEditor";
 
-    /// <summary>ドキュメントのサイト (URL は未決定。決まるまでリポジトリの README)。</summary>
-    public const string DocumentationUrl = RepositoryUrl + "#readme";
-
     public static IReadOnlyList<(string Label, string Value)> Items(IAppEnvironment env) =>
     [
         ("Version", env.InformationalVersion),

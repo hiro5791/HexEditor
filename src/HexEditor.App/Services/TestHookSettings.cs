@@ -91,6 +91,7 @@ public sealed record VirtualSourceSpec(
 ///   "unhandledExceptionDelayMs": 0,
 ///   "elevated": true,                           // 管理者として実行している扱い (タイトルの「(管理者)」。昇格はしない)。false なら
 ///                                               // 管理者として動いていても管理者でない扱い (CI のランナーは管理者として動く)。省略なら実際の権限
+///   "networkAvailable": false,                  // ネットワークにつながっていない扱い (マニュアルを同梱の HTML で開く。UI-59)。省略なら OS の状態
 ///   "culture": "de-DE",                         // 地域設定の上書き (OS の設定を変えずに CultureInfo.CurrentCulture を変える)
 ///   "timeZone": "Tokyo Standard Time",          // インスペクタの「ローカル時刻」のタイムゾーン (OS の設定を変えない。INSP-15)
 ///   "openPicker": [ "C:\a.bin" ],               // 「開く」のダイアログの代わりに返すファイル ([] はキャンセル)
@@ -148,6 +149,12 @@ public sealed record TestHookSettings
     /// ほかの通知を確かめるテストの邪魔になる)。TC-UI-34-06 で使う。
     /// </summary>
     public bool AdminDropNotice { get; init; }
+
+    /// <summary>
+    /// ネットワークにつながっている扱い (true) / つながっていない扱い (false)。マニュアルをオンラインと同梱のどちらで開くか (09 の UI-59) を
+    /// 確かめる。null なら OS の状態。
+    /// </summary>
+    public bool? NetworkAvailable { get; init; }
 
     /// <summary>
     /// ディスクの書き込み (ENG-30) で、ボリュームをロックした後・書き込みの直前に止め、このパスに印のファイルを書く (ロックを保持したまま。
@@ -225,6 +232,7 @@ public sealed record TestHookSettings
             Culture = root["culture"]?.GetValue<string>(),
             Elevated = root["elevated"]?.GetValue<bool>(),
             AdminDropNotice = root["adminDropNotice"]?.GetValue<bool>() ?? false,
+            NetworkAvailable = root["networkAvailable"]?.GetValue<bool>(),
             PauseAfterVolumeLock = root["pauseAfterVolumeLock"]?.GetValue<string>(),
             TimeZone = root["timeZone"]?.GetValue<string>(),
             FakeDevices = root["fakeDevices"]?.GetValue<string>(),

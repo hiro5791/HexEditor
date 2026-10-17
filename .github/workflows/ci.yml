@@ -1,5 +1,5 @@
 # ビルドとテスト (PKG-23、テスト方針 9 章)
-#   プッシュ・プルリクエスト: build (3 種類 × 2 アーキテクチャ)、test-x64、test-arm64、i18n、lint、size、配布物の検査
+#   プッシュ・プルリクエスト: build (3 種類 × 2 アーキテクチャ)、test-x64、test-arm64、i18n、manual (利用者向けマニュアル)、lint、size、配布物の検査
 #   毎晩: 性能テストと全規模のテスト (Category=Nightly)、ポータブル版を起動する配布のテスト
 # フォークからの PR にも Secrets を使う手順はない (PKG-23 の仕様 5)。
 name: ci
@@ -189,6 +189,31 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources (UI-49). For Japanese, run: dotnet run --project tools/I18nTool -- sync-ja' }
           dotnet run --project tools/I18nTool -c Release -- check-glossary
           if ($LASTEXITCODE -ne 0) { throw 'glossary.csv has format errors (UI-48)' }
+
+  # 利用者向けマニュアル (09 の UI-59): docs/manual から HTML を作り、ページ間のリンク・見出し・画像を検査する (誤りがあれば失敗)。
+  # 公開 (GitHub Pages) は main への push のときだけ pages.yml が行う。ここでは作った HTML を成果物として残すだけ。
+  manual:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Build and check the manual
+        run: dotnet run --project tools/ManualBuilder -c Release -- build --source docs/manual --out artifacts/manual
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual
+          retention-days: 7
+          include-hidden-files: true
+          path: artifacts/manual/
 
   # Markdown (docs/) と .editorconfig の検査。
   lint:
