@@ -461,6 +461,44 @@ public sealed class ScriptHost : IDisposable
         RunningChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// 外部のプログラムからの自動操作 (名前付きパイプの JSON-RPC。AUTO-45) の 1 つの接続の実行の状態を作る。本文は実行せず、API の
+    /// 入口 (<see cref="ScriptContext.App"/>) だけを使う。<paramref name="permissions"/> は信頼の確認で与えた許可。
+    /// 接続が終わったら <see cref="CloseExternalContext"/> を呼ぶ (スクリプトのスレッドで呼ぶのと同じく、UI スレッドから呼ばない)。
+    /// </summary>
+    public ScriptContext OpenExternalContext(string name, IScriptEnvironment environment, IEnumerable<string> permissions)
+    {
+        var run = new ScriptRun(this, name, null, ScriptLanguage.CSharp, _time) { Origin = ScriptOrigin.External };
+        var request = new ScriptRunRequest { Origin = ScriptOrigin.External, DisplayName = name, Quiet = true };
+        var context = new ScriptContext(this, run, environment, request, ScriptMetadata.Parse(string.Empty), new Dictionary<string, object?>(), null)
+        {
+            Thread = new CSharp.CSharpScriptThread(),
+        };
+        context.Grant(permissions);
+        context.App = new Api.ScriptApp(context);
+        run.Context = context;
+        run.SetStatus(ScriptRunStatus.Running);
+        return context;
+    }
+
+    /// <summary>外部からの自動操作の接続を終える (書き込みの排他を手放し、Undo の単位を閉じ、購読と強調表示を消す)。</summary>
+    public void CloseExternalContext(ScriptContext context)
+    {
+        IReadOnlyList<string> modified = [];
+        try
+        {
+            context.RequestStopWithoutForce();
+            modified = context.Finish();
+        }
+        finally
+        {
+            context.Run.ExecutionFinished = true;
+            context.Run.Complete(new ScriptRunResult(ScriptRunStatus.Succeeded, ScriptFailure.None, null, [], null,
+                _time.GetUtcNow() - context.Run.StartedAt, modified, null));
+            context.Dispose();
+        }
+    }
+
     /// <summary>すべての実行を止める (アプリの終了)。</summary>
     public void StopAll()
     {

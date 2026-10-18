@@ -1,8 +1,222 @@
 {
   "apiVersion": "1.0",
+  "transport": {
+    "pipe": "\\\\.\\pipe\\HexEditor.\u003Cuser SID\u003E.rpc",
+    "framing": "One JSON-RPC 2.0 message per line (UTF-8, LF). At most 64 MB per message.",
+    "target": "document.* and its parts take \u0022document\u0022 (an id; the first positional parameter). Other API objects take \u0022handle\u0022.",
+    "bytes": "Base64 text. A BytePattern also accepts {\u0022hex\u0022: \u0022DE AD\u0022} or {\u0022text\u0022: \u0022random\u0022}.",
+    "notifications": [
+      "event",
+      "$/progress",
+      "$/cancel"
+    ]
+  },
+  "errors": [
+    {
+      "type": "ParseError",
+      "code": -32700
+    },
+    {
+      "type": "InvalidRequest",
+      "code": -32600
+    },
+    {
+      "type": "MethodNotFound",
+      "code": -32601
+    },
+    {
+      "type": "InvalidParams",
+      "code": -32602
+    },
+    {
+      "type": "InternalError",
+      "code": -32603
+    },
+    {
+      "type": "ScriptError",
+      "code": -32000
+    },
+    {
+      "type": "PermissionError",
+      "code": -32001
+    },
+    {
+      "type": "ArgumentError",
+      "code": -32002
+    },
+    {
+      "type": "RangeError",
+      "code": -32003
+    },
+    {
+      "type": "ReadOnlyError",
+      "code": -32004
+    },
+    {
+      "type": "IoError",
+      "code": -32005
+    },
+    {
+      "type": "CanceledError",
+      "code": -32006
+    },
+    {
+      "type": "LimitError",
+      "code": -32007
+    },
+    {
+      "type": "ConnectionRefused",
+      "code": -32010
+    }
+  ],
   "methods": [
     {
+      "method": "app.version",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.apiVersion",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.language",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.documents",
+      "kind": "property",
+      "type": "Document[]",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.activeDocument",
+      "kind": "property",
+      "type": "Document",
+      "settable": true,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.commands",
+      "kind": "property",
+      "type": "Commands",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.inspector",
+      "kind": "property",
+      "type": "Inspector",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.text",
+      "kind": "property",
+      "type": "Text",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.templates",
+      "kind": "property",
+      "type": "Templates",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.hash",
+      "kind": "property",
+      "type": "Hash",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.clipboard",
+      "kind": "property",
+      "type": "Clipboard",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.ui",
+      "kind": "property",
+      "type": "Ui",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.settings",
+      "kind": "property",
+      "type": "Settings",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.script",
+      "kind": "property",
+      "type": "Script",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.fs",
+      "kind": "property",
+      "type": "FileSystem",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.net",
+      "kind": "property",
+      "type": "Net",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.process",
+      "kind": "property",
+      "type": "ProcessRunner",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "app.plugins",
+      "kind": "property",
+      "type": "Plugins",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
       "method": "app.open",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -16,10 +230,12 @@
         }
       ],
       "result": "Promise\u003CDocument\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "app.openDisk",
+      "kind": "method",
       "params": [
         {
           "name": "id",
@@ -33,10 +249,12 @@
         }
       ],
       "result": "Promise\u003CDocument\u003E",
-      "permission": "disk"
+      "permission": "disk",
+      "available": true
     },
     {
       "method": "app.openProcess",
+      "kind": "method",
       "params": [
         {
           "name": "pid",
@@ -50,10 +268,12 @@
         }
       ],
       "result": "Promise\u003CDocument\u003E",
-      "permission": "disk"
+      "permission": "disk",
+      "available": true
     },
     {
       "method": "app.newDocument",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -62,10 +282,12 @@
         }
       ],
       "result": "Document",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "app.on",
+      "kind": "method",
       "params": [
         {
           "name": "eventName",
@@ -79,16 +301,21 @@
         }
       ],
       "result": "EventSubscription",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "app.stop",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This ends a running script; disconnect the pipe instead."
     },
     {
       "method": "app.exit",
+      "kind": "method",
       "params": [
         {
           "name": "code",
@@ -97,10 +324,61 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This ends a running script; disconnect the pipe instead."
+    },
+    {
+      "method": "bookmark.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "bookmark.start",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "bookmark.length",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "bookmark.color",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "bookmark.comment",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "bookmark.number",
+      "kind": "property",
+      "type": "number | null",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "bookmarks.add",
+      "kind": "method",
       "params": [
         {
           "name": "bookmark",
@@ -109,10 +387,12 @@
         }
       ],
       "result": "Bookmark",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "bookmarks.remove",
+      "kind": "method",
       "params": [
         {
           "name": "bookmark",
@@ -121,16 +401,20 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "bookmarks.clear",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "bookmarks.find",
+      "kind": "method",
       "params": [
         {
           "name": "name",
@@ -139,10 +423,12 @@
         }
       ],
       "result": "Bookmark | null",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "bookmarks.addFromResults",
+      "kind": "method",
       "params": [
         {
           "name": "results",
@@ -156,10 +442,12 @@
         }
       ],
       "result": "number",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "clipboard.setText",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -168,10 +456,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "clipboard.setBytes",
+      "kind": "method",
       "params": [
         {
           "name": "data",
@@ -180,22 +470,28 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "clipboard.getText",
+      "kind": "method",
       "params": [],
       "result": "string | null",
-      "permission": "clipboard-read"
+      "permission": "clipboard-read",
+      "available": true
     },
     {
       "method": "clipboard.getBytes",
+      "kind": "method",
       "params": [],
       "result": "Uint8Array | null",
-      "permission": "clipboard-read"
+      "permission": "clipboard-read",
+      "available": true
     },
     {
       "method": "clipboard.copyAs",
+      "kind": "method",
       "params": [
         {
           "name": "document",
@@ -219,10 +515,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "clipboard.formatAs",
+      "kind": "method",
       "params": [
         {
           "name": "document",
@@ -246,10 +544,12 @@
         }
       ],
       "result": "string",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "commands.execute",
+      "kind": "method",
       "params": [
         {
           "name": "id",
@@ -263,16 +563,148 @@
         }
       ],
       "result": "Promise\u003Cunknown\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "commands.list",
+      "kind": "method",
       "params": [],
       "result": "CommandInfo[]",
-      "permission": null
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.id",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.kind",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.path",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.length",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.isModified",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.isReadOnly",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.canResize",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.baseAddress",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.sectorSize",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.encoding",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.cursor",
+      "kind": "property",
+      "type": "number",
+      "settable": true,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.selection",
+      "kind": "property",
+      "type": "Selection",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.activeColumn",
+      "kind": "property",
+      "type": "string",
+      "settable": true,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.bookmarks",
+      "kind": "property",
+      "type": "Bookmarks",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "document.highlights",
+      "kind": "property",
+      "type": "Highlights",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.save",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -281,10 +713,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.saveAs",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -298,10 +732,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.close",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -310,22 +746,28 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.undo",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.redo",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.beginUndoGroup",
+      "kind": "method",
       "params": [
         {
           "name": "name",
@@ -334,16 +776,20 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.endUndoGroup",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.goTo",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -352,10 +798,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.scrollTo",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -364,10 +812,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.openRange",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -376,10 +826,12 @@
         }
       ],
       "result": "Promise\u003CDocument\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.readBytes",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -393,10 +845,12 @@
         }
       ],
       "result": "Uint8Array",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.readByte",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -405,10 +859,12 @@
         }
       ],
       "result": "number",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.readInt",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -427,10 +883,12 @@
         }
       ],
       "result": "number | bigint",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.readFloat",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -449,10 +907,12 @@
         }
       ],
       "result": "number",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.readString",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -476,10 +936,12 @@
         }
       ],
       "result": "string",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.writeBytes",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -493,10 +955,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.writeInt",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -520,10 +984,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.writeFloat",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -547,10 +1013,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.writeString",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -569,10 +1037,12 @@
         }
       ],
       "result": "number",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.insertBytes",
+      "kind": "method",
       "params": [
         {
           "name": "offset",
@@ -586,10 +1056,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.delete",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -598,10 +1070,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.fill",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -620,10 +1094,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.resize",
+      "kind": "method",
       "params": [
         {
           "name": "newLength",
@@ -637,10 +1113,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.transform",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -664,10 +1142,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.findAll",
+      "kind": "method",
       "params": [
         {
           "name": "pattern",
@@ -681,10 +1161,12 @@
         }
       ],
       "result": "Promise\u003CSearchResults\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.find",
+      "kind": "method",
       "params": [
         {
           "name": "pattern",
@@ -698,10 +1180,12 @@
         }
       ],
       "result": "Promise\u003CByteRange | null\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.replaceAll",
+      "kind": "method",
       "params": [
         {
           "name": "pattern",
@@ -720,10 +1204,12 @@
         }
       ],
       "result": "Promise\u003Cnumber\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.count",
+      "kind": "method",
       "params": [
         {
           "name": "pattern",
@@ -737,10 +1223,12 @@
         }
       ],
       "result": "Promise\u003Cnumber\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.copyRange",
+      "kind": "method",
       "params": [
         {
           "name": "source",
@@ -764,10 +1252,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.exportRange",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -786,10 +1276,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": "file-write"
+      "permission": "file-write",
+      "available": true
     },
     {
       "method": "document.chunks",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -803,10 +1295,13 @@
         }
       ],
       "result": "AsyncIterable\u003CDataChunk\u003E",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "Use document.readBytes or document.exportRange instead of an enumerator."
     },
     {
       "method": "document.transformChunks",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -825,10 +1320,13 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This method takes a script function (callback)."
     },
     {
       "method": "document.histogram",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -842,10 +1340,12 @@
         }
       ],
       "result": "Promise\u003Cnumber[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.entropy",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -859,10 +1359,12 @@
         }
       ],
       "result": "Promise\u003Cnumber | number[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.compare",
+      "kind": "method",
       "params": [
         {
           "name": "other",
@@ -876,10 +1378,12 @@
         }
       ],
       "result": "Promise\u003CByteRange[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.strings",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -888,10 +1392,12 @@
         }
       ],
       "result": "Promise\u003CFoundString[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "document.applyTemplate",
+      "kind": "method",
       "params": [
         {
           "name": "nameOrPath",
@@ -905,16 +1411,20 @@
         }
       ],
       "result": "Promise\u003CTemplateNode\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "eventSubscription.off",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "fileSystem.readBytes",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -933,10 +1443,12 @@
         }
       ],
       "result": "Uint8Array",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "fileSystem.readText",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -950,10 +1462,12 @@
         }
       ],
       "result": "string",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "fileSystem.writeBytes",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -967,10 +1481,12 @@
         }
       ],
       "result": "void",
-      "permission": "file-write"
+      "permission": "file-write",
+      "available": true
     },
     {
       "method": "fileSystem.writeText",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -989,10 +1505,12 @@
         }
       ],
       "result": "void",
-      "permission": "file-write"
+      "permission": "file-write",
+      "available": true
     },
     {
       "method": "fileSystem.list",
+      "kind": "method",
       "params": [
         {
           "name": "folder",
@@ -1006,10 +1524,12 @@
         }
       ],
       "result": "string[]",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "fileSystem.exists",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1018,10 +1538,12 @@
         }
       ],
       "result": "boolean",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "fileSystem.stat",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1030,10 +1552,12 @@
         }
       ],
       "result": "FileStat",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "fileSystem.delete",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1042,10 +1566,12 @@
         }
       ],
       "result": "void",
-      "permission": "file-write"
+      "permission": "file-write",
+      "available": true
     },
     {
       "method": "fileSystem.createFolder",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1054,10 +1580,20 @@
         }
       ],
       "result": "void",
-      "permission": "file-write"
+      "permission": "file-write",
+      "available": true
+    },
+    {
+      "method": "hash.algorithms",
+      "kind": "property",
+      "type": "HashAlgorithmInfo[]",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "hash.compute",
+      "kind": "method",
       "params": [
         {
           "name": "document",
@@ -1081,10 +1617,12 @@
         }
       ],
       "result": "Promise\u003CHashResult[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "hash.computeBytes",
+      "kind": "method",
       "params": [
         {
           "name": "data",
@@ -1098,10 +1636,12 @@
         }
       ],
       "result": "HashResult",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "hash.computeFile",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1120,10 +1660,12 @@
         }
       ],
       "result": "Promise\u003CHashResult[]\u003E",
-      "permission": "file-read"
+      "permission": "file-read",
+      "available": true
     },
     {
       "method": "highlights.add",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -1142,16 +1684,28 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "highlights.clear",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "inspector.types",
+      "kind": "property",
+      "type": "InspectorTypeInfo[]",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "inspector.decode",
+      "kind": "method",
       "params": [
         {
           "name": "document",
@@ -1175,10 +1729,12 @@
         }
       ],
       "result": "InspectorValue",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "inspector.encode",
+      "kind": "method",
       "params": [
         {
           "name": "typeId",
@@ -1197,10 +1753,12 @@
         }
       ],
       "result": "Uint8Array",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "inspector.show",
+      "kind": "method",
       "params": [
         {
           "name": "typeId",
@@ -1209,10 +1767,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "inspector.hide",
+      "kind": "method",
       "params": [
         {
           "name": "typeId",
@@ -1221,10 +1781,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "net.fetch",
+      "kind": "method",
       "params": [
         {
           "name": "url",
@@ -1238,16 +1800,60 @@
         }
       ],
       "result": "Promise\u003CFetchResponse\u003E",
-      "permission": "network"
+      "permission": "network",
+      "available": true
+    },
+    {
+      "method": "pluginHandle.id",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "pluginHandle.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "pluginHandle.version",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "pluginHandle.enabled",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "pluginHandle.api",
+      "kind": "property",
+      "type": "any",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "plugins.list",
+      "kind": "method",
       "params": [],
       "result": "PluginInfo[]",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "plugins.get",
+      "kind": "method",
       "params": [
         {
           "name": "id",
@@ -1256,10 +1862,12 @@
         }
       ],
       "result": "PluginHandle | null",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "processRunner.run",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1278,10 +1886,54 @@
         }
       ],
       "result": "Promise\u003CProcessResult\u003E",
-      "permission": "process"
+      "permission": "process",
+      "available": true
+    },
+    {
+      "method": "script.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "script.path",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "script.args",
+      "kind": "property",
+      "type": "Record\u003Cstring, unknown\u003E",
+      "settable": false,
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This property is only meaningful inside a script."
+    },
+    {
+      "method": "script.signal",
+      "kind": "property",
+      "type": "AbortSignal",
+      "settable": false,
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This property is only meaningful inside a script."
+    },
+    {
+      "method": "script.storage",
+      "kind": "property",
+      "type": "ScriptStorage",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "scriptStorage.get",
+      "kind": "method",
       "params": [
         {
           "name": "key",
@@ -1290,10 +1942,12 @@
         }
       ],
       "result": "unknown",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "scriptStorage.set",
+      "kind": "method",
       "params": [
         {
           "name": "key",
@@ -1307,10 +1961,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "scriptStorage.remove",
+      "kind": "method",
       "params": [
         {
           "name": "key",
@@ -1319,10 +1975,60 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.start",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.end",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.length",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.ranges",
+      "kind": "property",
+      "type": "ByteRange[]",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.isEmpty",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "selection.isRectangular",
+      "kind": "property",
+      "type": "boolean",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "selection.set",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -1331,10 +2037,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "selection.add",
+      "kind": "method",
       "params": [
         {
           "name": "range",
@@ -1343,16 +2051,20 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "selection.clear",
+      "kind": "method",
       "params": [],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "selection.setRectangle",
+      "kind": "method",
       "params": [
         {
           "name": "startOffset",
@@ -1371,10 +2083,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "selection.fromResults",
+      "kind": "method",
       "params": [
         {
           "name": "results",
@@ -1383,10 +2097,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "settings.get",
+      "kind": "method",
       "params": [
         {
           "name": "key",
@@ -1395,10 +2111,12 @@
         }
       ],
       "result": "unknown",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "settings.set",
+      "kind": "method",
       "params": [
         {
           "name": "key",
@@ -1412,10 +2130,68 @@
         }
       ],
       "result": "void",
-      "permission": "settings"
+      "permission": "settings",
+      "available": true
+    },
+    {
+      "method": "templateNode.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.type",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.start",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.length",
+      "kind": "property",
+      "type": "number",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.value",
+      "kind": "property",
+      "type": "unknown",
+      "settable": true,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.displayValue",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "templateNode.children",
+      "kind": "property",
+      "type": "TemplateNode[]",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "templateNode.get",
+      "kind": "method",
       "params": [
         {
           "name": "path",
@@ -1424,22 +2200,28 @@
         }
       ],
       "result": "TemplateNode | null",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "templateNode.toJSON",
+      "kind": "method",
       "params": [],
       "result": "unknown",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "templates.list",
+      "kind": "method",
       "params": [],
       "result": "TemplateInfo[]",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "templates.detect",
+      "kind": "method",
       "params": [
         {
           "name": "document",
@@ -1448,10 +2230,12 @@
         }
       ],
       "result": "TemplateInfo[]",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "templates.registerExtension",
+      "kind": "method",
       "params": [
         {
           "name": "name",
@@ -1470,10 +2254,21 @@
         }
       ],
       "result": "EventSubscription",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "This method takes a script function (callback)."
+    },
+    {
+      "method": "text.encodings",
+      "kind": "property",
+      "type": "EncodingInfo[]",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "text.encode",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -1487,10 +2282,12 @@
         }
       ],
       "result": "Uint8Array",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "text.decode",
+      "kind": "method",
       "params": [
         {
           "name": "bytes",
@@ -1509,10 +2306,20 @@
         }
       ],
       "result": "string",
-      "permission": null
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "ui.progress",
+      "kind": "property",
+      "type": "UiProgress",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.message",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -1526,10 +2333,12 @@
         }
       ],
       "result": "Promise\u003Cvoid\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.confirm",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -1543,10 +2352,12 @@
         }
       ],
       "result": "Promise\u003Cnumber\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.prompt",
+      "kind": "method",
       "params": [
         {
           "name": "label",
@@ -1560,10 +2371,12 @@
         }
       ],
       "result": "Promise\u003Cunknown\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.form",
+      "kind": "method",
       "params": [
         {
           "name": "fields",
@@ -1572,10 +2385,12 @@
         }
       ],
       "result": "Promise\u003CRecord\u003Cstring, unknown\u003E | null\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.pickFile",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -1584,10 +2399,12 @@
         }
       ],
       "result": "Promise\u003Cstring\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.pickFiles",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -1596,10 +2413,12 @@
         }
       ],
       "result": "Promise\u003Cstring[]\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.saveFile",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -1608,10 +2427,12 @@
         }
       ],
       "result": "Promise\u003Cstring\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.pickFolder",
+      "kind": "method",
       "params": [
         {
           "name": "options",
@@ -1620,10 +2441,12 @@
         }
       ],
       "result": "Promise\u003Cstring\u003E",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.status",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -1632,10 +2455,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.showResults",
+      "kind": "method",
       "params": [
         {
           "name": "title",
@@ -1654,10 +2479,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "ui.output",
+      "kind": "method",
       "params": [
         {
           "name": "text",
@@ -1671,10 +2498,12 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
     },
     {
       "method": "uiProgress.report",
+      "kind": "method",
       "params": [
         {
           "name": "fraction",
@@ -1688,10 +2517,28 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "scriptEventArgs.name",
+      "kind": "property",
+      "type": "string",
+      "settable": false,
+      "permission": null,
+      "available": true
+    },
+    {
+      "method": "scriptEventArgs.document",
+      "kind": "property",
+      "type": "Document",
+      "settable": false,
+      "permission": null,
+      "available": true
     },
     {
       "method": "scriptEventArgs.cancel",
+      "kind": "method",
       "params": [
         {
           "name": "reason",
@@ -1700,7 +2547,9 @@
         }
       ],
       "result": "void",
-      "permission": null
+      "permission": null,
+      "available": false,
+      "unavailableReason": "Event notifications cannot be canceled from JSON-RPC."
     }
   ]
 }

@@ -100,8 +100,9 @@ public enum TrustAnswer
 /// <param name="FromInternet">Mark of the Web が付いている。</param>
 /// <param name="Elevated">アプリを管理者として実行中 (仕様 8 の警告を加える)。</param>
 /// <param name="ElevationOnly">信頼済みで、管理者の確認だけを出す (ボタンは「実行する」「実行しない」)。</param>
+/// <param name="External">外部のプログラムからの自動操作の接続 (AUTO-45)。<paramref name="Path"/> は接続してきた実行ファイル。</param>
 public sealed record TrustPrompt(string Name, string? Path, string? Author, ScriptLanguage Language, IReadOnlyList<string> Permissions,
-    bool FullTrust, bool FromInternet, bool Elevated, bool ElevationOnly);
+    bool FullTrust, bool FromInternet, bool Elevated, bool ElevationOnly, bool External = false);
 
 /// <summary>パラメータの入力ダイアログの項目 (AUTO-26 の仕様 3)。</summary>
 public sealed record ScriptFormField(string Name, string Label, string Type, object? Default, IReadOnlyList<string>? Choices);

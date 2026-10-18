@@ -421,6 +421,36 @@ public sealed class ScriptContext : IDisposable
     }
 
     private readonly HashSet<string> _released = new(StringComparer.Ordinal);
+    /// <summary>
+    /// 書き込みの排他をすべて手放す (外部からの自動操作の要求の区切り。AUTO-45)。Undo の単位はここで区切れ、利用者は再び編集できる。
+    /// 名前付きの Undo の単位 (<c>beginUndoGroup</c>) を開いているドキュメントは手放さない。
+    /// </summary>
+    internal void ReleaseIdleWrites()
+    {
+        WriteSession[] sessions;
+        lock (_lock)
+        {
+            sessions = [.. _writes.Values.Where(w => !w.HasExplicitGroup)];
+        }
+
+        foreach (WriteSession session in sessions)
+        {
+            ReleaseWrite(session.Document);
+        }
+    }
+
+    /// <summary>キャンセルを求める (強制中断はしない。外部からの自動操作の接続の終わり)。</summary>
+    internal void RequestStopWithoutForce()
+    {
+        try
+        {
+            _stop.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+        }
+    }
+
 
     internal WriteSession AcquireWrite(ScriptDocument doc)
     {
@@ -588,6 +618,9 @@ internal sealed class WriteSession(ScriptContext context, ScriptDocument documen
     }
     private IDisposable? _group;
     private bool _explicitGroup;
+
+    /// <summary>名前付きの Undo の単位 (<c>beginUndoGroup</c>) を開いている。</summary>
+    public bool HasExplicitGroup => _explicitGroup;
 
     public ScriptDocument Document { get; } = document;
 
