@@ -44,6 +44,52 @@ public sealed class DecoderTests
         Assert.DoesNotContain(list, i => i.IsInvalid);
     }
 
+    public static TheoryData<string, string, string> ManagedFixture()
+    {
+        var data = new TheoryData<string, string, string>();
+        foreach (string line in File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "fixtures", "disasm", "managed.txt")))
+        {
+            if (line.Length > 0 && !line.StartsWith('#'))
+            {
+                string[] p = line.Split('\t');
+                data.Add(p[0], p[1], p[2]);
+            }
+        }
+
+        return data;
+    }
+
+    /// <summary>TC-ANA-23-02 の手順 2: 本体の自前の逆アセンブラ (Capstone 4 にないアーキテクチャ) のフィクスチャ。</summary>
+    [Theory]
+    [Trait(TC, "TC-ANA-23-02")]
+    [MemberData(nameof(ManagedFixture))]
+    public void ManagedDecodersMatchTheFixture(string arch, string hex, string expected)
+    {
+        IReadOnlyList<DisasmInstruction> list = Sweep(arch, hex);
+        Assert.Equal(expected.Split('|'), list.Select(i => i.Text));
+        Assert.Equal(Hex(hex).Length, list.Sum(i => i.Length));
+    }
+
+    /// <summary>TC-ANA-23-02 の手順 2: Capstone 4 のアーキテクチャの代表的な命令 (各モードで解釈でき、長さが合う)。</summary>
+    [Theory]
+    [Trait(TC, "TC-ANA-23-02")]
+    [InlineData(DisasmArchitectures.ArmV8, "1E FF 2F E1", false, "bx lr")]
+    [InlineData(DisasmArchitectures.CortexM, "70 47", false, "bx lr")]
+    [InlineData(DisasmArchitectures.Mips64, "03 E0 00 08", true, "jr $ra")]
+    [InlineData(DisasmArchitectures.MicroMips, "45 9F", true, "jr16 $ra")]
+    [InlineData(DisasmArchitectures.Mips32R6, "03 E0 00 09", true, "jr $ra")]
+    [InlineData(DisasmArchitectures.Ppc64, "4E 80 00 20", true, "blr")]
+    [InlineData(DisasmArchitectures.SparcV9, "81 C3 E0 08", null, "retl")]
+    [InlineData(DisasmArchitectures.Tms320C64x, "00 00 00 00", null, "NOP")]
+    [InlineData("m68k-040", "4E 75", null, "rts")]
+    [InlineData(DisasmArchitectures.Arm64, "FD 7B BF A9", null, "stp x29, x30, [sp, #-0x10]!")]
+    public void CapstoneModesDecode(string arch, string hex, bool? big, string expected)
+    {
+        IReadOnlyList<DisasmInstruction> list = Sweep(arch, hex, big);
+        Assert.Equal(expected, Normalize(list[0].Text));
+        Assert.Equal(Hex(hex).Length, list.Sum(i => i.Length));
+    }
+
     [Fact]
     [Trait(TC, "TC-ANA-23-05")]
     public void InvalidBytesBecomeDbAndDecodingContinues()
