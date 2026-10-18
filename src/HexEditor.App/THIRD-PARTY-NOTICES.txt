@@ -79,6 +79,15 @@ The native library comes from the NuGet package Gee.External.Capstone 2.3.0
 (Capstone.NET, https://github.com/9ee1/Capstone.NET), MIT License,
 Copyright (c) Ahmed Garhy. Only the native library of the package is used.
 
+-------------------------------------------------------------------------------
+Ed25519 reference implementation (RFC 8032, section 6; verifies the signature of
+the online template repository index)
+https://www.rfc-editor.org/rfc/rfc8032
+Ported to C#. Code components of RFCs are licensed under the Simplified BSD
+License (Revised BSD License) as described in the IETF Trust Legal Provisions.
+Copyright (c) 2017 IETF Trust and the persons identified as the document
+authors (S. Josefsson, I. Liusvaara). All rights reserved.
+
 ===============================================================================
 BSD 2-Clause License (Jint)
 

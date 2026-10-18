@@ -27,6 +27,7 @@
     "scripting",
     "macros",
     "plugins",
+    "external-automation",
     "api-reference",
     "api-plugins",
     "command-line",

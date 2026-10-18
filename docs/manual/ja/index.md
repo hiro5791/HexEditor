@@ -33,6 +33,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [スクリプト](scripting.md)
 - [マクロ](macros.md)
 - [プラグイン](plugins.md)
+- [外部からの自動操作](external-automation.md)
 - [自動化 API リファレンス](api-reference.md)
 - [HexEditor のプラグイン SDK](api-plugins.md)
 - [コマンドライン (hexed)](command-line.md)

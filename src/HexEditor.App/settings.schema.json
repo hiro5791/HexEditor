@@ -138,6 +138,11 @@
       ],
       "default": "border"
     },
+    "automation.rpc.enabled": {
+      "description": "Allow external automation (JSON-RPC over a named pipe)",
+      "type": "boolean",
+      "default": false
+    },
     "bookmarks.defaultColor": {
       "description": "Default bookmark color",
       "type": "string",
@@ -857,6 +862,24 @@
     },
     "templates.inspector": {
       "description": "Inspector templates",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.online.autoUpdate": {
+      "description": "Update online templates automatically",
+      "type": "boolean",
+      "default": false
+    },
+    "templates.online.checkUpdates": {
+      "description": "Check online templates for updates at startup (once a day)",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.online.repositories": {
+      "description": "Template repositories",
       "type": "array",
       "items": {
         "type": "string"
