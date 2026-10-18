@@ -623,7 +623,12 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
                         }
 
                         // 矢印キー以外(Tab やクリックなど)でフォーカスが来たら、範囲選択の起点をそのビットにし直す。
-                        if (!_internalFocusMove)
+                        // 矢印キーによる移動 (FocusBit) で来たフォーカスは、遅れて届いても起点を変えない。
+                        if (_expectedFocusBit == index)
+                        {
+                            _expectedFocusBit = -1;
+                        }
+                        else
                         {
                             _selAnchor = -1;
                         }
@@ -719,14 +724,13 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
 
     private void FocusBit(int index)
     {
-        _internalFocusMove = true;
+        _expectedFocusBit = index;
         _bitFocus = index;
         _bitCells.FirstOrDefault(c => (int)c.Tag == index)?.Focus(FocusState.Keyboard);
-        _internalFocusMove = false;
     }
 
-    /// <summary>矢印キーによるフォーカスの移動中(範囲選択の起点を変えない)。</summary>
-    private bool _internalFocusMove;
+    /// <summary>矢印キーで移したフォーカスの行き先(その GotFocus では範囲選択の起点を変えない)。</summary>
+    private int _expectedFocusBit = -1;
 
     /// <summary>フォーカスのあるビット(なければ -1)。</summary>
     private int _bitFocus = -1;

@@ -111,7 +111,9 @@ internal sealed partial class CalculatorPanel
     internal void TestFocusBit(int index)
     {
         _selAnchor = -1;
+        _expectedFocusBit = -1;
         FocusBit(index);
+        _expectedFocusBit = -1;
     }
 
     internal void TestInvokeCopy(string automationId) => ToolParts.InvokeCopyButton(automationId);
