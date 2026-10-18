@@ -45,7 +45,14 @@ public sealed partial class Document
     /// ジャーナルは使わない (プロセスの終了で意味を失うため。ENG-34 の仕様 4)。書き込めた範囲の旧内容は追加バッファに退避してあり
     /// (Undo のため)、現在の版は読んだ値がプロセスの今の内容と同じになるよう、プロセスをそのまま指す。
     /// </summary>
-    public void CompleteProcessWrite(ProcessMemoryByteSource memory, IReadOnlyList<SavedRange> written, bool allWritten)
+    public void CompleteProcessWrite(ProcessMemoryByteSource memory, IReadOnlyList<SavedRange> written, bool allWritten) =>
+        CompleteTargetWrite(memory, written, allWritten);
+
+    /// <summary>
+    /// 長さ固定の書き込み先 (プロセスメモリ、GDB サーバーの対象のメモリ。ENG-34、ENG-40 の仕様 6) への書き込みの完了。書き込めた範囲だけを
+    /// 「保存した時点」にし、失敗した範囲は「変更あり」で残す (<see cref="CompleteProcessWrite"/> と同じ)。
+    /// </summary>
+    public void CompleteTargetWrite(IByteSource memory, IReadOnlyList<SavedRange> written, bool allWritten)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (written.Count == 0)

@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>ایجاد تصویر لحظه‌ای فرایند</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>ایجاد</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>در حال ایجاد تصویر لحظه‌ای {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} صفحه ({1}) خوانده نشد و در تصویر لحظه‌ای نیست.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>تصویر لحظه‌ای ایجاد یا ذخیره نشد ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>دسترسی به حافظهٔ فرایند رد شد.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>برای خواندن این فرایند مجوز مدیر لازم است. تصویر لحظه‌ای دوباره با مجوز مدیر ایجاد شود؟</value></data>

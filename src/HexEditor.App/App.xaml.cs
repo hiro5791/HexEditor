@@ -147,6 +147,7 @@ public partial class App : Application
         MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
         MainWindow.RegisterDisassemblyPanel();
+        MainWindow.RegisterPacketsPanel();
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
         Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());

@@ -46,6 +46,9 @@ public sealed record FakeProcessSpec
 
     public bool CurrentUser { get; init; } = true;
 
+    /// <summary>一時停止できない (ENG-35 の仕様 2 の「停止できない場合は警告して続ける」の再現)。</summary>
+    public bool CannotSuspend { get; init; }
+
     public long AddressLimit { get; init; } = 0x7FFF_FFFF_0000;
 
     public List<FakeRegionSpec> Regions { get; init; } = [];
@@ -96,6 +99,41 @@ public sealed class FakeProcess
     public List<(long Address, uint Protect)> ProtectCalls { get; } = [];
 
     public event EventHandler? ExitedEvent;
+
+    /// <summary>一時停止の回数 (停止中なら 1 以上。ENG-35 の仕様 2)。</summary>
+    public int SuspendCount { get; private set; }
+
+    /// <summary>停止していた間に読まれたバイト数 (取得が停止の間に行われたかの確認)。</summary>
+    public long BytesReadWhileSuspended { get; private set; }
+
+    /// <summary>読み込みの前に呼ぶ (テストが取得の途中で内容を変える・終了させるため)。</summary>
+    public Action<long, int>? BeforeRead { get; set; }
+
+    internal int Suspend()
+    {
+        if (Exited)
+        {
+            return Win32Errors.ProcessAborted;
+        }
+
+        if (Spec.CannotSuspend)
+        {
+            return Win32Errors.AccessDenied;
+        }
+
+        SuspendCount++;
+        return 0;
+    }
+
+    internal int Resume()
+    {
+        if (SuspendCount > 0)
+        {
+            SuspendCount--;
+        }
+
+        return 0;
+    }
 
     public IReadOnlyList<MemoryRegion> Regions
     {
@@ -167,6 +205,7 @@ public sealed class FakeProcess
     internal int Read(long address, Span<byte> buffer, out int read)
     {
         read = 0;
+        BeforeRead?.Invoke(address, buffer.Length);
         if (Exited)
         {
             return Win32Errors.ProcessAborted;
@@ -197,6 +236,10 @@ public sealed class FakeProcess
                 int n = (int)Math.Min(buffer.Length - read, region.End - a);
                 ReadRaw(a, n).CopyTo(buffer.Slice(read, n));
                 read += n;
+                if (SuspendCount > 0)
+                {
+                    BytesReadWhileSuspended += n;
+                }
             }
         }
 
@@ -317,7 +360,7 @@ public sealed class FakeProcessAccess : IProcessAccess
         return new Memory(process, writable, Elevated);
     }
 
-    private sealed class Memory : IProcessMemory
+    private sealed class Memory : IProcessMemory, IProcessSuspend
     {
         private readonly FakeProcess _process;
         private readonly bool _elevated;
@@ -371,6 +414,10 @@ public sealed class FakeProcessAccess : IProcessAccess
             oldProtect = 0;
             return Writable ? _process.Protect(address, size, protect, out oldProtect) : Win32Errors.AccessDenied;
         }
+
+        public int Suspend() => _process.Suspend();
+
+        public int Resume() => _process.Resume();
 
         public void Dispose()
         {

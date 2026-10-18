@@ -37,6 +37,29 @@ public sealed partial class Document
     }
 
     /// <summary>
+    /// 末尾に追記されていくデータソース (UDP の受信。ENG-42 の仕様 3) が伸びた分を、ドキュメントの末尾に加える。Undo の単位にはしない
+    /// (今の版をデータソース全体を指す状態に置き換える)。変更のあるドキュメント・古い元データを指す版では何もしない (false)。
+    /// 伸びる前の末尾のブロックは短いままキャッシュされているため、キャッシュを捨てる。
+    /// </summary>
+    public bool SyncAppendedSource()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        long length = Source.Length;
+        long before = Length;
+        if (length <= before || History.IsModified || !CurrentUsesLatestSource || _viewTransform is not null)
+        {
+            return false;
+        }
+
+        PieceTree tree = PieceTree.FromPiece(Piece.Original(0, length));
+        History.ReplaceCurrent(new DocumentSnapshot(_storage, tree));
+        History.MarkSaved();
+        _storage.Cache.Invalidate();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(before, 0, length - before, isWholeDocument: false, DocumentChangeKind.Reloaded));
+        return true;
+    }
+
+    /// <summary>
     /// 変更を破棄して再読み込み (データソースが外部で変更されていない場合。ENG-18 の仕様 3): 今の元データ全体を指す状態を
     /// 1 つの Undo 単位として積み、その状態を「保存した時点」にする。Ctrl+Z で破棄の前に戻せる。データソースを変えないため、読み取り専用の
     /// ドキュメントでもできる (EDIT-16 の仕様 2)。処理中 (ENG-09 の仕様 7) は <see cref="DocumentLockedException"/>。

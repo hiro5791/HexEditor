@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>プロセスのスナップショットを作成</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>作成</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>スナップショット {0} を作成</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} ページ ({1}) を読めなかったため、スナップショットに含まれていません。</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>スナップショットを作成・保存できませんでした ({0})。</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>プロセスのメモリを読む権限がありません。</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>このプロセスを読むには管理者権限が必要です。管理者権限でスナップショットを作り直しますか?</value></data>
@@ -7344,4 +7343,173 @@
   <data name="Yara_Column_Meta" xml:space="preserve"><value>メタ情報</value></data>
   <data name="Yara_Column_String" xml:space="preserve"><value>文字列</value></data>
   <data name="Codec_Error_Failed" xml:space="preserve"><value>処理に失敗しました: {0}</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>リモートに接続(T)</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB サーバー(G)...</value></data>
+  <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP(F)...</value></data>
+  <data name="Menu_File_OpenSftp.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReceiveUdp.Text" xml:space="preserve"><value>UDP を受信(U)...</value></data>
+  <data name="Menu_File_ReceiveUdp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveSnapshot.Text" xml:space="preserve"><value>スナップショットを保存(N)...</value></data>
+  <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>ミニダンプとして保存(M)...</value></data>
+  <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>パケット(E)</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>プロセスのスナップショットを保存...</value></data>
+  <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>すなっぷしょっとをほぞん ぷろせす</value></data>
+  <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>ミニダンプとして保存...</value></data>
+  <data name="CmdAlias_file_saveMinidump" xml:space="preserve"><value>みにだんぷ だんぷ でばっが</value></data>
+  <data name="Cmd_file_connectGdb" xml:space="preserve"><value>GDB サーバーに接続...</value></data>
+  <data name="CmdAlias_file_connectGdb" xml:space="preserve"><value>りもーと せつぞく でばっぐ</value></data>
+  <data name="Cmd_file_openSftp" xml:space="preserve"><value>SFTP で開く...</value></data>
+  <data name="CmdAlias_file_openSftp" xml:space="preserve"><value>りもーと さーばー ひらく</value></data>
+  <data name="Cmd_file_receiveUdp" xml:space="preserve"><value>UDP を受信...</value></data>
+  <data name="CmdAlias_file_receiveUdp" xml:space="preserve"><value>じゅしん ぱけっと ねっとわーく</value></data>
+  <data name="Cmd_file_reconnect" xml:space="preserve"><value>再接続</value></data>
+  <data name="CmdAlias_file_reconnect" xml:space="preserve"><value>さいせつぞく りもーと</value></data>
+  <data name="Cmd_view_panel_packets" xml:space="preserve"><value>パケットのパネル</value></data>
+  <data name="CmdAlias_view_panel_packets" xml:space="preserve"><value>ぱけっと いちらん</value></data>
+  <data name="Set_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB サーバーの要求の待ち時間の上限 (秒)</value></data>
+  <data name="SetDesc_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB サーバーがこの時間内に要求に応えなければ、切断として扱います。</value></data>
+  <data name="Set_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>SFTP で変更範囲だけを書き込む前に確認する</value></data>
+  <data name="SetDesc_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>保存の途中で接続が切れると、リモートのファイルの一部だけが書き換わる可能性があります。</value></data>
+  <data name="Set_remote_udp_followEnd" xml:space="preserve"><value>UDP の受信中に末尾に追従する</value></data>
+  <data name="SetDesc_remote_udp_followEnd" xml:space="preserve"><value>UDP の受信のドキュメントでカーソルが末尾にあるとき、受信したデータまでスクロールします。</value></data>
+  <data name="Remote_StateConnected" xml:space="preserve"><value>接続</value></data>
+  <data name="Remote_StateConnecting" xml:space="preserve"><value>接続中</value></data>
+  <data name="Remote_StateDisconnected" xml:space="preserve"><value>切断</value></data>
+  <data name="Remote_StatusGdb" xml:space="preserve"><value>GDB {0} ({1})</value></data>
+  <data name="Remote_StatusSftp" xml:space="preserve"><value>SFTP {0} ({1})</value></data>
+  <data name="Remote_StatusUdp" xml:space="preserve"><value>UDP {0}: {1} 個, {2} ({3})</value></data>
+  <data name="Remote_Disconnected" xml:space="preserve"><value>{0} との接続が切れました。未保存の変更は残っています。</value></data>
+  <data name="Remote_Reconnect" xml:space="preserve"><value>再接続</value></data>
+  <data name="Remote_Reconnected" xml:space="preserve"><value>再接続しました。</value></data>
+  <data name="Remote_ReconnectFailed" xml:space="preserve"><value>再接続できませんでした: {0}</value></data>
+  <data name="Remote_AlreadyConnected" xml:space="preserve"><value>接続しています。</value></data>
+  <data name="Remote_NotRemote" xml:space="preserve"><value>GDB サーバー・SFTP のドキュメントだけで使えます。</value></data>
+  <data name="Session_RemoteNotConnected" xml:space="preserve"><value>接続していません: {0}</value></data>
+  <data name="Session_ConnectRemote.Content" xml:space="preserve"><value>接続</value></data>
+  <data name="Capture_SnapshotTitle" xml:space="preserve"><value>スナップショットを保存</value></data>
+  <data name="Capture_MinidumpTitle" xml:space="preserve"><value>ミニダンプとして保存</value></data>
+  <data name="Capture_Scope" xml:space="preserve"><value>対象</value></data>
+  <data name="Capture_ScopeAll" xml:space="preserve"><value>読めるすべての領域</value></data>
+  <data name="Capture_ScopeSelected" xml:space="preserve"><value>選んだ領域・モジュール (メモリマップのパネル)</value></data>
+  <data name="Capture_ScopeWritable" xml:space="preserve"><value>書き込み可能な領域だけ</value></data>
+  <data name="Capture_Pause" xml:space="preserve"><value>取得中は対象のプロセスを一時停止する</value></data>
+  <data name="Capture_Path" xml:space="preserve"><value>保存先</value></data>
+  <data name="Capture_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="Capture_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Capture_SavingSnapshot" xml:space="preserve"><value>スナップショット {0} を保存</value></data>
+  <data name="Capture_SavingMinidump" xml:space="preserve"><value>ミニダンプ {0} を保存</value></data>
+  <data name="Capture_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Capture_Cancelled" xml:space="preserve"><value>キャンセルしました。途中のファイルは削除しました。</value></data>
+  <data name="Capture_ProcessExited" xml:space="preserve"><value>取得中にプロセスが終了したため中止しました。途中のファイルは削除しました。</value></data>
+  <data name="Capture_Error" xml:space="preserve"><value>保存できませんでした: {0}</value></data>
+  <data name="Capture_PauseFailed" xml:space="preserve"><value>対象のプロセスを一時停止できなかったため、動いたまま取得しました。内容が一貫していない可能性があります。</value></data>
+  <data name="Capture_Unreadable" xml:space="preserve"><value>{0} 個の領域 (合計 {1}) を読めませんでした。</value></data>
+  <data name="FileType_Minidump" xml:space="preserve"><value>ミニダンプ</value></data>
+  <data name="Snapshot_SaveAsGuide" xml:space="preserve"><value>プロセスメモリはファイルとして保存できません。ファイル &gt; エクスポート &gt; スナップショットを保存 を使ってください。</value></data>
+  <data name="Gdb_Title" xml:space="preserve"><value>GDB サーバーに接続</value></data>
+  <data name="Gdb_Host" xml:space="preserve"><value>ホスト</value></data>
+  <data name="Gdb_Port" xml:space="preserve"><value>ポート</value></data>
+  <data name="Gdb_AddressWidth" xml:space="preserve"><value>アドレスの幅</value></data>
+  <data name="Gdb_Width32" xml:space="preserve"><value>32 bit</value></data>
+  <data name="Gdb_Width64" xml:space="preserve"><value>64 bit</value></data>
+  <data name="Gdb_ReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="Gdb_Note" xml:space="preserve"><value>対象のメモリの読み書きだけを行います。実行の停止・再開・ブレークポイントは使いません。</value></data>
+  <data name="Gdb_Connect" xml:space="preserve"><value>接続</value></data>
+  <data name="Gdb_Connecting" xml:space="preserve"><value>{0} に接続しています...</value></data>
+  <data name="Gdb_ConnectFailed" xml:space="preserve"><value>GDB サーバーに接続できませんでした ({0}、{1})。</value></data>
+  <data name="Gdb_ProtocolError" xml:space="preserve"><value>GDB サーバーの応答を解釈できませんでした。切断しました。</value></data>
+  <data name="Gdb_WriteBody" xml:space="preserve"><value>GDB サーバー {0} の対象のメモリに {1} バイトを書き込みますか?</value></data>
+  <data name="Gdb_ImmediateConfirm" xml:space="preserve"><value>即時書き込みをオンにしますか? 編集するたびに {0} の対象のメモリにすぐ書き込みます。</value></data>
+  <data name="Gdb_WriteDisconnected" xml:space="preserve"><value>{0} との接続が切れたため、書き込めなかった変更があります。</value></data>
+  <data name="Gdb_WriteRejected" xml:space="preserve"><value>対象が書き込みを拒否しました</value></data>
+  <data name="Gdb_SaveAsUnavailable" xml:space="preserve"><value>GDB サーバーのアドレス空間全体はファイルとして保存できません。ファイル &gt; エクスポート &gt; 選択範囲を保存 を使ってください。</value></data>
+  <data name="Sftp_Title" xml:space="preserve"><value>SFTP で開く</value></data>
+  <data name="Sftp_Host" xml:space="preserve"><value>ホスト</value></data>
+  <data name="Sftp_Port" xml:space="preserve"><value>ポート</value></data>
+  <data name="Sftp_User" xml:space="preserve"><value>ユーザー名</value></data>
+  <data name="Sftp_Method" xml:space="preserve"><value>認証方式</value></data>
+  <data name="Sftp_MethodPassword" xml:space="preserve"><value>パスワード</value></data>
+  <data name="Sftp_MethodKeyFile" xml:space="preserve"><value>鍵ファイル</value></data>
+  <data name="Sftp_MethodAgent" xml:space="preserve"><value>SSH エージェント (OpenSSH エージェント、Pageant)</value></data>
+  <data name="Sftp_Password" xml:space="preserve"><value>パスワード</value></data>
+  <data name="Sftp_KeyFile" xml:space="preserve"><value>鍵ファイル</value></data>
+  <data name="Sftp_Passphrase" xml:space="preserve"><value>パスフレーズ (鍵にある場合)</value></data>
+  <data name="Sftp_Save" xml:space="preserve"><value>パスワードを Windows の資格情報マネージャーに保存する</value></data>
+  <data name="Sftp_Connect" xml:space="preserve"><value>接続</value></data>
+  <data name="Sftp_Connecting" xml:space="preserve"><value>{0} に接続しています...</value></data>
+  <data name="Sftp_AuthFailed" xml:space="preserve"><value>{0} の認証に失敗しました。ユーザー名とパスワード・鍵を確かめてください。</value></data>
+  <data name="Sftp_ConnectFailed" xml:space="preserve"><value>{0} に接続できませんでした ({1})。</value></data>
+  <data name="Sftp_PermissionDenied" xml:space="preserve"><value>権限がありません: {0}</value></data>
+  <data name="Sftp_NotFound" xml:space="preserve"><value>リモートのファイルが見つかりません: {0}</value></data>
+  <data name="Sftp_OpenFailed" xml:space="preserve"><value>{0} を開けませんでした: {1}</value></data>
+  <data name="Sftp_HostKeyUnknownTitle" xml:space="preserve"><value>初めて接続するホスト</value></data>
+  <data name="Sftp_HostKeyUnknownBody" xml:space="preserve"><value>{0} に初めて接続します。
+
+ホスト鍵の種類: {1}
+SHA-256 のフィンガープリント: {2}
+
+フィンガープリントがサーバーのものと一致する場合だけ接続してください。</value></data>
+  <data name="Sftp_HostKeyTrust" xml:space="preserve"><value>信頼して接続</value></data>
+  <data name="Sftp_HostKeyChangedTitle" xml:space="preserve"><value>警告: ホスト鍵が変わっています</value></data>
+  <data name="Sftp_HostKeyChangedBody" xml:space="preserve"><value>{0} のホスト鍵が、以前に信頼した鍵と違います。通信が傍受されている可能性があります。
+
+新しいホスト鍵の種類: {1}
+新しい SHA-256 のフィンガープリント: {2}
+
+以前に信頼した鍵: {3} {4}
+
+鍵を置き換えることを選ばない限り、接続しません。</value></data>
+  <data name="Sftp_HostKeyReplace" xml:space="preserve"><value>鍵を置き換えて接続</value></data>
+  <data name="SftpPicker_Title" xml:space="preserve"><value>リモートのファイルを選ぶ ({0})</value></data>
+  <data name="SftpPicker_Path" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="SftpPicker_List" xml:space="preserve"><value>ファイル</value></data>
+  <data name="SftpPicker_Up" xml:space="preserve"><value>上へ</value></data>
+  <data name="SftpPicker_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="SftpPicker_ListFailed" xml:space="preserve"><value>フォルダーの一覧を取得できませんでした: {0}</value></data>
+  <data name="Sftp_SaveTitle" xml:space="preserve"><value>リモートのファイルに保存</value></data>
+  <data name="Sftp_PartialWriteBody" xml:space="preserve"><value>変更範囲だけを書き込みます。途中で接続が切れると、リモートのファイルの一部だけが書き換わる可能性があります。</value></data>
+  <data name="Sftp_PartialWriteSkip" xml:space="preserve"><value>今後は確認しない</value></data>
+  <data name="Sftp_SaveWrite" xml:space="preserve"><value>保存</value></data>
+  <data name="Sftp_Saving" xml:space="preserve"><value>{0} を保存</value></data>
+  <data name="Sftp_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Sftp_SavePermission" xml:space="preserve"><value>{0} に書き込む権限がありません。</value></data>
+  <data name="Sftp_SavePartial" xml:space="preserve"><value>保存の途中で接続が切れました。リモートのファイルの一部だけが書き換わった可能性があります。変更は残っています。</value></data>
+  <data name="Sftp_SaveDisconnected" xml:space="preserve"><value>保存の途中で接続が切れました。リモートのファイルは置き換えていません。変更は残っています。</value></data>
+  <data name="Sftp_SaveFailed" xml:space="preserve"><value>保存できませんでした: {0}</value></data>
+  <data name="Sftp_Changed" xml:space="preserve"><value>リモートのファイル {0} が他のプログラムによって変更されました。</value></data>
+  <data name="Sftp_ChangedModified" xml:space="preserve"><value>リモートのファイル {0} が他のプログラムによって変更されました。再読み込みすると変更は破棄されます。</value></data>
+  <data name="Sftp_Reload" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="Udp_Title" xml:space="preserve"><value>UDP を受信</value></data>
+  <data name="Udp_Address" xml:space="preserve"><value>待ち受けるアドレス</value></data>
+  <data name="Udp_Port" xml:space="preserve"><value>ポート</value></data>
+  <data name="Udp_PortPlaceholder" xml:space="preserve"><value>1〜65535</value></data>
+  <data name="Udp_LimitMiB" xml:space="preserve"><value>保持する上限 (MiB、1〜{0})</value></data>
+  <data name="Udp_FirewallNote" xml:space="preserve"><value>127.0.0.1 以外で待ち受けると、Windows ファイアウォールの確認が表示されることがあります。</value></data>
+  <data name="Udp_ReceiveOnly" xml:space="preserve"><value>受信だけを行い、送信はしません。</value></data>
+  <data name="Udp_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Udp_TabName" xml:space="preserve"><value>UDP {0}</value></data>
+  <data name="Udp_PortInUse" xml:space="preserve"><value>ポート {0} は他のアプリが使用中です。</value></data>
+  <data name="Udp_StartFailed" xml:space="preserve"><value>受信を開始できませんでした: {0}</value></data>
+  <data name="Udp_LimitReached" xml:space="preserve"><value>上限 ({0}) に達したため記録を停止しました。</value></data>
+  <data name="Udp_DiscardOld" xml:space="preserve"><value>古いデータを捨てて続ける</value></data>
+  <data name="Udp_StateReceiving" xml:space="preserve"><value>受信中</value></data>
+  <data name="Udp_StatePaused" xml:space="preserve"><value>一時停止</value></data>
+  <data name="Udp_StateLimit" xml:space="preserve"><value>上限で停止</value></data>
+  <data name="Udp_StateStopped" xml:space="preserve"><value>停止</value></data>
+  <data name="Udp_Saved" xml:space="preserve"><value>受信したデータを {0} に保存しました。</value></data>
+  <data name="Udp_SaveFailed" xml:space="preserve"><value>保存できませんでした: {0}</value></data>
+  <data name="Panel_Packets_Title" xml:space="preserve"><value>パケット</value></data>
+  <data name="Packets_List" xml:space="preserve"><value>パケットの一覧</value></data>
+  <data name="Packets_Pause" xml:space="preserve"><value>一時停止</value></data>
+  <data name="Packets_Resume" xml:space="preserve"><value>再開</value></data>
+  <data name="Packets_Clear" xml:space="preserve"><value>消去</value></data>
+  <data name="Packets_ExportCsv" xml:space="preserve"><value>CSV でエクスポート...</value></data>
+  <data name="Packets_ExportJson" xml:space="preserve"><value>JSON でエクスポート...</value></data>
+  <data name="Packets_Exported" xml:space="preserve"><value>{0} にエクスポートしました。</value></data>
+  <data name="Packets_NotUdp" xml:space="preserve"><value>UDP の受信のドキュメント (ファイル &gt; リモートに接続 &gt; UDP を受信) を開くと、パケットの一覧が表示されます。</value></data>
 </root>

@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>สร้างสแนปช็อตของโปรเซส</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>สร้าง</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>กำลังสร้างสแนปช็อต {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>อ่าน {0} เพจ ({1}) ไม่ได้ และไม่ได้อยู่ในสแนปช็อต</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>ไม่สามารถสร้างหรือบันทึกสแนปช็อต ({0})</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>การเข้าถึงหน่วยความจำของโปรเซสถูกปฏิเสธ</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>ต้องมีสิทธิ์ผู้ดูแลระบบเพื่ออ่านโปรเซสนี้ สร้างสแนปช็อตอีกครั้งด้วยสิทธิ์ผู้ดูแลระบบหรือไม่</value></data>

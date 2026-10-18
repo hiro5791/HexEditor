@@ -5416,7 +5416,6 @@ Los detalles se escribieron en:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Crear una instantánea de proceso</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Crear</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Creando la instantánea {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>No se pudieron leer {0} páginas ({1}) y no están en la instantánea.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>No se pudo crear ni guardar la instantánea ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Se denegó el acceso a la memoria del proceso.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Para leer este proceso se necesitan permisos de administrador. ¿Volver a crear la instantánea con permisos de administrador?</value></data>

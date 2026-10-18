@@ -66,7 +66,8 @@ public sealed partial class MainWindow
             ?? await HandleDisassemblyTestCommandsAsync(cmd, request)
             ?? await HandleTplAutoTestCommandsAsync(cmd, request)
             ?? await HandleEditingPhase4TestCommandsAsync(cmd, request)
-            ?? await HandleDataCodecTestCommandsAsync(cmd, request),
+            ?? await HandleDataCodecTestCommandsAsync(cmd, request)
+            ?? await HandleRemoteTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

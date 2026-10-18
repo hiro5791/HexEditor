@@ -127,7 +127,7 @@ You can save the memory of a process at one moment and compare it with another m
 2. Select **Analysis > Compare > Create Process Snapshot...**.
 3. Enter a **Name** and select **Create**.
 
-This command works in a tab that has process memory open. The dialog asks only for a name. It saves all the readable regions of that process. You cannot choose the regions, and the process is not paused while the snapshot is taken.
+This command works in a tab that has process memory open. Besides the name, you can choose the regions to include (**All readable regions**, the **Region or module selected in the memory map**, or **Writable regions only**) and **Pause the process while capturing**, as when you save a snapshot (see [Save a process snapshot or minidump](opening-files.md#process-snapshot)).
 
 The snapshot is saved as a `.hexsnap` file in the temporary folder and is deleted when you quit the app. To keep it, use **Save As** and save it somewhere else. Some processes need administrator rights to be read. In that case you are asked whether to create the snapshot again with administrator rights. Pages that could not be read are not in the snapshot.
 

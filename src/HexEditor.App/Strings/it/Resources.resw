@@ -5416,7 +5416,6 @@ I dettagli sono stati scritti in:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Crea uno snapshot del processo</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Crea</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Creazione dello snapshot {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Impossibile leggere {0} pagine ({1}); non sono incluse nello snapshot.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Impossibile creare o salvare lo snapshot ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Accesso alla memoria del processo negato.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Per leggere questo processo sono necessari i diritti di amministratore. Creare di nuovo lo snapshot con i diritti di amministratore?</value></data>

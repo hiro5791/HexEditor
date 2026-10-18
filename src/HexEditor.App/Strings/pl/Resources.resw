@@ -5416,7 +5416,6 @@ Szczegóły zapisano w:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Utwórz migawkę procesu</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Utwórz</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Tworzenie migawki {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Nie można odczytać stron: {0} ({1}); nie ma ich w migawce.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Nie można utworzyć ani zapisać migawki ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Odmówiono dostępu do pamięci procesu.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Odczyt tego procesu wymaga uprawnień administratora. Utworzyć migawkę ponownie z uprawnieniami administratora?</value></data>

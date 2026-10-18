@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>建立處理程序快照</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>建立</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>正在建立快照 {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>有 {0} 個頁面（{1}）無法讀取，因此不在快照中。</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>無法建立或儲存快照（{0}）。</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>處理程序記憶體的存取被拒。</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>讀取此處理程序需要系統管理員權限。要以系統管理員權限重新建立快照嗎？</value></data>

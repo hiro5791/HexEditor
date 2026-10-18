@@ -5416,7 +5416,6 @@ Les détails ont été écrits dans :
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Créer un instantané de processus</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Créer</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Création de l'instantané {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} pages ({1}) n'ont pas pu être lues et ne figurent pas dans l'instantané.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Impossible de créer ou d'enregistrer l'instantané ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>L'accès à la mémoire du processus a été refusé.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Des droits d'administrateur sont nécessaires pour lire ce processus. Recréer l'instantané avec des droits d'administrateur ?</value></data>

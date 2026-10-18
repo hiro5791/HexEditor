@@ -8,6 +8,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 
 - [はじめに](getting-started.md)
 - [ファイル・ディスク・プロセスを開く](opening-files.md)
+- [リモートのデータソース](remote-sources.md)
 - [Hex ビュー](hex-view.md)
 - [編集](editing.md)
 - [選択とクリップボード](selection-clipboard.md)

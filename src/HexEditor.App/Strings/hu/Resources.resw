@@ -5416,7 +5416,6 @@ A részletek helye:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Folyamat-pillanatkép készítése</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Létrehozás</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Pillanatkép készítése: {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} lap ({1}) nem olvasható, ezért nem került a pillanatképbe.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>A pillanatkép nem hozható létre vagy nem menthető ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>A folyamatmemóriához való hozzáférés megtagadva.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>A folyamat olvasásához rendszergazdai jogosultság szükséges. Újra elkészíti a pillanatképet rendszergazdai jogosultsággal?</value></data>

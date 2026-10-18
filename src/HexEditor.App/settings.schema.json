@@ -621,6 +621,23 @@
       "type": "boolean",
       "default": true
     },
+    "remote.gdb.timeoutSeconds": {
+      "description": "GDB server request timeout (seconds)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120,
+      "default": 5
+    },
+    "remote.sftp.confirmPartialWrite": {
+      "description": "Confirm before writing only the changed ranges over SFTP",
+      "type": "boolean",
+      "default": true
+    },
+    "remote.udp.followEnd": {
+      "description": "Follow the end while receiving UDP",
+      "type": "boolean",
+      "default": true
+    },
     "save.backup.enabled": {
       "description": "Make a backup when saving",
       "type": "boolean",

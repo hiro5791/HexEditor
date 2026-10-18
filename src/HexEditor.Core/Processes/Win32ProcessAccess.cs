@@ -252,7 +252,7 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
         }
     }
 
-    private sealed class Memory : IProcessMemory
+    private sealed class Memory : IProcessMemory, IProcessSuspend, IProcessThreads
     {
         private readonly SafeProcessHandle _handle;
         private readonly RegisteredWaitHandle? _wait;
@@ -492,6 +492,104 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
         public int Protect(long address, long size, uint protect, out uint oldProtect) =>
             VirtualProtectEx(_handle, (IntPtr)address, (IntPtr)size, protect, out oldProtect) ? 0 : Error();
 
+        /// <summary>
+        /// スレッドを停止する (ENG-35 の仕様 2)。停止・再開の権限 (<c>PROCESS_SUSPEND_RESUME</c>) は読み書きのハンドルに含めないため、
+        /// その都度別のハンドルで開く。<c>NtSuspendProcess</c> は停止の回数を数えるため、<see cref="Resume"/> と対で呼ぶ。
+        /// </summary>
+        public int Suspend() => SuspendOrResume(suspend: true);
+
+        public int Resume() => SuspendOrResume(suspend: false);
+
+        /// <summary>
+        /// スレッドの状態を取る (ミニダンプのスレッドの一覧。ENG-35 の仕様 6)。各スレッドは <c>GetThreadContext</c> の間だけ停止する
+        /// (<c>MiniDumpWriteDump</c> と同じ)。開けないスレッドは除く。
+        /// </summary>
+        public IReadOnlyList<ProcessThreadState> CaptureThreads()
+        {
+            var list = new List<ProcessThreadState>();
+            if (_exited)
+            {
+                return list;
+            }
+
+            (int contextSize, int flagsOffset, uint flags, int spOffset, ProcessArchitecture arch) = RuntimeInformation.ProcessArchitecture switch
+            {
+                System.Runtime.InteropServices.Architecture.Arm64 => (0x390, 0, 0x40000Fu, 0x100, ProcessArchitecture.Arm64),
+                _ => (1232, 0x30, 0x10001Fu, 0x98, ProcessArchitecture.X64),
+            };
+            IntPtr snapshot = CreateToolhelp32Snapshot(4 /* TH32CS_SNAPTHREAD */, 0);
+            if (snapshot == -1)
+            {
+                return list;
+            }
+
+            byte* context = (byte*)NativeMemory.AlignedAlloc((nuint)contextSize, 16);
+            byte* basic = stackalloc byte[48];
+            try
+            {
+                ThreadEntry entry = new() { Size = sizeof(ThreadEntry) };
+                for (bool ok = Thread32First(snapshot, &entry); ok; ok = Thread32Next(snapshot, &entry))
+                {
+                    if (entry.OwnerProcessId != Pid)
+                    {
+                        continue;
+                    }
+
+                    using SafeProcessHandle thread = OpenThread(ThreadGetContext | ThreadQueryInformation | ThreadSuspendResume, false, entry.ThreadId);
+                    if (thread.IsInvalid)
+                    {
+                        continue;
+                    }
+
+                    new Span<byte>(context, contextSize).Clear();
+                    *(uint*)(context + flagsOffset) = flags;
+                    bool suspended = SuspendThread(thread) != uint.MaxValue;
+                    bool got = GetThreadContext(thread, context);
+                    if (suspended)
+                    {
+                        ResumeThread(thread);
+                    }
+
+                    if (!got)
+                    {
+                        continue;
+                    }
+
+                    long teb = 0;
+                    if (NtQueryInformationThread(thread, 0 /* ThreadBasicInformation */, basic, 48, out _) >= 0)
+                    {
+                        teb = *(long*)(basic + 8);
+                    }
+
+                    list.Add(new ProcessThreadState(entry.ThreadId, teb, *(long*)(context + spOffset), new Span<byte>(context, contextSize).ToArray(), arch));
+                }
+            }
+            finally
+            {
+                NativeMemory.AlignedFree(context);
+                CloseHandle(snapshot);
+            }
+
+            return list;
+        }
+
+        private int SuspendOrResume(bool suspend)
+        {
+            if (_exited)
+            {
+                return Win32Errors.ProcessAborted;
+            }
+
+            using SafeProcessHandle handle = OpenProcess(ProcessSuspendResume, false, Pid);
+            if (handle.IsInvalid)
+            {
+                return Marshal.GetLastPInvokeError() is var e and not 0 ? e : Win32Errors.AccessDenied;
+            }
+
+            int status = suspend ? NtSuspendProcess(handle) : NtResumeProcess(handle);
+            return status >= 0 ? 0 : RtlNtStatusToDosError(status);
+        }
+
         private int Error()
         {
             int error = Marshal.GetLastPInvokeError();
@@ -522,6 +620,22 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
     private const uint ProcessVmWrite = 0x0020;
     private const uint ProcessQueryInformation = 0x0400;
     private const uint ProcessQueryLimitedInformation = 0x1000;
+    private const uint ProcessSuspendResume = 0x0800;
+    private const uint ThreadSuspendResume = 0x0002;
+    private const uint ThreadGetContext = 0x0008;
+    private const uint ThreadQueryInformation = 0x0040;
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct ThreadEntry
+    {
+        public int Size;
+        public int Usage;
+        public int ThreadId;
+        public int OwnerProcessId;
+        public int BasePriority;
+        public int DeltaPriority;
+        public int Flags;
+    }
     private const uint Synchronize = 0x00100000;
     private const uint TokenQuery = 0x0008;
     private const uint TokenAdjustPrivileges = 0x0020;
@@ -608,6 +722,42 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool WriteProcessMemory(SafeProcessHandle process, IntPtr address, byte* buffer, IntPtr size, out IntPtr written);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr CreateToolhelp32Snapshot(uint flags, int pid);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool Thread32First(IntPtr snapshot, ThreadEntry* entry);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool Thread32Next(IntPtr snapshot, ThreadEntry* entry);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool CloseHandle(IntPtr handle);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern SafeProcessHandle OpenThread(uint access, bool inherit, int threadId);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint SuspendThread(SafeProcessHandle thread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint ResumeThread(SafeProcessHandle thread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GetThreadContext(SafeProcessHandle thread, byte* context);
+
+    [DllImport("ntdll.dll")]
+    private static extern int NtQueryInformationThread(SafeProcessHandle thread, int informationClass, byte* information, int length, out int returned);
+
+    [DllImport("ntdll.dll")]
+    private static extern int NtSuspendProcess(SafeProcessHandle process);
+
+    [DllImport("ntdll.dll")]
+    private static extern int NtResumeProcess(SafeProcessHandle process);
+
+    [DllImport("ntdll.dll")]
+    private static extern int RtlNtStatusToDosError(int status);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool VirtualProtectEx(SafeProcessHandle process, IntPtr address, IntPtr size, uint protect, out uint oldProtect);

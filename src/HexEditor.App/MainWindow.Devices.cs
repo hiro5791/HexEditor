@@ -29,12 +29,13 @@ public sealed partial class MainWindow
     {
         HookDeviceIntegration();
         RegisterSnapshotCommands();
+        RegisterRemoteCommands();
         var e = new RoutedEventArgs();
         Commands.Register("file.openDisk", () => OpenDisk_Click(this, e));
         Commands.Register("file.openProcess", () => OpenProcess_Click(this, e));
         Commands.Register("file.openDiskImage", () => OpenDiskImage_Click(this, e));
         Commands.Register("file.toggleImmediateWrite", () => _ = ToggleImmediateWriteAsync(),
-            () => NeedsDocument(d => d.IsProcessMemory ? null : Loc.Get("Command_ProcessOnly")));
+            () => NeedsDocument(d => d.IsProcessMemory || d.Gdb is { Writable: true } ? null : Loc.Get("Command_ProcessOnly")));
 
         Commands.Register("go.nextSector", () => Vm.Selected?.Editor.MoveNextSector(), NeedsDocument);
         Commands.Register("go.previousSector", () => Vm.Selected?.Editor.MovePreviousSector(), NeedsDocument);
@@ -676,14 +677,18 @@ public sealed partial class MainWindow
     /// <summary>即時書き込みモードの切り替え。オンにするときは確認する (ENG-34 の仕様 2)。オンにしたら、未保存の変更もすぐに書き込む。</summary>
     internal async Task ToggleImmediateWriteAsync()
     {
-        if (Vm.Selected is not { IsProcessMemory: true } doc || doc.ProcessMemory is not { } source)
+        if (Vm.Selected is not { } doc || (doc.ProcessMemory is null && doc.Gdb is null))
         {
             return;
         }
 
         if (!doc.ImmediateWrite)
         {
-            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), Loc.Format("ProcessWrite_ImmediateConfirm", source.ProcessName, PidText(source.Pid)),
+            // GDB サーバーの対象のメモリも ENG-34 と同じ即時書き込みモードを持つ (ENG-40 の仕様 6)。
+            string body = doc.ProcessMemory is { } process
+                ? Loc.Format("ProcessWrite_ImmediateConfirm", process.ProcessName, PidText(process.Pid))
+                : Loc.Format("Gdb_ImmediateConfirm", doc.Gdb!.Endpoint.Display);
+            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), body,
                 Loc.Get("ProcessWrite_ImmediateEnable"), "ImmediateWriteConfirmDialog"))
             {
                 return;
@@ -732,7 +737,7 @@ public sealed partial class MainWindow
     /// <summary>即時書き込み: 書き込み中に次の編集が来たら、終わってからもう一度書く (書き込みを重ねない)。</summary>
     private async Task WriteImmediatelyAsync(DocumentViewModel doc)
     {
-        if (doc.ProcessMemory is not { } source || !doc.ImmediateWrite || doc.Document.IsDisposed || doc.Document.IsReadOnly)
+        if ((doc.ProcessMemory is null && doc.Gdb is null) || !doc.ImmediateWrite || doc.Document.IsDisposed || doc.Document.IsReadOnly)
         {
             return;
         }
@@ -750,7 +755,14 @@ public sealed partial class MainWindow
                 _immediatePending.Remove(doc);
                 if (doc.Document.Current.EnumerateModifiedRanges().Any() || doc.Document.LastDeviceWriteRanges.Count > 0)
                 {
-                    await WriteProcessAsync(doc, source);
+                    if (doc.Gdb is { } gdb)
+                    {
+                        await WriteGdbAsync(doc, gdb);
+                    }
+                    else if (doc.ProcessMemory is { } source)
+                    {
+                        await WriteProcessAsync(doc, source);
+                    }
                 }
             }
             while (_immediatePending.Contains(doc) && !doc.Document.IsDisposed);

@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Создание снимка процесса</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Создать</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Создание снимка {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Не удалось прочитать страниц: {0} ({1}); они не включены в снимок.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Не удалось создать или сохранить снимок ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Доступ к памяти процесса запрещен.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Для чтения этого процесса нужны права администратора. Создать снимок снова с правами администратора?</value></data>

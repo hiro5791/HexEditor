@@ -9,6 +9,9 @@ public enum SessionTabKind
     Disk,
     Untitled,
     Process,
+
+    /// <summary>リモートの接続 (SFTP のファイル・GDB サーバー。ENG-40・ENG-41 の仕様 9)。復元しても自動で接続せず、「接続」ボタンを出す。</summary>
+    Remote,
 }
 
 /// <summary>タブ 1 つの記録 (UI-31 の仕様 1 のタブの単位)。</summary>
@@ -136,7 +139,7 @@ public sealed record SessionState
 public static class SessionRules
 {
     /// <summary>復元するタブか: プロセスメモリ・無題 (内容は終了時の確認で保存されている) は復元しない。</summary>
-    public static bool IsRestorable(SessionTab tab) => tab.Kind is SessionTabKind.File or SessionTabKind.Disk && tab.Path is not null;
+    public static bool IsRestorable(SessionTab tab) => tab.Kind is SessionTabKind.File or SessionTabKind.Disk or SessionTabKind.Remote && tab.Path is not null;
 }
 
 /// <summary>
