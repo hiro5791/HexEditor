@@ -24,6 +24,11 @@ public sealed partial class StaticCheckTests
     [
         "src/HexEditor.Platform/Network/NetworkClient.cs",
         "src/HexEditor.App/Hosting/VelopackBootstrap.cs",
+
+        // 利用者が接続先を指定する機能 (リモートのデータソース ENG-40・ENG-42)。アプリが自分から行う通信ではなく、利用者の操作でだけ接続する
+        // ため、通信の入口と network.offline の対象外 (UI-58 の仕様 2)。SFTP (ENG-41) は SSH.NET が接続する。
+        "src/HexEditor.Core/Remote/Gdb/GdbClient.cs",
+        "src/HexEditor.Core/Remote/Udp/UdpCapture.cs",
     ];
 
     [GeneratedRegex(@"\bnew\s+HttpClient\b|\bHttpClient\s*\(|\b(TcpClient|UdpClient|TcpListener|WebRequest|HttpWebRequest|WebClient|ClientWebSocket)\b|\bnew\s+Socket\s*\(|\bDns\.")]
