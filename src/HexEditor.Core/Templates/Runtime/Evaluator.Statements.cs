@@ -262,9 +262,57 @@ internal sealed partial class Evaluator
                 Section = _space.Section,
             };
             v.ShowNode = node;
+            if (Attr(l.Attributes, "instance") is not null && value.Kind == VK.Node && f.Node is { } owner && CanExpandReference(owner, value.AsNode))
+            {
+                // .ksy の value: が別のパターンを指すとき (例: linked_section) は、指す先の中身を子として開けるようにする
+                TemplateNode referred = value.AsNode;
+                node.Children0 = new PointerChildren(() => referred);
+            }
+
             CountPattern();
             AttachChild(f, node);
         }
+    }
+
+    /// <summary>参照のつながり (A が B を指し、B が A を指す、など)。ぐるぐる回る参照は子として開かない。</summary>
+    private readonly Dictionary<TemplateNode, List<TemplateNode>> _referenceGraph = new(ReferenceEqualityComparer.Instance);
+
+    private bool CanExpandReference(TemplateNode owner, TemplateNode target)
+    {
+        target = Resolve(target);
+        if (target.Children0 is null)
+        {
+            return false;
+        }
+
+        // target から owner に着くなら、開くと同じ中身が無限に続く
+        var visited = new HashSet<TemplateNode>(ReferenceEqualityComparer.Instance);
+        var stack = new Stack<TemplateNode>();
+        stack.Push(target);
+        while (stack.Count > 0)
+        {
+            TemplateNode n = stack.Pop();
+            if (ReferenceEquals(n, owner))
+            {
+                return false;
+            }
+
+            if (visited.Add(n) && _referenceGraph.TryGetValue(n, out List<TemplateNode>? next))
+            {
+                foreach (TemplateNode x in next)
+                {
+                    stack.Push(x);
+                }
+            }
+        }
+
+        if (!_referenceGraph.TryGetValue(owner, out List<TemplateNode>? list))
+        {
+            _referenceGraph[owner] = list = [];
+        }
+
+        list.Add(target);
+        return true;
     }
 
     private void TrackLocalMemory(Val? old, Val value)

@@ -159,7 +159,7 @@ public sealed class DisassemblyFeatureTests
                 if (m.Success)
                 {
                     expected.Add((Convert.ToUInt64(m.Groups[1].Value, 16), m.Groups[2].Value.Trim().Split(' ').Length,
-                        Normalize(m.Groups[3].Value + " " + m.Groups[4].Value)));
+                        Normalize((m.Groups[3].Value + " " + m.Groups[4].Value).Trim())));
                 }
             }
 

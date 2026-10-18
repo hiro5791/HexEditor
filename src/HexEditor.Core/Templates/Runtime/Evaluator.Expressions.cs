@@ -660,7 +660,13 @@ internal sealed partial class Evaluator
             throw ErrorAt(at.Location, TemplateMessages.UnknownMember, KindName(target), name);
         }
 
-        TemplateNode node = target.AsNode;
+        // .ksy の instances (遅延評価) は評価した先を、値が別のパターンの変数 (local auto x = パターン) はその先をたどる
+        TemplateNode node = Resolve(target.AsNode);
+        if (node.Kind == TemplateNodeKind.Computed && node.ComputedVariable?.Value is { Kind: VK.Node } referred)
+        {
+            node = Resolve(referred.AsNode);
+        }
+
         if (node.Kind == TemplateNodeKind.Pointer)
         {
             TemplateNode? t = PointerTarget(node);
@@ -673,6 +679,11 @@ internal sealed partial class Evaluator
         }
 
         TemplateNode? child = MemberOf(node, name);
+        if (child is null && node.ParamValues is { } paramValues && paramValues.TryGetValue(name, out Val paramValue))
+        {
+            return paramValue;
+        }
+
         if (child is null && name == "parent")
         {
             // parent.parent (TPL-04 の仕様 9)
@@ -905,7 +916,8 @@ internal sealed partial class Evaluator
             throw ErrorAt(ie.Location, TemplateMessages.NotAPattern, ie.Operand is NameExpr nn ? nn.Text : KindName(v));
         }
 
-        TemplateNode node = v.AsNode;
+        // .ksy の instances は遅延評価なので、位置とサイズを使う前に評価する (評価するまでは宣言の位置が入っている)
+        TemplateNode node = Resolve(v.AsNode);
         EnsureSize(node);
         return ie.Kind switch
         {

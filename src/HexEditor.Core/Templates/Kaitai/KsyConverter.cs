@@ -416,6 +416,22 @@ internal static class KsyConverter
                             continue;
                         }
 
+                        // instances の if: は宣言の時点 (その型を読むとき) に評価されるので、親の instances を参照する (_parent.名前) ものは
+                        // seq の式と同じに扱う
+                        if (key.Value == "instances" && value is YamlMapping instances)
+                        {
+                            foreach ((_, YamlNode inst) in instances.Entries)
+                            {
+                                if (inst is YamlMapping { } im && im["if"] is YamlScalar cond)
+                                {
+                                    foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(cond.Value, @"_parent\.([A-Za-z_][A-Za-z0-9_]*)"))
+                                    {
+                                        _seqWords.Add(m.Groups[1].Value);
+                                    }
+                                }
+                            }
+                        }
+
                         CollectSeqWords(value, inSeq || key.Value == "seq");
                     }
 
@@ -508,6 +524,30 @@ internal static class KsyConverter
             }
         }
 
+        /// <summary>
+        /// instances の io: の指す入出力 (ストリーム) の先頭のアドレス。<c>_root._io</c> はファイルの先頭、<c>X._io</c> は X (size で切り出した
+        /// 部分ストリーム) の先頭。ほかは今のストリームの先頭にする。
+        /// </summary>
+        private string IoBase(string? io, TypeScope scope, YamlNode? node)
+        {
+            if (io is null || io == "_io")
+            {
+                return "std::ksy::io_base()";
+            }
+
+            if (io == "_root._io")
+            {
+                return "0";
+            }
+
+            if (io.EndsWith("._io", StringComparison.Ordinal))
+            {
+                return $"addressof({Expr(io[..^4], scope, node)})";
+            }
+
+            return "std::ksy::io_base()";
+        }
+
         private IEnumerable<string> Declaration(YamlMapping attr, TypeScope scope, string id, bool instance)
         {
             var attrs = new List<string>();
@@ -517,7 +557,11 @@ internal static class KsyConverter
                 attrs.Add("instance");
                 if (attr["pos"] is { } pos)
                 {
-                    string io = Scalar(attr["io"]) is "_root._io" ? "0" : "std::ksy::io_base()";
+                    string io = IoBase(Scalar(attr["io"]), scope, attr["io"]);
+                    if (Scalar(attr["io"]) is { } ioText && ioText != "_io")
+                    {
+                        attrs.Add("ksy_root_io");
+                    }
                     placement = $" @ ({io} + {Expr(Scalar(pos) ?? "0", scope, pos)})";
                 }
                 else
@@ -653,7 +697,7 @@ internal static class KsyConverter
                 else if (type == "strz" || Scalar(attr["terminator"]) is not null)
                 {
                     string term = Scalar(attr["terminator"]) is { } t ? Expr(t, scope, attr["terminator"]) : "0";
-                    yield return term == "0" && suffix.Length == 0 ? $"string {id}{placement}{attrText()};"
+                    yield return term == "0" ? $"string {id}{suffix}{placement}{attrText()};"
                         : $"char {id}[until(last == {term})]{placement}{attrText()};";
                 }
                 else

@@ -595,7 +595,7 @@ jobs:
           key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Create the checksum files (TC-TOOL-18)
-        run: dotnet test tests/HexEditor.Core.Tests -c Release --filter "FullyQualifiedName~ChecksumFileTests.WritesTheCrossPlatformArtifacts"
+        run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "FullyQualifiedName~ChecksumFileTests.WritesTheCrossPlatformArtifacts"
       - uses: actions/upload-artifact@v4
         with:
           name: checksum-interop

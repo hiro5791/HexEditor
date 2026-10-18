@@ -176,8 +176,9 @@ function Build-PatchApplier {
     $applierStaging = Join-Path $staging 'PatchApplier'
     foreach ($a in 'x64', 'arm64') {
         $dir = Join-Path $applierStaging "publish-$a"
+        # dotnet の出力が関数の戻り値に混ざらないよう Out-Host に流す
         Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.PatchApplier/HexEditor.PatchApplier.csproj'),
-            '-c', $Configuration, '-r', "win-$a", "-p:HexVersion=$Version", '-nologo', '-o', $dir)
+            '-c', $Configuration, '-r', "win-$a", "-p:HexVersion=$Version", '-nologo', '-o', $dir) | Out-Host
         $exe = Join-Path $dir 'HexPatchApply.exe'
         if (-not (Test-Path $exe)) { throw "HexPatchApply.exe ($a) was not produced (EDIT-44)." }
         New-Item -ItemType Directory -Force (Join-Path $applierStaging $a) | Out-Null

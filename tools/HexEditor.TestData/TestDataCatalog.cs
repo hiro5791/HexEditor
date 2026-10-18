@@ -249,12 +249,16 @@ public static partial class TestDataCatalog
 
             // 書いた内容をディスクに反映してから渡す。キャッシュに書きかけの内容が残っていると、テストの中の FlushToDisk (その場保存の
             // 完了など) がテストデータの書き込みをまとめて待つことになり、遅いディスク (CI のランナー) では時間を計るテストが失敗する。
-            using (SafeFileHandle handle = File.OpenHandle(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+            // フォルダ型のテストデータ (TD-TOOL-TREE など) は、生成処理がフォルダの中へ直接書き、一時ファイルを作らない。
+            if (File.Exists(temp))
             {
-                RandomAccess.FlushToDisk(handle);
-            }
+                using (SafeFileHandle handle = File.OpenHandle(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+                {
+                    RandomAccess.FlushToDisk(handle);
+                }
 
-            File.Move(temp, path, overwrite: true);
+                File.Move(temp, path, overwrite: true);
+            }
         }
 
         return path;

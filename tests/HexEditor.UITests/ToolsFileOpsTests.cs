@@ -15,8 +15,12 @@ public sealed class ToolsFileOpsTests
     private static Task SetPickerAsync(AppSession app, params string[] paths) =>
         app.SendAsync("setHooks", new JsonObject { ["settings"] = new JsonObject { ["openPicker"] = new JsonArray([.. paths.Select(p => (JsonNode?)p)]) } });
 
-    private static async Task SetCheckedAsync(AppSession app, string id, bool value = true) =>
+    private static async Task SetCheckedAsync(AppSession app, string id, bool value = true)
+    {
+        // ダイアログが開いても、中身 (ScrollViewer の中) の部品がまだ作られていないことがある。現れるまで待ってから設定する
+        await app.WaitForAsync(id);
         await app.SendAsync("setChecked", new JsonObject { ["id"] = id, ["value"] = value });
+    }
 
     private static async Task<string> WaitForTextAsync(AppSession app, string id, Func<string, bool> ready, string what)
     {

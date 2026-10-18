@@ -647,7 +647,7 @@ internal sealed partial class Evaluator
         "pointer_map", "allow_null", "expect", "require", "show", "show_all", "visualize", "export", "bookmark", "inspector", "docs",
 
         // .ksy の変換で使う (TPL-33)
-        "substream", "ksy_enum", "instance",
+        "substream", "ksy_enum", "instance", "ksy_root_io",
     ];
 
     internal static AttributeNode? Attr(List<AttributeNode> list, string name)

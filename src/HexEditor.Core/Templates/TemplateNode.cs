@@ -390,6 +390,9 @@ public sealed class TemplateNode
 
     internal TemplateNode? InstanceTarget { get; set; }
 
+    /// <summary>型のパラメーター (<c>struct T(auto x)</c> の x) の値。<c>parent.x</c> で参照するために、.ksy の型の引数 (<c>_parent.x</c>) が使う。</summary>
+    internal Dictionary<string, Val>? ParamValues { get; set; }
+
     internal bool ValueCached { get; set; }
 
     internal bool IsComputed => Kind == TemplateNodeKind.Computed;
