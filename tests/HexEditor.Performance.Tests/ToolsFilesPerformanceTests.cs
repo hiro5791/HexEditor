@@ -115,7 +115,8 @@ public sealed class ToolsFilesPerformanceTests(ITestOutputHelper output) : IDisp
             ? System.Text.Encoding.ASCII.GetString(TestDataCatalog.Marker(doc.Length - TestDataCatalog.MarkerLength))
             : string.Empty;
         string text = string.Concat(last!.Runs.Select(r => r.Text));
-        Assert.Contains(marker[..8], text, StringComparison.Ordinal);
+        // 目印 (17 バイト) は 16 バイトの行の境目をまたぐので、先頭の "@" を除いた 16 文字 (最後の行にぴったり入る) を探す
+        Assert.Contains(marker[1..], text, StringComparison.Ordinal);
         TimeLimit(times.Order().ElementAt(2) <= TimeSpan.FromMilliseconds(200), Summary(times));
     }
 
