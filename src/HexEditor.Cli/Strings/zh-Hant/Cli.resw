@@ -254,6 +254,7 @@
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>此處的資料無法讀取</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>命令列中無法使用</value></data>
 
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>值不是整數</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu 只能使用一個演算法。要使用多個演算法，請用 --format bsd 或 text。</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range 不能與標準輸入一起使用。</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>未知的演算法: {0}。執行 'hexed hash --algorithm list' 查看 ID。</value></data>
@@ -298,8 +299,7 @@
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>請指定 -o &lt;output&gt; 或 --in-place (以免誤改原檔案)。</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o 和 --in-place 不能同時使用。</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>輸出路徑 {0} 是目標檔案或修補檔。要取代目標檔案，請使用 --in-place。</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} 不是修補檔格式。請使用 auto、ips 或 ips32。</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: 此版本不支援 UPS、BPS 和 .hexpatch 修補檔，支援 IPS 和 IPS32。</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} 不是修補檔格式。請使用 auto、ips、ips32、ups、bps 或 hexpatch。</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} 不是可辨識的修補檔。</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: 修補檔在記錄 {1} (檔案位移 {2}) 處已損毀。</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} 不是 {1} 修補檔。</value></data>
@@ -308,6 +308,10 @@
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>修補後的 {0} 的雜湊與預期不符 (--verify-after)。未寫入任何內容。</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>已套用 {0} 筆記錄，變更了 {1} 位元組，長度變化 {2}。已寫入 {3}。</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: 修補檔在記錄 {1} 處已損毀。</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: 修補檔已損毀 ({1})。</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} 可能是為另一個檔案製作的: 修補檔中記錄的原始內容與 {1} 不一致。未寫入任何內容。</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>套用 {0} 的結果與修補檔中記錄的結果不一致。未寫入任何內容。</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} 筆記錄，將變更 {1} 位元組，長度變化 {2}，新長度 {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>請只指定 --template 和 --auto 中的一個。</value></data>

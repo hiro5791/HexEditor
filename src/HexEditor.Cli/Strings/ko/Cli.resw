@@ -255,6 +255,7 @@ PowerShell에서는 $가 들어 있는 값을 작은따옴표로 묶으세요(�
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>여기의 데이터를 읽을 수 없습니다</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>명령줄에서는 사용할 수 없습니다</value></data>
 
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>값이 정수가 아닙니다</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu에는 알고리즘이 정확히 하나 필요합니다. 여러 개는 --format bsd 또는 text를 쓰세요.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range는 표준 입력과 함께 쓸 수 없습니다.</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>알 수 없는 알고리즘: {0}. ID는 'hexed hash --algorithm list'로 확인하세요.</value></data>
@@ -299,8 +300,7 @@ PowerShell에서는 $가 들어 있는 값을 작은따옴표로 묶으세요(�
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>-o &lt;output&gt; 또는 --in-place를 지정하세요(원본 파일이 실수로 바뀌지 않도록).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o와 --in-place는 함께 쓸 수 없습니다.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>출력 경로 {0}이(가) 대상 또는 패치입니다. 대상을 교체하려면 --in-place를 쓰세요.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0}은(는) 패치 형식이 아닙니다. auto, ips, ips32 중에서 쓰세요.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: 이 버전은 UPS, BPS, .hexpatch 패치를 지원하지 않습니다. IPS와 IPS32는 지원합니다.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0}은(는) 패치 형식이 아닙니다. auto, ips, ips32, ups, bps, hexpatch 중에서 쓰세요.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0}은(는) 인식할 수 있는 패치 파일이 아닙니다.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: 패치가 레코드 {1}(파일 오프셋 {2})에서 손상되었습니다.</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0}은(는) {1} 패치가 아닙니다.</value></data>
@@ -309,6 +309,10 @@ PowerShell에서는 $가 들어 있는 값을 작은따옴표로 묶으세요(�
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>패치한 {0}의 해시가 기대한 값과 다릅니다(--verify-after). 아무것도 쓰지 않았습니다.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>레코드 {0}개를 적용했고 {1}바이트가 바뀌었으며 길이 변화는 {2}입니다. {3}에 썼습니다.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: 패치가 레코드 {1}에서 손상되었습니다.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: 패치가 손상되었습니다({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0}은(는) 다른 파일용일 수 있습니다. 패치에 기록된 원본이 {1}과(와) 일치하지 않습니다. 아무것도 쓰지 않았습니다.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>{0}을(를) 적용한 결과가 패치에 기록된 결과와 일치하지 않습니다. 아무것도 쓰지 않았습니다.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>레코드 {0}개, {1}바이트가 바뀔 예정, 길이 변화 {2}, 새 길이 {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>--template과 --auto 중 정확히 하나를 지정하세요.</value></data>
