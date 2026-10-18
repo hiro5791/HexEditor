@@ -14,6 +14,9 @@ public readonly record struct SearchMatch(long Offset, long Length, int Variant 
     public long End => Offset + Length;
 }
 
+/// <summary>結果一覧の追加の列 (<see cref="HeaderKey"/> は見出しのリソースのキー)。</summary>
+public sealed record SearchResultColumn(string HeaderKey, double Width, Func<SearchMatch, string> Cell);
+
 /// <summary>すべて検索の状態 (FIND-20 の「画面」の見出し)。</summary>
 public enum SearchResultsState
 {
@@ -208,6 +211,12 @@ public sealed class SearchResults : IDisposable
     /// <summary>元の情報が更新されて古い結果になった (テンプレートの値の検索。FIND-29 の仕様 5)。UI スレッドから呼ぶ。</summary>
     public Func<bool>? IsOutdated { get; init; }
 
+    /// <summary>結果の種類ごとの追加の列 (YARA のルール名・名前空間・タグ・メタ情報・文字列の識別子。FIND-33 の仕様 8)。</summary>
+    public IReadOnlyList<SearchResultColumn>? ExtraColumns { get; init; }
+
+    /// <summary>位置を持たない行か (文字列を含まない YARA のルール。オフセット・長さ・データを出さない。FIND-33 の仕様 8)。</summary>
+    public Func<SearchMatch, bool>? IsWithoutOffset { get; init; }
+
     /// <summary>同じ条件で、別のスナップショットを探す新しい結果 (再検索。FIND-03 の「エラー」の再検索ボタン)。</summary>
     public SearchResults Renew(DocumentSnapshot snapshot) => new(snapshot, Pattern, Options)
     {
@@ -218,6 +227,8 @@ public sealed class SearchResults : IDisposable
         CustomFindAll = CustomFindAll,
         MatchJumped = MatchJumped,
         IsOutdated = IsOutdated,
+        ExtraColumns = ExtraColumns,
+        IsWithoutOffset = IsWithoutOffset,
         MemoryLimit = MemoryLimit,
         SpillDirectory = SpillDirectory,
     };

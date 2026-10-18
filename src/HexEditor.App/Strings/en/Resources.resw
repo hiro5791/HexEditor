@@ -6833,4 +6833,218 @@ The file was not changed.</value></data>
   <data name="Patch_NoCompare" xml:space="preserve"><value>Open a comparison first.</value></data>
   <data name="Patch_NoSpace" xml:space="preserve"><value>There is not enough free space to write the patch: it needs about {0}, but only {1} is free.</value></data>
   <data name="TransformView_NoLinkedView" xml:space="preserve"><value>A linked view cannot be opened while a transform view is active. Clear the transform view first, or open the range as a copy.</value></data>
+  <data name="Menu_Data_Encrypt.Text" xml:space="preserve"><value>Encrypt...</value></data>
+  <data name="Menu_Data_Encrypt.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Data_Decrypt.Text" xml:space="preserve"><value>Decrypt...</value></data>
+  <data name="Menu_Data_Decrypt.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Compress.Text" xml:space="preserve"><value>Compress...</value></data>
+  <data name="Menu_Data_Compress.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Data_Decompress.Text" xml:space="preserve"><value>Decompress...</value></data>
+  <data name="Menu_Data_Decompress.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_SelectCompressed.Text" xml:space="preserve"><value>Select compressed data</value></data>
+  <data name="Menu_Data_SelectCompressed.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Yara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_Search_Yara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_data_encrypt" xml:space="preserve"><value>Encrypt...</value></data>
+  <data name="CmdAlias_data_encrypt" xml:space="preserve"><value>encrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_decrypt" xml:space="preserve"><value>Decrypt...</value></data>
+  <data name="CmdAlias_data_decrypt" xml:space="preserve"><value>decrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_compress" xml:space="preserve"><value>Compress...</value></data>
+  <data name="CmdAlias_data_compress" xml:space="preserve"><value>compress zlib gzip zstd lz4 xz</value></data>
+  <data name="Cmd_data_decompress" xml:space="preserve"><value>Decompress...</value></data>
+  <data name="CmdAlias_data_decompress" xml:space="preserve"><value>decompress inflate unzip zlib gzip zstd lz4 xz</value></data>
+  <data name="Cmd_data_selectCompressed" xml:space="preserve"><value>Select compressed data</value></data>
+  <data name="CmdAlias_data_selectCompressed" xml:space="preserve"><value>select compressed range deflate</value></data>
+  <data name="Cmd_data_derived_writeBack" xml:space="preserve"><value>Write back to source</value></data>
+  <data name="CmdAlias_data_derived_writeBack" xml:space="preserve"><value>write back derived recompress reencrypt</value></data>
+  <data name="Cmd_search_yara" xml:space="preserve"><value>YARA scan</value></data>
+  <data name="CmdAlias_search_yara" xml:space="preserve"><value>yara rules scan</value></data>
+  <data name="Cmd_view_panel_yara" xml:space="preserve"><value>Toggle YARA</value></data>
+  <data name="CmdAlias_view_panel_yara" xml:space="preserve"><value>yara panel</value></data>
+  <data name="Panel_Yara_Title" xml:space="preserve"><value>YARA</value></data>
+  <data name="Set_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>Decompression size to confirm (MiB)</value></data>
+  <data name="SetDesc_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>When decompressed data grows beyond this size, decompression pauses and asks whether to continue (protects against compression bombs).</value></data>
+  <data name="Set_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA: block size (MiB)</value></data>
+  <data name="SetDesc_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA scans the data in blocks of this size, overlapping each block with the last 64 KB of the previous one.</value></data>
+  <data name="Set_search_yara_timeLimitSeconds" xml:space="preserve"><value>YARA: time limit (seconds)</value></data>
+  <data name="SetDesc_search_yara_timeLimitSeconds" xml:space="preserve"><value>A scan stops at this time limit and keeps the results found so far.</value></data>
+  <data name="Codec_Destination" xml:space="preserve"><value>Write the result to</value></data>
+  <data name="Codec_DestReplace" xml:space="preserve"><value>Replace the selection</value></data>
+  <data name="Codec_DestNewTab" xml:space="preserve"><value>Open in a new tab</value></data>
+  <data name="Codec_DestReadOnly" xml:space="preserve"><value>The document is read-only, so the result opens in a new tab.</value></data>
+  <data name="Codec_DestFixedLength" xml:space="preserve"><value>The length of this document cannot change, so the result opens in a new tab.</value></data>
+  <data name="Codec_Error_MultipleRanges" xml:space="preserve"><value>This command works on a single range. Select one range.</value></data>
+  <data name="Operation_Encrypt" xml:space="preserve"><value>Encrypt</value></data>
+  <data name="Operation_Decrypt" xml:space="preserve"><value>Decrypt</value></data>
+  <data name="Operation_Compress" xml:space="preserve"><value>Compress</value></data>
+  <data name="Operation_Decompress" xml:space="preserve"><value>Decompress</value></data>
+  <data name="Operation_SelectCompressed" xml:space="preserve"><value>Select compressed data</value></data>
+  <data name="Operation_WriteBack" xml:space="preserve"><value>Write back to source</value></data>
+  <data name="Compression_Format_Deflate" xml:space="preserve"><value>deflate (raw)</value></data>
+  <data name="Compression_Format_Zlib" xml:space="preserve"><value>zlib</value></data>
+  <data name="Compression_Format_Gzip" xml:space="preserve"><value>gzip</value></data>
+  <data name="Compression_Format_Brotli" xml:space="preserve"><value>Brotli</value></data>
+  <data name="Compression_Format_Zstd" xml:space="preserve"><value>zstd</value></data>
+  <data name="Compression_Format_Lz4Frame" xml:space="preserve"><value>LZ4 (frame)</value></data>
+  <data name="Compression_Format_Lz4Block" xml:space="preserve"><value>LZ4 (block)</value></data>
+  <data name="Compression_Format_Lzma" xml:space="preserve"><value>LZMA (.lzma)</value></data>
+  <data name="Compression_Format_Xz" xml:space="preserve"><value>XZ</value></data>
+  <data name="Compress_Title" xml:space="preserve"><value>Compress</value></data>
+  <data name="Compress_Run" xml:space="preserve"><value>Compress</value></data>
+  <data name="Compress_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Compress_Level" xml:space="preserve"><value>Compression level</value></data>
+  <data name="Compress_LevelRangeText" xml:space="preserve"><value>{0}–{1} (standard {2})</value></data>
+  <data name="Compress_GzipHeader" xml:space="preserve"><value>Store the file name and modification time in the header</value></data>
+  <data name="Compress_Error_Lz4BlockLimit" xml:space="preserve"><value>The LZ4 block format holds data in a single block, so up to {0} GB can be compressed. Use the LZ4 frame format for larger data.</value></data>
+  <data name="Decompress_Title" xml:space="preserve"><value>Decompress</value></data>
+  <data name="Decompress_Run" xml:space="preserve"><value>Decompress</value></data>
+  <data name="Decompress_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Decompress_Auto" xml:space="preserve"><value>Detect automatically</value></data>
+  <data name="Decompress_Clue" xml:space="preserve"><value>Detected from the header: {0}</value></data>
+  <data name="Decompress_NoClue" xml:space="preserve"><value>The header has no format signature. If detection fails, you will be asked to choose the format.</value></data>
+  <data name="Decompress_Undetected" xml:space="preserve"><value>The format could not be detected automatically. Choose the format.</value></data>
+  <data name="Decompress_Trailing" xml:space="preserve"><value>The compressed data ends after {0} bytes; the remaining {1} bytes were not changed.</value></data>
+  <data name="Decompress_LimitTitle" xml:space="preserve"><value>Large decompressed data</value></data>
+  <data name="Decompress_LimitBody" xml:space="preserve"><value>The decompressed data has exceeded {0} (compressed size {1} MB). Continue decompressing?</value></data>
+  <data name="Decompress_LimitGiB" xml:space="preserve"><value>{0} GiB</value></data>
+  <data name="Decompress_LimitMiB" xml:space="preserve"><value>{0} MiB</value></data>
+  <data name="Decompress_LimitContinue" xml:space="preserve"><value>Continue</value></data>
+  <data name="Decompress_LimitAbort" xml:space="preserve"><value>Abort</value></data>
+  <data name="Decompress_ChecksumMismatch" xml:space="preserve"><value>The {0} checksum does not match, so the decompressed data may be damaged. Use the result anyway?</value></data>
+  <data name="Decompress_UseResult" xml:space="preserve"><value>Use the result</value></data>
+  <data name="Decompress_Corrupt" xml:space="preserve"><value>The compressed data is damaged at offset {0}.</value></data>
+  <data name="Decompress_Truncated" xml:space="preserve"><value>The compressed data ends unexpectedly at offset {0}.</value></data>
+  <data name="Decompress_Unsupported" xml:space="preserve"><value>This compressed data uses a feature that is not supported: {0}</value></data>
+  <data name="Decompress_MemoryLimit" xml:space="preserve"><value>Decompressing this data needs too much memory.</value></data>
+  <data name="Decompress_PartialAvailable" xml:space="preserve"><value>{0} bytes were decompressed before the error.</value></data>
+  <data name="Decompress_OpenPartial" xml:space="preserve"><value>Open the decompressed part in a new tab</value></data>
+  <data name="SelectCompressed_Found" xml:space="preserve"><value>Selected {0} compressed data: {1} bytes (decompressed size {2} bytes).</value></data>
+  <data name="SelectCompressed_NotFound" xml:space="preserve"><value>No compressed data could be read from the cursor position.</value></data>
+  <data name="Cipher_EncryptTitle" xml:space="preserve"><value>Encrypt</value></data>
+  <data name="Cipher_DecryptTitle" xml:space="preserve"><value>Decrypt</value></data>
+  <data name="Cipher_Encrypt" xml:space="preserve"><value>Encrypt</value></data>
+  <data name="Cipher_Decrypt" xml:space="preserve"><value>Decrypt</value></data>
+  <data name="Cipher_Algorithm" xml:space="preserve"><value>Algorithm</value></data>
+  <data name="Cipher_Algorithm_Aes128" xml:space="preserve"><value>AES-128</value></data>
+  <data name="Cipher_Algorithm_Aes192" xml:space="preserve"><value>AES-192</value></data>
+  <data name="Cipher_Algorithm_Aes256" xml:space="preserve"><value>AES-256</value></data>
+  <data name="Cipher_Algorithm_ChaCha20Poly1305" xml:space="preserve"><value>ChaCha20-Poly1305</value></data>
+  <data name="Cipher_Algorithm_TripleDes" xml:space="preserve"><value>3DES (TripleDES)</value></data>
+  <data name="Cipher_Algorithm_Des" xml:space="preserve"><value>DES</value></data>
+  <data name="Cipher_Algorithm_Rc4" xml:space="preserve"><value>RC4</value></data>
+  <data name="Cipher_Mode" xml:space="preserve"><value>Mode</value></data>
+  <data name="Cipher_Mode_None" xml:space="preserve"><value>—</value></data>
+  <data name="Cipher_Mode_Ecb" xml:space="preserve"><value>ECB</value></data>
+  <data name="Cipher_Mode_Cbc" xml:space="preserve"><value>CBC</value></data>
+  <data name="Cipher_Mode_Cfb8" xml:space="preserve"><value>CFB8</value></data>
+  <data name="Cipher_Mode_Cfb128" xml:space="preserve"><value>CFB128</value></data>
+  <data name="Cipher_Mode_Ctr" xml:space="preserve"><value>CTR</value></data>
+  <data name="Cipher_Mode_Gcm" xml:space="preserve"><value>GCM</value></data>
+  <data name="Cipher_Padding" xml:space="preserve"><value>Padding</value></data>
+  <data name="Cipher_Padding_Pkcs7" xml:space="preserve"><value>PKCS#7</value></data>
+  <data name="Cipher_Padding_Zeros" xml:space="preserve"><value>Zeros</value></data>
+  <data name="Cipher_Padding_AnsiX923" xml:space="preserve"><value>ANSI X9.23</value></data>
+  <data name="Cipher_Padding_Iso10126" xml:space="preserve"><value>ISO 10126</value></data>
+  <data name="Cipher_Padding_None" xml:space="preserve"><value>None</value></data>
+  <data name="Cipher_InsecureText" xml:space="preserve"><value>This is not a secure method. Use it only for compatibility.</value></data>
+  <data name="Cipher_Unsupported" xml:space="preserve"><value>{0} is not available on this version of Windows.</value></data>
+  <data name="Cipher_AeadLimit" xml:space="preserve"><value>Authenticated encryption (GCM, ChaCha20-Poly1305) cannot be used for data larger than 1 GiB.</value></data>
+  <data name="Cipher_KeySource" xml:space="preserve"><value>Key</value></data>
+  <data name="Cipher_KeyHex" xml:space="preserve"><value>Enter in hex</value></data>
+  <data name="Cipher_KeyPassphrase" xml:space="preserve"><value>Make from a passphrase (PBKDF2-HMAC-SHA256)</value></data>
+  <data name="Cipher_Key" xml:space="preserve"><value>Key (hex)</value></data>
+  <data name="Cipher_Passphrase" xml:space="preserve"><value>Passphrase</value></data>
+  <data name="Cipher_ShowKey" xml:space="preserve"><value>Show</value></data>
+  <data name="Cipher_Iterations" xml:space="preserve"><value>Iterations</value></data>
+  <data name="Cipher_Salt" xml:space="preserve"><value>Salt (hex)</value></data>
+  <data name="Cipher_SaltPlaceholder" xml:space="preserve"><value>Empty: generate 16 random bytes</value></data>
+  <data name="Cipher_SaltGenerated" xml:space="preserve"><value>A random salt was generated. Keep it to decrypt later: {0}</value></data>
+  <data name="Cipher_Iv" xml:space="preserve"><value>IV (hex)</value></data>
+  <data name="Cipher_IvBytes" xml:space="preserve"><value>IV (hex, {0} bytes)</value></data>
+  <data name="Cipher_NonceBytes" xml:space="preserve"><value>Nonce (hex, {0} bytes)</value></data>
+  <data name="Cipher_RandomIv" xml:space="preserve"><value>Generate randomly</value></data>
+  <data name="Cipher_Aad" xml:space="preserve"><value>Additional authenticated data (hex, optional)</value></data>
+  <data name="Cipher_TagAppend" xml:space="preserve"><value>Append the authentication tag to the result</value></data>
+  <data name="Cipher_TagSeparate" xml:space="preserve"><value>Only show the authentication tag</value></data>
+  <data name="Cipher_TagFromEnd" xml:space="preserve"><value>Tag: the last 16 bytes of the selection</value></data>
+  <data name="Cipher_TagHex" xml:space="preserve"><value>Tag: enter in hex</value></data>
+  <data name="Cipher_Tag" xml:space="preserve"><value>Authentication tag (hex, 16 bytes)</value></data>
+  <data name="Cipher_TagResult" xml:space="preserve"><value>Authentication tag</value></data>
+  <data name="Cipher_Error_KeyHex" xml:space="preserve"><value>Enter the key as hex bytes.</value></data>
+  <data name="Cipher_Error_KeyLength" xml:space="preserve"><value>The {0} key is {1} bytes (you entered {2} bytes).</value></data>
+  <data name="Cipher_Error_IvLength" xml:space="preserve"><value>The {0} IV is {1} bytes (you entered {2} bytes).</value></data>
+  <data name="Cipher_Error_NonceLength" xml:space="preserve"><value>The {0} nonce is {1} bytes (you entered {2} bytes).</value></data>
+  <data name="Cipher_Error_TagLength" xml:space="preserve"><value>The authentication tag is {0} bytes (you entered {1} bytes).</value></data>
+  <data name="Cipher_Error_MissingTag" xml:space="preserve"><value>The selection is shorter than the 16-byte authentication tag.</value></data>
+  <data name="Cipher_Error_BlockMultiple" xml:space="preserve"><value>The length must be a multiple of the block size ({0} bytes).</value></data>
+  <data name="Cipher_Error_Settings" xml:space="preserve"><value>The settings are not valid.</value></data>
+  <data name="Cipher_Error_Padding" xml:space="preserve"><value>The padding is not correct. The key, IV, or mode may be wrong.</value></data>
+  <data name="Cipher_DecryptWithoutPadding" xml:space="preserve"><value>Decrypt without padding</value></data>
+  <data name="Cipher_Error_Authentication" xml:space="preserve"><value>Authentication failed. The key, nonce, additional data, or data is different. The data was not changed.</value></data>
+  <data name="Derived_TabRange" xml:space="preserve"><value> [0x{0}-0x{1} {2}]</value></data>
+  <data name="Derived_Label_Decompressed" xml:space="preserve"><value>decompressed</value></data>
+  <data name="Derived_Label_Decrypted" xml:space="preserve"><value>decrypted</value></data>
+  <data name="Derived_Label_Compressed" xml:space="preserve"><value>compressed</value></data>
+  <data name="Derived_Label_Encrypted" xml:space="preserve"><value>encrypted</value></data>
+  <data name="Derived_Label_Partial" xml:space="preserve"><value>partly decompressed</value></data>
+  <data name="Derived_Band" xml:space="preserve"><value>Source: {0}, range {1}–{2}, {3}</value></data>
+  <data name="Derived_Transform_Decompressed" xml:space="preserve"><value>{0} decompression</value></data>
+  <data name="Derived_Transform_Decrypted" xml:space="preserve"><value>{0} decryption</value></data>
+  <data name="Derived_WriteBack.Content" xml:space="preserve"><value>Write back to source</value></data>
+  <data name="Derived_NotDerived" xml:space="preserve"><value>This tab was not opened by decompressing or decrypting.</value></data>
+  <data name="Derived_ParentClosed" xml:space="preserve"><value>The source document was closed, so this tab can no longer be written back. It is now a normal new document.</value></data>
+  <data name="Derived_TooDeep" xml:space="preserve"><value>Derived documents can be nested up to {0} levels.</value></data>
+  <data name="Derived_WriteBackTitle" xml:space="preserve"><value>Write back to source</value></data>
+  <data name="Derived_WriteBackRun" xml:space="preserve"><value>Write back</value></data>
+  <data name="Derived_RangeChanged" xml:space="preserve"><value>The source range has been changed since this derived document was opened.</value></data>
+  <data name="Derived_Overwrite" xml:space="preserve"><value>Overwrite and write back</value></data>
+  <data name="Derived_KeyPrompt" xml:space="preserve"><value>Enter the key again to write back ({0}). The key is not kept.</value></data>
+  <data name="Derived_NewNonce" xml:space="preserve"><value>Generate a new nonce (recommended)</value></data>
+  <data name="Derived_SameNonce" xml:space="preserve"><value>Use the same nonce as when opened</value></data>
+  <data name="Derived_NonceNoteText" xml:space="preserve"><value>Reusing a nonce with the same key is not secure. Where the nonce is stored depends on the data format, so update it yourself after writing back.</value></data>
+  <data name="Derived_NewNonceValue" xml:space="preserve"><value>New nonce (hex)</value></data>
+  <data name="Derived_SaltRequired" xml:space="preserve"><value>Enter the salt that was used when the data was encrypted.</value></data>
+  <data name="Derived_FixedLength" xml:space="preserve"><value>The source document cannot change its length, so it was not written back (the length changes from {0} to {1} bytes).</value></data>
+  <data name="Derived_Written" xml:space="preserve"><value>Written back to the source document.</value></data>
+  <data name="Yara_RuleSet" xml:space="preserve"><value>Rule set</value></data>
+  <data name="Yara_NoRuleSet" xml:space="preserve"><value>(not saved)</value></data>
+  <data name="Yara_SaveSet" xml:space="preserve"><value>Save set...</value></data>
+  <data name="Yara_SaveRun" xml:space="preserve"><value>Save</value></data>
+  <data name="Yara_SetName" xml:space="preserve"><value>Rule set name</value></data>
+  <data name="Yara_DeleteSet" xml:space="preserve"><value>Delete set</value></data>
+  <data name="Yara_AddFiles" xml:space="preserve"><value>Add rule files...</value></data>
+  <data name="Yara_AddFolder" xml:space="preserve"><value>Add folder...</value></data>
+  <data name="Yara_RemoveFiles" xml:space="preserve"><value>Remove</value></data>
+  <data name="Yara_Files" xml:space="preserve"><value>Rule files</value></data>
+  <data name="Yara_Externals" xml:space="preserve"><value>External variables (name=value, one per line)</value></data>
+  <data name="Yara_Scope" xml:space="preserve"><value>Scope</value></data>
+  <data name="Yara_Scope_Document" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Yara_Scope_Selection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Yara_Scope_Folder" xml:space="preserve"><value>Files in a folder</value></data>
+  <data name="Yara_Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="Yara_Mask" xml:space="preserve"><value>Files</value></data>
+  <data name="Yara_Scan" xml:space="preserve"><value>Scan</value></data>
+  <data name="Yara_KindName" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_LimitationText" xml:space="preserve"><value>The data is scanned in blocks of {0} MiB that overlap by {1} KB. In a document larger than one block, strings longer than the overlap and conditions that span blocks may not be found.</value></data>
+  <data name="Yara_Scanning" xml:space="preserve"><value>Scanning...</value></data>
+  <data name="Yara_NoRules" xml:space="preserve"><value>Add rule files first.</value></data>
+  <data name="Yara_CompileErrors" xml:space="preserve"><value>The rules have {0} error(s). The scan did not start.</value></data>
+  <data name="Yara_Matched" xml:space="preserve"><value>{0} rule(s) matched.</value></data>
+  <data name="Yara_TimedOut" xml:space="preserve"><value>The time limit was reached.</value></data>
+  <data name="Yara_Cancelled" xml:space="preserve"><value>The scan was cancelled.</value></data>
+  <data name="Yara_TooManyMatches" xml:space="preserve"><value>Too many matches; only the first 1,000,000 are kept for: {0}</value></data>
+  <data name="Yara_Console" xml:space="preserve"><value>console:</value></data>
+  <data name="Yara_InternalError" xml:space="preserve"><value>YARA internal error ({0}): {1}</value></data>
+  <data name="Yara_DetailsText" xml:space="preserve"><value>Rule: {0}  Namespace: {1}  Tags: {2}&#xA;Meta:&#xA;{3}</value></data>
+  <data name="Yara_ErrorsName" xml:space="preserve"><value>Rule errors</value></data>
+  <data name="Yara_FolderResultsName" xml:space="preserve"><value>Matches in files</value></data>
+  <data name="Yara_FolderMissing" xml:space="preserve"><value>Enter an existing folder.</value></data>
+  <data name="Yara_FolderError" xml:space="preserve"><value>The folder could not be read: {0}</value></data>
+  <data name="Yara_FolderDone" xml:space="preserve"><value>Scanned {0} file(s); {1} file(s) matched.</value></data>
+  <data name="Yara_AnnotationSource" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_Column_Rule" xml:space="preserve"><value>Rule</value></data>
+  <data name="Yara_Column_Namespace" xml:space="preserve"><value>Namespace</value></data>
+  <data name="Yara_Column_Tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="Yara_Column_Meta" xml:space="preserve"><value>Meta</value></data>
+  <data name="Yara_Column_String" xml:space="preserve"><value>String</value></data>
 </root>

@@ -180,6 +180,7 @@ public static class BuiltInCommands
         new("search.multiFile", "search") { DefaultBindings = [K("Ctrl+Shift+F")] },
         new("search.multiFileReplace", "search"),
         new("search.strings", "search") { Condition = "documentOpen" },
+        new("search.yara", "search"),
         new("search.multiTerm", "search") { Condition = "documentOpen" },
         new("search.mismatch", "search") { Condition = "documentOpen" },
 
@@ -324,6 +325,7 @@ public static class BuiltInCommands
         new("view.panel.clipboard", "view"),
         new("view.panel.formatIssues", "view"),
         new("view.panel.strings", "view"),
+        new("view.panel.yara", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
 
@@ -426,6 +428,14 @@ public static class BuiltInCommands
         new("data.transformView.xor", "data") { Condition = "documentOpen" },
         new("data.transformView.clear", "data") { Condition = "documentOpen" },
         new("data.transformView.applyToData", "data") { Condition = "documentOpen" },
+
+        // 暗号化と復号 (EDIT-40)、圧縮と展開 (EDIT-41)、派生ドキュメントの書き戻し (EDIT-46)。ショートカットは既定なし。
+        new("data.encrypt", "data") { Condition = "documentOpen" },
+        new("data.decrypt", "data") { Condition = "documentOpen" },
+        new("data.compress", "data") { Condition = "documentOpen" },
+        new("data.decompress", "data") { Condition = "documentOpen" },
+        new("data.selectCompressed", "data") { Condition = "documentOpen" },
+        new("data.derived.writeBack", "data") { Condition = "documentOpen" },
 
         // 分岐する履歴 (EDIT-21)。ショートカットは既定なし。
         new("edit.history.save", "edit") { Condition = "documentOpen" },

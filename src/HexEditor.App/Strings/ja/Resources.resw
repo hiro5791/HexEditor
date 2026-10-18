@@ -6833,4 +6833,218 @@
   <data name="Patch_NoCompare" xml:space="preserve"><value>先に比較を開いてください。</value></data>
   <data name="Patch_NoSpace" xml:space="preserve"><value>パッチを書き出す空き容量が足りません。約 {0} 必要ですが、空きは {1} です。</value></data>
   <data name="TransformView_NoLinkedView" xml:space="preserve"><value>変換ビューの間は連動ビューを開けません。先に変換ビューを解除するか、範囲をコピーとして開いてください。</value></data>
+  <data name="Menu_Data_Encrypt.Text" xml:space="preserve"><value>暗号化...</value></data>
+  <data name="Menu_Data_Encrypt.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Data_Decrypt.Text" xml:space="preserve"><value>復号...</value></data>
+  <data name="Menu_Data_Decrypt.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Compress.Text" xml:space="preserve"><value>圧縮...</value></data>
+  <data name="Menu_Data_Compress.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Data_Decompress.Text" xml:space="preserve"><value>展開...</value></data>
+  <data name="Menu_Data_Decompress.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_SelectCompressed.Text" xml:space="preserve"><value>圧縮データの範囲を選択</value></data>
+  <data name="Menu_Data_SelectCompressed.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Yara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_Search_Yara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_data_encrypt" xml:space="preserve"><value>暗号化...</value></data>
+  <data name="CmdAlias_data_encrypt" xml:space="preserve"><value>あんごうか aes</value></data>
+  <data name="Cmd_data_decrypt" xml:space="preserve"><value>復号...</value></data>
+  <data name="CmdAlias_data_decrypt" xml:space="preserve"><value>ふくごう aes</value></data>
+  <data name="Cmd_data_compress" xml:space="preserve"><value>圧縮...</value></data>
+  <data name="CmdAlias_data_compress" xml:space="preserve"><value>あっしゅく zlib gzip zstd</value></data>
+  <data name="Cmd_data_decompress" xml:space="preserve"><value>展開...</value></data>
+  <data name="CmdAlias_data_decompress" xml:space="preserve"><value>てんかい zlib gzip zstd</value></data>
+  <data name="Cmd_data_selectCompressed" xml:space="preserve"><value>圧縮データの範囲を選択</value></data>
+  <data name="CmdAlias_data_selectCompressed" xml:space="preserve"><value>あっしゅくでーたのはんいをせんたく</value></data>
+  <data name="Cmd_data_derived_writeBack" xml:space="preserve"><value>元に書き戻す</value></data>
+  <data name="CmdAlias_data_derived_writeBack" xml:space="preserve"><value>もとにかきもどす</value></data>
+  <data name="Cmd_search_yara" xml:space="preserve"><value>YARA スキャン</value></data>
+  <data name="CmdAlias_search_yara" xml:space="preserve"><value>やら すきゃん るーる</value></data>
+  <data name="Cmd_view_panel_yara" xml:space="preserve"><value>YARA の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_yara" xml:space="preserve"><value>やら ぱねる</value></data>
+  <data name="Panel_Yara_Title" xml:space="preserve"><value>YARA</value></data>
+  <data name="Set_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>展開の確認を出す大きさ (MiB)</value></data>
+  <data name="SetDesc_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>展開後のデータがこの大きさを超えたら一時停止し、続けるかを確かめる (圧縮爆弾への対策)。</value></data>
+  <data name="Set_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA: ブロックの大きさ (MiB)</value></data>
+  <data name="SetDesc_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA はデータをこの大きさのブロックに分けてスキャンする。ブロックは前のブロックの末尾 64 KB と重ねる。</value></data>
+  <data name="Set_search_yara_timeLimitSeconds" xml:space="preserve"><value>YARA: 時間の上限 (秒)</value></data>
+  <data name="SetDesc_search_yara_timeLimitSeconds" xml:space="preserve"><value>スキャンはこの時間で止め、それまでの結果を残す。</value></data>
+  <data name="Codec_Destination" xml:space="preserve"><value>結果の書き込み先</value></data>
+  <data name="Codec_DestReplace" xml:space="preserve"><value>選択範囲を置き換える</value></data>
+  <data name="Codec_DestNewTab" xml:space="preserve"><value>新しいタブで開く</value></data>
+  <data name="Codec_DestReadOnly" xml:space="preserve"><value>読み取り専用のため、結果は新しいタブで開きます。</value></data>
+  <data name="Codec_DestFixedLength" xml:space="preserve"><value>このドキュメントは長さを変えられないため、結果は新しいタブで開きます。</value></data>
+  <data name="Codec_Error_MultipleRanges" xml:space="preserve"><value>このコマンドは 1 つの範囲に使います。範囲を 1 つ選んでください。</value></data>
+  <data name="Operation_Encrypt" xml:space="preserve"><value>暗号化</value></data>
+  <data name="Operation_Decrypt" xml:space="preserve"><value>復号</value></data>
+  <data name="Operation_Compress" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Operation_Decompress" xml:space="preserve"><value>展開</value></data>
+  <data name="Operation_SelectCompressed" xml:space="preserve"><value>圧縮データの範囲を選択</value></data>
+  <data name="Operation_WriteBack" xml:space="preserve"><value>元に書き戻す</value></data>
+  <data name="Compression_Format_Deflate" xml:space="preserve"><value>deflate (raw)</value></data>
+  <data name="Compression_Format_Zlib" xml:space="preserve"><value>zlib</value></data>
+  <data name="Compression_Format_Gzip" xml:space="preserve"><value>gzip</value></data>
+  <data name="Compression_Format_Brotli" xml:space="preserve"><value>Brotli</value></data>
+  <data name="Compression_Format_Zstd" xml:space="preserve"><value>zstd</value></data>
+  <data name="Compression_Format_Lz4Frame" xml:space="preserve"><value>LZ4 (フレーム)</value></data>
+  <data name="Compression_Format_Lz4Block" xml:space="preserve"><value>LZ4 (ブロック)</value></data>
+  <data name="Compression_Format_Lzma" xml:space="preserve"><value>LZMA (.lzma)</value></data>
+  <data name="Compression_Format_Xz" xml:space="preserve"><value>XZ</value></data>
+  <data name="Compress_Title" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Compress_Run" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Compress_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Compress_Level" xml:space="preserve"><value>圧縮レベル</value></data>
+  <data name="Compress_LevelRangeText" xml:space="preserve"><value>{0}〜{1} (標準 {2})</value></data>
+  <data name="Compress_GzipHeader" xml:space="preserve"><value>ファイル名と更新日時をヘッダに入れる</value></data>
+  <data name="Compress_Error_Lz4BlockLimit" xml:space="preserve"><value>LZ4 のブロック形式は 1 つのブロックで表すため、圧縮できるのは {0} GB までです。大きなデータには LZ4 のフレーム形式を使ってください。</value></data>
+  <data name="Decompress_Title" xml:space="preserve"><value>展開</value></data>
+  <data name="Decompress_Run" xml:space="preserve"><value>展開</value></data>
+  <data name="Decompress_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Decompress_Auto" xml:space="preserve"><value>自動判別</value></data>
+  <data name="Decompress_Clue" xml:space="preserve"><value>先頭のバイトからの判別: {0}</value></data>
+  <data name="Decompress_NoClue" xml:space="preserve"><value>先頭のバイトに形式の手がかりがありません。判別できなかった場合は形式を選んでください。</value></data>
+  <data name="Decompress_Undetected" xml:space="preserve"><value>形式を自動判別できませんでした。形式を選んでください。</value></data>
+  <data name="Decompress_Trailing" xml:space="preserve"><value>圧縮データは {0} バイトで終わり、残りの {1} バイトは変更しませんでした。</value></data>
+  <data name="Decompress_LimitTitle" xml:space="preserve"><value>展開後のデータが大きくなっています</value></data>
+  <data name="Decompress_LimitBody" xml:space="preserve"><value>展開後のデータが {0} を超えました (圧縮前 {1} MB)。展開を続けますか?</value></data>
+  <data name="Decompress_LimitGiB" xml:space="preserve"><value>{0} GiB</value></data>
+  <data name="Decompress_LimitMiB" xml:space="preserve"><value>{0} MiB</value></data>
+  <data name="Decompress_LimitContinue" xml:space="preserve"><value>続ける</value></data>
+  <data name="Decompress_LimitAbort" xml:space="preserve"><value>中止する</value></data>
+  <data name="Decompress_ChecksumMismatch" xml:space="preserve"><value>{0} のチェックサムが一致しません。展開した内容が壊れている可能性があります。結果を使いますか?</value></data>
+  <data name="Decompress_UseResult" xml:space="preserve"><value>結果を使う</value></data>
+  <data name="Decompress_Corrupt" xml:space="preserve"><value>オフセット {0} で圧縮データが壊れています。</value></data>
+  <data name="Decompress_Truncated" xml:space="preserve"><value>オフセット {0} で圧縮データが途中で終わっています。</value></data>
+  <data name="Decompress_Unsupported" xml:space="preserve"><value>対応していない機能を使う圧縮データです: {0}</value></data>
+  <data name="Decompress_MemoryLimit" xml:space="preserve"><value>この圧縮データの展開には、メモリが多く必要すぎます。</value></data>
+  <data name="Decompress_PartialAvailable" xml:space="preserve"><value>誤りの前までに {0} バイトを展開しました。</value></data>
+  <data name="Decompress_OpenPartial" xml:space="preserve"><value>展開できた分を新しいタブで開く</value></data>
+  <data name="SelectCompressed_Found" xml:space="preserve"><value>{0} の圧縮データを選択しました: {1} バイト (展開後 {2} バイト)。</value></data>
+  <data name="SelectCompressed_NotFound" xml:space="preserve"><value>カーソル位置から圧縮データとして読めませんでした。</value></data>
+  <data name="Cipher_EncryptTitle" xml:space="preserve"><value>暗号化</value></data>
+  <data name="Cipher_DecryptTitle" xml:space="preserve"><value>復号</value></data>
+  <data name="Cipher_Encrypt" xml:space="preserve"><value>暗号化</value></data>
+  <data name="Cipher_Decrypt" xml:space="preserve"><value>復号</value></data>
+  <data name="Cipher_Algorithm" xml:space="preserve"><value>アルゴリズム</value></data>
+  <data name="Cipher_Algorithm_Aes128" xml:space="preserve"><value>AES-128</value></data>
+  <data name="Cipher_Algorithm_Aes192" xml:space="preserve"><value>AES-192</value></data>
+  <data name="Cipher_Algorithm_Aes256" xml:space="preserve"><value>AES-256</value></data>
+  <data name="Cipher_Algorithm_ChaCha20Poly1305" xml:space="preserve"><value>ChaCha20-Poly1305</value></data>
+  <data name="Cipher_Algorithm_TripleDes" xml:space="preserve"><value>3DES (TripleDES)</value></data>
+  <data name="Cipher_Algorithm_Des" xml:space="preserve"><value>DES</value></data>
+  <data name="Cipher_Algorithm_Rc4" xml:space="preserve"><value>RC4</value></data>
+  <data name="Cipher_Mode" xml:space="preserve"><value>モード</value></data>
+  <data name="Cipher_Mode_None" xml:space="preserve"><value>—</value></data>
+  <data name="Cipher_Mode_Ecb" xml:space="preserve"><value>ECB</value></data>
+  <data name="Cipher_Mode_Cbc" xml:space="preserve"><value>CBC</value></data>
+  <data name="Cipher_Mode_Cfb8" xml:space="preserve"><value>CFB8</value></data>
+  <data name="Cipher_Mode_Cfb128" xml:space="preserve"><value>CFB128</value></data>
+  <data name="Cipher_Mode_Ctr" xml:space="preserve"><value>CTR</value></data>
+  <data name="Cipher_Mode_Gcm" xml:space="preserve"><value>GCM</value></data>
+  <data name="Cipher_Padding" xml:space="preserve"><value>パディング</value></data>
+  <data name="Cipher_Padding_Pkcs7" xml:space="preserve"><value>PKCS#7</value></data>
+  <data name="Cipher_Padding_Zeros" xml:space="preserve"><value>ゼロ埋め</value></data>
+  <data name="Cipher_Padding_AnsiX923" xml:space="preserve"><value>ANSI X9.23</value></data>
+  <data name="Cipher_Padding_Iso10126" xml:space="preserve"><value>ISO 10126</value></data>
+  <data name="Cipher_Padding_None" xml:space="preserve"><value>なし</value></data>
+  <data name="Cipher_InsecureText" xml:space="preserve"><value>安全ではない方式です。互換のためだけに使ってください。</value></data>
+  <data name="Cipher_Unsupported" xml:space="preserve"><value>{0} はこの Windows では使えません。</value></data>
+  <data name="Cipher_AeadLimit" xml:space="preserve"><value>認証付き暗号 (GCM・ChaCha20-Poly1305) は 1 GiB を超えるデータには使えません。</value></data>
+  <data name="Cipher_KeySource" xml:space="preserve"><value>鍵</value></data>
+  <data name="Cipher_KeyHex" xml:space="preserve"><value>Hex で入力</value></data>
+  <data name="Cipher_KeyPassphrase" xml:space="preserve"><value>パスフレーズから作る (PBKDF2-HMAC-SHA256)</value></data>
+  <data name="Cipher_Key" xml:space="preserve"><value>鍵 (Hex)</value></data>
+  <data name="Cipher_Passphrase" xml:space="preserve"><value>パスフレーズ</value></data>
+  <data name="Cipher_ShowKey" xml:space="preserve"><value>表示</value></data>
+  <data name="Cipher_Iterations" xml:space="preserve"><value>反復回数</value></data>
+  <data name="Cipher_Salt" xml:space="preserve"><value>ソルト (Hex)</value></data>
+  <data name="Cipher_SaltPlaceholder" xml:space="preserve"><value>空欄: 16 バイトの乱数を作る</value></data>
+  <data name="Cipher_SaltGenerated" xml:space="preserve"><value>乱数のソルトを作りました。復号に必要なので控えてください: {0}</value></data>
+  <data name="Cipher_Iv" xml:space="preserve"><value>IV (Hex)</value></data>
+  <data name="Cipher_IvBytes" xml:space="preserve"><value>IV (Hex、{0} バイト)</value></data>
+  <data name="Cipher_NonceBytes" xml:space="preserve"><value>ナンス (Hex、{0} バイト)</value></data>
+  <data name="Cipher_RandomIv" xml:space="preserve"><value>乱数で生成</value></data>
+  <data name="Cipher_Aad" xml:space="preserve"><value>追加認証データ (Hex、省略可)</value></data>
+  <data name="Cipher_TagAppend" xml:space="preserve"><value>認証タグを結果の末尾に付ける</value></data>
+  <data name="Cipher_TagSeparate" xml:space="preserve"><value>認証タグを別の欄に表示するだけ</value></data>
+  <data name="Cipher_TagFromEnd" xml:space="preserve"><value>タグ: 選択範囲の末尾 16 バイト</value></data>
+  <data name="Cipher_TagHex" xml:space="preserve"><value>タグ: Hex で入力</value></data>
+  <data name="Cipher_Tag" xml:space="preserve"><value>認証タグ (Hex、16 バイト)</value></data>
+  <data name="Cipher_TagResult" xml:space="preserve"><value>認証タグ</value></data>
+  <data name="Cipher_Error_KeyHex" xml:space="preserve"><value>鍵は Hex のバイト列で入力してください。</value></data>
+  <data name="Cipher_Error_KeyLength" xml:space="preserve"><value>{0} の鍵は {1} バイトです (入力は {2} バイト)。</value></data>
+  <data name="Cipher_Error_IvLength" xml:space="preserve"><value>{0} の IV は {1} バイトです (入力は {2} バイト)。</value></data>
+  <data name="Cipher_Error_NonceLength" xml:space="preserve"><value>{0} のナンスは {1} バイトです (入力は {2} バイト)。</value></data>
+  <data name="Cipher_Error_TagLength" xml:space="preserve"><value>認証タグは {0} バイトです (入力は {1} バイト)。</value></data>
+  <data name="Cipher_Error_MissingTag" xml:space="preserve"><value>選択範囲が 16 バイトの認証タグより短いです。</value></data>
+  <data name="Cipher_Error_BlockMultiple" xml:space="preserve"><value>長さはブロック長 ({0} バイト) の倍数にしてください。</value></data>
+  <data name="Cipher_Error_Settings" xml:space="preserve"><value>設定が正しくありません。</value></data>
+  <data name="Cipher_Error_Padding" xml:space="preserve"><value>パディングが正しくありません。鍵・IV・モードが違う可能性があります。</value></data>
+  <data name="Cipher_DecryptWithoutPadding" xml:space="preserve"><value>パディングなしで復号する</value></data>
+  <data name="Cipher_Error_Authentication" xml:space="preserve"><value>認証に失敗しました。鍵・ナンス・AAD・データのいずれかが違います。データは変えていません。</value></data>
+  <data name="Derived_TabRange" xml:space="preserve"><value> [0x{0}-0x{1} {2}]</value></data>
+  <data name="Derived_Label_Decompressed" xml:space="preserve"><value>展開</value></data>
+  <data name="Derived_Label_Decrypted" xml:space="preserve"><value>復号</value></data>
+  <data name="Derived_Label_Compressed" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Derived_Label_Encrypted" xml:space="preserve"><value>暗号化</value></data>
+  <data name="Derived_Label_Partial" xml:space="preserve"><value>展開の途中まで</value></data>
+  <data name="Derived_Band" xml:space="preserve"><value>元: {0}、範囲 {1}–{2}、{3}</value></data>
+  <data name="Derived_Transform_Decompressed" xml:space="preserve"><value>{0} の展開</value></data>
+  <data name="Derived_Transform_Decrypted" xml:space="preserve"><value>{0} の復号</value></data>
+  <data name="Derived_WriteBack.Content" xml:space="preserve"><value>元に書き戻す</value></data>
+  <data name="Derived_NotDerived" xml:space="preserve"><value>このタブは展開・復号で開いたものではありません。</value></data>
+  <data name="Derived_ParentClosed" xml:space="preserve"><value>元のドキュメントが閉じられたため、元に書き戻せなくなりました。このタブは通常の新規ドキュメントです。</value></data>
+  <data name="Derived_TooDeep" xml:space="preserve"><value>派生ドキュメントの入れ子は {0} 段までです。</value></data>
+  <data name="Derived_WriteBackTitle" xml:space="preserve"><value>元に書き戻す</value></data>
+  <data name="Derived_WriteBackRun" xml:space="preserve"><value>書き戻す</value></data>
+  <data name="Derived_RangeChanged" xml:space="preserve"><value>元の範囲は派生ドキュメントを開いた後に変更されています。</value></data>
+  <data name="Derived_Overwrite" xml:space="preserve"><value>上書きして書き戻す</value></data>
+  <data name="Derived_KeyPrompt" xml:space="preserve"><value>書き戻すには鍵をもう一度入力してください ({0})。鍵は保持していません。</value></data>
+  <data name="Derived_NewNonce" xml:space="preserve"><value>新しいナンスを生成する (推奨)</value></data>
+  <data name="Derived_SameNonce" xml:space="preserve"><value>開いたときと同じナンスを使う</value></data>
+  <data name="Derived_NonceNoteText" xml:space="preserve"><value>同じ鍵で同じナンスを使い直すのは安全ではありません。ナンスの保存位置はデータの形式によるため、書き戻した後に書き込み先を確かめてください。</value></data>
+  <data name="Derived_NewNonceValue" xml:space="preserve"><value>新しいナンス (Hex)</value></data>
+  <data name="Derived_SaltRequired" xml:space="preserve"><value>暗号化したときのソルトを入力してください。</value></data>
+  <data name="Derived_FixedLength" xml:space="preserve"><value>元のドキュメントは長さを変えられないため、書き戻しませんでした (長さが {0} から {1} バイトに変わります)。</value></data>
+  <data name="Derived_Written" xml:space="preserve"><value>元のドキュメントに書き戻しました。</value></data>
+  <data name="Yara_RuleSet" xml:space="preserve"><value>ルールセット</value></data>
+  <data name="Yara_NoRuleSet" xml:space="preserve"><value>(保存していない)</value></data>
+  <data name="Yara_SaveSet" xml:space="preserve"><value>セットを保存...</value></data>
+  <data name="Yara_SaveRun" xml:space="preserve"><value>保存</value></data>
+  <data name="Yara_SetName" xml:space="preserve"><value>ルールセットの名前</value></data>
+  <data name="Yara_DeleteSet" xml:space="preserve"><value>セットを削除</value></data>
+  <data name="Yara_AddFiles" xml:space="preserve"><value>ルールファイルを追加...</value></data>
+  <data name="Yara_AddFolder" xml:space="preserve"><value>フォルダを追加...</value></data>
+  <data name="Yara_RemoveFiles" xml:space="preserve"><value>削除</value></data>
+  <data name="Yara_Files" xml:space="preserve"><value>ルールファイル</value></data>
+  <data name="Yara_Externals" xml:space="preserve"><value>外部変数 (name=value を 1 行に 1 つ)</value></data>
+  <data name="Yara_Scope" xml:space="preserve"><value>範囲</value></data>
+  <data name="Yara_Scope_Document" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Yara_Scope_Selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Yara_Scope_Folder" xml:space="preserve"><value>フォルダ内のファイル</value></data>
+  <data name="Yara_Folder" xml:space="preserve"><value>フォルダ</value></data>
+  <data name="Yara_Mask" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Yara_Scan" xml:space="preserve"><value>スキャン</value></data>
+  <data name="Yara_KindName" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_LimitationText" xml:space="preserve"><value>データは {0} MiB のブロックに分け、{1} KB ずつ重ねてスキャンします。1 ブロックに収まらないドキュメントでは、重なり幅を超える長さの文字列の一致や、ブロックをまたぐ条件が見つからないことがあります。</value></data>
+  <data name="Yara_Scanning" xml:space="preserve"><value>スキャンしています...</value></data>
+  <data name="Yara_NoRules" xml:space="preserve"><value>先にルールファイルを追加してください。</value></data>
+  <data name="Yara_CompileErrors" xml:space="preserve"><value>ルールに {0} 件の誤りがあります。スキャンは始めていません。</value></data>
+  <data name="Yara_Matched" xml:space="preserve"><value>{0} 件のルールが一致しました。</value></data>
+  <data name="Yara_TimedOut" xml:space="preserve"><value>時間の上限に達しました。</value></data>
+  <data name="Yara_Cancelled" xml:space="preserve"><value>スキャンを取り消しました。</value></data>
+  <data name="Yara_TooManyMatches" xml:space="preserve"><value>一致が多すぎるため、先頭の 1,000,000 件だけを残しました: {0}</value></data>
+  <data name="Yara_Console" xml:space="preserve"><value>console:</value></data>
+  <data name="Yara_InternalError" xml:space="preserve"><value>YARA の内部エラー ({0}): {1}</value></data>
+  <data name="Yara_DetailsText" xml:space="preserve"><value>ルール: {0}  名前空間: {1}  タグ: {2}&#xA;メタ情報:&#xA;{3}</value></data>
+  <data name="Yara_ErrorsName" xml:space="preserve"><value>ルールの誤り</value></data>
+  <data name="Yara_FolderResultsName" xml:space="preserve"><value>ファイルごとの一致</value></data>
+  <data name="Yara_FolderMissing" xml:space="preserve"><value>あるフォルダを入力してください。</value></data>
+  <data name="Yara_FolderError" xml:space="preserve"><value>フォルダを読めませんでした: {0}</value></data>
+  <data name="Yara_FolderDone" xml:space="preserve"><value>{0} 個のファイルをスキャンし、{1} 個が一致しました。</value></data>
+  <data name="Yara_AnnotationSource" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_Column_Rule" xml:space="preserve"><value>ルール名</value></data>
+  <data name="Yara_Column_Namespace" xml:space="preserve"><value>名前空間</value></data>
+  <data name="Yara_Column_Tags" xml:space="preserve"><value>タグ</value></data>
+  <data name="Yara_Column_Meta" xml:space="preserve"><value>メタ情報</value></data>
+  <data name="Yara_Column_String" xml:space="preserve"><value>文字列</value></data>
 </root>

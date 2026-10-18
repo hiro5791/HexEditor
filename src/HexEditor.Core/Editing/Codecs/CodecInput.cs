@@ -115,7 +115,7 @@ public enum CompressedDataError
 /// (新しいタブで開くかを選べる。使わなければ <see cref="Engine.EditContent.Dispose"/> で消す)。
 /// </summary>
 public sealed class CompressedDataException(CompressedDataError error, long inputOffset, string? detail = null)
-    : IOException($"圧縮データの誤り ({error}) 位置 {inputOffset}" + (detail is null ? string.Empty : ": " + detail))
+    : Exception($"圧縮データの誤り ({error}) 位置 {inputOffset}" + (detail is null ? string.Empty : ": " + detail))
 {
     public CompressedDataError Error { get; } = error;
 

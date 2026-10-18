@@ -178,6 +178,8 @@ public sealed partial class MainWindow
         RegisterDataCommands();
         RegisterTransformViewCommands();
         RegisterPatchCommands();
+        RegisterDataCodecCommands();
+        RegisterYaraCommands();
         RegisterBranchingHistoryCommands();
 
         // ---- 検索・移動 ----

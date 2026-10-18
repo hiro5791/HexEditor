@@ -175,6 +175,14 @@ public static class BuiltInSettings
         new(View.EditingSettings.ClipboardHistoryCountKey, SettingCategories.Editing, SettingKind.Int, 20) { Min = 0, Max = 100, Order = 54 },
         new(View.EditingSettings.UserClipboardPersistKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 55 },
 
+        // 展開の確認を出す大きさ (MiB。EDIT-41 の仕様 7: 圧縮爆弾への対策)。
+        new(Editing.Codecs.CodecSettings.DecompressConfirmKey, SettingCategories.Editing, SettingKind.Int, Editing.Codecs.CodecSettings.DefaultDecompressConfirmMiB)
+        {
+            Min = 1,
+            Max = Editing.Codecs.CodecSettings.MaxDecompressConfirmMiB,
+            Order = 56,
+        },
+
         // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
         new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
         new("search.findAll.limit", SettingCategories.Search, SettingKind.Int, 1_000_000) { Min = 1_000, Max = 100_000_000, Order = 20 },
@@ -209,6 +217,20 @@ public static class BuiltInSettings
             Min = 1,
             Max = Search.MultiFileSearch.MaxParallelism,
             Order = 130,
+        },
+
+        // YARA のブロックの大きさ (MiB) と時間の上限 (秒) (FIND-33 の仕様 6・7)。
+        new(Search.Yara.YaraSettings.BlockSizeKey, SettingCategories.Search, SettingKind.Int, Search.Yara.YaraSettings.DefaultBlockSizeMiB)
+        {
+            Min = Search.Yara.YaraSettings.MinBlockSizeMiB,
+            Max = Search.Yara.YaraSettings.MaxBlockSizeMiB,
+            Order = 140,
+        },
+        new(Search.Yara.YaraSettings.TimeLimitKey, SettingCategories.Search, SettingKind.Int, Search.Yara.YaraSettings.DefaultTimeLimitSeconds)
+        {
+            Min = 1,
+            Max = Search.Yara.YaraSettings.MaxTimeLimitSeconds,
+            Order = 150,
         },
 
         // ---- ファイルと保存 ----

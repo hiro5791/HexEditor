@@ -43,6 +43,9 @@ public static class CompressionFormats
 
     public static CompressionFormatInfo Info(CompressionFormat format) => All.First(f => f.Format == format);
 
+    /// <summary>XZ・LZMA に使う liblzma を読み込めるか (読み込めなければ一覧で選べないようにする)。</summary>
+    public static bool LzmaAvailable() => LibLzma.IsAvailable(out _);
+
     /// <summary>
     /// 先頭のバイトから、手がかりの一致する形式を確からしい順に返す (一致がなければ空)。手がかりが一致しても展開に失敗した場合は
     /// 呼び出し側が次の候補を試し、すべて失敗したら「自動判別できませんでした」とする (仕様 3)。

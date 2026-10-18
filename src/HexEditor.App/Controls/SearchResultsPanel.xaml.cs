@@ -793,7 +793,11 @@ public sealed partial class SearchResultsPanel : UserControl
     private IEnumerable<(string Key, double Width, bool Mono)> VisibleColumns() =>
         Columns.Where(c => c.Kind == ColumnKind.Always || (c.Kind == ColumnKind.Numeric && IsNumeric) || (c.Kind == ColumnKind.Documents && ShowsDocuments)
                 || (c.Kind == ColumnKind.Variant && HasVariant) || (c.Kind == ColumnKind.Strings && IsStrings))
-            .Select(c => (c.Key, c.Kind == ColumnKind.Always && c.Key == "SearchResults_Column_Text" && IsStrings ? 400 : c.Width, c.Mono));
+            .Select(c => (c.Key, c.Kind == ColumnKind.Always && c.Key == "SearchResults_Column_Text" && IsStrings ? 400 : c.Width, c.Mono))
+            .Concat(ExtraColumns.Select(c => (c.HeaderKey, c.Width, false)));
+
+    /// <summary>結果の種類ごとの追加の列 (YARA のルール名など。FIND-33 の仕様 8)。</summary>
+    private IReadOnlyList<SearchResultColumn> ExtraColumns => _groups.Count > 0 ? _groups[0].Results.ExtraColumns ?? [] : [];
 
     private void BuildHeaders()
     {
@@ -806,7 +810,7 @@ public sealed partial class SearchResultsPanel : UserControl
             string text = key == VariantColumnKey ? VariantHeader
                 : key == "SearchResults_Column_Text" && IsStrings ? Loc.Get("SearchResults_Column_String") : Loc.Get(key);
             FrameworkElement header;
-            if (Columns.First(c => c.Key == key).Sort is { } sort)
+            if (Columns.FirstOrDefault(c => c.Key == key).Sort is { } sort)
             {
                 // 押すとその列で並べ替える。もう一度押すと逆順 (00-overview 9 章の「結果一覧」)。
                 string arrow = sort == _sortKey && IsOrdered ? (_sortDescending ? " \u25BC" : " \u25B2") : string.Empty;
@@ -933,7 +937,7 @@ public sealed partial class SearchResultsPanel : UserControl
             // 番号の列は結果の番号 (見つかった順) を出す (並べ替えても一致と番号の対応は変わらない)。
             if (data is not null)
             {
-                row.Set(Cells(Map(index), g, data));
+                row.Set(Cells(Map(index), g, data, g.Results[local]));
             }
             else
             {
@@ -950,7 +954,7 @@ public sealed partial class SearchResultsPanel : UserControl
         UpdateAccessibleName();
     }
 
-    private string[] Cells(long index, Group g, SearchResultRow r)
+    private string[] Cells(long index, Group g, SearchResultRow r, SearchMatch match)
     {
         var cells = new List<string> { (index + 1).ToString("N0", CultureInfo.CurrentCulture) };
         if (ShowsDocuments)
@@ -958,15 +962,23 @@ public sealed partial class SearchResultsPanel : UserControl
             cells.Add(g.Name);
         }
 
-        cells.AddRange(
-        [
-            StatusFormat.Hex(r.Offset),
-            r.Length.ToString("N0", CultureInfo.CurrentCulture),
-            r.Hex,
-            r.Text,
-            r.Before + " | " + r.After,
-            StatusText(r.Status),
-        ]);
+        if (g.Results.IsWithoutOffset?.Invoke(match) == true)
+        {
+            // 位置を持たない行 (条件だけの YARA のルール)。オフセット・長さ・データは出さない。
+            cells.AddRange(["\u2014", string.Empty, string.Empty, string.Empty, string.Empty, StatusText(r.Status)]);
+        }
+        else
+        {
+            cells.AddRange(
+            [
+                StatusFormat.Hex(r.Offset),
+                r.Length.ToString("N0", CultureInfo.CurrentCulture),
+                r.Hex,
+                r.Text,
+                r.Before + " | " + r.After,
+                StatusText(r.Status),
+            ]);
+        }
         if (HasVariant)
         {
             cells.Add(r.Variant ?? string.Empty);
@@ -980,6 +992,11 @@ public sealed partial class SearchResultsPanel : UserControl
         if (IsStrings)
         {
             cells.Add(r.Chars?.ToString("N0", CultureInfo.CurrentCulture) ?? string.Empty);
+        }
+
+        foreach (SearchResultColumn extra in g.Results.ExtraColumns ?? [])
+        {
+            cells.Add(extra.Cell(match));
         }
 
         return [.. cells];
