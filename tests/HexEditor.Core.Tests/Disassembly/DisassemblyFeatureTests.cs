@@ -192,9 +192,12 @@ public sealed class DisassemblyFeatureTests
         // 構文の差 (ptr の表記、空白、大文字・小文字、先頭の 0) をそろえる。
         static string Normalize(string text)
         {
-            string t = text.ToLowerInvariant().Replace("ptr ", string.Empty, StringComparison.Ordinal).Replace(" ", string.Empty, StringComparison.Ordinal);
+            string t = text.ToLowerInvariant().Replace("ptr ", string.Empty, StringComparison.Ordinal);
             t = System.Text.RegularExpressions.Regex.Replace(t, @"\b0*([0-9a-f]+)h\b", "$1");
-            return System.Text.RegularExpressions.Regex.Replace(t, @"\b0+([0-9a-f]+)\b", "$1");
+            t = System.Text.RegularExpressions.Regex.Replace(t, @"\b0+([0-9a-f]+)\b", "$1");
+
+            // 数値の表記をそろえてから空白を取る (先に取ると、命令名とくっついて語の境界が見えない)
+            return t.Replace(" ", string.Empty, StringComparison.Ordinal);
         }
     }
 

@@ -176,7 +176,7 @@ function Build-PatchApplier {
     $applierStaging = Join-Path $staging 'PatchApplier'
     foreach ($a in 'x64', 'arm64') {
         $dir = Join-Path $applierStaging "publish-$a"
-        # dotnet の出力が関数の戻り値に混ざらないよう Out-Host に流す
+        # send dotnet output to the host so it does not become part of the return value
         Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.PatchApplier/HexEditor.PatchApplier.csproj'),
             '-c', $Configuration, '-r', "win-$a", "-p:HexVersion=$Version", '-nologo', '-o', $dir) | Out-Host
         $exe = Join-Path $dir 'HexPatchApply.exe'

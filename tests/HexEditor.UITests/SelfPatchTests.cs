@@ -90,12 +90,14 @@ public sealed class SelfPatchTests
     private static async Task<(Process Process, Window Next)> StartAndSelectAsync(string exe, string target)
     {
         Process process = Process.Start(new ProcessStartInfo(exe) { UseShellExecute = false, WorkingDirectory = Path.GetDirectoryName(exe)! })!;
-        Window intro = await WaitWindowAsync(process, w => w.FindFirstDescendant(cf => cf.ByAutomationId("1148")) is null, "the intro message");
+        Window intro = await WaitWindowAsync(process, w => w.FindFirstDescendant(cf => cf.ByAutomationId("1148")) is null && AllText(w).Length > 0, "the intro message");
+        string introText = AllText(intro);
         Press(intro, "1");
         Window open = await WaitWindowAsync(process, w => w.FindFirstDescendant(cf => cf.ByAutomationId("1148")) is not null, "the file dialog");
         open.FindFirstDescendant(cf => cf.ByAutomationId("1148"))!.AsComboBox().EditableText = target;
         Press(open, "1");
-        Window next = await WaitWindowAsync(process, w => w.FindFirstDescendant(cf => cf.ByAutomationId("1148")) is null && !ReferenceEquals(w, open), "the next message");
+        Window next = await WaitWindowAsync(process, w => w.FindFirstDescendant(cf => cf.ByAutomationId("1148")) is null && AllText(w) is { Length: > 0 } text && text != introText,
+            "the next message");
         return (process, next);
     }
 
