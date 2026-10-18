@@ -244,6 +244,7 @@ public sealed partial class MainWindow
         RegisterCompareCommands();
         RegisterStatisticsCommands();
         RegisterTemplateCommands();
+        RegisterDisassemblyCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();

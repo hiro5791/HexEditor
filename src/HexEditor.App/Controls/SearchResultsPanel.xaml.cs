@@ -645,6 +645,7 @@ public sealed partial class SearchResultsPanel : UserControl
         VariantColumn.Term => Loc.Get("SearchResults_Column_Term"),
         VariantColumn.Interpretation => Loc.Get("SearchResults_Column_Interpretation"),
         VariantColumn.TemplateField => Loc.Get("SearchResults_Column_TemplateField"),
+        VariantColumn.Instruction => Loc.Get("SearchResults_Column_Instruction"),
         _ => Loc.Get("SearchResults_Column_Endian"),
     };
 

@@ -113,7 +113,7 @@ public static class Demangler
     /// </summary>
     public static IReadOnlyList<DemangleResult> DemangleLines(string text, DemangleOptions options, CancellationToken token = default)
     {
-        string[] lines = text.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        string[] lines = text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n').Split('\n');
         int count = lines.Length > 1 && lines[^1].Length == 0 ? lines.Length - 1 : lines.Length;
         var results = new DemangleResult[count];
         for (int i = 0; i < count; i++)

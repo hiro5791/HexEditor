@@ -1276,6 +1276,20 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
                 await page.GoToDefinitionAsync();
                 return;
             }
+
+            // 逆アセンブルパネルにフォーカスがあれば、選んだ行の命令の分岐先へ移動する (06 の ANA-25 の仕様 4)。
+            if (n is DisassemblyPanel && DisasmVm.SelectedRow is { } disasmRow)
+            {
+                GoToDisasmTarget(disasmRow);
+                return;
+            }
+        }
+
+        // テンプレートの適用がなく、逆アセンブルパネルが開いていれば、カーソル位置を含む命令の分岐先へ移動する (ANA-25 の仕様 4)。
+        if (Vm.Selected is { } d && DocumentTemplates.Find(d.Document) is not { Entries.Count: > 0 })
+        {
+            DisassemblyF12();
+            return;
         }
 
         if (Vm.Selected is { } doc && Editor is { } editor && DocumentTemplates.Find(doc.Document) is { Entries.Count: > 0 } templates)

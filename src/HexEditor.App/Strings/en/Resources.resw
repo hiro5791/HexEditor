@@ -6667,4 +6667,123 @@ Type: {4}</value></data>
   <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>Disassembler unavailable</value></data>
   <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>Go to branch target</value></data>
   <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>Architecture</value></data>
+  <data name="Panel_Disassembly_Title" xml:space="preserve"><value>Disassembly</value></data>
+  <data name="Menu_View_Disassembly.Text" xml:space="preserve"><value>Disassembly</value></data>
+  <data name="Menu_Analysis_Disassemble.Text" xml:space="preserve"><value>Disassemble</value></data>
+  <data name="Menu_Analysis_Disassemble.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Analysis_Demangle.Text" xml:space="preserve"><value>Demangle...</value></data>
+  <data name="Menu_Analysis_Demangle.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="HexView_Menu_Disassemble" xml:space="preserve"><value>Disassemble</value></data>
+  <data name="HexView_Menu_Demangle" xml:space="preserve"><value>Demangle</value></data>
+  <data name="ToolPage_Demangle" xml:space="preserve"><value>Demangle</value></data>
+  <data name="SearchResults_Column_Instruction" xml:space="preserve"><value>Instruction</value></data>
+  <data name="Disasm_ListingName" xml:space="preserve"><value>Disassembly listing</value></data>
+  <data name="Disasm_Architecture" xml:space="preserve"><value>Architecture</value></data>
+  <data name="Disasm_Mode" xml:space="preserve"><value>Mode</value></data>
+  <data name="Disasm_Endian" xml:space="preserve"><value>Endianness</value></data>
+  <data name="Disasm_Slice" xml:space="preserve"><value>Architecture in the universal binary</value></data>
+  <data name="Disasm_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Disasm_StartTip" xml:space="preserve"><value>Where to start disassembling</value></data>
+  <data name="Disasm_StartCursor" xml:space="preserve"><value>Cursor position</value></data>
+  <data name="Disasm_StartSelection" xml:space="preserve"><value>Start of the selection</value></data>
+  <data name="Disasm_StartOffset" xml:space="preserve"><value>Offset...</value></data>
+  <data name="Disasm_StartAddress" xml:space="preserve"><value>Virtual address...</value></data>
+  <data name="Disasm_StartEntry" xml:space="preserve"><value>Entry point</value></data>
+  <data name="Disasm_BaseAuto" xml:space="preserve"><value>Base: automatic</value></data>
+  <data name="Disasm_BaseAddress" xml:space="preserve"><value>Base address (empty for automatic)</value></data>
+  <data name="Disasm_Syntax" xml:space="preserve"><value>Syntax (x86)</value></data>
+  <data name="Disasm_Options" xml:space="preserve"><value>Display options</value></data>
+  <data name="Disasm_Follow" xml:space="preserve"><value>Follow cursor</value></data>
+  <data name="Disasm_FindPattern" xml:space="preserve"><value>Find instructions</value></data>
+  <data name="Disasm_PatternPlaceholder" xml:space="preserve"><value>e.g. push rbp; mov rbp, rsp</value></data>
+  <data name="Disasm_PatternRegex" xml:space="preserve"><value>Regular expression</value></data>
+  <data name="Disasm_PatternFindAll" xml:space="preserve"><value>Find all</value></data>
+  <data name="Disasm_PatternClose" xml:space="preserve"><value>Close</value></data>
+  <data name="Disasm_Sections" xml:space="preserve"><value>Sections</value></data>
+  <data name="Disasm_Symbols" xml:space="preserve"><value>Symbols</value></data>
+  <data name="Disasm_Methods" xml:space="preserve"><value>Types and methods</value></data>
+  <data name="Disasm_SymbolFilter" xml:space="preserve"><value>Filter by name</value></data>
+  <data name="Disasm_SymbolKind_Function" xml:space="preserve"><value>Function</value></data>
+  <data name="Disasm_SymbolKind_Data" xml:space="preserve"><value>Data</value></data>
+  <data name="Disasm_SymbolKind_Import" xml:space="preserve"><value>Import</value></data>
+  <data name="Disasm_SymbolKind_Export" xml:space="preserve"><value>Export</value></data>
+  <data name="Disasm_PluginArchitecture" xml:space="preserve"><value>From plugin: {0}</value></data>
+  <data name="Disasm_EngineError" xml:space="preserve"><value>Can't load the disassembly engine: {0}</value></data>
+  <data name="Disasm_MostlyData" xml:space="preserve"><value>This may not be code for this architecture.</value></data>
+  <data name="Disasm_HeaderIssue" xml:space="preserve"><value>Part of the header can't be interpreted: {0}</value></data>
+  <data name="Disasm_HeaderIssue_OutOfRange" xml:space="preserve"><value>data outside the file</value></data>
+  <data name="Disasm_HeaderIssue_Unreadable" xml:space="preserve"><value>unreadable bytes</value></data>
+  <data name="Disasm_HeaderIssue_StringOutOfRange" xml:space="preserve"><value>a name outside the file</value></data>
+  <data name="Disasm_HeaderIssue_TooManySections" xml:space="preserve"><value>too many sections</value></data>
+  <data name="Disasm_HeaderIssue_SectionTableOutside" xml:space="preserve"><value>the section table is outside the file</value></data>
+  <data name="Disasm_HeaderIssue_SectionOutside" xml:space="preserve"><value>a section is outside the file</value></data>
+  <data name="Disasm_HeaderIssue_SectionNamesBroken" xml:space="preserve"><value>broken section names</value></data>
+  <data name="Disasm_HeaderIssue_ProgramHeadersOutside" xml:space="preserve"><value>the program headers are outside the file</value></data>
+  <data name="Disasm_HeaderIssue_ExportTableBroken" xml:space="preserve"><value>broken export table</value></data>
+  <data name="Disasm_HeaderIssue_ImportTableBroken" xml:space="preserve"><value>broken import table</value></data>
+  <data name="Disasm_HeaderIssue_DelayImportTableBroken" xml:space="preserve"><value>broken delay-load import table</value></data>
+  <data name="Disasm_HeaderIssue_ExceptionTableBroken" xml:space="preserve"><value>broken exception table</value></data>
+  <data name="Disasm_HeaderIssue_RvaOutside" xml:space="preserve"><value>an address outside the sections</value></data>
+  <data name="Disasm_HeaderIssue_SymbolTableBroken" xml:space="preserve"><value>broken symbol table</value></data>
+  <data name="Disasm_HeaderIssue_NoStringTable" xml:space="preserve"><value>missing string table</value></data>
+  <data name="Disasm_HeaderIssue_PltBroken" xml:space="preserve"><value>broken PLT relocations</value></data>
+  <data name="Disasm_HeaderIssue_FatHeaderBroken" xml:space="preserve"><value>broken universal binary header</value></data>
+  <data name="Disasm_HeaderIssue_SliceOutside" xml:space="preserve"><value>an architecture slice is outside the file</value></data>
+  <data name="Disasm_HeaderIssue_LoadCommandsBroken" xml:space="preserve"><value>broken load commands</value></data>
+  <data name="Disasm_HeaderIssue_StubsBroken" xml:space="preserve"><value>broken stubs</value></data>
+  <data name="Disasm_DotNetMessage" xml:space="preserve"><value>This is a .NET assembly. You can disassemble its methods as MSIL.</value></data>
+  <data name="Disasm_DotNetAction" xml:space="preserve"><value>Show MSIL</value></data>
+  <data name="Disasm_MetadataIssue" xml:space="preserve"><value>Part of the metadata can't be read.</value></data>
+  <data name="Disasm_MenuAssemble" xml:space="preserve"><value>Assemble...</value></data>
+  <data name="Disasm_MenuCopy" xml:space="preserve"><value>Copy</value></data>
+  <data name="Disasm_NoTarget" xml:space="preserve"><value>This instruction has no branch target that can be determined.</value></data>
+  <data name="Disasm_ExternalFunction" xml:space="preserve"><value>External function: {0}</value></data>
+  <data name="Disasm_TargetOutside" xml:space="preserve"><value>The branch target {0} isn't in the file.</value></data>
+  <data name="Disasm_NotExecutable" xml:space="preserve"><value>The document isn't an executable (PE, ELF or Mach-O).</value></data>
+  <data name="Disasm_NoEntryPoint" xml:space="preserve"><value>The executable has no entry point.</value></data>
+  <data name="Disasm_NotDotNet" xml:space="preserve"><value>The document isn't a .NET assembly.</value></data>
+  <data name="Disasm_NotForMsil" xml:space="preserve"><value>Not available for MSIL.</value></data>
+  <data name="Disasm_AssembleX86Only" xml:space="preserve"><value>In-place assembling is available only for x86 and x64.</value></data>
+  <data name="Disasm_Go" xml:space="preserve"><value>Go</value></data>
+  <data name="Disasm_OutOfDocument" xml:space="preserve"><value>The offset is outside the document.</value></data>
+  <data name="Disasm_VirtualAddress" xml:space="preserve"><value>Virtual address</value></data>
+  <data name="Disasm_NoSection" xml:space="preserve"><value>The address isn't in any section.</value></data>
+  <data name="Disasm_AddressResolved" xml:space="preserve"><value>Offset {0} ({1})</value></data>
+  <data name="Disasm_ReferencesTo" xml:space="preserve"><value>References to {0}</value></data>
+  <data name="Disasm_ReferencesKind" xml:space="preserve"><value>References</value></data>
+  <data name="Disasm_PatternKind" xml:space="preserve"><value>Instruction pattern</value></data>
+  <data name="Disasm_PatternError" xml:space="preserve"><value>Column {0}: {1}</value></data>
+  <data name="Disasm_PatternError_Empty" xml:space="preserve"><value>there is no instruction in the pattern</value></data>
+  <data name="Disasm_PatternError_Range" xml:space="preserve"><value>invalid {n} range</value></data>
+  <data name="Disasm_PatternError_Brace" xml:space="preserve"><value>unmatched brace</value></data>
+  <data name="Disasm_PatternError_Regex" xml:space="preserve"><value>invalid regular expression</value></data>
+  <data name="Disasm_PatternEstimate" xml:space="preserve"><value>Searching will take about {0} seconds.</value></data>
+  <data name="Disasm_PatternNotFound" xml:space="preserve"><value>No match.</value></data>
+  <data name="Disasm_AssemblyFile" xml:space="preserve"><value>Assembly listing</value></data>
+  <data name="Disasm_Exported" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Disasm_TipLength" xml:space="preserve"><value>Length: {0} bytes</value></data>
+  <data name="Disasm_TipOperands" xml:space="preserve"><value>Operands: {0}</value></data>
+  <data name="Disasm_TipRead" xml:space="preserve"><value>Registers read: {0}</value></data>
+  <data name="Disasm_TipWritten" xml:space="preserve"><value>Registers written: {0}</value></data>
+  <data name="Disasm_TipGroups" xml:space="preserve"><value>Groups: {0}</value></data>
+  <data name="Disasm_AssembleInput" xml:space="preserve"><value>New instructions (separate with ;)</value></data>
+  <data name="Disasm_AssembleFillNop" xml:space="preserve"><value>Fill the rest with NOP (0x90)</value></data>
+  <data name="Disasm_AssembleKeep" xml:space="preserve"><value>Keep the remaining bytes</value></data>
+  <data name="Disasm_AssembleWrite" xml:space="preserve"><value>Write</value></data>
+  <data name="Disasm_AssembleResult" xml:space="preserve"><value>{0} ({1} bytes)</value></data>
+  <data name="Disasm_AssembleOverwrites" xml:space="preserve"><value>This also overwrites: {0}</value></data>
+  <data name="Disasm_AssembleError" xml:space="preserve"><value>Can't assemble ({0}): {1}</value></data>
+  <data name="Disasm_AssembleError_Syntax" xml:space="preserve"><value>syntax error</value></data>
+  <data name="Disasm_AssembleError_UnknownMnemonic" xml:space="preserve"><value>unknown instruction</value></data>
+  <data name="Disasm_AssembleError_Operands" xml:space="preserve"><value>invalid operands</value></data>
+  <data name="Disasm_AssembleError_Encode" xml:space="preserve"><value>can't be encoded</value></data>
+  <data name="Disasm_UndoAssemble" xml:space="preserve"><value>Assemble</value></data>
+  <data name="Demangle_Input" xml:space="preserve"><value>Mangled names (one per line)</value></data>
+  <data name="Demangle_InputPlaceholder" xml:space="preserve"><value>_ZN3foo3barEi</value></data>
+  <data name="Demangle_Output" xml:space="preserve"><value>Result</value></data>
+  <data name="Demangle_ShortNames" xml:space="preserve"><value>Short names (no parameter or return types)</value></data>
+  <data name="Demangle_RustHash" xml:space="preserve"><value>Show Rust hashes</value></data>
+  <data name="Demangle_Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (can't demangle)</value></data>
+  <data name="Demangle_Converting" xml:space="preserve"><value>Converting...</value></data>
 </root>

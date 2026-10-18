@@ -21,6 +21,9 @@ public enum VariantColumn
 
     /// <summary>テンプレートのフィールドのパスと値 (FIND-29 の仕様 3)。</summary>
     TemplateField,
+
+    /// <summary>命令 (逆アセンブルの相互参照・命令パターン検索。06 の ANA-25 の仕様 7、ANA-28 の仕様 6)。</summary>
+    Instruction,
 }
 
 /// <summary>
