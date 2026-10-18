@@ -69,6 +69,18 @@ public sealed partial class MainWindow
         return settings;
     }
 
+    private static bool HasSavedPrintBytesPerRow()
+    {
+        try
+        {
+            return JsonNode.Parse(AppState.GetString(PrintDefaultsKey, "{}")) is JsonObject json && json.ContainsKey("bytesPerRow");
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return false;
+        }
+    }
+
     private static PrintColor LightBookmarkColor(BookmarkColor color)
     {
         if (color.IsCustom)
@@ -157,6 +169,13 @@ public sealed partial class MainWindow
         }
 
         PrintSettings settings = LoadPrintDefaults(mode);
+
+        // 1 行のバイト数の既定は画面と同じ (「既定として保存」した値があればそちらを使う。TOOL-01 の仕様 2)。
+        if (!HasSavedPrintBytesPerRow())
+        {
+            settings = settings with { BytesPerRow = Math.Clamp(doc.Editor.BytesPerRow, 4, 64) };
+        }
+
         bool firstTime = true;
         while (true)
         {

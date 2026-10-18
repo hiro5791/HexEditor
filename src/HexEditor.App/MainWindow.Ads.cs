@@ -116,6 +116,7 @@ public sealed partial class MainWindow
 
         _adsButtons.Clear();
         AddAdsButton(table, "Choose", "Ads_Choose", () => _ = ChooseAdsFileAsync());
+        AddAdsButton(table, "ChooseFolder", "Ads_ChooseFolder", () => _ = ChooseAdsFolderAsync());
         AddAdsButton(table, "Open", "Ads_Open", () => _ = OpenSelectedStreamAsync());
         AddAdsButton(table, "Create", "Ads_Create", () => _ = CreateStreamAsync());
         AddAdsButton(table, "Rename", "Ads_Rename", () => _ = RenameStreamAsync());
@@ -150,9 +151,12 @@ public sealed partial class MainWindow
 
         AdsRow? row = SelectedAdsRow;
         bool has = row is not null && _adsFile is not null && _adsSupported;
+
+        // フォルダのストリームは一覧・作成・削除などができるが、ドキュメントとしては開けない (TOOL-21 の仕様 5)。
+        bool isFile = _adsFile is not null && File.Exists(_adsFile);
         bool writable = !WriteBlockMode.IsEnabled && _adsSupported && _adsFile is not null;
         bool named = row is { Info.IsDefault: false };
-        _adsButtons["Open"].IsEnabled = has;
+        _adsButtons["Open"].IsEnabled = has && isFile;
         _adsButtons["Create"].IsEnabled = writable;
         _adsButtons["Rename"].IsEnabled = writable && has && named;
         _adsButtons["Delete"].IsEnabled = writable && has && named;
@@ -231,6 +235,14 @@ public sealed partial class MainWindow
     private async Task ChooseAdsFileAsync()
     {
         if ((await PickFilesAsync("HexEditor.AdsFile", multiple: false)).FirstOrDefault() is { } picked)
+        {
+            LoadAds(picked);
+        }
+    }
+
+    private async Task ChooseAdsFolderAsync()
+    {
+        if (await PickFolderToolAsync("HexEditor.AdsFolder") is { } picked)
         {
             LoadAds(picked);
         }
@@ -320,7 +332,7 @@ public sealed partial class MainWindow
         }
 
         LoadAds(file);
-        if (open)
+        if (open && File.Exists(file))
         {
             await OpenStreamAsync(file, name);
         }

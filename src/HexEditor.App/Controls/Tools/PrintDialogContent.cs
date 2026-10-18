@@ -56,6 +56,7 @@ internal sealed class PrintDialogContent : UserControl
     private readonly TextBlock _error = ToolParts.ErrorText("Print_Error");
     private readonly IReadOnlyList<PaperKind> _papers;
     private bool _loading;
+    private readonly IReadOnlyList<int> _bytesOptions;
 
     public PrintDialogContent(PrintDialogMode mode, PrintSettings initial, ViewSettings view, IReadOnlyList<(long Start, long Length)> selection, long documentLength,
         IReadOnlyList<string> printers, IExpressionContext context, PrintPreview preview)
@@ -127,9 +128,17 @@ internal sealed class PrintDialogContent : UserControl
         _fontSize = DialogParts.Combo("Print_FontSize", Loc.Get("Print_FontSize"), PrintSettings.FontSizes.Select(s => s.ToString("0.##", CultureInfo.CurrentCulture) + " pt"),
             Math.Max(0, PrintSettings.FontSizes.ToList().IndexOf(Math.Round(initial.FontSize))));
         _fontSize.MinWidth = 100;
-        int[] bytes = [0, 4, 8, 12, 16, 24, 32, 48, 64];
+        // 1 行のバイト数の選択肢。画面の値 (4〜64) が一覧にない値 (例: 20) でも選べるよう、一覧に足す。
+        var bytes = new List<int> { 0, 4, 8, 12, 16, 24, 32, 48, 64 };
+        if (initial.BytesPerRow is >= 4 and <= 64 && !bytes.Contains(initial.BytesPerRow))
+        {
+            bytes.Add(initial.BytesPerRow);
+            bytes.Sort();
+        }
+
+        _bytesOptions = bytes;
         _bytesPerRow = DialogParts.Combo("Print_BytesPerRow", Loc.Get("Print_BytesPerRow"),
-            bytes.Select(b => b == 0 ? Loc.Get("Print_FitToPaper") : b.ToString(CultureInfo.CurrentCulture)), Math.Max(0, Array.IndexOf(bytes, initial.BytesPerRow)));
+            bytes.Select(b => b == 0 ? Loc.Get("Print_FitToPaper") : b.ToString(CultureInfo.CurrentCulture)), Math.Max(0, bytes.IndexOf(initial.BytesPerRow)));
         _bytesPerRow.MinWidth = 140;
         _font.SelectionChanged += (_, _) => Changed();
         _fontSize.SelectionChanged += (_, _) => Changed();
@@ -310,8 +319,6 @@ internal sealed class PrintDialogContent : UserControl
             offsets = (start, length);
         }
 
-        int[] sizes = [.. PrintSettings.FontSizes.Select(s => (int)s)];
-        int[] bytes = [0, 4, 8, 12, 16, 24, 32, 48, 64];
         return new PrintSettings
         {
             Range = kind,
@@ -326,7 +333,7 @@ internal sealed class PrintDialogContent : UserControl
             MarginRightMm = margins[3],
             FontFamily = _font.SelectedItem as string ?? SystemFontCatalog.DefaultFamily,
             FontSize = PrintSettings.FontSizes[Math.Max(0, _fontSize.SelectedIndex)],
-            BytesPerRow = bytes[Math.Max(0, _bytesPerRow.SelectedIndex)],
+            BytesPerRow = _bytesOptions[Math.Max(0, _bytesPerRow.SelectedIndex)],
             View = _view with { ShowOffsetColumn = _colOffset.IsChecked == true, ShowHexColumn = _colHex.IsChecked == true, ShowTextColumn = _colText.IsChecked == true },
             Color = _color.IsChecked == true ? PrintColorMode.Color : PrintColorMode.BlackWhite,
             Header = new HeaderFooterText(_header[0].Text, _header[1].Text, _header[2].Text),
@@ -397,7 +404,7 @@ internal sealed class PrintDialogContent : UserControl
         }
     }
 
-    internal void TestSetBytesPerRow(int value) => _bytesPerRow.SelectedIndex = Math.Max(0, new[] { 0, 4, 8, 12, 16, 24, 32, 48, 64 }.ToList().IndexOf(value));
+    internal void TestSetBytesPerRow(int value) => _bytesPerRow.SelectedIndex = Math.Max(0, _bytesOptions.ToList().IndexOf(value));
 
     internal bool TestSelectionEnabled => _rangeSelection.IsEnabled;
 

@@ -7283,4 +7283,5 @@
   <data name="Print_Preview_Info" xml:space="preserve"><value>{0} / {1} ページ</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
 </root>

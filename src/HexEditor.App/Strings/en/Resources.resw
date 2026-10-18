@@ -7283,4 +7283,5 @@ Type: {4}</value></data>
   <data name="Print_Preview_Info" xml:space="preserve"><value>{0} / {1} pages</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Whole page</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Fit width</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>Choose folder...</value></data>
 </root>

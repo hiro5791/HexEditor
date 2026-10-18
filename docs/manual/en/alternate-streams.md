@@ -4,7 +4,7 @@ A file on an NTFS or ReFS volume can carry extra named streams besides its main 
 
 ## See the streams of a file {#list}
 
-1. Open a file and select **File > Alternate data streams...**, or **Tools > File tools > Alternate data streams...**. You can also right-click the tab and select **Alternate data streams...**. Select **Choose file...** in the panel to look at another file or folder.
+1. Open a file and select **File > Alternate data streams...**, or **Tools > File tools > Alternate data streams...**. You can also right-click the tab and select **Alternate data streams...**. Select **Choose file...** or **Choose folder...** in the panel to look at another file or a folder. A folder has streams too; you can list, create, rename, delete, export and import them, but not open them in a tab.
 2. The panel lists the streams. The main stream appears as `::$DATA`. The columns are the stream name, the size, the first 16 bytes in hex and a description of well-known streams. `Zone.Identifier` is described as the mark of a file that came from the Internet.
 
 If the file is on a volume without stream support, such as FAT32 or exFAT, the panel says "This volume does not support alternate data streams." and the buttons are off.
