@@ -205,19 +205,23 @@ public sealed partial class MainWindow
                 && (chosen != PatchFormat.SelfApplying || stubPath is not null);
         }
 
-        PatchScript? BuildScript(CancellationToken token)
+        // 差分の元と先のスナップショット (UI スレッドで選び、計算はバックグラウンド)。
+        Func<CancellationToken, PatchScript> ScriptBuilder()
         {
+            DocumentSnapshot current = doc.Document.DataSnapshot;
             switch (Source())
             {
                 case PatchDiffSource.Tabs when otherTab.SelectedIndex >= 0:
-                    return PatchDiff.Between(others[otherTab.SelectedIndex].Document.DataSnapshot, doc.Document.DataSnapshot, token);
+                    DocumentSnapshot other = others[otherTab.SelectedIndex].Document.DataSnapshot;
+                    return token => PatchDiff.Between(other, current, token);
                 case PatchDiffSource.History when historyPair is { } pair:
-                    return PatchDiff.Between(pair.From, pair.To, token);
+                    return token => PatchDiff.Between(pair.From, pair.To, token);
                 case PatchDiffSource.History:
-                    return PatchDiff.Between(history.Entries[Math.Max(0, fromPoint.SelectedIndex)].Snapshot, history.Entries[Math.Max(0, toPoint.SelectedIndex)].Snapshot,
-                        token);
+                    DocumentSnapshot from = history.Entries[Math.Max(0, fromPoint.SelectedIndex)].Snapshot;
+                    DocumentSnapshot to = history.Entries[Math.Max(0, toPoint.SelectedIndex)].Snapshot;
+                    return token => PatchDiff.Between(from, to, token);
                 default:
-                    return PatchDiff.FromSaved(doc.Document.DataSnapshot);
+                    return _ => PatchDiff.FromSaved(current);
             }
         }
 
@@ -230,11 +234,12 @@ public sealed partial class MainWindow
             creator = null;
             estimates = [];
             Update();
+            Func<CancellationToken, PatchScript> build = ScriptBuilder();
             try
             {
                 (PatchCreator c, Dictionary<PatchFormat, PatchEstimate> e) = await Task.Run(() =>
                 {
-                    PatchScript script = BuildScript(mine.Token) ?? throw new OperationCanceledException();
+                    PatchScript script = build(mine.Token);
                     var made = new PatchCreator(script);
                     var all = new Dictionary<PatchFormat, PatchEstimate>();
                     foreach (PatchFormat f in new[] { PatchFormat.Ips, PatchFormat.Ips32, PatchFormat.Ups, PatchFormat.Bps, PatchFormat.HexPatch, PatchFormat.SelfApplying })

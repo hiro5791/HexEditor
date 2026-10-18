@@ -338,6 +338,20 @@
       ],
       "default": "none"
     },
+    "edit.transformView.copy": {
+      "description": "Copy in a transform view",
+      "type": "string",
+      "enum": [
+        "display",
+        "raw"
+      ],
+      "default": "display"
+    },
+    "edit.undo.branching": {
+      "description": "Use branching undo history",
+      "type": "boolean",
+      "default": false
+    },
     "edit.undo.clearOnSave": {
       "description": "Clear the undo history when saving",
       "type": "boolean",
