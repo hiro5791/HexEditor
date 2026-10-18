@@ -6910,7 +6910,7 @@
   <data name="Sums_Verifying" xml:space="preserve"><value>検証中...</value></data>
   <data name="Sums_Verifying2" xml:space="preserve"><value>検証中: {0}</value></data>
   <data name="Sums_VerifyCancelled" xml:space="preserve"><value>取り消しました: {0}</value></data>
-  <data name="Sums_SkippedLines" xml:space="preserve"><value>書式の誤りのため {0} 行を飛ばしました (行 {1})。</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>書式の誤りのため {0} 行を飛ばしました。行番号: {1}</value></data>
   <data name="Sums_Summary_Match" xml:space="preserve"><value>一致 {0}</value></data>
   <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>不一致 {0}</value></data>
   <data name="Sums_Summary_Missing" xml:space="preserve"><value>見つからない {0}</value></data>

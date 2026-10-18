@@ -170,6 +170,9 @@ internal sealed partial class ColorPanel : ToolPanelBase
 
     // ---- 色の設定 ----
 
+    /// <summary>利用者が選んだ色(テーマの色ではない)を、XAML の色にする。</summary>
+    private static Windows.UI.Color ToWindowsColor(ColorValue c) => new() { A = c.A, R = c.R, G = c.G, B = c.B };
+
     public ColorValue Color => _color;
 
     /// <summary>色を設定して、すべての表示を更新する。</summary>
@@ -179,7 +182,7 @@ internal sealed partial class ColorPanel : ToolPanelBase
         _updating = true;
         if (!fromPicker)
         {
-            _picker.Color = Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
+            _picker.Color = ToWindowsColor(color);
         }
 
         ToolParts.SetText(_hex, color.ToHex());
@@ -199,14 +202,14 @@ internal sealed partial class ColorPanel : ToolPanelBase
         ToolParts.ShowError(_hexError, _hex, null);
         _color = color;
         _updating = true;
-        _picker.Color = Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
+        _picker.Color = ToWindowsColor(color);
         _updating = false;
         Refresh();
     }
 
     private void Refresh()
     {
-        _swatch.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(_color.A, _color.R, _color.G, _color.B));
+        _swatch.Background = new SolidColorBrush(ToWindowsColor(_color));
         _swatch.BorderBrush = ToolParts.ThemeBrush("ControlStrongStrokeColorDefaultBrush");
         _swatchText.Text = _color.ToHex();
         _components.Text = Loc.Format("Color_Components", _color.R, _color.G, _color.B, _color.A);
@@ -284,5 +287,4 @@ internal sealed partial class ColorPanel : ToolPanelBase
 
     internal string Components => _components.Text;
 
-    internal static string Group(string text) => text.Replace(" ", string.Empty, StringComparison.Ordinal).ToString(CultureInfo.InvariantCulture);
 }

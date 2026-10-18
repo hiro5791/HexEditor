@@ -6910,7 +6910,7 @@ Type: {4}</value></data>
   <data name="Sums_Verifying" xml:space="preserve"><value>Verifying...</value></data>
   <data name="Sums_Verifying2" xml:space="preserve"><value>Verifying: {0}</value></data>
   <data name="Sums_VerifyCancelled" xml:space="preserve"><value>Cancelled: {0}</value></data>
-  <data name="Sums_SkippedLines" xml:space="preserve"><value>{0, plural, one {# line was skipped because its format is wrong (line {1}).} other {# lines were skipped because their format is wrong (lines {1}).}}</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>Skipped {0, plural, one {# line} other {# lines}} with a wrong format. Line numbers: {1}</value></data>
   <data name="Sums_Summary_Match" xml:space="preserve"><value>Match {0}</value></data>
   <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>Mismatch {0}</value></data>
   <data name="Sums_Summary_Missing" xml:space="preserve"><value>Missing {0}</value></data>
