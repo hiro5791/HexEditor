@@ -87,6 +87,8 @@ public sealed partial class DisassemblyViewModel : ObservableObject
     private IReadOnlyList<DisasmRow> _rows = [];
     private int _visibleRows = 30;
     private readonly Dictionary<Document, EventHandler<DocumentChangedEventArgs>> _watched = [];
+    private readonly Dictionary<Document, EventHandler> _loadedWatched = [];
+    private bool _refreshQueued;
 
     public DisassemblyViewModel(DisasmFormat format) => _format = format;
 
@@ -170,6 +172,12 @@ public sealed partial class DisassemblyViewModel : ObservableObject
             EventHandler<DocumentChangedEventArgs> handler = (_, e) => DocumentChanged(d, e);
             _watched[d] = handler;
             d.Changed += handler;
+
+            // リモートのデータソース: リスティングは読み込みを待たずに作るので、読み込みが届いたら作り直す (UI スレッドで待たない)。
+            Microsoft.UI.Dispatching.DispatcherQueue? queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+            EventHandler loaded = (_, _) => DataLoaded(d, queue);
+            _loadedWatched[d] = loaded;
+            d.DataLoaded += loaded;
         }
 
         if (_state is { ImageTask: null } s && doc is not null)
@@ -231,6 +239,12 @@ public sealed partial class DisassemblyViewModel : ObservableObject
         }
 
         _watched.Clear();
+        foreach ((Document d, EventHandler handler) in _loadedWatched)
+        {
+            d.DataLoaded -= handler;
+        }
+
+        _loadedWatched.Clear();
         foreach (DocState s in _states.Select(p => p.Value))
         {
             ResetListing(s);
@@ -265,6 +279,44 @@ public sealed partial class DisassemblyViewModel : ObservableObject
         }
     }
 
+    /// <summary>読み込みが届いた (任意のスレッド): 表示中のリスティングが読み込み待ちで止まっていたら、UI スレッドで作り直す。</summary>
+    private void DataLoaded(Document document, Microsoft.UI.Dispatching.DispatcherQueue? queue)
+    {
+        if (queue is null || !_states.TryGetValue(document, out DocState? s) || s.Listing is not { HasPendingReads: true } || _refreshQueued)
+        {
+            return;
+        }
+
+        _refreshQueued = true;
+        if (!queue.TryEnqueue(() =>
+        {
+            _refreshQueued = false;
+            if (Document?.Document == document)
+            {
+                Refresh();
+            }
+        }))
+        {
+            _refreshQueued = false;
+        }
+    }
+
+    /// <summary>
+    /// UI スレッドで少しのバイトを読む: リモートのデータソースでは読み込みを待たず、キャッシュにある分だけ (読み込み中なら読めた長さまで)。
+    /// </summary>
+    internal static int ReadForUi(Document document, long offset, Span<byte> destination)
+    {
+        if (document.Source is not Core.Sources.IRemoteByteSource)
+        {
+            return document.Current.Read(offset, destination).BytesReturned;
+        }
+
+        Span<ByteState> states = destination.Length <= 256 ? stackalloc ByteState[destination.Length] : new ByteState[destination.Length];
+        int n = document.Current.ReadForDisplay(offset, destination, states);
+        int loading = states[..n].IndexOf(ByteState.Loading);
+        return loading >= 0 ? loading : n;
+    }
+
     private DisassemblyListing ListingOf(DocState s)
     {
         if (s.Listing is not null && s.Listing.Format != _format)
@@ -281,7 +333,10 @@ public sealed partial class DisassemblyViewModel : ObservableObject
                 BigEndian = s.BigEndian,
                 BaseAddress = s.BaseAddress,
                 Format = _format,
-            });
+            })
+            {
+                NonBlocking = doc.Source is Core.Sources.IRemoteByteSource,
+            };
             if (s.Image.IsExecutable)
             {
                 // ラベルの自動生成のため、実行可能なセクションを先に解釈しておく (ANA-25 の仕様 6)。
@@ -716,7 +771,7 @@ public sealed partial class DisassemblyViewModel : ObservableObject
 
         int n = Math.Min(line.Length, _format.MaxBytes);
         byte[] b = new byte[n];
-        int read = doc.Document.Current.Read(line.Offset, b).BytesReturned;
+        int read = ReadForUi(doc.Document, line.Offset, b);
         string text = string.Join(' ', b.Take(read).Select(x => x.ToString(_format.UppercaseHex ? "X2" : "x2", CultureInfo.InvariantCulture)));
         return line.Length > _format.MaxBytes ? text + " …" : text;
     }

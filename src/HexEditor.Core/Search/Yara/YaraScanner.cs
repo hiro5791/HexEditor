@@ -245,7 +245,15 @@ public static class YaraScanner
             foreach (YaraRule rule in rules.Rules)
             {
                 evalLimits.Check();
-                context.RuleResults[rule] = rule.Condition.Eval(context).Truthy;
+                try
+                {
+                    context.RuleResults[rule] = rule.Condition.Eval(context).Truthy;
+                }
+                catch (InsufficientExecutionStackException)
+                {
+                    // 評価できないほど深い式 (信頼できないルール): そのルールは一致しない。
+                    context.RuleResults[rule] = false;
+                }
             }
         }
         catch (YaraTimeoutException)

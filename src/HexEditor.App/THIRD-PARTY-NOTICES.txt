@@ -58,7 +58,7 @@ License: MIT License. Copyright (c) Renci, Oleg Kapeljushnik, Gert Driesen,
 Rob Hague and contributors.
 
 -------------------------------------------------------------------------------
-BouncyCastle.Cryptography 2.7.0 (cryptography used by SSH.NET)
+BouncyCastle.Cryptography 2.7.0 (cryptography used by SSH.NET; Ed25519 verification of the online template index)
 https://github.com/bcgit/bc-csharp
 License: MIT License. Copyright (c) 2000-2025 The Legion of the Bouncy Castle
 Inc. (https://www.bouncycastle.org).

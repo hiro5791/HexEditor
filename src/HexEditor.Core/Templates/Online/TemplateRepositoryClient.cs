@@ -155,7 +155,12 @@ public sealed class TemplateRepositoryClient(ITemplateFeedTransport transport)
     /// </summary>
     public async Task<byte[]> DownloadAsync(TemplateRepository repository, OnlineTemplateEntry entry, CancellationToken cancellationToken = default)
     {
-        Uri uri = new(repository.IndexUrl, entry.File);
+        if (!Uri.TryCreate(repository.IndexUrl, entry.File, out Uri? uri))
+        {
+            // 索引の file が URL として読めない (索引は信頼できない入力)。
+            throw new TemplateTamperedException("The template file name in the index is not valid.");
+        }
+
         if (uri.Scheme != repository.IndexUrl.Scheme || uri.Host != repository.IndexUrl.Host || uri.Port != repository.IndexUrl.Port)
         {
             // 索引と別のサーバーのファイルは取りに行かない (索引の URL だけを信頼する)。

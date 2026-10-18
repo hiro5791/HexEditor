@@ -23,7 +23,7 @@ public sealed partial class Document
     /// <summary><paramref name="data"/> の位置にあるパターンを追加バッファに入れ、パターンのピースを返す。</summary>
     internal Piece LoadPatternPiece(IByteSource data, long offset, int patternLength, long length, long phase)
     {
-        if (patternLength is < 1 or > GeneratedData.MaxPatternLength || offset < 0 || offset + patternLength > data.Length)
+        if (patternLength is < 1 or > GeneratedData.MaxPatternLength || offset < 0 || offset > data.Length - patternLength)
         {
             throw new FormatException("pattern");
         }

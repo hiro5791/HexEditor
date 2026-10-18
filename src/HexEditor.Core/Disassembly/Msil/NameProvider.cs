@@ -12,11 +12,30 @@ namespace HexEditor.Core.Disassembly.Msil;
 /// </summary>
 internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
 {
+    /// <summary>
+    /// 解釈するシグネチャの大きさの上限。System.Reflection.Metadata のシグネチャの解釈は入れ子 1 段ごとに再帰し、深さの上限を持たないため、
+    /// 入れ子の深さ (1 段につき 1 バイト以上) を大きさで抑える (壊れたメタデータでスタックオーバーフローにしない)。
+    /// </summary>
+    internal const int MaxSignatureBytes = 1024;
+
+    /// <summary>名前の入れ子 (入れ子の型、型の参照の解決範囲、TypeSpec の中の TypeSpec) の深さの上限 (輪になったメタデータでも止まる)。</summary>
+    internal const int MaxNameDepth = 64;
+
     private readonly MetadataReader? _md;
+    private int _specDepth;
 
     public NameProvider(MetadataReader? md) => _md = md;
 
     private static string Token(int token) => "token 0x" + token.ToString("x8", CultureInfo.InvariantCulture);
+
+    /// <summary>大きすぎるシグネチャは解釈しない (<see cref="MaxSignatureBytes"/>)。</summary>
+    private void Checked(BlobHandle blob)
+    {
+        if (_md!.GetBlobReader(blob).Length > MaxSignatureBytes)
+        {
+            throw new BadImageFormatException("The signature is too large.");
+        }
+    }
 
     public string UserString(int token)
     {
@@ -69,7 +88,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
                 HandleKind.FieldDefinition => FieldDefText((FieldDefinitionHandle)handle),
                 HandleKind.TypeDefinition => TypeDefName((TypeDefinitionHandle)handle, true),
                 HandleKind.TypeReference => TypeRefName((TypeReferenceHandle)handle),
-                HandleKind.TypeSpecification => _md.GetTypeSpecification((TypeSpecificationHandle)handle).DecodeSignature(this, null),
+                HandleKind.TypeSpecification => TypeSpecText((TypeSpecificationHandle)handle, null),
                 HandleKind.StandaloneSignature => "sig " + Token(token),
                 _ => Token(token),
             };
@@ -83,6 +102,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     private string MethodDefText(MethodDefinitionHandle handle)
     {
         MethodDefinition m = _md!.GetMethodDefinition(handle);
+        Checked(m.Signature);
         MethodSignature<string> sig = m.DecodeSignature(this, null);
         string owner = TypeDefName(m.GetDeclaringType(), true);
         return FormatMethod(sig, owner, _md.GetString(m.Name), null);
@@ -91,6 +111,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     private string MemberRefText(MemberReferenceHandle handle)
     {
         MemberReference r = _md!.GetMemberReference(handle);
+        Checked(r.Signature);
         string owner = OwnerName(r.Parent);
         string name = _md.GetString(r.Name);
         if (r.GetKind() == MemberReferenceKind.Field)
@@ -104,6 +125,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     private string MethodSpecText(MethodSpecificationHandle handle)
     {
         MethodSpecification spec = _md!.GetMethodSpecification(handle);
+        Checked(spec.Signature);
         ImmutableArray<string> args = spec.DecodeSignature(this, null);
         string text = TokenText(MetadataTokens.GetToken(spec.Method));
         int paren = text.IndexOf('(', StringComparison.Ordinal);
@@ -113,6 +135,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     private string FieldDefText(FieldDefinitionHandle handle)
     {
         FieldDefinition f = _md!.GetFieldDefinition(handle);
+        Checked(f.Signature);
         return f.DecodeSignature(this, null) + " " + TypeDefName(f.GetDeclaringType(), true) + "::" + _md.GetString(f.Name);
     }
 
@@ -120,7 +143,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     {
         HandleKind.TypeReference => TypeRefName((TypeReferenceHandle)parent),
         HandleKind.TypeDefinition => TypeDefName((TypeDefinitionHandle)parent, true),
-        HandleKind.TypeSpecification => _md!.GetTypeSpecification((TypeSpecificationHandle)parent).DecodeSignature(this, null),
+        HandleKind.TypeSpecification => TypeSpecText((TypeSpecificationHandle)parent, null),
         HandleKind.MethodDefinition => TypeDefName(_md!.GetMethodDefinition((MethodDefinitionHandle)parent).GetDeclaringType(), true),
         HandleKind.ModuleReference => "[.module " + _md!.GetString(_md.GetModuleReference((ModuleReferenceHandle)parent).Name) + "]",
         _ => Token(MetadataTokens.GetToken(parent)),
@@ -137,10 +160,11 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
     {
         try
         {
+            Checked(m.Signature);
             MethodSignature<string> sig = m.DecodeSignature(this, null);
             return "(" + string.Join(", ", sig.ParameterTypes) + ") : " + sig.ReturnType;
         }
-        catch (BadImageFormatException)
+        catch (Exception ex) when (ex is BadImageFormatException or InvalidOperationException or ArgumentException)
         {
             return "(?)";
         }
@@ -156,6 +180,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
         try
         {
             StandaloneSignature s = _md.GetStandaloneSignature(MetadataTokens.StandaloneSignatureHandle(token & 0xFFFFFF));
+            Checked(s.Signature);
             ImmutableArray<string> locals = s.DecodeLocalSignature(this, null);
             return "(" + string.Join(", ", locals.Select((t, i) => t + " V_" + i.ToString(CultureInfo.InvariantCulture))) + ")";
         }
@@ -165,31 +190,75 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
         }
     }
 
+    /// <summary>
+    /// 型の名前 (入れ子の型は <c>外側/内側</c>)。入れ子の宣言は検証されていないメタデータの表なので、輪になっていても
+    /// <see cref="MaxNameDepth"/> 段で打ち切る (再帰しない)。
+    /// </summary>
     public string TypeDefName(TypeDefinitionHandle handle, bool withNamespace)
     {
+        var parts = new List<string>();
         TypeDefinition t = _md!.GetTypeDefinition(handle);
-        string name = _md.GetString(t.Name);
-        if (t.GetDeclaringType() is { IsNil: false } outer)
+        parts.Add(_md.GetString(t.Name));
+        while (t.GetDeclaringType() is { IsNil: false } outer)
         {
-            return TypeDefName(outer, withNamespace) + "/" + name;
+            if (parts.Count >= MaxNameDepth)
+            {
+                parts.Add("…");
+                break;
+            }
+
+            t = _md.GetTypeDefinition(outer);
+            parts.Add(_md.GetString(t.Name));
         }
 
+        parts.Reverse();
         string ns = _md.GetString(t.Namespace);
-        return withNamespace && ns.Length > 0 ? ns + "." + name : name;
+        string joined = string.Join("/", parts);
+        return withNamespace && ns.Length > 0 ? ns + "." + joined : joined;
     }
 
     private string TypeRefName(TypeReferenceHandle handle)
     {
+        // 解決範囲が型の参照 (入れ子の型) なら外側へたどる。輪になっていても打ち切る (再帰しない)。
+        var parts = new List<string>();
         TypeReference r = _md!.GetTypeReference(handle);
-        string name = _md.GetString(r.Name);
+        parts.Add(_md.GetString(r.Name));
+        while (r.ResolutionScope.Kind == HandleKind.TypeReference && parts.Count < MaxNameDepth)
+        {
+            r = _md.GetTypeReference((TypeReferenceHandle)r.ResolutionScope);
+            parts.Add(_md.GetString(r.Name));
+        }
+
+        parts.Reverse();
         string ns = _md.GetString(r.Namespace);
-        string full = ns.Length > 0 ? ns + "." + name : name;
+        string full = (ns.Length > 0 ? ns + "." : string.Empty) + string.Join("/", parts);
         return r.ResolutionScope.Kind switch
         {
             HandleKind.AssemblyReference => "[" + _md.GetString(_md.GetAssemblyReference((AssemblyReferenceHandle)r.ResolutionScope).Name) + "]" + full,
-            HandleKind.TypeReference => TypeRefName((TypeReferenceHandle)r.ResolutionScope) + "/" + name,
+            HandleKind.TypeReference => "…/" + full,
             _ => full,
         };
+    }
+
+    /// <summary>TypeSpec の型 (中に TypeSpec があれば再帰する。深さを <see cref="MaxNameDepth"/> で抑える)。</summary>
+    private string TypeSpecText(TypeSpecificationHandle handle, object? genericContext)
+    {
+        if (_specDepth >= MaxNameDepth)
+        {
+            throw new BadImageFormatException("Type specifications are nested too deeply.");
+        }
+
+        TypeSpecification spec = _md!.GetTypeSpecification(handle);
+        Checked(spec.Signature);
+        _specDepth++;
+        try
+        {
+            return spec.DecodeSignature(this, genericContext);
+        }
+        finally
+        {
+            _specDepth--;
+        }
     }
 
     // ---- ISignatureTypeProvider ----
@@ -226,7 +295,7 @@ internal sealed class NameProvider : ISignatureTypeProvider<string, object?>
         Kind(rawTypeKind) + TypeRefName(handle);
 
     public string GetTypeFromSpecification(MetadataReader reader, object? genericContext, TypeSpecificationHandle handle, byte rawTypeKind) =>
-        reader.GetTypeSpecification(handle).DecodeSignature(this, genericContext);
+        TypeSpecText(handle, genericContext);
 
     public string GetSZArrayType(string elementType) => elementType + "[]";
 

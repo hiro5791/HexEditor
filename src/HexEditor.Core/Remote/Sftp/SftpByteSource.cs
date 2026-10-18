@@ -7,7 +7,7 @@ namespace HexEditor.Core.Remote.Sftp;
 /// 通す。ファイル全体はダウンロードしない。長さはリモートのファイルサイズ。ドキュメントは長さを変えられる (保存は <see cref="SftpSaver"/>)。
 /// 接続が切れたら自動で 1 回だけ再接続を試み、失敗したら「切断」(<see cref="SourceChangeKind.Disconnected"/>) にする (仕様 7)。
 /// </summary>
-public sealed class SftpByteSource : ByteSourceBase
+public sealed class SftpByteSource : ByteSourceBase, IRemoteByteSource
 {
     private readonly SemaphoreSlim _gate = new(1, 1);
     private ISftpFile? _file;

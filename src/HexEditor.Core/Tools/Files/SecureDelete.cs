@@ -1,6 +1,8 @@
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using HexEditor.Core.Operations;
+using Microsoft.Win32.SafeHandles;
 
 namespace HexEditor.Core.Tools.Files;
 
@@ -102,6 +104,15 @@ public interface IShredFileSystem
     void DeleteFile(string path);
 
     void DeleteEmptyDirectory(string path);
+
+    /// <summary>
+    /// リンク (シンボリックリンク・ジャンクション、途中のフォルダのものも) をたどった本当のパス。調べられなければ <paramref name="path"/> のまま。
+    /// 対象にできるかの判定 (システムフォルダ・ドライブのルート・開いているファイル) は、このパスでも行う。
+    /// </summary>
+    string FinalPath(string path) => path;
+
+    /// <summary>フォルダの中のサブフォルダ (リンクはたどらない。空になったフォルダを消すときに使う)。</summary>
+    IEnumerable<string> EnumerateDirectories(string directory) => [];
 }
 
 /// <summary>対象にできない理由 (TOOL-17 の仕様 6・7)。</summary>
@@ -164,39 +175,71 @@ public static class SecureDelete
         return [.. folders.Distinct(StringComparer.OrdinalIgnoreCase)];
     }
 
-    private static string Normalize(string path) => Path.GetFullPath(path).TrimEnd('\\', '/');
+    private static string Normalize(string path) => Path.GetFullPath(WithoutDevicePrefix(path)).TrimEnd('\\', '/');
 
-    /// <summary>パスが対象にできるか。<paramref name="openFiles"/> はアプリで開いているファイル。</summary>
-    public static ShredRejection Check(string path, IShredFileSystem fileSystem, IEnumerable<string> openFiles, IReadOnlyList<string>? systemFolders = null)
+    /// <summary>
+    /// <c>\\?\</c>・<c>\\.\</c> で始まるパス (<c>\\?\C:\Windows</c>、<c>\\?\UNC\server\share</c>) を通常の形にする (判定を逃れないように)。
+    /// </summary>
+    internal static string WithoutDevicePrefix(string path)
     {
-        string full = Path.GetFullPath(path);
-        string trimmed = Normalize(full);
-        string? root = Path.GetPathRoot(full);
-        if (root is not null && string.Equals(trimmed, root.TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase))
+        if (path.StartsWith(@"\\?\UNC\", StringComparison.OrdinalIgnoreCase) || path.StartsWith(@"\\.\UNC\", StringComparison.OrdinalIgnoreCase))
         {
-            return ShredRejection.DriveRoot;
+            return @"\\" + path[8..];
         }
 
-        foreach (string folder in systemFolders ?? SystemFolders())
+        if (path.StartsWith(@"\\?\", StringComparison.Ordinal) || path.StartsWith(@"\\.\", StringComparison.Ordinal))
         {
-            if (IsSameOrUnder(trimmed, folder))
+            string rest = path[4..];
+            return rest.Length == 2 && rest[1] == ':' ? rest + "\\" : rest;
+        }
+
+        return path;
+    }
+
+    /// <summary>
+    /// パスが対象にできるか。<paramref name="openFiles"/> はアプリで開いているファイル。指定したパスと、リンクをたどった本当のパス
+    /// (<see cref="IShredFileSystem.FinalPath"/>) の両方で判定する (ジャンクション・シンボリックリンクでシステムフォルダを指しても対象にしない)。
+    /// </summary>
+    public static ShredRejection Check(string path, IShredFileSystem fileSystem, IEnumerable<string> openFiles, IReadOnlyList<string>? systemFolders = null)
+    {
+        string full = Path.GetFullPath(WithoutDevicePrefix(path));
+        bool isDirectory = fileSystem.DirectoryExists(full);
+        bool exists = isDirectory || fileSystem.FileExists(full);
+        string[] candidates = exists ? [.. new[] { full, Path.GetFullPath(WithoutDevicePrefix(fileSystem.FinalPath(full))) }.Distinct(StringComparer.OrdinalIgnoreCase)] : [full];
+        IReadOnlyList<string> system = systemFolders ?? SystemFolders();
+        foreach (string candidate in candidates)
+        {
+            string trimmed = Normalize(candidate);
+            string? root = Path.GetPathRoot(candidate);
+            if (root is not null && string.Equals(trimmed, root.TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase))
             {
-                return ShredRejection.SystemFolder;
+                return ShredRejection.DriveRoot;
+            }
+
+            foreach (string folder in system)
+            {
+                if (IsSameOrUnder(trimmed, Normalize(folder)))
+                {
+                    return ShredRejection.SystemFolder;
+                }
             }
         }
 
-        bool isDirectory = fileSystem.DirectoryExists(full);
-        if (!isDirectory && !fileSystem.FileExists(full))
+        if (!exists)
         {
             return ShredRejection.NotFound;
         }
 
-        foreach (string open in openFiles)
+        string[] open = [.. openFiles.Select(Normalize)];
+        foreach (string candidate in candidates)
         {
-            string openFull = Normalize(open);
-            if (isDirectory ? IsSameOrUnder(openFull, trimmed) : string.Equals(openFull, trimmed, StringComparison.OrdinalIgnoreCase))
+            string trimmed = Normalize(candidate);
+            foreach (string openFull in open)
             {
-                return ShredRejection.OpenInApp;
+                if (isDirectory ? IsSameOrUnder(openFull, trimmed) : string.Equals(openFull, trimmed, StringComparison.OrdinalIgnoreCase))
+                {
+                    return ShredRejection.OpenInApp;
+                }
             }
         }
 
@@ -360,7 +403,8 @@ public static class SecureDelete
             return;
         }
 
-        foreach (string sub in Directory.Exists(folder) ? Directory.EnumerateDirectories(folder) : [])
+        // リンク (ジャンクションなど) のフォルダはたどらない (選んだフォルダの外の空のフォルダを消さない)。
+        foreach (string sub in fileSystem.EnumerateDirectories(folder).ToList())
         {
             DeleteEmptyTree(sub, fileSystem);
         }
@@ -537,6 +581,38 @@ public sealed class WindowsShredFileSystem : IShredFileSystem
     public void DeleteFile(string path) => File.Delete(path);
 
     public void DeleteEmptyDirectory(string path) => Directory.Delete(path, recursive: false);
+
+    public IEnumerable<string> EnumerateDirectories(string directory) =>
+        Directory.Exists(directory)
+            ? Directory.EnumerateDirectories(directory, "*", new EnumerationOptions { IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint })
+            : [];
+
+    /// <summary>リンクをたどった本当のパス (<c>GetFinalPathNameByHandleW</c>)。調べられなければそのまま。</summary>
+    public string FinalPath(string path)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return path;
+        }
+
+        const uint FileFlagBackupSemantics = 0x02000000;
+        const uint OpenExisting = 3;
+        using SafeFileHandle handle = CreateFileW(path, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, OpenExisting, FileFlagBackupSemantics, IntPtr.Zero);
+        if (handle.IsInvalid)
+        {
+            return path;
+        }
+
+        char[] buffer = new char[32768];
+        uint n = GetFinalPathNameByHandleW(handle, buffer, (uint)buffer.Length, 0);
+        return n is > 0 and < 32768 ? new string(buffer, 0, (int)n) : path;
+    }
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern SafeFileHandle CreateFileW(string name, uint access, FileShare share, IntPtr security, uint creation, uint flags, IntPtr template);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern uint GetFinalPathNameByHandleW(SafeFileHandle file, [Out] char[] path, uint length, uint flags);
 
     private sealed class WindowsShredStream(FileStream stream) : IShredStream
     {

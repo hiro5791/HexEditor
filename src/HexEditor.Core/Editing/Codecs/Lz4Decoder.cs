@@ -18,7 +18,7 @@ internal static class Lz4Decoder
         var window = new WindowWriter(output, WindowSize);
         try
         {
-            DecodeSequences(new StreamingBlock(input), window, token, () => input.Consumed);
+            DecodeSequences(new StreamingBlock(input), window, token, () => input.Consumed, long.MaxValue);
         }
         finally
         {
@@ -152,27 +152,26 @@ internal static class Lz4Decoder
                 }
             }
 
-            long before = blockWindow.Total;
             if (raw)
             {
                 blockWindow.Write(block.AsSpan(0, (int)size));
             }
             else
             {
-                DecodeSequences(new MemoryBlock(block, (int)size), blockWindow, token, () => at);
-            }
-
-            if (blockWindow.Total - before > maxBlock)
-            {
-                throw new CompressedDataException(CompressedDataError.Corrupt, at, "LZ4 のブロックの展開後の大きさが上限を超えています");
+                // 展開の途中でもブロックの最大の大きさで止める (1 つの一致で際限なく書かない)。
+                DecodeSequences(new MemoryBlock(block, (int)size), blockWindow, token, () => at, maxBlock);
             }
         }
     }
 
-    /// <summary>LZ4 のシーケンス (トークン、リテラル、オフセット、一致の長さ) を、入力の終わりまで展開する。</summary>
-    private static void DecodeSequences(IBlockInput input, WindowWriter window, CancellationToken token, Func<long> position)
+    /// <summary>
+    /// LZ4 のシーケンス (トークン、リテラル、オフセット、一致の長さ) を、入力の終わりまで展開する。展開した長さが <paramref name="maxOutput"/> を
+    /// 超えるなら、書く前に壊れたデータとして止める (フレームのブロックの最大の大きさ)。
+    /// </summary>
+    private static void DecodeSequences(IBlockInput input, WindowWriter window, CancellationToken token, Func<long> position, long maxOutput)
     {
         int steps = 0;
+        long start = window.Total;
         while (true)
         {
             int tokenByte = input.ReadByte();
@@ -186,6 +185,11 @@ internal static class Lz4Decoder
             if (literal == 15)
             {
                 literal += ReadLength(input, position);
+            }
+
+            if (literal > maxOutput - (window.Total - start))
+            {
+                throw new CompressedDataException(CompressedDataError.Corrupt, position(), "LZ4 のブロックの展開後の大きさが上限を超えています");
             }
 
             input.CopyTo(window, literal, position);
@@ -206,6 +210,11 @@ internal static class Lz4Decoder
             if (match == 15)
             {
                 match += ReadLength(input, position);
+            }
+
+            if (match + 4L > maxOutput - (window.Total - start))
+            {
+                throw new CompressedDataException(CompressedDataError.Corrupt, position(), "LZ4 のブロックの展開後の大きさが上限を超えています");
             }
 
             if (!window.Copy(offset, match + 4))

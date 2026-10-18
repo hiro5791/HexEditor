@@ -28,7 +28,7 @@ public sealed class JsonRpcTests : IDisposable
         private readonly Task _run;
         private int _id;
 
-        public Pair(ScriptTestHost t, TimeSpan? idle = null)
+        public Pair(ScriptTestHost t, TimeSpan? idle = null, IReadOnlyCollection<string>? permissions = null)
         {
             string name = "HexEditor.test." + Guid.NewGuid().ToString("N");
             _server = new NamedPipeServerStream(name, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
@@ -36,7 +36,7 @@ public sealed class JsonRpcTests : IDisposable
             Task wait = _server.WaitForConnectionAsync();
             _client.Connect(5000);
             wait.Wait();
-            Context = t.Host.OpenExternalContext("rpc-test.exe", t.Env, JsonRpcTrust.GrantedPermissions);
+            Context = t.Host.OpenExternalContext("rpc-test.exe", t.Env, permissions ?? JsonRpcTrust.GrantedPermissions);
             Session = new JsonRpcSession(Context, _server) { IdleRelease = idle ?? TimeSpan.FromSeconds(30) };
             Host = t;
             _run = Session.RunAsync();
@@ -50,6 +50,12 @@ public sealed class JsonRpcTests : IDisposable
         public JsonRpcSession Session { get; }
 
         public List<JsonObject> Notifications { get; } = [];
+
+        public async Task SendBytesAsync(byte[] bytes)
+        {
+            await _client.WriteAsync(bytes);
+            await _client.FlushAsync();
+        }
 
         public async Task SendRawAsync(string line)
         {
@@ -252,6 +258,171 @@ public sealed class JsonRpcTests : IDisposable
 
         // 購読をやめる (handle)。
         await p.ResultAsync("eventSubscription.off", new JsonObject { ["handle"] = (string)sub["handle"]! });
+    }
+
+    /// <summary>
+    /// 壊れたメッセージ (重複したキー、型の違う値、深い入れ子、壊れた UTF-8 など。変異させたものを含む) でも接続は切れず、
+    /// 続く正しい要求に応答する (フェーズ 4 の監査)。許可のない接続で送る (変異でファイル・プロセスの API を呼ばないように)。
+    /// </summary>
+    [Fact]
+    public async Task Malformed_messages_never_end_the_session()
+    {
+        _t.Open(new byte[64]);
+        await using var p = new Pair(_t, permissions: []);
+        string[] seeds =
+        [
+            """{"jsonrpc":"2.0","id":1,"method":"app.documents"}""",
+            """{"jsonrpc":"2.0","id":"a","method":"document.readBytes","params":{"offset":0,"length":4}}""",
+            """[{"jsonrpc":"2.0","id":2,"method":"app.activeDocument"},{"jsonrpc":"2.0","method":"$/cancel","params":{"id":2}}]""",
+        ];
+        var malformed = new List<string>
+        {
+            """{"jsonrpc":"2.0","jsonrpc":"2.0","id":1,"method":"app.documents"}""",
+            """{"jsonrpc":"2.0","id":1,"id":2,"method":"app.documents"}""",
+            """{"jsonrpc":"2.0","id":1,"method":"document.readBytes","params":{"offset":0,"offset":1}}""",
+            "[" + string.Join(",", Enumerable.Repeat("""{"a":1,"a":2}""", 3)) + "]",
+            new string('[', 200) + new string(']', 200),
+            """{"jsonrpc":2,"method":[1]}""",
+            """{"jsonrpc":"2.0","id":{"x":1},"method":"app.documents","params":"x"}""",
+            "\"just a string\"",
+            """{"jsonrpc":"2.0","id":1,"method":"bookmark.name","params":{"handle":{"handle":[]}}}""",
+        };
+        var random = new Random(4501);
+        for (int i = 0; i < 300; i++)
+        {
+            malformed.Add(Security.Fuzz.MutateText(random, seeds[random.Next(seeds.Length)], "{}[],:\"0123456789.-eE\\u ").Replace('\n', ' '));
+        }
+
+        // 誤りの応答を読みながら送る (読まないとパイプが詰まる)。最後の正しい要求 (id 999999) の応答まで読む。
+        Task<JsonObject> last = Task.Run(async () =>
+        {
+            while (true)
+            {
+                JsonObject o = await p.ReadResponseAsync();
+                if (o["id"] is JsonValue v && v.TryGetValue(out int n) && n == 999999)
+                {
+                    return o;
+                }
+            }
+        });
+        foreach (string line in malformed)
+        {
+            await p.SendRawAsync(line);
+        }
+
+        // 壊れた UTF-8 も 1 行。
+        byte[] broken = [0xFF, 0xFE, 0x7B, 0xC0, 0x80, 0x7D, (byte)'\n'];
+        await p.SendBytesAsync(broken);
+        await p.SendRawAsync("""{"jsonrpc":"2.0","id":999999,"method":"app.apiVersion"}""");
+        JsonObject ok = await last.WaitAsync(TimeSpan.FromSeconds(60));
+        Assert.True(ok.ContainsKey("result"), ok.ToJsonString());
+    }
+
+    /// <summary>参照 (handle) の表は、ドキュメントを閉じたらそのドキュメントの分を、接続が切れたらすべてを捨てる (フェーズ 4 の監査)。</summary>
+    [Fact]
+    public async Task Handles_are_released_when_the_document_closes()
+    {
+        _t.Open(new byte[64]);
+        var p = new Pair(_t);
+        try
+        {
+            string id = (string)(await p.ResultAsync("app.activeDocument"))!["id"]!;
+            JsonNode mark = (await p.ResultAsync("bookmarks.add", new JsonObject
+            {
+                ["document"] = id,
+                ["bookmark"] = new JsonObject { ["start"] = 16, ["length"] = 4, ["name"] = "header" },
+            }))!;
+            string handle = (string)mark["handle"]!;
+            Assert.Equal(1, p.Session.HandleCount);
+            await p.ResultAsync("document.close", new JsonObject { ["document"] = id });
+            Assert.Equal(0, p.Session.HandleCount);
+            Assert.Equal(JsonRpcErrorCodes.InvalidParams, await p.ErrorAsync("bookmark.name", new JsonObject { ["handle"] = handle }));
+            await p.ResultAsync("bookmarks.add", new JsonObject
+            {
+                ["document"] = (string)(await p.ResultAsync("app.open", new JsonArray(WriteTemp())))!["id"]!,
+                ["bookmark"] = new JsonObject { ["start"] = 0, ["length"] = 1, ["name"] = "x" },
+            });
+            Assert.Equal(1, p.Session.HandleCount);
+        }
+        finally
+        {
+            await p.DisposeAsync();
+        }
+
+        // 接続が切れたらすべて捨てる。
+        Assert.Equal(0, p.Session.HandleCount);
+    }
+
+    /// <summary>確認の答えを待たせる UI (答えるまで ConfirmTrustAsync が終わらない)。</summary>
+    private sealed class GatedTrustUi(CoreScriptEnvironment env) : HeadlessScriptUi(env)
+    {
+        private readonly object _lock = new();
+
+        public List<TaskCompletionSource<TrustAnswer>> Pending { get; } = [];
+
+        public int Prompts
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return Pending.Count;
+                }
+            }
+        }
+
+        public override Task<TrustAnswer> ConfirmTrustAsync(TrustPrompt prompt)
+        {
+            var tcs = new TaskCompletionSource<TrustAnswer>(TaskCreationOptions.RunContinuationsAsynchronously);
+            lock (_lock)
+            {
+                Pending.Add(tcs);
+            }
+
+            return tcs.Task;
+        }
+    }
+
+    /// <summary>
+    /// 接続の確認は 1 つずつ出し (列は 1 つ)、待っている接続が上限を超えたら確認を出さずに拒否する。待っている間に同じ実行ファイルを
+    /// 拒否・常に許可したら、待っていた接続は確認を出さずにその答えになる (フェーズ 4 の監査: 確認のダイアログで画面を埋められない)。
+    /// </summary>
+    [Theory]
+    [InlineData(TrustAnswer.Deny, false)]
+    [InlineData(TrustAnswer.AlwaysAllow, true)]
+    public async Task Trust_prompts_are_queued_one_at_a_time(TrustAnswer answer, bool allowed)
+    {
+        string exe = Path.Combine(_t.Root, "client-" + answer + ".exe");
+        File.WriteAllBytes(exe, Encoding.ASCII.GetBytes("MZ fake client " + answer));
+        var ui = new GatedTrustUi(_t.Env);
+        IScriptUiService previous = _t.Env.Ui;
+        _t.Env.Ui = ui;
+        try
+        {
+            var client = new JsonRpcClient(exe, 1234, null);
+            Task<JsonRpcAdmission>[] checks = [.. Enumerable.Range(0, 8).Select(_ => Task.Run(() => JsonRpcTrust.CheckAsync(_t.Host, _t.Env, client)))];
+
+            // 上限を超えた分 (8 - 4) はすぐに拒否される。確認は 1 つだけ出ている。
+            await WaitUntilAsync(() => checks.Count(c => c.IsCompleted) == 8 - JsonRpcTrust.MaxWaitingPrompts && ui.Prompts == 1);
+            Assert.All(checks.Where(c => c.IsCompleted), c => Assert.False(c.Result.Allowed));
+            Assert.Equal(1, ui.Prompts);
+
+            ui.Pending[0].SetResult(answer);
+            JsonRpcAdmission[] results = await Task.WhenAll(checks).WaitAsync(TimeSpan.FromSeconds(30));
+            Assert.Equal(1, ui.Prompts);
+            Assert.Equal(allowed ? JsonRpcTrust.MaxWaitingPrompts : 0, results.Count(r => r.Allowed));
+        }
+        finally
+        {
+            _t.Env.Ui = previous;
+        }
+    }
+
+    private string WriteTemp()
+    {
+        string path = Path.Combine(_t.Root, "handles-" + Guid.NewGuid().ToString("N") + ".bin");
+        File.WriteAllBytes(path, new byte[16]);
+        return path;
     }
 
     [Fact]

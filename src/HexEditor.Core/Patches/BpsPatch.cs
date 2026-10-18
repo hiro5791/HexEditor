@@ -97,7 +97,7 @@ public sealed class BpsPatch : LoadedPatch
                 if (action == BpsAction.TargetRead)
                 {
                     dataAt = body.Position;
-                    if (dataAt + length > _actionsEnd)
+                    if (length > _actionsEnd - dataAt)
                     {
                         throw new EndOfStreamException();
                     }
@@ -135,7 +135,7 @@ public sealed class BpsPatch : LoadedPatch
         {
             cancellationToken.ThrowIfCancellationRequested();
             long outPos = output.Length;
-            if (outPos + length > TargetSize)
+            if (length > TargetSize - outPos)
             {
                 throw new PatchException(PatchError.Corrupt, $"BPS: レコード {index + 1} が範囲外です。", index);
             }
@@ -143,7 +143,7 @@ public sealed class BpsPatch : LoadedPatch
             switch (action)
             {
                 case BpsAction.SourceRead:
-                    if (outPos + length > SourceSize)
+                    if (outPos > SourceSize || length > SourceSize - outPos)
                     {
                         throw new PatchException(PatchError.Corrupt, $"BPS: レコード {index + 1} が範囲外です。", index);
                     }
@@ -163,7 +163,7 @@ public sealed class BpsPatch : LoadedPatch
                     break;
                 case BpsAction.SourceCopy:
                     sourceRelative += relative;
-                    if (sourceRelative < 0 || sourceRelative + length > SourceSize)
+                    if (sourceRelative < 0 || sourceRelative > SourceSize || length > SourceSize - sourceRelative)
                     {
                         throw new PatchException(PatchError.Corrupt, $"BPS: レコード {index + 1} が範囲外です。", index);
                     }
@@ -248,6 +248,13 @@ public sealed class BpsPatch : LoadedPatch
             long sourceSize = checked((long)BeatVarint.Read(head));
             long targetSize = checked((long)BeatVarint.Read(head));
             long metadata = checked((long)BeatVarint.Read(head));
+
+            // 引き算で比べる (巨大なメタデータの長さで位置があふれないように)。
+            if (metadata > stream.Length - 12 - head.Position)
+            {
+                throw new PatchException(PatchError.Corrupt, "BPS: メタデータが壊れています。");
+            }
+
             long actionsStart = head.Position + metadata;
             if (actionsStart > stream.Length - 12)
             {
@@ -263,7 +270,7 @@ public sealed class BpsPatch : LoadedPatch
             foreach ((BpsAction action, long length, _, _) in patch.Actions())
             {
                 count++;
-                total += length;
+                total = checked(total + length);
                 if (action != BpsAction.SourceRead)
                 {
                     changed += length;

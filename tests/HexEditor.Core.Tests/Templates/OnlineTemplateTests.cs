@@ -100,6 +100,44 @@ public sealed class OnlineTemplateTests : IDisposable
         Assert.False(Ed25519.Verify(pk[..31], m, sig));
     }
 
+    /// <summary>
+    /// 検証は BouncyCastle の Ed25519 (フェーズ 4 の監査で自前の移植から置き換えた)。壊れた署名・鍵は例外にせず false: S が L 以上
+    /// (署名の可鍛性)、復元できない点の公開鍵、長さの違い。
+    /// </summary>
+    [Fact]
+    public void Ed25519_rejects_malformed_signatures_and_keys_without_throwing()
+    {
+        byte[] seed = Convert.FromHexString("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60");
+        byte[] pk = Ed25519.PublicKeyFromSeed(seed);
+        byte[] m = "message"u8.ToArray();
+        byte[] sig = Ed25519.Sign(seed, m);
+        Assert.True(Ed25519.Verify(pk, m, sig));
+
+        // S に L を足す (同じ点を表すが、RFC 8032 は S < L を求める)。
+        byte[] malleable = [.. sig];
+        var l = System.Numerics.BigInteger.Parse("7237005577332262213973186563042994240857116359379907606001950938285454250989", System.Globalization.CultureInfo.InvariantCulture);
+        var s = new System.Numerics.BigInteger(sig.AsSpan(32), isUnsigned: true) + l;
+        byte[] sBytes = s.ToByteArray(isUnsigned: true);
+        Array.Clear(malleable, 32, 32);
+        sBytes.CopyTo(malleable, 32);
+        Assert.False(Ed25519.Verify(pk, m, malleable));
+
+        byte[] notAPoint = [.. Enumerable.Repeat((byte)0xFF, 32)];
+        Assert.False(Ed25519.Verify(notAPoint, m, sig));
+        Assert.False(Ed25519.Verify(new byte[32], m, sig));
+        Assert.False(Ed25519.Verify(pk, m, sig[..63]));
+        Assert.False(Ed25519.Verify(pk, m, []));
+        Assert.False(Ed25519.Verify([], m, sig));
+        var random = new Random(3603);
+        for (int i = 0; i < 2000; i++)
+        {
+            byte[] k = new byte[32], g = new byte[64];
+            random.NextBytes(k);
+            random.NextBytes(g);
+            Assert.False(Ed25519.Verify(k, m, g));
+        }
+    }
+
     // ───────────── 索引と署名 ─────────────
 
     [Fact]

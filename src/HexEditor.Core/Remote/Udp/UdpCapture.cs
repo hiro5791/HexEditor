@@ -67,8 +67,17 @@ public sealed class UdpPortInUseException(int port, Exception inner) : IOExcepti
 /// </summary>
 public sealed class UdpCapture : IDisposable
 {
+    /// <summary>
+    /// 保持するデータグラムの数の上限 (長さ 0 のデータグラムはバイト数の上限に数えられないため、件数でもメモリを抑える。1 件あたり約 150 バイト)。
+    /// 超えたら、バイト数の上限と同じく記録を止める (古いデータを捨てて続ける設定では、古いものから捨てる)。
+    /// </summary>
+    public const int MaxPackets = 262_144;
+
     private readonly object _lock = new();
+
+    // 保持しているパケットは _packets[_head..] (先頭から捨てるときは _head を進め、半分を超えたら詰める。捨てるたびに一覧を詰め直さない)。
     private readonly List<UdpPacket> _packets = [];
+    private int _head;
     private readonly CancellationTokenSource _cts = new();
     private readonly Socket _socket;
     private readonly TimeProvider _time;
@@ -206,7 +215,7 @@ public sealed class UdpCapture : IDisposable
         {
             lock (_lock)
             {
-                return [.. _packets];
+                return _packets.GetRange(_head, _packets.Count - _head);
             }
         }
     }
@@ -218,7 +227,7 @@ public sealed class UdpCapture : IDisposable
         {
             lock (_lock)
             {
-                return _packets.Count;
+                return _packets.Count - _head;
             }
         }
     }
@@ -228,7 +237,7 @@ public sealed class UdpCapture : IDisposable
     {
         lock (_lock)
         {
-            return index >= 0 && index < _packets.Count ? _packets[index] : null;
+            return index >= 0 && index < _packets.Count - _head ? _packets[_head + index] : null;
         }
     }
 
@@ -237,7 +246,7 @@ public sealed class UdpCapture : IDisposable
     {
         lock (_lock)
         {
-            int lo = 0, hi = _packets.Count - 1;
+            int lo = _head, hi = _packets.Count - 1;
             while (lo <= hi)
             {
                 int mid = (lo + hi) >>> 1;
@@ -273,6 +282,7 @@ public sealed class UdpCapture : IDisposable
         {
             Store.Clear();
             _packets.Clear();
+            _head = 0;
             _received = 0;
             _nextNumber = 0;
             if (_state == UdpCaptureState.LimitReached)
@@ -363,7 +373,9 @@ public sealed class UdpCapture : IDisposable
             }
 
             long retained = Store.Length;
-            if (retained + data.Length > Settings.Limit)
+            bool overBytes = retained + data.Length > Settings.Limit;
+            bool overCount = _packets.Count - _head >= MaxPackets;
+            if (overBytes || overCount)
             {
                 if (!_discardOld || data.Length > Settings.Limit)
                 {
@@ -373,11 +385,20 @@ public sealed class UdpCapture : IDisposable
                 }
                 else
                 {
-                    long discard = retained + data.Length - Settings.Limit;
-                    Store.DiscardFront(discard);
-                    long start = Store.Start;
-                    int removed = _packets.FindIndex(p => p.End > start);
-                    _packets.RemoveRange(0, removed < 0 ? _packets.Count : removed);
+                    if (overBytes)
+                    {
+                        Store.DiscardFront(retained + data.Length - Settings.Limit);
+                    }
+
+                    if (overCount)
+                    {
+                        // 件数の上限: 最も古いデータグラムの終わりまで捨てる。
+                        UdpPacket oldest = _packets[_head];
+                        Store.DiscardFront(Math.Max(0, oldest.End - Store.Start));
+                        _head++;
+                    }
+
+                    DropDiscardedPackets();
                 }
             }
 
@@ -397,6 +418,22 @@ public sealed class UdpCapture : IDisposable
         else
         {
             DataReceived?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>捨てたデータの中のパケットを一覧から外す (ロックの中で呼ぶ)。</summary>
+    private void DropDiscardedPackets()
+    {
+        long start = Store.Start;
+        while (_head < _packets.Count && _packets[_head].End <= start && _packets[_head].Position < start)
+        {
+            _head++;
+        }
+
+        if (_head > 4096 && _head > _packets.Count / 2)
+        {
+            _packets.RemoveRange(0, _head);
+            _head = 0;
         }
     }
 

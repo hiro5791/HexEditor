@@ -94,6 +94,8 @@ public sealed class JsonRpcSession
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _ctx.Token);
+        IScriptEventSource events = _ctx.Environment.Events;
+        events.DocumentClosed += OnDocumentClosed;
         Task worker = Task.Factory.StartNew(() => WorkLoop(linked.Token), CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         Task idle = IdleLoopAsync(linked.Token);
         try
@@ -106,6 +108,7 @@ public sealed class JsonRpcSession
         }
         finally
         {
+            events.DocumentClosed -= OnDocumentClosed;
             _queue.CompleteAdding();
             foreach (CancellationTokenSource cts in _running.Values)
             {
@@ -113,6 +116,15 @@ public sealed class JsonRpcSession
             }
 
             await worker.ConfigureAwait(false);
+
+            // 接続が切れたら参照の表を捨てる (参照が持つオブジェクトを残さない)。
+            _convert.Clear();
+            foreach (CancellationTokenSource cts in _running.Values)
+            {
+                cts.Dispose();
+            }
+
+            _running.Clear();
             await linked.CancelAsync().ConfigureAwait(false);
             try
             {
@@ -123,6 +135,12 @@ public sealed class JsonRpcSession
             }
         }
     }
+
+    /// <summary>持っている参照の数 (テスト用)。</summary>
+    internal int HandleCount => _convert.HandleCount;
+
+    /// <summary>ドキュメントを閉じた: そのドキュメントを対象にした要求で作った参照を捨てる (UI スレッド)。</summary>
+    private void OnDocumentClosed(object? sender, IScriptDocumentHost document) => _convert.ForgetDocument(document.Document.Id.ToString("N"));
 
     private static void TryCancel(CancellationTokenSource cts)
     {
@@ -204,13 +222,39 @@ public sealed class JsonRpcSession
             return;
         }
 
-        IEnumerable<JsonNode?> items = message is JsonArray batch ? batch : [message];
+        IEnumerable<JsonNode?> items;
+        try
+        {
+            items = message is JsonArray batch ? [.. batch] : [message];
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            await SendErrorAsync(null, JsonRpcErrorCodes.InvalidRequest, "Invalid request: " + ex.Message).ConfigureAwait(false);
+            return;
+        }
+
         foreach (JsonNode? item in items)
         {
-            if (item is not JsonObject o || o["jsonrpc"]?.GetValueKind() != JsonValueKind.String || (string?)o["jsonrpc"] != "2.0"
-                || o["method"] is not JsonValue mv || !mv.TryGetValue(out string? method))
+            JsonObject o;
+            string? method;
+            JsonNode? requestId;
+            try
             {
-                await SendErrorAsync(item is JsonObject bad ? bad["id"]?.DeepClone() : null, JsonRpcErrorCodes.InvalidRequest, "Invalid request.").ConfigureAwait(false);
+                // 同じキーが 2 回ある (JsonObject は読むときに ArgumentException にする) などの不正なメッセージは、接続を切らずに誤りを返す。
+                if (item is not JsonObject obj || obj["jsonrpc"]?.GetValueKind() != JsonValueKind.String || (string?)obj["jsonrpc"] != "2.0"
+                    || obj["method"] is not JsonValue mv || !mv.TryGetValue(out method))
+                {
+                    await SendErrorAsync(item is JsonObject bad ? SafeId(bad) : null, JsonRpcErrorCodes.InvalidRequest, "Invalid request.").ConfigureAwait(false);
+                    continue;
+                }
+
+                o = obj;
+                requestId = o["id"];
+                _ = o["params"];
+            }
+            catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or FormatException)
+            {
+                await SendErrorAsync(null, JsonRpcErrorCodes.InvalidRequest, "Invalid request: " + ex.Message).ConfigureAwait(false);
                 continue;
             }
 
@@ -225,7 +269,7 @@ public sealed class JsonRpcSession
                 continue;
             }
 
-            if (o["id"] is { } requestId)
+            if (requestId is not null)
             {
                 _running[IdKey(requestId)] = new CancellationTokenSource();
             }
@@ -236,6 +280,18 @@ public sealed class JsonRpcSession
     }
 
     private static string IdKey(JsonNode id) => id.ToJsonString();
+
+    private static JsonNode? SafeId(JsonObject o)
+    {
+        try
+        {
+            return o["id"]?.DeepClone();
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            return null;
+        }
+    }
 
     // ───────────── 実行 ─────────────
 
@@ -311,6 +367,7 @@ public sealed class JsonRpcSession
     internal JsonNode? Invoke(string method, JsonNode? parameters, JsonNode? id, CancellationToken cancellationToken)
     {
         _ctx.ThrowIfStopped();
+        _convert.Scope = null;
         if (!JsonRpcApi.Members.TryGetValue(method, out JsonRpcMember? member))
         {
             throw new JsonRpcMethodException(JsonRpcErrorCodes.MethodNotFound, "Method not found: " + method);
@@ -406,6 +463,7 @@ public sealed class JsonRpcSession
         {
             IDocument doc = args.TakeTarget("document") is { } d ? (IDocument)_convert.FromJson(d, typeof(IDocument))!
                 : app.ActiveDocument ?? throw new Sdk.ArgumentError(Msg.T("ドキュメントが開いていません。", "No document is open."));
+            _convert.Scope = doc.Id;
             return owner == typeof(IDocument) ? doc : JsonRpcApi.DocumentPart(owner)!.GetValue(doc)!;
         }
 

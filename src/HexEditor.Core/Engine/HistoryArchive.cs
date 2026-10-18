@@ -255,7 +255,7 @@ public static class HistoryArchive
             return new HistoryArchiveInfo(SourceIdentity.ReadFrom(root.GetProperty("identity")), root.GetProperty("nodes").GetArrayLength(),
                 root.GetProperty("dataLength").GetInt64());
         }
-        catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
+        catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException)
         {
             throw new HistoryArchiveException("identity");
         }
@@ -300,14 +300,14 @@ public static class HistoryArchive
                 matches = IdentityOf(document).Matches(SourceIdentity.ReadFrom(root.GetProperty("identity")) with { FullSha256 = null });
                 dataLength = root.GetProperty("dataLength").GetInt64();
             }
-            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
+            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException)
             {
                 throw new HistoryArchiveException("identity");
             }
 
             // data.bin を一時ファイルに取り出す (追加データの量に比例する)。ドキュメントを閉じるときに消す。
-            ZipArchiveEntry dataEntry = zip.GetEntry(DataEntry) ?? throw new HistoryArchiveException(DataEntry);
-            if (dataEntry.Length != dataLength)
+            ZipArchiveEntry dataEntry = GetEntry(zip, DataEntry) ?? throw new HistoryArchiveException(DataEntry);
+            if (dataLength < 0 || dataEntry.Length != dataLength)
             {
                 throw new HistoryArchiveException(DataEntry);
             }
@@ -317,14 +317,22 @@ public static class HistoryArchive
             SafeFileHandle handle = File.OpenHandle(tempPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, FileOptions.DeleteOnClose);
             try
             {
-                using (Stream data = dataEntry.Open())
+                try
                 {
+                    using Stream data = dataEntry.Open();
                     byte[] buffer = new byte[1 << 20];
                     long done = 0;
                     int n;
                     while ((n = data.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
+
+                        // 宣言した長さを超えて展開しない (zip の中の長さが偽りでも、一時ファイルを際限なく大きくしない)。
+                        if (n > dataLength - done)
+                        {
+                            throw new HistoryArchiveException(DataEntry);
+                        }
+
                         RandomAccess.Write(handle, buffer.AsSpan(0, n), done);
                         done += n;
                         progress?.Invoke(done);
@@ -334,6 +342,10 @@ public static class HistoryArchive
                     {
                         throw new HistoryArchiveException(DataEntry);
                     }
+                }
+                catch (InvalidDataException ex)
+                {
+                    throw new HistoryArchiveException(ex.Message);
                 }
 
                 return new PreparedHistory(doc, new TempFileSource(handle, dataLength, []), matches);
@@ -376,7 +388,8 @@ public static class HistoryArchive
                 Build(document, _json.RootElement, data, IdentityMatches);
                 _data = null;
             }
-            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException or OverflowException)
+            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException or OverflowException
+                or IndexOutOfRangeException)
             {
                 throw new HistoryArchiveException(ex.Message);
             }
@@ -412,13 +425,19 @@ public static class HistoryArchive
             {
                 string kind = pe[0].GetString()!;
                 long offset = pe[1].GetInt64(), length = pe[2].GetInt64();
+                if (length <= 0)
+                {
+                    throw new FormatException("piece length");
+                }
+
+                // 範囲は引き算で比べる (位置と長さの和が long をあふれても範囲内に見えないように)。
                 pieces.Add(kind switch
                 {
-                    "o" when offset >= 0 && offset + length <= sourceLength => Piece.Original(offset, length),
+                    "o" when offset >= 0 && offset <= sourceLength && length <= sourceLength - offset => Piece.Original(offset, length),
                     "o" => throw new FormatException("元ファイルの範囲外を指しています。"),
-                    "d" when offset >= 0 && offset + length <= data.Length => Piece.External(dataIndex, offset, length),
+                    "d" when offset >= 0 && offset <= data.Length && length <= data.Length - offset => Piece.External(dataIndex, offset, length),
                     "p" => document.LoadPatternPiece(data, offset, pe[3].GetInt32(), length, pe[4].GetInt64()),
-                    "r" => Piece.Random(ulong.Parse(pe[3].GetString()!, CultureInfo.InvariantCulture), offset, length),
+                    "r" when offset >= 0 && length <= long.MaxValue - offset => Piece.Random(ulong.Parse(pe[3].GetString()!, CultureInfo.InvariantCulture), offset, length),
                     _ => throw new FormatException("piece"),
                 });
             }
@@ -484,6 +503,9 @@ public static class HistoryArchive
         document.ReplaceHistory(rootNode, current, saved);
     }
 
+    /// <summary>history.json の大きさの上限 (節の数に比例する。圧縮爆弾で際限なくメモリを使わない)。</summary>
+    private const long MaxJsonBytes = 1L << 30;
+
     private static ZipArchive OpenZip(Stream input)
     {
         try
@@ -496,13 +518,31 @@ public static class HistoryArchive
         }
     }
 
+    /// <summary>項目を探す (中央ディレクトリが壊れていれば、ここで初めて読むので誤りになる)。</summary>
+    private static ZipArchiveEntry? GetEntry(ZipArchive zip, string name)
+    {
+        try
+        {
+            return zip.GetEntry(name);
+        }
+        catch (InvalidDataException ex)
+        {
+            throw new HistoryArchiveException(ex.Message);
+        }
+    }
+
     private static JsonDocument ReadJson(ZipArchive zip)
     {
-        ZipArchiveEntry entry = zip.GetEntry(JsonEntry) ?? throw new HistoryArchiveException(JsonEntry);
+        ZipArchiveEntry entry = GetEntry(zip, JsonEntry) ?? throw new HistoryArchiveException(JsonEntry);
+        if (entry.Length > MaxJsonBytes)
+        {
+            throw new HistoryArchiveException(JsonEntry);
+        }
+
         JsonDocument doc;
         try
         {
-            using Stream s = entry.Open();
+            using Stream s = new LimitedReadStream(entry.Open(), MaxJsonBytes);
             doc = JsonDocument.Parse(s);
         }
         catch (Exception ex) when (ex is JsonException or InvalidDataException)
@@ -510,8 +550,19 @@ public static class HistoryArchive
             throw new HistoryArchiveException(ex.Message);
         }
 
-        if (doc.RootElement.ValueKind != JsonValueKind.Object || !doc.RootElement.TryGetProperty("format", out JsonElement f) || f.GetString() != FormatName
-            || !doc.RootElement.TryGetProperty("version", out JsonElement v) || v.GetInt32() > Version)
+        bool ok;
+        try
+        {
+            ok = doc.RootElement.ValueKind == JsonValueKind.Object && doc.RootElement.TryGetProperty("format", out JsonElement f)
+                && f.ValueKind == JsonValueKind.String && f.GetString() == FormatName
+                && doc.RootElement.TryGetProperty("version", out JsonElement v) && v.TryGetInt32(out int version) && version <= Version;
+        }
+        catch (InvalidOperationException)
+        {
+            ok = false;
+        }
+
+        if (!ok)
         {
             doc.Dispose();
             throw new HistoryArchiveException("format");

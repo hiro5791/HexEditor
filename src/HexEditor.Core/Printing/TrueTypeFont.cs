@@ -25,11 +25,27 @@ public sealed class TrueTypeFont
         {
             int record = faceOffset + 12 + i * 16;
             string tag = Encoding.ASCII.GetString(data, record, 4);
-            _tables[tag] = (ReadI32(record + 8), ReadI32(record + 12));
+            int offset = ReadI32(record + 8), length = ReadI32(record + 12);
+
+            // ファイルの外を指す表は使わない (システムのフォントでも、壊れたファイルを信頼しない)。
+            if (offset >= 0 && length >= 0 && length <= data.Length - offset)
+            {
+                _tables[tag] = (offset, length);
+            }
         }
 
-        (int head, _) = _tables["head"];
+        (int head, int headLength) = _tables["head"];
+        if (headLength < 54 || _tables["hhea"].Length < 36 || _tables["maxp"].Length < 6)
+        {
+            throw new InvalidDataException("A required table is too short.");
+        }
+
         UnitsPerEm = ReadU16(head + 18);
+        if (UnitsPerEm is < 16 or > 16384)
+        {
+            throw new InvalidDataException("unitsPerEm is out of range.");
+        }
+
         XMin = ReadI16(head + 36);
         YMin = ReadI16(head + 38);
         XMax = ReadI16(head + 40);
@@ -40,6 +56,21 @@ public sealed class TrueTypeFont
         Descent = ReadI16(hhea + 6);
         _numberOfHMetrics = Math.Max(1, ReadU16(hhea + 34));
         NumGlyphs = ReadU16(_tables["maxp"].Offset + 4);
+        if (_tables.TryGetValue("hmtx", out var hmtxTable) && hmtxTable.Length < _numberOfHMetrics * 4)
+        {
+            // 送り幅の表が短い: 表にある分だけを使う。
+            _numberOfHMetrics = hmtxTable.Length / 4;
+        }
+
+        if (_tables.ContainsKey("hmtx") && _numberOfHMetrics < 1)
+        {
+            throw new InvalidDataException("The hmtx table is empty.");
+        }
+
+        if (_tables.ContainsKey("loca") && _tables.ContainsKey("glyf"))
+        {
+            ValidateGlyphOffsets();
+        }
         if (_tables.TryGetValue("post", out var post) && post.Length >= 16)
         {
             IsFixedPitch = ReadI32(post.Offset + 12) != 0;
@@ -56,13 +87,19 @@ public sealed class TrueTypeFont
         }
 
         var maps = new List<(int, int, int)>();
-        if (_tables.TryGetValue("cmap", out var cmap))
+        if (_tables.TryGetValue("cmap", out var cmap) && cmap.Length >= 4)
         {
-            int count = ReadU16(cmap.Offset + 2);
+            int count = Math.Min(ReadU16(cmap.Offset + 2), (cmap.Length - 4) / 8);
             for (int i = 0; i < count; i++)
             {
                 int record = cmap.Offset + 4 + i * 8;
-                maps.Add((ReadU16(record), ReadU16(record + 2), cmap.Offset + ReadI32(record + 4)));
+                int subtable = ReadI32(record + 4);
+
+                // 表の外を指す部分の表は使わない。
+                if (subtable >= 0 && subtable <= cmap.Length - 8)
+                {
+                    maps.Add((ReadU16(record), ReadU16(record + 2), cmap.Offset + subtable));
+                }
             }
         }
 
@@ -132,15 +169,44 @@ public sealed class TrueTypeFont
             var font = new TrueTypeFont(data, offset);
             return font.HasTable("glyf") && font.HasTable("loca") && font.HasTable("hmtx") ? font : null;
         }
-        catch (Exception ex) when (ex is ArgumentOutOfRangeException or KeyNotFoundException or IndexOutOfRangeException)
+        catch (Exception ex) when (ex is ArgumentOutOfRangeException or ArgumentException or KeyNotFoundException or IndexOutOfRangeException
+            or InvalidDataException or OverflowException)
         {
             return null;
         }
     }
 
-    /// <summary>ttc の書体の数 (ttc でなければ 1)。</summary>
+    /// <summary>ttc の書体の数 (ttc でなければ 1)。ファイルに入りきらない数 (壊れた値) はファイルの大きさで抑える。</summary>
     public static int FaceCount(byte[] data) =>
-        data.Length >= 16 && data[0] == 't' && data[1] == 't' && data[2] == 'c' && data[3] == 'f' ? BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(8)) : 1;
+        data.Length >= 16 && data[0] == 't' && data[1] == 't' && data[2] == 'c' && data[3] == 'f'
+            ? Math.Clamp(BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(8)), 0, (data.Length - 12) / 4) : 1;
+
+    /// <summary>
+    /// グリフの位置の表 (loca) を確かめる: 表の長さが足り、位置は昇順で glyf の表の中 (仕様どおりのフォントでは輪郭は重ならないので、
+    /// サブセットの大きさは glyf の表を超えない)。満たさなければ <see cref="InvalidDataException"/>。
+    /// </summary>
+    private void ValidateGlyphOffsets()
+    {
+        (int loca, int locaLength) = _tables["loca"];
+        (_, int glyfLength) = _tables["glyf"];
+        int entry = _locaFormat == 0 ? 2 : 4;
+        if (locaLength < (NumGlyphs + 1) * entry)
+        {
+            throw new InvalidDataException("The loca table is too short.");
+        }
+
+        long previous = 0;
+        for (int g = 0; g <= NumGlyphs; g++)
+        {
+            long at = _locaFormat == 0 ? ReadU16(loca + g * 2) * 2L : (uint)ReadI32(loca + g * 4);
+            if (at < previous || at > glyfLength)
+            {
+                throw new InvalidDataException("The loca table is not valid.");
+            }
+
+            previous = at;
+        }
+    }
 
     private bool HasTable(string tag) => _tables.ContainsKey(tag);
 
@@ -155,7 +221,16 @@ public sealed class TrueTypeFont
         int gid = 0;
         foreach ((_, _, int offset) in _cmaps)
         {
-            gid = Lookup(offset, codePoint);
+            try
+            {
+                gid = Lookup(offset, codePoint);
+            }
+            catch (Exception ex) when (ex is ArgumentOutOfRangeException or IndexOutOfRangeException or OverflowException)
+            {
+                // 壊れた部分の表 (ファイルの外を指す): この表では見つからない扱い。
+                gid = 0;
+            }
+
             if (gid != 0)
             {
                 break;
@@ -219,7 +294,7 @@ public sealed class TrueTypeFont
 
             case 12:
                 {
-                    int groups = ReadI32(offset + 12);
+                    int groups = (int)Math.Clamp((uint)ReadI32(offset + 12), 0, (_data.Length - offset - 16) / 12);
                     int lo = 0;
                     int hi = groups - 1;
                     while (lo <= hi)
@@ -246,7 +321,7 @@ public sealed class TrueTypeFont
                 }
 
             case 0:
-                return codePoint is >= 0 and < 256 ? _data[offset + 6 + codePoint] : 0;
+                return codePoint is >= 0 and < 256 && offset + 6 + codePoint < _data.Length ? _data[offset + 6 + codePoint] : 0;
             default:
                 return 0;
         }
@@ -256,7 +331,7 @@ public sealed class TrueTypeFont
     public int Advance(int glyph)
     {
         (int hmtx, _) = _tables["hmtx"];
-        int index = Math.Min(glyph, _numberOfHMetrics - 1);
+        int index = Math.Clamp(glyph, 0, _numberOfHMetrics - 1);
         return ReadU16(hmtx + index * 4);
     }
 

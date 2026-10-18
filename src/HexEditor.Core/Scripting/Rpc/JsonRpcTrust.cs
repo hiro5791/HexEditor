@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Security.Cryptography;
 
 namespace HexEditor.Core.Scripting.Rpc;
@@ -26,6 +27,14 @@ public static class JsonRpcTrust
 {
     /// <summary>信頼の一覧 (<c>scripts/trust.json</c>) の種類。</summary>
     public const string Kind = "rpc-client";
+
+    /// <summary>確認を待つ接続の数の上限 (これを超える接続は確認を出さずに拒否する。確認のダイアログで画面を埋められないように)。</summary>
+    public const int MaxWaitingPrompts = 4;
+
+    // 確認は 1 つずつ出す (アプリ全体で 1 つの列)。待っている間に同じ実行ファイルを許可・拒否したら、その答えを使う。
+    private static readonly SemaphoreSlim PromptGate = new(1, 1);
+    private static readonly ConcurrentDictionary<string, long> DeniedAt = new(StringComparer.OrdinalIgnoreCase);
+    private static int s_waiting;
 
     /// <summary>許可したプログラムに与える許可。</summary>
     public static IReadOnlyList<string> GrantedPermissions { get; } =
@@ -77,19 +86,65 @@ public static class JsonRpcTrust
             return new(true, GrantedPermissions, string.Empty);
         }
 
-        var prompt = new TrustPrompt(Path.GetFileName(exe), exe, client.Signer, ScriptLanguage.CSharp, [], FullTrust: true,
-            FromInternet: MarkOfTheWeb.IsFromInternet(exe), Elevated: env.IsElevated, ElevationOnly: record is not null, External: true);
-        TrustAnswer answer = await env.Dispatcher.InvokeAsync(() => env.Ui.ConfirmTrustAsync(prompt)).ConfigureAwait(false);
-        switch (answer)
+        // 確認は 1 つずつ。待っている接続が多すぎれば、確認を出さずに拒否する。
+        long arrived = Environment.TickCount64;
+        if (Interlocked.Increment(ref s_waiting) > MaxWaitingPrompts)
         {
-            case TrustAnswer.Deny:
-                return new(false, [], Msg.T("利用者が接続を許可しませんでした。", "The user did not allow the connection."));
-            case TrustAnswer.AlwaysAllow:
-                Remember(host.Trust, exe);
-                break;
+            Interlocked.Decrement(ref s_waiting);
+            return new(false, [], Msg.T("確認を待っている接続が多すぎます。", "Too many connections are waiting for confirmation."));
         }
 
-        return new(true, GrantedPermissions, string.Empty);
+        try
+        {
+            await PromptGate.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                string key;
+                try
+                {
+                    key = TrustStore.ScriptKey(exe) + "|" + HashOf(exe);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    return new(false, [], Msg.T("接続してきたプログラムを確認できません。", "The connecting program cannot be identified."));
+                }
+
+                // 待っている間に、利用者が同じ実行ファイルを拒否した・常に許可した。
+                if (DeniedAt.TryGetValue(key, out long denied) && denied >= arrived)
+                {
+                    return new(false, [], Msg.T("利用者が接続を許可しませんでした。", "The user did not allow the connection."));
+                }
+
+                record = FindRecord(host.Trust, exe);
+                if (record is not null && !env.IsElevated)
+                {
+                    return new(true, GrantedPermissions, string.Empty);
+                }
+
+                var prompt = new TrustPrompt(Path.GetFileName(exe), exe, client.Signer, ScriptLanguage.CSharp, [], FullTrust: true,
+                    FromInternet: MarkOfTheWeb.IsFromInternet(exe), Elevated: env.IsElevated, ElevationOnly: record is not null, External: true);
+                TrustAnswer answer = await env.Dispatcher.InvokeAsync(() => env.Ui.ConfirmTrustAsync(prompt)).ConfigureAwait(false);
+                switch (answer)
+                {
+                    case TrustAnswer.Deny:
+                        DeniedAt[key] = Environment.TickCount64;
+                        return new(false, [], Msg.T("利用者が接続を許可しませんでした。", "The user did not allow the connection."));
+                    case TrustAnswer.AlwaysAllow:
+                        Remember(host.Trust, exe);
+                        break;
+                }
+
+                return new(true, GrantedPermissions, string.Empty);
+            }
+            finally
+            {
+                PromptGate.Release();
+            }
+        }
+        finally
+        {
+            Interlocked.Decrement(ref s_waiting);
+        }
     }
 
     /// <summary>
