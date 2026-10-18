@@ -17,6 +17,16 @@
     <PackageReference Include="Jint" Version="4.16.4" />
   </ItemGroup>
 
+  <!--
+    逆アセンブル (06 の ANA-23〜ANA-29)。x86 / x64 の逆アセンブル・アセンブルは Iced (MIT、マネージド)。そのほかのアーキテクチャは
+    Capstone 4.0 のネイティブライブラリ (BSD-3-Clause) を自前の P/Invoke で呼ぶ。ネイティブの DLL は Gee.External.Capstone (MIT) の
+    パッケージに入っている win-x64 / win-arm64 の capstone.dll だけを使う (パッケージのマネージドのラッパーは参照しない)。
+  -->
+  <ItemGroup>
+    <PackageReference Include="Iced" Version="1.21.0" />
+    <PackageReference Include="Gee.External.Capstone" Version="2.3.0" ExcludeAssets="compile;runtime" />
+  </ItemGroup>
+
   <!-- スクリプトの実行環境の前置き (JavaScript の例外の型、console、AbortController など)。 -->
   <ItemGroup>
     <EmbeddedResource Include="Scripting\Js\prelude.js" LogicalName="HexEditor.Scripting.prelude.js" />
