@@ -24,8 +24,15 @@ public sealed class TemplateVisualizerUiTests
     {
         JsonObject state = await VisAsync(app, "show", new JsonObject { ["path"] = path });
         Assert.True(state["selected"]!.GetValue<bool>(), "node " + path);
-        await app.WaitUntilAsync(async () => !(state = await VisAsync(app, "state"))["loading"]!.GetValue<bool>() && state["kind"] is not null,
-            Wait, "the visualizer content");
+        try
+        {
+            await app.WaitUntilAsync(async () => !(state = await VisAsync(app, "state"))["loading"]!.GetValue<bool>() && state["kind"] is not null,
+                Wait, "the visualizer content");
+        }
+        catch (TimeoutException ex)
+        {
+            throw new TimeoutException(ex.Message + " " + state.ToJsonString(), ex);
+        }
         Assert.True(state["visible"]!.GetValue<bool>());
         return state;
     }

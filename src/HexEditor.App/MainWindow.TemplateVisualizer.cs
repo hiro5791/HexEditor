@@ -63,15 +63,6 @@ public sealed partial class MainWindow
     /// <summary>結果ツリーの選択と「表示」ボタンをつなぐ (<see cref="CreateTemplateVm"/> から呼ぶ)。</summary>
     private void HookTemplateVisualizer(TemplatePanelViewModel templateVm)
     {
-        // 適用の解除・再評価で、表示していたノードの評価結果がなくなったら消す。
-        templateVm.ResultsChanged += (_, _) =>
-        {
-            if (_templateVisVm?.Node is { } shown && !templateVm.Roots.Any(r => ReferenceEquals(r.Result, shown.Result)))
-            {
-                ClearTemplateVisualizer();
-            }
-        };
-
         templateVm.Rows.VisualizerRequested += (_, item) =>
         {
             templateVm.SelectedItem = item;
@@ -116,15 +107,6 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(mi, "TplMenu_Visualize");
         mi.Click += (_, _) => ShowTemplateVisualizer(node);
         menu.Items.Add(mi);
-    }
-
-    /// <summary>ドキュメント・テンプレートの適用が変わった: 表示していたノードが別の評価結果のものなら消す。</summary>
-    private void ClearTemplateVisualizer()
-    {
-        if (_templateVisVm is { Node: not null } vm)
-        {
-            _ = vm.ShowAsync(null);
-        }
     }
 
     // ───────────── 保存 (仕様 5) ─────────────
