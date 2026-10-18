@@ -91,19 +91,59 @@ public sealed partial class MainWindow
     }
 
     /// <summary>パネルを開き、中身を返す(コマンドとインスペクタの右クリックから開くとき)。</summary>
-    internal T? OpenToolPanel<T>(string id)
+    internal T? OpenToolPanel<T>(string id, bool focus = false)
         where T : FrameworkElement
     {
         _ = Tools;
-        ShowPanel(id);
+        if (focus || !IsPanelShown(id))
+        {
+            ShowPanel(id, focus);
+        }
+
         return FindPanelContent<T>(id);
     }
 
     /// <summary>データインスペクタの float / double の行の右クリック「ビジュアライザで開く」(TOOL-25)。</summary>
-    internal void ShowFloatVisualizer(FloatLayout layout, UInt128 bits) => OpenToolPanel<FloatPanel>(FloatPanelId)?.Show(layout, bits);
+    internal void ShowFloatVisualizer(FloatLayout layout, UInt128 bits) => OpenToolPanel<FloatPanel>(FloatPanelId, focus: true)?.Show(layout, bits);
 
     /// <summary>データインスペクタの色の型の行の右クリック「カラーピッカーで開く」(TOOL-27)。</summary>
-    internal void ShowColorPicker(ColorValue color) => OpenToolPanel<ColorPanel>(ColorPanelId)?.SetColor(color, fromPicker: false);
+    internal void ShowColorPicker(ColorValue color) => OpenToolPanel<ColorPanel>(ColorPanelId, focus: true)?.SetColor(color, fromPicker: false);
+
+    /// <summary>データインスペクタの行の右クリック「ビジュアライザで開く」「カラーピッカーで開く」(TOOL-25・TOOL-27)。</summary>
+    internal void OpenInspectorRowInTool(InspectorItemViewModel item)
+    {
+        if (item.Rgba is { } rgba)
+        {
+            ShowColorPicker(new ColorValue((byte)(rgba >> 24), (byte)(rgba >> 16), (byte)(rgba >> 8), (byte)rgba));
+            return;
+        }
+
+        FloatLayout? layout = item.TypeId switch
+        {
+            Core.Inspector.InspectorTypes.Float32 => FloatLayout.Single,
+            Core.Inspector.InspectorTypes.Float64 => FloatLayout.Double,
+            Core.Inspector.InspectorTypes.Half => FloatLayout.Half,
+            Core.Inspector.InspectorTypes.BFloat16 => FloatLayout.BFloat16,
+            Core.Inspector.InspectorTypes.Float80 => FloatLayout.X87,
+            _ => null,
+        };
+        if (layout is null || Vm.Selected is not { } doc)
+        {
+            return;
+        }
+
+        byte[] bytes = new byte[layout.Bytes];
+        if (!doc.Document.Current.Read(_inspectorVm.Origin, bytes).IsComplete)
+        {
+            return;
+        }
+
+        bool big = (_inspectorVm.Endian == Core.Inspector.Endianness.Big) != item.Opposite;
+        if (FloatAnalyzer.FromBytes(layout, bytes, big) is { } bits)
+        {
+            ShowFloatVisualizer(layout, bits);
+        }
+    }
 
     // ---- カーソル位置への書き込み ----
 

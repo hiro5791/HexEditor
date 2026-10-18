@@ -62,7 +62,13 @@ internal sealed partial class CharTablePanel : ToolPanelBase
                 AutomationProperties.SetAutomationId(cell, idPrefix + value.ToString("X2", CultureInfo.InvariantCulture));
                 cell.Click += (_, _) => select(captured);
                 cell.DoubleTapped += (_, _) => activate(captured);
-                cell.GotFocus += (_, _) => FocusedValue = captured;
+                cell.GotFocus += (_, _) =>
+                {
+                    if (FocusManager.GetFocusedElement(cell.XamlRoot) == cell)
+                    {
+                        FocusedValue = captured;
+                    }
+                };
                 Grid.SetRow(cell, (value >> 4) + 1);
                 Grid.SetColumn(cell, (value & 15) + 1);
                 Root.Children.Add(cell);
@@ -94,7 +100,7 @@ internal sealed partial class CharTablePanel : ToolPanelBase
                 }
                 else if (next >= 0 && next < 256)
                 {
-                    Cells[next].Focus(FocusState.Keyboard);
+                    FocusCell(next);
                     e.Handled = true;
                 }
                 else if (next != -1)
@@ -115,6 +121,13 @@ internal sealed partial class CharTablePanel : ToolPanelBase
         public Button[] Cells { get; } = new Button[256];
 
         public int FocusedValue { get; private set; } = -1;
+
+        /// <summary>セルにフォーカスを移す(フォーカスしたセルを覚える)。</summary>
+        public void FocusCell(int value)
+        {
+            FocusedValue = value;
+            Cells[value].Focus(FocusState.Keyboard);
+        }
 
         private readonly TextBlock[] _columnHeaders = new TextBlock[16];
         private readonly TextBlock[] _rowHeaders = new TextBlock[16];
@@ -149,7 +162,11 @@ internal sealed partial class CharTablePanel : ToolPanelBase
             {
                 CharacterCell cell = CellOf(v);
                 Button button = Cells[v];
-                button.Content = cell.Kind == CharacterCellKind.Undefined ? "⁄" : cell.Label;
+                // 代替フォントでも表示できない文字は「□」で示す(文字名は読み上げの名前とツールヒントにある。TOOL-26 の仕様 7)。
+                bool displayable = cell.Kind != CharacterCellKind.Character || cell.Text.Length == 0 || cell.CodePoint is < 0x20 or 0x7F
+                    || Services.FontCatalog.CanDisplay(cell.CodePoint);
+                button.Content = cell.Kind == CharacterCellKind.Undefined ? "⁄" : displayable ? cell.Label : "□";
+                ToolTipService.SetToolTip(button, cell.Kind == CharacterCellKind.Character && cell.Name is not null ? cell.Name : null);
                 button.Opacity = cell.Kind == CharacterCellKind.Undefined ? 0.4 : 1;
                 button.FontWeight = cell.Kind == CharacterCellKind.Lead ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal;
                 AutomationProperties.SetName(button, cell.SpokenText);
@@ -595,7 +612,7 @@ internal sealed partial class CharTablePanel : ToolPanelBase
 
     internal int FocusedFirst => _first.FocusedValue;
 
-    internal void FocusFirstCell(int value) => _first.Cells[value].Focus(FocusState.Keyboard);
+    internal void FocusFirstCell(int value) => _first.FocusCell(value);
 
     internal CharacterCell? DetailCell => _detailCell;
 }

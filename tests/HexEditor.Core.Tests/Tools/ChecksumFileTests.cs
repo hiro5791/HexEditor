@@ -277,4 +277,42 @@ public sealed class ChecksumFileTests : IDisposable
         IReadOnlyList<ChecksumResultRow> withFallback = ChecksumVerifier.Verify(ambiguous, folder, "crc64-xz");
         Assert.NotEqual(ChecksumStatus.ReadError, withFallback[0].Status);
     }
+
+    /// <summary>
+    /// 結合テストの作る側 (TC-TOOL-18-01〜03): GNU 形式と BSD 形式のチェックサムファイルを、TD-TOOL-TREE のコピーと並べて出力する。
+    /// CI は環境変数 HEXEDITOR_CHECKSUM_OUT に出力し、Linux の sha256sum -c と macOS の shasum -c で検証する (ci.yml の checksum-interop-*)。
+    /// 環境変数がなければ一時フォルダに作り、このプロセスの中で検証し直す(正しく読み書きできることの確認)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-TOOL-18-01")]
+    [Trait(TC, "TC-TOOL-18-02")]
+    [Trait(TC, "TC-TOOL-18-03")]
+    public void WritesTheCrossPlatformArtifacts()
+    {
+        string root = Environment.GetEnvironmentVariable("HEXEDITOR_CHECKSUM_OUT") is { Length: > 0 } dir ? dir : Path.Combine(_dir, "interop");
+        foreach ((string name, ChecksumFormat format) in new[] { ("gnu", ChecksumFormat.Gnu), ("bsd", ChecksumFormat.Bsd) })
+        {
+            string target = Path.Combine(root, name);
+            Directory.CreateDirectory(target);
+            string source = TestDataCatalog.FolderOf("TD-TOOL-TREE");
+            foreach (string file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
+            {
+                string destination = Path.Combine(target, Path.GetRelativePath(source, file));
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                File.Copy(file, destination, overwrite: true);
+            }
+
+            var options = new ChecksumCreateOptions { Format = format, Separator = ChecksumSeparator.Slash, LineEnding = ChecksumLineEnding.Lf };
+            ChecksumCreator.Create(ChecksumCreator.Plan([target], options), options);
+
+            // 作ったファイルを、このプロセスの検証でも読み戻す。
+            string sums = Path.Combine(target, format == ChecksumFormat.Gnu ? "SHA256SUMS" : "CHECKSUM.SHA256");
+            ChecksumDocument document = ChecksumReader.ReadFile(sums);
+            Assert.Equal(format, document.Format);
+            IReadOnlyList<ChecksumResultRow> rows = ChecksumVerifier.Verify(document, target);
+            Assert.Equal(5, rows.Count);
+            Assert.All(rows, r => Assert.Equal(ChecksumStatus.Match, r.Status));
+            Assert.Contains(rows, r => r.Path == "日本語/テスト ファイル①.bin");
+        }
+    }
 }

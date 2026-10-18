@@ -97,7 +97,13 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
 
         _input = ToolParts.Box("Calc_Input", Loc.Get("Calc_Input"));
         _input.PlaceholderText = Loc.Get("Calc_Placeholder");
-        _input.TextChanged += (_, _) => Evaluate();
+        _input.TextChanged += (_, _) =>
+        {
+            if (!ToolParts.IsProgrammatic(_input))
+            {
+                Evaluate();
+            }
+        };
         _input.KeyDown += Input_KeyDown;
         _error = ToolParts.ErrorText("Calc_Error");
         _overflow = new TextBlock { Foreground = ToolParts.ThemeBrush("SystemFillColorCautionBrush"), Visibility = Visibility.Collapsed, Text = Loc.Get("Calc_Overflow") };
@@ -256,7 +262,10 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
     private void SetRowsDim(bool dim) => _rowsPanel.Opacity = dim ? 0.5 : 1.0;
 
     private string PrimaryDecimalCopy() =>
-        _lastRows is null ? string.Empty : IsProgrammer && !_signed ? _lastRows.CopyDecimalUnsigned ?? string.Empty : _lastRows.CopyDecimalSigned ?? string.Empty;
+        _lastRows is null ? string.Empty
+        : _lastRows.IsFloat ? _lastRows.CopyDecimalFloat ?? string.Empty
+        : IsProgrammer && !_signed ? _lastRows.CopyDecimalUnsigned ?? string.Empty
+        : _lastRows.CopyDecimalSigned ?? string.Empty;
 
     private void ShowRows(CalcValue value)
     {
@@ -604,6 +613,23 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
                     AutomationProperties.SetAutomationId(cell, "Calc_Bit_" + bit.ToString(CultureInfo.InvariantCulture));
                     int index = bit;
                     cell.Click += (_, _) => Bit_Click(index);
+                    Button focusCell = cell;
+                    cell.GotFocus += (_, _) =>
+                    {
+                        // 実際にフォーカスのあるセルだけを記録する(遅れて届いたイベントで、動かした後のフォーカスを上書きしない)。
+                        if (FocusManager.GetFocusedElement(focusCell.XamlRoot) != focusCell)
+                        {
+                            return;
+                        }
+
+                        // 矢印キー以外(Tab やクリックなど)でフォーカスが来たら、範囲選択の起点をそのビットにし直す。
+                        if (!_internalFocusMove)
+                        {
+                            _selAnchor = -1;
+                        }
+
+                        _bitFocus = index;
+                    };
                     cell.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler((_, e) => Bit_PointerPressed(index, e)), true);
                     _bitCells.Add(cell);
                     var label = new TextBlock
@@ -674,7 +700,7 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
     private void SetValueFromBits()
     {
         _updating = true;
-        _input.Text = "0x" + _bits.ToString("X", CultureInfo.InvariantCulture);
+        ToolParts.SetText(_input, "0x" + _bits.ToString("X", CultureInfo.InvariantCulture));
         _updating = false;
         Evaluate();
     }
@@ -693,8 +719,17 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
 
     private void FocusBit(int index)
     {
+        _internalFocusMove = true;
+        _bitFocus = index;
         _bitCells.FirstOrDefault(c => (int)c.Tag == index)?.Focus(FocusState.Keyboard);
+        _internalFocusMove = false;
     }
+
+    /// <summary>矢印キーによるフォーカスの移動中(範囲選択の起点を変えない)。</summary>
+    private bool _internalFocusMove;
+
+    /// <summary>フォーカスのあるビット(なければ -1)。</summary>
+    private int _bitFocus = -1;
 
     private void Bit_PointerPressed(int index, PointerRoutedEventArgs e)
     {
@@ -747,8 +782,17 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
         }
 
         bool shift = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+        e.Handled = HandleBitKey(bit, e.Key, shift);
+    }
+
+    /// <summary>
+    /// ビットの表のキー操作: ← / → で隣のビットへ (左が上位)、Home / End で最上位 / 最下位、Shift 付きで範囲を選ぶ、Esc で選択を解除。
+    /// フォーカスのあるビットが <paramref name="bit"/>。処理したら true。
+    /// </summary>
+    internal bool HandleBitKey(int bit, VirtualKey key, bool shift)
+    {
         int next = bit;
-        switch (e.Key)
+        switch (key)
         {
             case VirtualKey.Left:
                 next = Math.Min(_width - 1, bit + 1);
@@ -765,10 +809,9 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
             case VirtualKey.Escape:
                 ClearBitSelection();
                 UpdateBits();
-                e.Handled = true;
-                return;
+                return true;
             default:
-                return;
+                return false;
         }
 
         if (shift)
@@ -783,7 +826,7 @@ internal sealed partial class CalculatorPanel : ToolPanelBase
         }
 
         FocusBit(next);
-        e.Handled = true;
+        return true;
     }
 
     private void ReadFromCursor()

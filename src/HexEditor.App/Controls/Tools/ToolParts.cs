@@ -85,6 +85,26 @@ internal static class ToolParts
         return box;
     }
 
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<TextBox, StrongBox> s_programmatic = new();
+
+    private sealed class StrongBox
+    {
+        public string? Value;
+    }
+
+    /// <summary>
+    /// プログラムが入れる文字列。TextChanged は文字を入れた後で非同期に届くため、利用者の入力と区別できるよう、入れた文字列を覚える
+    /// (<see cref="IsProgrammatic"/>)。他の欄の更新が、その欄の入力として処理し直されるのを防ぐ。
+    /// </summary>
+    public static void SetText(TextBox box, string text)
+    {
+        s_programmatic.GetOrCreateValue(box).Value = text;
+        box.Text = text;
+    }
+
+    /// <summary>欄の今の文字列が、プログラムが入れたもの(利用者が変えていない)か。</summary>
+    public static bool IsProgrammatic(TextBox box) => s_programmatic.TryGetValue(box, out StrongBox? expected) && expected.Value == box.Text;
+
     /// <summary>コピーのボタン(アイコンだけ。名前と ToolTip は <paramref name="name"/>)。</summary>
     public static Button CopyButton(string id, string name, Func<string> text)
     {
@@ -98,7 +118,22 @@ internal static class ToolParts
         AutomationProperties.SetName(button, name);
         ToolTipService.SetToolTip(button, name);
         button.Click += (_, _) => Copy(text());
+        s_copyButtons[id] = new WeakReference<Button>(button);
         return button;
+    }
+
+    private static readonly Dictionary<string, WeakReference<Button>> s_copyButtons = [];
+
+    /// <summary>コピーのボタン(AutomationId)を押したのと同じ処理(テスト用)。</summary>
+    internal static void InvokeCopyButton(string id)
+    {
+        if (s_copyButtons.TryGetValue(id, out WeakReference<Button>? weak) && weak.TryGetTarget(out Button? button))
+        {
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button)).Invoke();
+            return;
+        }
+
+        throw new InvalidOperationException($"Copy button not found: {id}");
     }
 
     /// <summary>システムのクリップボードに文字列を置く。</summary>

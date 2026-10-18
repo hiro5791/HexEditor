@@ -6961,4 +6961,6 @@ Type: {4}</value></data>
   <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>Read error {0}</value></data>
   <data name="FolderCmp_Summary_None" xml:space="preserve"><value>No files</value></data>
   <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>Open in file comparison</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>Open in floating-point visualizer</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>Open in color picker</value></data>
 </root>

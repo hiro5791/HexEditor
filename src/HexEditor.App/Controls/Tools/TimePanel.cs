@@ -76,19 +76,10 @@ internal sealed partial class TimePanel : ToolPanelBase
         _date.PlaceholderText = "2024-02-29T12:34:56Z";
         _date.TextChanged += (_, _) =>
         {
-            if (_updating)
+            if (!_updating && !ToolParts.IsProgrammatic(_date))
             {
-                return;
+                DateEdited();
             }
-
-            if (_converter.SetFromText(_date.Text) is { } error)
-            {
-                ToolParts.ShowError(_dateError, _date, Loc.Get("Time_Error_" + error.Code));
-                return;
-            }
-
-            ToolParts.ShowError(_dateError, _date, null);
-            Refresh(null, keepDate: true);
         };
         _dateError = ToolParts.ErrorText("Time_DateError");
 
@@ -144,6 +135,18 @@ internal sealed partial class TimePanel : ToolPanelBase
         FlowDirection = FlowDirection.LeftToRight;
         ApplyZone();
         Refresh(null);
+    }
+
+    private void DateEdited()
+    {
+        if (_converter.SetFromText(_date.Text) is { } error)
+        {
+            ToolParts.ShowError(_dateError, _date, Loc.Get("Time_Error_" + error.Code));
+            return;
+        }
+
+        ToolParts.ShowError(_dateError, _date, null);
+        Refresh(null, keepDate: true);
     }
 
     protected override Control FirstFocus => _date;
@@ -249,7 +252,7 @@ internal sealed partial class TimePanel : ToolPanelBase
 
     private void RowEdited(FormatRow row, TextBox source, Func<TimestampError?> apply)
     {
-        if (_updating || string.IsNullOrWhiteSpace(source.Text))
+        if (_updating || ToolParts.IsProgrammatic(source) || string.IsNullOrWhiteSpace(source.Text))
         {
             return;
         }
@@ -272,7 +275,7 @@ internal sealed partial class TimePanel : ToolPanelBase
         _updating = true;
         if (!keepDate)
         {
-            _date.Text = _converter.Iso();
+            ToolParts.SetText(_date, _converter.Iso());
             ToolParts.ShowError(_dateError, _date, null);
         }
 
@@ -287,7 +290,7 @@ internal sealed partial class TimePanel : ToolPanelBase
             {
                 if (box != except)
                 {
-                    box.Text = text;
+                    ToolParts.SetText(box, text);
                     DialogParts.MarkInvalid(box, false);
                 }
             }
@@ -330,13 +333,24 @@ internal sealed partial class TimePanel : ToolPanelBase
 
     // ---- テスト用 ----
 
-    internal void SetDateText(string text) => _date.Text = text;
+    internal void SetDateText(string text)
+    {
+        _date.Text = text;
+        DateEdited();
+    }
 
     internal void SetField(string formatId, string field, string text)
     {
         FormatRow row = _rows.First(r => r.Format.Id == formatId);
         TextBox box = field switch { "dec" => row.Decimal, "hex" => row.Hex, _ => row.Bytes };
         box.Text = text;
+        Func<TimestampError?> apply = field switch
+        {
+            "dec" => () => _converter.SetFromNumber(row.Format, row.Decimal.Text),
+            "hex" => () => _converter.SetFromNumber(row.Format, row.Hex.Text),
+            _ => () => _converter.SetFromHexBytes(row.Format, row.Bytes.Text),
+        };
+        RowEdited(row, box, apply);
     }
 
     internal void SelectFormat(string id)

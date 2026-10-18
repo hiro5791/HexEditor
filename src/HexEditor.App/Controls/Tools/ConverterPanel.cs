@@ -140,7 +140,7 @@ internal sealed partial class ConverterPanel : ToolPanelBase
         _rows.Add(row);
         box.TextChanged += (_, _) =>
         {
-            if (!_updating)
+            if (!_updating && !ToolParts.IsProgrammatic(box))
             {
                 Edited(row);
             }
@@ -187,7 +187,7 @@ internal sealed partial class ConverterPanel : ToolPanelBase
                 continue;
             }
 
-            row.Box.Text = _converter.Get(row.Field);
+            ToolParts.SetText(row.Box, _converter.Get(row.Field));
             ToolParts.ShowError(row.Message, row.Box, null);
             if (_converter.HasWarning(row.Field))
             {

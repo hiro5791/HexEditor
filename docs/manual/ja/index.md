@@ -21,8 +21,12 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [ファイルの比較](compare.md)
 - [統計と解析](statistics.md)
 - [ハッシュとチェックサム](hashes.md)
+- [チェックサムファイル](checksum-files.md)
+- [フォルダの比較](folder-compare.md)
 - [データ演算](data-operations.md)
 - [インポートとエクスポート](import-export.md)
+- [電卓とプログラマモード](calculator.md)
+- [変換・参照ツール](reference-tools.md)
 
 ## 構造の解析と自動化 {#structures-and-automation}
 

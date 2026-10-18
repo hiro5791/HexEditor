@@ -59,7 +59,7 @@ internal sealed partial class FloatPanel : ToolPanelBase
         _decimal = ToolParts.Box("Float_Decimal", Loc.Get("Float_Decimal"));
         _decimal.TextChanged += (_, _) =>
         {
-            if (!_updating)
+            if (!_updating && !ToolParts.IsProgrammatic(_decimal))
             {
                 DecimalEdited();
             }
@@ -67,7 +67,7 @@ internal sealed partial class FloatPanel : ToolPanelBase
         _hexInput = ToolParts.Box("Float_HexInput", Loc.Get("Float_HexInput"));
         _hexInput.TextChanged += (_, _) =>
         {
-            if (!_updating)
+            if (!_updating && !ToolParts.IsProgrammatic(_hexInput))
             {
                 HexEdited();
             }
@@ -292,13 +292,13 @@ internal sealed partial class FloatPanel : ToolPanelBase
         _updating = true;
         if (!keepDecimal)
         {
-            _decimal.Text = a.Class is FloatClass.Invalid ? string.Empty : a.Shortest;
+            ToolParts.SetText(_decimal, a.Class is FloatClass.Invalid ? string.Empty : a.Shortest);
             ToolParts.ShowError(_inputError, _decimal, null);
         }
 
         if (!keepHex)
         {
-            _hexInput.Text = FloatAnalyzer.HexText(_layout, _bits)[2..];
+            ToolParts.SetText(_hexInput, FloatAnalyzer.HexText(_layout, _bits)[2..]);
         }
 
         _updating = false;
@@ -357,9 +357,17 @@ internal sealed partial class FloatPanel : ToolPanelBase
     public bool WriteAtCursor() =>
         Host.Write(FloatAnalyzer.ToBytes(_layout, _bits, _endian.SelectedIndex == 1), "浮動小数点の値の書き込み", false);
 
-    internal void SetDecimal(string text) => _decimal.Text = text;
+    internal void SetDecimal(string text)
+    {
+        _decimal.Text = text;
+        DecimalEdited();
+    }
 
-    internal void SetHex(string text) => _hexInput.Text = text;
+    internal void SetHex(string text)
+    {
+        _hexInput.Text = text;
+        HexEdited();
+    }
 
     internal void SelectFormat(string id)
     {

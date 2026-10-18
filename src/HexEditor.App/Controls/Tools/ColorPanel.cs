@@ -53,7 +53,7 @@ internal sealed partial class ColorPanel : ToolPanelBase
         _hex.PlaceholderText = "#RRGGBB / #AARRGGBB";
         _hex.TextChanged += (_, _) =>
         {
-            if (!_updating)
+            if (!_updating && !ToolParts.IsProgrammatic(_hex))
             {
                 HexEdited();
             }
@@ -182,7 +182,7 @@ internal sealed partial class ColorPanel : ToolPanelBase
             _picker.Color = Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        _hex.Text = color.ToHex();
+        ToolParts.SetText(_hex, color.ToHex());
         ToolParts.ShowError(_hexError, _hex, null);
         _updating = false;
         Refresh();
@@ -248,7 +248,11 @@ internal sealed partial class ColorPanel : ToolPanelBase
 
     // ---- テスト用 ----
 
-    internal void SetHexText(string text) => _hex.Text = text;
+    internal void SetHexText(string text)
+    {
+        _hex.Text = text;
+        HexEdited();
+    }
 
     internal void SelectFormat(string id)
     {

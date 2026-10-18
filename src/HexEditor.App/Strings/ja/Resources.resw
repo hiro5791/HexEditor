@@ -6961,4 +6961,6 @@
   <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>読み取りエラー {0}</value></data>
   <data name="FolderCmp_Summary_None" xml:space="preserve"><value>ファイルなし</value></data>
   <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>ファイルの比較で開く</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>ビジュアライザで開く</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>カラーピッカーで開く</value></data>
 </root>

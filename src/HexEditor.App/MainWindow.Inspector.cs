@@ -152,7 +152,7 @@ public sealed partial class MainWindow
         };
     }
 
-    private InspectorPanel CreateInspectorPanel() => new(_inspectorVm);
+    private InspectorPanel CreateInspectorPanel() => new(_inspectorVm) { OpenInTool = OpenInspectorRowInTool };
 
     private BookmarkListPanel CreateBookmarkListPanel()
     {
