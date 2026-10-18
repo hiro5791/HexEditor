@@ -19,7 +19,7 @@ public sealed class TemplatePickItem
         CultureInfo ui = CultureInfo.CurrentUICulture;
         Name = entry.DisplayName(ui);
         Description = entry.Metadata.GetDescription(ui) ?? string.Empty;
-        string origin = Loc.Get(entry.Origin == TemplateOrigin.Standard ? "Tpl_OriginStandard" : "Tpl_OriginUser");
+        string origin = Views.TemplateSettingsSection.OriginText(entry);
         string kaitai = entry.Metadata.IsKaitai ? " · Kaitai" : string.Empty;
         string script = entry.Metadata.UsesExtensions ? " · " + Loc.Get("Tpl_UsesScript") : string.Empty;
         Detail = (recent ? Loc.Get("Tpl_Recent") + " · " : string.Empty) + origin + kaitai + script

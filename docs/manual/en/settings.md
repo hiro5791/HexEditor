@@ -20,6 +20,7 @@ Categories are on the left and settings on the right.
 | **Language** | Display language |
 | **Accessibility** | Screen reader announcements |
 | **Automation** | Scripts and plug-ins |
+| **Disassembly** | Syntax, number format and columns of the [disassembly](disassembly.md#display-options) |
 | **Updates** | Automatic updates and channel |
 | **Privacy** | Features that use the network |
 | **Explorer integration** | Right-click menu and file associations |

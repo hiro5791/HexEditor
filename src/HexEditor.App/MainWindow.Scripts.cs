@@ -248,8 +248,11 @@ public sealed partial class MainWindow
     // ---- 実行の表示 (AUTO-01 の仕様 6・10、「エラー」) ----
 
     /// <summary>書き込み中の InfoBar「スクリプト「名前」を実行中です」と停止ボタン。</summary>
-    internal Notification ShowScriptWritingNotice(DocumentViewModel doc, ScriptRun run) =>
-        ShowNotice(Loc.Format("Script_Writing", run.Name), InfoBarSeverity.Warning, doc,
+    internal Notification ShowScriptWritingNotice(DocumentViewModel doc, ScriptRun run) => run.Origin == ScriptOrigin.External
+        // 外部からの自動操作 (AUTO-45 の仕様 7): 「外部から操作されています: プログラム名」。「切断」で接続を切る。
+        ? ShowNotice(Loc.Format("Rpc_Writing", run.Name), InfoBarSeverity.Warning, doc,
+            actions: [new NotificationAction(Loc.Get("Rpc_Disconnect"), run.Stop)])
+        : ShowNotice(Loc.Format("Script_Writing", run.Name), InfoBarSeverity.Warning, doc,
             actions: [new NotificationAction(Loc.Get("Script_Stop"), run.Stop)]);
 
     internal void OnScriptStarted(ScriptRun run)
@@ -519,7 +522,7 @@ public sealed partial class MainWindow
             Line(Loc.Get("ScriptTrust_Elevated"), "ScriptTrust_Elevated");
         }
 
-        Line(Loc.Format("ScriptTrust_Name", prompt.Name), "ScriptTrust_Name");
+        Line(Loc.Format(prompt.External ? "RpcTrust_Program" : "ScriptTrust_Name", prompt.Name), "ScriptTrust_Name");
         if (prompt.Path is not null)
         {
             Line(prompt.Path, "ScriptTrust_Path", ltr: true);
@@ -527,12 +530,21 @@ public sealed partial class MainWindow
 
         if (prompt.Author is not null)
         {
-            Line(Loc.Format("ScriptTrust_Author", prompt.Author), "ScriptTrust_Author");
+            Line(Loc.Format(prompt.External ? "RpcTrust_Signer" : "ScriptTrust_Author", prompt.Author), "ScriptTrust_Author");
         }
 
         if (!prompt.ElevationOnly)
         {
-            if (prompt.FullTrust)
+            if (prompt.External)
+            {
+                // 外部のプログラムからの接続 (AUTO-45 の仕様 4)。署名がなければその旨も出す。
+                Line(Loc.Get("RpcTrust_Description"), "ScriptTrust_Description");
+                if (prompt.Author is null)
+                {
+                    Line(Loc.Get("RpcTrust_Unsigned"), "RpcTrust_Unsigned");
+                }
+            }
+            else if (prompt.FullTrust)
             {
                 Line(Loc.Get("ScriptTrust_FullTrust"), "ScriptTrust_Description");
             }
@@ -553,8 +565,8 @@ public sealed partial class MainWindow
             panel.Children.Add(warning);
         }
 
-        ContentDialog dialog = NewDialog(Loc.Format("ScriptTrust_Title", prompt.Name), new ScrollViewer { Content = panel, MaxHeight = 480 });
-        AutomationProperties.SetAutomationId(dialog, "ScriptTrustDialog");
+        ContentDialog dialog = NewDialog(Loc.Format(prompt.External ? "RpcTrust_Title" : "ScriptTrust_Title", prompt.Name), new ScrollViewer { Content = panel, MaxHeight = 480 });
+        AutomationProperties.SetAutomationId(dialog, prompt.External ? "RpcTrustDialog" : "ScriptTrustDialog");
         if (prompt.ElevationOnly)
         {
             dialog.PrimaryButtonText = Loc.Get("ScriptTrust_Run");
@@ -563,9 +575,9 @@ public sealed partial class MainWindow
             return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary ? TrustAnswer.RunOnce : TrustAnswer.Deny;
         }
 
-        dialog.PrimaryButtonText = Loc.Get("ScriptTrust_RunOnce");
+        dialog.PrimaryButtonText = Loc.Get(prompt.External ? "RpcTrust_AllowOnce" : "ScriptTrust_RunOnce");
         dialog.SecondaryButtonText = Loc.Get("ScriptTrust_AlwaysAllow");
-        dialog.CloseButtonText = Loc.Get("ScriptTrust_DontRun");
+        dialog.CloseButtonText = Loc.Get(prompt.External ? "RpcTrust_Deny" : "ScriptTrust_DontRun");
         dialog.DefaultButton = prompt.Elevated ? ContentDialogButton.Close : ContentDialogButton.Primary;
         return await dialog.ShowQueuedAsync() switch
         {

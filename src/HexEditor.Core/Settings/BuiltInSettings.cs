@@ -300,6 +300,9 @@ public static class BuiltInSettings
         new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
         // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
         new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+
+        // ---- 自動化: 外部からの自動操作 (08 の AUTO-45)。既定はオフ (仕様 3)。他の PC に持ち出さない ----
+        new("automation.rpc.enabled", SettingCategories.Automation, SettingKind.Bool, false) { Order = 120, Group = "rpc", Exportable = false },
         // ---- 構造体テンプレート (07 の TPL-20、TPL-23、TPL-29、TPL-30、TPL-35) ----
         new("templates.autoApply", SettingCategories.Templates, SettingKind.Choice, "suggest") { Options = ["suggest", "always", "none"], Order = 10 },
         new("templates.autoReevaluate", SettingCategories.Templates, SettingKind.Bool, true) { Order = 20 },
@@ -309,6 +312,29 @@ public static class BuiltInSettings
         new("templates.folders", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 50, ShowInPage = false },
         new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
         new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
+        // オンラインのテンプレート (07 の TPL-36)。リポジトリの一覧は管理画面の「オンライン」で編集する。通信の可否はプライバシーの
+        // network.downloads.enabled / network.offline に従う (仕様 7)。
+        new("templates.online.repositories", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 80, ShowInPage = false },
+        new("templates.online.checkUpdates", SettingCategories.Templates, SettingKind.Bool, true) { Order = 90, Group = "templatesOnline" },
+        new("templates.online.autoUpdate", SettingCategories.Templates, SettingKind.Bool, false) { Order = 100, Group = "templatesOnline" },
+
+        // ---- 逆アセンブル (06 の ANA-26。キーと解釈は Disassembly.DisasmSettings) ----
+        new(Disassembly.DisasmSettings.SyntaxKey, SettingCategories.Disassembly, SettingKind.Choice, "intel") { Options = ["intel", "att", "masm"], Order = 10 },
+        new(Disassembly.DisasmSettings.HexStyleKey, SettingCategories.Disassembly, SettingKind.Choice, "prefix") { Options = ["prefix", "suffix"], Order = 20 },
+        new(Disassembly.DisasmSettings.UppercaseHexKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 30 },
+        new(Disassembly.DisasmSettings.SignedImmediatesKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 40 },
+        new(Disassembly.DisasmSettings.UppercaseMnemonicsKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 50 },
+        new(Disassembly.DisasmSettings.ArmRegisterAliasesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 60 },
+        new(Disassembly.DisasmSettings.ShowBytesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 70 },
+        new(Disassembly.DisasmSettings.MaxBytesKey, SettingCategories.Disassembly, SettingKind.Int, 8)
+        {
+            Min = Disassembly.DisasmFormat.MinBytes,
+            Max = Disassembly.DisasmFormat.MaxBytesLimit,
+            Order = 80,
+        },
+        new(Disassembly.DisasmSettings.AddressColumnKey, SettingCategories.Disassembly, SettingKind.Choice, "virtual") { Options = ["virtual", "offset", "both"], Order = 90 },
+        new(Disassembly.DisasmSettings.BranchLinesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 100 },
+        new(Disassembly.DisasmSettings.CommentsKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 110 },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },

@@ -300,7 +300,9 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Statistics" cmd:CommandUi.Id="view.panel.statistics" AutomationProperties.AutomationId="Command_PanelStatistics" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_VisualizerPanel" cmd:CommandUi.Id="view.panel.visualizer" AutomationProperties.AutomationId="Command_ToggleVisualizer" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateVisualizer" cmd:CommandUi.Id="view.panel.templateVisualizer" AutomationProperties.AutomationId="Command_ToggleTemplateVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Disassembly" cmd:CommandUi.Id="view.panel.disassembly" AutomationProperties.AutomationId="Command_PanelDisassembly" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ClipboardPanel" cmd:CommandUi.Id="view.panel.clipboard" AutomationProperties.AutomationId="Command_ToggleClipboard" />
@@ -347,6 +349,9 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
+                        <!--  逆アセンブル (ANA-23) とデマングル (ANA-30)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Disassemble" cmd:CommandUi.Id="analysis.disassemble" AutomationProperties.AutomationId="Command_Disassemble" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Demangle" cmd:CommandUi.Id="analysis.demangle" AutomationProperties.AutomationId="Command_Demangle" />
                         <!--  構造体テンプレート (TPL-20〜TPL-35)  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Templates" AutomationProperties.AutomationId="Command_TemplatesMenu">
                             <MenuFlyoutItem x:Uid="Menu_Templates_Apply" cmd:CommandUi.Id="templates.apply" AutomationProperties.AutomationId="Command_TemplateApply" />
@@ -364,6 +369,7 @@
                             <MenuFlyoutItem x:Uid="Menu_Templates_Edit" cmd:CommandUi.Id="templates.edit" AutomationProperties.AutomationId="Command_TemplateEdit" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_ConvertKsy" cmd:CommandUi.Id="templates.convertKsy" AutomationProperties.AutomationId="Command_TemplateConvertKsy" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Manage" cmd:CommandUi.Id="templates.manage" AutomationProperties.AutomationId="Command_TemplateManage" />
+                            <MenuFlyoutItem x:Uid="Menu_Templates_Online" cmd:CommandUi.Id="templates.online.browse" AutomationProperties.AutomationId="Command_TemplateOnline" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
@@ -705,6 +711,15 @@
                     Tag="helper"
                     Visibility="Collapsed">
                     <FontIcon FontSize="14" Glyph="&#xE1A7;" />
+                </Button>
+                <!--  外部からの自動操作 (AUTO-45 の仕様 3): オンの間は必ず示す (利用者が隠せる項目にしない)。クリックで設定を開く。  -->
+                <Button
+                    x:Name="StatusAutomation"
+                    AutomationProperties.AutomationId="Status_Automation"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="automation"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE703;" />
                 </Button>
                 <Button
                     x:Name="NotificationHistoryButton"

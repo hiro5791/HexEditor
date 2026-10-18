@@ -72,6 +72,12 @@
     <!-- 同梱のサンプルスクリプト (08 の AUTO-46)。実行時は AppContext.BaseDirectory\Samples\scripts\ から読む (信頼の確認なし。ScriptingService)。 -->
     <Content Include="..\..\samples\scripts\*" Link="Samples\scripts\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <!--
+      外部からの自動操作 (08 の AUTO-45): PowerShell のモジュール HexEditor.Automation (仕様 1) と、AUTO-04 の型定義から生成した JSON-RPC の
+      メソッド一覧 (仕様 8。docs/api が正本)。3 つの配布形態すべてに入る (配布物の Automation\ の下)。
+    -->
+    <Content Include="..\..\automation\HexEditor.Automation\*" Link="Automation\HexEditor.Automation\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\docs\api\jsonrpc-methods.json" Link="Automation\jsonrpc-methods.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!--
       C# スクリプト コンポーネントの検証用の一覧 (08 の AUTO-03 の仕様 3: アプリ本体に埋め込む SHA-256 の一覧)。
       build/Build-CSharpComponent.ps1 が作り、-p:HexCSharpComponentManifest=<パス> で渡す。渡さないビルドでは埋め込まない (追加できない)。
     -->

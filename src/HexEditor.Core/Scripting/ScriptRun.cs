@@ -22,6 +22,9 @@ public enum ScriptOrigin
 
     /// <summary>フック (AUTO-25)。</summary>
     Hook,
+
+    /// <summary>外部のプログラムからの自動操作 (名前付きパイプの JSON-RPC。AUTO-45)。</summary>
+    External,
 }
 
 /// <summary>実行の状態と結果 (AUTO-01 の仕様 10)。</summary>

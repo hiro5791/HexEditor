@@ -35,6 +35,7 @@ public static class BuiltInSections
         });
         PackagingSections.Register();
         ScriptSections.Register();
+        AutomationSections.Register();
         ViewSections.Register();
     }
 

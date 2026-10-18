@@ -464,36 +464,11 @@ public static partial class TestDataCatalog
         return pe;
     }
 
-    /// <summary>小さな Linux 実行ファイル (x64、ELF64、8 KiB)。ELF ヘッダとプログラムヘッダ (PT_LOAD) 1 つ、コードは exit(0)。</summary>
-    public static byte[] ElfX64()
-    {
-        byte[] elf = new byte[0x2000];
-        elf[0] = 0x7F;
-        "ELF"u8.CopyTo(elf.AsSpan(1));
-        elf[4] = 2;
-        elf[5] = 1;
-        elf[6] = 1;
-        BinaryPrimitives.WriteUInt16LittleEndian(elf.AsSpan(16), 2);
-        BinaryPrimitives.WriteUInt16LittleEndian(elf.AsSpan(18), 0x3E);
-        BinaryPrimitives.WriteUInt32LittleEndian(elf.AsSpan(20), 1);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(24), 0x401000);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(32), 64);
-        BinaryPrimitives.WriteUInt16LittleEndian(elf.AsSpan(52), 64);
-        BinaryPrimitives.WriteUInt16LittleEndian(elf.AsSpan(54), 56);
-        BinaryPrimitives.WriteUInt16LittleEndian(elf.AsSpan(56), 1);
-        int p = 64;
-        BinaryPrimitives.WriteUInt32LittleEndian(elf.AsSpan(p), 1);
-        BinaryPrimitives.WriteUInt32LittleEndian(elf.AsSpan(p + 4), 5);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 8), 0x1000);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 16), 0x401000);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 24), 0x401000);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 32), 12);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 40), 12);
-        BinaryPrimitives.WriteUInt64LittleEndian(elf.AsSpan(p + 48), 0x1000);
-        byte[] code = [0xB8, 0x3C, 0x00, 0x00, 0x00, 0x31, 0xFF, 0x0F, 0x05, 0x90, 0x90, 0x90];
-        code.CopyTo(elf, 0x1000);
-        return elf;
-    }
+    /// <summary>
+    /// 小さな Linux 実行ファイル (x64、ELF64、8 KiB)。PT_LOAD 1 つ、セクション (.text・.plt・.got.plt・.dynsym・.dynstr・.rela.plt・
+    /// .symtab・.strtab) を持ち、シンボル表に <c>_start</c> と <c>main</c>、PLT に <c>puts@plt</c>・<c>exit@plt</c> がある (ANA-24 の TC-ANA-24-03)。
+    /// </summary>
+    public static byte[] ElfX64() => BuildElf(cpp: false);
 
     /// <summary>TD-ANA-PE-PNG: TD-PE-X64 の後ろ (0x2000) に TD-PNG を置いたもの。</summary>
     public static byte[] PePng() => [.. PeX64(), .. Png16()];

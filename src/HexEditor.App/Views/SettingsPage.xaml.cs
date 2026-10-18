@@ -93,6 +93,15 @@ public sealed partial class SettingsPage : UserControl
         }
     }
 
+    /// <summary>専用の区画 (AutomationId) を表示の中に入れる (「テンプレート: オンラインで探す」など)。</summary>
+    public void BringIntoView(string automationId)
+    {
+        if (FindByAutomationId(Items, automationId) is UIElement element)
+        {
+            element.StartBringIntoView();
+        }
+    }
+
     public void SetSearch(string text)
     {
         Search.Text = text;

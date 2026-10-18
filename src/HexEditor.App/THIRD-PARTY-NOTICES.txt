@@ -63,6 +63,31 @@ the application, downloaded separately when C# scripts are first used)
 https://github.com/dotnet/roslyn
 License: MIT License. Copyright (c) .NET Foundation and Contributors.
 
+-------------------------------------------------------------------------------
+Iced 1.21.0 (x86 / x64 disassembler and assembler)
+https://github.com/icedland/iced
+License: MIT License. Copyright (C) 2018-present iced project and contributors.
+
+-------------------------------------------------------------------------------
+Capstone 4.0 (disassembly framework; native capstone.dll for x64 and ARM64)
+https://www.capstone-engine.org/
+License: BSD 3-Clause License (below). Copyright (c) 2013, COSEINC.
+Capstone contains code derived from LLVM, which is licensed under the
+University of Illinois/NCSA Open Source License. Copyright (c) 2003-2013
+University of Illinois at Urbana-Champaign.
+The native library comes from the NuGet package Gee.External.Capstone 2.3.0
+(Capstone.NET, https://github.com/9ee1/Capstone.NET), MIT License,
+Copyright (c) Ahmed Garhy. Only the native library of the package is used.
+
+-------------------------------------------------------------------------------
+Ed25519 reference implementation (RFC 8032, section 6; verifies the signature of
+the online template repository index)
+https://www.rfc-editor.org/rfc/rfc8032
+Ported to C#. Code components of RFCs are licensed under the Simplified BSD
+License (Revised BSD License) as described in the IETF Trust Legal Provisions.
+Copyright (c) 2017 IETF Trust and the persons identified as the document
+authors (S. Josefsson, I. Liusvaara). All rights reserved.
+
 ===============================================================================
 BSD 2-Clause License (Jint)
 
@@ -88,7 +113,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
-BSD 3-Clause License (Acornima)
+BSD 3-Clause License (Acornima, Capstone)
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

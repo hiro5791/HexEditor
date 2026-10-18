@@ -13,6 +13,9 @@ public enum TemplateOrigin
 
     /// <summary>利用者のテンプレートのフォルダ (TPL-35 の仕様 1)。</summary>
     User,
+
+    /// <summary>オンラインのリポジトリからインストールしたもの (設定フォルダの <c>templates-online/</c>。TPL-36 の仕様 6)。</summary>
+    Online,
 }
 
 /// <summary>一覧の 1 項目。<see cref="Name"/> はファイル名から拡張子を除いたもの (コマンドラインの <c>--template pe</c> の名前)。</summary>
@@ -42,12 +45,19 @@ public sealed class TemplateCatalog
     private readonly Lock _lock = new();
     private readonly Dictionary<string, (DateTime Time, long Size, TemplateCatalogEntry Entry)> _cache = new(StringComparer.OrdinalIgnoreCase);
 
-    public TemplateCatalog(IReadOnlyList<string> userFolders, bool includeStandard = true, TemplateLoadOptions? loadOptions = null)
+    /// <param name="onlineFolder">
+    /// オンラインのテンプレートのフォルダ (TPL-36 の仕様 6)。利用者のフォルダの後、標準テンプレートの前に探す (利用者のテンプレートが優先)。
+    /// </param>
+    public TemplateCatalog(IReadOnlyList<string> userFolders, bool includeStandard = true, TemplateLoadOptions? loadOptions = null, string? onlineFolder = null)
     {
         UserFolders = userFolders;
         IncludeStandard = includeStandard;
-        LoadOptions = loadOptions ?? new TemplateLoadOptions { SearchPaths = userFolders };
+        OnlineFolder = onlineFolder;
+        LoadOptions = loadOptions ?? new TemplateLoadOptions { SearchPaths = onlineFolder is null ? userFolders : [.. userFolders, onlineFolder] };
     }
+
+    /// <summary>オンラインのテンプレートのフォルダ (なければ null)。</summary>
+    public string? OnlineFolder { get; }
 
     /// <summary>標準テンプレートと、<paramref name="userFolder"/> (あれば) の利用者のテンプレート。</summary>
     public static TemplateCatalog CreateDefault(string? userFolder) => new(userFolder is null ? [] : [userFolder]);
@@ -94,6 +104,17 @@ public sealed class TemplateCatalog
                 foreach (string file in EnumerateFolder(folder))
                 {
                     if (Describe(file, TemplateOrigin.User) is { } entry)
+                    {
+                        Add(entry);
+                    }
+                }
+            }
+
+            if (OnlineFolder is { } online)
+            {
+                foreach (string file in EnumerateFolder(online))
+                {
+                    if (Describe(file, TemplateOrigin.Online) is { } entry)
                     {
                         Add(entry);
                     }
@@ -288,7 +309,7 @@ public sealed class TemplateCatalog
     {
         DateTime time = default;
         long size = 0;
-        if (origin == TemplateOrigin.User)
+        if (origin != TemplateOrigin.Standard)
         {
             try
             {

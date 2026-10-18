@@ -48,7 +48,9 @@ Other types are hidden at first. You can show them as described in [Showing, hid
 - Variable-length integers: ULEB128, SLEB128, SQLite varint.
 - Strings: NUL-terminated (ANSI / UTF-8 / UTF-16) and Pascal strings (1-, 2- or 4-byte length).
 - Date and time: DOS date, DOS time, Unix time (32-bit unsigned, 64-bit, milliseconds), OLE Automation date, HFS+ date, APFS date, Mac absolute time (Cocoa), SQL Server datetime and smalldatetime, .NET DateTime, and a date written in decimal digits.
-- Other: Binary (16, 32 and 64-bit), UUID (RFC 9562), and colors (RGBA8, BGRA8, RGB8, RGB565).
+- Other: Binary (16, 32 and 64-bit), UUID (RFC 9562), colors (RGBA8, BGRA8, RGB8, RGB565), and **Instruction**, which disassembles one machine instruction, such as `mov rbp, rsp (3 bytes)`.
+
+The **Instruction** row uses x86 64 bit at first. To use another architecture, select the row in the row settings and choose it under **Architecture**. The syntax and number format follow the [disassembly display options](disassembly.md#display-options). The highlight covers the bytes of the instruction, and invalid bytes show **Invalid instruction**. This row can't be edited. For a branch, right-click the row and select **Go to branch target** to go to the target. Press <kbd>Alt</kbd>+<kbd>←</kbd> to come back.
 
 Bytes that cannot be read show **Invalid** with the reason, such as "continuation byte" or "incomplete sequence". UTF-8 and UTF-16 strings read up to the first 4 KB.
 

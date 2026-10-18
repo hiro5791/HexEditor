@@ -596,7 +596,7 @@ Removes leading and trailing white space.
 
 `demangle(name) -> string`
 
-Returns the name unchanged in this version (demangling comes with ANA-30).
+Demangles a C++, Rust or D symbol name, the same way as [demangling](disassembly.md#demangle) in the app. A name that can't be demangled is returned unchanged.
 
 ### std::sys::detected_mime
 

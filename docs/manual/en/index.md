@@ -21,6 +21,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Comparing files](compare.md)
 - [Statistics and analysis](statistics.md)
 - [Hashes and checksums](hashes.md)
+- [Disassembly](disassembly.md)
 - [Data operations](data-operations.md)
 - [Import and export](import-export.md)
 
@@ -32,6 +33,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Scripts](scripting.md)
 - [Macros](macros.md)
 - [Plugins](plugins.md)
+- [External automation](external-automation.md)
 - [Automation API reference](api-reference.md)
 - [HexEditor plugin SDK](api-plugins.md)
 - [Command line (hexed)](command-line.md)

@@ -6603,4 +6603,300 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>コードエディタ (WebView2) を起動できなかったため、機能の少ない簡易エディタを使っています。Microsoft Edge WebView2 ランタイムを入れ直すと直ることがあります。</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 ランタイムを入手する</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>補完を使うには C# スクリプト コンポーネントを追加してください。</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>x86 の構文</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>逆アセンブルのリスティングとデータインスペクタで使う、x86 と x64 の命令の構文。</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>16 進数の書式</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>リスティングの 16 進数の書き方。</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>0x 接頭辞 (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>h 接尾辞 (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>16 進数を大文字にする</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>16 進数の A〜F を大文字で表示します。</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>負の即値を符号付きで表示</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>負の即値を、大きな符号なしの数ではなく、マイナス記号付きで表示します (x86)。</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>ニーモニックとレジスタ名を大文字にする</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>命令名とレジスタ名を大文字で表示します。</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM のレジスタの別名</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM のレジスタを、番号 (r13、r14、r15) ではなく別名 (sp、lr、pc) で表示します。</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>バイト列の列を表示</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>アドレスの横に命令のバイト列を表示します。</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>表示する最大バイト数</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>1 命令あたりに表示するバイト数 (4〜16)。長い命令は「…」で省略します。</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>アドレス列</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>アドレス列に表示する内容。</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>仮想アドレス</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>ファイル上のオフセット</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>両方</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>分岐の線</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>分岐の矢印と、表示範囲内の分岐先への線を描きます。</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>コメント列</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>シンボル名、分岐先の名前、参照している文字列を表示します。</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>逆アセンブルパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>ぎゃくあせんぶるぱねる</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>ぎゃくあせんぶる めいれい</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>カーソル位置から逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>かーそるいちからぎゃくあせんぶる</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>仮想アドレスへ移動</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>かそうあどれすへいどう</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>エントリポイントへ移動</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>えんとりぽいんとへいどう</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>.NET のメソッドを逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>どっとねっと めそっど ぎゃくあせんぶる</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>シンボル名をデマングル...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>でまんぐる しんぼるめい</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>分岐先へ移動</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>ぶんきさきへいどう</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>参照を探す</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>さんしょうをさがす くろすりふぁれんす</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>命令パターンを検索</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>めいれいぱたーんをけんさく</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>命令を書き換える</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>めいれいをかきかえる あせんぶる</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>リスティングの行をコピー</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>りすてぃんぐのぎょうをこぴー</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>アセンブリとしてエクスポート...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>あせんぶりとしてえくすぽーと</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>1 命令の逆アセンブル</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>1 命令の逆アセンブル ({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>不正な命令</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>逆アセンブラを使えません</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>分岐先へ移動</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>アーキテクチャ</value></data>
+  <data name="Panel_Disassembly_Title" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Menu_View_Disassembly.Text" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Menu_Analysis_Disassemble.Text" xml:space="preserve"><value>逆アセンブル(D)</value></data>
+  <data name="Menu_Analysis_Disassemble.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Analysis_Demangle.Text" xml:space="preserve"><value>デマングル(M)...</value></data>
+  <data name="Menu_Analysis_Demangle.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="HexView_Menu_Disassemble" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="HexView_Menu_Demangle" xml:space="preserve"><value>デマングル</value></data>
+  <data name="ToolPage_Demangle" xml:space="preserve"><value>デマングル</value></data>
+  <data name="SearchResults_Column_Instruction" xml:space="preserve"><value>命令</value></data>
+  <data name="Disasm_ListingName" xml:space="preserve"><value>逆アセンブルのリスティング</value></data>
+  <data name="Disasm_Architecture" xml:space="preserve"><value>アーキテクチャ</value></data>
+  <data name="Disasm_Mode" xml:space="preserve"><value>モード</value></data>
+  <data name="Disasm_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Disasm_Slice" xml:space="preserve"><value>ユニバーサルバイナリのアーキテクチャ</value></data>
+  <data name="Disasm_Start" xml:space="preserve"><value>開始位置</value></data>
+  <data name="Disasm_StartTip" xml:space="preserve"><value>逆アセンブルを始める位置</value></data>
+  <data name="Disasm_StartCursor" xml:space="preserve"><value>カーソル位置</value></data>
+  <data name="Disasm_StartSelection" xml:space="preserve"><value>選択範囲の先頭</value></data>
+  <data name="Disasm_StartOffset" xml:space="preserve"><value>指定したオフセット...</value></data>
+  <data name="Disasm_StartAddress" xml:space="preserve"><value>仮想アドレス...</value></data>
+  <data name="Disasm_StartEntry" xml:space="preserve"><value>エントリポイント</value></data>
+  <data name="Disasm_BaseAuto" xml:space="preserve"><value>ベース: 自動</value></data>
+  <data name="Disasm_BaseAddress" xml:space="preserve"><value>ベースアドレス (空欄で自動)</value></data>
+  <data name="Disasm_Syntax" xml:space="preserve"><value>構文 (x86)</value></data>
+  <data name="Disasm_Options" xml:space="preserve"><value>表示オプション</value></data>
+  <data name="Disasm_Follow" xml:space="preserve"><value>カーソルに追従</value></data>
+  <data name="Disasm_FindPattern" xml:space="preserve"><value>命令を検索</value></data>
+  <data name="Disasm_PatternPlaceholder" xml:space="preserve"><value>例: push rbp; mov rbp, rsp</value></data>
+  <data name="Disasm_PatternRegex" xml:space="preserve"><value>正規表現</value></data>
+  <data name="Disasm_PatternFindAll" xml:space="preserve"><value>すべて検索</value></data>
+  <data name="Disasm_PatternClose" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Disasm_Sections" xml:space="preserve"><value>セクション</value></data>
+  <data name="Disasm_Symbols" xml:space="preserve"><value>シンボル</value></data>
+  <data name="Disasm_Methods" xml:space="preserve"><value>型とメソッド</value></data>
+  <data name="Disasm_SymbolFilter" xml:space="preserve"><value>名前で絞り込み</value></data>
+  <data name="Disasm_SymbolKind_Function" xml:space="preserve"><value>関数</value></data>
+  <data name="Disasm_SymbolKind_Data" xml:space="preserve"><value>データ</value></data>
+  <data name="Disasm_SymbolKind_Import" xml:space="preserve"><value>インポート</value></data>
+  <data name="Disasm_SymbolKind_Export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Disasm_PluginArchitecture" xml:space="preserve"><value>プラグイン: {0}</value></data>
+  <data name="Disasm_EngineError" xml:space="preserve"><value>逆アセンブルエンジンを読み込めません: {0}</value></data>
+  <data name="Disasm_MostlyData" xml:space="preserve"><value>このアーキテクチャのコードではない可能性があります。</value></data>
+  <data name="Disasm_HeaderIssue" xml:space="preserve"><value>ヘッダの一部を解釈できません: {0}</value></data>
+  <data name="Disasm_HeaderIssue_OutOfRange" xml:space="preserve"><value>ファイルの範囲外のデータ</value></data>
+  <data name="Disasm_HeaderIssue_Unreadable" xml:space="preserve"><value>読めないバイト</value></data>
+  <data name="Disasm_HeaderIssue_StringOutOfRange" xml:space="preserve"><value>ファイルの範囲外の名前</value></data>
+  <data name="Disasm_HeaderIssue_TooManySections" xml:space="preserve"><value>セクションが多すぎる</value></data>
+  <data name="Disasm_HeaderIssue_SectionTableOutside" xml:space="preserve"><value>セクション表がファイルの範囲外</value></data>
+  <data name="Disasm_HeaderIssue_SectionOutside" xml:space="preserve"><value>セクションがファイルの範囲外</value></data>
+  <data name="Disasm_HeaderIssue_SectionNamesBroken" xml:space="preserve"><value>セクション名が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_ProgramHeadersOutside" xml:space="preserve"><value>プログラムヘッダがファイルの範囲外</value></data>
+  <data name="Disasm_HeaderIssue_ExportTableBroken" xml:space="preserve"><value>エクスポート表が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_ImportTableBroken" xml:space="preserve"><value>インポート表が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_DelayImportTableBroken" xml:space="preserve"><value>遅延読み込みインポート表が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_ExceptionTableBroken" xml:space="preserve"><value>例外表が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_RvaOutside" xml:space="preserve"><value>セクションの外のアドレス</value></data>
+  <data name="Disasm_HeaderIssue_SymbolTableBroken" xml:space="preserve"><value>シンボル表が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_NoStringTable" xml:space="preserve"><value>文字列表がない</value></data>
+  <data name="Disasm_HeaderIssue_PltBroken" xml:space="preserve"><value>PLT の再配置が壊れている</value></data>
+  <data name="Disasm_HeaderIssue_FatHeaderBroken" xml:space="preserve"><value>ユニバーサルバイナリのヘッダが壊れている</value></data>
+  <data name="Disasm_HeaderIssue_SliceOutside" xml:space="preserve"><value>スライスがファイルの範囲外</value></data>
+  <data name="Disasm_HeaderIssue_LoadCommandsBroken" xml:space="preserve"><value>ロードコマンドが壊れている</value></data>
+  <data name="Disasm_HeaderIssue_StubsBroken" xml:space="preserve"><value>スタブが壊れている</value></data>
+  <data name="Disasm_DotNetMessage" xml:space="preserve"><value>.NET のアセンブリです。メソッドを MSIL として逆アセンブルできます。</value></data>
+  <data name="Disasm_DotNetAction" xml:space="preserve"><value>MSIL で表示</value></data>
+  <data name="Disasm_MetadataIssue" xml:space="preserve"><value>メタデータの一部を読めません。</value></data>
+  <data name="Disasm_MenuAssemble" xml:space="preserve"><value>アセンブル...</value></data>
+  <data name="Disasm_MenuCopy" xml:space="preserve"><value>コピー</value></data>
+  <data name="Disasm_NoTarget" xml:space="preserve"><value>この命令の分岐先は決まりません。</value></data>
+  <data name="Disasm_ExternalFunction" xml:space="preserve"><value>外部関数: {0}</value></data>
+  <data name="Disasm_TargetOutside" xml:space="preserve"><value>分岐先 {0} はファイルに含まれていません。</value></data>
+  <data name="Disasm_NotExecutable" xml:space="preserve"><value>ドキュメントが実行形式 (PE、ELF、Mach-O) ではありません。</value></data>
+  <data name="Disasm_NoEntryPoint" xml:space="preserve"><value>実行形式にエントリポイントがありません。</value></data>
+  <data name="Disasm_NotDotNet" xml:space="preserve"><value>ドキュメントが .NET のアセンブリではありません。</value></data>
+  <data name="Disasm_NotForMsil" xml:space="preserve"><value>MSIL では使えません。</value></data>
+  <data name="Disasm_AssembleX86Only" xml:space="preserve"><value>インプレースアセンブルは x86 と x64 だけで使えます。</value></data>
+  <data name="Disasm_Go" xml:space="preserve"><value>移動</value></data>
+  <data name="Disasm_OutOfDocument" xml:space="preserve"><value>オフセットがドキュメントの範囲外です。</value></data>
+  <data name="Disasm_VirtualAddress" xml:space="preserve"><value>仮想アドレス</value></data>
+  <data name="Disasm_NoSection" xml:space="preserve"><value>どのセクションにも含まれないアドレスです。</value></data>
+  <data name="Disasm_AddressResolved" xml:space="preserve"><value>オフセット {0} ({1})</value></data>
+  <data name="Disasm_ReferencesTo" xml:space="preserve"><value>{0} への参照</value></data>
+  <data name="Disasm_ReferencesKind" xml:space="preserve"><value>参照</value></data>
+  <data name="Disasm_PatternKind" xml:space="preserve"><value>命令パターン</value></data>
+  <data name="Disasm_PatternError" xml:space="preserve"><value>{0} 文字目: {1}</value></data>
+  <data name="Disasm_PatternError_Empty" xml:space="preserve"><value>パターンに命令がありません</value></data>
+  <data name="Disasm_PatternError_Range" xml:space="preserve"><value>{n} の範囲が正しくありません</value></data>
+  <data name="Disasm_PatternError_Brace" xml:space="preserve"><value>括弧が対応していません</value></data>
+  <data name="Disasm_PatternError_Regex" xml:space="preserve"><value>正規表現が正しくありません</value></data>
+  <data name="Disasm_PatternEstimate" xml:space="preserve"><value>検索には {0} 秒ほどかかります。</value></data>
+  <data name="Disasm_PatternNotFound" xml:space="preserve"><value>見つかりませんでした。</value></data>
+  <data name="Disasm_AssemblyFile" xml:space="preserve"><value>アセンブリのリスティング</value></data>
+  <data name="Disasm_Exported" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Disasm_TipLength" xml:space="preserve"><value>長さ: {0} バイト</value></data>
+  <data name="Disasm_TipOperands" xml:space="preserve"><value>オペランド: {0}</value></data>
+  <data name="Disasm_TipRead" xml:space="preserve"><value>読むレジスタ: {0}</value></data>
+  <data name="Disasm_TipWritten" xml:space="preserve"><value>書くレジスタ: {0}</value></data>
+  <data name="Disasm_TipGroups" xml:space="preserve"><value>命令グループ: {0}</value></data>
+  <data name="Disasm_AssembleInput" xml:space="preserve"><value>新しい命令 (; で区切って複数)</value></data>
+  <data name="Disasm_AssembleFillNop" xml:space="preserve"><value>残りを NOP (0x90) で埋める</value></data>
+  <data name="Disasm_AssembleKeep" xml:space="preserve"><value>残りのバイトをそのまま残す</value></data>
+  <data name="Disasm_AssembleWrite" xml:space="preserve"><value>書き込む</value></data>
+  <data name="Disasm_AssembleResult" xml:space="preserve"><value>{0} ({1} バイト)</value></data>
+  <data name="Disasm_AssembleOverwrites" xml:space="preserve"><value>後ろの命令も上書きします: {0}</value></data>
+  <data name="Disasm_AssembleError" xml:space="preserve"><value>アセンブルできません ({0}): {1}</value></data>
+  <data name="Disasm_AssembleError_Syntax" xml:space="preserve"><value>構文エラー</value></data>
+  <data name="Disasm_AssembleError_UnknownMnemonic" xml:space="preserve"><value>知らない命令</value></data>
+  <data name="Disasm_AssembleError_Operands" xml:space="preserve"><value>オペランドが正しくありません</value></data>
+  <data name="Disasm_AssembleError_Encode" xml:space="preserve"><value>符号化できません</value></data>
+  <data name="Disasm_UndoAssemble" xml:space="preserve"><value>アセンブル</value></data>
+  <data name="Demangle_Input" xml:space="preserve"><value>マングル名 (1 行に 1 つ)</value></data>
+  <data name="Demangle_InputPlaceholder" xml:space="preserve"><value>_ZN3foo3barEi</value></data>
+  <data name="Demangle_Output" xml:space="preserve"><value>結果</value></data>
+  <data name="Demangle_ShortNames" xml:space="preserve"><value>短い名前 (引数と戻り値の型を省く)</value></data>
+  <data name="Demangle_RustHash" xml:space="preserve"><value>Rust のハッシュを表示</value></data>
+  <data name="Demangle_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (デマングルできません)</value></data>
+  <data name="Demangle_Converting" xml:space="preserve"><value>変換しています...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>ネイティブコードを表示</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>このメソッドの ReadyToRun のネイティブコードを表示します</value></data>
+  <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Panel_TemplateVisualizer_Title" xml:space="preserve"><value>ビジュアライザ</value></data>
+  <data name="Cmd_view_panel_templateVisualizer" xml:space="preserve"><value>表示: テンプレートのビジュアライザパネル</value></data>
+  <data name="CmdAlias_view_panel_templateVisualizer" xml:space="preserve"><value>びじゅあらいざ;てんぷれーと;がぞう;おんせい</value></data>
+  <data name="Cmd_templates_visualize" xml:space="preserve"><value>テンプレート: ビジュアライザで表示</value></data>
+  <data name="CmdAlias_templates_visualize" xml:space="preserve"><value>びじゅあらいざ;ひょうじ;がぞう;おんせい</value></data>
+  <data name="Menu_View_TemplateVisualizer.Text" xml:space="preserve"><value>テンプレートのビジュアライザ(2)</value></data>
+  <data name="Menu_View_TemplateVisualizer.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="TplMenu_Visualize" xml:space="preserve"><value>ビジュアライザで表示</value></data>
+  <data name="TplVis_ShowButton" xml:space="preserve"><value>{0} をビジュアライザで表示</value></data>
+  <data name="TplVis_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="TplVis_Play" xml:space="preserve"><value>再生</value></data>
+  <data name="TplVis_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="TplVis_Seek" xml:space="preserve"><value>再生位置</value></data>
+  <data name="TplVis_Nothing" xml:space="preserve"><value>構造体の結果ツリーで、ビジュアライザ (visualize 属性) のあるノードを選んでください。</value></data>
+  <data name="TplVis_NoVisualizer" xml:space="preserve"><value>選んでいるノードにはビジュアライザがありません</value></data>
+  <data name="TplVis_Header" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="TplVis_Kind_Bitmap" xml:space="preserve"><value>画像</value></data>
+  <data name="TplVis_Kind_Image" xml:space="preserve"><value>画像</value></data>
+  <data name="TplVis_Kind_Audio" xml:space="preserve"><value>音声</value></data>
+  <data name="TplVis_Kind_Disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="TplVis_Kind_Table" xml:space="preserve"><value>表</value></data>
+  <data name="TplVis_Kind_Chart" xml:space="preserve"><value>グラフ</value></data>
+  <data name="TplVis_Kind_Color" xml:space="preserve"><value>色</value></data>
+  <data name="TplVis_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="TplVis_Kind_Error" xml:space="preserve"><value>エラー</value></data>
+  <data name="TplVis_CannotShow" xml:space="preserve"><value>表示できません: {0}</value></data>
+  <data name="TplVis_CannotShowImage" xml:space="preserve"><value>この画像を表示できません: {0}</value></data>
+  <data name="TplVis_Truncated" xml:space="preserve"><value>データが上限 (64 MB、画像は 16,384 × 16,384 ピクセル) を超えるため、先頭だけを表示しています。</value></data>
+  <data name="TplVis_ImageAlt" xml:space="preserve"><value>画像、幅 {0}、高さ {1}、形式 {2}</value></data>
+  <data name="TplVis_AudioAlt" xml:space="preserve"><value>音声、長さ {0} 秒、サンプルレート {1} Hz、{2} チャンネル</value></data>
+  <data name="TplVis_TableAlt" xml:space="preserve"><value>表、{0} 行、{1} 列</value></data>
+  <data name="TplVis_ChartAlt" xml:space="preserve"><value>グラフ、{0} 個の値 ({1}〜{2})</value></data>
+  <data name="TplVis_ColorAlt" xml:space="preserve"><value>色 {0}</value></data>
+  <data name="TplVis_WavFiles" xml:space="preserve"><value>WAV 音声</value></data>
+  <data name="TplVis_CsvFiles" xml:space="preserve"><value>CSV (コンマ区切り)</value></data>
+  <data name="Cmd_templates_online_browse" xml:space="preserve"><value>テンプレート: オンラインで探す</value></data>
+  <data name="CmdAlias_templates_online_browse" xml:space="preserve"><value>おんらいん;りぽじとり;だうんろーど;いんすとーる</value></data>
+  <data name="Cmd_templates_online_checkUpdates" xml:space="preserve"><value>テンプレート: 更新を確認</value></data>
+  <data name="CmdAlias_templates_online_checkUpdates" xml:space="preserve"><value>こうしん;あっぷでーと;おんらいん</value></data>
+  <data name="Menu_Templates_Online.Text" xml:space="preserve"><value>オンラインのテンプレートを探す(L)...</value></data>
+  <data name="Menu_Templates_Online.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="SetSection_TemplateOnline" xml:space="preserve"><value>オンラインのテンプレート</value></data>
+  <data name="SetSearch_TemplateOnline" xml:space="preserve"><value>オンライン リポジトリ ダウンロード インストール 更新 テンプレート</value></data>
+  <data name="Set_templates_online_checkUpdates" xml:space="preserve"><value>起動時にオンラインのテンプレートの更新を確認する (1 日 1 回)</value></data>
+  <data name="SetDesc_templates_online_checkUpdates" xml:space="preserve"><value>新しい版は InfoBar で知らせます。自動更新をオンにしない限り、承認なしには更新しません。</value></data>
+  <data name="Set_templates_online_autoUpdate" xml:space="preserve"><value>オンラインのテンプレートを自動で更新する</value></data>
+  <data name="SetDesc_templates_online_autoUpdate" xml:space="preserve"><value>更新の確認で見つかった新しい版を、確認せずにインストールします。</value></data>
+  <data name="Set_templates_online_repositories" xml:space="preserve"><value>テンプレートのリポジトリ</value></data>
+  <data name="SetDesc_templates_online_repositories" xml:space="preserve"><value>追加したリポジトリの索引の URL (HTTPS)。</value></data>
+  <data name="Tpl_OriginOnline" xml:space="preserve"><value>オンライン</value></data>
+  <data name="TplOnline_OfficialRepository" xml:space="preserve"><value>公式のリポジトリ</value></data>
+  <data name="TplOnline_Search" xml:space="preserve"><value>オンラインのテンプレートを検索</value></data>
+  <data name="TplOnline_Category" xml:space="preserve"><value>分類</value></data>
+  <data name="TplOnline_AllCategories" xml:space="preserve"><value>すべての分類</value></data>
+  <data name="TplOnline_Refresh" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="TplOnline_CheckUpdates" xml:space="preserve"><value>更新を確認</value></data>
+  <data name="TplOnline_Repositories" xml:space="preserve"><value>追加したリポジトリ</value></data>
+  <data name="TplOnline_RepoUrl" xml:space="preserve"><value>リポジトリの索引の URL</value></data>
+  <data name="TplOnline_AddRepo" xml:space="preserve"><value>リポジトリを追加</value></data>
+  <data name="TplOnline_BadUrl" xml:space="preserve"><value>リポジトリの索引 (index.json) の HTTPS の URL を入力してください。</value></data>
+  <data name="TplOnline_NoRepositories" xml:space="preserve"><value>リポジトリが設定されていません。</value></data>
+  <data name="TplOnline_Loading" xml:space="preserve"><value>リポジトリを読み込んでいます...</value></data>
+  <data name="TplOnline_Disabled" xml:space="preserve"><value>オンラインのテンプレートは無効になっています</value></data>
+  <data name="TplOnline_OpenSettings" xml:space="preserve"><value>設定を開く</value></data>
+  <data name="TplOnline_Unavailable" xml:space="preserve"><value>リポジトリに接続できません: {0}</value></data>
+  <data name="TplOnline_Tampered" xml:space="preserve"><value>{0} の索引の署名を確認できないため使いません。ファイルが改ざんされている可能性があります。</value></data>
+  <data name="TplOnline_Invalid" xml:space="preserve"><value>{0} の索引を読めません: {1}</value></data>
+  <data name="TplOnline_NoMatch" xml:space="preserve"><value>一致するテンプレートがありません。</value></data>
+  <data name="TplOnline_License" xml:space="preserve"><value>ライセンス: {0}</value></data>
+  <data name="TplOnline_Author" xml:space="preserve"><value>作者: {0}</value></data>
+  <data name="TplOnline_InstalledVersion" xml:space="preserve"><value>インストール済み: {0}</value></data>
+  <data name="TplOnline_Unsigned" xml:space="preserve"><value>署名なし</value></data>
+  <data name="TplOnline_UsesExtensions" xml:space="preserve"><value>スクリプトの機能を使います</value></data>
+  <data name="TplOnline_Install" xml:space="preserve"><value>インストール</value></data>
+  <data name="TplOnline_Update" xml:space="preserve"><value>更新</value></data>
+  <data name="TplOnline_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="TplOnline_Source" xml:space="preserve"><value>ソースを表示</value></data>
+  <data name="TplOnline_SourceTitle" xml:space="preserve"><value>{0} のソース</value></data>
+  <data name="TplOnline_FileTampered" xml:space="preserve"><value>ファイルが改ざんされている可能性があります。</value></data>
+  <data name="TplOnline_FileTamperedNamed" xml:space="preserve"><value>{0} をインストールしませんでした。ファイルが改ざんされている可能性があります。</value></data>
+  <data name="TplOnline_Downloading" xml:space="preserve"><value>テンプレートをダウンロード中: {0}</value></data>
+  <data name="TplOnline_Installed" xml:space="preserve"><value>{0} {1} をインストールしました</value></data>
+  <data name="TplOnline_ExtensionsTitle" xml:space="preserve"><value>{0} をインストールしますか?</value></data>
+  <data name="TplOnline_ExtensionsText" xml:space="preserve"><value>このテンプレートはスクリプトの機能 (テンプレートの拡張関数) を使います。拡張関数はスクリプトの許可と制限に従って動きます。信頼できる作者のテンプレートだけをインストールしてください。</value></data>
+  <data name="TplOnline_UpdatesAvailable" xml:space="preserve"><value>オンラインのテンプレートに新しい版があります: {0}</value></data>
+  <data name="TplOnline_NoUpdates" xml:space="preserve"><value>オンラインのテンプレートはすべて最新です。</value></data>
+  <data name="SetGroup_templatesOnline" xml:space="preserve"><value>オンラインのテンプレート</value></data>
+  <data name="SetGroup_rpc" xml:space="preserve"><value>外部からの自動操作</value></data>
+  <data name="Set_automation_rpc_enabled" xml:space="preserve"><value>外部からの自動操作を許可する (名前付きパイプの JSON-RPC)</value></data>
+  <data name="SetDesc_automation_rpc_enabled" xml:space="preserve"><value>あなたのアカウントのほかのプログラム (PowerShell、Python、テストツールなど) から HexEditor を操作できるようにします。プログラムごとに最初の接続で許可を確認します。既定はオフです。</value></data>
+  <data name="Status_AutomationOn" xml:space="preserve"><value>外部からの自動操作: 有効</value></data>
+  <data name="Status_AutomationConnections" xml:space="preserve"><value>(接続 {0})</value></data>
+  <data name="Rpc_Writing" xml:space="preserve"><value>外部から操作されています: {0}</value></data>
+  <data name="Rpc_Disconnect" xml:space="preserve"><value>切断</value></data>
+  <data name="RpcTrust_Title" xml:space="preserve"><value>{0} からの接続を許可しますか?</value></data>
+  <data name="RpcTrust_Program" xml:space="preserve"><value>プログラム: {0}</value></data>
+  <data name="RpcTrust_Signer" xml:space="preserve"><value>署名者: {0}</value></data>
+  <data name="RpcTrust_Description" xml:space="preserve"><value>このプログラムが外部からの自動操作で HexEditor を操作しようとしています。開いているドキュメントの読み書き、ファイルを開く・保存するなど、自動化のほかの機能も使えます。信頼できるプログラムだけを許可してください。</value></data>
+  <data name="RpcTrust_Unsigned" xml:space="preserve"><value>このプログラムには有効なデジタル署名がありません。</value></data>
+  <data name="RpcTrust_AllowOnce" xml:space="preserve"><value>今回だけ許可する</value></data>
+  <data name="RpcTrust_Deny" xml:space="preserve"><value>許可しない</value></data>
+  <data name="SetSection_RpcClients" xml:space="preserve"><value>外部からの自動操作</value></data>
+  <data name="SetSearch_RpcClients" xml:space="preserve"><value>外部 自動操作 JSON-RPC 名前付きパイプ PowerShell Python 許可したプログラム</value></data>
+  <data name="RpcClients_Running" xml:space="preserve"><value>次の名前付きパイプで待ち受けています。この PC のあなたのアカウントのプログラムだけが接続できます。</value></data>
+  <data name="RpcClients_Stopped" xml:space="preserve"><value>待ち受けていません (「外部からの自動操作を許可する」をオンにしてください)。</value></data>
+  <data name="RpcClients_StartError" xml:space="preserve"><value>名前付きパイプを作れません: {0}</value></data>
+  <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell モジュール: {0} (Import-Module で読み込みます)。メソッドの一覧: {1}</value></data>
+  <data name="RpcClients_None" xml:space="preserve"><value>常に許可したプログラムはありません。</value></data>
+  <data name="RpcClients_Allowed" xml:space="preserve"><value>許可した日時: {0}</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>HexEditor {0} 以降が必要です</value></data>
 </root>
