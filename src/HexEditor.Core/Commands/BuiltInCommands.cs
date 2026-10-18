@@ -503,7 +503,11 @@ public static class BuiltInCommands
         new("templates.libraryReference", "templates"),
         new("templates.tryRun", "templates"),
         new("templates.breakOnRead", "templates") { Condition = "documentOpen" },
+        new("templates.visualize", "templates") { Condition = "documentOpen" },
+        new("templates.online.browse", "templates"),
+        new("templates.online.checkUpdates", "templates"),
         new("view.panel.templates", "view"),
+        new("view.panel.templateVisualizer", "view"),
         new("view.panel.templateOutput", "view"),
 
         // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----

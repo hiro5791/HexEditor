@@ -47,6 +47,29 @@ public static class AuthenticodeVerifier
         return true;
     }
 
+    /// <summary>
+    /// 有効な署名の署名者の名前 (署名がない・検証できなければ null)。外部からの自動操作の接続の確認ダイアログに出す (08 の AUTO-45 の仕様 4)。
+    /// </summary>
+    public static string? SignerOf(string path)
+    {
+        if (!IsSignedBy(path, string.Empty, out _))
+        {
+            return null;
+        }
+
+        try
+        {
+#pragma warning disable SYSLIB0057 // 署名者の証明書を取り出すだけ (検証は WinVerifyTrust で済んでいる)。
+            using var cert = new X509Certificate2(X509Certificate.CreateFromSignedFile(path));
+#pragma warning restore SYSLIB0057
+            return cert.GetNameInfo(X509NameType.SimpleName, forIssuer: false);
+        }
+        catch (Exception ex) when (ex is System.Security.Cryptography.CryptographicException or IOException)
+        {
+            return null;
+        }
+    }
+
     /// <summary>Microsoft の署名があるか (Roslyn のアセンブリの確認)。</summary>
     /// <remarks>
     /// 署名者は "Microsoft Corporation" か ".NET" (.NET 8 以降のランタイムと一部の NuGet パッケージ) で、発行者が Microsoft の CA のもの。
