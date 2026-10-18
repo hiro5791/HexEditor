@@ -6,6 +6,8 @@ A hex editor for Windows. It opens, shows, edits, searches and saves files and d
 
 [日本語](#日本語) | [English](#english)
 
+マニュアル / Manual: <https://hiro5791.github.io/HexEditor/> (アプリのヘルプ > ドキュメントからも開けます / also from Help > Documentation in the app)
+
 ## 日本語
 
 ### ダウンロード

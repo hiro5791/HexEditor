@@ -1287,6 +1287,8 @@ Ayrıntılar şuraya yazıldı:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Güncelleştirmeleri Denetle</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Betik API başvurusu</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Update_Available" xml:space="preserve"><value>{0} sürümü kullanılabilir.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>{0} sürümü yüklenmeye hazır.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>{0} sürümüne güncelleştirildi.</value></data>
@@ -1350,6 +1352,8 @@ Ayrıntılar şuraya yazıldı:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>çeviri dil sorun translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Güncelleştirmeleri denetle</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>güncelleştirme güncelleme yükselt sürüm update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Betik API başvurusu</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api betik başvuru otomasyon script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Araç ipuçlarında kaynak anahtarlarını göster</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Çevirmenler için: her dizenin kaynak anahtarını araç ipucunda gösterir.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Güncelleştirmeleri otomatik olarak denetle</value></data>
@@ -5801,6 +5805,7 @@ Ayrıntılar şuraya yazıldı:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Bir hata ayıklayıcının eklenmesi bekleniyor. İşlem kimliği: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>C# betikleri uygulamada adım adım çalıştırılamaz. Bu işleme harici bir hata ayıklayıcı (Visual Studio veya Visual Studio Code) ekleyin ve durmak için betikte System.Diagnostics.Debugger.Break() çağırın.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Eklemeden çalıştır</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>C# betikleri nasıl hata ayıklanır</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Dil</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Oturumu sıfırla</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Temizle</value></data>

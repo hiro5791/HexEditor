@@ -84,14 +84,25 @@ public sealed class SettingsStoreTests : IDisposable
         store.Load();
         store.StartWatching();
         store.SetBool("log.debug", true, false);
-        await Task.Delay(SettingsStore.WriteDelay + TimeSpan.FromMilliseconds(500));
+        // 書き込みはタイマーで遅らせて行う。並列のテストで混んだランナーではタイマーの呼び出しが遅れるので、時間は目標
+        // (TimeBudget) にし、書かれないことだけを余裕のある上限 (10 秒) で失敗にする
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        await Task.Delay(SettingsStore.WriteDelay);
+        while (!File.Exists(store.PathName) && sw.Elapsed < TimeSpan.FromSeconds(10))
+        {
+            await Task.Delay(50);
+        }
+
         Assert.True(File.Exists(store.PathName));
+        Support.TimeBudget.Limit(sw.Elapsed < SettingsStore.WriteDelay + TimeSpan.FromMilliseconds(500), $"書き込みまで {sw.ElapsedMilliseconds} ms");
 
         var changed = new TaskCompletionSource<IReadOnlyCollection<string>>();
         store.Changed += keys => changed.TrySetResult(keys);
+        sw.Restart();
         File.WriteAllText(store.PathName, """{ "$schemaVersion": 1, "ui.theme": "light" }""");
-        Task done = await Task.WhenAny(changed.Task, Task.Delay(TimeSpan.FromSeconds(1)));
-        Assert.True(done == changed.Task, "外部の変更を 1 秒以内に読み直す");
+        Task done = await Task.WhenAny(changed.Task, Task.Delay(TimeSpan.FromSeconds(10)));
+        Assert.True(done == changed.Task, "外部の変更を読み直す");
+        Support.TimeBudget.Limit(sw.Elapsed < TimeSpan.FromSeconds(1), $"外部の変更を読み直すまで {sw.ElapsedMilliseconds} ms (目標 1 秒以内)");
         Assert.Equal("light", store.GetString("ui.theme", "system"));
     }
 

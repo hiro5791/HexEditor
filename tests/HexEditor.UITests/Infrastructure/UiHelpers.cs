@@ -10,6 +10,24 @@ namespace HexEditor.UITests.Infrastructure;
 public static class UiHelpers
 {
     /// <summary>
+    /// アプリが書き込み中かもしれないファイル (settings.json など) を読む。書き込みと重なって読めないとき、まだないときは空文字列を返す
+    /// (待ちの条件の中で使い、次の確認で読み直す)。
+    /// </summary>
+    public static string ReadWhileWritten(string path)
+    {
+        try
+        {
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
+        catch (IOException)
+        {
+            return string.Empty;
+        }
+    }
+
+    /// <summary>
     /// 確かめる内容 (<paramref name="assertion"/>) が成り立つまで繰り返す (既定 10 秒。待ちの倍率を掛ける)。決まった時間だけ待ってから
     /// 確かめると、遅い PC では反映の前に確かめてしまう。期限を過ぎたら最後の失敗をそのまま投げる。「何も起きない」ことを確かめる
     /// (決まった時間の後も状態が変わらない) 場面には使わない。

@@ -199,8 +199,8 @@ public sealed class ViewPanesTests
         state = await app.SendAsync("minimap", new JsonObject { ["action"] = "resize", ["width"] = 500 });
         Assert.Equal(200, state["requestedWidth"]!.GetValue<double>());
         string settings = Path.Combine(app.Profile, "settings.json");
-        await app.WaitUntilAsync(() => Task.FromResult(File.Exists(settings)
-            && JsonNode.Parse(File.ReadAllText(settings))?["view.minimap.width"]?.GetValue<int>() == 200),
+        await app.WaitUntilAsync(() => Task.FromResult(UiHelpers.ReadWhileWritten(settings) is { Length: > 0 } text
+            && JsonNode.Parse(text)?["view.minimap.width"]?.GetValue<int>() == 200),
             UiTest.Scaled(TimeSpan.FromSeconds(10)), "the saved width");
 
         // キーボードでの代わりの設定 (view.minimap.width) を変えても反映される。

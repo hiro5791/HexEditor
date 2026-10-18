@@ -36,6 +36,9 @@ public static class TestHooks
     /// <summary>テスト用の設定 elevated による管理者の扱いの上書き (null なら実際の権限)。</summary>
     public static bool? ElevationOverride => Active ? Settings.Elevated : null;
 
+    /// <summary>テスト用の設定 networkAvailable によるネットワークの状態の上書き (null なら OS の状態。UI-59)。</summary>
+    public static bool? NetworkAvailableOverride => Active ? Settings.NetworkAvailable : null;
+
     /// <summary>管理者として実行中のドロップの案内を出してよい (テスト用のビルドでは設定 adminDropNotice のときだけ。UI-34 の仕様 7)。</summary>
     public static bool AllowsAdminDropNotice => !Active || Settings.AdminDropNotice;
 
@@ -709,6 +712,8 @@ public static class TestHooks
     }
 
     public static bool InterceptLaunch(Uri uri) => false;
+
+    public static bool? NetworkAvailableOverride => null;
 
     public static Core.Saving.IVolumeInfoProvider? Volumes => null;
 

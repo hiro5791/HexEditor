@@ -48,7 +48,7 @@ public sealed partial class MainWindow : ITemplateEditorHost
         Commands.Register("templates.edit", EditTemplateAsync);
         Commands.Register("templates.manage", () => OpenSettingsPage(Views.TemplateSettingsSection.Category));
         Commands.Register("templates.convertKsy", ConvertKsyAsync);
-        Commands.Register("templates.libraryReference", () => OpenUriAsync(Templates.TemplateHelp.LibraryUrl));
+        Commands.Register("templates.libraryReference", () => OpenManualAsync(Core.Help.ManualTopic.TemplateLibrary));
         Commands.Register("templates.tryRun", () => ActiveTemplateEditor?.TryRun(), TemplateEditorState);
         Commands.Register("templates.breakOnRead", () => BreakOnRead(Editor?.Cursor ?? 0),
             () => NeedsDocument(_ => TemplateEditorOpen ? null : Loc.Get("TplEd_NoEditor")));

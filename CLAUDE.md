@@ -92,6 +92,7 @@ dotnet test
 ## 作業時の注意
 
 - 新しい機能はまず Core にロジックとテストを書き、そのあと UI につなぐ。
+- 機能を作る・変えるプルリクエストでは、利用者向けマニュアル (`docs/manual/en` と `docs/manual/ja`) も同時に書く・直す。書き方は [docs/manual/STYLE.md](docs/manual/STYLE.md)、仕様は 09 の UI-59。`dotnet run --project tools/ManualBuilder -c Release -- check` でリンクを確かめる。
 - コミット前に `winui:winui-code-review` スキルでのレビューを検討する。
 - サブエージェントを使うときは、使用量を抑えるため、作業の難しさに合わせてモデルを指定する。
   - Haiku: ログの取得・状況の確認・読み取りだけの調査など、簡単な作業

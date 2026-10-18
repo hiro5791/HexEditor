@@ -1287,6 +1287,8 @@
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>Л</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Перевірити наявність оновлень</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Довідник API сценаріїв</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>В</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Доступна версія {0}.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Версія {0} готова до інсталяції.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Оновлено до версії {0}.</value></data>
@@ -1350,6 +1352,8 @@
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>переклад мова проблема translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Перевірити наявність оновлень</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>оновлення версія update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Довідник API сценаріїв</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api сценарії довідник автоматизація script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Показувати ключі ресурсів у підказках</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Для перекладачів: показувати ключ ресурсу кожного рядка в його підказці.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Автоматично перевіряти наявність оновлень</value></data>
@@ -5801,6 +5805,7 @@
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Очікування підключення налагоджувача. Ідентифікатор процесу: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Скрипти C# не можна виконувати покроково в застосунку. Підключіть зовнішній налагоджувач (Visual Studio або Visual Studio Code) до цього процесу та викличте System.Diagnostics.Debugger.Break() у скрипті, щоб зупинитися.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Виконати без підключення</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Як налагоджувати сценарії C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Мова</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Скинути сеанс</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Очистити</value></data>

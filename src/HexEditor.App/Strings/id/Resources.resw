@@ -1287,6 +1287,8 @@ Detail ditulis ke:
   <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Periksa Pembaruan</value></data>
   <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_ScriptingApi.Text" xml:space="preserve"><value>Referensi API Skrip</value></data>
+  <data name="Menu_Help_ScriptingApi.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Versi {0} tersedia.</value></data>
   <data name="Update_Ready" xml:space="preserve"><value>Versi {0} siap dipasang.</value></data>
   <data name="Update_Updated" xml:space="preserve"><value>Diperbarui ke versi {0}.</value></data>
@@ -1350,6 +1352,8 @@ Detail ditulis ke:
   <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>laporkan kesalahan terjemahan bahasa translation language issue</value></data>
   <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Periksa pembaruan</value></data>
   <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>periksa pembaruan tingkatkan versi update upgrade version</value></data>
+  <data name="Cmd_help_scriptingApi" xml:space="preserve"><value>Referensi API Skrip</value></data>
+  <data name="CmdAlias_help_scriptingApi" xml:space="preserve"><value>api skrip referensi otomatisasi script reference</value></data>
   <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Tampilkan kunci sumber daya di tooltip</value></data>
   <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>Untuk penerjemah: menampilkan kunci sumber daya setiap string di tooltip-nya.</value></data>
   <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Periksa pembaruan secara otomatis</value></data>
@@ -5801,6 +5805,7 @@ Detail ditulis ke:
   <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Menunggu debugger terpasang. ID proses: {0}</value></data>
   <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Skrip C# tidak dapat dijalankan langkah demi langkah di aplikasi. Pasang debugger eksternal (Visual Studio atau Visual Studio Code) ke proses ini, lalu panggil System.Diagnostics.Debugger.Break() di skrip untuk berhenti.</value></data>
   <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Jalankan tanpa memasang</value></data>
+  <data name="CSharpDebug_Help" xml:space="preserve"><value>Cara men-debug skrip C#</value></data>
   <data name="Console_LanguageLabel" xml:space="preserve"><value>Bahasa</value></data>
   <data name="Console_Reset" xml:space="preserve"><value>Reset sesi</value></data>
   <data name="Console_Clear" xml:space="preserve"><value>Hapus</value></data>

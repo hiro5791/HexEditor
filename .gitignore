@@ -61,3 +61,6 @@ artifacts/
 
 # Generated pseudo-locales (build/PseudoLocalize.targets)
 src/HexEditor.App/Strings/qps-*/
+
+# Kaitai Struct reference toolchain (CI only: tools/KaitaiReference)
+tools/KaitaiReference/node_modules/

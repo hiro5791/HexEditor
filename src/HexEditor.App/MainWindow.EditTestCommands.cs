@@ -37,10 +37,14 @@ public sealed partial class MainWindow
             ["items"] = new JsonArray([.. Controls.DialogParts.HistoryOf(request["id"]!.GetValue<string>()).Select(t => (JsonNode?)t)]),
         },
 
-        // 開いている ContentDialog の数 (閉じる動きが終わるまでは数える)。
+        // 開いている ContentDialog の数 (閉じる動きが終わるまでは数える)。ready は、そのうちボタンを押せる (テンプレートが当たって
+        // Loaded が済んだ) ものの数。ShowAsync はポップアップをすぐに開くが、ボタン (PrimaryButton など) は次の配置で作られるため、
+        // count だけを待って dialogButton を送ると「ボタンがない」になることがある。
         "openDialogs" => new JsonObject
         {
             ["count"] = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Count(p => p.Child is ContentDialog),
+            ["ready"] = VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot)
+                .Count(p => p.Child is ContentDialog { IsLoaded: true } d && VisualTreeHelper.GetChildrenCount(d) > 0),
             ["closed"] = _editDialogsClosed,
         },
         _ => null,

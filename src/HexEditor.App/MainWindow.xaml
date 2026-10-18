@@ -398,6 +398,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Help_Shortcuts" cmd:CommandUi.Id="help.shortcuts" AutomationProperties.AutomationId="Command_Shortcuts" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Help_Documentation" cmd:CommandUi.Id="help.documentation" AutomationProperties.AutomationId="Command_Documentation" />
+                        <MenuFlyoutItem x:Uid="Menu_Help_ScriptingApi" cmd:CommandUi.Id="help.scriptingApi" AutomationProperties.AutomationId="Command_ScriptingApi" />
                         <MenuFlyoutItem x:Uid="Menu_Help_Report" cmd:CommandUi.Id="help.reportProblem" AutomationProperties.AutomationId="Command_ReportProblem" />
                         <MenuFlyoutItem x:Uid="Menu_Help_ReportTranslation" cmd:CommandUi.Id="help.reportTranslation" AutomationProperties.AutomationId="Command_ReportTranslation" />
                         <MenuFlyoutItem x:Uid="Menu_Help_CheckForUpdates" cmd:CommandUi.Id="help.checkForUpdates" AutomationProperties.AutomationId="Command_CheckForUpdates" />

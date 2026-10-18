@@ -1,0 +1,4 @@
+# TC-TPL-33-01 の許容リスト。仕様で近似・対象外と決めた機能による違いだけを書く (各行に仕様の項目を書く)。
+# 形式 TAB パス (結果ツリーのパス。* は任意の文字列) TAB 対象 (value / offset / size / missing / count / error / all) TAB 理由
+# 例: microsoft_pe<TAB>pe.sections[*].name<TAB>value<TAB>TPL-33 の仕様 7: pad-right は近似する
+# 今は違いがないので空 (2026-10-17 の照合で 5 つの形式がすべて一致)。

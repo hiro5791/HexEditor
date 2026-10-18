@@ -377,9 +377,47 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         if (sender is TextBox box)
         {
             AutomationProperties.SetName(box, Loc.Get("Inspector_Edit_Name"));
-            box.Focus(FocusState.Programmatic);
+            bool focused = box.Focus(FocusState.Programmatic);
             box.SelectAll();
+            if (!focused)
+            {
+                FocusWhenReady(box);
+            }
         }
+    }
+
+    /// <summary>
+    /// 入力欄 (x:Load で一覧の行の中に作る) は、Loaded の時点ではまだフォーカスを受け取れないことがある (混んでいるときに起きる)。
+    /// そのままでは入力欄が開いているのにフォーカスが行 (ListViewItem) に残り、打った文字が入らず、Enter が入力を最初からやり直す
+    /// (入れた値が消える)。受け取れるようになるまで、少しの間 (最大 2 秒) フォーカスを置き直す。行の外へフォーカスを移した
+    /// (ほかの操作を始めた) とき・入力をやめたときは置かない。
+    /// </summary>
+    private void FocusWhenReady(TextBox box)
+    {
+        Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+        timer.Interval = TimeSpan.FromMilliseconds(16);
+        long deadline = Environment.TickCount64 + 2000;
+        timer.Tick += (t, _) =>
+        {
+            bool stop = !box.IsLoaded || box.DataContext is not InspectorItemViewModel { IsEditing: true } item || XamlRoot is null
+                || !IsFocusOnRow(item) || box.Focus(FocusState.Programmatic) || Environment.TickCount64 > deadline;
+            if (stop)
+            {
+                t.Stop();
+            }
+        };
+        timer.Start();
+    }
+
+    /// <summary>フォーカスが、行の入れ物 (ListViewItem) かその中にあるか (どこにもないときも含む)。</summary>
+    private bool IsFocusOnRow(InspectorItemViewModel item)
+    {
+        if (FocusManager.GetFocusedElement(XamlRoot) is not DependencyObject focused)
+        {
+            return true;
+        }
+
+        return RowsList.ContainerFromItem(item) is DependencyObject container && IsInside(focused, container);
     }
 
     private void Edit_TextChanged(object sender, TextChangedEventArgs e)

@@ -283,7 +283,7 @@ public sealed class ViewMiscTests
 
         // 5. 再起動後も使われる (設定ファイルに書かれている)。
         string settingsFile = Path.Combine(profile, "settings.json");
-        await app.WaitUntilAsync(() => Task.FromResult(File.Exists(settingsFile) && File.ReadAllText(settingsFile).Contains("view.defaults")),
+        await app.WaitUntilAsync(() => Task.FromResult(UiHelpers.ReadWhileWritten(settingsFile).Contains("view.defaults")),
             TimeSpan.FromSeconds(5), "the defaults in settings.json");
         await ExitAsync(app);
         AppSession again = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-BYTES-256")] });

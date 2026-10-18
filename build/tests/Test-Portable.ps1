@@ -561,7 +561,9 @@ if ($TestZip) {
             Assert-True (@($offer.buttons | Where-Object { $_.id -eq 'Start_ImportFrom_Installer' }).Count -eq 1) 'no import button on the start page'
             [void](Send-TestCommand $a 'invoke' @{ id = 'Start_ImportFrom_Installer' })
             # The dialog of PKG-31 spec 2: settings and key bindings are on by default; "Import".
-            Wait-Until { (Send-TestCommand $a 'openDialogs').count -gt 0 } 10 'the import dialog'
+            # Wait until the dialog's buttons exist ('ready'): ShowAsync opens the popup at once ('count'), but the template
+            # with PrimaryButton is applied in the next layout pass, so pressing it right after 'count' > 0 can miss it.
+            Wait-Until { (Send-TestCommand $a 'openDialogs').ready -gt 0 } 10 'the import dialog'
             [void](Send-TestCommand $a 'dialogButton' @{ name = 'PrimaryButton' })
             Wait-Until { (Get-TestState $a).actualTheme -eq 'Dark' } 10 'the dark theme'
         } finally { Stop-TestApp $a }

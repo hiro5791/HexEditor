@@ -1,11 +1,29 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json.Nodes;
 using HexEditor.Core.Templates;
 using HexEditor.Core.Templates.Loading;
 using HexEditor.TestData;
 using static HexEditor.Core.Tests.Templates.TemplateTestSupport;
 
 namespace HexEditor.Core.Tests.Templates;
+
+/// <summary>
+/// TC-TPL-33-01 の参照のフォルダ (環境変数 HEXEDITOR_KAITAI_REF) がないときはスキップする Fact。フォルダは CI のジョブ kaitai-reference
+/// (毎晩と手動の実行) が、固定の版のフォーマット集・コンパイラ・実行時ライブラリをダウンロードして作る。開発者の PC では作らない。
+/// </summary>
+public sealed class KaitaiReferenceFactAttribute : FactAttribute
+{
+    public const string Variable = "HEXEDITOR_KAITAI_REF";
+
+    public KaitaiReferenceFactAttribute()
+    {
+        if (Environment.GetEnvironmentVariable(Variable) is not { Length: > 0 } dir || !Directory.Exists(dir))
+        {
+            Skip = $"{Variable} がない (CI のジョブ kaitai-reference だけで動く)。";
+        }
+    }
+}
 
 /// <summary>.ksy の読み込みと実行 (TPL-33)。</summary>
 public sealed class KaitaiTests
@@ -52,19 +70,155 @@ public sealed class KaitaiTests
         }
     }
 
-    /// <summary>TC-TPL-33-01 本体。期待値の JSON (TD-TPL-KSY-FORMATS) の取り込みにダウンロードとコンパイラの導入が要るため、まだ実行しない。</summary>
-    [Fact(Skip = "TD-TPL-KSY-FORMATS (kaitai_struct_formats の 5 つの .ksy と公式コンパイラの期待値の JSON) の取り込みにダウンロードとコンパイラの導入が要る。それまでは PngKsyMatchesTheData で代える。")]
+    /// <summary>
+    /// TC-TPL-33-01 本体。CI のジョブ kaitai-reference だけで動く (HEXEDITOR_KAITAI_REF のフォルダを CI が用意する。なければスキップ)。
+    /// フォルダの中: <c>formats/</c> (固定のコミットの kaitai_struct_formats)、<c>data/&lt;TD の ID&gt;.bin</c> (TestDataGen)、
+    /// <c>ref/&lt;key&gt;.json</c> (tools/KaitaiReference/dump.js の参照の解析結果)。報告は <c>report/kaitai-report.md</c> に書く。
+    /// </summary>
+    [KaitaiReferenceFact]
     [Trait(TC, "TC-TPL-33-01")]
     public void KaitaiStructFormatsRunUnchanged()
     {
+        string root = Environment.GetEnvironmentVariable(KaitaiReferenceFactAttribute.Variable)!;
+        string formatsDir = Path.Combine(root, "formats");
+        JsonArray formats = (JsonArray)JsonNode.Parse(File.ReadAllText(Engine.SourceTests.FindRepoFile("tools/KaitaiReference/formats.json")))!;
+        IReadOnlyList<KaitaiAllowEntry> allow = KaitaiReferenceComparer.LoadAllowList(KaitaiFixture("allowlist.tsv"));
+        var results = new List<KaitaiComparison>();
+        string header = string.Empty;
+        foreach (JsonObject f in formats.OfType<JsonObject>())
+        {
+            string key = (string)f["key"]!;
+            string ksy = (string)f["ksy"]!;
+            var cmp = new KaitaiComparison(key);
+            results.Add(cmp);
+            string dumpPath = Path.Combine(root, "ref", key + ".json");
+            if (!File.Exists(dumpPath))
+            {
+                cmp.Mismatches.Add(new KaitaiMismatch("(ref)", "reference", "参照の JSON がある", dumpPath));
+                continue;
+            }
+
+            JsonNode dump = JsonNode.Parse(File.ReadAllText(dumpPath))!;
+            header = $"参照: {dump["toolchain"]?.ToJsonString()}";
+            byte[] data = File.ReadAllBytes(Path.Combine(root, "data", (string)f["data"]! + ".bin"));
+            string ksyPath = Path.Combine(formatsDir, ksy.Replace('/', Path.DirectorySeparatorChar));
+            if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(data)) != (string?)dump["sha256"]
+                || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(ksyPath))) != (string?)dump["ksySha256"])
+            {
+                cmp.Mismatches.Add(new KaitaiMismatch("(data)", "reference", "参照と同じデータと .ksy", "ハッシュが違う"));
+                continue;
+            }
+
+            // .ksy は変更せずに読む。imports (/common/... など) はフォーマット集の最上位を検索パスにして解決する (TPL-33 の仕様 3)
+            TemplateProgram p = TemplateLoader.LoadFile(ksyPath, new TemplateLoadOptions { SearchPaths = [formatsDir] });
+            if (p.HasErrors)
+            {
+                foreach (TemplateDiagnostic d in p.Diagnostics.Where(d => d.Severity == TemplateSeverity.Error))
+                {
+                    cmp.Mismatches.Add(new KaitaiMismatch("(ksy)", "load", "エラーなく読める", d.ToString()));
+                }
+
+                continue;
+            }
+
+            TemplateResult r = Run(p, TemplateDataSource.FromBytes(data), timeout: TimeSpan.FromMinutes(2));
+            r.EvaluateAll();
+            if (r.State != TemplateRunState.Completed)
+            {
+                cmp.Mismatches.Add(new KaitaiMismatch("(run)", "run", "Completed", $"{r.State}: {string.Join("; ", r.Diagnostics)}"));
+            }
+
+            KaitaiComparison c = KaitaiReferenceComparer.Compare(key, dump, JsonNode.Parse(TemplateJsonExporter.ToJson(r))!, allow);
+            cmp.Mismatches.AddRange(c.Mismatches);
+            cmp.Notes.AddRange(c.Notes);
+            cmp.Fields = c.Fields;
+            cmp.Values = c.Values;
+            cmp.Positions = c.Positions;
+            cmp.Extra = c.Extra;
+        }
+
+        string report = KaitaiReferenceComparer.ToMarkdown(results, header);
+        string reportDir = Path.Combine(root, "report");
+        Directory.CreateDirectory(reportDir);
+        File.WriteAllText(Path.Combine(reportDir, "kaitai-report.md"), report, new UTF8Encoding(false));
+        Assert.True(results.All(x => x.Passed), "kaitai_struct_formats の照合に不一致があります (report/kaitai-report.md):\n"
+            + string.Join("\n", results.SelectMany(x => x.Failures.Take(10).Select(m => $"{x.Format}: {m.Path} [{m.Aspect}] 期待 {m.Expected} / 結果 {m.Actual}"))));
     }
 
-    /// <summary>TC-TPL-33-01 の代わり (kaitai_struct_formats の取り込みまで)。</summary>
+    internal static string KaitaiFixture(string name) =>
+        Path.Combine(Path.GetDirectoryName(Engine.SourceTests.FindRepoFile("HexEditor.slnx"))!, "tests", "fixtures", "templates", "kaitai", name);
+
+    /// <summary>TC-TPL-33-01 の照合 (KaitaiReferenceComparer) を、手で書いた参照の JSON で確かめる (ダウンロードなしで毎回動く)。</summary>
+    [Fact]
+    public void ReferenceComparerMatchesAHandmadeDump()
+    {
+        TemplateResult r = RunKsy("png-lite.ksy", TestDataCatalog.Png16());
+        r.EvaluateAll();
+        JsonNode ours = JsonNode.Parse(TemplateJsonExporter.ToJson(r))!;
+        JsonNode reference = JsonNode.Parse(File.ReadAllText(KaitaiFixture("png-lite.ref.json")))!;
+        KaitaiComparison c = KaitaiReferenceComparer.Compare("png-lite", reference, ours, []);
+        Assert.True(c.Passed, string.Join("\n", c.Failures));
+        Assert.Equal(0, c.Extra);
+        Assert.True(c.Fields >= 24, c.Fields.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        Assert.True(c.Positions >= 20);
+
+        // 値・位置・大きさ・欠けたフィールド・配列の要素の数・参照側の失敗を、それぞれ不一致として見つける
+        JsonNode Mutated(Action<JsonNode> change)
+        {
+            JsonNode copy = reference.DeepClone();
+            change(copy);
+            return copy;
+        }
+
+        JsonArray Fields(JsonNode n) => (JsonArray)n["root"]!["fields"]!;
+        JsonObject Chunk(JsonNode n, int i) => (JsonObject)((JsonArray)Fields(n)[5]!["items"]!)[i]!;
+        (string Path, string Aspect)[] Found(JsonNode changed) =>
+            [.. KaitaiReferenceComparer.Compare("png-lite", changed, ours, []).Failures.Select(m => (m.Path, m.Aspect))];
+
+        Assert.Equal([("ihdr.width", "value")], Found(Mutated(n => n["root"]!["fields"]![3]!["fields"]![0]!["value"] = 17)));
+        Assert.Equal([("chunks[1].crc", "offset")], Found(Mutated(n => Chunk(n, 1)["fields"]![3]!["offset"] = 555)));
+        Assert.Equal([("chunks[0].body", "size")], Found(Mutated(n => Chunk(n, 0)["fields"]![2]!["size"] = 500)));
+        Assert.Equal([("chunks[0].type", "value")], Found(Mutated(n => Chunk(n, 0)["fields"]![1]!["value"] = "IDAX")));
+        Assert.Equal([("chunks[0].is_last", "value")], Found(Mutated(n => Chunk(n, 0)["fields"]![4]!["value"] = true)));
+        Assert.Equal([("magic", "value")], Found(Mutated(n => Fields(n)[0]!["value"] = "89504E470D0A1A0B")));
+        Assert.Equal([("extra", "missing")], Found(Mutated(n => Fields(n).Add(JsonNode.Parse("""{"name":"extra","kind":"number","value":1}""")))));
+        Assert.Equal([("chunks", "count")], Found(Mutated(n => ((JsonArray)Fields(n)[5]!["items"]!).RemoveAt(1))));
+        Assert.Equal([("(root)", "reference")], Found(Mutated(n => n["error"] = "EOF")));
+        Assert.Equal([("(ksy)", "compile")], Found(Mutated(n => n["compileError"] = "bad")));
+
+        // 列挙型は数値で比べる。参照側でエラーになったフィールドは比べない。許容リストで認めた違いは失敗にしない
+        Assert.Empty(Found(Mutated(n => n["root"]!["fields"]![3]!["fields"]![3]!["error"] = "boom")));
+        KaitaiComparison allowed = KaitaiReferenceComparer.Compare("png-lite", Mutated(n => Chunk(n, 0)["fields"]![1]!["value"] = "IDAX"), ours,
+            [new KaitaiAllowEntry("png-lite", new System.Text.RegularExpressions.Regex("^chunks\\[.*\\]\\.type$"), "value", "test")]);
+        Assert.True(allowed.Passed);
+        Assert.Single(allowed.Mismatches);
+        Assert.Contains("| png-lite | 合格 |", KaitaiReferenceComparer.ToMarkdown([allowed], "h"), StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData("color_type", "colorType")]
+    [InlineData("len_", "len")]
+    [InlineData("ofs_local_header", "ofsLocalHeader")]
+    [InlineData("b", "b")]
+    [InlineData("_unnamed0", "_unnamed0")]
+    [InlineData("rgb_32", "rgb32")]
+    public void ReferenceNamesUseKaitaiLowerCamelCase(string ksy, string js) => Assert.Equal(js, KaitaiReferenceComparer.LowerCamel(ksy));
+
+    [Fact]
+    public void AllowListEntriesCiteTheSpec()
+    {
+        IReadOnlyList<KaitaiAllowEntry> list = KaitaiReferenceComparer.LoadAllowList(KaitaiFixture("allowlist.tsv"));
+        Assert.All(list, e => Assert.Matches(@"TPL-\d+ の仕様 \d+", e.Reason));
+        Assert.All(list, e => Assert.Contains(e.Aspect, new[] { "value", "offset", "size", "missing", "count", "error", "all" }));
+        Assert.True(list.Count <= 10, "許容リストは短く保つ");
+    }
+
+    /// <summary>TC-TPL-33-01 の CI だけの照合を補う、ローカルで毎回動く確認 (同じ書き方のテスト用の .ksy)。</summary>
     [Fact]
     public void PngKsyMatchesTheData()
     {
-        // kaitai_struct_formats の png.ksy と公式のコンパイラの期待値はリポジトリに取り込んでいないため (取り込みにはダウンロードと
-        // コンパイラの導入が要る)、同じ書き方 (contents、valid、enum、repeat-until、switch-on、instances の value) を使うテスト用の
+        // kaitai_struct_formats と公式のコンパイラの期待値は CI のジョブ (kaitai-reference) だけで用意する (ダウンロードが要る) ため、
+        // 毎回のテストでは同じ書き方 (contents、valid、enum、repeat-until、switch-on、instances の value) を使うテスト用の
         // .ksy の値を、データの作り方から求めた値と比べる
         byte[] png = TestDataCatalog.Png16();
         TemplateResult r = RunKsy("png-lite.ksy", png);

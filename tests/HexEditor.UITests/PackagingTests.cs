@@ -53,10 +53,11 @@ public sealed class PackagingTests
     });
 
     [Fact]
-    public Task Offline_mode_shows_the_url_before_opening_the_documentation() => UiTestContext.RunAsync(async ctx =>
+    public Task Offline_mode_shows_the_url_before_opening_a_web_page() => UiTestContext.RunAsync(async ctx =>
     {
+        // ヘルプ > ドキュメントはオフラインでは同梱のマニュアルを開く (UI-59。ManualTests) ため、問題の報告のページで確かめる。
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = await ProfileWithSettings(ctx, "{\"$schemaVersion\": 1, \"network.offline\": true}") });
-        await app.CommandAsync("Command_Documentation");
+        await app.CommandAsync("Command_ReportProblem");
         AutomationElement dialog = await app.WaitForDialogAsync("OpenUrlDialog");
         Assert.NotNull(dialog);
         Assert.Contains("github.com/hiro5791/HexEditor", (await app.WaitForAsync("OpenUrlDialog_Url")).Patterns.Value.Pattern.Value.Value);
@@ -116,7 +117,7 @@ public sealed class PackagingTests
 
         // この版をスキップ: 設定に記録され、自動の確認では出ない。
         await app.SendAsync("updateButton", new JsonObject { ["button"] = "Skip" });
-        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(Path.Combine(profile, "settings.json")).Contains("\"update.skippedVersion\": \"0.9.1\"")),
+        await app.WaitUntilAsync(() => Task.FromResult(UiHelpers.ReadWhileWritten(Path.Combine(profile, "settings.json")).Contains("\"update.skippedVersion\": \"0.9.1\"")),
             TimeSpan.FromSeconds(5), "the skipped version in settings.json");
         state = await app.SendAsync("updateCheck", new JsonObject { ["manual"] = false });
         Assert.False(state["barVisible"]!.GetValue<bool>());
@@ -269,7 +270,7 @@ public sealed class PackagingTests
         // スイッチも切れる。
         (await app.WaitForAsync("Settings_NetworkSwitch_Downloads")).Patterns.Toggle.Pattern.Toggle();
         await app.WaitUntilAsync(() => Task.FromResult(File.Exists(Path.Combine(profile, "settings.json"))
-            && File.ReadAllText(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
+            && UiHelpers.ReadWhileWritten(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
             TimeSpan.FromSeconds(5), "network.downloads.enabled = false in settings.json");
         await app.WaitUntilAsync(async () => !AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_Components")),
             TimeSpan.FromSeconds(5), "the Components switch to follow");

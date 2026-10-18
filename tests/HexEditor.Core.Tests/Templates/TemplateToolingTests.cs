@@ -553,16 +553,20 @@ public sealed class TemplateToolingTests : IDisposable
     [Fact]
     public void EveryStandardLibraryFunctionHasASignatureAndAHelpSection()
     {
-        // TPL-18 の仕様 4: 引数・戻り値・エラーをリファレンス (補完の説明と docs/help/template-library.md。英語と日本語) に書く
-        string help = File.ReadAllText(Core.Tests.Engine.SourceTests.FindRepoFile(TemplateLibraryReference.HelpPage)).ReplaceLineEndings("\n");
+        // TPL-18 の仕様 4: 引数・戻り値・エラーをリファレンス (補完の説明とマニュアルの template-library。英語と日本語) に書く
         Assert.Equal(TemplateLanguageService.StdFunctions.Order(StringComparer.Ordinal), TemplateLibraryReference.Signatures.Keys.Order(StringComparer.Ordinal));
-        foreach (string name in TemplateLanguageService.StdFunctions)
+        foreach (string language in new[] { "en", "ja" })
         {
-            int at = help.IndexOf("\n### " + name + "\n", StringComparison.Ordinal);
-            Assert.True(at >= 0, "No help section: " + name);
-            string section = help[at..(help.IndexOf("\n#", at + 5, StringComparison.Ordinal) is int next and > 0 ? next : help.Length)];
-            Assert.Contains("- English: ", section, StringComparison.Ordinal);
-            Assert.Contains("- 日本語: ", section, StringComparison.Ordinal);
+            string help = File.ReadAllText(Core.Tests.Engine.SourceTests.FindRepoFile($"docs/manual/{language}/{TemplateLibraryReference.HelpPage}.md")).ReplaceLineEndings("\n");
+            foreach (string name in TemplateLanguageService.StdFunctions)
+            {
+                int at = help.IndexOf("\n### " + name + "\n", StringComparison.Ordinal);
+                Assert.True(at >= 0, $"No help section ({language}): {name}");
+                string section = help[(at + 5 + name.Length)..(help.IndexOf("\n#", at + 5, StringComparison.Ordinal) is int next and > 0 ? next : help.Length)];
+                // 署名 (`read_u32(offset, endian?) -> u32`) のほかに説明の文がある。
+                string[] lines = [.. section.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Where(l => !l.StartsWith('`'))];
+                Assert.True(lines.Length > 0, $"No description ({language}): {name}");
+            }
         }
 
         TemplateCompletionResult c = TemplateLanguageService.Complete("local u32 x = std::mem::re", 26, "t.hxt");
