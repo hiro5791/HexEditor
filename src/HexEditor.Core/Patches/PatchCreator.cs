@@ -43,6 +43,9 @@ public sealed record PatchWriteOptions
 
     /// <summary>自己適用型パッチの適用プログラム (同梱の実行ファイル)。</summary>
     public string? StubPath { get; init; }
+
+    /// <summary>自己適用型パッチの適用プログラムが表示する文字列 (言語のタグ → キー → 文字列。EDIT-44 の仕様 4)。</summary>
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>>? ApplierStrings { get; init; }
 }
 
 /// <summary>
@@ -184,7 +187,7 @@ public sealed class PatchCreator(PatchScript script)
             default:
                 SelfPatchBuilder.Write(output, options.StubPath ?? throw new InvalidOperationException("適用プログラムがありません。"),
                     s => HexPatch.Write(s, Script, options.FullHash, options.DefaultFileName, options.Message, ops: Operations(), progress: progress,
-                        cancellationToken: cancellationToken));
+                        cancellationToken: cancellationToken, applierStrings: options.ApplierStrings));
                 break;
         }
     }
@@ -197,7 +200,7 @@ public sealed class PatchCreator(PatchScript script)
 public static class SelfPatchBuilder
 {
     /// <summary>同梱の適用プログラムのファイル名 (アプリのフォルダの <c>PatchApplier\&lt;arch&gt;\</c> に置く)。</summary>
-    public const string StubFileName = "HexPatchApply.exe";
+    public const string StubFileName = "HexPatchApply.stub";
 
     /// <summary>
     /// 同梱の適用プログラムのパス (なければ null)。<paramref name="appDirectory"/> はアプリのフォルダ、<paramref name="architecture"/> は <c>x64</c> か <c>arm64</c>。

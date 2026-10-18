@@ -417,6 +417,21 @@ public static class BuiltInCommands
         .. new[] { "upper", "lower", "swap" }.SelectMany(op => new[] { "ascii", "text" }.Select(method =>
             new CommandDefinition($"data.case.{op}.{method}", "data") { Condition = "documentOpen && !readOnly" })),
 
+        // パッチの作成と適用 (EDIT-42〜EDIT-44)。ショートカットは既定なし。
+        new("data.patch.create", "data") { Condition = "documentOpen" },
+        new("data.patch.apply", "data") { Condition = "documentOpen && !readOnly" },
+
+        // 変換ビュー (EDIT-45)。ショートカットは既定なし。
+        new("data.transformView.define", "data") { Condition = "documentOpen" },
+        new("data.transformView.xor", "data") { Condition = "documentOpen" },
+        new("data.transformView.clear", "data") { Condition = "documentOpen" },
+        new("data.transformView.applyToData", "data") { Condition = "documentOpen" },
+
+        // 分岐する履歴 (EDIT-21)。ショートカットは既定なし。
+        new("edit.history.save", "edit") { Condition = "documentOpen" },
+        new("edit.history.load", "edit") { Condition = "documentOpen" },
+        new("edit.history.goToNode", "edit") { Condition = "documentOpen" },
+
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 

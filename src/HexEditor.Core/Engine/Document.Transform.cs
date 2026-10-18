@@ -9,6 +9,9 @@ public sealed partial class Document
     /// <summary>今の元データの版 (保存のたびに変わる)。</summary>
     internal DocumentStorage LatestStorage => _storage;
 
+    /// <summary>次に加える外部参照の番号。</summary>
+    internal int NextExternalIndex => _storage.Externals.Count;
+
     /// <summary>このドキュメントが持つ外部のデータ (閉じるときに閉じる) を加え、外部参照の番号を返す。</summary>
     internal int AddOwnedExternal(IByteSource source)
     {

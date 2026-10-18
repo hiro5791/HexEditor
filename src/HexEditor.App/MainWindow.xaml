@@ -331,6 +331,18 @@
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseLower" cmd:CommandUi.Id="data.case.lower" AutomationProperties.AutomationId="Command_CaseLower" />
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseSwap" cmd:CommandUi.Id="data.case.swap" AutomationProperties.AutomationId="Command_CaseSwap" />
                         </MenuFlyoutSubItem>
+                        <!--  パッチ (EDIT-42〜EDIT-44) と変換ビュー (EDIT-45)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_Patch" AutomationProperties.AutomationId="Command_PatchMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchCreate" cmd:CommandUi.Id="data.patch.create" AutomationProperties.AutomationId="Command_PatchCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchApply" cmd:CommandUi.Id="data.patch.apply" AutomationProperties.AutomationId="Command_PatchApply" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_TransformView" AutomationProperties.AutomationId="Command_TransformViewMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformDefine" cmd:CommandUi.Id="data.transformView.define" AutomationProperties.AutomationId="Command_TransformViewDefine" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformXor" cmd:CommandUi.Id="data.transformView.xor" AutomationProperties.AutomationId="Command_TransformViewXor" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformClear" cmd:CommandUi.Id="data.transformView.clear" AutomationProperties.AutomationId="Command_TransformViewClear" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformApply" cmd:CommandUi.Id="data.transformView.applyToData" AutomationProperties.AutomationId="Command_TransformViewApply" />
+                        </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
                         <!--  比較 (ANA-01、ANA-08)  -->
@@ -673,6 +685,8 @@
                 <!--  プロセスメモリの即時書き込み (ENG-34 の「画面」)。セクタ番号は StatusPosition (VIEW-40) が出す。  -->
                 <Button x:Name="StatusImmediate" AutomationProperties.AutomationId="Status_ImmediateWrite" Content="{x:Bind Vm.StatusDocument.ImmediateWriteText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="immediate" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
+                <!--  変換ビュー (EDIT-45 の仕様 9): 有効な間は必ず出す (隠せない項目)。クリックで変換ビューの設定を開く  -->
+                <Button x:Name="StatusTransform" AutomationProperties.AutomationId="Status_TransformView" Click="StatusTransform_Click" Style="{StaticResource StatusItemStyle}" Tag="transform" Visibility="Collapsed" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
                 <Button x:Name="StatusCompare" AutomationProperties.AutomationId="Status_Compare" Click="StatusCompare_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="compare" Visibility="Collapsed" />

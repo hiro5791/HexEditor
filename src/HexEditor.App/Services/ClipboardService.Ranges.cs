@@ -56,7 +56,7 @@ public sealed partial class ClipboardService
             return new ClipboardPlan(false, ClipboardTextKind.TooLargeLine);
         }
 
-        DocumentSnapshot snapshot = editor.Document.Current;
+        DocumentSnapshot snapshot = editor.Document.ClipboardSnapshot;
         List<ByteRange> ranges = [.. selection.Ranges];
         byte[] bytes = await Task.Run(() =>
         {

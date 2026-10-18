@@ -273,78 +273,127 @@ public static class HistoryArchive
     /// </summary>
     public static void Load(Document document, Stream input, Action<long>? progress = null, CancellationToken cancellationToken = default)
     {
+        using PreparedHistory prepared = Prepare(document, input, progress, cancellationToken);
+        prepared.ApplyTo(document);
+    }
+
+    /// <summary>
+    /// 読み込みの準備 (data.bin の取り出しと JSON の読み込み。追加データの量に比例するので、UI はバックグラウンドで行う)。ドキュメントは変えない。
+    /// 履歴の置き換えは <see cref="PreparedHistory.ApplyTo"/> (UI スレッド)。
+    /// </summary>
+    public static PreparedHistory Prepare(Document document, Stream input, Action<long>? progress = null, CancellationToken cancellationToken = default)
+    {
         if (document.LinkedParent is not null)
         {
             throw new InvalidOperationException("連動ビューには履歴を読み込めません。");
         }
 
         using var zip = OpenZip(input);
-        using JsonDocument doc = ReadJson(zip);
-        JsonElement root = doc.RootElement;
-        bool matches;
-        long dataLength;
+        JsonDocument doc = ReadJson(zip);
         try
         {
-            matches = IdentityOf(document).Matches(SourceIdentity.ReadFrom(root.GetProperty("identity")) with { FullSha256 = null });
-            dataLength = root.GetProperty("dataLength").GetInt64();
-        }
-        catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
-        {
-            throw new HistoryArchiveException("identity");
-        }
-
-        // data.bin を一時ファイルに取り出す (追加データの量に比例する)。ドキュメントを閉じるときに消す。
-        ZipArchiveEntry dataEntry = zip.GetEntry(DataEntry) ?? throw new HistoryArchiveException(DataEntry);
-        if (dataEntry.Length != dataLength)
-        {
-            throw new HistoryArchiveException(DataEntry);
-        }
-
-        string tempPath = Path.Combine(document.Options.TempDirectory, document.Id.ToString("N"), "history-" + Guid.NewGuid().ToString("N") + ".bin");
-        Directory.CreateDirectory(Path.GetDirectoryName(tempPath)!);
-        SafeFileHandle handle = File.OpenHandle(tempPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, FileOptions.DeleteOnClose);
-        TempFileSource? temp = null;
-        try
-        {
-            using (Stream data = dataEntry.Open())
+            JsonElement root = doc.RootElement;
+            bool matches;
+            long dataLength;
+            try
             {
-                byte[] buffer = new byte[1 << 20];
-                long done = 0;
-                int n;
-                while ((n = data.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    RandomAccess.Write(handle, buffer.AsSpan(0, n), done);
-                    done += n;
-                    progress?.Invoke(done);
-                }
-
-                if (done != dataLength)
-                {
-                    throw new HistoryArchiveException(DataEntry);
-                }
+                matches = IdentityOf(document).Matches(SourceIdentity.ReadFrom(root.GetProperty("identity")) with { FullSha256 = null });
+                dataLength = root.GetProperty("dataLength").GetInt64();
+            }
+            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
+            {
+                throw new HistoryArchiveException("identity");
             }
 
-            temp = new TempFileSource(handle, dataLength, []);
-            Build(document, root, temp, matches);
-        }
-        catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException or OverflowException)
-        {
-            temp?.Dispose();
-            handle.Dispose();
-            throw new HistoryArchiveException(ex.Message);
+            // data.bin を一時ファイルに取り出す (追加データの量に比例する)。ドキュメントを閉じるときに消す。
+            ZipArchiveEntry dataEntry = zip.GetEntry(DataEntry) ?? throw new HistoryArchiveException(DataEntry);
+            if (dataEntry.Length != dataLength)
+            {
+                throw new HistoryArchiveException(DataEntry);
+            }
+
+            string tempPath = Path.Combine(document.Options.TempDirectory, document.Id.ToString("N"), "history-" + Guid.NewGuid().ToString("N") + ".bin");
+            Directory.CreateDirectory(Path.GetDirectoryName(tempPath)!);
+            SafeFileHandle handle = File.OpenHandle(tempPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, FileOptions.DeleteOnClose);
+            try
+            {
+                using (Stream data = dataEntry.Open())
+                {
+                    byte[] buffer = new byte[1 << 20];
+                    long done = 0;
+                    int n;
+                    while ((n = data.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        RandomAccess.Write(handle, buffer.AsSpan(0, n), done);
+                        done += n;
+                        progress?.Invoke(done);
+                    }
+
+                    if (done != dataLength)
+                    {
+                        throw new HistoryArchiveException(DataEntry);
+                    }
+                }
+
+                return new PreparedHistory(doc, new TempFileSource(handle, dataLength, []), matches);
+            }
+            catch
+            {
+                handle.Dispose();
+                throw;
+            }
         }
         catch
         {
-            temp?.Dispose();
-            handle.Dispose();
+            doc.Dispose();
             throw;
+        }
+    }
+
+    /// <summary>読み込みの準備ができた履歴 (<see cref="Prepare"/>)。<see cref="ApplyTo"/> しなければ、Dispose で一時ファイルを消す。</summary>
+    public sealed class PreparedHistory : IDisposable
+    {
+        private readonly JsonDocument _json;
+        private TempFileSource? _data;
+
+        internal PreparedHistory(JsonDocument json, TempFileSource data, bool matches)
+        {
+            _json = json;
+            _data = data;
+            IdentityMatches = matches;
+        }
+
+        /// <summary>今の元ファイルが履歴の元ファイルと一致したか (一致しなければ保存した時点を記録しない)。</summary>
+        public bool IdentityMatches { get; }
+
+        /// <summary>ドキュメントの履歴を置き換える (UI スレッド)。壊れていれば <see cref="HistoryArchiveException"/> で、ドキュメントは変えない。</summary>
+        public void ApplyTo(Document document)
+        {
+            TempFileSource data = _data ?? throw new InvalidOperationException("すでに読み込みました。");
+            try
+            {
+                Build(document, _json.RootElement, data, IdentityMatches);
+                _data = null;
+            }
+            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException or OverflowException)
+            {
+                throw new HistoryArchiveException(ex.Message);
+            }
+        }
+
+        public void Dispose()
+        {
+            _json.Dispose();
+            _data?.Dispose();
+            _data = null;
         }
     }
 
     private static void Build(Document document, JsonElement root, TempFileSource data, bool matches)
     {
-        int dataIndex = document.AddOwnedExternal(data);
+        // 外部参照の番号は次に加える番号 (木を作り終えてから加える。途中で壊れていればドキュメントを変えない)。
+        int dataIndex = document.NextExternalIndex;
         var nodes = new Dictionary<int, HistoryNode>();
         var lastChild = new Dictionary<int, int>();
         HistoryNode? rootNode = null;
@@ -427,6 +476,11 @@ public static class HistoryArchive
 
         HistoryNode current = nodes.GetValueOrDefault(root.GetProperty("current").GetInt32()) ?? throw new FormatException("current");
         HistoryNode? saved = matches && root.TryGetProperty("saved", out JsonElement s) ? nodes.GetValueOrDefault(s.GetInt32()) : null;
+        if (document.AddOwnedExternal(data) != dataIndex)
+        {
+            throw new InvalidOperationException("外部参照の番号が変わりました。");
+        }
+
         document.ReplaceHistory(rootNode, current, saved);
     }
 

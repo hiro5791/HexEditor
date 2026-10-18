@@ -133,6 +133,18 @@ internal sealed class FillContentPanel : StackPanel
     /// <summary>入力が変わった。</summary>
     public event EventHandler? Changed;
 
+    /// <summary>種類を Hex のパターンにして値を入れる (「この変換をデータに適用…」で鍵を引き継ぐ。EDIT-45 の仕様 13)。</summary>
+    public void PresetHexPattern(string hex)
+    {
+        int index = Array.IndexOf(_kinds, FillKind.HexPattern);
+        if (index >= 0)
+        {
+            _kind.SelectedIndex = index;
+            _pattern.Text = hex;
+            UpdateSections();
+        }
+    }
+
     public FillKind Kind => _kinds[Math.Max(0, _kind.SelectedIndex)];
 
     /// <summary>ファイルの内容を選んだ場合のパス (ダイアログがファイルを選ぶため)。</summary>

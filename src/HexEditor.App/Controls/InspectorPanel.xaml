@@ -279,6 +279,13 @@
                 Checked="UtcToggle_Changed"
                 Unchecked="UtcToggle_Changed"
                 TabIndex="4" />
+            <!--  元のデータを解釈 (変換ビューが有効なときだけ。INSP-01 の仕様 12)  -->
+            <ToggleButton
+                x:Name="InterpretOriginalToggle"
+                x:Uid="Inspector_InterpretOriginal"
+                AutomationProperties.AutomationId="Inspector_InterpretOriginal"
+                IsChecked="{x:Bind Vm.InterpretOriginal, Mode=TwoWay}"
+                Visibility="{x:Bind Vm.TransformActive, Mode=OneWay}" />
             <Button
                 x:Name="RowsButton"
                 AutomationProperties.AutomationId="Inspector_Rows"

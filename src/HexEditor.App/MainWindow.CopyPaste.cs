@@ -233,7 +233,7 @@ public sealed partial class MainWindow
     /// <summary>出力を作ってクリップボードに入れる。0.5 秒以上かかれば長時間処理として表示され、キャンセルしたらクリップボードを変えない (仕様 9)。</summary>
     private async Task CopyFormattedAsync(DocumentViewModel doc, CopyFormat format, CopyOptions options, long start, long length)
     {
-        DocumentSnapshot snapshot = doc.Document.Current;
+        DocumentSnapshot snapshot = doc.Document.ClipboardSnapshot;
         try
         {
             (string text, string? html, string? rtf) = await Vm.Operations.RunAsync(Loc.Get("Operation_CopyAs"), OperationKind.ReadOnly, doc.Document, length,
@@ -468,7 +468,7 @@ public sealed partial class MainWindow
             }
 
             // プレビュー: 出力の先頭 4 KiB と、出力全体の推定サイズ (仕様 1)。
-            DocumentSnapshot snapshot = doc.Document.Current;
+            DocumentSnapshot snapshot = doc.Document.ClipboardSnapshot;
             var limited = new LimitedWriter(CopyFormatter.PreviewChars);
             IReadOnlyList<CopyNote> notes = [];
             try

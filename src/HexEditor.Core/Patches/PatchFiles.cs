@@ -123,6 +123,13 @@ public abstract class LoadedPatch : IDisposable
 
     protected abstract void ApplyCore(Document document, bool reverse, string description, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// 適用後の確認だけをする (UPS・BPS の CRC-32、独自形式の識別情報。仕様 5)。UI は適用を UI スレッドで、この確認をバックグラウンドで行い、
+    /// 合わなければ元に戻す。確認の手段がない形式は true。
+    /// </summary>
+    public bool CheckResult(DocumentSnapshot result, bool reverse = false, Action<long>? progress = null, CancellationToken cancellationToken = default) =>
+        VerifyResult(result, reverse, progress, cancellationToken);
+
     /// <summary>適用後の確認。確認の手段がない形式は true。</summary>
     protected virtual bool VerifyResult(DocumentSnapshot result, bool reverse, Action<long>? progress, CancellationToken cancellationToken) => true;
 

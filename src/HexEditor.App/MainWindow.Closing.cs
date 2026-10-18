@@ -127,6 +127,17 @@ public sealed partial class MainWindow
             return false;
         }
 
+        // 2b. 名前付きまたは固定した履歴の節がある文書は、履歴を保存するか確かめる (EDIT-21 の仕様 10)。
+        foreach (DocumentViewModel doc in docs.Where(d => Vm.Documents.Contains(d) && !d.KeepsDocumentAfterClosing(docs)
+            && d.Document.LinkedParent is null && d.Document.History.HasNamedOrPinnedNodes).GroupBy(d => d.Document).Select(g => g.First()).ToList())
+        {
+            Vm.Selected = doc;
+            if (!await ConfirmHistoryOnCloseAsync(doc))
+            {
+                return false;
+            }
+        }
+
         // 3. コピーした範囲を保持するために書き出す量が 1 GB を超えるなら確かめる (EDIT-24 の仕様 6)。
         long pending = docs.Where(Vm.Documents.Contains).Sum(d => d.Document.PendingReferenceBytes);
         if (pending > MaterializeConfirmBytes && !await ConfirmMaterializeAsync(pending))

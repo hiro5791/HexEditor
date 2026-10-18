@@ -6603,4 +6603,228 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>コードエディタ (WebView2) を起動できなかったため、機能の少ない簡易エディタを使っています。Microsoft Edge WebView2 ランタイムを入れ直すと直ることがあります。</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 ランタイムを入手する</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>補完を使うには C# スクリプト コンポーネントを追加してください。</value></data>
+  <data name="Cmd_data_patch_create" xml:space="preserve"><value>パッチを作成...</value></data>
+  <data name="CmdAlias_data_patch_create" xml:space="preserve"><value>ぱっちをさくせい さぶん</value></data>
+  <data name="Cmd_data_patch_apply" xml:space="preserve"><value>パッチを適用...</value></data>
+  <data name="CmdAlias_data_patch_apply" xml:space="preserve"><value>ぱっちをてきよう</value></data>
+  <data name="Cmd_data_transformView_define" xml:space="preserve"><value>変換ビューの設定...</value></data>
+  <data name="CmdAlias_data_transformView_define" xml:space="preserve"><value>へんかんびゅーのせってい</value></data>
+  <data name="Cmd_data_transformView_xor" xml:space="preserve"><value>XOR して表示...</value></data>
+  <data name="CmdAlias_data_transformView_xor" xml:space="preserve"><value>えっくすおあしてひょうじ</value></data>
+  <data name="Cmd_data_transformView_clear" xml:space="preserve"><value>変換ビューの解除</value></data>
+  <data name="CmdAlias_data_transformView_clear" xml:space="preserve"><value>へんかんびゅーのかいじょ</value></data>
+  <data name="Cmd_data_transformView_applyToData" xml:space="preserve"><value>この変換をデータに適用...</value></data>
+  <data name="CmdAlias_data_transformView_applyToData" xml:space="preserve"><value>このへんかんをでーたにてきよう</value></data>
+  <data name="Cmd_edit_history_save" xml:space="preserve"><value>履歴を保存...</value></data>
+  <data name="CmdAlias_edit_history_save" xml:space="preserve"><value>りれきをほぞん</value></data>
+  <data name="Cmd_edit_history_load" xml:space="preserve"><value>履歴を読み込む...</value></data>
+  <data name="CmdAlias_edit_history_load" xml:space="preserve"><value>りれきをよみこむ</value></data>
+  <data name="Cmd_edit_history_goToNode" xml:space="preserve"><value>履歴の節へ移動...</value></data>
+  <data name="CmdAlias_edit_history_goToNode" xml:space="preserve"><value>りれきのふしへいどう</value></data>
+  <data name="Set_edit_undo_branching" xml:space="preserve"><value>分岐する履歴を使う</value></data>
+  <data name="SetDesc_edit_undo_branching" xml:space="preserve"><value>元に戻した後に新しい編集をしても、元に戻した編集を捨てずに別の枝として残します。履歴パネルで枝を木として表示できます。</value></data>
+  <data name="Set_edit_transformView_copy" xml:space="preserve"><value>変換ビューでのコピー</value></data>
+  <data name="SetDesc_edit_transformView_copy" xml:space="preserve"><value>変換ビュー (XOR して表示など) が有効な間に、コピーでクリップボードに入れる内容です。</value></data>
+  <data name="SetOpt_edit_transformView_copy_display" xml:space="preserve"><value>表示どおり</value></data>
+  <data name="SetOpt_edit_transformView_copy_raw" xml:space="preserve"><value>元のデータ</value></data>
+  <data name="Menu_Data_Patch.Text" xml:space="preserve"><value>パッチ</value></data>
+  <data name="Menu_Data_Patch.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Data_PatchCreate.Text" xml:space="preserve"><value>パッチを作成...</value></data>
+  <data name="Menu_Data_PatchCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_PatchApply.Text" xml:space="preserve"><value>パッチを適用...</value></data>
+  <data name="Menu_Data_PatchApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Data_TransformView.Text" xml:space="preserve"><value>変換ビュー</value></data>
+  <data name="Menu_Data_TransformView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_TransformDefine.Text" xml:space="preserve"><value>変換ビューの設定...</value></data>
+  <data name="Menu_Data_TransformDefine.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Data_TransformXor.Text" xml:space="preserve"><value>XOR して表示...</value></data>
+  <data name="Menu_Data_TransformXor.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_TransformClear.Text" xml:space="preserve"><value>変換ビューの解除</value></data>
+  <data name="Menu_Data_TransformClear.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_TransformApply.Text" xml:space="preserve"><value>この変換をデータに適用...</value></data>
+  <data name="Menu_Data_TransformApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="History_TreeView" xml:space="preserve"><value>木で表示</value></data>
+  <data name="History_SaveHistory" xml:space="preserve"><value>履歴を保存</value></data>
+  <data name="History_LoadHistory" xml:space="preserve"><value>履歴を読み込む</value></data>
+  <data name="History_CreatePatch.Text" xml:space="preserve"><value>この 2 時点からパッチを作成...</value></data>
+  <data name="History_NameNode.Text" xml:space="preserve"><value>名前を付ける...</value></data>
+  <data name="History_DeleteBranch.Text" xml:space="preserve"><value>枝を削除...</value></data>
+  <data name="History_Pin" xml:space="preserve"><value>固定する</value></data>
+  <data name="History_Unpin" xml:space="preserve"><value>固定を外す</value></data>
+  <data name="History_PinnedMark" xml:space="preserve"><value>固定</value></data>
+  <data name="History_NodeDetails" xml:space="preserve"><value>範囲 {0} ({1} バイト)  変更前: {2}  変更後: {3}</value></data>
+  <data name="History_LinkedView" xml:space="preserve"><value>連動ビューの履歴は元のタブで保存・読み込みします。</value></data>
+  <data name="History_NoNamedNodes" xml:space="preserve"><value>名前の付いた履歴の節がありません。履歴パネルの木の表示で節に名前を付けてください。</value></data>
+  <data name="HistorySave_Title" xml:space="preserve"><value>履歴を保存</value></data>
+  <data name="HistorySave_Path" xml:space="preserve"><value>ファイル</value></data>
+  <data name="HistorySave_FullHash" xml:space="preserve"><value>元ファイル全体の SHA-256 を含める (大きなファイルでは時間がかかります)</value></data>
+  <data name="HistorySave_EstimateText" xml:space="preserve"><value>推定サイズ: {0} (節 {1} 個)</value></data>
+  <data name="HistorySave_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="HistorySave_FileType" xml:space="preserve"><value>HexEditor の履歴</value></data>
+  <data name="HistorySave_NoSpace" xml:space="preserve"><value>履歴を保存する空き容量が足りません。{0} 必要ですが、空きは {1} です。</value></data>
+  <data name="HistorySave_Operation" xml:space="preserve"><value>履歴の保存</value></data>
+  <data name="HistorySave_Done" xml:space="preserve"><value>履歴を {0} に保存しました。</value></data>
+  <data name="HistorySave_Failed" xml:space="preserve"><value>履歴を保存できません: {0}</value></data>
+  <data name="HistoryLoad_Title" xml:space="preserve"><value>履歴を読み込む</value></data>
+  <data name="HistoryLoad_Checking" xml:space="preserve"><value>履歴ファイルの確認</value></data>
+  <data name="HistoryLoad_Mismatch" xml:space="preserve"><value>履歴を保存した後に元ファイルが変わっている可能性があります。読み込みますか?</value></data>
+  <data name="HistoryLoad_LoadAnyway" xml:space="preserve"><value>読み込む</value></data>
+  <data name="HistoryLoad_Operation" xml:space="preserve"><value>履歴の読み込み</value></data>
+  <data name="HistoryLoad_Done" xml:space="preserve"><value>{0} から履歴を読み込みました。</value></data>
+  <data name="HistoryLoad_Failed" xml:space="preserve"><value>履歴ファイルを読み込めません: {0}</value></data>
+  <data name="HistoryGoTo_Title" xml:space="preserve"><value>履歴の節へ移動</value></data>
+  <data name="HistoryGoTo_Filter" xml:space="preserve"><value>名前</value></data>
+  <data name="HistoryGoTo_Go" xml:space="preserve"><value>移動</value></data>
+  <data name="HistoryName_Title" xml:space="preserve"><value>履歴の節に名前を付ける</value></data>
+  <data name="HistoryName_Name" xml:space="preserve"><value>名前 (1〜100 文字)</value></data>
+  <data name="HistoryName_Note" xml:space="preserve"><value>空にすると名前を外します。名前の付いた節は自動の整理で消しません。</value></data>
+  <data name="HistoryName_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="HistoryDelete_Title" xml:space="preserve"><value>枝を削除</value></data>
+  <data name="HistoryDelete_Body" xml:space="preserve"><value>この節と、この枝の後ろの節をすべて削除しますか? 削除は元に戻せません。</value></data>
+  <data name="HistoryDelete_Delete" xml:space="preserve"><value>枝を削除</value></data>
+  <data name="HistoryClose_Title" xml:space="preserve"><value>{0} の履歴を保存しますか?</value></data>
+  <data name="HistoryClose_Body" xml:space="preserve"><value>履歴に名前付きまたは固定した節があります。保存しないと、タブを閉じたときに履歴は失われます。</value></data>
+  <data name="HistoryClose_Save" xml:space="preserve"><value>履歴を保存</value></data>
+  <data name="HistoryClose_DontSave" xml:space="preserve"><value>保存しないで閉じる</value></data>
+  <data name="Inspector_InterpretOriginal.Content" xml:space="preserve"><value>元のデータを解釈</value></data>
+  <data name="Inspector_InterpretingOriginal" xml:space="preserve"><value>(元のデータ)</value></data>
+  <data name="Inspector_InterpretingTransformed" xml:space="preserve"><value>(変換後)</value></data>
+  <data name="TransformView_Badge" xml:space="preserve"><value>変換ビュー: {0}</value></data>
+  <data name="TransformView_Title" xml:space="preserve"><value>変換ビュー</value></data>
+  <data name="TransformView_Apply" xml:space="preserve"><value>設定</value></data>
+  <data name="TransformView_ClearButton" xml:space="preserve"><value>解除</value></data>
+  <data name="TransformView_Ops" xml:space="preserve"><value>演算 (上から順にかける。8 個まで)</value></data>
+  <data name="TransformView_AddKind" xml:space="preserve"><value>加える演算</value></data>
+  <data name="TransformView_Add" xml:space="preserve"><value>追加</value></data>
+  <data name="TransformView_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="TransformView_Up" xml:space="preserve"><value>上へ</value></data>
+  <data name="TransformView_Down" xml:space="preserve"><value>下へ</value></data>
+  <data name="TransformView_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="TransformView_Kind_Add" xml:space="preserve"><value>加算</value></data>
+  <data name="TransformView_Kind_Subtract" xml:space="preserve"><value>減算</value></data>
+  <data name="TransformView_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="TransformView_Kind_RotateLeft" xml:space="preserve"><value>左ローテート</value></data>
+  <data name="TransformView_Kind_RotateRight" xml:space="preserve"><value>右ローテート</value></data>
+  <data name="TransformView_Kind_ByteSwap16" xml:space="preserve"><value>バイトスワップ (16 bit)</value></data>
+  <data name="TransformView_Kind_ByteSwap32" xml:space="preserve"><value>バイトスワップ (32 bit)</value></data>
+  <data name="TransformView_Kind_ByteSwap64" xml:space="preserve"><value>バイトスワップ (64 bit)</value></data>
+  <data name="TransformView_Kind_ReverseBits" xml:space="preserve"><value>ビット順の反転</value></data>
+  <data name="TransformView_Kind_SwapNibbles" xml:space="preserve"><value>ニブルの入れ替え</value></data>
+  <data name="TransformView_Kind_Plugin" xml:space="preserve"><value>プラグイン: {0}</value></data>
+  <data name="TransformView_KeyHex" xml:space="preserve"><value>バイト列の鍵</value></data>
+  <data name="TransformView_Key" xml:space="preserve"><value>鍵 (Hex、1〜256 バイト)</value></data>
+  <data name="TransformView_Plugin" xml:space="preserve"><value>プラグインの変換</value></data>
+  <data name="TransformView_Scope" xml:space="preserve"><value>適用範囲と鍵の起点</value></data>
+  <data name="TransformView_Whole" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="TransformView_Range" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="TransformView_KeyOrigin" xml:space="preserve"><value>鍵の起点</value></data>
+  <data name="TransformView_Origin_Zero" xml:space="preserve"><value>オフセット 0 から数える</value></data>
+  <data name="TransformView_Origin_Range" xml:space="preserve"><value>範囲の先頭から</value></data>
+  <data name="TransformView_Origin_Offset" xml:space="preserve"><value>オフセットを指定</value></data>
+  <data name="TransformView_OriginOffset" xml:space="preserve"><value>鍵の起点のオフセット</value></data>
+  <data name="TransformView_Saved" xml:space="preserve"><value>保存した変換</value></data>
+  <data name="TransformView_SavedPlaceholder" xml:space="preserve"><value>保存した変換を読み込む</value></data>
+  <data name="TransformView_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="TransformView_Save" xml:space="preserve"><value>この名前で保存</value></data>
+  <data name="TransformView_PreviewTitle" xml:space="preserve"><value>プレビュー (カーソル位置の 16 バイト)</value></data>
+  <data name="TransformView_PreviewLines" xml:space="preserve"><value>{0}
+元のデータ: {1}
+表示:       {2}</value></data>
+  <data name="TransformView_XorTitle" xml:space="preserve"><value>XOR して表示</value></data>
+  <data name="TransformView_Error_KeyEmpty" xml:space="preserve"><value>鍵を入力してください。</value></data>
+  <data name="TransformView_Error_KeyHex" xml:space="preserve"><value>鍵は Hex のバイト列で入力してください (偶数桁。例: 5A 3C)。</value></data>
+  <data name="TransformView_Error_KeyTooLong" xml:space="preserve"><value>鍵は 256 バイトまでです。</value></data>
+  <data name="TransformView_Error_Operand" xml:space="preserve"><value>値が要素の大きさに収まりません。</value></data>
+  <data name="TransformView_Error_Range" xml:space="preserve"><value>正しい範囲を入力してください (開始は 0 以上、長さは 1 以上)。</value></data>
+  <data name="TransformView_Error_Origin" xml:space="preserve"><value>鍵の起点のオフセットを正しく入力してください。</value></data>
+  <data name="TransformView_Error_OpCount" xml:space="preserve"><value>演算を 1〜8 個加えてください。</value></data>
+  <data name="TransformView_Error_InvalidSize" xml:space="preserve"><value>要素の大きさは 1、2、4、8 バイトのどれかです。</value></data>
+  <data name="TransformView_Error_BitCountOutOfRange" xml:space="preserve"><value>ビット数は 1〜要素のビット数 − 1 です。</value></data>
+  <data name="TransformView_Error_InvalidRange" xml:space="preserve"><value>正しい範囲を入力してください。</value></data>
+  <data name="TransformView_Error_PluginMissing" xml:space="preserve"><value>この変換に使うプラグインがありません。</value></data>
+  <data name="TransformView_NotActive" xml:space="preserve"><value>変換ビューは設定されていません。</value></data>
+  <data name="TransformView_LinkedView" xml:space="preserve"><value>連動ビューには変換ビューを設定できません。</value></data>
+  <data name="TransformView_LengthNotice" xml:space="preserve"><value>変換ビューでは長さを変える編集はできません。</value></data>
+  <data name="TransformView_ReadOnlyNotice" xml:space="preserve"><value>この変換ビューは逆変換がないため編集できません。変換ビューを解除すると編集できます。</value></data>
+  <data name="TransformView_ClearAction" xml:space="preserve"><value>変換ビューを解除</value></data>
+  <data name="TransformView_ApplyTitle" xml:space="preserve"><value>変換をデータに適用</value></data>
+  <data name="TransformView_ApplyConfirm" xml:space="preserve"><value>変換「{0}」をデータに書き込み、変換ビューを解除しますか?</value></data>
+  <data name="Patch_Format_Auto" xml:space="preserve"><value>自動 (IPS または IPS32)</value></data>
+  <data name="Patch_Format_Ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Patch_Format_Ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Patch_Format_Ups" xml:space="preserve"><value>UPS</value></data>
+  <data name="Patch_Format_Bps" xml:space="preserve"><value>BPS</value></data>
+  <data name="Patch_Format_HexPatch" xml:space="preserve"><value>独自形式 (.hexpatch)</value></data>
+  <data name="Patch_Format_SelfApplying" xml:space="preserve"><value>自己適用型 (EXE)</value></data>
+  <data name="Patch_Unavailable_IpsOffsetLimit" xml:space="preserve"><value>IPS では 16 MiB (0x1000000) 以上の位置の変更を表せません。</value></data>
+  <data name="Patch_Unavailable_Ips32OffsetLimit" xml:space="preserve"><value>IPS32 では 4 GiB 以上の位置の変更を表せません。</value></data>
+  <data name="Patch_Unavailable_StubMissing" xml:space="preserve"><value>このビルドには適用プログラムが含まれていません。</value></data>
+  <data name="Patch_UseOtherFormats" xml:space="preserve"><value>IPS32、UPS、BPS、独自形式を使ってください。</value></data>
+  <data name="Patch_LinkedView" xml:space="preserve"><value>連動ビューのパッチは元のタブで作ってください。</value></data>
+  <data name="PatchCreate_Title" xml:space="preserve"><value>パッチを作成</value></data>
+  <data name="PatchCreate_Source" xml:space="preserve"><value>差分の取り方</value></data>
+  <data name="PatchCreate_SourceSaved" xml:space="preserve"><value>保存されている内容と現在の内容</value></data>
+  <data name="PatchCreate_SourceTabs" xml:space="preserve"><value>2 つのファイル (タブ): 別のタブからこのタブへ</value></data>
+  <data name="PatchCreate_OtherTab" xml:space="preserve"><value>変換前のタブ</value></data>
+  <data name="PatchCreate_SourceHistory" xml:space="preserve"><value>履歴の 2 時点</value></data>
+  <data name="PatchCreate_FromPoint" xml:space="preserve"><value>変換前</value></data>
+  <data name="PatchCreate_ToPoint" xml:space="preserve"><value>変換後</value></data>
+  <data name="PatchCreate_HistoryPairText" xml:space="preserve"><value>履歴の節 #{0} から #{1} へ</value></data>
+  <data name="PatchCreate_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="PatchCreate_AutoChoice" xml:space="preserve"><value>{0} を使います。</value></data>
+  <data name="PatchCreate_Rle" xml:space="preserve"><value>RLE を使う</value></data>
+  <data name="PatchCreate_FullHash" xml:space="preserve"><value>全体の SHA-256 を含める (大きなファイルでは時間がかかります)</value></data>
+  <data name="PatchCreate_DefaultFileName" xml:space="preserve"><value>既定の対象ファイル名</value></data>
+  <data name="PatchCreate_Message" xml:space="preserve"><value>表示するメッセージ</value></data>
+  <data name="PatchCreate_Architecture" xml:space="preserve"><value>適用プログラム</value></data>
+  <data name="PatchCreate_SmartScreen" xml:space="preserve"><value>署名のない実行ファイルは、受け取った人の環境で SmartScreen の警告が出ます。</value></data>
+  <data name="PatchCreate_Path" xml:space="preserve"><value>出力ファイル</value></data>
+  <data name="PatchCreate_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="PatchCreate_Computing" xml:space="preserve"><value>差分を求めています...</value></data>
+  <data name="PatchCreate_NoChanges" xml:space="preserve"><value>差分はありません。</value></data>
+  <data name="PatchCreate_SummaryText" xml:space="preserve"><value>レコード数: {0}、推定サイズ: {1}</value></data>
+  <data name="PatchCreate_Inefficient" xml:space="preserve"><value>この形式では挿入・削除を効率よく表せません。BPS または独自形式を使ってください。</value></data>
+  <data name="PatchCreate_Failed" xml:space="preserve"><value>差分を求められません: {0}</value></data>
+  <data name="PatchCreate_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Patch_Operation_Create" xml:space="preserve"><value>パッチ {0} の作成</value></data>
+  <data name="Patch_Operation_Verify" xml:space="preserve"><value>適用後の確認</value></data>
+  <data name="Patch_Created" xml:space="preserve"><value>{0} を作りました。</value></data>
+  <data name="Patch_CreatedSelfApplying" xml:space="preserve"><value>{0} を作りました。署名のない実行ファイルのため、受け取った人の環境で SmartScreen の警告が出ます。</value></data>
+  <data name="Patch_CreateFailed" xml:space="preserve"><value>パッチを作れません: {0}</value></data>
+  <data name="PatchApply_Title" xml:space="preserve"><value>パッチ {0} を適用</value></data>
+  <data name="PatchApply_InfoText" xml:space="preserve"><value>形式: {0}
+レコード数: {1}
+変更するバイト数: {2}
+適用後の長さ: {3}</value></data>
+  <data name="PatchApply_Reverse" xml:space="preserve"><value>逆適用 (適用済みのパッチを戻す)</value></data>
+  <data name="PatchApply_VerificationText" xml:space="preserve"><value>変換前の確認: {0}</value></data>
+  <data name="PatchApply_Verifying" xml:space="preserve"><value>確認しています...</value></data>
+  <data name="PatchApply_Match" xml:space="preserve"><value>一致</value></data>
+  <data name="PatchApply_Mismatch" xml:space="preserve"><value>不一致</value></data>
+  <data name="PatchApply_Unverifiable" xml:space="preserve"><value>確認できません</value></data>
+  <data name="PatchApply_MismatchWarning" xml:space="preserve"><value>このパッチは別のファイル用の可能性があります。</value></data>
+  <data name="PatchApply_Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="PatchApply_ApplyAnyway" xml:space="preserve"><value>適用する</value></data>
+  <data name="PatchApply_SkipVerification" xml:space="preserve"><value>確認を省略して適用</value></data>
+  <data name="Patch_Applied" xml:space="preserve"><value>パッチ {0} を適用しました。</value></data>
+  <data name="Patch_Error_UnknownFormat" xml:space="preserve"><value>パッチの形式を判別できません。</value></data>
+  <data name="Patch_Error_Record" xml:space="preserve"><value>パッチのレコード {0} が壊れています。</value></data>
+  <data name="Patch_Error_Corrupt" xml:space="preserve"><value>パッチが壊れています: {0}</value></data>
+  <data name="Patch_Error_FixedLength" xml:space="preserve"><value>長さが変わるパッチは、このドキュメント (長さ固定) には適用できません。</value></data>
+  <data name="Patch_Error_ResultMismatch" xml:space="preserve"><value>適用後の内容がパッチに記録された内容と一致しないため、適用を取り消しました。</value></data>
+  <data name="PatchApplier_Title" xml:space="preserve"><value>パッチの適用</value></data>
+  <data name="PatchApplier_NoPatch" xml:space="preserve"><value>このプログラムにはパッチが含まれていません。</value></data>
+  <data name="PatchApplier_Intro" xml:space="preserve"><value>このプログラムはファイルにパッチを当てます。パッチを当てるファイルを選んでください。</value></data>
+  <data name="PatchApplier_SelectTitle" xml:space="preserve"><value>パッチを当てるファイルの選択</value></data>
+  <data name="PatchApplier_AllFiles" xml:space="preserve"><value>すべてのファイル</value></data>
+  <data name="PatchApplier_Mismatch" xml:space="preserve"><value>このパッチは別のファイル用の可能性があります。{0} はパッチに記録された変換前のファイルと一致しません。
+
+それでも適用しますか?</value></data>
+  <data name="PatchApplier_Backup" xml:space="preserve"><value>適用する前に元のファイルのバックアップ ({0}) を作りますか?</value></data>
+  <data name="PatchApplier_Success" xml:space="preserve"><value>{0} にパッチを適用しました。</value></data>
+  <data name="PatchApplier_BackupDone" xml:space="preserve"><value>元のファイルは {0} として残しました。</value></data>
+  <data name="PatchApplier_Failed" xml:space="preserve"><value>パッチを適用できません: {0}
+
+ファイルは変更していません。</value></data>
+  <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>適用後の内容がパッチに記録された内容と一致しません。</value></data>
 </root>

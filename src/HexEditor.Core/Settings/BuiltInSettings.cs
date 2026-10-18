@@ -137,6 +137,10 @@ public static class BuiltInSettings
         new(View.EditingSettings.DeleteKeepsLengthKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 5 },
         new(View.EditingSettings.UndoCoalesceSecondsKey, SettingCategories.Editing, SettingKind.Int, 2) { Min = 0, Max = 10, Order = 6 },
         new(View.EditingSettings.ClearHistoryOnSaveKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 7 },
+
+        // 分岐する履歴 (EDIT-21。既定オフ) と、変換ビューでのコピー (EDIT-45 の仕様 12)。
+        new(View.EditingSettings.BranchingHistoryKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 8 },
+        new(View.EditingSettings.TransformViewCopyKey, SettingCategories.Editing, SettingKind.Choice, "display") { Options = ["display", "raw"], Order = 44 },
         new(View.EditingSettings.SelectPastedKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 31 },
         new(View.EditingSettings.FitOverwritePasteKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 32 },
         new(View.EditingSettings.ClipboardMaxSizeKey, SettingCategories.Editing, SettingKind.Int, View.EditingSettings.DefaultClipboardMaxMiB)

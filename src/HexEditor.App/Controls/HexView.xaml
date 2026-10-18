@@ -277,6 +277,36 @@
                     FontSize="11"
                     Foreground="{ThemeResource HexViewTextBrush}" />
             </Border>
+            <!--
+                変換ビュー (EDIT-45 の仕様 9): エディタの枠を色と破線で示し (色だけで示さない)、左上に「変換ビュー: XOR 5A」のような文字のバッジを出す。
+            -->
+            <Rectangle
+                x:Name="TransformFrame"
+                AutomationProperties.AccessibilityView="Raw"
+                IsHitTestVisible="False"
+                Stroke="{ThemeResource HexViewCursorMarkerBrush}"
+                StrokeDashArray="4,3"
+                StrokeThickness="2"
+                Visibility="Collapsed" />
+            <Border
+                x:Name="TransformBadge"
+                Margin="4,4,0,0"
+                Padding="6,2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Background="{ThemeResource HexViewPanelBrush}"
+                BorderBrush="{ThemeResource HexViewCursorMarkerBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                IsHitTestVisible="False"
+                Opacity="0.92"
+                Visibility="Collapsed">
+                <TextBlock
+                    x:Name="TransformBadgeText"
+                    AutomationProperties.AutomationId="HexView_TransformBadge"
+                    FontSize="12"
+                    Foreground="{ThemeResource HexViewTextBrush}" />
+            </Border>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="2">

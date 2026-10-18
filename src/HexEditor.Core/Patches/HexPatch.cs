@@ -144,6 +144,9 @@ public sealed class HexPatch : LoadedPatch
 
     // ---- 書き出し ----
 
+    /// <summary>自己適用型パッチの適用プログラムの文字列を入れる項目。</summary>
+    public const string ApplierStringsEntry = "applier-strings.json";
+
     /// <summary>推定サイズ (命令の数とパッチの大きさ。データは無圧縮として見積もる)。</summary>
     internal static (long Records, long Size) Estimate(PatchScript script, List<HexPatchOp> ops)
     {
@@ -156,7 +159,8 @@ public sealed class HexPatch : LoadedPatch
     /// <paramref name="message"/> は自己適用型パッチ (EDIT-44) の既定の対象ファイル名と表示するメッセージ。
     /// </summary>
     public static HexPatchManifest Write(Stream output, PatchScript script, bool fullHash = false, string? defaultFileName = null, string? message = null,
-        SourceIdentity? sourceIdentity = null, List<HexPatchOp>? ops = null, Action<long>? progress = null, CancellationToken cancellationToken = default)
+        SourceIdentity? sourceIdentity = null, List<HexPatchOp>? ops = null, Action<long>? progress = null, CancellationToken cancellationToken = default,
+        IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>>? applierStrings = null)
     {
         ops ??= script.Operations();
         SourceIdentity source = sourceIdentity ?? SourceIdentity.Compute(Reader(script.ReadSource, script.SourceLength), script.SourceLength, fullHash, progress,
@@ -198,6 +202,26 @@ public sealed class HexPatch : LoadedPatch
 
         CopyRanges(HexPatchManifest.DataEntry, fromTarget: true);
         CopyRanges(HexPatchManifest.OldDataEntry, fromTarget: false);
+        if (applierStrings is not null)
+        {
+            // 自己適用型パッチの適用プログラムが表示する文字列 (言語ごと。EDIT-44 の仕様 4)。
+            using Stream s = zip.CreateEntry(ApplierStringsEntry, CompressionLevel.Optimal).Open();
+            using var json = new System.Text.Json.Utf8JsonWriter(s);
+            json.WriteStartObject();
+            foreach ((string language, IReadOnlyDictionary<string, string> table) in applierStrings)
+            {
+                json.WriteStartObject(language);
+                foreach ((string key, string value) in table)
+                {
+                    json.WriteString(key, value);
+                }
+
+                json.WriteEndObject();
+            }
+
+            json.WriteEndObject();
+        }
+
         return manifest;
     }
 

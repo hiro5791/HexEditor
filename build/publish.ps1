@@ -160,6 +160,41 @@ function Copy-Cli($cliDir, $destination) {
     foreach ($name in $CliFiles) { Copy-Item (Join-Path $cliDir $name) (Join-Path $destination $name) -Force }
 }
 
+# The self-applying patch applier (EDIT-44): a small NativeAOT exe for x64 and ARM64 (both are bundled, so that either kind of patch
+# can be made on any PC). The app appends a .hexpatch to it. It needs the Visual C++ build tools (x64 and ARM64); without them the
+# applier is left out with a warning (local builds only; GitHub Actions requires it). The files are copied as PatchApplier\<arch>\HexPatchApply.stub
+# AFTER the app folder has been signed: the applier is never signed (EDIT-44 spec 3; a signature would also be broken by the appended patch).
+function Build-PatchApplier {
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+    $components = @('Microsoft.VisualStudio.Component.VC.Tools.x86.x64', 'Microsoft.VisualStudio.Component.VC.Tools.ARM64')
+    $hasVc = (Test-Path $vswhere) -and @($components | Where-Object { -not [bool](& $vswhere -products * -requires $_ -property installationPath) }).Count -eq 0
+    if (-not $hasVc) {
+        if ($env:GITHUB_ACTIONS -eq 'true') { throw 'The Visual C++ build tools (x64 and ARM64) are required to build the patch applier (EDIT-44).' }
+        Write-Warning 'The Visual C++ build tools (x64 and ARM64) are not installed: the build has no self-applying patch applier (EDIT-44).'
+        return $null
+    }
+    $applierStaging = Join-Path $staging 'PatchApplier'
+    foreach ($a in 'x64', 'arm64') {
+        $dir = Join-Path $applierStaging "publish-$a"
+        Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.PatchApplier/HexEditor.PatchApplier.csproj'),
+            '-c', $Configuration, '-r', "win-$a", "-p:HexVersion=$Version", '-nologo', '-o', $dir)
+        $exe = Join-Path $dir 'HexPatchApply.exe'
+        if (-not (Test-Path $exe)) { throw "HexPatchApply.exe ($a) was not produced (EDIT-44)." }
+        New-Item -ItemType Directory -Force (Join-Path $applierStaging $a) | Out-Null
+        Copy-Item $exe (Join-Path $applierStaging "$a/HexPatchApply.stub")
+    }
+    return $applierStaging
+}
+
+function Copy-PatchApplier($applierDir, $destination) {
+    if (-not $applierDir) { return }
+    foreach ($a in 'x64', 'arm64') {
+        $target = Join-Path $destination "PatchApplier/$a"
+        New-Item -ItemType Directory -Force $target | Out-Null
+        Copy-Item (Join-Path $applierDir "$a/HexPatchApply.stub") $target -Force
+    }
+}
+
 # The code editor (AUTO-20, TPL-31) bundles Monaco: every distribution must contain these files (the app never loads them from the internet).
 $MonacoFiles = @('Assets/Monaco/vs/loader.js', 'Assets/Monaco/vs/editor/editor.main.js', 'Assets/Monaco/host/index.html', 'Assets/Monaco/host/host.js',
     'Assets/Monaco/host/hexeditor.d.ts', 'Assets/Monaco/LICENSE.txt', 'Assets/Monaco/ThirdPartyNotices.txt')
@@ -191,6 +226,7 @@ switch ($Distro) {
         Copy-ElevatedHelper $helper $publishDir
         Build-Cli | Out-Null
         Copy-Cli $script:CliDir $publishDir
+        Copy-PatchApplier (Build-PatchApplier) $publishDir
         Assert-Monaco $publishDir
 
         # The marker tells the app to keep its data next to the exe (PKG-05, PKG-12, PKG-13).
@@ -226,6 +262,7 @@ switch ($Distro) {
         Copy-ElevatedHelper $helper $publishDir
         Build-Cli | Out-Null
         Copy-Cli $script:CliDir $publishDir
+        Copy-PatchApplier (Build-PatchApplier) $publishDir
         Assert-Monaco $publishDir
         Push-Location $root
         try {
@@ -287,6 +324,8 @@ switch ($Distro) {
         # hexed.exe (AUTO-36): the manifest declares it as the second application with the execution alias hexed.exe.
         Build-Cli | Out-Null
         $msixExtra += "-p:HexCliDir=$script:CliDir"
+        $applierDir = Build-PatchApplier
+        if ($applierDir) { $msixExtra += "-p:HexPatchApplierDir=$applierDir" }
         Invoke-Checked 'dotnet' (@('publish') + $common + $msixExtra + @(
             '-p:GenerateAppxPackageOnBuild=true',
             '-p:AppxPackageSigningEnabled=false',

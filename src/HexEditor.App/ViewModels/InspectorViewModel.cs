@@ -228,6 +228,18 @@ public sealed partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     public partial string OriginText { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 変換ビュー (EDIT-45) が有効なとき、変換前の元のデータを解釈する (ツールバーの「元のデータを解釈」。既定オフ = 変換後を解釈。INSP-01 の仕様 12)。
+    /// </summary>
+    [ObservableProperty]
+    public partial bool InterpretOriginal { get; set; }
+
+    /// <summary>変換ビューが有効か (「元のデータを解釈」の切り替えを出す)。</summary>
+    [ObservableProperty]
+    public partial bool TransformActive { get; set; }
+
+    partial void OnInterpretOriginalChanged(bool value) => Refresh();
+
     [ObservableProperty]
     public partial string EndianText { get; set; } = "LE";
 
@@ -423,7 +435,14 @@ public sealed partial class InspectorViewModel : ObservableObject
         Origin = DataInspector.OriginOf(editor, _settings.GetBool(CursorWithSelectionKey, false));
         OriginText = Loc.Format("Inspector_Origin", Origin.ToString(Origin > uint.MaxValue ? "X16" : "X8", CultureInfo.InvariantCulture));
 
-        DocumentSnapshot snapshot = doc.Document.Current;
+        // 変換ビュー: 既定は変換後 (Hex ビューの表示どおり) のバイト、「元のデータを解釈」なら変換前 (INSP-01 の仕様 12)。どちらかを起点の横に示す。
+        TransformActive = doc.Document.ViewTransform is not null;
+        if (TransformActive)
+        {
+            OriginText += " " + Loc.Get(InterpretOriginal ? "Inspector_InterpretingOriginal" : "Inspector_InterpretingTransformed");
+        }
+
+        DocumentSnapshot snapshot = TransformActive && InterpretOriginal ? doc.Document.DataSnapshot : doc.Document.Current;
         int count = (int)Math.Clamp(snapshot.Length - Origin, 0, Layout.ReadLength);
         _data = new byte[count];
         _states = new ByteState[count];
@@ -763,7 +782,23 @@ public sealed partial class InspectorViewModel : ObservableObject
     private void Write(DocumentViewModel doc, byte[] bytes)
     {
         // 上書きで書き、長さを変えない。末尾を越える書き込みは入力の段階で誤りにしてある。
-        doc.Document.Overwrite(Origin, bytes, Loc.Get("Inspector_UndoDescription"));
+        doc.Document.Overwrite(Origin, ForWrite(doc, Origin, bytes), Loc.Get("Inspector_UndoDescription"));
+    }
+
+    /// <summary>
+    /// 書き込む値: 変換後を解釈しているときは表示上の値のまま (ドキュメントが逆変換して書く。EDIT-45 の仕様 6)。元のデータを解釈しているときは、
+    /// 逆変換されたときに元のデータの値になるよう、先に変換をかけておく。
+    /// </summary>
+    internal byte[] ForWrite(DocumentViewModel doc, long offset, byte[] bytes)
+    {
+        if (!InterpretOriginal || doc.Document.ViewTransform is not { } transform)
+        {
+            return bytes;
+        }
+
+        byte[] shown = (byte[])bytes.Clone();
+        transform.Forward(offset, shown);
+        return shown;
     }
 
     // ---- コピー (INSP-01 の仕様 7) ----

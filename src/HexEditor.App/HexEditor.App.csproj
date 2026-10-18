@@ -136,6 +136,15 @@
     <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.deps.json" Link="hexed.deps.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.runtimeconfig.json" Link="hexed.runtimeconfig.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+  <!--
+    自己適用型パッチの適用プログラム (03 の EDIT-44)。build/publish.ps1 が NativeAOT で x64 と ARM64 を作り、HexPatchApplierDir で渡す
+    (MSIX 版。ポータブル版・インストーラ版は publish.ps1 が署名の後にアプリのフォルダへ写す)。ファイル名を .stub にして、配布物の署名の対象にしない。
+    開発中のビルドには入らない (パッチの作成の形式「自己適用型 (EXE)」は理由付きで無効になる)。
+  -->
+  <ItemGroup Condition="'$(HexPatchApplierDir)' != ''">
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexPatchApplierDir)'))x64\HexPatchApply.stub" Link="PatchApplier\x64\HexPatchApply.stub" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexPatchApplierDir)'))arm64\HexPatchApply.stub" Link="PatchApplier\arm64\HexPatchApply.stub" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
   <Target Name="HexWarnMissingCli" BeforeTargets="BeforeBuild"
           Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexCliDir)' == ''">
     <Warning Text="HexCliDir が指定されていないため、hexed.exe をパッケージに入れません (マニフェストの Application 'Hexed' が指す実行ファイルがないため、MSIX を作れません。build/publish.ps1 を使ってください)。" />

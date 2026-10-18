@@ -126,7 +126,7 @@ public sealed partial class MainWindow
         {
             if (_historyVm is null)
             {
-                _historyVm = new HistoryPanelViewModel(Vm);
+                _historyVm = new HistoryPanelViewModel(Vm) { Host = this };
                 _historyVm.Attach(Vm.Selected);
                 _panelContext.ActiveDocumentChanged += (_, _) => _historyVm.Attach(Vm.Selected);
                 Closed += (_, _) =>

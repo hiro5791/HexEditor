@@ -6603,4 +6603,228 @@ Type: {4}</value></data>
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>The code editor (WebView2) could not start, so a basic editor with fewer features is used. Reinstalling the Microsoft Edge WebView2 Runtime may fix this.</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Get the WebView2 Runtime</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>To use completion, add the C# script component.</value></data>
+  <data name="Cmd_data_patch_create" xml:space="preserve"><value>Create patch...</value></data>
+  <data name="CmdAlias_data_patch_create" xml:space="preserve"><value>ips ups bps hexpatch diff</value></data>
+  <data name="Cmd_data_patch_apply" xml:space="preserve"><value>Apply patch...</value></data>
+  <data name="CmdAlias_data_patch_apply" xml:space="preserve"><value>ips ups bps hexpatch</value></data>
+  <data name="Cmd_data_transformView_define" xml:space="preserve"><value>Transform view settings...</value></data>
+  <data name="CmdAlias_data_transformView_define" xml:space="preserve"><value>xor view decode</value></data>
+  <data name="Cmd_data_transformView_xor" xml:space="preserve"><value>XOR view...</value></data>
+  <data name="CmdAlias_data_transformView_xor" xml:space="preserve"><value>xor key view</value></data>
+  <data name="Cmd_data_transformView_clear" xml:space="preserve"><value>Clear transform view</value></data>
+  <data name="CmdAlias_data_transformView_clear" xml:space="preserve"><value>remove xor view</value></data>
+  <data name="Cmd_data_transformView_applyToData" xml:space="preserve"><value>Apply this transform to the data...</value></data>
+  <data name="CmdAlias_data_transformView_applyToData" xml:space="preserve"><value>bake xor write</value></data>
+  <data name="Cmd_edit_history_save" xml:space="preserve"><value>Save history...</value></data>
+  <data name="CmdAlias_edit_history_save" xml:space="preserve"><value>undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_load" xml:space="preserve"><value>Load history...</value></data>
+  <data name="CmdAlias_edit_history_load" xml:space="preserve"><value>undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_goToNode" xml:space="preserve"><value>Go to history node...</value></data>
+  <data name="CmdAlias_edit_history_goToNode" xml:space="preserve"><value>undo tree named state</value></data>
+  <data name="Set_edit_undo_branching" xml:space="preserve"><value>Use branching undo history</value></data>
+  <data name="SetDesc_edit_undo_branching" xml:space="preserve"><value>When you undo and then make a new edit, keep the undone edits as a separate branch instead of discarding them. The history panel can show the branches as a tree.</value></data>
+  <data name="Set_edit_transformView_copy" xml:space="preserve"><value>Copy in a transform view</value></data>
+  <data name="SetDesc_edit_transformView_copy" xml:space="preserve"><value>What Copy puts on the clipboard while a transform view (such as an XOR view) is active.</value></data>
+  <data name="SetOpt_edit_transformView_copy_display" xml:space="preserve"><value>As displayed</value></data>
+  <data name="SetOpt_edit_transformView_copy_raw" xml:space="preserve"><value>Original data</value></data>
+  <data name="Menu_Data_Patch.Text" xml:space="preserve"><value>Patch</value></data>
+  <data name="Menu_Data_Patch.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Data_PatchCreate.Text" xml:space="preserve"><value>Create patch...</value></data>
+  <data name="Menu_Data_PatchCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_PatchApply.Text" xml:space="preserve"><value>Apply patch...</value></data>
+  <data name="Menu_Data_PatchApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Data_TransformView.Text" xml:space="preserve"><value>Transform view</value></data>
+  <data name="Menu_Data_TransformView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_TransformDefine.Text" xml:space="preserve"><value>Transform view settings...</value></data>
+  <data name="Menu_Data_TransformDefine.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Data_TransformXor.Text" xml:space="preserve"><value>XOR view...</value></data>
+  <data name="Menu_Data_TransformXor.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_TransformClear.Text" xml:space="preserve"><value>Clear transform view</value></data>
+  <data name="Menu_Data_TransformClear.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_TransformApply.Text" xml:space="preserve"><value>Apply this transform to the data...</value></data>
+  <data name="Menu_Data_TransformApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="History_TreeView" xml:space="preserve"><value>Show as tree</value></data>
+  <data name="History_SaveHistory" xml:space="preserve"><value>Save history</value></data>
+  <data name="History_LoadHistory" xml:space="preserve"><value>Load history</value></data>
+  <data name="History_CreatePatch.Text" xml:space="preserve"><value>Create patch from these two points...</value></data>
+  <data name="History_NameNode.Text" xml:space="preserve"><value>Name...</value></data>
+  <data name="History_DeleteBranch.Text" xml:space="preserve"><value>Delete branch...</value></data>
+  <data name="History_Pin" xml:space="preserve"><value>Pin</value></data>
+  <data name="History_Unpin" xml:space="preserve"><value>Unpin</value></data>
+  <data name="History_PinnedMark" xml:space="preserve"><value>Pinned</value></data>
+  <data name="History_NodeDetails" xml:space="preserve"><value>Range {0} ({1} bytes)  Before: {2}  After: {3}</value></data>
+  <data name="History_LinkedView" xml:space="preserve"><value>Save and load the history in the original tab of this linked view.</value></data>
+  <data name="History_NoNamedNodes" xml:space="preserve"><value>No history node has a name. Name a node in the history panel (tree view).</value></data>
+  <data name="HistorySave_Title" xml:space="preserve"><value>Save history</value></data>
+  <data name="HistorySave_Path" xml:space="preserve"><value>File</value></data>
+  <data name="HistorySave_FullHash" xml:space="preserve"><value>Include the SHA-256 of the whole original file (slow for large files)</value></data>
+  <data name="HistorySave_EstimateText" xml:space="preserve"><value>Estimated size: {0} ({1} nodes)</value></data>
+  <data name="HistorySave_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="HistorySave_FileType" xml:space="preserve"><value>HexEditor history</value></data>
+  <data name="HistorySave_NoSpace" xml:space="preserve"><value>There is not enough free space to save the history: it needs {0}, but only {1} is free.</value></data>
+  <data name="HistorySave_Operation" xml:space="preserve"><value>Saving history</value></data>
+  <data name="HistorySave_Done" xml:space="preserve"><value>Saved the history to {0}.</value></data>
+  <data name="HistorySave_Failed" xml:space="preserve"><value>The history could not be saved: {0}</value></data>
+  <data name="HistoryLoad_Title" xml:space="preserve"><value>Load history</value></data>
+  <data name="HistoryLoad_Checking" xml:space="preserve"><value>Checking the history file</value></data>
+  <data name="HistoryLoad_Mismatch" xml:space="preserve"><value>The original file may have changed since this history was saved. Load the history anyway?</value></data>
+  <data name="HistoryLoad_LoadAnyway" xml:space="preserve"><value>Load</value></data>
+  <data name="HistoryLoad_Operation" xml:space="preserve"><value>Loading history</value></data>
+  <data name="HistoryLoad_Done" xml:space="preserve"><value>Loaded the history from {0}.</value></data>
+  <data name="HistoryLoad_Failed" xml:space="preserve"><value>The history file cannot be loaded: {0}</value></data>
+  <data name="HistoryGoTo_Title" xml:space="preserve"><value>Go to history node</value></data>
+  <data name="HistoryGoTo_Filter" xml:space="preserve"><value>Name</value></data>
+  <data name="HistoryGoTo_Go" xml:space="preserve"><value>Go</value></data>
+  <data name="HistoryName_Title" xml:space="preserve"><value>Name the history node</value></data>
+  <data name="HistoryName_Name" xml:space="preserve"><value>Name (1 to 100 characters)</value></data>
+  <data name="HistoryName_Note" xml:space="preserve"><value>Leave it empty to remove the name. Named nodes are not removed by automatic cleanup.</value></data>
+  <data name="HistoryName_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="HistoryDelete_Title" xml:space="preserve"><value>Delete branch</value></data>
+  <data name="HistoryDelete_Body" xml:space="preserve"><value>Delete this node and all the nodes after it on this branch? This cannot be undone.</value></data>
+  <data name="HistoryDelete_Delete" xml:space="preserve"><value>Delete branch</value></data>
+  <data name="HistoryClose_Title" xml:space="preserve"><value>Save the history of {0}?</value></data>
+  <data name="HistoryClose_Body" xml:space="preserve"><value>The history has named or pinned nodes. The history is lost when the tab is closed unless you save it.</value></data>
+  <data name="HistoryClose_Save" xml:space="preserve"><value>Save history</value></data>
+  <data name="HistoryClose_DontSave" xml:space="preserve"><value>Close without saving</value></data>
+  <data name="Inspector_InterpretOriginal.Content" xml:space="preserve"><value>Interpret original data</value></data>
+  <data name="Inspector_InterpretingOriginal" xml:space="preserve"><value>(original)</value></data>
+  <data name="Inspector_InterpretingTransformed" xml:space="preserve"><value>(transformed)</value></data>
+  <data name="TransformView_Badge" xml:space="preserve"><value>Transform view: {0}</value></data>
+  <data name="TransformView_Title" xml:space="preserve"><value>Transform view</value></data>
+  <data name="TransformView_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="TransformView_ClearButton" xml:space="preserve"><value>Clear</value></data>
+  <data name="TransformView_Ops" xml:space="preserve"><value>Operations (applied from the top, up to 8)</value></data>
+  <data name="TransformView_AddKind" xml:space="preserve"><value>Operation to add</value></data>
+  <data name="TransformView_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="TransformView_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="TransformView_Up" xml:space="preserve"><value>Move up</value></data>
+  <data name="TransformView_Down" xml:space="preserve"><value>Move down</value></data>
+  <data name="TransformView_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="TransformView_Kind_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="TransformView_Kind_Subtract" xml:space="preserve"><value>Subtract</value></data>
+  <data name="TransformView_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="TransformView_Kind_RotateLeft" xml:space="preserve"><value>Rotate left</value></data>
+  <data name="TransformView_Kind_RotateRight" xml:space="preserve"><value>Rotate right</value></data>
+  <data name="TransformView_Kind_ByteSwap16" xml:space="preserve"><value>Byte swap (16 bit)</value></data>
+  <data name="TransformView_Kind_ByteSwap32" xml:space="preserve"><value>Byte swap (32 bit)</value></data>
+  <data name="TransformView_Kind_ByteSwap64" xml:space="preserve"><value>Byte swap (64 bit)</value></data>
+  <data name="TransformView_Kind_ReverseBits" xml:space="preserve"><value>Reverse bit order</value></data>
+  <data name="TransformView_Kind_SwapNibbles" xml:space="preserve"><value>Swap nibbles</value></data>
+  <data name="TransformView_Kind_Plugin" xml:space="preserve"><value>Plugin: {0}</value></data>
+  <data name="TransformView_KeyHex" xml:space="preserve"><value>Byte key</value></data>
+  <data name="TransformView_Key" xml:space="preserve"><value>Key (hex, 1 to 256 bytes)</value></data>
+  <data name="TransformView_Plugin" xml:space="preserve"><value>Plugin transform</value></data>
+  <data name="TransformView_Scope" xml:space="preserve"><value>Range and key start</value></data>
+  <data name="TransformView_Whole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="TransformView_Range" xml:space="preserve"><value>Range</value></data>
+  <data name="TransformView_KeyOrigin" xml:space="preserve"><value>Key start</value></data>
+  <data name="TransformView_Origin_Zero" xml:space="preserve"><value>Count from offset 0</value></data>
+  <data name="TransformView_Origin_Range" xml:space="preserve"><value>From the start of the range</value></data>
+  <data name="TransformView_Origin_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="TransformView_OriginOffset" xml:space="preserve"><value>Key start offset</value></data>
+  <data name="TransformView_Saved" xml:space="preserve"><value>Saved transforms</value></data>
+  <data name="TransformView_SavedPlaceholder" xml:space="preserve"><value>Load a saved transform</value></data>
+  <data name="TransformView_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="TransformView_Save" xml:space="preserve"><value>Save with this name</value></data>
+  <data name="TransformView_PreviewTitle" xml:space="preserve"><value>Preview (16 bytes at the cursor)</value></data>
+  <data name="TransformView_PreviewLines" xml:space="preserve"><value>{0}
+Original:  {1}
+Displayed: {2}</value></data>
+  <data name="TransformView_XorTitle" xml:space="preserve"><value>XOR view</value></data>
+  <data name="TransformView_Error_KeyEmpty" xml:space="preserve"><value>Enter a key.</value></data>
+  <data name="TransformView_Error_KeyHex" xml:space="preserve"><value>The key must be hex bytes (an even number of digits, e.g. 5A 3C).</value></data>
+  <data name="TransformView_Error_KeyTooLong" xml:space="preserve"><value>The key can be up to 256 bytes.</value></data>
+  <data name="TransformView_Error_Operand" xml:space="preserve"><value>The value does not fit in the element size.</value></data>
+  <data name="TransformView_Error_Range" xml:space="preserve"><value>Enter a valid range (start 0 or more, length 1 or more).</value></data>
+  <data name="TransformView_Error_Origin" xml:space="preserve"><value>Enter a valid offset for the key start.</value></data>
+  <data name="TransformView_Error_OpCount" xml:space="preserve"><value>Add 1 to 8 operations.</value></data>
+  <data name="TransformView_Error_InvalidSize" xml:space="preserve"><value>The element size must be 1, 2, 4 or 8 bytes.</value></data>
+  <data name="TransformView_Error_BitCountOutOfRange" xml:space="preserve"><value>The bit count must be from 1 to the element bit size minus 1.</value></data>
+  <data name="TransformView_Error_InvalidRange" xml:space="preserve"><value>Enter a valid range.</value></data>
+  <data name="TransformView_Error_PluginMissing" xml:space="preserve"><value>The plugin used by this transform is not available.</value></data>
+  <data name="TransformView_NotActive" xml:space="preserve"><value>No transform view is active.</value></data>
+  <data name="TransformView_LinkedView" xml:space="preserve"><value>A transform view cannot be set on a linked view.</value></data>
+  <data name="TransformView_LengthNotice" xml:space="preserve"><value>Edits that change the length cannot be made in a transform view.</value></data>
+  <data name="TransformView_ReadOnlyNotice" xml:space="preserve"><value>This transform view has no inverse transform, so it cannot be edited. Clear the transform view to edit.</value></data>
+  <data name="TransformView_ClearAction" xml:space="preserve"><value>Clear transform view</value></data>
+  <data name="TransformView_ApplyTitle" xml:space="preserve"><value>Apply transform to the data</value></data>
+  <data name="TransformView_ApplyConfirm" xml:space="preserve"><value>Write the transform "{0}" to the data and clear the transform view?</value></data>
+  <data name="Patch_Format_Auto" xml:space="preserve"><value>Automatic (IPS or IPS32)</value></data>
+  <data name="Patch_Format_Ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Patch_Format_Ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Patch_Format_Ups" xml:space="preserve"><value>UPS</value></data>
+  <data name="Patch_Format_Bps" xml:space="preserve"><value>BPS</value></data>
+  <data name="Patch_Format_HexPatch" xml:space="preserve"><value>HexEditor patch (.hexpatch)</value></data>
+  <data name="Patch_Format_SelfApplying" xml:space="preserve"><value>Self-applying (EXE)</value></data>
+  <data name="Patch_Unavailable_IpsOffsetLimit" xml:space="preserve"><value>IPS cannot represent changes at offsets of 16 MiB (0x1000000) or more.</value></data>
+  <data name="Patch_Unavailable_Ips32OffsetLimit" xml:space="preserve"><value>IPS32 cannot represent changes at offsets of 4 GiB or more.</value></data>
+  <data name="Patch_Unavailable_StubMissing" xml:space="preserve"><value>This build does not include the patch applier program.</value></data>
+  <data name="Patch_UseOtherFormats" xml:space="preserve"><value>Use IPS32, UPS, BPS or the HexEditor patch format.</value></data>
+  <data name="Patch_LinkedView" xml:space="preserve"><value>Create the patch in the original tab of this linked view.</value></data>
+  <data name="PatchCreate_Title" xml:space="preserve"><value>Create patch</value></data>
+  <data name="PatchCreate_Source" xml:space="preserve"><value>Compare</value></data>
+  <data name="PatchCreate_SourceSaved" xml:space="preserve"><value>Saved content and current content</value></data>
+  <data name="PatchCreate_SourceTabs" xml:space="preserve"><value>Two files (tabs): from another tab to this tab</value></data>
+  <data name="PatchCreate_OtherTab" xml:space="preserve"><value>Original tab</value></data>
+  <data name="PatchCreate_SourceHistory" xml:space="preserve"><value>Two points in the history</value></data>
+  <data name="PatchCreate_FromPoint" xml:space="preserve"><value>From</value></data>
+  <data name="PatchCreate_ToPoint" xml:space="preserve"><value>To</value></data>
+  <data name="PatchCreate_HistoryPairText" xml:space="preserve"><value>From history node #{0} to #{1}</value></data>
+  <data name="PatchCreate_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="PatchCreate_AutoChoice" xml:space="preserve"><value>Uses {0}.</value></data>
+  <data name="PatchCreate_Rle" xml:space="preserve"><value>Use RLE records</value></data>
+  <data name="PatchCreate_FullHash" xml:space="preserve"><value>Include the SHA-256 of the whole data (slow for large files)</value></data>
+  <data name="PatchCreate_DefaultFileName" xml:space="preserve"><value>Default file name to patch</value></data>
+  <data name="PatchCreate_Message" xml:space="preserve"><value>Message shown to the user</value></data>
+  <data name="PatchCreate_Architecture" xml:space="preserve"><value>Applier program</value></data>
+  <data name="PatchCreate_SmartScreen" xml:space="preserve"><value>The program is not code-signed. Windows SmartScreen shows a warning when the recipient runs it.</value></data>
+  <data name="PatchCreate_Path" xml:space="preserve"><value>Output file</value></data>
+  <data name="PatchCreate_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="PatchCreate_Computing" xml:space="preserve"><value>Calculating the differences...</value></data>
+  <data name="PatchCreate_NoChanges" xml:space="preserve"><value>There are no differences.</value></data>
+  <data name="PatchCreate_SummaryText" xml:space="preserve"><value>Records: {0}, estimated size: {1}</value></data>
+  <data name="PatchCreate_Inefficient" xml:space="preserve"><value>This format cannot represent insertions and deletions efficiently. Use BPS or the HexEditor patch format.</value></data>
+  <data name="PatchCreate_Failed" xml:space="preserve"><value>The differences could not be calculated: {0}</value></data>
+  <data name="PatchCreate_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Patch_Operation_Create" xml:space="preserve"><value>Creating patch {0}</value></data>
+  <data name="Patch_Operation_Verify" xml:space="preserve"><value>Checking the patched data</value></data>
+  <data name="Patch_Created" xml:space="preserve"><value>Created {0}.</value></data>
+  <data name="Patch_CreatedSelfApplying" xml:space="preserve"><value>Created {0}. It is not code-signed, so Windows SmartScreen shows a warning when the recipient runs it.</value></data>
+  <data name="Patch_CreateFailed" xml:space="preserve"><value>The patch could not be created: {0}</value></data>
+  <data name="PatchApply_Title" xml:space="preserve"><value>Apply patch {0}</value></data>
+  <data name="PatchApply_InfoText" xml:space="preserve"><value>Format: {0}
+Records: {1}
+Bytes to change: {2}
+Length after applying: {3}</value></data>
+  <data name="PatchApply_Reverse" xml:space="preserve"><value>Reverse (undo a patch that was already applied)</value></data>
+  <data name="PatchApply_VerificationText" xml:space="preserve"><value>Check of the original: {0}</value></data>
+  <data name="PatchApply_Verifying" xml:space="preserve"><value>Checking...</value></data>
+  <data name="PatchApply_Match" xml:space="preserve"><value>Match</value></data>
+  <data name="PatchApply_Mismatch" xml:space="preserve"><value>Mismatch</value></data>
+  <data name="PatchApply_Unverifiable" xml:space="preserve"><value>Cannot be checked</value></data>
+  <data name="PatchApply_MismatchWarning" xml:space="preserve"><value>This patch may be for a different file.</value></data>
+  <data name="PatchApply_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="PatchApply_ApplyAnyway" xml:space="preserve"><value>Apply anyway</value></data>
+  <data name="PatchApply_SkipVerification" xml:space="preserve"><value>Skip check and apply</value></data>
+  <data name="Patch_Applied" xml:space="preserve"><value>Applied the patch {0}.</value></data>
+  <data name="Patch_Error_UnknownFormat" xml:space="preserve"><value>The patch format cannot be recognized.</value></data>
+  <data name="Patch_Error_Record" xml:space="preserve"><value>Record {0} of the patch is broken.</value></data>
+  <data name="Patch_Error_Corrupt" xml:space="preserve"><value>The patch is broken: {0}</value></data>
+  <data name="Patch_Error_FixedLength" xml:space="preserve"><value>A patch that changes the length cannot be applied to this document (its length is fixed).</value></data>
+  <data name="Patch_Error_ResultMismatch" xml:space="preserve"><value>The patched data does not match the result recorded in the patch. The patch was not applied.</value></data>
+  <data name="PatchApplier_Title" xml:space="preserve"><value>Apply patch</value></data>
+  <data name="PatchApplier_NoPatch" xml:space="preserve"><value>This program does not contain a patch.</value></data>
+  <data name="PatchApplier_Intro" xml:space="preserve"><value>This program applies a patch to a file. Select the file to patch.</value></data>
+  <data name="PatchApplier_SelectTitle" xml:space="preserve"><value>Select the file to patch</value></data>
+  <data name="PatchApplier_AllFiles" xml:space="preserve"><value>All files</value></data>
+  <data name="PatchApplier_Mismatch" xml:space="preserve"><value>This patch may be for a different file: {0} does not match the original recorded in the patch.
+
+Apply the patch anyway?</value></data>
+  <data name="PatchApplier_Backup" xml:space="preserve"><value>Create a backup of the original file ({0}) before applying the patch?</value></data>
+  <data name="PatchApplier_Success" xml:space="preserve"><value>The patch was applied to {0}.</value></data>
+  <data name="PatchApplier_BackupDone" xml:space="preserve"><value>The original file was saved as {0}.</value></data>
+  <data name="PatchApplier_Failed" xml:space="preserve"><value>The patch could not be applied: {0}
+
+The file was not changed.</value></data>
+  <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>The patched data does not match the result recorded in the patch.</value></data>
 </root>

@@ -254,6 +254,12 @@ public sealed partial class Document : IDisposable
     /// <summary>変換ビューを設定・解除した。</summary>
     public event EventHandler? ViewTransformChanged;
 
+    /// <summary>変換ビューでのコピーを元のデータにするか (設定「変換ビューでのコピー: 元のデータ」。EDIT-45 の仕様 12。既定は表示どおり)。</summary>
+    public bool CopyRawInTransformView { get; set; }
+
+    /// <summary>コピー・切り取りが読む内容 (変換ビューでは設定に従って表示どおりか元のデータ)。</summary>
+    public DocumentSnapshot ClipboardSnapshot => CopyRawInTransformView && _viewTransform is not null ? DataSnapshot : Current;
+
     /// <summary>
     /// 変換ビューを設定する (null で解除)。設定している間、読み込みは変換後の値になり、書き込む値は表示上の値とみなして逆変換してから
     /// 元のデータに書き込む (仕様 6)。長さを変える編集はできない (仕様 8。<see cref="CanResize"/> が偽になる)。連動ビューには設定できない。
