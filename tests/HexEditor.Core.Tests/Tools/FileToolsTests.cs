@@ -49,7 +49,7 @@ public sealed class FileToolsTests : IDisposable
         {
             stream.SetLength(10 * GiB);
             SparseFiles.TryMakeSparse(stream.SafeFileHandle);
-            foreach (long at in new[] { 0L, 4 * GiB, 8 * GiB, 10 * GiB - 16 })
+            foreach (long at in new[] { 0L, 4 * GiB, 8 * GiB, 10 * GiB - 17 })
             {
                 stream.Position = at;
                 stream.Write(TestDataCatalog.Marker(at));
