@@ -63,9 +63,9 @@ public sealed partial class InspectorPanel
         AutomationProperties.SetAutomationId(_branchMenu, "Inspector_MenuGoToBranchTarget");
         _branchMenu.Click += (_, _) =>
         {
-            if ((_menuTarget ?? Vm.Selected) is { BranchTarget: { } relative })
+            if ((_menuTarget ?? Vm.Selected) is { BranchTarget: { } target })
             {
-                Vm.GoToBranchTarget?.Invoke(Vm.Origin, relative);
+                Vm.GoToBranchTarget?.Invoke(target);
             }
         };
 

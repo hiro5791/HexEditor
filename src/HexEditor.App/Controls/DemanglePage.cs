@@ -91,6 +91,9 @@ public sealed partial class DemanglePage : UserControl
     /// <summary>変換が終わるのを待つ (テスト用)。</summary>
     internal Task? Converting { get; private set; }
 
+    /// <summary>今の入力で変換する (テスト用の命令。TextChanged を待たない)。</summary>
+    internal Task ConvertNowAsync() => ConvertAsync();
+
     private Task ConvertAsync()
     {
         Converting = ConvertCoreAsync();

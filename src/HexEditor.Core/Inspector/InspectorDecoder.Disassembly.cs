@@ -4,8 +4,8 @@ using HexEditor.Core.Engine;
 namespace HexEditor.Core.Inspector;
 
 /// <summary>
-/// 1 命令の逆アセンブル (INSP-16)。06 の ANA-23 の逆アセンブラと ANA-26 の構文・数値の書式を使う。起点を
-/// アドレス 0 として解釈し、分岐先 (ANA-25 の求め方) を起点からの相対位置として返す (<see cref="InspectorValue.BranchTarget"/>)。
+/// 1 命令の逆アセンブル (INSP-16)。06 の ANA-23 の逆アセンブラと ANA-26 の構文・数値の書式を使う。起点のオフセット
+/// (<see cref="InspectorOptions.DisasmAddress"/>) をアドレスとして解釈し、分岐先 (ANA-25 の求め方) をオフセットとして返す (<see cref="InspectorValue.BranchTarget"/>)。
 /// </summary>
 public static partial class InspectorDecoder
 {
@@ -63,7 +63,7 @@ public static partial class InspectorDecoder
         DisasmInstruction? instruction;
         try
         {
-            instruction = decoder.Decode(data[..window], 0, detail: false);
+            instruction = decoder.Decode(data[..window], (ulong)Math.Max(0, o.DisasmAddress), detail: false);
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {

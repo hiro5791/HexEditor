@@ -206,8 +206,4 @@ public sealed partial class MainWindow
         ShowToolPage(DemanglePageId, _demanglePage, Loc.Get("ToolPage_Demangle"), "");
         _demanglePage.FocusInput();
     }
-
-    /// <summary>インスペクタの 1 命令の行の「分岐先へ移動」の対象 (起点、相対位置)。分岐命令でなければ null。</summary>
-    internal static (long Origin, long Relative)? InspectorBranchOf(InspectorViewModel vm, InspectorItemViewModel? item) =>
-        item is { BranchTarget: { } relative } && Core.Inspector.InspectorTypes.IsDisasm(item.TypeId) ? (vm.Origin, relative) : null;
 }

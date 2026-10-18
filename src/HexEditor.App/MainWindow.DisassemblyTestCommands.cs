@@ -104,7 +104,9 @@ public sealed partial class MainWindow
                 {
                     if (request["text"]?.GetValue<string>() is { } text)
                     {
+                        // TextChanged は後で届くので、ここで解釈し直す。
                         state.Input.Text = text;
+                        UpdateAssemble(state);
                     }
 
                     if (request["fill"]?.GetValue<string>() == "keep")
@@ -215,7 +217,8 @@ public sealed partial class MainWindow
                     lp.UpdateLayout();
                     result["listingFlowDirection"] = lp.ListingView.FlowDirection.ToString();
                     result["toolbarFlowDirection"] = lp.ToolbarElement.FlowDirection.ToString();
-                    if (lp.ListingView.RowElement(0) is { } row0 && row0.XamlRoot is not null)
+                    int first = vm.Rows.ToList().FindIndex(r => r.Kind == ListingLineKind.Instruction);
+                    if (first >= 0 && lp.ListingView.RowElement(first) is { } row0 && row0.XamlRoot is not null)
                     {
                         // 行の中の列の画面上の横位置 (アドレス列とニーモニック列)。
                         var texts = new List<Microsoft.UI.Xaml.Controls.TextBlock>();
@@ -238,15 +241,16 @@ public sealed partial class MainWindow
                     _demanglePage!.SetInput(input);
                 }
 
-                if (_demanglePage?.Converting is { } converting)
+                if (_demanglePage is { } page)
                 {
-                    await converting;
+                    await page.ConvertNowAsync();
                 }
 
                 result["output"] = _demanglePage?.OutputText;
                 break;
             case "inspector":
             {
+                ShowPanel("inspector", focus: false);
                 InspectorLayout layout = _inspectorVm.Layout;
                 string current = layout.Rows.First(r => InspectorTypes.IsDisasm(r.TypeId)).TypeId;
                 layout = layout.WithVisible(current, true);
@@ -267,9 +271,9 @@ public sealed partial class MainWindow
             case "inspectorBranch":
             {
                 InspectorItemViewModel? item = _inspectorVm.Items.FirstOrDefault(i => i.Kind == InspectorItemKind.Row && InspectorTypes.IsDisasm(i.TypeId));
-                if (item?.BranchTarget is { } relative)
+                if (item?.BranchTarget is { } target)
                 {
-                    GoToInspectorBranch(_inspectorVm.Origin, relative);
+                    GoToInspectorBranch(target);
                     result["moved"] = true;
                 }
 
@@ -318,6 +322,15 @@ public sealed partial class MainWindow
         result["engineError"] = vm.EngineError;
         result["mostlyData"] = vm.MostlyData;
         result["method"] = vm.CurrentMethod?.Name;
+        result["format"] = new JsonObject
+        {
+            ["syntax"] = DisasmSettings.SyntaxValue(vm.Format.Syntax),
+            ["hexStyle"] = vm.Format.HexStyle == HexStyle.Suffix ? "suffix" : "prefix",
+            ["uppercaseHex"] = vm.Format.UppercaseHex,
+            ["maxBytes"] = vm.Format.MaxBytes,
+            ["addressColumn"] = DisasmSettings.AddressColumnValue(vm.Format.AddressColumn),
+        };
+        result["settings"] = new JsonObject([.. DisasmSettings.Keys.Select(k => new KeyValuePair<string, JsonNode?>(k, App.Settings.GetNode(k)?.DeepClone()))]);
         DisasmRow? selected = vm.SelectedRow;
         result["rows"] = new JsonArray([.. vm.Rows.Select((r, i) => (JsonNode?)new JsonObject
         {

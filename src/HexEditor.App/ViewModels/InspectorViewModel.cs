@@ -88,7 +88,7 @@ public sealed partial class InspectorItemViewModel : ObservableObject
     /// <summary>表示を省いた値の全体 (文字列の行の「値をコピー」。INSP-10 の仕様 2)。なければ <see cref="Value"/>。</summary>
     public string? FullText { get; set; }
 
-    /// <summary>1 命令の逆アセンブルの行の分岐先 (起点からの相対位置。INSP-16 の仕様 7)。</summary>
+    /// <summary>1 命令の逆アセンブルの行の分岐先のオフセット (INSP-16 の仕様 7)。</summary>
     public long? BranchTarget { get; set; }
 
     /// <summary>色の行の色 (0xRRGGBBAA。INSP-12)。色の行でなければ null。</summary>
@@ -330,8 +330,8 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>1 命令の逆アセンブルの構文と数値の書式 (INSP-16 の仕様 2。06 の ANA-26 の設定。MainWindow が設定する)。</summary>
     public static Func<Core.Disassembly.DisasmFormat>? DisasmFormatSource { get; set; }
 
-    /// <summary>1 命令の逆アセンブルの行の「分岐先へ移動」(INSP-16 の仕様 7)。引数は起点と相対位置。</summary>
-    public Action<long, long>? GoToBranchTarget { get; set; }
+    /// <summary>1 命令の逆アセンブルの行の「分岐先へ移動」(INSP-16 の仕様 7)。引数は分岐先のオフセット。</summary>
+    public Action<long>? GoToBranchTarget { get; set; }
 
     public InspectorOptions Options => new()
     {
@@ -444,7 +444,7 @@ public sealed partial class InspectorViewModel : ObservableObject
             _states = _states[..count];
         }
 
-        InspectorOptions options = Options;
+        InspectorOptions options = Options with { DisasmAddress = Origin };
         IReadOnlyList<InspectorGroupResult> groups = DataInspector.Evaluate(_data, _states, Layout, Endian, options);
         var wanted = new List<InspectorItemViewModel>();
         foreach (InspectorGroupResult group in groups)

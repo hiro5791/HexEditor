@@ -375,6 +375,9 @@ public sealed record InspectorOptions
     /// <summary>1 命令の逆アセンブルの構文と数値の書式 (INSP-16 の仕様 2。06 の ANA-26 の設定)。</summary>
     public HexEditor.Core.Disassembly.DisasmFormat DisasmFormat { get; init; } = HexEditor.Core.Disassembly.DisasmFormat.Default;
 
+    /// <summary>1 命令の逆アセンブルの命令のアドレス (起点のオフセット。分岐先の表示と「分岐先へ移動」に使う)。</summary>
+    public long DisasmAddress { get; init; }
+
     /// <summary>
     /// 文字を表示できるか (代替フォントを含めて、どれかのフォントにその文字があるか。INSP-09 の仕様 3)。表示できない文字は
     /// コードポイントだけを表示する。null ならすべて表示できるとみなす (UI がフォントを調べる関数を渡す)。

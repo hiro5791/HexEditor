@@ -597,14 +597,13 @@ public sealed partial class MainWindow
     }
 
     /// <summary>インスペクタの 1 命令の行の「分岐先へ移動」(INSP-16 の仕様 7。ジャンプ履歴に記録する)。</summary>
-    internal void GoToInspectorBranch(long origin, long relative)
+    internal void GoToInspectorBranch(long target)
     {
         if (Editor is not { } editor)
         {
             return;
         }
 
-        long target = origin + relative;
         if (target < 0 || target >= editor.Document.Length)
         {
             ShowStatusMessage(Loc.Format("Disasm_TargetOutside", "0x" + target.ToString("X", CultureInfo.InvariantCulture)));

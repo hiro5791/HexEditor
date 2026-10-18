@@ -34,7 +34,7 @@ public sealed record InspectorComponent(string Id, string Name, string Value, in
 public sealed record InspectorValue(InspectorStatus Status, string Text, int ByteCount, string? ToolTip = null,
     IReadOnlyList<InspectorComponent>? Components = null, string? FullText = null, uint? Rgba = null)
 {
-    /// <summary>分岐命令の分岐先 (起点からの相対位置。INSP-16 の仕様 7「分岐先へ移動」)。分岐先が求まらなければ null。</summary>
+    /// <summary>分岐命令の分岐先のオフセット (INSP-16 の仕様 7「分岐先へ移動」)。分岐先が求まらなければ null。</summary>
     public long? BranchTarget { get; init; }
 }
 

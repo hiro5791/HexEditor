@@ -33,11 +33,12 @@ public sealed class InspectorDisassemblyTests
 
     [Fact]
     [Trait(TC, "TC-INSP-16-02")]
-    public void BranchTargetIsRelativeToOrigin()
+    public void BranchTargetIsAnOffset()
     {
-        InspectorValue jmp = Decode(DisasmArchitectures.X86_64, "EB 10");
-        Assert.Equal(0x12, jmp.BranchTarget);
-        Assert.Equal(-0x10 + 2, Decode(DisasmArchitectures.X86_64, "EB F0").BranchTarget);
+        InspectorValue jmp = InspectorDecoder.Decode(InspectorTypes.Disasm, DecoderTests.Hex("EB 10"), [], Endianness.Little, Japanese with { DisasmAddress = 0xA0 });
+        Assert.Equal(0xB2, jmp.BranchTarget);
+        Assert.StartsWith("jmp 0xb2", jmp.Text, StringComparison.Ordinal);
+        Assert.Equal(0x12, Decode(DisasmArchitectures.X86_64, "EB 10").BranchTarget);
     }
 
     [Fact]
