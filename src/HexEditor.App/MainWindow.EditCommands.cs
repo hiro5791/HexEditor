@@ -176,6 +176,14 @@ public sealed partial class MainWindow
     /// </summary>
     private void ShowReadOnlyNotice(DocumentViewModel doc)
     {
+        if (doc.Document.IsTransformReadOnly)
+        {
+            // 逆変換のない変換ビュー (EDIT-45 の仕様 7)。解除すると編集できる。
+            ShowNotice(Loc.Get("TransformView_ReadOnlyNotice"), InfoBarSeverity.Warning, doc,
+                actions: [new NotificationAction(Loc.Get("TransformView_ClearAction"), () => ClearTransformView(doc))]);
+            return;
+        }
+
         IReadOnlyList<NotificationAction>? actions = doc.Document.ReadOnlyRelease == ReadOnlyRelease.NotAllowed
             ? null
             : [new NotificationAction(Loc.Get("ReadOnly_AllowEdit"), () => _ = AllowEditAsync(doc))];

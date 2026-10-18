@@ -231,6 +231,9 @@ public sealed partial class MainWindow
             // マクロの記録中 (AUTO-27 の仕様 4): 隠せない項目。
             ["recording"] = ScriptWorkspace.Macros.IsRecording,
 
+            // 変換ビュー (EDIT-45 の仕様 9): 有効な間は隠せない項目として出す。
+            ["transform"] = doc?.Document.ViewTransform is not null,
+
             // プロセスメモリの即時書き込み (ENG-34): オンの間は必ず示す (利用者が隠せる項目にしない)。
             ["immediate"] = doc?.ImmediateWriteText is { Length: > 0 },
 
@@ -249,8 +252,10 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        StatusTransform.Content = doc?.Document.ViewTransform is { } transform ? Controls.HexView.TransformViewLabel(transform) : string.Empty;
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
         StatusSync.Content = SyncStatusText();

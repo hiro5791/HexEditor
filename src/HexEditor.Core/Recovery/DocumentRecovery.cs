@@ -142,7 +142,7 @@ public sealed class DocumentRecovery : IDisposable
             return null;
         }
 
-        DocumentSnapshot snapshot = document.Current;
+        DocumentSnapshot snapshot = document.DataSnapshot;
         string? path = (document.Source as FileByteSource)?.Path;
         FileStamp? stamp = (document.Source as FileByteSource)?.Stamp;
         (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;

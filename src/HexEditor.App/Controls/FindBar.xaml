@@ -82,13 +82,21 @@
                     </Button.Flyout>
                 </Button>
             </StackPanel>
-            <TextBlock
-                x:Name="Status"
-                Grid.Column="2"
-                VerticalAlignment="Center"
-                AutomationProperties.AutomationId="Find_Status"
-                AutomationProperties.LiveSetting="Polite"
-                TextTrimming="CharacterEllipsis" />
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                <!--  変換ビュー (EDIT-45 の仕様 11、FIND-01 の仕様 13): 変換後のデータを検索していることを示す  -->
+                <TextBlock
+                    x:Name="TransformLabel"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Find_TransformView"
+                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                    Visibility="Collapsed" />
+                <TextBlock
+                    x:Name="Status"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Find_Status"
+                    AutomationProperties.LiveSetting="Polite"
+                    TextTrimming="CharacterEllipsis" />
+            </StackPanel>
             <TextBlock
                 x:Name="CountText"
                 Grid.Column="3"

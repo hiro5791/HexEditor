@@ -53,6 +53,68 @@ public sealed class HistoryRow
 }
 
 /// <summary>
+/// 分岐する履歴の木の 1 行 (EDIT-21 の仕様 3)。行は作った順 (時系列) に縦に並べ、枝は列 (<see cref="Lane"/>) を変えて横に分ける。
+/// 保存点・名前付き・固定・現在の節は、アイコンと文字で区別する。
+/// </summary>
+public sealed class HistoryTreeRow
+{
+    public required HistoryNode Node { get; init; }
+
+    /// <summary>枝の列 (0 が根の枝)。</summary>
+    public required int Lane { get; init; }
+
+    public required string Title { get; init; }
+
+    public required string RangeText { get; init; }
+
+    public required bool IsCurrent { get; init; }
+
+    public required bool IsSaved { get; init; }
+
+    /// <summary>現在の経路から外れた節 (薄く表示する)。</summary>
+    public required bool IsOffPath { get; init; }
+
+    public string NumberText => "#" + Node.Id.ToString(CultureInfo.CurrentCulture);
+
+    public string? Name => Node.Name;
+
+    public bool IsPinned => Node.IsPinned;
+
+    public Microsoft.UI.Xaml.Thickness Indent => new(Lane * 18, 0, 0, 0);
+
+    /// <summary>枝の印 (現在の節は塗りつぶし、それ以外は白抜き)。</summary>
+    public string NodeGlyph => IsCurrent ? "\u25CF" : "\u25CB";
+
+    /// <summary>分かれた枝の最初の節の印。</summary>
+    public string BranchMark => Node.Parent is { } p && !ReferenceEquals(p.Children.FirstOrDefault(), Node) ? "\u2514 " : string.Empty;
+
+    /// <summary>状態の文字 (色・アイコンだけで区別しない)。</summary>
+    public string StateText => string.Join(" ", new[]
+    {
+        IsCurrent ? Loc.Get("History_CurrentState") : string.Empty,
+        IsSaved ? Loc.Get("History_SavedMark") : string.Empty,
+        IsPinned ? Loc.Get("History_PinnedMark") : string.Empty,
+    }.Where(t => t.Length > 0));
+
+    /// <summary>名前 (名札のアイコンの横に出す)。</summary>
+    public string NameText => Node.Name ?? string.Empty;
+
+    public Microsoft.UI.Xaml.Visibility NameVisibility => Node.Name is null ? Microsoft.UI.Xaml.Visibility.Collapsed : Microsoft.UI.Xaml.Visibility.Visible;
+
+    public Microsoft.UI.Xaml.Visibility PinVisibility => IsPinned ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    public Microsoft.UI.Xaml.Visibility SavedVisibility => IsSaved ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    public Windows.UI.Text.FontWeight Weight => IsCurrent ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal;
+
+    public double Opacity => IsOffPath ? 0.6 : 1;
+
+    public Microsoft.UI.Xaml.Visibility CurrentBarVisibility => IsCurrent ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    public string AccessibleName => string.Join(", ", new[] { NumberText, Title, Name ?? string.Empty, RangeText, StateText }.Where(s => s.Length > 0));
+}
+
+/// <summary>
 /// 履歴の行の一覧。行は表示するときに作る (100 万項目以上でも、一覧が仮想化して見えている行だけを尋ねる。EDIT-20 の仕様 6)。
 /// </summary>
 public sealed class HistoryRowList : IList, IReadOnlyList<HistoryRow>, INotifyCollectionChanged
@@ -157,6 +219,41 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
 
     public HistoryRowList Rows { get; }
 
+    /// <summary>木の表示の行 (EDIT-21 の仕様 3。「木で表示」のときだけ作る)。</summary>
+    public System.Collections.ObjectModel.ObservableCollection<HistoryTreeRow> TreeRows { get; } = [];
+
+    private const string TreeViewKey = "history.treeView";
+
+    /// <summary>木で表示するか (履歴パネルの「木で表示」の切り替え。アプリの状態に覚える)。</summary>
+    public bool IsTreeView
+    {
+        get => AppState.GetString(TreeViewKey, "false") == "true";
+        set
+        {
+            if (value != IsTreeView)
+            {
+                AppState.SetString(TreeViewKey, value ? "true" : "false");
+                Refresh();
+                OnPropertyChanged(nameof(IsTreeView));
+                OnPropertyChanged(nameof(ListVisibility));
+                OnPropertyChanged(nameof(TreeVisibility));
+            }
+        }
+    }
+
+    public Microsoft.UI.Xaml.Visibility ListVisibility => IsTreeView ? Microsoft.UI.Xaml.Visibility.Collapsed : Microsoft.UI.Xaml.Visibility.Visible;
+
+    public Microsoft.UI.Xaml.Visibility TreeVisibility => IsTreeView ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    /// <summary>作業中の文書 (パネルの操作の対象)。</summary>
+    public DocumentViewModel? Document => _doc;
+
+    /// <summary>作業中の文書の履歴。</summary>
+    public EditHistory? History => _doc?.Document.History;
+
+    /// <summary>ダイアログを伴う操作 (履歴の保存・読み込み、名前付け、枝の削除、パッチの作成) をするウィンドウ。</summary>
+    public Controls.IHistoryPanelHost? Host { get; set; }
+
     /// <summary>
     /// 「2 つの時点を比較」(仕様 5) の処理。比較の機能 (06) が設定する。null なら比較のボタンを無効にする。引数は 2 時点の内容と名前。
     /// </summary>
@@ -203,6 +300,7 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
     {
         // 行 i は項目 i。行 0 は開いた時点 (そこへ移るとすべて元に戻す。開いた直後に保存した印・現在の状態の印もここに付く)。
         Rows.Reset(_doc?.Document.History.Count ?? 0);
+        RefreshTree();
         OnPropertyChanged(nameof(CurrentIndex));
         OnPropertyChanged(nameof(CanUndo));
         OnPropertyChanged(nameof(CanRedo));
@@ -212,6 +310,76 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
 
     /// <summary>一覧を作り直した (現在の行を見える位置に出す)。</summary>
     public event EventHandler? Refreshed;
+
+    /// <summary>木の表示の行を作り直す。作った順に並べ、最初の子は親の列を、2 つ目以降の子は新しい列を使う。</summary>
+    private void RefreshTree()
+    {
+        TreeRows.Clear();
+        if (!IsTreeView || _doc is not { } doc)
+        {
+            return;
+        }
+
+        EditHistory history = doc.Document.History;
+        var lanes = new Dictionary<HistoryNode, int>();
+        int nextLane = 0;
+        CultureInfo culture = CultureInfo.CurrentCulture;
+        foreach (HistoryNode node in history.AllNodes().OrderBy(n => n.Id))
+        {
+            int lane = node.Parent is not { } parent ? 0
+                : ReferenceEquals(parent.Children.FirstOrDefault(), node) ? lanes.GetValueOrDefault(parent) : ++nextLane;
+            lanes[node] = lane;
+            string range = string.Empty;
+            if (node.Parent is not null && node.Entry.Range is { } r)
+            {
+                range = Loc.Format("History_Range", doc.Editor.OffsetFormat.Value(r.Offset, culture), Math.Max(r.BeforeLength, r.AfterLength).ToString("N0", culture));
+            }
+
+            TreeRows.Add(new HistoryTreeRow
+            {
+                Node = node,
+                Lane = lane,
+                Title = node.Parent is null ? Loc.Get("History_Opened") : MainWindow.EditOperationName(node.Entry.Description),
+                RangeText = range,
+                IsCurrent = ReferenceEquals(node, history.CurrentNode),
+                IsSaved = ReferenceEquals(node, history.SavedNode),
+                IsOffPath = !history.IsOnPath(node),
+            });
+        }
+    }
+
+    /// <summary>節の状態に移る (別の枝の節も。EDIT-21 の仕様 2)。</summary>
+    public void GoToNode(HistoryNode node)
+    {
+        if (_doc is { } doc && !doc.Document.IsReadOnly && !doc.Document.IsEditLocked)
+        {
+            doc.Document.MoveToHistoryNode(node);
+        }
+    }
+
+    /// <summary>節での変更内容 (範囲、変更前と変更後の先頭 16 バイト。EDIT-21 の「画面」)。</summary>
+    public string DetailsOf(HistoryNode node)
+    {
+        if (_doc is not { } doc || node.Parent is not { } parent || node.Entry.Range is not { } r)
+        {
+            return node.Parent is null ? Loc.Get("History_Opened") : string.Empty;
+        }
+
+        static string Head(DocumentSnapshot snapshot, long offset, long length)
+        {
+            byte[] bytes = new byte[(int)Math.Clamp(Math.Min(length, snapshot.Length - offset), 0, 16)];
+            if (bytes.Length > 0)
+            {
+                snapshot.Read(offset, bytes);
+            }
+
+            return bytes.Length == 0 ? "-" : string.Join(' ', bytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture)));
+        }
+
+        CultureInfo culture = CultureInfo.CurrentCulture;
+        return Loc.Format("History_NodeDetails", doc.Editor.OffsetFormat.Value(r.Offset, culture), Math.Max(r.BeforeLength, r.AfterLength).ToString("N0", culture),
+            Head(parent.Entry.Snapshot, r.Offset, r.BeforeLength), Head(node.Entry.Snapshot, r.Offset, r.AfterLength));
+    }
 
     /// <summary>行の編集を適用した直後の状態に移る (仕様 3)。</summary>
     public void GoTo(int index)
@@ -320,6 +488,27 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
             });
         }
 
-        return new JsonObject { ["rows"] = rows, ["current"] = CurrentIndex };
+        var tree = new JsonArray();
+        if (_doc is { } doc)
+        {
+            EditHistory history = doc.Document.History;
+            foreach (HistoryNode node in history.AllNodes().OrderBy(n => n.Id))
+            {
+                tree.Add(new JsonObject
+                {
+                    ["id"] = node.Id,
+                    ["parent"] = node.Parent?.Id,
+                    ["name"] = node.Name,
+                    ["pinned"] = node.IsPinned,
+                    ["current"] = ReferenceEquals(node, history.CurrentNode),
+                    ["saved"] = ReferenceEquals(node, history.SavedNode),
+                    ["description"] = node.Parent is null ? string.Empty : MainWindow.EditOperationName(node.Entry.Description),
+                    ["lane"] = TreeRows.FirstOrDefault(t => ReferenceEquals(t.Node, node))?.Lane,
+                    ["details"] = DetailsOf(node),
+                });
+            }
+        }
+
+        return new JsonObject { ["rows"] = rows, ["current"] = CurrentIndex, ["tree"] = tree, ["treeView"] = IsTreeView, ["treeRows"] = TreeRows.Count };
     }
 }

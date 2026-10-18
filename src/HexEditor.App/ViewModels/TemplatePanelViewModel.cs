@@ -301,6 +301,12 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
         StatusText = IsEvaluating ? Loc.Get("Tpl_Evaluating")
             : stopped is not null ? Loc.Format("Tpl_EvaluatedPartial", patterns.ToString("N0", CultureInfo.CurrentCulture), Loc.Get("Tpl_LimitKind_" + stopped.LimitReached))
             : Loc.Format("Tpl_Evaluated", patterns.ToString("N0", CultureInfo.CurrentCulture));
+        if (_templates?.Document.ViewTransform is { } transform)
+        {
+            // 変換ビュー (EDIT-45 の仕様 11、TPL-26 の仕様 9): 変換後のデータに対して評価したことを結果の上部に示す。
+            StatusText = Loc.Format("TransformView_Badge", transform.Label) + " · " + StatusText;
+        }
+
         int errors = results.Sum(r => r.ErrorCount);
         int warnings = results.Sum(r => r.WarningCount);
         CountsText = Loc.Format("Tpl_Counts", errors, warnings);

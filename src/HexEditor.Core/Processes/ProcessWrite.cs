@@ -42,7 +42,7 @@ public static class ProcessWrite
     /// <param name="confirmProtectChange">読み取り専用のページへの書き込みの確認 (保護属性を渡す)。承認したら true。</param>
     public static ProcessWriteResult Execute(Document document, ProcessMemoryByteSource memory, Func<uint, bool>? confirmProtectChange = null)
     {
-        DocumentSnapshot snapshot = document.Current;
+        DocumentSnapshot snapshot = document.DataSnapshot;
         AddBuffer addBuffer = document.AddBuffer;
         var written = new List<SavedRange>();
         var failed = new List<ProcessWriteFailure>();

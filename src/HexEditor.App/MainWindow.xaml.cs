@@ -881,6 +881,7 @@ public sealed partial class MainWindow : Window
     private Notification ShowNotice(string message, InfoBarSeverity severity, DocumentViewModel? document = null,
         NotificationAction? undo = null, IReadOnlyList<NotificationAction>? actions = null)
     {
+        message = TransformViewNotice(message, document ?? Vm.Selected);
         AppLog.Info($"Notice ({severity}): {message}");
         return Vm.Notifications.Show(
             document is null ? NotificationScope.Window : NotificationScope.Document,

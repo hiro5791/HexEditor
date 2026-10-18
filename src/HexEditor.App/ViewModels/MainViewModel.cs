@@ -303,8 +303,12 @@ public sealed partial class MainViewModel : ObservableObject
             }
 
             BeforeClose(vm, Documents.IndexOf(vm));
+
+            // 元のドキュメントを閉じると、派生ドキュメントは書き戻せなくなる (EDIT-46 の仕様 7)。
+            DetachDerivedTabsOf(vm);
         }
 
+        vm.Derived?.Dispose();
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
         if (!otherViews)

@@ -177,19 +177,36 @@ public sealed partial class FindBar : UserControl
                 if (_editor is not null)
                 {
                     _editor.ViewChanged -= Editor_ViewChanged;
+                    _editor.Document.ViewTransformChanged -= Document_ViewTransformChanged;
                 }
 
                 _editor = value;
                 if (_editor is not null)
                 {
                     _editor.ViewChanged += Editor_ViewChanged;
+                    _editor.Document.ViewTransformChanged += Document_ViewTransformChanged;
                 }
 
+                UpdateTransformLabel();
                 UpdateReplaceAvailability();
                 Validate();
             }
         }
     }
+
+    private void Document_ViewTransformChanged(object? sender, EventArgs e) => UpdateTransformLabel();
+
+    /// <summary>変換ビューが有効なら「変換ビュー: XOR 5A」を出す (変換後のデータを検索する。FIND-01 の仕様 13)。</summary>
+    private void UpdateTransformLabel()
+    {
+        Core.Engine.IViewTransform? transform = _editor?.Document.ViewTransform;
+        TransformLabel.Text = transform is null ? string.Empty : HexView.TransformViewLabel(transform);
+        TransformLabel.Visibility = transform is null ? Visibility.Collapsed : Visibility.Visible;
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(TransformLabel, TransformLabel.Text);
+    }
+
+    /// <summary>テスト用: 検索バーの変換ビューの表示。</summary>
+    internal string TransformLabelText => TransformLabel.Visibility == Visibility.Visible ? TransformLabel.Text : string.Empty;
 
     /// <summary>長時間処理の管理 (ENG-09)。</summary>
     public OperationCenter? Operations { get; set; }

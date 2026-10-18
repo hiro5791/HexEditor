@@ -1178,6 +1178,8 @@ public sealed partial class MainWindow
     /// <summary>IPS パッチを書く: 差分の元は保存されている内容 (TOOL-12 の仕様 5、EDIT-42 の既定)。</summary>
     private static void WritePatch(DocumentSnapshot snapshot, ExportOptions options, Stream stream, LongRunningOperation op)
     {
+        // 変換ビュー (EDIT-45) の表示どおりの値ではなく、元のデータの差分を書く。
+        snapshot = snapshot.Raw;
         Core.Sources.IByteSource original = snapshot.OriginalSource;
         Core.Clipboard.ByteReader readOriginal = (o, d) => original.Read(o, d);
         List<(long, long)> changes = IpsPatch.ChangedRanges(snapshot, readOriginal, original.Length, op.CancellationToken);

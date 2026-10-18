@@ -241,12 +241,14 @@ hexed patch app.bin fix.ips -o app-fixed.bin
 hexed patch app.bin fix.ips --in-place --verify-before sha256:ab12...
 ```
 
-This applies a patch file to a file. This version can apply IPS and IPS32 patches.
+This applies a patch file to a file. It can apply IPS, IPS32, UPS, BPS and HexEditor patches (`.hexpatch`). The format is detected from the file; `--format ips|ips32|ups|bps|hexpatch` requires that format.
 
 - You must give either `-o path` (the original is not changed) or `--in-place` (the original is replaced). If you give neither, the exit code is 2.
 - `--in-place` writes a temporary file first and then replaces the original, just like saving in the app.
 - `--verify-before algorithm:value` checks the hash of the target before applying. If it differs, nothing is written and the exit code is 1. `--verify-after` checks the hash of the result.
 - `--dry-run` applies nothing and prints the number of patch records and the number of bytes that would change.
+
+For UPS, BPS and HexEditor patches, the original recorded in the patch is checked first (CRC-32, or the length and SHA-256 of parts of the file). If it does not match, nothing is written and the exit code is 1. The result is checked in the same way after applying.
 
 A broken patch gives exit code 8.
 

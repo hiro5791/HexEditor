@@ -87,6 +87,9 @@ public enum DocumentChangeKind
 
     /// <summary>再読み込み・変更の破棄・外部の変更とのマージ (ENG-18、ENG-19)。</summary>
     Reloaded,
+
+    /// <summary>変換ビュー (EDIT-45) を設定・解除した。元のデータは変わらないが、読み込む値 (表示どおりの値) が変わる。</summary>
+    ViewTransformChanged,
 }
 
 /// <summary>
@@ -208,13 +211,86 @@ public sealed partial class Document : IDisposable
     /// <summary>Undo 履歴。連動ビュー (ENG-39) では親のドキュメントの履歴 (親でも子でも同じ履歴を Undo する)。</summary>
     public EditHistory History { get; }
 
-    /// <summary>現在の内容。連動ビューでは親の現在の内容の範囲。</summary>
-    public DocumentSnapshot Current => _linkView ?? History.Current;
+    /// <summary>
+    /// 現在の内容。連動ビューでは親の現在の内容の範囲。変換ビュー (EDIT-45) が有効なら、変換後 (表示どおり) の値を読むスナップショット
+    /// (検索・インスペクタ・ハッシュ・テンプレートなどは表示どおりのデータを対象にする。仕様 11)。保存などで元のデータが要る場合は <see cref="DataSnapshot"/>。
+    /// </summary>
+    public DocumentSnapshot Current
+    {
+        get
+        {
+            DocumentSnapshot data = _linkView ?? History.Current;
+            if (_viewTransform is not { } transform)
+            {
+                return data;
+            }
+
+            // 同じ版には同じインスタンスを返す (スナップショットの参照で版を見分ける処理があるため)。
+            if (!ReferenceEquals(_viewBase, data) || !ReferenceEquals(_viewSnapshot?.Transform, transform))
+            {
+                _viewBase = data;
+                _viewSnapshot = data.WithTransform(transform);
+            }
+
+            return _viewSnapshot!;
+        }
+    }
+
+    /// <summary>現在の内容の元のデータ (変換ビューを通さない。保存・復旧用データ・パッチの作成・履歴の保存に使う)。</summary>
+    public DocumentSnapshot DataSnapshot => _linkView ?? History.Current;
+
+    // ---- 変換ビュー (EDIT-45) ----
+
+    private IViewTransform? _viewTransform;
+    private DocumentSnapshot? _viewBase;
+    private DocumentSnapshot? _viewSnapshot;
+
+    /// <summary>有効な変換ビュー (なければ null)。表示の設定で、編集履歴には残さない (仕様 10)。</summary>
+    public IViewTransform? ViewTransform => _viewTransform;
+
+    /// <summary>変換ビューが逆変換を持たないため読み取り専用か (仕様 7)。</summary>
+    public bool IsTransformReadOnly => _viewTransform is { CanInverse: false };
+
+    /// <summary>変換ビューを設定・解除した。</summary>
+    public event EventHandler? ViewTransformChanged;
+
+    /// <summary>変換ビューでのコピーを元のデータにするか (設定「変換ビューでのコピー: 元のデータ」。EDIT-45 の仕様 12。既定は表示どおり)。</summary>
+    public bool CopyRawInTransformView { get; set; }
+
+    /// <summary>コピー・切り取りが読む内容 (変換ビューでは設定に従って表示どおりか元のデータ)。</summary>
+    public DocumentSnapshot ClipboardSnapshot => CopyRawInTransformView && _viewTransform is not null ? DataSnapshot : Current;
+
+    /// <summary>
+    /// 変換ビューを設定する (null で解除)。設定している間、読み込みは変換後の値になり、書き込む値は表示上の値とみなして逆変換してから
+    /// 元のデータに書き込む (仕様 6)。長さを変える編集はできない (仕様 8。<see cref="CanResize"/> が偽になる)。連動ビューには設定できない。
+    /// </summary>
+    public void SetViewTransform(IViewTransform? transform)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (transform is not null && (LinkedParent is not null || _linkedViews.Count > 0))
+        {
+            // 連動ビューは親の元のデータを指すため、親と子のどちらかだけを変換すると書き込みの値がずれる。
+            throw new InvalidOperationException("連動ビューのあるドキュメントには変換ビューを設定できません。");
+        }
+
+        if (ReferenceEquals(transform, _viewTransform))
+        {
+            return;
+        }
+
+        _viewTransform = transform;
+        _viewBase = null;
+        _viewSnapshot = null;
+        History.BreakCoalescing();
+        ViewTransformChanged?.Invoke(this, EventArgs.Empty);
+        ReadOnlyChanged?.Invoke(this, EventArgs.Empty);
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.ViewTransformChanged));
+    }
 
     public long Length => Current.Length;
 
     /// <summary>挿入・削除・切り取り・挿入貼り付けができるか (ENG-07)。連動ビューは長さ固定 (ENG-39 の仕様 1)。</summary>
-    public bool CanResize => LinkedParent is null && Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
+    public bool CanResize => LinkedParent is null && _viewTransform is null && Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
 
     /// <summary>元のデータソースに保存できるか (ENG-01 の仕様 6)。偽なら「名前を付けて保存」だけになる。</summary>
     public bool CanSave => Source.Capabilities.HasFlag(SourceCapabilities.CanWrite);
@@ -246,7 +322,7 @@ public sealed partial class Document : IDisposable
     public ReadOnlyReason ReadOnlyReason { get; private set; }
 
     /// <summary>読み取り専用か。読み取り専用の間、データを変える操作は <see cref="DocumentReadOnlyException"/> になる (仕様 2)。</summary>
-    public bool IsReadOnly => ReadOnlyReason != ReadOnlyReason.None;
+    public bool IsReadOnly => ReadOnlyReason != ReadOnlyReason.None || IsTransformReadOnly;
 
     /// <summary>読み取り専用を解除できるか、解除にどの手順が要るか (EDIT-16 の仕様 4、ENG-14 の仕様 2・3)。</summary>
     public ReadOnlyRelease ReadOnlyRelease => ReadOnlyReason switch
@@ -608,9 +684,15 @@ public sealed partial class Document : IDisposable
             return linkParent.ContentFrom(source, sourceOffset, length);
         }
         // 同じ元データ (保存で切り替わる前のスナップショットは別の元データ) ならピースをそのまま共有できる。
-        if (ReferenceEquals(source.Storage, _storage))
+        if (ReferenceEquals(source.Storage, _storage) && source.Transform is null)
         {
             return source.Tree.Slice(sourceOffset, length);
+        }
+
+        if (source.Transform is not null && ReferenceEquals(source.Storage.Owner, this))
+        {
+            // 変換ビューを通した自分自身の内容 (表示どおりの値): 値を読んで追加バッファに入れる (自分自身への参照を作らない)。
+            return MaterializeFrom(source, sourceOffset, length);
         }
 
         SnapshotRange range = source.Storage.Owner.CreateRange(source, sourceOffset, length);
@@ -638,7 +720,7 @@ public sealed partial class Document : IDisposable
             throw new ArgumentOutOfRangeException(nameof(rangeOffset));
         }
 
-        if (range.Origin is { } origin && ReferenceEquals(origin.Snapshot.Storage, _storage))
+        if (range.Origin is { } origin && ReferenceEquals(origin.Snapshot.Storage, _storage) && origin.Snapshot.Transform is null)
         {
             return origin.Snapshot.Tree.Slice(origin.Offset + rangeOffset, length);
         }
@@ -660,6 +742,22 @@ public sealed partial class Document : IDisposable
     }
 
     private void OnExternalDataLoaded(object? sender, EventArgs e) => DataLoaded?.Invoke(this, EventArgs.Empty);
+
+    /// <summary><paramref name="source"/> の範囲の値を読み、追加バッファに入れた内容にする。</summary>
+    private PieceTree MaterializeFrom(DocumentSnapshot source, long sourceOffset, long length)
+    {
+        PieceTree result = PieceTree.Empty;
+        byte[] buffer = new byte[(int)Math.Min(length, 1 << 20)];
+        for (long done = 0; done < length;)
+        {
+            int n = (int)Math.Min(buffer.Length, length - done);
+            source.Read(sourceOffset + done, buffer.AsSpan(0, n));
+            result = result.Concat(AppendToBuffer(buffer.AsSpan(0, n)));
+            done += n;
+        }
+
+        return result;
+    }
 
     // ---- 上書き ----
 
@@ -1007,6 +1105,11 @@ public sealed partial class Document : IDisposable
             return;
         }
 
+        if (_viewTransform is { } transform)
+        {
+            tree = InverseThroughView(transform, tree, offset, removed, inserted);
+        }
+
         History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey, offset, removed, inserted);
         UpdateLock();
         Changed?.Invoke(this, new DocumentChangedEventArgs(offset, removed, inserted, isWholeDocument: false));
@@ -1069,6 +1172,7 @@ public sealed partial class Document : IDisposable
 
         if (IsReadOnly)
         {
+            // 逆変換のない変換ビュー (EDIT-45 の仕様 7) も読み取り専用として扱う。
             throw new DocumentReadOnlyException();
         }
     }

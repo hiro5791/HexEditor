@@ -7,13 +7,16 @@
     AutomationProperties.AutomationId="HistoryPanel"
     AutomationProperties.LandmarkType="Custom">
     <!--
-        履歴パネル (EDIT-20)。上部に「元に戻す」「やり直し」「比較」、その下に仮想化した一覧 (番号、操作名、対象範囲、長さの変化、日時、保存の印)。
+        履歴パネル (EDIT-20)。上部に「元に戻す」「やり直し」「比較」「木で表示」「履歴を保存」「履歴を読み込む」、その下に仮想化した一覧
+        (番号、操作名、対象範囲、長さの変化、日時、保存の印)。「木で表示」では分岐する履歴 (EDIT-21) の木を縦に時系列で、枝を横に分けて並べ、
+        選んだ節での変更内容を下部に出す。
         一覧の中のキー: Enter でその時点へ移る、Shift+F10 / アプリケーションキーで右クリックメニュー (00-overview 8.6)。
     -->
     <Grid RowSpacing="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Padding="8,6,8,0" Orientation="Horizontal" Spacing="4">
             <Button
@@ -37,6 +40,21 @@
                 IsEnabled="{x:Bind Vm.CanCompare, Mode=OneWay}">
                 <FontIcon FontSize="14" Glyph="&#xE89A;" />
             </Button>
+            <AppBarSeparator />
+            <!--  木で表示 (EDIT-21 の「呼び出し」)  -->
+            <ToggleButton
+                x:Name="TreeToggle"
+                AutomationProperties.AutomationId="History_TreeToggle"
+                Click="TreeToggle_Click"
+                IsChecked="{x:Bind Vm.IsTreeView, Mode=OneWay}">
+                <FontIcon FontSize="14" Glyph="&#xE8B7;" />
+            </ToggleButton>
+            <Button x:Name="SaveHistoryButton" AutomationProperties.AutomationId="History_SaveHistory" Click="SaveHistory_Click">
+                <FontIcon FontSize="14" Glyph="&#xE74E;" />
+            </Button>
+            <Button x:Name="LoadHistoryButton" AutomationProperties.AutomationId="History_LoadHistory" Click="LoadHistory_Click">
+                <FontIcon FontSize="14" Glyph="&#xE8E5;" />
+            </Button>
         </StackPanel>
         <ListView
             x:Name="List"
@@ -45,7 +63,8 @@
             DoubleTapped="List_DoubleTapped"
             ItemsSource="{x:Bind Vm.Rows}"
             KeyDown="List_KeyDown"
-            SelectionMode="Extended">
+            SelectionMode="Extended"
+            Visibility="{x:Bind Vm.ListVisibility, Mode=OneWay}">
             <ListView.ContextFlyout>
                 <MenuFlyout>
                     <MenuFlyoutItem x:Uid="History_GoToState" AutomationProperties.AutomationId="History_GoToState" Click="GoToState_Click" />
@@ -55,6 +74,8 @@
                         AutomationProperties.AutomationId="History_CompareMenu"
                         Click="Compare_Click"
                         IsEnabled="{x:Bind Vm.CanCompare, Mode=OneWay}" />
+                    <!--  この 2 時点からパッチを作成 (EDIT-42 の「呼び出し」)  -->
+                    <MenuFlyoutItem x:Uid="History_CreatePatch" AutomationProperties.AutomationId="History_CreatePatch" Click="CreatePatch_Click" />
                 </MenuFlyout>
             </ListView.ContextFlyout>
             <ListView.ItemTemplate>
@@ -93,5 +114,79 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!--  分岐する履歴の木 (EDIT-21 の仕様 3)  -->
+        <ListView
+            x:Name="Tree"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="History_Tree"
+            DoubleTapped="Tree_DoubleTapped"
+            ItemsSource="{x:Bind Vm.TreeRows}"
+            KeyDown="Tree_KeyDown"
+            SelectionChanged="Tree_SelectionChanged"
+            SelectionMode="Extended"
+            Visibility="{x:Bind Vm.TreeVisibility, Mode=OneWay}">
+            <ListView.ContextFlyout>
+                <MenuFlyout Opening="TreeMenu_Opening">
+                    <MenuFlyoutItem x:Uid="History_GoToState" AutomationProperties.AutomationId="History_TreeGoTo" Click="TreeGoTo_Click" />
+                    <MenuFlyoutItem x:Uid="History_NameNode" AutomationProperties.AutomationId="History_NameNode" Click="NameNode_Click" />
+                    <MenuFlyoutItem x:Name="PinItem" AutomationProperties.AutomationId="History_PinNode" Click="PinNode_Click" />
+                    <MenuFlyoutItem x:Name="DeleteItem" x:Uid="History_DeleteBranch" AutomationProperties.AutomationId="History_DeleteBranch" Click="DeleteBranch_Click" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem x:Uid="History_CreatePatch" AutomationProperties.AutomationId="History_TreeCreatePatch" Click="TreeCreatePatch_Click" />
+                </MenuFlyout>
+            </ListView.ContextFlyout>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:HistoryTreeRow">
+                    <Grid
+                        AutomationProperties.Name="{x:Bind AccessibleName}"
+                        ColumnSpacing="6"
+                        Opacity="{x:Bind Opacity}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" MinWidth="32" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle
+                            Width="3"
+                            HorizontalAlignment="Left"
+                            Fill="{ThemeResource AccentFillColorDefaultBrush}"
+                            Visibility="{x:Bind CurrentBarVisibility}" />
+                        <!--  枝の列: 枝ごとに字下げし、分かれた枝の最初の節に印を付ける  -->
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="{x:Bind Indent}"
+                            FontFamily="Cascadia Mono, Consolas"
+                            Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}">
+                            <Run Text="{x:Bind BranchMark}" /><Run Text="{x:Bind NodeGlyph}" />
+                        </TextBlock>
+                        <TextBlock Grid.Column="2" FontWeight="{x:Bind Weight}" Text="{x:Bind NumberText}" />
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6">
+                            <TextBlock FontWeight="{x:Bind Weight}" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" />
+                            <!--  名前 (名札のアイコンと文字)  -->
+                            <StackPanel Orientation="Horizontal" Spacing="2" Visibility="{x:Bind NameVisibility}">
+                                <FontIcon FontSize="12" Glyph="&#xE8EC;" />
+                                <TextBlock FontWeight="SemiBold" Text="{x:Bind NameText}" />
+                            </StackPanel>
+                            <FontIcon FontSize="12" Glyph="&#xE718;" Visibility="{x:Bind PinVisibility}" />
+                            <FontIcon FontSize="12" Glyph="&#xE74E;" Visibility="{x:Bind SavedVisibility}" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="4" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind RangeText}" />
+                        <TextBlock Grid.Column="5" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Text="{x:Bind StateText}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--  選んだ節での変更内容 (範囲、変更前後の先頭 16 バイト)  -->
+        <TextBlock
+            x:Name="TreeDetails"
+            Grid.Row="2"
+            Padding="8,0,8,6"
+            AutomationProperties.AutomationId="History_TreeDetails"
+            FontFamily="Cascadia Mono, Consolas"
+            TextWrapping="Wrap"
+            Visibility="{x:Bind Vm.TreeVisibility, Mode=OneWay}" />
     </Grid>
 </UserControl>

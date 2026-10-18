@@ -526,7 +526,7 @@ public sealed partial class MainWindow
         {
             IReadOnlyList<SavedRange> saved = await Vm.Operations.RunAsync(
                 Loc.Format("Operation_Save", source.DisplayName), OperationKind.WritesExternal, doc.Document, plan.TotalBytes,
-                op => Task.FromResult(DiskWrite.Execute(plan, doc.Document.Current, Vm.RecoveryRoot, ConfirmDismountSync, op, journal)),
+                op => Task.FromResult(DiskWrite.Execute(plan, doc.Document.DataSnapshot, Vm.RecoveryRoot, ConfirmDismountSync, op, journal)),
                 locked => doc.Document.SetEditLock(locked));
             doc.Document.CompleteDeviceWrite(source, saved);
             doc.OnSaved();

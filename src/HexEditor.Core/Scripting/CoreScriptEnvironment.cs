@@ -173,7 +173,7 @@ public sealed class CoreDocumentHost : IScriptDocumentHost
             return;
         }
 
-        DocumentSnapshot snapshot = Document.Current;
+        DocumentSnapshot snapshot = Document.DataSnapshot;
         string target = Path;
         FileByteSource saved = await Task.Run(() => DocumentSaver.Save(snapshot, target), cancellationToken).ConfigureAwait(true);
         Document.CompleteSave(saved);

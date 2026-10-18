@@ -332,6 +332,13 @@
       ],
       "default": "ascii"
     },
+    "edit.decompress.confirmSizeMiB": {
+      "description": "Decompression size to confirm (MiB)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1048576,
+      "default": 4096
+    },
     "edit.defaultInputMode": {
       "description": "Input mode for newly opened files",
       "type": "string",
@@ -413,6 +420,20 @@
         "cr"
       ],
       "default": "none"
+    },
+    "edit.transformView.copy": {
+      "description": "Copy in a transform view",
+      "type": "string",
+      "enum": [
+        "display",
+        "raw"
+      ],
+      "default": "display"
+    },
+    "edit.undo.branching": {
+      "description": "Use branching undo history",
+      "type": "boolean",
+      "default": false
     },
     "edit.undo.clearOnSave": {
       "description": "Clear the undo history when saving",
@@ -789,6 +810,20 @@
       "description": "Preview results with Up and Down",
       "type": "boolean",
       "default": true
+    },
+    "search.yara.blockSizeMiB": {
+      "description": "YARA: block size (MiB)",
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 1024,
+      "default": 64
+    },
+    "search.yara.timeLimitSeconds": {
+      "description": "YARA: time limit (seconds)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400,
+      "default": 600
     },
     "session.restoreOnStartup": {
       "description": "On startup",

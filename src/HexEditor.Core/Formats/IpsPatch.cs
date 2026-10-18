@@ -104,7 +104,7 @@ public static class IpsPatch
     }
 
     /// <summary>候補の範囲で、元のデータと値が違うバイトの範囲を求める。現在の長さを超える部分 (短くなった) は差分にしない。</summary>
-    private static List<(long Offset, long Length)> Refine(List<(long Offset, long Length)> candidates, ByteReader current, long currentLength,
+    internal static List<(long Offset, long Length)> Refine(List<(long Offset, long Length)> candidates, ByteReader current, long currentLength,
         ByteReader original, long originalLength, CancellationToken cancellationToken)
     {
         var result = new List<(long Offset, long Length)>();

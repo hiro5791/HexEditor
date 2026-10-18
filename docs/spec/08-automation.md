@@ -1858,7 +1858,7 @@ await app.commands.execute("edit.fill", { range: "sel", pattern: "00" });
 4. `--verify-before`: 適用前の対象のハッシュ (`アルゴリズム:値`、例: `sha256:ab12...`) を確認し、違えば適用せずに終了コード 1。`--verify-after`: 適用後のハッシュを確認し、違えば出力を書かずに終了コード 1。
 5. `--dry-run`: 適用せずに、パッチのレコード数・変更されるバイト数・長さの変化を出力する。
 6. パッチの形式の判定と適用の規則は 03 の EDIT-43 と 11 の TOOL-12 (IPS / IPS32 の形式) に従う。
-7. フェーズの注記: フェーズ 3 で適用できるのは IPS と IPS32。UPS・BPS・`.hexpatch` は EDIT-42・EDIT-43 と同じ F4-03 (フェーズ 4) で扱い、フェーズ 3 の `hexed` は終了コード 2 (「この版では使えません」) で終わる。`patch` の `--format` はパッチの形式 (`auto|ips|ips32|ups|bps|hexpatch`) で、共通の `--format text|json` とは別。`-o` は適用後のファイルの出力先で、標準出力の切り替え (AUTO-36 の 3) ではない。
+7. フェーズの注記: フェーズ 3 で適用できたのは IPS と IPS32。UPS・BPS・`.hexpatch` は EDIT-42・EDIT-43 と同じ F4-03 (フェーズ 4) で加えた。UPS・BPS・`.hexpatch` は適用後の内容もパッチに記録された内容 (CRC-32・識別情報) と照らし合わせ、合わなければ出力を書かずに終了コード 1。`patch` の `--format` はパッチの形式 (`auto|ips|ips32|ups|bps|hexpatch`) で、共通の `--format text|json` とは別。`-o` は適用後のファイルの出力先で、標準出力の切り替え (AUTO-36 の 3) ではない。
 
 **画面**: 該当なし。
 

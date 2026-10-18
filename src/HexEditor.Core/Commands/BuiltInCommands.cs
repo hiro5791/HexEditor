@@ -180,6 +180,7 @@ public static class BuiltInCommands
         new("search.multiFile", "search") { DefaultBindings = [K("Ctrl+Shift+F")] },
         new("search.multiFileReplace", "search"),
         new("search.strings", "search") { Condition = "documentOpen" },
+        new("search.yara", "search"),
         new("search.multiTerm", "search") { Condition = "documentOpen" },
         new("search.mismatch", "search") { Condition = "documentOpen" },
 
@@ -325,6 +326,7 @@ public static class BuiltInCommands
         new("view.panel.clipboard", "view"),
         new("view.panel.formatIssues", "view"),
         new("view.panel.strings", "view"),
+        new("view.panel.yara", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
 
@@ -418,6 +420,29 @@ public static class BuiltInCommands
         .. new[] { "upper", "lower", "swap" }.SelectMany(op => new[] { "ascii", "text" }.Select(method =>
             new CommandDefinition($"data.case.{op}.{method}", "data") { Condition = "documentOpen && !readOnly" })),
 
+        // パッチの作成と適用 (EDIT-42〜EDIT-44)。ショートカットは既定なし。
+        new("data.patch.create", "data") { Condition = "documentOpen" },
+        new("data.patch.apply", "data") { Condition = "documentOpen && !readOnly" },
+
+        // 変換ビュー (EDIT-45)。ショートカットは既定なし。
+        new("data.transformView.define", "data") { Condition = "documentOpen" },
+        new("data.transformView.xor", "data") { Condition = "documentOpen" },
+        new("data.transformView.clear", "data") { Condition = "documentOpen" },
+        new("data.transformView.applyToData", "data") { Condition = "documentOpen" },
+
+        // 暗号化と復号 (EDIT-40)、圧縮と展開 (EDIT-41)、派生ドキュメントの書き戻し (EDIT-46)。ショートカットは既定なし。
+        new("data.encrypt", "data") { Condition = "documentOpen" },
+        new("data.decrypt", "data") { Condition = "documentOpen" },
+        new("data.compress", "data") { Condition = "documentOpen" },
+        new("data.decompress", "data") { Condition = "documentOpen" },
+        new("data.selectCompressed", "data") { Condition = "documentOpen" },
+        new("data.derived.writeBack", "data") { Condition = "documentOpen" },
+
+        // 分岐する履歴 (EDIT-21)。ショートカットは既定なし。
+        new("edit.history.save", "edit") { Condition = "documentOpen" },
+        new("edit.history.load", "edit") { Condition = "documentOpen" },
+        new("edit.history.goToNode", "edit") { Condition = "documentOpen" },
+
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
@@ -439,6 +464,9 @@ public static class BuiltInCommands
         new("compare.copyAllRight", "compare"),
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
+
+        // 比較の結果画面の「パッチを作成」(EDIT-42 の「呼び出し」。左を変換前、右を変換後にする)。
+        new("compare.createPatch", "compare") { Icon = "\uE8A5" },
         new("compare.saveReport", "compare"),
 
         // プロセスのスナップショットと比較 (ANA-09)。既定のキーはなし。

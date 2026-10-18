@@ -88,10 +88,11 @@ public sealed partial class MainWindow
 
         if (doc.Editor.ReadOnly)
         {
-            return CommandState.Unavailable(Loc.Get("Command_ReadOnly"));
+            // 逆変換のない変換ビュー (EDIT-45 の仕様 7) は、その理由を示す。
+            return CommandState.Unavailable(Loc.Get(doc.Document.IsTransformReadOnly ? "TransformView_ReadOnlyNotice" : "Command_ReadOnly"));
         }
 
-        return more?.Invoke(doc) is { } reason ? CommandState.Unavailable(reason) : CommandState.Available;
+        return more?.Invoke(doc) is { } reason ? CommandState.Unavailable(TransformViewNotice(reason, doc)) : CommandState.Available;
     }
 
     private CommandState NeedsDocument(Func<DocumentViewModel, string?> more) =>
@@ -175,6 +176,11 @@ public sealed partial class MainWindow
         RegisterSelectionCommands();
         RegisterUserClipboardCommands();
         RegisterDataCommands();
+        RegisterTransformViewCommands();
+        RegisterPatchCommands();
+        RegisterDataCodecCommands();
+        RegisterYaraCommands();
+        RegisterBranchingHistoryCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);

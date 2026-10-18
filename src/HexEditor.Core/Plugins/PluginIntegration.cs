@@ -301,6 +301,50 @@ public static class PluginIntegration
     public static IReadOnlyList<(RegisteredExtension Registration, IDataTransform Transform)> DataTransforms() =>
         PluginManager.Current?.Registry.Usable<IDataTransform>() ?? [];
 
+    // ---- 変換ビュー (03 の EDIT-45) ----
+
+    /// <summary>変換ビューの演算に出すプラグインの変換 (<c>ITransformView</c>)。</summary>
+    public static IReadOnlyList<(RegisteredExtension Registration, ITransformView Transform)> TransformViews() =>
+        PluginManager.Current?.Registry.Usable<ITransformView>() ?? [];
+
+    /// <summary>
+    /// 拡張ポイントの ID からプラグインの変換を引く (変換ビューの定義の <see cref="Editing.TransformView.TransformOpKind.Plugin"/>)。プラグインの呼び出しは
+    /// ガードを通し、例外を出した場合はデータを変えない (描画の途中でアプリを止めない)。
+    /// </summary>
+    public static Editing.TransformView.IPluginTransform? TransformView(string id) =>
+        TransformViews().FirstOrDefault(t => t.Registration.Id == id) is { Registration: not null } found ? new GuardedTransform(found.Registration, found.Transform) : null;
+
+    private sealed class GuardedTransform(RegisteredExtension registration, ITransformView transform) : Editing.TransformView.IPluginTransform
+    {
+        public bool CanInverse { get; } = registration.Guard.Invoke("CanInverse", () => transform.CanInverse, false);
+
+        public void Forward(long offset, Span<byte> data) => Call("Forward", offset, data, inverse: false);
+
+        public void Inverse(long offset, Span<byte> data) => Call("Inverse", offset, data, inverse: true);
+
+        private void Call(string what, long offset, Span<byte> data, bool inverse)
+        {
+            byte[] buffer = data.ToArray();
+            bool done = registration.Guard.Invoke(what, () =>
+            {
+                if (inverse)
+                {
+                    transform.Inverse(offset, buffer);
+                }
+                else
+                {
+                    transform.Forward(offset, buffer);
+                }
+
+                return true;
+            }, false);
+            if (done)
+            {
+                buffer.CopyTo(data);
+            }
+        }
+    }
+
     // ---- テンプレートの関数 (07) ----
 
     /// <summary>テンプレートの関数を登録簿に入れる (登録簿が変わるたびに呼ぶ。プラグインの関数は名前の前に何も付けない)。</summary>

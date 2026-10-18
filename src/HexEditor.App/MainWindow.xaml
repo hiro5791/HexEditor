@@ -219,6 +219,7 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Search_MultiFile" cmd:CommandUi.Id="search.multiFile" AutomationProperties.AutomationId="Command_MultiFileSearch" />
                         <MenuFlyoutItem x:Uid="Menu_Search_Strings" cmd:CommandUi.Id="search.strings" AutomationProperties.AutomationId="Command_Strings" />
+                        <MenuFlyoutItem x:Uid="Menu_Search_Yara" cmd:CommandUi.Id="search.yara" AutomationProperties.AutomationId="Command_Yara" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Search_ClearHistory" cmd:CommandUi.Id="search.clearHistory" AutomationProperties.AutomationId="Command_ClearSearchHistory" />
                     </MenuBarItem>
@@ -332,6 +333,25 @@
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseUpper" cmd:CommandUi.Id="data.case.upper" AutomationProperties.AutomationId="Command_CaseUpper" />
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseLower" cmd:CommandUi.Id="data.case.lower" AutomationProperties.AutomationId="Command_CaseLower" />
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseSwap" cmd:CommandUi.Id="data.case.swap" AutomationProperties.AutomationId="Command_CaseSwap" />
+                        </MenuFlyoutSubItem>
+                        <!--  暗号化と復号 (EDIT-40)、圧縮と展開 (EDIT-41)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Encrypt" cmd:CommandUi.Id="data.encrypt" AutomationProperties.AutomationId="Command_Encrypt" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Decrypt" cmd:CommandUi.Id="data.decrypt" AutomationProperties.AutomationId="Command_Decrypt" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Compress" cmd:CommandUi.Id="data.compress" AutomationProperties.AutomationId="Command_Compress" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Decompress" cmd:CommandUi.Id="data.decompress" AutomationProperties.AutomationId="Command_Decompress" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_SelectCompressed" cmd:CommandUi.Id="data.selectCompressed" AutomationProperties.AutomationId="Command_SelectCompressed" />
+                        <!--  パッチ (EDIT-42〜EDIT-44) と変換ビュー (EDIT-45)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_Patch" AutomationProperties.AutomationId="Command_PatchMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchCreate" cmd:CommandUi.Id="data.patch.create" AutomationProperties.AutomationId="Command_PatchCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchApply" cmd:CommandUi.Id="data.patch.apply" AutomationProperties.AutomationId="Command_PatchApply" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_TransformView" AutomationProperties.AutomationId="Command_TransformViewMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformDefine" cmd:CommandUi.Id="data.transformView.define" AutomationProperties.AutomationId="Command_TransformViewDefine" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformXor" cmd:CommandUi.Id="data.transformView.xor" AutomationProperties.AutomationId="Command_TransformViewXor" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformClear" cmd:CommandUi.Id="data.transformView.clear" AutomationProperties.AutomationId="Command_TransformViewClear" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformApply" cmd:CommandUi.Id="data.transformView.applyToData" AutomationProperties.AutomationId="Command_TransformViewApply" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
@@ -550,11 +570,45 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <controls:NotificationHost
-                                        AutomationProperties.AutomationId="DocumentNotifications"
-                                        Center="{x:Bind Notifications}"
-                                        Owner="{x:Bind}"
-                                        Scope="Document" />
+                                    <StackPanel>
+                                        <!--  派生ドキュメントの帯 (EDIT-46 の画面): 元のドキュメントと範囲、変換、「元に書き戻す」  -->
+                                        <Grid
+                                            Padding="12,6"
+                                            AutomationProperties.AutomationId="Derived_Band"
+                                            Background="{ThemeResource InfoBarInformationalSeverityBackgroundBrush}"
+                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                            BorderThickness="0,0,0,1"
+                                            ColumnSpacing="12"
+                                            Visibility="{x:Bind IsDerived, Mode=OneWay}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <FontIcon
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.AccessibilityView="Raw"
+                                                FontSize="14"
+                                                Glyph="&#xE71B;" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.AutomationId="Derived_BandText"
+                                                Text="{x:Bind DerivedBandText, Mode=OneWay}"
+                                                TextWrapping="Wrap" />
+                                            <Button
+                                                x:Uid="Derived_WriteBack"
+                                                Grid.Column="2"
+                                                AutomationProperties.AutomationId="Derived_WriteBack"
+                                                Click="DerivedWriteBack_Click"
+                                                IsEnabled="{x:Bind CanWriteBack, Mode=OneWay}" />
+                                        </Grid>
+                                        <controls:NotificationHost
+                                            AutomationProperties.AutomationId="DocumentNotifications"
+                                            Center="{x:Bind Notifications}"
+                                            Owner="{x:Bind}"
+                                            Scope="Document" />
+                                    </StackPanel>
                                     <!--  画面分割 (VIEW-37): 1 つ目のペインの Hex ビュー。分割すると PaneHost が 2 つ目を加える (MainWindow.Split.cs)。  -->
                                     <controls:PaneHost Grid.Row="1" AutomationProperties.AutomationId="PaneHost">
                                         <controls:HexView
@@ -679,6 +733,8 @@
                 <!--  プロセスメモリの即時書き込み (ENG-34 の「画面」)。セクタ番号は StatusPosition (VIEW-40) が出す。  -->
                 <Button x:Name="StatusImmediate" AutomationProperties.AutomationId="Status_ImmediateWrite" Content="{x:Bind Vm.StatusDocument.ImmediateWriteText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="immediate" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
+                <!--  変換ビュー (EDIT-45 の仕様 9): 有効な間は必ず出す (隠せない項目)。クリックで変換ビューの設定を開く  -->
+                <Button x:Name="StatusTransform" AutomationProperties.AutomationId="Status_TransformView" Click="StatusTransform_Click" Style="{StaticResource StatusItemStyle}" Tag="transform" Visibility="Collapsed" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
                 <Button x:Name="StatusCompare" AutomationProperties.AutomationId="Status_Compare" Click="StatusCompare_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="compare" Visibility="Collapsed" />

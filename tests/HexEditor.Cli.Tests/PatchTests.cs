@@ -132,14 +132,49 @@ public sealed class PatchTests
 
         File.WriteAllBytes(dir.File("x.bps"), "BPS1xxxx"u8.ToArray());
         CliResult bps = Hexed.Run(dir.Path, "patch", "t.bin", "x.bps", "-o", "o.bin", "--lang", "en");
-        Assert.Equal(2, bps.ExitCode);
-        Assert.Contains("not supported in this version", bps.Err);
+        Assert.Equal(8, bps.ExitCode);
+        Assert.Contains("broken", bps.Err);
 
         File.WriteAllBytes(dir.File("junk.bin"), "junkjunk"u8.ToArray());
         Assert.Equal(8, Hexed.Run(dir.Path, "patch", "t.bin", "junk.bin", "-o", "o.bin").ExitCode);
         Assert.Equal(2, Hexed.Run(dir.Path, "patch", "t.bin", "broken.ips", "-o", "t.bin").ExitCode);
-        Assert.Equal(2, Hexed.Run(dir.Path, "patch", "t.bin", "broken.ips", "-o", "o.bin", "--format", "ups").ExitCode);
+        Assert.Equal(8, Hexed.Run(dir.Path, "patch", "t.bin", "broken.ips", "-o", "o.bin", "--format", "ups").ExitCode);
         Assert.Equal(3, Hexed.Run(dir.Path, "patch", "none.bin", "broken.ips", "-o", "o.bin").ExitCode);
         Assert.Equal(Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(TestDataCatalog.Get("TD-BYTES-256")))), Sha256(target));
+    }
+
+    [Fact]
+    public void Ups_bps_and_hexpatch_are_applied_and_checked_against_the_original()
+    {
+        using var dir = new TempDir();
+        string src = TestDataCatalog.Get("TD-EDIT-PATCH-SRC");
+        string bps = TestDataCatalog.Get("TD-EDIT-PATCH-BPS");
+        CliResult ok = Hexed.Run(dir.Path, "patch", src, bps, "-o", "out.bin");
+        Assert.True(ok.ExitCode == 0, ok.Err);
+        Assert.Equal(Sha256(TestDataCatalog.Get("TD-EDIT-PATCH-INS100")), Sha256(dir.File("out.bin")));
+
+        // 別のファイルには当てない (変換前の CRC-32 が合わない)。
+        CliResult other = Hexed.Run(dir.Path, "patch", TestDataCatalog.Get("TD-EDIT-PATCH-OTHER"), bps, "-o", "other.bin", "--lang", "en");
+        Assert.Equal(1, other.ExitCode);
+        Assert.Contains("different file", other.Err);
+        Assert.False(File.Exists(dir.File("other.bin")));
+
+        // .hexpatch と UPS (Core で作ったもの)。
+        foreach (HexEditor.Core.Patches.PatchFormat format in new[] { HexEditor.Core.Patches.PatchFormat.HexPatch, HexEditor.Core.Patches.PatchFormat.Ups })
+        {
+            string patch = dir.File("p." + format);
+            using (var document = new Document(FileByteSource.Open(dir.Copy("TD-EDIT-PATCH-SRC", "c-" + format + ".bin")), new DocumentOptions { TempDirectory = dir.File("recovery") }))
+            {
+                document.Overwrite(0x100, [1, 2, 3]);
+                document.Delete(0x9000, 10);
+                using FileStream output = File.Create(patch);
+                new HexEditor.Core.Patches.PatchCreator(HexEditor.Core.Patches.PatchDiff.FromSaved(document.DataSnapshot)).Write(format, output);
+                using FileByteSource saved = DocumentSaver.Save(document.Current, dir.File("expected-" + format + ".bin"));
+            }
+
+            CliResult applied = Hexed.Run(dir.Path, "patch", src, patch, "-o", "o-" + format + ".bin", "--format", format == HexEditor.Core.Patches.PatchFormat.Ups ? "ups" : "hexpatch");
+            Assert.True(applied.ExitCode == 0, applied.Err);
+            Assert.Equal(Sha256(dir.File("expected-" + format + ".bin")), Sha256(dir.File("o-" + format + ".bin")));
+        }
     }
 }

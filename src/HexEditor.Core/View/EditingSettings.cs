@@ -26,6 +26,12 @@ public static class EditingSettings
     /// <summary>保存時に履歴を消す (EDIT-19 の仕様 9)。</summary>
     public const string ClearHistoryOnSaveKey = "edit.undo.clearOnSave";
 
+    /// <summary>分岐する履歴を使う (EDIT-21。既定オフ)。</summary>
+    public const string BranchingHistoryKey = "edit.undo.branching";
+
+    /// <summary>変換ビューでのコピー (EDIT-45 の仕様 12: <c>display</c> 表示どおり (既定) / <c>raw</c> 元のデータ)。</summary>
+    public const string TransformViewCopyKey = "edit.transformView.copy";
+
     /// <summary>貼り付け後に貼り付けた範囲を選択する (EDIT-23 の仕様 7)。</summary>
     public const string SelectPastedKey = "edit.paste.selectPasted";
 

@@ -415,6 +415,51 @@ internal sealed class DataOperationPanel : StackPanel
         return operandFits ? _increment : _operand;
     }
 
+    /// <summary>
+    /// 演算・鍵・範囲を設定した状態にする (変換ビューの「この変換をデータに適用…」。EDIT-45 の仕様 13)。<paramref name="range"/> が null なら
+    /// ドキュメント全体。
+    /// </summary>
+    public void Preset(DataOperationSpec spec, string? keyHex, (long Start, long Length)? range)
+    {
+        _loading = true;
+        try
+        {
+            _category.SelectedIndex = Array.IndexOf(Categories, spec.Category);
+            FillKinds(spec.Kind);
+            _size.SelectedIndex = Math.Max(0, Array.IndexOf([1, 2, 4, 8], spec.Size));
+            _endian.SelectedIndex = spec.BigEndian ? 1 : 0;
+            _type.SelectedIndex = (int)ElementType.Unsigned;
+            _operand.Text = "0x" + ((UInt128)spec.Operand).ToString("X", CultureInfo.InvariantCulture);
+            _increment.Text = spec.Increment == 0 ? "0" : "0x" + ((UInt128)spec.Increment).ToString("X", CultureInfo.InvariantCulture);
+            _shiftBits.Text = spec.ShiftBits.ToString(CultureInfo.InvariantCulture);
+            _rotateIncrement.Text = "0";
+            _process.Text = "1";
+            _skip.Text = "0";
+            _operandSource.SelectedIndex = spec.OperandSource == OperandSource.KeyBytes ? 1 : 0;
+            _keyOrigin.SelectedIndex = spec.KeyOrigin == PatternOrigin.OffsetZero ? 1 : 0;
+            _keyIncrement.Text = "0";
+            if (keyHex is not null)
+            {
+                _key.PresetHexPattern(keyHex);
+            }
+
+            _targetSelection.IsChecked = false;
+            _targetWhole.IsChecked = range is null;
+            _targetRange.IsChecked = range is not null;
+            if (range is { } r)
+            {
+                _start.Text = RangeSelectionModel.Format(r.Start);
+                _length.Text = RangeSelectionModel.Format(r.Length);
+            }
+        }
+        finally
+        {
+            _loading = false;
+        }
+
+        OnChanged();
+    }
+
     /// <summary>最後に使った演算と設定を記憶する。</summary>
     public void Save()
     {

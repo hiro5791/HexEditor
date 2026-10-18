@@ -13,6 +13,12 @@
     <Grid>
         <ScrollViewer Padding="12,8,12,12" HorizontalScrollMode="Disabled">
             <StackPanel Spacing="12">
+                <!--  変換ビュー (EDIT-45 の仕様 11): 変換後のデータを対象にしていることを示す  -->
+                <TextBlock
+                    AutomationProperties.AutomationId="Hash_TransformView"
+                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                    Text="{x:Bind ViewModel.TransformNote, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.HasTransformNote, Mode=OneWay}" />
                 <!--  対象範囲 (06 の 0.1)  -->
                 <StackPanel Spacing="4">
                     <ComboBox
