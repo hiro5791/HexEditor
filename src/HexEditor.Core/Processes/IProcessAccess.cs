@@ -66,3 +66,29 @@ public sealed class ProcessAccessException(ProcessOpenFailure failure, int error
 
     public int ErrorCode { get; } = errorCode;
 }
+
+/// <summary>
+/// 対象のプロセスのスレッドを一時停止・再開できるメモリ (ENG-35 の仕様 2「取得中は対象のプロセスを一時停止する」)。実装していない経路
+/// (補助プロセス経由など) では一時停止できないものとして扱い、警告して続ける。停止と再開は対で呼ぶ。
+/// </summary>
+public interface IProcessSuspend
+{
+    /// <summary>すべてのスレッドを停止する。0 = 成功、それ以外は Win32 のエラーコード。</summary>
+    int Suspend();
+
+    /// <summary><see cref="Suspend"/> で停止したスレッドを再開する。</summary>
+    int Resume();
+}
+
+/// <summary>
+/// スレッド 1 つの状態 (ミニダンプのスレッドの一覧。ENG-35 の仕様 6)。<see cref="Context"/> は、このアプリのプロセスのアーキテクチャの
+/// <c>CONTEXT</c> 構造体のバイト列 (<see cref="Architecture"/>)。
+/// </summary>
+public sealed record ProcessThreadState(int ThreadId, long Teb, long StackPointer, byte[] Context, ProcessArchitecture Architecture);
+
+/// <summary>スレッドの状態を取れるメモリ (ミニダンプをデバッガでスタックまで追えるようにする)。取れない経路では空のスレッドで代用する。</summary>
+public interface IProcessThreads
+{
+    /// <summary>スレッドの ID・TEB・レジスタ。取れなかったスレッドは除く。各スレッドはレジスタを読む間だけ停止する。</summary>
+    IReadOnlyList<ProcessThreadState> CaptureThreads();
+}

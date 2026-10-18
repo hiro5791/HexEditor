@@ -63,6 +63,18 @@
                         VerticalAlignment="Center"
                         Text="{x:Bind Name, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis" />
+                    <!--  ビジュアライザで表示する (TPL-16 の「呼び出し」: 結果ツリーのノードの「表示」ボタン)。  -->
+                    <Button
+                        Padding="4,0"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="Tpl_RowVisualize"
+                        AutomationProperties.Name="{x:Bind VisualizerButtonName, Mode=OneWay}"
+                        Click="{x:Bind ShowVisualizer}"
+                        IsTabStop="False"
+                        ToolTipService.ToolTip="{x:Bind VisualizerButtonName, Mode=OneWay}"
+                        Visibility="{x:Bind VisualizerVisibility, Mode=OneWay}">
+                        <FontIcon FontSize="12" Glyph="&#xE8B9;" />
+                    </Button>
                 </StackPanel>
                 <StackPanel
                     Grid.Column="{x:Bind Layout.ValueColumn, Mode=OneWay}"

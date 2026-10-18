@@ -206,4 +206,22 @@ public sealed class HashVerificationTests : IDisposable
             }
         }
     }
+
+    [Fact]
+    public void Exports_record_the_transform_view()
+    {
+        // EDIT-45 の仕様 11: 変換ビューのデータを計算した結果は、JSON と CSV にその旨を記録する。
+        byte[] data = new byte[64];
+        HashResultRow[] rows = [Row("crc32", data, start: 0)];
+        var display = HashDisplayOptions.Default;
+        JsonArray json = JsonNode.Parse(HashExport.Json(rows, display, "XOR 5A"))!.AsArray();
+        Assert.Equal("XOR 5A", json[0]!["transformView"]!.GetValue<string>());
+        string[] csv = HashExport.Csv(rows, display, "XOR 5A").TrimEnd('\n').Split('\n');
+        Assert.Equal("algorithm,value,start,length,transformView", csv[0]);
+        Assert.EndsWith(",XOR 5A", csv[1], StringComparison.Ordinal);
+
+        // 変換ビューでなければ列も項目も出さない。
+        Assert.Null(JsonNode.Parse(HashExport.Json(rows, display))!.AsArray()[0]!["transformView"]);
+        Assert.Equal("algorithm,value,start,length", HashExport.Csv(rows, display).Split('\n')[0]);
+    }
 }

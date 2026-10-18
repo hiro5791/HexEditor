@@ -212,7 +212,7 @@ public sealed partial class TabTests
             ["TabMenu_Close", "TabMenu_CloseOthers", "TabMenu_CloseRight", "TabMenu_CloseSaved", "TabMenu_CloseAll", "TabMenu_Pin",
                 "TabMenu_NewView", "TabMenu_ShowToRight",
                 "TabMenu_MoveToNewWindow", "TabMenu_MoveToWindow", "TabMenu_CopyPath", "TabMenu_RevealInExplorer", "TabMenu_ReadOnly",
-                "TabMenu_CompareSelectLeft", "TabMenu_CompareWithLeft", "TabMenu_CompareSaved"],
+                "TabMenu_CompareSelectLeft", "TabMenu_CompareWithLeft", "TabMenu_CompareSaved", "TabMenu_Ads"],
             items.Select(i => i!["id"]!.GetValue<string>()));
 
         // パスをコピー (アプリ内のクリップボードの代わりに入る)。

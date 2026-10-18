@@ -23,13 +23,27 @@ public sealed class DocumentSnapshot
 {
     private readonly DocumentStorage _storage;
 
-    internal DocumentSnapshot(DocumentStorage storage, PieceTree tree)
+    internal DocumentSnapshot(DocumentStorage storage, PieceTree tree, IViewTransform? transform = null)
     {
         _storage = storage;
         Tree = tree;
+        Transform = transform;
     }
 
     public PieceTree Tree { get; }
+
+    /// <summary>
+    /// 変換ビュー (EDIT-45) の変換。null でなければ、読み込み (<see cref="Read"/>・<see cref="ReadForDisplay"/>) は変換後 (表示どおり) の値を返す。
+    /// ピースツリー (<see cref="Tree"/>) は元のデータのまま。
+    /// </summary>
+    public IViewTransform? Transform { get; }
+
+    /// <summary>同じ内容を、変換 <paramref name="transform"/> を通して読むスナップショット (null なら元のデータ)。</summary>
+    public DocumentSnapshot WithTransform(IViewTransform? transform) =>
+        ReferenceEquals(transform, Transform) ? this : new DocumentSnapshot(_storage, Tree, transform);
+
+    /// <summary>変換を通さない (元のデータを読む) スナップショット。</summary>
+    public DocumentSnapshot Raw => Transform is null ? this : new DocumentSnapshot(_storage, Tree);
 
     public long Length => Tree.Length;
 
@@ -49,6 +63,53 @@ public sealed class DocumentSnapshot
         {
             throw new ArgumentException("states が短すぎます。", nameof(states));
         }
+
+        if (Transform is not { } transform)
+        {
+            return ReadForDisplayRaw(offset, destination, states);
+        }
+
+        int count = CountWithinLength(offset, destination.Length);
+        (long start, long end) = AlignedWindow(transform, offset, count);
+        if (start == offset && end == offset + count)
+        {
+            ReadForDisplayRaw(offset, destination[..count], states);
+            transform.Forward(offset, destination[..count]);
+            return count;
+        }
+
+        byte[] buffer = new byte[end - start];
+        var bufferStates = new ByteState[buffer.Length];
+        ReadForDisplayRaw(start, buffer, bufferStates);
+        transform.Forward(start, buffer);
+        buffer.AsSpan((int)(offset - start), count).CopyTo(destination);
+        bufferStates.AsSpan((int)(offset - start), count).CopyTo(states);
+        return count;
+    }
+
+    /// <summary>
+    /// 変換の要素の境界にそろえた読み込みの範囲 (要素の途中から読んでも、要素全体を変換するため)。ドキュメントの長さで切り詰める。
+    /// </summary>
+    private (long Start, long End) AlignedWindow(IViewTransform transform, long offset, int count)
+    {
+        int align = Math.Max(1, transform.Alignment);
+        if (align == 1 || count == 0)
+        {
+            return (offset, offset + count);
+        }
+
+        long origin = transform.AlignmentOrigin;
+        long start = offset - Mod(offset - origin, align);
+        long end = offset + count;
+        long rem = Mod(end - origin, align);
+        end = rem == 0 ? end : Math.Min(Length, end + align - rem);
+        return (Math.Max(0, start), end);
+    }
+
+    private static long Mod(long value, long m) => ((value % m) + m) % m;
+
+    private int ReadForDisplayRaw(long offset, Span<byte> destination, Span<ByteState> states)
+    {
 
         int count = CountWithinLength(offset, destination.Length);
         foreach ((long docOffset, Piece piece) in Tree.Enumerate(offset, count))
@@ -167,6 +228,39 @@ public sealed class DocumentSnapshot
     /// </summary>
     public ReadResult Read(long offset, Span<byte> destination) => Read(offset, destination, throughCache: false);
 
+    private ReadResult Read(long offset, Span<byte> destination, bool throughCache)
+    {
+        if (Transform is not { } transform)
+        {
+            return ReadRaw(offset, destination, throughCache);
+        }
+
+        int count = CountWithinLength(offset, destination.Length);
+        (long start, long end) = AlignedWindow(transform, offset, count);
+        if (start == offset && end == offset + count)
+        {
+            ReadResult direct = ReadRaw(offset, destination[..count], throughCache);
+            transform.Forward(offset, destination[..count]);
+            return direct;
+        }
+
+        byte[] buffer = new byte[end - start];
+        ReadResult r = ReadRaw(start, buffer, throughCache);
+        transform.Forward(start, buffer);
+        buffer.AsSpan((int)(offset - start), count).CopyTo(destination);
+        List<UnreadableRange>? bad = null;
+        foreach (UnreadableRange u in r.Unreadable)
+        {
+            long from = Math.Max(u.Offset, offset), to = Math.Min(u.Offset + u.Length, offset + count);
+            if (to > from)
+            {
+                (bad ??= []).Add(u with { Offset = from, Length = to - from });
+            }
+        }
+
+        return new ReadResult(count, bad);
+    }
+
     /// <summary>
     /// 元データを表示用のキャッシュに入れながら読む (<see cref="BlockCache.ReadThrough"/>)。近い位置を何度も少しずつ読む UI の操作
     /// (マルチカーソルの位置のバイト) に使う。
@@ -176,7 +270,7 @@ public sealed class DocumentSnapshot
     /// <summary>元データの読み込みの単位 (キャッシュのブロックの大きさ)。</summary>
     public int CacheBlockSize => _storage.Cache.BlockSize;
 
-    private ReadResult Read(long offset, Span<byte> destination, bool throughCache)
+    private ReadResult ReadRaw(long offset, Span<byte> destination, bool throughCache)
     {
         int count = CountWithinLength(offset, destination.Length);
         List<UnreadableRange>? bad = null;

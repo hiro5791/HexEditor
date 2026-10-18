@@ -166,13 +166,13 @@ In PowerShell, racchiudi tra apici singoli i valori che contengono $ (ad esempio
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Uso: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Applica un file di patch a un file. Una tra -o e --in-place è obbligatoria. Questa versione applica patch IPS
-e IPS32.
+Applica un file di patch a un file. Una tra -o e --in-place è obbligatoria. Questa versione applica patch IPS,
+IPS32, UPS, BPS e .hexpatch.
 
 Opzioni:
   -o, --output &lt;path&gt;       Scrive qui il file con la patch (la destinazione non viene modificata)
       --in-place            Sostituisce la destinazione in modo sicuro (prima viene scritto un file temporaneo)
-      --format &lt;f&gt;          auto (predefinito), ips o ips32
+      --format &lt;f&gt;          auto (predefinito), ips, ips32, ups, bps o hexpatch
       --verify-before &lt;a:v&gt; Controlla prima l'hash della destinazione (ad esempio sha256:ab12...);
                             codice di uscita 1 e non viene scritto nulla se differisce
       --verify-after &lt;a:v&gt;  Controlla l'hash del risultato prima di scriverlo
@@ -255,6 +255,7 @@ In PowerShell, racchiudi tra apici singoli i valori che contengono $ (ad esempio
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>numero non valido</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>impossibile leggere i dati qui</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>non disponibile dalla riga di comando</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>il valore non è un intero</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu richiede esattamente un algoritmo. Usa --format bsd o text per più algoritmi.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range non può essere usato con l'input standard.</value></data>
@@ -300,8 +301,7 @@ In PowerShell, racchiudi tra apici singoli i valori che contengono $ (ad esempio
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Specifica -o &lt;output&gt; o --in-place (in modo che il file originale non venga modificato per errore).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o e --in-place non possono essere usati insieme.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Il percorso di output {0} è la destinazione o la patch. Usa --in-place per sostituire la destinazione.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} non è un formato di patch. Usa auto, ips o ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: le patch UPS, BPS e .hexpatch non sono supportate in questa versione. IPS e IPS32 lo sono.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} non è un formato di patch. Usa auto, ips, ips32, ups, bps o hexpatch.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} non è un file di patch riconoscibile.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: la patch è danneggiata al record {1} (offset nel file {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} non è una patch {1}.</value></data>
@@ -310,6 +310,10 @@ In PowerShell, racchiudi tra apici singoli i valori che contengono $ (ad esempio
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} con la patch applicata non ha l'hash previsto (--verify-after). Non è stato scritto nulla.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>Applicati {0} record, {1} byte modificati, variazione di lunghezza {2}. Scritto {3}.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>formato</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: la patch è danneggiata al record {1}.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: la patch è danneggiata ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} potrebbe essere per un altro file: l'originale registrato nella patch non corrisponde a {1}. Non è stato scritto nulla.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Il risultato dell'applicazione di {0} non corrisponde al risultato registrato nella patch. Non è stato scritto nulla.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} record, {1} byte cambierebbero, variazione di lunghezza {2}, nuova lunghezza {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Specifica esattamente una delle opzioni --template e --auto.</value></data>

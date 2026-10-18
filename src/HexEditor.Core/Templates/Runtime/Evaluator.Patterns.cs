@@ -429,14 +429,17 @@ internal sealed partial class Evaluator
             {
                 bool msb = BitOrderAttr(attrs, f) ?? f.MsbFirst;
                 string encoding = node.Attributes.Encoding ?? f.Encoding;
-                long windowEnd = f.WindowEnd;
-                long ioBase = f.IoBase;
+                // .ksy の io: _root._io の instances は、ファイル全体のストリームから読む (今のストリームの範囲に縛られない)
+                bool rootIo = Attr(attrs, "ksy_root_io") is not null;
+                long parentWindow = rootIo ? long.MaxValue : f.WindowEnd;
+                long windowEnd = parentWindow;
+                long ioBase = rootIo ? 0 : f.IoBase;
                 if (Attr(attrs, "substream") is { Args.Count: > 0 } sub)
                 {
                     long len = EvalLong(sub.Args[0], f);
-                    windowEnd = Math.Min(f.WindowEnd, offset + len);
+                    windowEnd = Math.Min(parentWindow, offset + len);
                     ioBase = offset;
-                    if (offset + len > Math.Min(space.Length, f.WindowEnd))
+                    if (offset + len > Math.Min(space.Length, parentWindow))
                     {
                         throw new TemplateError(ErrorAt(declaredAt, TemplateMessages.PatternOutOfRange, name,
                             offset.ToString("X", CultureInfo.InvariantCulture), len.ToString(CultureInfo.InvariantCulture)).Diagnostic)
@@ -609,7 +612,8 @@ internal sealed partial class Evaluator
     /// <summary>0 で終わる文字列の長さ (終端を含む)。終端がなければ警告し、末尾までとする (TPL-03 の「エラー」)。</summary>
     private long ScanTerminator(Space space, long offset, int unit, TemplateNode node, Frame f)
     {
-        long end = Math.Min(space.Length, f.WindowEnd);
+        // .ksy の io: で別のストリームを指す項目は、今のストリームの範囲に縛られない
+        long end = Math.Min(space.Length, Attr(node.AttributeNodes, "ksy_root_io") is null ? f.WindowEnd : long.MaxValue);
         byte[] buf = new byte[4096];
         long pos = offset;
         while (pos + unit <= end)
@@ -673,7 +677,7 @@ internal sealed partial class Evaluator
 
         long? elemSize = StaticSize(elem);
         long limit = Limits.Array;
-        long end = Math.Min(space.Length, f.WindowEnd);
+        long end = Math.Min(space.Length, Attr(attrs, "ksy_root_io") is null ? f.WindowEnd : long.MaxValue);
         if (elemSize is { } es && d.Array is ArrayKind.Count or ArrayKind.Eof && elem is not PrimType { Kind: PrimKind.Bits })
         {
             long count;
@@ -1067,6 +1071,10 @@ internal sealed partial class Evaluator
             }
 
             frame.Locals.Define(p.Name, new Variable(v, false, null));
+            if (frame.Node is { } owner)
+            {
+                (owner.ParamValues ??= [])[p.Name] = v;
+            }
         }
 
         ExecBlock(decl.Body, frame);

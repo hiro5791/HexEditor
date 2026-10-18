@@ -53,7 +53,8 @@ public sealed partial class DocumentViewModel
     {
         get
         {
-            var lines = new List<string> { FilePath ?? MissingPath ?? PendingRecord?.Path ?? DisplayName };
+            // リモートのファイルはリモートのパス (ENG-41 の「画面」)。
+            var lines = new List<string> { FilePath ?? RemoteLocation ?? MissingPath ?? PendingRecord?.Path ?? DisplayName };
             if (LinkParent is { } parent)
             {
                 // 連動ビュー: 親のドキュメント名と範囲 (ENG-39 の画面)。

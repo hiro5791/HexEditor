@@ -62,6 +62,9 @@ public static class Program
             // どちらも CommandLine.SafeMode を見る。テスト用のビルドは実際のキーの状態を読まない (フック safeModeShift)。
             step = "safe-mode";
             CommandLine = SafeModeStartup.Apply(CommandLine);
+
+            // 書き込み保護モード (12 の FOR-01) の起動時の状態。フェーズ 4 では状態だけを持つ (WriteBlockMode)。
+            WriteBlockMode.Initialize(CommandLine.WriteBlock);
         }
         catch (Exception ex)
         {

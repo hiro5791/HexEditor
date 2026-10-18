@@ -12,7 +12,7 @@ public static partial class TestDataCatalog
             path => WriteAll(path, Png4Chunks()), dir => Path.Combine(dir, "TD-TPL-PNG-4CHUNKS.png")),
         new("TD-TPL-PNG-AS-BIN", Png16().Length, "TD-PNG と同じ内容で拡張子が .bin のファイル", path => WriteAll(path, Png16())),
         new("TD-TPL-MACHO64", MachO64().Length, "x86_64 の Mach-O の実行ファイル (fat ではない)", path => WriteAll(path, MachO64())),
-        new("TD-ANA-MACHO-FAT", MachOFat().Length, "x86_64 のスライス 1 つを持つ fat の Mach-O", path => WriteAll(path, MachOFat())),
+        new("TD-ANA-MACHO-FAT", MachOFat().Length, "x86_64 と arm64 のスライスを持つ fat の Mach-O", path => WriteAll(path, MachOFat())),
         new("TD-TPL-1000-TEMPLATES", GeneratedTemplate(999).Length, "テンプレート 1,000 個 (gen-0000.hxt〜gen-0999.hxt。最後のファイルのパスを返す)",
             WriteThousandTemplates, dir => Path.Combine(dir, "TD-TPL-1000-TEMPLATES", "gen-0999.hxt")),
     ];
@@ -66,20 +66,31 @@ public static partial class TestDataCatalog
         return b;
     }
 
-    /// <summary>TD-ANA-MACHO-FAT: fat_header (ビッグエンディアン) と x86_64 のスライス 1 つ (TD-TPL-MACHO64 と同じ内容、0x1000 から)。</summary>
+    /// <summary>
+    /// TD-ANA-MACHO-FAT: fat_header (ビッグエンディアン) と、x86_64 (0x1000 から) と arm64 (0x5000 から) の 2 つのスライス。各スライスは
+    /// MH_EXECUTE で、LC_SEGMENT_64 (__TEXT)・LC_MAIN・LC_SYMTAB (<c>_main</c>) を持つ (06 の ANA-24。TestDataCatalog.Disassembly.cs)。
+    /// </summary>
     public static byte[] MachOFat()
     {
-        byte[] thin = MachO64();
-        byte[] b = new byte[0x1000 + thin.Length];
+        byte[] x64 = MachOSliceX64();
+        byte[] arm64 = MachOSliceArm64();
+        byte[] b = new byte[0x5000 + arm64.Length];
         Span<byte> h = b;
         BinaryPrimitives.WriteUInt32BigEndian(h, 0xCAFEBABE);
-        BinaryPrimitives.WriteUInt32BigEndian(h[4..], 1);
-        BinaryPrimitives.WriteUInt32BigEndian(h[8..], 0x01000007);
-        BinaryPrimitives.WriteUInt32BigEndian(h[12..], 3);
-        BinaryPrimitives.WriteUInt32BigEndian(h[16..], 0x1000);
-        BinaryPrimitives.WriteUInt32BigEndian(h[20..], (uint)thin.Length);
-        BinaryPrimitives.WriteUInt32BigEndian(h[24..], 12);
-        thin.CopyTo(b, 0x1000);
+        BinaryPrimitives.WriteUInt32BigEndian(h[4..], 2);
+        (uint Cpu, uint Sub, int Offset, int Size)[] arches = [(0x01000007, 3, 0x1000, x64.Length), (0x0100000C, 0, 0x5000, arm64.Length)];
+        for (int i = 0; i < arches.Length; i++)
+        {
+            Span<byte> a = h[(8 + i * 20)..];
+            BinaryPrimitives.WriteUInt32BigEndian(a, arches[i].Cpu);
+            BinaryPrimitives.WriteUInt32BigEndian(a[4..], arches[i].Sub);
+            BinaryPrimitives.WriteUInt32BigEndian(a[8..], (uint)arches[i].Offset);
+            BinaryPrimitives.WriteUInt32BigEndian(a[12..], (uint)arches[i].Size);
+            BinaryPrimitives.WriteUInt32BigEndian(a[16..], 12);
+        }
+
+        x64.CopyTo(b, 0x1000);
+        arm64.CopyTo(b, 0x5000);
         return b;
     }
 

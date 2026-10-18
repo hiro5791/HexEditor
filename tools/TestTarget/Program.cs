@@ -9,7 +9,12 @@ using System.Runtime.InteropServices;
 //              "REGIONS <N> 0x<先頭>" を出力する (TC-ENG-33-03)。
 //   --text     UTF-16 LE の文字列を専用のページに置き、"TEXT 0x..." を出力する (TC-PKG-04-04 のメモ帳の代わり)。
 //   --out      出力をこのファイルにも書く (標準出力を受け取れない起動のしかたのため)。
+//   --random   指定したバイト数の領域を確保し、--seed の種の乱数 (テストデータと同じ SplitMix64) で埋める。
+//              "RANDOM 0x<先頭> <バイト数> <SHA-256>" を出力する (TC-ENG-35-01〜03)。
+//   --seed     --random の種 (10 進。既定 0x35)。
+//   --commit   指定した MiB のコミット済みの領域を確保する (中身は書かない)。"COMMIT 0x<先頭> <バイト数>" を出力する (TC-ENG-35-04)。
 // 準備ができたら "READY" を出力し、標準入力が閉じられる (または "exit" の行を受け取る) まで待つ。
+// 標準入力の "poke <16 進のアドレス> <16 進のバイト列>" で自分のメモリを書き換え、"POKED" を出力する (TC-ENG-35-02 の値の書き換え)。
 //   --echo-args  残りの引数を JSON の文字列の配列で標準出力に出してすぐに終わる (TD-AUTO-ECHOARGS。TC-AUTO-18-03 の process.run の確認)。
 if (args.Length > 0 && args[0] == "--echo-args")
 {
@@ -21,6 +26,9 @@ string valueHex = "4845584544495421";
 int regions = 0;
 string? text = null;
 string? outFile = null;
+long randomSize = 0;
+ulong seed = 0x35;
+long commitMiB = 0;
 for (int i = 0; i + 1 < args.Length; i += 2)
 {
     switch (args[i])
@@ -36,6 +44,15 @@ for (int i = 0; i + 1 < args.Length; i += 2)
             break;
         case "--out":
             outFile = args[i + 1];
+            break;
+        case "--random":
+            randomSize = long.Parse(args[i + 1], CultureInfo.InvariantCulture);
+            break;
+        case "--seed":
+            seed = ulong.Parse(args[i + 1], CultureInfo.InvariantCulture);
+            break;
+        case "--commit":
+            commitMiB = long.Parse(args[i + 1], CultureInfo.InvariantCulture);
             break;
         default:
             Console.Error.WriteLine($"unknown argument: {args[i]}");
@@ -70,18 +87,67 @@ if (regions > 0)
     Report($"REGIONS {regions} 0x{first:X}");
 }
 
+if (randomSize > 0)
+{
+    nint random = Native.Alloc((nuint)randomSize, Native.PageReadWrite);
+    byte[] data = new byte[randomSize];
+    FillRandom(seed, data);
+    Marshal.Copy(data, 0, random, data.Length);
+    Report($"RANDOM 0x{random:X} {randomSize} {Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(data))}");
+}
+
+if (commitMiB > 0)
+{
+    long bytes = commitMiB * 1024 * 1024;
+    nint committed = Native.Alloc((nuint)bytes, Native.PageReadWrite);
+    Report($"COMMIT 0x{committed:X} {bytes}");
+}
+
 Report("READY");
 Console.Out.Flush();
 while (Console.ReadLine() is { } line)
 {
-    if (line.Trim() == "exit")
+    string trimmed = line.Trim();
+    if (trimmed == "exit")
     {
         break;
+    }
+
+    // 自分のメモリを書き換える (テストが値を変えた前後のスナップショットを比べる。TC-ENG-35-02)。
+    string[] parts = trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    if (parts.Length == 3 && parts[0] == "poke")
+    {
+        nint address = (nint)long.Parse(parts[1].StartsWith("0x", StringComparison.Ordinal) ? parts[1][2..] : parts[1], NumberStyles.HexNumber,
+            CultureInfo.InvariantCulture);
+        byte[] bytes = Convert.FromHexString(parts[2]);
+        Marshal.Copy(bytes, 0, address, bytes.Length);
+        Report("POKED");
     }
 }
 
 GC.KeepAlive(value);
 return 0;
+
+// テストデータ (tools/HexEditor.TestData の TestDataCatalog.Random) と同じ SplitMix64 のカウンタ方式。
+static void FillRandom(ulong seed, Span<byte> destination)
+{
+    long word = -1;
+    ulong z = 0;
+    for (int i = 0; i < destination.Length; i++)
+    {
+        long p = i;
+        if (p >> 3 != word)
+        {
+            word = p >> 3;
+            z = unchecked(seed + (ulong)word * 0x9E3779B97F4A7C15UL + 0x9E3779B97F4A7C15UL);
+            z = unchecked((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL);
+            z = unchecked((z ^ (z >> 27)) * 0x94D049BB133111EBUL);
+            z ^= z >> 31;
+        }
+
+        destination[i] = (byte)(z >> (int)((p & 7) * 8));
+    }
+}
 
 void Report(string line)
 {

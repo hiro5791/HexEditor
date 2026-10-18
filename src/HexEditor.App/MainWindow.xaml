@@ -103,6 +103,12 @@
                         <!--  ディスク・プロセスを開く (ENG-29、ENG-32)  -->
                         <MenuFlyoutItem x:Uid="Menu_File_OpenDisk" cmd:CommandUi.Id="file.openDisk" AutomationProperties.AutomationId="Command_OpenDisk" />
                         <MenuFlyoutItem x:Uid="Menu_File_OpenProcess" cmd:CommandUi.Id="file.openProcess" AutomationProperties.AutomationId="Command_OpenProcess" />
+                        <!--  リモートに接続 (ENG-40〜ENG-42)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_File_Remote" AutomationProperties.AutomationId="Command_RemoteMenu">
+                            <MenuFlyoutItem x:Uid="Menu_File_ConnectGdb" cmd:CommandUi.Id="file.connectGdb" AutomationProperties.AutomationId="Command_ConnectGdb" />
+                            <MenuFlyoutItem x:Uid="Menu_File_OpenSftp" cmd:CommandUi.Id="file.openSftp" AutomationProperties.AutomationId="Command_OpenSftp" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ReceiveUdp" cmd:CommandUi.Id="file.receiveUdp" AutomationProperties.AutomationId="Command_ReceiveUdp" />
+                        </MenuFlyoutSubItem>
                         <!--  プラグインのデータソース (08 の AUTO-31 の IByteSourceProvider)。項目はプラグインの読み込み後に MainWindow.Plugins.cs が足す  -->
                         <MenuFlyoutSubItem x:Name="PluginSourcesMenu" x:Uid="Menu_File_OpenPluginSource" AutomationProperties.AutomationId="Menu_File_OpenPluginSource" Visibility="Collapsed" />
                         <MenuFlyoutSubItem x:Uid="Menu_File_OpenSelection" AutomationProperties.AutomationId="Command_OpenSelection">
@@ -123,6 +129,10 @@
                             <MenuFlyoutItem x:Uid="Menu_File_ExportSelection" cmd:CommandUi.Id="file.exportSelection" AutomationProperties.AutomationId="Command_ExportSelection" />
                             <MenuFlyoutItem x:Uid="Menu_File_ExportTemplate" cmd:CommandUi.Id="templates.export" AutomationProperties.AutomationId="Command_TemplateExport" />
                             <MenuFlyoutItem x:Uid="Menu_File_SaveSelection" cmd:CommandUi.Id="file.saveSelection" AutomationProperties.AutomationId="Command_SaveSelection" />
+                            <!--  プロセスのスナップショット・ミニダンプ (ENG-35)  -->
+                            <MenuFlyoutItem x:Uid="Menu_File_SaveSnapshot" cmd:CommandUi.Id="file.saveProcessSnapshot" AutomationProperties.AutomationId="Command_SaveProcessSnapshot" />
+                            <MenuFlyoutItem x:Uid="Menu_File_SaveMinidump" cmd:CommandUi.Id="file.saveMinidump" AutomationProperties.AutomationId="Command_SaveMinidump" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ExportPdf" cmd:CommandUi.Id="file.exportPdf" AutomationProperties.AutomationId="Command_ExportPdf" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem x:Uid="Menu_File_Workspace" AutomationProperties.AutomationId="Command_WorkspaceMenu">
                             <MenuFlyoutItem x:Uid="Menu_File_WorkspaceSave" cmd:CommandUi.Id="workspace.save" AutomationProperties.AutomationId="Command_WorkspaceSave" />
@@ -148,6 +158,11 @@
                             <MenuFlyoutItem x:Uid="Menu_File_ImportBookmarks" cmd:CommandUi.Id="file.importBookmarks" AutomationProperties.AutomationId="Command_ImportBookmarks" />
                             <MenuFlyoutItem x:Uid="Menu_File_ExportBookmarks" cmd:CommandUi.Id="file.exportBookmarks" AutomationProperties.AutomationId="Command_ExportBookmarks" />
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <!--  印刷と印刷プレビュー (TOOL-01・TOOL-02)、代替データストリーム (ENG-37・TOOL-21)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_Print" cmd:CommandUi.Id="file.print" AutomationProperties.AutomationId="Command_Print" />
+                        <MenuFlyoutItem x:Uid="Menu_File_PrintPreview" cmd:CommandUi.Id="file.printPreview" AutomationProperties.AutomationId="Command_PrintPreview" />
+                        <MenuFlyoutItem x:Uid="Menu_File_Ads" cmd:CommandUi.Id="tools.ads" AutomationProperties.AutomationId="Command_FileAds" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Close" cmd:CommandUi.Id="file.close" AutomationProperties.AutomationId="Command_Close" />
                         <MenuFlyoutItem x:Uid="Menu_File_CloseAll" cmd:CommandUi.Id="file.closeAll" AutomationProperties.AutomationId="Command_CloseAll" />
@@ -219,6 +234,7 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Search_MultiFile" cmd:CommandUi.Id="search.multiFile" AutomationProperties.AutomationId="Command_MultiFileSearch" />
                         <MenuFlyoutItem x:Uid="Menu_Search_Strings" cmd:CommandUi.Id="search.strings" AutomationProperties.AutomationId="Command_Strings" />
+                        <MenuFlyoutItem x:Uid="Menu_Search_Yara" cmd:CommandUi.Id="search.yara" AutomationProperties.AutomationId="Command_Yara" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Search_ClearHistory" cmd:CommandUi.Id="search.clearHistory" AutomationProperties.AutomationId="Command_ClearSearchHistory" />
                     </MenuBarItem>
@@ -300,7 +316,9 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Statistics" cmd:CommandUi.Id="view.panel.statistics" AutomationProperties.AutomationId="Command_PanelStatistics" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_VisualizerPanel" cmd:CommandUi.Id="view.panel.visualizer" AutomationProperties.AutomationId="Command_ToggleVisualizer" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateVisualizer" cmd:CommandUi.Id="view.panel.templateVisualizer" AutomationProperties.AutomationId="Command_ToggleTemplateVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Disassembly" cmd:CommandUi.Id="view.panel.disassembly" AutomationProperties.AutomationId="Command_PanelDisassembly" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ClipboardPanel" cmd:CommandUi.Id="view.panel.clipboard" AutomationProperties.AutomationId="Command_ToggleClipboard" />
@@ -309,6 +327,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_MemoryMapPanel" cmd:CommandUi.Id="view.panel.memoryMap" AutomationProperties.AutomationId="Command_ToggleMemoryMap" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_PacketsPanel" cmd:CommandUi.Id="view.panel.packets" AutomationProperties.AutomationId="Command_TogglePackets" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ScriptsPanel" cmd:CommandUi.Id="view.panel.scripts" AutomationProperties.AutomationId="Command_ToggleScripts" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_OutputPanel" cmd:CommandUi.Id="view.panel.output" AutomationProperties.AutomationId="Command_ToggleOutput" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />
@@ -331,6 +350,25 @@
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseLower" cmd:CommandUi.Id="data.case.lower" AutomationProperties.AutomationId="Command_CaseLower" />
                             <MenuFlyoutItem x:Uid="Menu_Data_CaseSwap" cmd:CommandUi.Id="data.case.swap" AutomationProperties.AutomationId="Command_CaseSwap" />
                         </MenuFlyoutSubItem>
+                        <!--  暗号化と復号 (EDIT-40)、圧縮と展開 (EDIT-41)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Encrypt" cmd:CommandUi.Id="data.encrypt" AutomationProperties.AutomationId="Command_Encrypt" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Decrypt" cmd:CommandUi.Id="data.decrypt" AutomationProperties.AutomationId="Command_Decrypt" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Compress" cmd:CommandUi.Id="data.compress" AutomationProperties.AutomationId="Command_Compress" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_Decompress" cmd:CommandUi.Id="data.decompress" AutomationProperties.AutomationId="Command_Decompress" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_SelectCompressed" cmd:CommandUi.Id="data.selectCompressed" AutomationProperties.AutomationId="Command_SelectCompressed" />
+                        <!--  パッチ (EDIT-42〜EDIT-44) と変換ビュー (EDIT-45)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_Patch" AutomationProperties.AutomationId="Command_PatchMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchCreate" cmd:CommandUi.Id="data.patch.create" AutomationProperties.AutomationId="Command_PatchCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_PatchApply" cmd:CommandUi.Id="data.patch.apply" AutomationProperties.AutomationId="Command_PatchApply" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_TransformView" AutomationProperties.AutomationId="Command_TransformViewMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformDefine" cmd:CommandUi.Id="data.transformView.define" AutomationProperties.AutomationId="Command_TransformViewDefine" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformXor" cmd:CommandUi.Id="data.transformView.xor" AutomationProperties.AutomationId="Command_TransformViewXor" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformClear" cmd:CommandUi.Id="data.transformView.clear" AutomationProperties.AutomationId="Command_TransformViewClear" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_TransformApply" cmd:CommandUi.Id="data.transformView.applyToData" AutomationProperties.AutomationId="Command_TransformViewApply" />
+                        </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
                         <!--  比較 (ANA-01、ANA-08)  -->
@@ -347,6 +385,9 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
+                        <!--  逆アセンブル (ANA-23) とデマングル (ANA-30)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Disassemble" cmd:CommandUi.Id="analysis.disassemble" AutomationProperties.AutomationId="Command_Disassemble" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Demangle" cmd:CommandUi.Id="analysis.demangle" AutomationProperties.AutomationId="Command_Demangle" />
                         <!--  構造体テンプレート (TPL-20〜TPL-35)  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Templates" AutomationProperties.AutomationId="Command_TemplatesMenu">
                             <MenuFlyoutItem x:Uid="Menu_Templates_Apply" cmd:CommandUi.Id="templates.apply" AutomationProperties.AutomationId="Command_TemplateApply" />
@@ -364,6 +405,7 @@
                             <MenuFlyoutItem x:Uid="Menu_Templates_Edit" cmd:CommandUi.Id="templates.edit" AutomationProperties.AutomationId="Command_TemplateEdit" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_ConvertKsy" cmd:CommandUi.Id="templates.convertKsy" AutomationProperties.AutomationId="Command_TemplateConvertKsy" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Manage" cmd:CommandUi.Id="templates.manage" AutomationProperties.AutomationId="Command_TemplateManage" />
+                            <MenuFlyoutItem x:Uid="Menu_Templates_Online" cmd:CommandUi.Id="templates.online.browse" AutomationProperties.AutomationId="Command_TemplateOnline" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
@@ -389,6 +431,26 @@
                         <!--  プラグイン (08 の AUTO-32)。プラグインのメニューの項目 (IMenuContribution) は MainWindow.Plugins.cs が足す  -->
                         <MenuFlyoutSubItem x:Name="PluginsMenu" x:Uid="Menu_Tools_Plugins" AutomationProperties.AutomationId="Menu_Tools_Plugins">
                             <MenuFlyoutItem x:Uid="Menu_Tools_Plugins_Manage" cmd:CommandUi.Id="plugins.manage" AutomationProperties.AutomationId="Command_PluginsManage" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <!--  電卓と変換・参照ツール (11 の TOOL-22〜TOOL-28)、ファイルツール (チェックサムファイル・フォルダの比較。TOOL-18〜TOOL-20)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Calculator" cmd:CommandUi.Id="tools.calculator" AutomationProperties.AutomationId="Command_Calculator" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Converter" cmd:CommandUi.Id="tools.converter" AutomationProperties.AutomationId="Command_Converter" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_FloatVisualizer" cmd:CommandUi.Id="tools.floatVisualizer" AutomationProperties.AutomationId="Command_FloatVisualizer" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_CharTable" cmd:CommandUi.Id="tools.charTable" AutomationProperties.AutomationId="Command_CharTable" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_ColorPicker" cmd:CommandUi.Id="tools.colorPicker" AutomationProperties.AutomationId="Command_ColorPicker" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_DateTime" cmd:CommandUi.Id="tools.dateTime" AutomationProperties.AutomationId="Command_DateTime" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Tools_FileTools" AutomationProperties.AutomationId="Menu_Tools_FileTools">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumCreate" cmd:CommandUi.Id="tools.checksum.create" AutomationProperties.AutomationId="Command_ChecksumCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumVerify" cmd:CommandUi.Id="tools.checksum.verify" AutomationProperties.AutomationId="Command_ChecksumVerify" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_FolderCompare" cmd:CommandUi.Id="tools.folderCompare" AutomationProperties.AutomationId="Command_FolderCompare" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Split" cmd:CommandUi.Id="tools.files.split" AutomationProperties.AutomationId="Command_FileSplit" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Join" cmd:CommandUi.Id="tools.files.join" AutomationProperties.AutomationId="Command_FileJoin" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Interleave" cmd:CommandUi.Id="tools.files.interleave" AutomationProperties.AutomationId="Command_FileInterleave" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Deinterleave" cmd:CommandUi.Id="tools.files.deinterleave" AutomationProperties.AutomationId="Command_FileDeinterleave" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Shred" cmd:CommandUi.Id="tools.files.shred" AutomationProperties.AutomationId="Command_FileShred" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Ads" cmd:CommandUi.Id="tools.ads" AutomationProperties.AutomationId="Command_ToolsAds" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
@@ -544,11 +606,45 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <controls:NotificationHost
-                                        AutomationProperties.AutomationId="DocumentNotifications"
-                                        Center="{x:Bind Notifications}"
-                                        Owner="{x:Bind}"
-                                        Scope="Document" />
+                                    <StackPanel>
+                                        <!--  派生ドキュメントの帯 (EDIT-46 の画面): 元のドキュメントと範囲、変換、「元に書き戻す」  -->
+                                        <Grid
+                                            Padding="12,6"
+                                            AutomationProperties.AutomationId="Derived_Band"
+                                            Background="{ThemeResource InfoBarInformationalSeverityBackgroundBrush}"
+                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                            BorderThickness="0,0,0,1"
+                                            ColumnSpacing="12"
+                                            Visibility="{x:Bind IsDerived, Mode=OneWay}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <FontIcon
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.AccessibilityView="Raw"
+                                                FontSize="14"
+                                                Glyph="&#xE71B;" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.AutomationId="Derived_BandText"
+                                                Text="{x:Bind DerivedBandText, Mode=OneWay}"
+                                                TextWrapping="Wrap" />
+                                            <Button
+                                                x:Uid="Derived_WriteBack"
+                                                Grid.Column="2"
+                                                AutomationProperties.AutomationId="Derived_WriteBack"
+                                                Click="DerivedWriteBack_Click"
+                                                IsEnabled="{x:Bind CanWriteBack, Mode=OneWay}" />
+                                        </Grid>
+                                        <controls:NotificationHost
+                                            AutomationProperties.AutomationId="DocumentNotifications"
+                                            Center="{x:Bind Notifications}"
+                                            Owner="{x:Bind}"
+                                            Scope="Document" />
+                                    </StackPanel>
                                     <!--  画面分割 (VIEW-37): 1 つ目のペインの Hex ビュー。分割すると PaneHost が 2 つ目を加える (MainWindow.Split.cs)。  -->
                                     <controls:PaneHost Grid.Row="1" AutomationProperties.AutomationId="PaneHost">
                                         <controls:HexView
@@ -575,6 +671,7 @@
                                             <Button x:Uid="Session_Locate" AutomationProperties.AutomationId="Session_Locate" Click="MissingLocate_Click" Visibility="{x:Bind IsMissingFile}" />
                                             <!--  権限の確認を取り消したディスクのタブ (UI-31 の仕様 5)  -->
                                             <Button x:Uid="Session_OpenDisk" AutomationProperties.AutomationId="Session_OpenDisk" Click="MissingOpenDisk_Click" Visibility="{x:Bind IsMissingDisk}" />
+                                            <Button x:Uid="Session_ConnectRemote" AutomationProperties.AutomationId="Session_ConnectRemote" Click="MissingConnectRemote_Click" Visibility="{x:Bind IsMissingRemote}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -671,8 +768,11 @@
                 <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.StatusDocument.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
                 <Button x:Name="StatusFileType" AutomationProperties.AutomationId="Status_FileType" Click="StatusFileType_Click" Style="{StaticResource StatusItemStyle}" Tag="fileType" />
                 <!--  プロセスメモリの即時書き込み (ENG-34 の「画面」)。セクタ番号は StatusPosition (VIEW-40) が出す。  -->
+                <Button x:Name="StatusRemote" AutomationProperties.AutomationId="Status_Remote" Click="StatusRemote_Click" Content="{x:Bind Vm.StatusDocument.RemoteStatusText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="remote" />
                 <Button x:Name="StatusImmediate" AutomationProperties.AutomationId="Status_ImmediateWrite" Content="{x:Bind Vm.StatusDocument.ImmediateWriteText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="immediate" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
+                <!--  変換ビュー (EDIT-45 の仕様 9): 有効な間は必ず出す (隠せない項目)。クリックで変換ビューの設定を開く  -->
+                <Button x:Name="StatusTransform" AutomationProperties.AutomationId="Status_TransformView" Click="StatusTransform_Click" Style="{StaticResource StatusItemStyle}" Tag="transform" Visibility="Collapsed" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
                 <Button x:Name="StatusCompare" AutomationProperties.AutomationId="Status_Compare" Click="StatusCompare_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="compare" Visibility="Collapsed" />
@@ -705,6 +805,15 @@
                     Tag="helper"
                     Visibility="Collapsed">
                     <FontIcon FontSize="14" Glyph="&#xE1A7;" />
+                </Button>
+                <!--  外部からの自動操作 (AUTO-45 の仕様 3): オンの間は必ず示す (利用者が隠せる項目にしない)。クリックで設定を開く。  -->
+                <Button
+                    x:Name="StatusAutomation"
+                    AutomationProperties.AutomationId="Status_Automation"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="automation"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE703;" />
                 </Button>
                 <Button
                     x:Name="NotificationHistoryButton"

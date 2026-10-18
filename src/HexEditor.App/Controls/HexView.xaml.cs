@@ -177,6 +177,7 @@ public sealed partial class HexView : UserControl
                 QueueAutoFit();
             }
 
+            UpdateTransformIndicator();
             UpdateScrollBar();
             QueueRender();
         }
@@ -1382,6 +1383,7 @@ public sealed partial class HexView : UserControl
         EditorSnapshot state = EditorSnapshot.Of(_editor);
         OnEditorStateChanged(_lastState, state);
         _lastState = state;
+        UpdateTransformIndicator();
         if (_lastView != _editor.View)
         {
             _lastView = _editor.View;

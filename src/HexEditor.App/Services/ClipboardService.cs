@@ -109,7 +109,7 @@ public sealed partial class ClipboardService
     /// <param name="serial">アプリ内クリップボードの通し番号 (ドラッグでは 0。どのコピーとも一致しない)。</param>
     public async Task<ClipboardPlan> FillCopyFormatsAsync(DataPackage package, EditorState editor, long offset, long length, long serial)
     {
-        DocumentSnapshot snapshot = editor.Document.Current;
+        DocumentSnapshot snapshot = editor.Document.ClipboardSnapshot;
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
         package.SetData(MetaFormat, meta);
         // 上限以内なら実データを読む (読み込みを待つことがあるため UI スレッドでは読まない)。

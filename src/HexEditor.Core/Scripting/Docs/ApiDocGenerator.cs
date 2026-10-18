@@ -367,30 +367,69 @@ public sealed class ApiDocGenerator
 
     // ======================== JSON-RPC (AUTO-45) ========================
 
-    /// <summary>JSON-RPC のメソッド一覧 (<c>型.メソッド</c>。引数の名前と型、戻り値の型)。</summary>
+    /// <summary>
+    /// JSON-RPC のメソッド一覧 (AUTO-45 の仕様 8)。<c>型.メンバー</c> の名前、種類 (メソッド・プロパティ)、引数の名前と型、戻り値の型、
+    /// 必要な許可、JSON-RPC で使えるか (使えない理由)。最後に通信の方式とエラーコードの一覧 (AUTO-45 の「エラー」) を載せる。
+    /// </summary>
     public string JsonRpcMethods()
     {
         var methods = new JsonArray();
-        foreach (Type t in ApiTypes.Where(t => t.IsInterface || t.IsAbstract))
+        foreach (Rpc.JsonRpcMember member in Rpc.JsonRpcApi.Members.Values)
         {
-            foreach (MethodInfo m in MembersOf(t).OfType<MethodInfo>())
+            var item = new JsonObject { ["method"] = member.Name };
+            if (member.Method is { } m)
             {
-                methods.Add(new JsonObject
+                item["kind"] = "method";
+                item["params"] = new JsonArray([.. m.GetParameters().Select(p => (JsonNode)new JsonObject
                 {
-                    ["method"] = JsBinder.CamelCase(JsBinder.TsName(t)) + "." + JsBinder.JsName(m),
-                    ["params"] = new JsonArray([.. m.GetParameters().Select(p => (JsonNode)new JsonObject
-                    {
-                        ["name"] = p.Name,
-                        ["type"] = TsOf(p.ParameterType, p),
-                        ["optional"] = IsOptional(p),
-                    })]),
-                    ["result"] = TsReturn(m),
-                    ["permission"] = m.GetCustomAttribute<RequiresPermissionAttribute>()?.Permission,
-                });
+                    ["name"] = p.Name,
+                    ["type"] = TsOf(p.ParameterType, p),
+                    ["optional"] = IsOptional(p),
+                })]);
+                item["result"] = TsReturn(m);
+                item["permission"] = m.GetCustomAttribute<RequiresPermissionAttribute>()?.Permission;
             }
+            else if (member.Property is { } prop)
+            {
+                item["kind"] = "property";
+                item["type"] = TsOf(prop.PropertyType, prop);
+                item["settable"] = prop.CanWrite;
+                item["permission"] = prop.GetCustomAttribute<RequiresPermissionAttribute>()?.Permission;
+            }
+
+            item["available"] = member.IsAvailable;
+            if (member.UnavailableReason is { } reason)
+            {
+                item["unavailableReason"] = reason;
+            }
+
+            methods.Add(item);
         }
 
-        var root = new JsonObject { ["apiVersion"] = ApiInfo.Version, ["methods"] = methods };
+        var root = new JsonObject
+        {
+            ["apiVersion"] = ApiInfo.Version,
+            ["transport"] = new JsonObject
+            {
+                ["pipe"] = @"\\.\pipe\HexEditor.<user SID>.rpc",
+                ["framing"] = "One JSON-RPC 2.0 message per line (UTF-8, LF). At most 64 MB per message.",
+                ["target"] = "document.* and its parts take \"document\" (an id; the first positional parameter). Other API objects take \"handle\".",
+                ["bytes"] = "Base64 text. A BytePattern also accepts {\"hex\": \"DE AD\"} or {\"text\": \"random\"}.",
+                ["notifications"] = new JsonArray("event", "$/progress", "$/cancel"),
+            },
+            ["errors"] = new JsonArray([.. new (string Type, int Code)[]
+                {
+                    ("ParseError", Rpc.JsonRpcErrorCodes.ParseError),
+                    ("InvalidRequest", Rpc.JsonRpcErrorCodes.InvalidRequest),
+                    ("MethodNotFound", Rpc.JsonRpcErrorCodes.MethodNotFound),
+                    ("InvalidParams", Rpc.JsonRpcErrorCodes.InvalidParams),
+                    ("InternalError", Rpc.JsonRpcErrorCodes.InternalError),
+                    ("ScriptError", Rpc.JsonRpcErrorCodes.ScriptError),
+                }.Concat(Rpc.JsonRpcErrorCodes.ByType)
+                .Append(("ConnectionRefused", Rpc.JsonRpcErrorCodes.ConnectionRefused))
+                .Select(e => (JsonNode)new JsonObject { ["type"] = e.Item1, ["code"] = e.Item2 })]),
+            ["methods"] = methods,
+        };
         return root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }).Replace("\r\n", "\n", StringComparison.Ordinal) + "\n";
     }
 

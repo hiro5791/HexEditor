@@ -152,7 +152,7 @@ public sealed partial class MainWindow
         };
     }
 
-    private InspectorPanel CreateInspectorPanel() => new(_inspectorVm);
+    private InspectorPanel CreateInspectorPanel() => new(_inspectorVm) { OpenInTool = OpenInspectorRowInTool };
 
     private BookmarkListPanel CreateBookmarkListPanel()
     {
@@ -499,6 +499,7 @@ public sealed partial class MainWindow
         view.SetHighlightSource("inspectorArray", (start, end) => InspectorArrayBoundaries(view, start, end));
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
         AttachTemplates(view);
+        AttachDisassemblyHighlights(view);
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
 
         // スクロールバーの印 (VIEW-02 の仕様 9。設定でオン): その範囲から始まる最初のブックマークの色。木を引くので件数によらない。
@@ -530,6 +531,7 @@ public sealed partial class MainWindow
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewTemplateMenu(menu);
+            ExtendHexViewDisassemblyMenu(menu);
             ExtendHexViewReferenceMenu(menu);
             ExtendHexViewFilesMenu(menu);
             ExtendHexViewScriptMenu(menu);

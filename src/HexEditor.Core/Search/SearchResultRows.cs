@@ -214,6 +214,9 @@ public sealed record ExportLabels
 
     public string Value { get; init; } = "Value";
 
+    /// <summary>変換ビュー (EDIT-45 の仕様 11) のデータを検索した結果に付ける列の見出し。</summary>
+    public string TransformView { get; init; } = "Transform view";
+
     public Func<MatchStatus, string> StatusText { get; init; } = s => s == MatchStatus.Unchanged ? string.Empty : s.ToString();
 }
 
@@ -244,6 +247,9 @@ public static class SearchResultsExporter
         SearchPattern pattern = first.Pattern;
         bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1 || first.VariantNames is not null;
         bool documents = groups.Any(g => g.Document is not null);
+
+        // 変換ビュー (EDIT-45 の仕様 11) のデータを検索した結果は、その旨 (変換の表示) を各行に記録する。
+        bool transformed = groups.Any(g => g.Rows.Results.Snapshot.Transform is not null);
         long total = indices?.Count ?? groups.Sum(g => g.Rows.Results.LongCount);
         operation?.SetTotal(total);
 
@@ -263,7 +269,7 @@ public static class SearchResultsExporter
             return null;
         }
 
-        IEnumerable<(string? Document, SearchResultRow Row)> Enumerate()
+        IEnumerable<(string? Document, SearchResultRow Row, string? Transform)> Enumerate()
         {
             const int Batch = 4096;
             long written = 0;
@@ -278,9 +284,10 @@ public static class SearchResultsExporter
                         cancellationToken.ThrowIfCancellationRequested();
                         operation?.CancellationToken.ThrowIfCancellationRequested();
                         IReadOnlyList<SearchMatch> matches = rows.Results.GetRange(start, (int)Math.Min(Batch, count - start));
+                        string? transform = rows.Results.Snapshot.Transform?.Label;
                         for (int k = 0; k < matches.Count; k++)
                         {
-                            yield return (document, rows.Row(start + k, matches[k]) with { Number = ++number });
+                            yield return (document, rows.Row(start + k, matches[k]) with { Number = ++number }, transform);
                         }
 
                         written += matches.Count;
@@ -302,7 +309,7 @@ public static class SearchResultsExporter
 
                 if (Locate(index) is { } found)
                 {
-                    yield return (found.Document, found.Rows.Row(found.Local) with { Number = index + 1 });
+                    yield return (found.Document, found.Rows.Row(found.Local) with { Number = index + 1 }, found.Rows.Results.Snapshot.Transform?.Label);
                 }
 
                 written++;
@@ -311,12 +318,12 @@ public static class SearchResultsExporter
 
         if (format == ExportFormat.Csv)
         {
-            WriteCsv(stream, Enumerate(), labels, numeric, documents);
+            WriteCsv(stream, Enumerate(), labels, numeric, documents, transformed);
         }
         else if (format == ExportFormat.Text)
         {
             using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false), 65536, leaveOpen: true);
-            foreach ((string? _, SearchResultRow r) in Enumerate())
+            foreach ((string? _, SearchResultRow r, string? _) in Enumerate())
             {
                 writer.Write(r.Text.Replace("\r", " ", StringComparison.Ordinal).Replace("\n", " ", StringComparison.Ordinal));
                 writer.Write("\r\n");
@@ -324,11 +331,12 @@ public static class SearchResultsExporter
         }
         else
         {
-            WriteJson(stream, Enumerate(), numeric, documents);
+            WriteJson(stream, Enumerate(), numeric, documents, transformed);
         }
     }
 
-    private static void WriteCsv(Stream stream, IEnumerable<(string? Document, SearchResultRow Row)> rows, ExportLabels labels, bool numeric, bool documents)
+    private static void WriteCsv(Stream stream, IEnumerable<(string? Document, SearchResultRow Row, string? Transform)> rows, ExportLabels labels, bool numeric, bool documents,
+        bool transformed)
     {
         using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true), 65536, leaveOpen: true);
         var header = new List<string> { labels.Number };
@@ -344,9 +352,14 @@ public static class SearchResultsExporter
             header.Add(labels.Value);
         }
 
+        if (transformed)
+        {
+            header.Add(labels.TransformView);
+        }
+
         writer.Write(string.Join(',', header.Select(Csv)));
         writer.Write("\r\n");
-        foreach ((string? document, SearchResultRow r) in rows)
+        foreach ((string? document, SearchResultRow r, string? transform) in rows)
         {
             var fields = new List<string> { r.Number.ToString(CultureInfo.InvariantCulture) };
             if (documents)
@@ -371,17 +384,23 @@ public static class SearchResultsExporter
                 fields.Add(r.Value ?? r.Chars?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
             }
 
+            if (transformed)
+            {
+                fields.Add(transform ?? string.Empty);
+            }
+
             writer.Write(string.Join(',', fields.Select(Csv)));
             writer.Write("\r\n");
         }
     }
 
-    private static void WriteJson(Stream stream, IEnumerable<(string? Document, SearchResultRow Row)> rows, bool numeric, bool documents)
+    private static void WriteJson(Stream stream, IEnumerable<(string? Document, SearchResultRow Row, string? Transform)> rows, bool numeric, bool documents,
+        bool transformed)
     {
         using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
         writer.WriteStartObject();
         writer.WriteStartArray("results");
-        foreach ((string? document, SearchResultRow r) in rows)
+        foreach ((string? document, SearchResultRow r, string? transform) in rows)
         {
             writer.WriteStartObject();
             writer.WriteNumber("number", r.Number);
@@ -407,6 +426,11 @@ public static class SearchResultsExporter
             if (r.Chars is long chars)
             {
                 writer.WriteNumber("chars", chars);
+            }
+
+            if (transformed && transform is not null)
+            {
+                writer.WriteString("transformView", transform);
             }
 
             writer.WriteEndObject();

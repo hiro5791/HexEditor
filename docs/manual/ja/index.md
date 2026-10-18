@@ -8,10 +8,12 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 
 - [はじめに](getting-started.md)
 - [ファイル・ディスク・プロセスを開く](opening-files.md)
+- [リモートのデータソース](remote-sources.md)
 - [Hex ビュー](hex-view.md)
 - [編集](editing.md)
 - [選択とクリップボード](selection-clipboard.md)
 - [検索と置換](search-replace.md)
+- [YARA スキャン](yara.md)
 - [移動とナビゲーション](go-to.md)
 
 ## 解析 {#analysis}
@@ -21,8 +23,20 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [ファイルの比較](compare.md)
 - [統計と解析](statistics.md)
 - [ハッシュとチェックサム](hashes.md)
+- [逆アセンブル](disassembly.md)
+- [チェックサムファイル](checksum-files.md)
+- [フォルダの比較](folder-compare.md)
+- [ファイルの分割・結合・インターリーブ](split-join.md)
+- [安全な削除](secure-delete.md)
+- [NTFS の代替データストリーム](alternate-streams.md)
 - [データ演算](data-operations.md)
+- [変換ビュー](transform-view.md)
+- [パッチ](patches.md)
+- [暗号化と圧縮](encryption-compression.md)
 - [インポートとエクスポート](import-export.md)
+- [印刷と PDF](print-pdf.md)
+- [電卓とプログラマモード](calculator.md)
+- [変換・参照ツール](reference-tools.md)
 
 ## 構造の解析と自動化 {#structures-and-automation}
 
@@ -32,6 +46,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [スクリプト](scripting.md)
 - [マクロ](macros.md)
 - [プラグイン](plugins.md)
+- [外部からの自動操作](external-automation.md)
 - [自動化 API リファレンス](api-reference.md)
 - [HexEditor のプラグイン SDK](api-plugins.md)
 - [コマンドライン (hexed)](command-line.md)

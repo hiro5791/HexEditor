@@ -56,7 +56,7 @@ public sealed class InAppClipboard : IDisposable
     /// </summary>
     public InAppClip Copy(Document document, long offset, long length)
     {
-        SnapshotRange range = document.CreateRange(document.Current, offset, length);
+        SnapshotRange range = document.CreateRange(document.ClipboardSnapshot, offset, length);
         range.AddReference();
         Clear();
         Current = new InAppClip(++_serial, range, document.Source.DisplayName);
@@ -75,7 +75,7 @@ public sealed class InAppClipboard : IDisposable
         }
 
         long start = ranges[0].Start, end = ranges[^1].End;
-        SnapshotRange range = document.CreateRange(document.Current, start, end - start);
+        SnapshotRange range = document.CreateRange(document.ClipboardSnapshot, start, end - start);
         range.AddReference();
         Clear();
         ByteRange[] parts = [.. ranges.Select(r => new ByteRange(r.Start - start, r.Length))];

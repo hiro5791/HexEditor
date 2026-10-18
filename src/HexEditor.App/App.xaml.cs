@@ -140,12 +140,15 @@ public partial class App : Application
         MainWindow.RegisterStatisticsPanels(env.Locations.Settings);
         MainWindow.LoadCustomCrcs();
         MainWindow.RegisterAnnotationPanels();
+        MainWindow.RegisterToolsCalcPanels();
         MainWindow.RegisterSearchResultsPanel();
         MainWindow.RegisterSelectionPanels();
         MainWindow.RegisterFormatIssuesPanel();
         MainWindow.RegisterComparePanel();
         MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
+        MainWindow.RegisterDisassemblyPanel();
+        MainWindow.RegisterPacketsPanel();
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
         Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
@@ -244,6 +247,12 @@ public partial class App : Application
         // 更新の確認、ジャンプリスト、Explorer 連携の案内、他の配布形態の設定の取り込み (F1-22、F1-24、PKG-31)。
         window.RecentFiles = new RecentJumpListSource(vm.Recent);
         window.StartPackagingFeatures();
+
+        // オンラインのテンプレートの更新の確認 (07 の TPL-36 の仕様 5)。
+        window.StartOnlineTemplateUpdateCheck();
+
+        // 外部からの自動操作 (08 の AUTO-45。設定でオンのときだけ名前付きパイプで待ち受ける)。
+        Services.Automation.AutomationService.Initialize();
 
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();

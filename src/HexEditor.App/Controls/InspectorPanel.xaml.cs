@@ -49,6 +49,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         Vm = vm;
         InitializeComponent();
         InitializeNavigation();
+        InitializeToolMenus();
         AutomationProperties.SetName(this, Loc.Get("Inspector_PanelName"));
         AutomationProperties.SetName(RowsList, Loc.Get("Inspector_PanelName"));
         AutomationProperties.SetName(EndianButton, Loc.Get("Inspector_Endian_Name"));

@@ -78,8 +78,8 @@ You can undo your changes as many times as you like. There is no limit, and memo
 - After an undo, the affected range is selected and scrolled into view.
 - Moving the cursor, selecting and view settings are not undone.
 - Saving does not clear the history, so you can go back to before the save. If you want the history cleared, turn on **Clear the undo history when saving**.
-- If you make a new change after undoing, the redo history is discarded.
-- Closing the document discards the history.
+- If you make a new change after undoing, the redo history is discarded. To keep it as a separate branch, turn on **Use branching undo history** (see [Branching history](#branching-history)).
+- Closing the document discards the history, unless you save it (see [Branching history](#branching-history)).
 
 ## History panel {#history}
 
@@ -89,6 +89,40 @@ The history panel lists your changes and lets you jump to any point at once. Sho
 - The row for the current state is bold. Rows after it are actions you can redo, and are faded.
 - Double-click a row, or press <kbd>Enter</kbd>, to go to the state right after that action.
 - **Go to this range** selects and shows the range of that action. The state does not change.
+- **Create patch from these two points...** makes a patch from the state of one row to the state of another (see [Patches](patches.md)).
+
+## Branching history {#branching-history}
+
+With branching history, undoing and then making a new change does not throw away the changes you undid. They stay as a separate branch, and you can go back to any of them. Turn it on with **Use branching undo history** in the editing settings.
+
+- <kbd>Ctrl</kbd>+<kbd>Y</kbd> redoes along the branch you used last.
+- To see all branches, select **Show as tree** in the history panel. Changes are listed from top to bottom in the order you made them, and each branch is indented. The current state, the saved state, named points and pinned points are shown with an icon and text.
+- Double-click a point, or press <kbd>Enter</kbd>, to go to that state, even on another branch.
+- Select a point to see what it changed below the tree: the range and the first 16 bytes before and after.
+
+Right-click a point in the tree for more actions.
+
+| Action | What it does |
+| --- | --- |
+| **Name...** | Gives the point a name (1 to 100 characters). Leave it empty to remove the name |
+| **Pin** | Keeps the point and the path to it when old branches are cleaned up |
+| **Delete branch...** | Deletes the point and everything after it on that branch. This cannot be undone. You cannot delete the current point or the points before it |
+| **Create patch from these two points...** | Makes a patch between two points (select two points, or one point and the current state) |
+
+To go to a named point, run **Go to history node...** in the command palette and choose the name.
+
+### Saving and loading the history {#save-history}
+
+The history is normally discarded when you close the document. To keep it, save it to a history file (`.hexhist`).
+
+1. Run **Save history...** in the command palette, or select **Save history** in the history panel.
+2. Choose the file. The dialog shows the estimated size.
+3. If you want, turn on **Include the SHA-256 of the whole original file**. This takes longer for large files.
+4. Select **Save**.
+
+To load it later, open the same file and run **Load history...**. You return to the point that was current when you saved. If the file seems to have changed since the history was saved, you are asked whether to load it anyway.
+
+If the history has named or pinned points, closing the document asks whether to save the history first.
 
 ## Fill and insert bytes {#fill-and-insert}
 

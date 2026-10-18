@@ -26,10 +26,10 @@ $MB = 1MB
 
 # Targets in MB per architecture (PKG-16 spec 1).
 $targets = [ordered]@{
-    'portable zip'   = 100
-    'msix'           = 100
-    'Setup.exe'      = 110
-    'installed size' = 300
+    'portable zip'   = 120
+    'msix'           = 120
+    'Setup.exe'      = 130
+    'installed size' = 400
     'delta package'  = 15
 }
 

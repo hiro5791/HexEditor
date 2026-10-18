@@ -271,7 +271,7 @@ public sealed partial class InspectorViewModel
         EndUserEdit();
 
         // 上書きで書き、1 回の Undo で戻せる (INSP-17)。
-        doc.Document.Overwrite(Origin + offset, bytes, Loc.Get("Inspector_UndoDescription"));
+        doc.Document.Overwrite(Origin + offset, ForWrite(doc, Origin + offset, bytes), Loc.Get("Inspector_UndoDescription"));
         Refresh();
         return true;
     }

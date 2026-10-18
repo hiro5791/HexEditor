@@ -47,25 +47,31 @@ public sealed partial class MainWindow
             return;
         }
 
+        // ENG-35 の保存のダイアログから保存先の欄を除き、名前の欄を加えたもの (ANA-09 の「画面」): 名前・対象・取得中の一時停止。
         string defaultName = $"{process.Memory.Name} {DateTime.Now:HH:mm:ss}";
         var name = new TextBox { Text = defaultName, Header = Loc.Get("Snapshot_Name") };
         AutomationProperties.SetAutomationId(name, "Snapshot_Name");
-        string? chosen = await ConfirmAsync(Loc.Get("Snapshot_CreateTitle"), name, Loc.Get("Snapshot_Create"), "SnapshotCreateDialog")
+        var panel = new StackPanel { Spacing = 8, MinWidth = 340 };
+        panel.Children.Add(name);
+        CaptureOptionsInput input = BuildCaptureOptions(panel, includeScope: true);
+        string? chosen = await ConfirmAsync(Loc.Get("Snapshot_CreateTitle"), panel, Loc.Get("Snapshot_Create"), "SnapshotCreateDialog")
             ? name.Text.Trim() : null;
         if (string.IsNullOrEmpty(chosen))
         {
             return;
         }
 
-        await CreateSnapshotNamedAsync(doc, process, chosen);
+        await CreateSnapshotNamedAsync(doc, process, chosen, input.Options(null));
     }
 
     /// <summary>名前を決めた後の作成 (権限不足なら昇格した補助プロセスでの再試行を提案する)。テスト用の命令からも呼ぶ。</summary>
-    internal async Task CreateSnapshotNamedAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string chosen)
+    internal async Task CreateSnapshotNamedAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string chosen,
+        ProcessCaptureOptions? options = null)
     {
+        options ??= new ProcessCaptureOptions();
         try
         {
-            await CaptureSnapshotAsync(doc, process, chosen);
+            await CaptureSnapshotAsync(doc, process, chosen, options);
         }
         catch (OperationCanceledException)
         {
@@ -73,7 +79,15 @@ public sealed partial class MainWindow
         catch (ProcessAccessException ex) when (ex.Failure == ProcessOpenFailure.AccessDenied)
         {
             // 権限不足でプロセスを読めない (ANA-09 の「エラー」): プロセスを開くとき (01) と同じく、昇格した補助プロセスでの再試行を提案する。
-            await OfferElevatedSnapshotAsync(doc, process, chosen);
+            await OfferElevatedSnapshotAsync(doc, process, chosen, options);
+        }
+        catch (ProcessExitedDuringCaptureException)
+        {
+            ShowNotice(Loc.Get("Capture_ProcessExited"), InfoBarSeverity.Error, doc);
+        }
+        catch (Core.Saving.InsufficientSpaceException ex)
+        {
+            ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
         {
@@ -84,24 +98,22 @@ public sealed partial class MainWindow
     }
 
     /// <summary>スナップショットを一時フォルダに作り、読み取り専用のタブで開く (長時間処理)。</summary>
-    private async Task CaptureSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name)
+    private async Task CaptureSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name, ProcessCaptureOptions options)
     {
-        SnapshotByteSource snapshot = await Vm.Operations.RunAsync(Loc.Format("Snapshot_Creating", name), Core.Operations.OperationKind.ReadOnly,
-            doc.Document, null, op => Task.FromResult(Snapshots.CreateTemporary(process, name, operation: op)));
+        (SnapshotByteSource snapshot, ProcessCaptureSummary summary) = await Vm.Operations.RunAsync(Loc.Format("Snapshot_Creating", name),
+            Core.Operations.OperationKind.ReadOnly, doc.Document, null, op => Task.FromResult(Snapshots.CreateTemporary(process, name, options, op)));
         DocumentViewModel opened = Vm.OpenSnapshotSource(snapshot);
         LastSnapshot = opened;
+        LastCaptureSummary = summary;
         AppLog.Info($"Snapshot created: {snapshot.Path}");
-        if (snapshot.Metadata.UnreadablePages is { Count: > 0 } gaps)
-        {
-            ShowNotice(Loc.Format("Snapshot_Unreadable", gaps.Count, Size(gaps.Sum(g => g.Size))), InfoBarSeverity.Informational, opened);
-        }
+        ReportCaptureSummary(opened, summary);
     }
 
     /// <summary>
     /// 権限不足でスナップショットを作れなかった: 昇格した補助プロセス (ENG-28。<see cref="Services.DeviceService"/> の経路) でプロセスを開き直して
     /// 作り直すことを提案する。補助プロセスを使えない配布形態では、管理者として実行する案内を出す。既に管理者なら理由を知らせるだけ。
     /// </summary>
-    private async Task OfferElevatedSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name)
+    private async Task OfferElevatedSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name, ProcessCaptureOptions options)
     {
         OpenRoute route = DeviceService.RouteForProcess(ProcessAccessLevel.NeedsElevation);
         if (route == OpenRoute.SameProcess)
@@ -126,7 +138,7 @@ public sealed partial class MainWindow
         {
             using ProcessMemoryByteSource elevated = await DeviceService.OpenProcessAsync(process.Pid, process.Info, writable: false, route);
             RefreshHelperIndicator();
-            await CaptureSnapshotAsync(doc, elevated, name);
+            await CaptureSnapshotAsync(doc, elevated, name, options);
         }
         catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
         {

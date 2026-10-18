@@ -1,0 +1,3 @@
+#pragma name "Record table (TC-TPL-16-05)"
+struct Rec { u8 tag[16]; le u32 no; u8 rest[44]; };
+Rec recs[16] [[visualize("table")]];

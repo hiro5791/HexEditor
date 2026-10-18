@@ -19,6 +19,8 @@
                   (Process Monitor records from the first install to the last uninstall)
     TC-UI-54-01   the classic context menu "Open with HexEditor" is registered in HKCU with the app icon
     TC-UI-54-04   three files opened with the menu end up in one process (the tabs are checked with a test build)
+    TC-UI-55-02   signed (HEX_SIGNING_ENABLED): the sparse package is registered and the new context menu has "Open with HexEditor"
+                  (skipped as out of scope while code signing is off: PKG-25)
     TC-UI-55-03   unsigned: the classic menu "Open with HexEditor" (Shell API) opens the file; no sparse package
     TC-UI-56-01   .hexproj is associated with HexEditor and opens it
     TC-UI-56-02   the default app of .iso does not change; HexEditor is added to "Open with"
@@ -34,6 +36,7 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
 . "$PSScriptRoot/ProcessMonitor.ps1"
 . "$PSScriptRoot/Explorer.ps1"
+. "$PSScriptRoot/AppDriver.ps1"
 if (-not $env:GITHUB_ACTIONS) { throw 'This script installs HexEditor; run it only on CI runners.' }
 
 # TC-PKG-08-04: record every registry access from the first installation to the last uninstallation.
@@ -256,6 +259,35 @@ Invoke-TestCase 'TC-UI-55-03' 'unsigned installer: classic menu, no sparse packa
     $packages = Get-HexEditorPackages
     Assert-True ($packages.Count -eq 0) "packages: $(($packages | ForEach-Object { $_.PackageFullName }) -join ', ')"
     Add-TestNote 'TC-UI-55-03: the tab is checked through the command line of the started process (a release build has no test channel).'
+}
+
+Invoke-TestCase 'TC-UI-55-02' 'signed installer: sparse package and the new context menu' {
+    # Out of scope until code signing is introduced (PKG-25, UI-55 acceptance criterion 2): an unsigned installer has no sparse package.
+    if ($env:HEX_SIGNING_ENABLED -ne 'true') { Skip-TestCase 'code signing is off (HEX_SIGNING_ENABLED is not true): the installer provides no sparse package (UI-55 spec 2 and 3, PKG-25).' }
+    if ([Environment]::OSVersion.Version.Build -lt 22000) { Skip-TestCase 'the new context menu exists only on Windows 11 (UI-55 spec 4).' }
+    # 1. The sparse package (a package with an external location) is registered.
+    $packages = @(Get-HexEditorPackages)
+    Assert-True ($packages.Count -eq 1) "packages: $(($packages | ForEach-Object { $_.PackageFullName }) -join ', ')"
+    Assert-True ($packages[0].SignatureKind -ne 'None') "the sparse package is not signed ($($packages[0].SignatureKind))"
+    # 2. The new context menu of TD-SEQ-1M has one top-level "Open with HexEditor".
+    $folder = Join-Path $env:RUNNER_TEMP 'menu55-signed'
+    New-Item -ItemType Directory -Force $folder | Out-Null
+    $file = Join-Path $folder 'seq.bin'
+    [System.IO.File]::WriteAllBytes($file, [byte[]]((0..255) * 4096))
+    Stop-HexEditor
+    $window = Open-ExplorerSelection $file
+    try {
+        $items = @(Get-NewContextMenuItems 'Open with HexEditor')
+        if ($items.Count -eq 0) { Skip-IfNoContextMenu 'TC-UI-55-02' }
+        Assert-True ($items.Count -eq 1) "$($items.Count) items named 'Open with HexEditor'"
+        Assert-True ($items[0].ParentType -like '*Menu') "the item is under $($items[0].ParentType), not the top level of the menu"
+        Invoke-UiaElement $items[0].Element
+        $started = Wait-HexEditorFor 'seq.bin'
+        Assert-True ($started.ExecutablePath -ieq $exe) "the menu started $($started.ExecutablePath)"
+    } finally {
+        Close-ExplorerWindow $window
+        Stop-HexEditor
+    }
 }
 
 Invoke-TestCase 'TC-UI-56-01' '.hexproj opens HexEditor' {

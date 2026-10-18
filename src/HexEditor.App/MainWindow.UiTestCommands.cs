@@ -47,7 +47,7 @@ public sealed partial class MainWindow
         "fileType" => await TestFileTypeAsync(request),
 
         // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
-        _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
+        _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleToolsCalcTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
             ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleTabsTestCommandsAsync(cmd, request)
@@ -62,7 +62,12 @@ public sealed partial class MainWindow
             ?? await HandleScriptUiTestCommandAsync(cmd, request)
             ?? await HandlePluginTestCommandsAsync(cmd, request)
             ?? await HandleTemplateTestCommandsAsync(cmd, request)
-            ?? await HandleCodeEditorTestCommandAsync(cmd, request),
+            ?? await HandleCodeEditorTestCommandAsync(cmd, request)
+            ?? await HandleDisassemblyTestCommandsAsync(cmd, request)
+            ?? await HandleTplAutoTestCommandsAsync(cmd, request)
+            ?? await HandleEditingPhase4TestCommandsAsync(cmd, request)
+            ?? await HandleDataCodecTestCommandsAsync(cmd, request)
+            ?? await HandleRemoteTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

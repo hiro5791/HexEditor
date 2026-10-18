@@ -167,3 +167,10 @@ public abstract class ByteSourceBase : IByteSource
     {
     }
 }
+
+/// <summary>
+/// 読み込みがネットワークを通るデータソース (ENG-40 の GDB サーバー、ENG-41 の SFTP)。1 回の読み込みが要求の待ち時間の上限 (既定 5 秒) まで
+/// かかりうるため、UI スレッドからは読み込みを待たず、表示用の読み込み (<see cref="Engine.DocumentSnapshot.ReadForDisplay"/>) を使う
+/// (ENG-06 の受け入れ基準「UI スレッドが 50 ms 以上ブロックされない」)。
+/// </summary>
+public interface IRemoteByteSource : IByteSource;

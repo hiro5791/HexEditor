@@ -262,6 +262,15 @@ public sealed partial class TemplateRowViewModel : ObservableObject
 
     public Visibility StatusVisibility => StatusText.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary><c>visualize</c> 属性を持つノードの行の「表示」ボタン (07 の TPL-16)。</summary>
+    public Visibility VisualizerVisibility =>
+        Item is { Kind: TemplateTreeItemKind.Node, Node: { } node } && Core.Templates.Visualization.TemplateVisualizer.HasVisualizer(node)
+            ? Visibility.Visible : Visibility.Collapsed;
+
+    public string VisualizerButtonName => Loc.Format("TplVis_ShowButton", Name);
+
+    public void ShowVisualizer() => Owner.RequestVisualizer(Item);
+
     public string Name => Item.Kind == TemplateTreeItemKind.Application ? Owner.ApplicationName(Item) : Data?.Name ?? "…";
 
     public string Value => Data?.Value ?? string.Empty;
@@ -438,6 +447,11 @@ public sealed class TemplateRowList : IList, IReadOnlyList<object>, INotifyColle
 
     /// <summary>行の内容がない行が表示された (読み込みを頼む)。</summary>
     public event EventHandler<TemplateRowViewModel>? NeedsData;
+
+    /// <summary>行の「表示」ボタン (ビジュアライザ。07 の TPL-16 の「呼び出し」) を押した。</summary>
+    public event EventHandler<TemplateTreeItem>? VisualizerRequested;
+
+    internal void RequestVisualizer(TemplateTreeItem item) => VisualizerRequested?.Invoke(this, item);
 
     public int Count => Model.RowCount;
 

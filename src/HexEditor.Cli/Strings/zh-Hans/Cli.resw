@@ -165,13 +165,13 @@
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>用法: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [选项]
 
-将补丁文件应用到文件。-o 和 --in-place 必须指定其一。此版本可应用 IPS
-和 IPS32 补丁。
+将补丁文件应用到文件。-o 和 --in-place 必须指定其一。此版本可应用 IPS、
+IPS32、UPS、BPS 和 .hexpatch 补丁。
 
 选项:
   -o, --output &lt;path&gt;       将打补丁后的文件写到这里 (不更改目标文件)
       --in-place            安全地替换目标文件 (先写入临时文件)
-      --format &lt;f&gt;          auto (默认)、ips 或 ips32
+      --format &lt;f&gt;          auto (默认)、ips、ips32、ups、bps 或 hexpatch
       --verify-before &lt;a:v&gt; 先检查目标文件的哈希 (例如 sha256:ab12...);
                             不一致时退出代码为 1，且不写入任何内容
       --verify-after &lt;a:v&gt;  在写入前检查结果的哈希
@@ -254,6 +254,7 @@
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>此处的数据无法读取</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>命令行中不可用</value></data>
 
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>值不是整数</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu 只能使用一个算法。要使用多个算法，请用 --format bsd 或 text。</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range 不能与标准输入一起使用。</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>未知的算法: {0}。运行 'hexed hash --algorithm list' 查看 ID。</value></data>
@@ -298,8 +299,7 @@
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>请指定 -o &lt;output&gt; 或 --in-place (以免误改原文件)。</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o 和 --in-place 不能同时使用。</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>输出路径 {0} 是目标文件或补丁文件。要替换目标文件，请使用 --in-place。</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} 不是补丁格式。请使用 auto、ips 或 ips32。</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: 此版本不支持 UPS、BPS 和 .hexpatch 补丁，支持 IPS 和 IPS32。</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} 不是补丁格式。请使用 auto、ips、ips32、ups、bps 或 hexpatch。</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} 不是可识别的补丁文件。</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: 补丁在记录 {1} (文件偏移量 {2}) 处已损坏。</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} 不是 {1} 补丁。</value></data>
@@ -308,6 +308,10 @@
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>打补丁后的 {0} 的哈希与预期不符 (--verify-after)。未写入任何内容。</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>已应用 {0} 条记录，更改了 {1} 字节，长度变化 {2}。已写入 {3}。</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: 补丁在记录 {1} 处已损坏。</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: 补丁已损坏 ({1})。</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} 可能是为另一个文件制作的: 补丁中记录的原始内容与 {1} 不一致。未写入任何内容。</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>应用 {0} 的结果与补丁中记录的结果不一致。未写入任何内容。</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} 条记录，将更改 {1} 字节，长度变化 {2}，新长度 {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>请只指定 --template 和 --auto 中的一个。</value></data>

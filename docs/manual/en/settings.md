@@ -20,6 +20,7 @@ Categories are on the left and settings on the right.
 | **Language** | Display language |
 | **Accessibility** | Screen reader announcements |
 | **Automation** | Scripts and plug-ins |
+| **Disassembly** | Syntax, number format and columns of the [disassembly](disassembly.md#display-options) |
 | **Updates** | Automatic updates and channel |
 | **Privacy** | Features that use the network |
 | **Explorer integration** | Right-click menu and file associations |
@@ -101,6 +102,7 @@ Change how files are handled in **Tools > Settings > Files and saving**.
   - **Block writes by other apps only while there are unsaved changes** (default): other apps cannot write only while the file has unsaved changes.
   - **Always block writes by other apps while open**: other apps cannot write for as long as the file is open.
   - **Don't lock (always allow other apps to write)**: other apps can always write.
+- **Notify when a file has alternate data streams**: off by default. See [NTFS alternate data streams](alternate-streams.md#notice).
 
 For the backup and recovery settings, see [Backups and recovery](opening-files.md#backups-and-recovery).
 

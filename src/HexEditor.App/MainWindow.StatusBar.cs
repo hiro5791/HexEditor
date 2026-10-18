@@ -231,11 +231,20 @@ public sealed partial class MainWindow
             // マクロの記録中 (AUTO-27 の仕様 4): 隠せない項目。
             ["recording"] = ScriptWorkspace.Macros.IsRecording,
 
+            // 変換ビュー (EDIT-45 の仕様 9): 有効な間は隠せない項目として出す。
+            ["transform"] = doc?.Document.ViewTransform is not null,
+
+            // リモートの接続先と接続状態 (ENG-40・ENG-41)、UDP の受信数と受信量 (ENG-42): リモートのドキュメントでは必ず示す。
+            ["remote"] = doc?.RemoteStatusText is { Length: > 0 },
+
             // プロセスメモリの即時書き込み (ENG-34): オンの間は必ず示す (利用者が隠せる項目にしない)。
             ["immediate"] = doc?.ImmediateWriteText is { Length: > 0 },
 
             // 補助プロセス (管理者権限) が動いている間の盾のアイコン (ENG-28): これも隠せない。
             ["helper"] = App.Devices?.IsHelperRunning == true,
+
+            // 外部からの自動操作 (AUTO-45 の仕様 3): オンの間のアイコン。これも隠せない。
+            ["automation"] = Services.Automation.AutomationService.IsRunning,
             ["size"] = doc is not null,
             ["sync"] = SyncStatusText().Length > 0,
             ["zoom"] = true,
@@ -246,8 +255,10 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" or "recording" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" or "remote" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        StatusTransform.Content = doc?.Document.ViewTransform is { } transform ? Controls.HexView.TransformViewLabel(transform) : string.Empty;
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
         StatusSync.Content = SyncStatusText();

@@ -39,5 +39,5 @@ public sealed partial class DocumentViewModel
     public void NotifyStatusChanged() => OnPropertyChanged(string.Empty);
 
     /// <summary>即時書き込みモードの表示 (ENG-34 の「画面」)。</summary>
-    public string? ImmediateWriteText => IsProcessMemory && ImmediateWrite ? Loc.Get("Status_ImmediateWrite") : null;
+    public string? ImmediateWriteText => (IsProcessMemory || Gdb is not null) && ImmediateWrite ? Loc.Get("Status_ImmediateWrite") : null;
 }

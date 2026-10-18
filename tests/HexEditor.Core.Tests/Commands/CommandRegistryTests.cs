@@ -306,7 +306,7 @@ public sealed partial class CommandRegistryTests
         ["次 / 前のタブ (最近使った順)"] = ["tab.next", "tab.previous"],
         ["次 / 前のタブ (並び順)"] = ["tab.nextInOrder", "tab.previousInOrder"],
         ["次 / 前の領域へフォーカスを移す"] = ["view.nextRegion", "view.previousRegion"],
-        ["印刷"] = ["-F4-06 (フェーズ 4)"],
+        ["印刷"] = ["file.print"],
         ["元に戻す"] = ["edit.undo"],
         ["やり直し"] = ["edit.redo"],
         ["スクリプトを実行"] = ["scripting.run"],

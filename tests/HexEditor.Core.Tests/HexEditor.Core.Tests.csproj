@@ -11,6 +11,7 @@
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="FsCheck.Xunit" Version="3.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="PdfPig" Version="0.1.16" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
   </ItemGroup>
@@ -22,6 +23,8 @@
   <ItemGroup>
     <None Include="..\fixtures\hash\**\*" LinkBase="fixtures\hash" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\fixtures\templates\**\*" LinkBase="fixtures\templates" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\demangle\**\*" LinkBase="fixtures\demangle" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\disasm\**\*" LinkBase="fixtures\disasm" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

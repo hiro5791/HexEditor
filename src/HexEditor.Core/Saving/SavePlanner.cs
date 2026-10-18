@@ -24,6 +24,12 @@ public enum SaveMethod
 
     /// <summary>長さが変わる保存を、元のファイルの中でデータをずらしながら行う (ENG-24)。</summary>
     ShiftInPlace,
+
+    /// <summary>代替データストリームの長さが変わる保存: 旧内容をジャーナルに保存してから、ストリームの内容を書き直す (ENG-37 の仕様 2)。</summary>
+    StreamRewrite,
+
+    /// <summary>ストリームの書き直しをジャーナルなしで行う (ジャーナルの上限を超える場合の「保護なしで書き込む」)。</summary>
+    StreamRewriteUnprotected,
 }
 
 /// <summary>保存を始める前に見つかった問題 (ENG-20 の仕様 3)。UI は種類に応じて確認ダイアログまたはエラーを出す。</summary>
@@ -156,13 +162,18 @@ public sealed record SavePlan
 
     /// <summary>書き込みを行う計画で、確認の要る問題がない (<see cref="SavePlanner.Execute"/> できる)。</summary>
     public bool CanExecute => Issue == SaveIssue.None
-        && Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected or SaveMethod.Safe or SaveMethod.ShiftInPlace;
+        && Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected or SaveMethod.Safe or SaveMethod.ShiftInPlace
+            or SaveMethod.StreamRewrite or SaveMethod.StreamRewriteUnprotected;
+
+    /// <summary>保存先が代替データストリーム (ENG-37)。置き換えの安全な保存は使えない。</summary>
+    public bool IsStream => TargetPath is not null && Tools.Files.AlternateStreams.IsStreamPath(TargetPath);
 
     /// <summary>書き出す量 (進捗の全体)。</summary>
     public long TotalBytes => Method switch
     {
         SaveMethod.Safe => Snapshot.Length,
         SaveMethod.ShiftInPlace => Shift is { } s ? s.BackupBytes + s.SpillBytes + s.WriteBytes : Snapshot.Length,
+        SaveMethod.StreamRewrite or SaveMethod.StreamRewriteUnprotected => Snapshot.Length * 2 + (Method == SaveMethod.StreamRewrite ? StreamRewriteSaver.JournalSize(Snapshot) : 0),
         _ => InPlaceSaver.JournalSize(Snapshot) * 2,
     };
 }
@@ -196,7 +207,7 @@ public static class SavePlanner
     /// <param name="targetPath">保存先。null は「元の場所に保存」(無題なら <see cref="SaveMethod.SaveAs"/>)。</param>
     public static SavePlan Plan(Document document, string? targetPath, SaveSettings settings)
     {
-        DocumentSnapshot snapshot = document.Current;
+        DocumentSnapshot snapshot = document.DataSnapshot;
         string? own = (document.Source as FileByteSource)?.Path;
         string? target = targetPath is null ? own : Path.GetFullPath(targetPath);
         var plan = new SavePlan
@@ -231,6 +242,12 @@ public static class SavePlanner
         if (sameFile && !settings.AlwaysSafeSave && File.Exists(target) && InPlaceSaver.CanSaveInPlace(snapshot, target))
         {
             return CheckInPlace(plan with { Method = SaveMethod.InPlace });
+        }
+
+        // 代替データストリーム (ENG-37): 置き換えは使えない。長さが変わる保存は、旧内容をジャーナルに保存してから書き直す。
+        if (sameFile && Tools.Files.AlternateStreams.IsStreamPath(target))
+        {
+            return CheckStreamRewrite(plan with { Method = SaveMethod.StreamRewrite });
         }
 
         bool canShift = sameFile && File.Exists(target) && ShiftSaver.CanShift(snapshot, target);
@@ -329,7 +346,9 @@ public static class SavePlanner
     public static SavePlan WriteWithoutJournal(SavePlan plan) =>
         plan.Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected
             ? plan with { Method = SaveMethod.InPlaceUnprotected, Issue = SaveIssue.None, Journal = null }
-            : throw new InvalidOperationException("その場保存の計画ではありません。");
+            : plan.Method is SaveMethod.StreamRewrite or SaveMethod.StreamRewriteUnprotected
+                ? plan with { Method = SaveMethod.StreamRewriteUnprotected, Issue = SaveIssue.None, Journal = null }
+                : throw new InvalidOperationException("その場保存の計画ではありません。");
 
     /// <summary>バックアップのコピーの確認で「コピーして保存」を選んだ。</summary>
     public static SavePlan CopyBackup(SavePlan plan) =>
@@ -348,6 +367,13 @@ public static class SavePlanner
         if (!plan.CanExecute)
         {
             throw new InvalidOperationException($"この計画は実行できません ({plan.Method}, {plan.Issue})。");
+        }
+
+        if (plan.Method is SaveMethod.StreamRewrite or SaveMethod.StreamRewriteUnprotected)
+        {
+            FileByteSource rewritten = StreamRewriteSaver.Save(plan.Snapshot, plan.TargetPath!, plan.Settings.JournalDirectory, plan.Document.Id,
+                protect: plan.Method == SaveMethod.StreamRewrite, operation, plan.Settings.Volumes);
+            return new SaveResult(rewritten, null);
         }
 
         if (plan.Method == SaveMethod.Safe)
@@ -425,6 +451,34 @@ public static class SavePlanner
         return length > BackupSettings.CopyConfirmBytes
             ? plan with { Issue = SaveIssue.BackupCopy, BackupCopyBytes = length }
             : plan;
+    }
+
+    /// <summary>
+    /// 代替データストリームの書き直し (ENG-37 の仕様 2): ジャーナルの上限 (ENG-23 の仕様 3) を超える場合は同じ確認を出す。長さが変わらず
+    /// ずれもない変更はその場保存 (ENG-23) にする。
+    /// </summary>
+    private static SavePlan CheckStreamRewrite(SavePlan plan)
+    {
+        if (InPlaceSaver.CanSaveInPlace(plan.Snapshot, plan.TargetPath!))
+        {
+            return CheckInPlace(plan with { Method = SaveMethod.InPlace });
+        }
+
+        long size = StreamRewriteSaver.JournalSize(plan.Snapshot);
+        if (size > plan.Settings.JournalLimit)
+        {
+            return plan with { Issue = SaveIssue.JournalTooLarge, Journal = new JournalShortage(size, plan.Settings.JournalLimit, null) };
+        }
+
+        VolumeInfo? volume = plan.Settings.Volumes.GetVolume(ExistingFolder(plan.Settings.JournalDirectory));
+        long required = StreamRewriteSaver.RequiredSpace(plan.Snapshot, protect: true) + DocumentSaver.FreeSpaceMargin;
+        if (volume?.AvailableFreeSpace is long available && available < required)
+        {
+            var space = new SpaceShortage(volume.Name, required, available);
+            return plan with { Issue = SaveIssue.JournalTooLarge, Journal = new JournalShortage(size, plan.Settings.JournalLimit, space) };
+        }
+
+        return plan;
     }
 
     private static SavePlan CheckJournal(SavePlan plan)

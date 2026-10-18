@@ -167,12 +167,12 @@ V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (napří
   <data name="Cli_Help_patch" xml:space="preserve"><value>Použití: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
 Použije soubor záplaty na soubor. Je vyžadována jedna z voleb -o a --in-place. Tato verze
-používá záplaty IPS a IPS32.
+používá záplaty IPS, IPS32, UPS, BPS a .hexpatch.
 
 Volby:
   -o, --output &lt;path&gt;       Zapsat opravený soubor sem (cílový soubor se nemění)
       --in-place            Bezpečně nahradit cílový soubor (nejprve se zapíše dočasný soubor)
-      --format &lt;f&gt;          auto (výchozí), ips nebo ips32
+      --format &lt;f&gt;          auto (výchozí), ips, ips32, ups, bps nebo hexpatch
       --verify-before &lt;a:v&gt; Nejprve zkontrolovat hash cílového souboru (například sha256:ab12...);
                             při rozdílu návratový kód 1 a nic se nezapíše
       --verify-after &lt;a:v&gt;  Zkontrolovat hash výsledku před zápisem
@@ -255,6 +255,7 @@ V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (napří
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>není platné číslo</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>data zde nelze přečíst</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>není v příkazovém řádku k dispozici</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>hodnota není celé číslo</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu vyžaduje právě jeden algoritmus. Pro více použijte --format bsd nebo text.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range nelze použít se standardním vstupem.</value></data>
@@ -301,7 +302,6 @@ V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (napří
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o a --in-place nelze použít společně.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Výstupní cesta {0} je cílový soubor nebo záplata. Chcete-li cíl nahradit, použijte --in-place.</value></data>
   <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} není formát záplaty. Použijte auto, ips nebo ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: záplaty UPS, BPS a .hexpatch tato verze nepodporuje. IPS a IPS32 ano.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} není rozpoznatelný soubor záplaty.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: záplata je poškozená u záznamu {1} (posun v souboru {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} není záplata {1}.</value></data>
@@ -310,6 +310,10 @@ V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (napří
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Opravený {0} nemá očekávaný hash (--verify-after). Nic nebylo zapsáno.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>Použito záznamů: {0}, změněno bajtů: {1}, změna délky: {2}. Zapsáno: {3}.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>formát</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: záplata je poškozena u záznamu {1}.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: záplata je poškozena ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} může být určena pro jiný soubor: originál zaznamenaný v záplatě neodpovídá {1}. Nic nebylo zapsáno.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Výsledek použití {0} neodpovídá výsledku zaznamenanému v záplatě. Nic nebylo zapsáno.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>záznamů: {0}, bajtů ke změně: {1}, změna délky: {2}, nová délka: {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Zadejte právě jednu z voleb --template a --auto.</value></data>

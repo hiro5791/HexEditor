@@ -1,0 +1,2 @@
+#pragma name "Image visualizer (TC-TPL-16-04)"
+u8 img[eof] [[visualize("image")]];

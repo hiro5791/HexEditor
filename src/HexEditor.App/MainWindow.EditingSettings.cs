@@ -69,6 +69,8 @@ public sealed partial class MainWindow
         editor.Options = CurrentEditingOptions();
         ApplySelectionSettings(doc);
         doc.Document.History.CoalesceInterval = EditingSettings.CoalesceInterval(App.Settings.GetInt(EditingSettings.UndoCoalesceSecondsKey, 2));
+        doc.Document.History.BranchingEnabled = App.Settings.GetBool(EditingSettings.BranchingHistoryKey, false);
+        doc.Document.CopyRawInTransformView = App.Settings.GetString(EditingSettings.TransformViewCopyKey, "display") == "raw";
 
         // 新しく開いたドキュメントのモードは設定「既定の入力モード」に従う (EDIT-10 の仕様 1)。固定長のドキュメントは常に上書き。
         if (!s_inputModeApplied.TryGetValue(editor, out _))

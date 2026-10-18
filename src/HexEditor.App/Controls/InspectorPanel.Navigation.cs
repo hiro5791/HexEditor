@@ -27,6 +27,7 @@ public sealed partial class InspectorPanel
 
     private MenuFlyoutSubItem _pointerMenu = null!;
     private MenuFlyoutItem _arrayMenu = null!;
+    private MenuFlyoutItem _branchMenu = null!;
     private readonly List<MenuFlyoutItem> _pointerItems = [];
     private Flyout? _baseFlyout;
 
@@ -57,8 +58,20 @@ public sealed partial class InspectorPanel
             }
         };
 
+        // 1 命令の逆アセンブルの行の「分岐先へ移動」(INSP-16 の仕様 7)。
+        _branchMenu = new MenuFlyoutItem { Text = Loc.Get("Inspector_MenuGoToBranchTarget") };
+        AutomationProperties.SetAutomationId(_branchMenu, "Inspector_MenuGoToBranchTarget");
+        _branchMenu.Click += (_, _) =>
+        {
+            if ((_menuTarget ?? Vm.Selected) is { BranchTarget: { } target })
+            {
+                Vm.GoToBranchTarget?.Invoke(target);
+            }
+        };
+
         // 「値を編集」の後ろに置く (INSP-01 の仕様 7 の順)。
         int at = RowMenu.Items.IndexOf(MenuEdit) + 1;
+        RowMenu.Items.Insert(at, _branchMenu);
         RowMenu.Items.Insert(at, _arrayMenu);
         RowMenu.Items.Insert(at, _pointerMenu);
         RowMenu.Opening += (_, _) =>
@@ -66,6 +79,15 @@ public sealed partial class InspectorPanel
             InspectorItemViewModel? target = _menuTarget ?? Vm.Selected;
             _pointerMenu.IsEnabled = InspectorViewModel.CanFollowPointer(target);
             _arrayMenu.IsEnabled = target is { Kind: InspectorItemKind.Row } && InspectorTypes.Find(target.TypeId) is not null;
+            bool disasm = target is not null && InspectorTypes.IsDisasm(target.TypeId);
+            _branchMenu.Visibility = disasm ? Visibility.Visible : Visibility.Collapsed;
+            _branchMenu.IsEnabled = disasm && target!.BranchTarget is not null;
+            if (disasm)
+            {
+                // 1 命令の逆アセンブルの行からは書き換えできない (INSP-16 の仕様 6)。
+                MenuEdit.IsEnabled = false;
+            }
+
             if (target is not null && target.TypeId.StartsWith("user:", StringComparison.Ordinal))
             {
                 // ユーザー定義型の行は書き換え・非表示にできない (INSP-22 の仕様 5)。

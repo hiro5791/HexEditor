@@ -2376,7 +2376,7 @@
   <data name="Encoding_Name_cp939" xml:space="preserve"><value>EBCDIC 日文拉丁混合（SO/SI）</value></data>
   <data name="Menu_View_EncodingMore.Text" xml:space="preserve"><value>更多編碼(M)…</value></data>
   <data name="Menu_View_EncodingMore.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>檢視：選取文字編碼</value></data>
+  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>選擇文字編碼</value></data>
   <data name="CmdAlias_view_encoding_select" xml:space="preserve"><value>文字編碼 字元集 字碼頁 charset code page ebcdic</value></data>
   <data name="EncodingList_Title" xml:space="preserve"><value>文字編碼</value></data>
   <data name="EncodingList_Filter" xml:space="preserve"><value>依編號或名稱篩選</value></data>
@@ -2447,23 +2447,23 @@
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>在多位元組字元中顯示接續標記(C)</value></data>
   <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
-  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>移至：下一個半位元組</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>下一個半位元組</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>半位元組 游標 nibble cursor</value></data>
-  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>移至：上一個半位元組</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>上一個半位元組</value></data>
   <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>半位元組 游標 nibble cursor</value></data>
-  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>移至：在 Hex 欄與文字欄之間切換</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>在 Hex 欄與文字欄之間切換</value></data>
   <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>切換欄 文字欄 Hex 欄 tab column text hex</value></data>
-  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>檢視：每 8 個位元組加入間隔</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>每 8 位元組加入額外空格</value></data>
   <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>間隔 分隔 群組 separator group</value></data>
-  <data name="Cmd_view_alternateText" xml:space="preserve"><value>檢視：文字欄交替色彩</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>文字欄交替顯示色彩</value></data>
   <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>交替色彩 條紋 alternate color stripes</value></data>
-  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>檢視：將自動每列位元組數調整為 2 的乘冪</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>將自動每列位元組數調整為 2 的次方</value></data>
   <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>每列位元組數 自動 乘冪 bytes per row auto</value></data>
-  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>檢視：以 : 分隔位移數字</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>以 : 分隔位移數字</value></data>
   <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>位移 冒號 分隔 offset colon</value></data>
-  <data name="Cmd_view_alignRows" xml:space="preserve"><value>檢視：將列對齊位址</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>依位址對齊列</value></data>
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>基底位址 列 對齊 base address row shift</value></data>
-  <data name="Cmd_view_continuation" xml:space="preserve"><value>檢視：多位元組字元中的接續標記</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>在多位元組字元中顯示接續標記</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>多位元組 接續 標記 utf-8 multibyte</value></data>
   <data name="Notice_OpenedReadOnly_AccessDenied" xml:space="preserve"><value>您沒有寫入此檔案的權限，因此已以唯讀方式開啟。若要重試，請選擇「允許編輯」。</value></data>
   <data name="Notice_OpenedReadOnly_SharingViolation" xml:space="preserve"><value>另一個應用程式已開啟此檔案以進行寫入，因此已以唯讀方式開啟。待其他應用程式完成後，請選擇「允許編輯」。</value></data>
@@ -2598,13 +2598,13 @@
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>協助工具</value></data>
   <data name="TranslationReport_Truncated" xml:space="preserve"><value>顯示 {1} 個字串中的前 {0} 個。請搜尋以縮小清單範圍。</value></data>
   <data name="SetGroup_translators" xml:space="preserve"><value>供翻譯人員使用</value></data>
-  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>移至：上一個群組</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>上一組</value></data>
   <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>上一個群組 左 字組 後退 group left word move back</value></data>
-  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>移至：下一個群組</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>下一組</value></data>
   <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>下一個群組 右 字組 前進 group right word move forward</value></data>
-  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>檢視：向上捲動一列</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>向上捲動一列</value></data>
   <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>向上捲動 一列 scroll line row up</value></data>
-  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>檢視：向下捲動一列</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>向下捲動一列</value></data>
   <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>向下捲動 一列 scroll line row down</value></data>
   <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>無效位元組的符號</value></data>
   <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>在文字欄編碼中無效的位元組的顯示方式。</value></data>
@@ -2621,7 +2621,7 @@
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>UTF-32 起始位置 餘數 2 utf-32 start position phase 2</value></data>
   <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>檢視：從餘數為 3 的位移解碼 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>UTF-32 起始位置 餘數 3 utf-32 start position phase 3</value></data>
-  <data name="Cmd_go_history" xml:space="preserve"><value>移至：記錄清單</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>記錄清單</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>記錄 清單 跳躍 返回 最近的位置 jump history list back recent positions</value></data>
   <data name="GoTo_History_Name" xml:space="preserve"><value>輸入記錄</value></data>
   <data name="GoTo_History_Empty" xml:space="preserve"><value>沒有記錄</value></data>
@@ -5408,15 +5408,14 @@
   <data name="Menu_Analysis_CreateSnapshot.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_Analysis_CompareSnapshots.Text" xml:space="preserve"><value>比較快照(N)...</value></data>
   <data name="Menu_Analysis_CompareSnapshots.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>比較：建立快照</value></data>
+  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>建立快照</value></data>
   <data name="CmdAlias_compare_createSnapshot" xml:space="preserve"><value>比較 建立快照 處理程序 記憶體 process memory snapshot</value></data>
-  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>比較：比較快照</value></data>
+  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>比較快照</value></data>
   <data name="CmdAlias_compare_snapshots" xml:space="preserve"><value>比較 比較快照 處理程序 記憶體 process memory snapshot</value></data>
   <data name="Snapshot_Name" xml:space="preserve"><value>名稱</value></data>
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>建立處理程序快照</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>建立</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>正在建立快照 {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>有 {0} 個頁面（{1}）無法讀取，因此不在快照中。</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>無法建立或儲存快照（{0}）。</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>處理程序記憶體的存取被拒。</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>讀取此處理程序需要系統管理員權限。要以系統管理員權限重新建立快照嗎？</value></data>
@@ -5434,11 +5433,11 @@
   <data name="Menu_View_PresetSave.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_View_PresetManage.Text" xml:space="preserve"><value>管理預設集(M)...</value></data>
   <data name="Menu_View_PresetManage.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_presetApply" xml:space="preserve"><value>檢視：套用預設集</value></data>
+  <data name="Cmd_view_presetApply" xml:space="preserve"><value>套用預設</value></data>
   <data name="CmdAlias_view_presetApply" xml:space="preserve"><value>檢視 套用預設集 設定 view settings preset</value></data>
-  <data name="Cmd_view_presetSave" xml:space="preserve"><value>檢視：將目前設定儲存為預設集</value></data>
+  <data name="Cmd_view_presetSave" xml:space="preserve"><value>將目前設定儲存為預設</value></data>
   <data name="CmdAlias_view_presetSave" xml:space="preserve"><value>檢視 儲存預設集 設定 view settings preset</value></data>
-  <data name="Cmd_view_presetManage" xml:space="preserve"><value>檢視：管理預設集</value></data>
+  <data name="Cmd_view_presetManage" xml:space="preserve"><value>管理預設</value></data>
   <data name="CmdAlias_view_presetManage" xml:space="preserve"><value>檢視 管理預設集 設定 view settings preset</value></data>
   <data name="Preset_Name" xml:space="preserve"><value>名稱</value></data>
   <data name="Preset_Extensions" xml:space="preserve"><value>自動套用至這些副檔名（選用）</value></data>
@@ -5576,13 +5575,13 @@
   <data name="TplSeverity_Warning" xml:space="preserve"><value>警告</value></data>
   <data name="TplSeverity_Error" xml:space="preserve"><value>錯誤</value></data>
   <data name="CmdCategory_scripting" xml:space="preserve"><value>指令碼</value></data>
-  <data name="Cmd_scripting_run" xml:space="preserve"><value>指令碼: 執行</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>執行</value></data>
   <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 執行 指令碼 重新執行</value></data>
-  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>指令碼: 執行指令碼檔案...</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>執行指令碼檔案...</value></data>
   <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx 執行 指令碼檔案</value></data>
-  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>指令碼: 全部停止</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>停止所有指令碼</value></data>
   <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts 停止 取消 指令碼</value></data>
-  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>指令碼: 新增 C# 指令碼元件...</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>新增 C# 指令碼元件...</value></data>
   <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install 新增 指令碼元件 安裝</value></data>
   <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>指令碼(R)</value></data>
   <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
@@ -5669,25 +5668,25 @@
   <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro 重播 巨集</value></data>
   <data name="Cmd_macro_repeat" xml:space="preserve"><value>重複播放</value></data>
   <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop 重複 巨集 迴圈</value></data>
-  <data name="Cmd_cursor_left" xml:space="preserve"><value>游標: 向左</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>向左</value></data>
   <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left 游標 移動 向左</value></data>
-  <data name="Cmd_cursor_right" xml:space="preserve"><value>游標: 向右</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>向右</value></data>
   <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right 游標 移動 向右</value></data>
-  <data name="Cmd_cursor_up" xml:space="preserve"><value>游標: 向上</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>向上</value></data>
   <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up 游標 移動 向上</value></data>
-  <data name="Cmd_cursor_down" xml:space="preserve"><value>游標: 向下</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>向下</value></data>
   <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down 游標 移動 向下</value></data>
-  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>游標: 上一頁</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>上一頁</value></data>
   <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up 游標 移動 上一頁</value></data>
-  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>游標: 下一頁</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>下一頁</value></data>
   <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down 游標 移動 下一頁</value></data>
-  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>游標: 行首</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>列首</value></data>
   <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start 游標 移動 行首</value></data>
-  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>游標: 行尾</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>列尾</value></data>
   <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end 游標 移動 行尾</value></data>
-  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>游標: 檔案開頭</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>檔案開頭</value></data>
   <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start 游標 移動 檔案開頭</value></data>
-  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>游標: 檔案結尾</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>檔案結尾</value></data>
   <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end 游標 移動 檔案結尾</value></data>
   <data name="Command_NoScriptEditor" xml:space="preserve"><value>未顯示指令碼編輯器。</value></data>
   <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>指令碼清單(I)</value></data>
@@ -6111,85 +6110,85 @@
   <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>讀取此處時中斷</value></data>
   <data name="CmdCategory_templates" xml:space="preserve"><value>範本</value></data>
   <data name="CmdCategory_codeEditor" xml:space="preserve"><value>程式碼編輯器</value></data>
-  <data name="Cmd_templates_apply" xml:space="preserve"><value>範本: 套用</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>套用</value></data>
   <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;結構;剖析</value></data>
-  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>範本: 從此處套用</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>從此處套用</value></data>
   <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;游標</value></data>
-  <data name="Cmd_templates_followType" xml:space="preserve"><value>範本: 顯示游標處的型別</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>顯示游標處的類型</value></data>
   <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;跟隨</value></data>
-  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>範本: 套用 Kaitai Struct</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>套用 Kaitai Struct</value></data>
   <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
-  <data name="Cmd_templates_rerun" xml:space="preserve"><value>範本: 重新執行</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>重新執行</value></data>
   <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;重新評估</value></data>
-  <data name="Cmd_templates_remove" xml:space="preserve"><value>範本: 移除套用</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>移除套用</value></data>
   <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;取消套用</value></data>
-  <data name="Cmd_templates_stop" xml:space="preserve"><value>範本: 停止評估</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>停止評估</value></data>
   <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;取消</value></data>
-  <data name="Cmd_templates_showResults" xml:space="preserve"><value>範本: 顯示結果樹狀目錄</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>顯示結果樹狀目錄</value></data>
   <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;樹狀目錄</value></data>
-  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>範本: 顯示輸出</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>顯示輸出</value></data>
   <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;錯誤</value></data>
-  <data name="Cmd_templates_editValue" xml:space="preserve"><value>範本: 編輯值</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>編輯值</value></data>
   <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;變更</value></data>
-  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>範本: 移至定義</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>移至定義</value></data>
   <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;宣告</value></data>
-  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>範本: 移至指標目標</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>移至指標目標</value></data>
   <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;指標</value></data>
-  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>範本: 複製值</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>複製值</value></data>
   <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard;剪貼簿</value></data>
-  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>範本: 加入書籤</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>加入書籤</value></data>
   <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;書籤</value></data>
-  <data name="Cmd_templates_export" xml:space="preserve"><value>範本: 匯出結果</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>匯出結果</value></data>
   <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;匯出</value></data>
-  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>範本: 切換著色</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>切換著色</value></data>
   <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;醒目提示</value></data>
-  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>範本: 尋找相符的範本</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>尋找相符的範本</value></data>
   <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;偵測</value></data>
-  <data name="Cmd_templates_new" xml:space="preserve"><value>範本: 新增</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>新增</value></data>
   <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;建立</value></data>
-  <data name="Cmd_templates_open" xml:space="preserve"><value>範本: 開啟</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>開啟</value></data>
   <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;檔案</value></data>
-  <data name="Cmd_templates_edit" xml:space="preserve"><value>範本: 編輯</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>編輯</value></data>
   <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;編輯器</value></data>
-  <data name="Cmd_templates_manage" xml:space="preserve"><value>範本: 管理</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>管理</value></data>
   <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;程式庫</value></data>
-  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>範本: 將 .ksy 轉換為 HXT</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>將 .ksy 轉換為 HXT</value></data>
   <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;轉換</value></data>
-  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>範本: 標準程式庫參考</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>標準程式庫參考</value></data>
   <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;說明 函式</value></data>
-  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>範本: 試執行</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>試執行</value></data>
   <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;測試;未儲存</value></data>
-  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>範本: 讀取此處時中斷</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>讀取此處時中斷</value></data>
   <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;資料中斷點</value></data>
-  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>檢視: 結構面板</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>結構面板</value></data>
   <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;範本 結果</value></data>
-  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>檢視: 範本輸出面板</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>範本輸出面板</value></data>
   <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;錯誤</value></data>
-  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>程式碼編輯器: 開始偵錯 / 繼續</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>開始偵錯 / 繼續</value></data>
   <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;執行;偵錯</value></data>
-  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>程式碼編輯器: 停止偵錯</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>停止偵錯</value></data>
   <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;結束</value></data>
-  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>程式碼編輯器: 切換中斷點</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>切換中斷點</value></data>
   <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;中斷點</value></data>
-  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>程式碼編輯器: 逐程序</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>逐程序</value></data>
   <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;下一步</value></data>
-  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>程式碼編輯器: 逐步執行</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>逐步執行</value></data>
   <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;進入</value></data>
-  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>程式碼編輯器: 跳出</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>跳出</value></data>
   <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;傳回</value></data>
-  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>程式碼編輯器: 執行至游標處</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>執行到游標處</value></data>
   <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;游標</value></data>
-  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>程式碼編輯器: 新增監看運算式</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>新增監看運算式</value></data>
   <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;監看</value></data>
-  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>程式碼編輯器: 移至定義</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>移至定義</value></data>
   <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;宣告</value></data>
-  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>程式碼編輯器: 尋找參考</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>尋找參考</value></data>
   <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;參考</value></data>
-  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>程式碼編輯器: 格式化文件</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>格式化文件</value></data>
   <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;縮排</value></data>
-  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>程式碼編輯器: 切換註解</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>切換註解</value></data>
   <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;註解</value></data>
-  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>程式碼編輯器: 顯示自動完成</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>顯示自動完成</value></data>
   <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;自動完成</value></data>
   <data name="SetCategory_templates" xml:space="preserve"><value>範本</value></data>
   <data name="Set_templates_autoApply" xml:space="preserve"><value>自動套用</value></data>
@@ -6488,7 +6487,7 @@
   <data name="Bookmark_EndianDocument" xml:space="preserve"><value>檔案</value></data>
   <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>位置運算式</value></data>
   <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>例如 u32le(0x3C)</value></data>
-  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>檢視: 影像檢視面板</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>影像檢視面板</value></data>
   <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image 視覺化 點陣圖 像素 圖片 影像</value></data>
   <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>影像檢視(V)</value></data>
   <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
@@ -6539,7 +6538,7 @@
   <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>離線模式已開啟 (或已關閉下載)，因此不會下載該元件。若要手動新增，請從此版本的發行頁面取得 {0} (必要時可在另一台電腦上)，並解壓縮到 {1}。</value></data>
   <data name="SafeMode_Notice" xml:space="preserve"><value>已在安全模式下啟動。不會載入外掛程式和自動執行的指令碼。</value></data>
   <data name="SafeMode_RestartNormally" xml:space="preserve"><value>正常重新啟動</value></data>
-  <data name="Cmd_templates_findValues" xml:space="preserve"><value>範本: 尋找欄位值</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>尋找欄位值</value></data>
   <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;搜尋;欄位;值</value></data>
   <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>未套用任何範本。</value></data>
   <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>第 {0} 個字元處有語法錯誤: {1}</value></data>
@@ -6603,4 +6602,1595 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>無法啟動程式碼編輯器 (WebView2)，因此使用功能較少的基本編輯器。重新安裝 Microsoft Edge WebView2 執行階段可能可以解決此問題。</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>取得 WebView2 執行階段</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>若要使用自動完成，請先新增 C# 指令碼元件。</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>反組譯</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>x86 語法</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>反組譯清單與資料檢查器中 x86 與 x64 指令使用的組合語言語法。</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>十六進位數字</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>清單中十六進位數字的書寫方式。</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>0x 前綴 (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>h 後綴 (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>十六進位數字使用大寫</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>以大寫顯示十六進位數字 A–F。</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>有號立即值</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>將負的立即值顯示為帶負號的數字，而非很大的無號數 (x86)。</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>助憶碼和暫存器使用大寫</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>以大寫顯示指令名稱與暫存器名稱。</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM 暫存器別名</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>以別名 (sp、lr、pc) 而非編號 (r13、r14、r15) 顯示 ARM 暫存器。</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>顯示位元組欄</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>在位址旁顯示指令的位元組。</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>最多顯示的位元組數</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>每個指令顯示的位元組數 (4 到 16)。較長的指令以「…」結尾。</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>位址欄</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>位址欄所顯示的內容。</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>虛擬位址</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>檔案位移</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>兩者</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>分支線</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>為分支繪製箭頭，並為檢視範圍內的分支目標繪製連線。</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>註解欄</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>顯示符號名稱、分支目標名稱與被參考的字串。</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>反組譯</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>切換反組譯面板</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>反組譯 組合語言 程式碼 disassembler assembly code</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>反組譯</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>反組譯 組合語言 程式碼 指令 disassembler assembly code instructions</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>從游標處反組譯</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>反組譯 程式碼 此處 游標 disassembler code here</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>移至虛擬位址</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>虛擬位址 區段 位址 va rva address section</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>移至進入點</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>進入點 起點 主函式 可執行檔 start main executable</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>反組譯 .NET 方法</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>msil il cil dotnet 方法 method</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>還原符號名稱...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>還原 符號 修飾 c++ rust demangle symbol undecorate</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>移至分支目標</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>跳躍 呼叫 跟隨 jump call follow</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>尋找參考</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>交互參照 呼叫者 xref cross references callers</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>尋找指令模式</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>搜尋 指令 組合語言 search instructions assembly</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>組譯指令</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>修補檔 組譯 指令 patch assemble instruction</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>複製清單列</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>複製 組合語言 copy assembly</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>匯出為組合語言...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>儲存 清單 asm save listing asm</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>指令</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>指令 ({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>無效指令</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>反組譯器無法使用</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>移至分支目標</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>架構</value></data>
+  <data name="Panel_Disassembly_Title" xml:space="preserve"><value>反組譯</value></data>
+  <data name="Menu_View_Disassembly.Text" xml:space="preserve"><value>反組譯</value></data>
+  <data name="Menu_Analysis_Disassemble.Text" xml:space="preserve"><value>反組譯(D)</value></data>
+  <data name="Menu_Analysis_Disassemble.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Analysis_Demangle.Text" xml:space="preserve"><value>還原符號名稱(M)...</value></data>
+  <data name="Menu_Analysis_Demangle.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="HexView_Menu_Disassemble" xml:space="preserve"><value>反組譯</value></data>
+  <data name="HexView_Menu_Demangle" xml:space="preserve"><value>還原符號名稱</value></data>
+  <data name="ToolPage_Demangle" xml:space="preserve"><value>還原符號名稱</value></data>
+  <data name="SearchResults_Column_Instruction" xml:space="preserve"><value>指令</value></data>
+  <data name="Disasm_ListingName" xml:space="preserve"><value>反組譯清單</value></data>
+  <data name="Disasm_Architecture" xml:space="preserve"><value>架構</value></data>
+  <data name="Disasm_Mode" xml:space="preserve"><value>模式</value></data>
+  <data name="Disasm_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Disasm_Slice" xml:space="preserve"><value>通用二進位檔中的架構</value></data>
+  <data name="Disasm_Start" xml:space="preserve"><value>起點</value></data>
+  <data name="Disasm_StartTip" xml:space="preserve"><value>從何處開始反組譯</value></data>
+  <data name="Disasm_StartCursor" xml:space="preserve"><value>游標位置</value></data>
+  <data name="Disasm_StartSelection" xml:space="preserve"><value>選取範圍的開頭</value></data>
+  <data name="Disasm_StartOffset" xml:space="preserve"><value>位移...</value></data>
+  <data name="Disasm_StartAddress" xml:space="preserve"><value>虛擬位址...</value></data>
+  <data name="Disasm_StartEntry" xml:space="preserve"><value>進入點</value></data>
+  <data name="Disasm_BaseAuto" xml:space="preserve"><value>基底位址: 自動</value></data>
+  <data name="Disasm_BaseAddress" xml:space="preserve"><value>基底位址 (留空為自動)</value></data>
+  <data name="Disasm_Syntax" xml:space="preserve"><value>語法 (x86)</value></data>
+  <data name="Disasm_Options" xml:space="preserve"><value>顯示選項</value></data>
+  <data name="Disasm_Follow" xml:space="preserve"><value>跟隨游標</value></data>
+  <data name="Disasm_FindPattern" xml:space="preserve"><value>尋找指令</value></data>
+  <data name="Disasm_PatternPlaceholder" xml:space="preserve"><value>例如 push rbp; mov rbp, rsp</value></data>
+  <data name="Disasm_PatternRegex" xml:space="preserve"><value>規則運算式</value></data>
+  <data name="Disasm_PatternFindAll" xml:space="preserve"><value>尋找全部</value></data>
+  <data name="Disasm_PatternClose" xml:space="preserve"><value>關閉</value></data>
+  <data name="Disasm_Sections" xml:space="preserve"><value>區段</value></data>
+  <data name="Disasm_Symbols" xml:space="preserve"><value>符號</value></data>
+  <data name="Disasm_Methods" xml:space="preserve"><value>類型與方法</value></data>
+  <data name="Disasm_SymbolFilter" xml:space="preserve"><value>依名稱篩選</value></data>
+  <data name="Disasm_SymbolKind_Function" xml:space="preserve"><value>函式</value></data>
+  <data name="Disasm_SymbolKind_Data" xml:space="preserve"><value>資料</value></data>
+  <data name="Disasm_SymbolKind_Import" xml:space="preserve"><value>匯入</value></data>
+  <data name="Disasm_SymbolKind_Export" xml:space="preserve"><value>匯出</value></data>
+  <data name="Disasm_PluginArchitecture" xml:space="preserve"><value>來自外掛程式: {0}</value></data>
+  <data name="Disasm_EngineError" xml:space="preserve"><value>無法載入反組譯引擎: {0}</value></data>
+  <data name="Disasm_MostlyData" xml:space="preserve"><value>這可能不是此架構的程式碼。</value></data>
+  <data name="Disasm_HeaderIssue" xml:space="preserve"><value>標頭的一部分無法解譯: {0}</value></data>
+  <data name="Disasm_HeaderIssue_OutOfRange" xml:space="preserve"><value>檔案之外的資料</value></data>
+  <data name="Disasm_HeaderIssue_Unreadable" xml:space="preserve"><value>無法讀取的位元組</value></data>
+  <data name="Disasm_HeaderIssue_StringOutOfRange" xml:space="preserve"><value>檔案之外的名稱</value></data>
+  <data name="Disasm_HeaderIssue_TooManySections" xml:space="preserve"><value>區段過多</value></data>
+  <data name="Disasm_HeaderIssue_SectionTableOutside" xml:space="preserve"><value>區段表位於檔案之外</value></data>
+  <data name="Disasm_HeaderIssue_SectionOutside" xml:space="preserve"><value>有個區段位於檔案之外</value></data>
+  <data name="Disasm_HeaderIssue_SectionNamesBroken" xml:space="preserve"><value>區段名稱已損毀</value></data>
+  <data name="Disasm_HeaderIssue_ProgramHeadersOutside" xml:space="preserve"><value>程式標頭位於檔案之外</value></data>
+  <data name="Disasm_HeaderIssue_ExportTableBroken" xml:space="preserve"><value>匯出表已損毀</value></data>
+  <data name="Disasm_HeaderIssue_ImportTableBroken" xml:space="preserve"><value>匯入表已損毀</value></data>
+  <data name="Disasm_HeaderIssue_DelayImportTableBroken" xml:space="preserve"><value>延遲載入匯入表已損毀</value></data>
+  <data name="Disasm_HeaderIssue_ExceptionTableBroken" xml:space="preserve"><value>例外表已損毀</value></data>
+  <data name="Disasm_HeaderIssue_RvaOutside" xml:space="preserve"><value>區段之外的位址</value></data>
+  <data name="Disasm_HeaderIssue_SymbolTableBroken" xml:space="preserve"><value>符號表已損毀</value></data>
+  <data name="Disasm_HeaderIssue_NoStringTable" xml:space="preserve"><value>缺少字串表</value></data>
+  <data name="Disasm_HeaderIssue_PltBroken" xml:space="preserve"><value>PLT 重新定位已損毀</value></data>
+  <data name="Disasm_HeaderIssue_FatHeaderBroken" xml:space="preserve"><value>通用二進位檔標頭已損毀</value></data>
+  <data name="Disasm_HeaderIssue_SliceOutside" xml:space="preserve"><value>有個架構切片位於檔案之外</value></data>
+  <data name="Disasm_HeaderIssue_LoadCommandsBroken" xml:space="preserve"><value>載入命令已損毀</value></data>
+  <data name="Disasm_HeaderIssue_StubsBroken" xml:space="preserve"><value>存根已損毀</value></data>
+  <data name="Disasm_DotNetMessage" xml:space="preserve"><value>這是 .NET 組件。可將其方法反組譯為 MSIL。</value></data>
+  <data name="Disasm_DotNetAction" xml:space="preserve"><value>顯示 MSIL</value></data>
+  <data name="Disasm_MetadataIssue" xml:space="preserve"><value>部分中繼資料無法讀取。</value></data>
+  <data name="Disasm_MenuAssemble" xml:space="preserve"><value>組譯...</value></data>
+  <data name="Disasm_MenuCopy" xml:space="preserve"><value>複製</value></data>
+  <data name="Disasm_NoTarget" xml:space="preserve"><value>此指令沒有可判斷的分支目標。</value></data>
+  <data name="Disasm_ExternalFunction" xml:space="preserve"><value>外部函式: {0}</value></data>
+  <data name="Disasm_TargetOutside" xml:space="preserve"><value>分支目標 {0} 不在檔案中。</value></data>
+  <data name="Disasm_NotExecutable" xml:space="preserve"><value>此文件不是可執行檔 (PE、ELF 或 Mach-O)。</value></data>
+  <data name="Disasm_NoEntryPoint" xml:space="preserve"><value>此可執行檔沒有進入點。</value></data>
+  <data name="Disasm_NotDotNet" xml:space="preserve"><value>此文件不是 .NET 組件。</value></data>
+  <data name="Disasm_NotForMsil" xml:space="preserve"><value>不適用於 MSIL。</value></data>
+  <data name="Disasm_AssembleX86Only" xml:space="preserve"><value>就地組譯僅適用於 x86 和 x64。</value></data>
+  <data name="Disasm_Go" xml:space="preserve"><value>移至</value></data>
+  <data name="Disasm_OutOfDocument" xml:space="preserve"><value>位移超出文件範圍。</value></data>
+  <data name="Disasm_VirtualAddress" xml:space="preserve"><value>虛擬位址</value></data>
+  <data name="Disasm_NoSection" xml:space="preserve"><value>該位址不在任何區段中。</value></data>
+  <data name="Disasm_AddressResolved" xml:space="preserve"><value>位移 {0} ({1})</value></data>
+  <data name="Disasm_ReferencesTo" xml:space="preserve"><value>對 {0} 的參考</value></data>
+  <data name="Disasm_ReferencesKind" xml:space="preserve"><value>參考</value></data>
+  <data name="Disasm_PatternKind" xml:space="preserve"><value>指令模式</value></data>
+  <data name="Disasm_PatternError" xml:space="preserve"><value>第 {0} 欄: {1}</value></data>
+  <data name="Disasm_PatternError_Empty" xml:space="preserve"><value>模式中沒有指令</value></data>
+  <data name="Disasm_PatternError_Range" xml:space="preserve"><value>{n} 範圍無效</value></data>
+  <data name="Disasm_PatternError_Brace" xml:space="preserve"><value>大括號不成對</value></data>
+  <data name="Disasm_PatternError_Regex" xml:space="preserve"><value>規則運算式無效</value></data>
+  <data name="Disasm_PatternEstimate" xml:space="preserve"><value>搜尋大約需要 {0} 秒。</value></data>
+  <data name="Disasm_PatternNotFound" xml:space="preserve"><value>沒有相符項目。</value></data>
+  <data name="Disasm_AssemblyFile" xml:space="preserve"><value>組合語言清單</value></data>
+  <data name="Disasm_Exported" xml:space="preserve"><value>已儲存 {0}。</value></data>
+  <data name="Disasm_TipLength" xml:space="preserve"><value>長度: {0} 位元組</value></data>
+  <data name="Disasm_TipOperands" xml:space="preserve"><value>運算元: {0}</value></data>
+  <data name="Disasm_TipRead" xml:space="preserve"><value>讀取的暫存器: {0}</value></data>
+  <data name="Disasm_TipWritten" xml:space="preserve"><value>寫入的暫存器: {0}</value></data>
+  <data name="Disasm_TipGroups" xml:space="preserve"><value>群組: {0}</value></data>
+  <data name="Disasm_AssembleInput" xml:space="preserve"><value>新指令 (以 ; 分隔)</value></data>
+  <data name="Disasm_AssembleFillNop" xml:space="preserve"><value>以 NOP (0x90) 填滿其餘部分</value></data>
+  <data name="Disasm_AssembleKeep" xml:space="preserve"><value>保留其餘位元組</value></data>
+  <data name="Disasm_AssembleWrite" xml:space="preserve"><value>寫入</value></data>
+  <data name="Disasm_AssembleResult" xml:space="preserve"><value>{0} ({1} 位元組)</value></data>
+  <data name="Disasm_AssembleOverwrites" xml:space="preserve"><value>這也會覆寫: {0}</value></data>
+  <data name="Disasm_AssembleError" xml:space="preserve"><value>無法組譯 ({0}): {1}</value></data>
+  <data name="Disasm_AssembleError_Syntax" xml:space="preserve"><value>語法錯誤</value></data>
+  <data name="Disasm_AssembleError_UnknownMnemonic" xml:space="preserve"><value>未知的指令</value></data>
+  <data name="Disasm_AssembleError_Operands" xml:space="preserve"><value>運算元無效</value></data>
+  <data name="Disasm_AssembleError_Encode" xml:space="preserve"><value>無法編碼</value></data>
+  <data name="Disasm_UndoAssemble" xml:space="preserve"><value>組譯</value></data>
+  <data name="Demangle_Input" xml:space="preserve"><value>已修飾的名稱 (每行一個)</value></data>
+  <data name="Demangle_InputPlaceholder" xml:space="preserve"><value>_ZN3foo3barEi</value></data>
+  <data name="Demangle_Output" xml:space="preserve"><value>結果</value></data>
+  <data name="Demangle_ShortNames" xml:space="preserve"><value>簡短名稱 (不含參數與傳回類型)</value></data>
+  <data name="Demangle_RustHash" xml:space="preserve"><value>顯示 Rust 雜湊</value></data>
+  <data name="Demangle_Copy" xml:space="preserve"><value>複製</value></data>
+  <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (無法還原)</value></data>
+  <data name="Demangle_Converting" xml:space="preserve"><value>正在轉換...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>顯示原生程式碼</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>顯示此方法的 ReadyToRun 原生程式碼</value></data>
+  <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Panel_TemplateVisualizer_Title" xml:space="preserve"><value>視覺化檢視器</value></data>
+  <data name="Cmd_view_panel_templateVisualizer" xml:space="preserve"><value>範本視覺化檢視器面板</value></data>
+  <data name="CmdAlias_view_panel_templateVisualizer" xml:space="preserve"><value>視覺化檢視器 範本 影像 音訊 表格 圖表 visualizer template image audio table chart</value></data>
+  <data name="Cmd_templates_visualize" xml:space="preserve"><value>在視覺化檢視器中顯示</value></data>
+  <data name="CmdAlias_templates_visualize" xml:space="preserve"><value>視覺化 影像 音訊 波形 表格 圖表 visualize image audio waveform table chart</value></data>
+  <data name="Menu_View_TemplateVisualizer.Text" xml:space="preserve"><value>範本視覺化檢視器(2)</value></data>
+  <data name="Menu_View_TemplateVisualizer.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="TplMenu_Visualize" xml:space="preserve"><value>在視覺化檢視器中顯示</value></data>
+  <data name="TplVis_ShowButton" xml:space="preserve"><value>在視覺化檢視器中顯示 {0}</value></data>
+  <data name="TplVis_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="TplVis_Play" xml:space="preserve"><value>播放</value></data>
+  <data name="TplVis_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="TplVis_Seek" xml:space="preserve"><value>播放位置</value></data>
+  <data name="TplVis_Nothing" xml:space="preserve"><value>請在結構樹狀目錄中選取具有視覺化檢視器 (visualize 屬性) 的節點。</value></data>
+  <data name="TplVis_NoVisualizer" xml:space="preserve"><value>所選節點沒有視覺化檢視器</value></data>
+  <data name="TplVis_Header" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="TplVis_Kind_Bitmap" xml:space="preserve"><value>影像</value></data>
+  <data name="TplVis_Kind_Image" xml:space="preserve"><value>影像</value></data>
+  <data name="TplVis_Kind_Audio" xml:space="preserve"><value>音訊</value></data>
+  <data name="TplVis_Kind_Disassembly" xml:space="preserve"><value>反組譯</value></data>
+  <data name="TplVis_Kind_Table" xml:space="preserve"><value>表格</value></data>
+  <data name="TplVis_Kind_Chart" xml:space="preserve"><value>圖表</value></data>
+  <data name="TplVis_Kind_Color" xml:space="preserve"><value>色彩</value></data>
+  <data name="TplVis_Kind_Text" xml:space="preserve"><value>文字</value></data>
+  <data name="TplVis_Kind_Error" xml:space="preserve"><value>錯誤</value></data>
+  <data name="TplVis_CannotShow" xml:space="preserve"><value>無法顯示: {0}</value></data>
+  <data name="TplVis_CannotShowImage" xml:space="preserve"><value>無法顯示此影像: {0}</value></data>
+  <data name="TplVis_Truncated" xml:space="preserve"><value>資料超過上限 (64 MB，影像為 16,384 × 16,384 像素)。僅顯示開頭部分。</value></data>
+  <data name="TplVis_ImageAlt" xml:space="preserve"><value>影像，寬 {0}，高 {1}，格式 {2}</value></data>
+  <data name="TplVis_AudioAlt" xml:space="preserve"><value>音訊，長度 {0} 秒，取樣率 {1} Hz，{2} 個聲道</value></data>
+  <data name="TplVis_TableAlt" xml:space="preserve"><value>表格，{0} 列，{1} 欄</value></data>
+  <data name="TplVis_ChartAlt" xml:space="preserve"><value>圖表，{0} 個值，範圍從 {1} 到 {2}</value></data>
+  <data name="TplVis_ColorAlt" xml:space="preserve"><value>色彩 {0}</value></data>
+  <data name="TplVis_WavFiles" xml:space="preserve"><value>WAV 音訊</value></data>
+  <data name="TplVis_CsvFiles" xml:space="preserve"><value>CSV (逗號分隔值)</value></data>
+  <data name="Cmd_templates_online_browse" xml:space="preserve"><value>尋找線上範本</value></data>
+  <data name="CmdAlias_templates_online_browse" xml:space="preserve"><value>線上 存放庫 下載 安裝 online repository download install</value></data>
+  <data name="Cmd_templates_online_checkUpdates" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="CmdAlias_templates_online_checkUpdates" xml:space="preserve"><value>線上 更新 新版本 online update new version</value></data>
+  <data name="Menu_Templates_Online.Text" xml:space="preserve"><value>尋找線上範本(L)...</value></data>
+  <data name="Menu_Templates_Online.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="SetSection_TemplateOnline" xml:space="preserve"><value>線上範本</value></data>
+  <data name="SetSearch_TemplateOnline" xml:space="preserve"><value>線上 存放庫 下載 安裝 更新 範本 online repository download install update templates</value></data>
+  <data name="Set_templates_online_checkUpdates" xml:space="preserve"><value>啟動時檢查線上範本是否有更新 (每天一次)</value></data>
+  <data name="SetDesc_templates_online_checkUpdates" xml:space="preserve"><value>新版本會在資訊列中提示。除非已開啟自動更新，否則未經您同意不會更新任何內容。</value></data>
+  <data name="Set_templates_online_autoUpdate" xml:space="preserve"><value>自動更新線上範本</value></data>
+  <data name="SetDesc_templates_online_autoUpdate" xml:space="preserve"><value>不需詢問，直接安裝更新檢查發現的新版本。</value></data>
+  <data name="Set_templates_online_repositories" xml:space="preserve"><value>範本存放庫</value></data>
+  <data name="SetDesc_templates_online_repositories" xml:space="preserve"><value>您新增的存放庫的索引 URL (HTTPS)。</value></data>
+  <data name="Tpl_OriginOnline" xml:space="preserve"><value>線上</value></data>
+  <data name="TplOnline_OfficialRepository" xml:space="preserve"><value>官方存放庫</value></data>
+  <data name="TplOnline_Search" xml:space="preserve"><value>搜尋線上範本</value></data>
+  <data name="TplOnline_Category" xml:space="preserve"><value>類別</value></data>
+  <data name="TplOnline_AllCategories" xml:space="preserve"><value>所有類別</value></data>
+  <data name="TplOnline_Refresh" xml:space="preserve"><value>重新整理</value></data>
+  <data name="TplOnline_CheckUpdates" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="TplOnline_Repositories" xml:space="preserve"><value>您新增的存放庫</value></data>
+  <data name="TplOnline_RepoUrl" xml:space="preserve"><value>存放庫索引 URL</value></data>
+  <data name="TplOnline_AddRepo" xml:space="preserve"><value>新增存放庫</value></data>
+  <data name="TplOnline_BadUrl" xml:space="preserve"><value>請輸入存放庫索引 (index.json) 的 HTTPS URL。</value></data>
+  <data name="TplOnline_NoRepositories" xml:space="preserve"><value>未設定任何存放庫。</value></data>
+  <data name="TplOnline_Loading" xml:space="preserve"><value>正在載入存放庫...</value></data>
+  <data name="TplOnline_Disabled" xml:space="preserve"><value>線上範本已關閉。</value></data>
+  <data name="TplOnline_OpenSettings" xml:space="preserve"><value>開啟設定</value></data>
+  <data name="TplOnline_Unavailable" xml:space="preserve"><value>無法連線到存放庫: {0}</value></data>
+  <data name="TplOnline_Tampered" xml:space="preserve"><value>無法驗證 {0} 的索引，因此未使用。該檔案可能已遭竄改。</value></data>
+  <data name="TplOnline_Invalid" xml:space="preserve"><value>無法讀取 {0} 的索引: {1}</value></data>
+  <data name="TplOnline_NoMatch" xml:space="preserve"><value>沒有相符的範本。</value></data>
+  <data name="TplOnline_License" xml:space="preserve"><value>授權: {0}</value></data>
+  <data name="TplOnline_Author" xml:space="preserve"><value>作者: {0}</value></data>
+  <data name="TplOnline_InstalledVersion" xml:space="preserve"><value>已安裝: {0}</value></data>
+  <data name="TplOnline_Unsigned" xml:space="preserve"><value>未簽署</value></data>
+  <data name="TplOnline_UsesExtensions" xml:space="preserve"><value>使用指令碼函式</value></data>
+  <data name="TplOnline_Install" xml:space="preserve"><value>安裝</value></data>
+  <data name="TplOnline_Update" xml:space="preserve"><value>更新</value></data>
+  <data name="TplOnline_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="TplOnline_Source" xml:space="preserve"><value>檢視原始碼</value></data>
+  <data name="TplOnline_SourceTitle" xml:space="preserve"><value>{0} 的原始碼</value></data>
+  <data name="TplOnline_FileTampered" xml:space="preserve"><value>該檔案可能已遭竄改。</value></data>
+  <data name="TplOnline_FileTamperedNamed" xml:space="preserve"><value>未安裝 {0}。該檔案可能已遭竄改。</value></data>
+  <data name="TplOnline_Downloading" xml:space="preserve"><value>正在下載範本: {0}</value></data>
+  <data name="TplOnline_Installed" xml:space="preserve"><value>已安裝 {0} {1}</value></data>
+  <data name="TplOnline_ExtensionsTitle" xml:space="preserve"><value>安裝 {0}?</value></data>
+  <data name="TplOnline_ExtensionsText" xml:space="preserve"><value>此範本使用指令碼函式 (範本擴充功能)。這些函式會以指令碼的權限與限制執行。請只安裝您信任的作者所提供的範本。</value></data>
+  <data name="TplOnline_UpdatesAvailable" xml:space="preserve"><value>有線上範本的新版本: {0}</value></data>
+  <data name="TplOnline_NoUpdates" xml:space="preserve"><value>所有線上範本都是最新版本。</value></data>
+  <data name="SetGroup_templatesOnline" xml:space="preserve"><value>線上範本</value></data>
+  <data name="SetGroup_rpc" xml:space="preserve"><value>外部自動化</value></data>
+  <data name="Set_automation_rpc_enabled" xml:space="preserve"><value>允許外部自動化 (透過具名管道的 JSON-RPC)</value></data>
+  <data name="SetDesc_automation_rpc_enabled" xml:space="preserve"><value>您帳戶下的其他程式 (PowerShell、Python、測試工具) 可以操作 HexEditor。每個程式第一次連線時都會徵求您的許可。預設為關閉。</value></data>
+  <data name="Status_AutomationOn" xml:space="preserve"><value>外部自動化: 開啟</value></data>
+  <data name="Status_AutomationConnections" xml:space="preserve"><value>(已連線 {0} 個)</value></data>
+  <data name="Rpc_Writing" xml:space="preserve"><value>由外部程式操作: {0}</value></data>
+  <data name="Rpc_Disconnect" xml:space="preserve"><value>中斷連線</value></data>
+  <data name="RpcTrust_Title" xml:space="preserve"><value>要允許來自 {0} 的連線嗎?</value></data>
+  <data name="RpcTrust_Program" xml:space="preserve"><value>程式: {0}</value></data>
+  <data name="RpcTrust_Signer" xml:space="preserve"><value>簽署者: {0}</value></data>
+  <data name="RpcTrust_Description" xml:space="preserve"><value>此程式想要透過外部自動化操作 HexEditor。它可以讀取與編輯已開啟的文件、開啟與儲存檔案，並使用其他自動化功能。請只允許您信任的程式。</value></data>
+  <data name="RpcTrust_Unsigned" xml:space="preserve"><value>此程式沒有有效的數位簽章。</value></data>
+  <data name="RpcTrust_AllowOnce" xml:space="preserve"><value>僅允許這一次</value></data>
+  <data name="RpcTrust_Deny" xml:space="preserve"><value>不允許</value></data>
+  <data name="SetSection_RpcClients" xml:space="preserve"><value>外部自動化</value></data>
+  <data name="SetSearch_RpcClients" xml:space="preserve"><value>外部自動化 json-rpc 具名管道 powershell python 已允許的程式 external automation named pipe allowed programs</value></data>
+  <data name="RpcClients_Running" xml:space="preserve"><value>正在接聽下方的具名管道。只有此電腦上您帳戶下的程式可以連線。</value></data>
+  <data name="RpcClients_Stopped" xml:space="preserve"><value>未在接聽 (請開啟「允許外部自動化」)。</value></data>
+  <data name="RpcClients_StartError" xml:space="preserve"><value>無法建立具名管道: {0}</value></data>
+  <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell 模組: {0} (Import-Module)。方法清單: {1}</value></data>
+  <data name="RpcClients_None" xml:space="preserve"><value>沒有永久允許的程式。</value></data>
+  <data name="RpcClients_Allowed" xml:space="preserve"><value>允許於 {0}</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>需要 HexEditor {0} 或更新版本</value></data>
+  <data name="Cmd_data_patch_create" xml:space="preserve"><value>建立修補檔...</value></data>
+  <data name="CmdAlias_data_patch_create" xml:space="preserve"><value>修補檔 差異 ips ups bps hexpatch diff</value></data>
+  <data name="Cmd_data_patch_apply" xml:space="preserve"><value>套用修補檔...</value></data>
+  <data name="CmdAlias_data_patch_apply" xml:space="preserve"><value>修補檔 打補丁 ips ups bps hexpatch</value></data>
+  <data name="Cmd_data_transformView_define" xml:space="preserve"><value>轉換檢視設定...</value></data>
+  <data name="CmdAlias_data_transformView_define" xml:space="preserve"><value>轉換 檢視 解碼 xor view decode</value></data>
+  <data name="Cmd_data_transformView_xor" xml:space="preserve"><value>XOR 檢視...</value></data>
+  <data name="CmdAlias_data_transformView_xor" xml:space="preserve"><value>互斥或 金鑰 檢視 xor key view</value></data>
+  <data name="Cmd_data_transformView_clear" xml:space="preserve"><value>清除轉換檢視</value></data>
+  <data name="CmdAlias_data_transformView_clear" xml:space="preserve"><value>移除 清除 xor 檢視 remove xor view</value></data>
+  <data name="Cmd_data_transformView_applyToData" xml:space="preserve"><value>將此轉換套用到資料...</value></data>
+  <data name="CmdAlias_data_transformView_applyToData" xml:space="preserve"><value>寫回 固定 xor 寫入 bake xor write</value></data>
+  <data name="Cmd_edit_history_save" xml:space="preserve"><value>儲存記錄...</value></data>
+  <data name="CmdAlias_edit_history_save" xml:space="preserve"><value>復原樹狀目錄 記錄 undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_load" xml:space="preserve"><value>載入記錄...</value></data>
+  <data name="CmdAlias_edit_history_load" xml:space="preserve"><value>復原樹狀目錄 記錄 undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_goToNode" xml:space="preserve"><value>移至記錄節點...</value></data>
+  <data name="CmdAlias_edit_history_goToNode" xml:space="preserve"><value>復原樹狀目錄 已命名狀態 undo tree named state</value></data>
+  <data name="Set_edit_undo_branching" xml:space="preserve"><value>使用分支復原記錄</value></data>
+  <data name="SetDesc_edit_undo_branching" xml:space="preserve"><value>復原後再進行新的編輯時，將被復原的編輯保留為獨立的分支，而不是捨棄。記錄面板可以用樹狀結構顯示這些分支。</value></data>
+  <data name="Set_edit_transformView_copy" xml:space="preserve"><value>在轉換檢視中複製</value></data>
+  <data name="SetDesc_edit_transformView_copy" xml:space="preserve"><value>轉換檢視 (如 XOR 檢視) 作用中時，「複製」放入剪貼簿的內容。</value></data>
+  <data name="SetOpt_edit_transformView_copy_display" xml:space="preserve"><value>依顯示內容</value></data>
+  <data name="SetOpt_edit_transformView_copy_raw" xml:space="preserve"><value>原始資料</value></data>
+  <data name="Menu_Data_Patch.Text" xml:space="preserve"><value>修補檔</value></data>
+  <data name="Menu_Data_Patch.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Data_PatchCreate.Text" xml:space="preserve"><value>建立修補檔...</value></data>
+  <data name="Menu_Data_PatchCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_PatchApply.Text" xml:space="preserve"><value>套用修補檔...</value></data>
+  <data name="Menu_Data_PatchApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Data_TransformView.Text" xml:space="preserve"><value>轉換檢視</value></data>
+  <data name="Menu_Data_TransformView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_TransformDefine.Text" xml:space="preserve"><value>轉換檢視設定...</value></data>
+  <data name="Menu_Data_TransformDefine.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Data_TransformXor.Text" xml:space="preserve"><value>XOR 檢視...</value></data>
+  <data name="Menu_Data_TransformXor.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_TransformClear.Text" xml:space="preserve"><value>清除轉換檢視</value></data>
+  <data name="Menu_Data_TransformClear.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_TransformApply.Text" xml:space="preserve"><value>將此轉換套用到資料...</value></data>
+  <data name="Menu_Data_TransformApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="History_TreeView" xml:space="preserve"><value>以樹狀結構顯示</value></data>
+  <data name="History_SaveHistory" xml:space="preserve"><value>儲存記錄</value></data>
+  <data name="History_LoadHistory" xml:space="preserve"><value>載入記錄</value></data>
+  <data name="History_CreatePatch.Text" xml:space="preserve"><value>根據這兩點建立修補檔...</value></data>
+  <data name="History_NameNode.Text" xml:space="preserve"><value>命名...</value></data>
+  <data name="History_DeleteBranch.Text" xml:space="preserve"><value>刪除分支...</value></data>
+  <data name="History_Pin" xml:space="preserve"><value>釘選</value></data>
+  <data name="History_Unpin" xml:space="preserve"><value>取消釘選</value></data>
+  <data name="History_PinnedMark" xml:space="preserve"><value>已釘選</value></data>
+  <data name="History_NodeDetails" xml:space="preserve"><value>範圍 {0} ({1} 位元組)  之前: {2}  之後: {3}</value></data>
+  <data name="History_LinkedView" xml:space="preserve"><value>在此連結檢視的原始索引標籤中儲存與載入記錄。</value></data>
+  <data name="History_NoNamedNodes" xml:space="preserve"><value>沒有已命名的記錄節點。請在記錄面板 (樹狀檢視) 中為節點命名。</value></data>
+  <data name="HistorySave_Title" xml:space="preserve"><value>儲存記錄</value></data>
+  <data name="HistorySave_Path" xml:space="preserve"><value>檔案</value></data>
+  <data name="HistorySave_FullHash" xml:space="preserve"><value>包含整個原始檔案的 SHA-256 (大型檔案較慢)</value></data>
+  <data name="HistorySave_EstimateText" xml:space="preserve"><value>預估大小: {0} ({1} 個節點)</value></data>
+  <data name="HistorySave_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="HistorySave_FileType" xml:space="preserve"><value>HexEditor 記錄</value></data>
+  <data name="HistorySave_NoSpace" xml:space="preserve"><value>可用空間不足，無法儲存記錄: 需要 {0}，但只有 {1} 可用。</value></data>
+  <data name="HistorySave_Operation" xml:space="preserve"><value>正在儲存記錄</value></data>
+  <data name="HistorySave_Done" xml:space="preserve"><value>已將記錄儲存到 {0}。</value></data>
+  <data name="HistorySave_Failed" xml:space="preserve"><value>無法儲存記錄: {0}</value></data>
+  <data name="HistoryLoad_Title" xml:space="preserve"><value>載入記錄</value></data>
+  <data name="HistoryLoad_Checking" xml:space="preserve"><value>正在檢查記錄檔</value></data>
+  <data name="HistoryLoad_Mismatch" xml:space="preserve"><value>自儲存此記錄以來，原始檔案可能已變更。仍要載入記錄嗎?</value></data>
+  <data name="HistoryLoad_LoadAnyway" xml:space="preserve"><value>載入</value></data>
+  <data name="HistoryLoad_Operation" xml:space="preserve"><value>正在載入記錄</value></data>
+  <data name="HistoryLoad_Done" xml:space="preserve"><value>已從 {0} 載入記錄。</value></data>
+  <data name="HistoryLoad_Failed" xml:space="preserve"><value>無法載入記錄檔: {0}</value></data>
+  <data name="HistoryGoTo_Title" xml:space="preserve"><value>移至記錄節點</value></data>
+  <data name="HistoryGoTo_Filter" xml:space="preserve"><value>名稱</value></data>
+  <data name="HistoryGoTo_Go" xml:space="preserve"><value>移至</value></data>
+  <data name="HistoryName_Title" xml:space="preserve"><value>為記錄節點命名</value></data>
+  <data name="HistoryName_Name" xml:space="preserve"><value>名稱 (1 到 100 個字元)</value></data>
+  <data name="HistoryName_Note" xml:space="preserve"><value>留空則移除名稱。已命名的節點不會被自動清理移除。</value></data>
+  <data name="HistoryName_Ok" xml:space="preserve"><value>確定</value></data>
+  <data name="HistoryDelete_Title" xml:space="preserve"><value>刪除分支</value></data>
+  <data name="HistoryDelete_Body" xml:space="preserve"><value>要刪除此節點及此分支上其後的所有節點嗎? 此動作無法復原。</value></data>
+  <data name="HistoryDelete_Delete" xml:space="preserve"><value>刪除分支</value></data>
+  <data name="HistoryClose_Title" xml:space="preserve"><value>要儲存 {0} 的記錄嗎?</value></data>
+  <data name="HistoryClose_Body" xml:space="preserve"><value>記錄中有已命名或已釘選的節點。關閉索引標籤後記錄將會遺失，除非先儲存。</value></data>
+  <data name="HistoryClose_Save" xml:space="preserve"><value>儲存記錄</value></data>
+  <data name="HistoryClose_DontSave" xml:space="preserve"><value>不儲存直接關閉</value></data>
+  <data name="Inspector_InterpretOriginal.Content" xml:space="preserve"><value>解譯原始資料</value></data>
+  <data name="Inspector_InterpretingOriginal" xml:space="preserve"><value>(原始)</value></data>
+  <data name="Inspector_InterpretingTransformed" xml:space="preserve"><value>(已轉換)</value></data>
+  <data name="TransformView_Badge" xml:space="preserve"><value>轉換檢視: {0}</value></data>
+  <data name="TransformView_Title" xml:space="preserve"><value>轉換檢視</value></data>
+  <data name="TransformView_Apply" xml:space="preserve"><value>套用</value></data>
+  <data name="TransformView_ClearButton" xml:space="preserve"><value>清除</value></data>
+  <data name="TransformView_Ops" xml:space="preserve"><value>作業 (由上而下依序套用，最多 8 個)</value></data>
+  <data name="TransformView_AddKind" xml:space="preserve"><value>要新增的作業</value></data>
+  <data name="TransformView_Add" xml:space="preserve"><value>新增</value></data>
+  <data name="TransformView_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="TransformView_Up" xml:space="preserve"><value>上移</value></data>
+  <data name="TransformView_Down" xml:space="preserve"><value>下移</value></data>
+  <data name="TransformView_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="TransformView_Kind_Add" xml:space="preserve"><value>加</value></data>
+  <data name="TransformView_Kind_Subtract" xml:space="preserve"><value>減</value></data>
+  <data name="TransformView_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="TransformView_Kind_RotateLeft" xml:space="preserve"><value>循環左移</value></data>
+  <data name="TransformView_Kind_RotateRight" xml:space="preserve"><value>循環右移</value></data>
+  <data name="TransformView_Kind_ByteSwap16" xml:space="preserve"><value>位元組交換 (16 位元)</value></data>
+  <data name="TransformView_Kind_ByteSwap32" xml:space="preserve"><value>位元組交換 (32 位元)</value></data>
+  <data name="TransformView_Kind_ByteSwap64" xml:space="preserve"><value>位元組交換 (64 位元)</value></data>
+  <data name="TransformView_Kind_ReverseBits" xml:space="preserve"><value>反轉位元順序</value></data>
+  <data name="TransformView_Kind_SwapNibbles" xml:space="preserve"><value>交換半位元組</value></data>
+  <data name="TransformView_Kind_Plugin" xml:space="preserve"><value>外掛程式: {0}</value></data>
+  <data name="TransformView_KeyHex" xml:space="preserve"><value>位元組金鑰</value></data>
+  <data name="TransformView_Key" xml:space="preserve"><value>金鑰 (Hex，1 到 256 位元組)</value></data>
+  <data name="TransformView_Plugin" xml:space="preserve"><value>外掛程式轉換</value></data>
+  <data name="TransformView_Scope" xml:space="preserve"><value>範圍與金鑰起點</value></data>
+  <data name="TransformView_Whole" xml:space="preserve"><value>整份文件</value></data>
+  <data name="TransformView_Range" xml:space="preserve"><value>範圍</value></data>
+  <data name="TransformView_KeyOrigin" xml:space="preserve"><value>金鑰起點</value></data>
+  <data name="TransformView_Origin_Zero" xml:space="preserve"><value>從位移 0 開始計數</value></data>
+  <data name="TransformView_Origin_Range" xml:space="preserve"><value>從範圍起點開始</value></data>
+  <data name="TransformView_Origin_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="TransformView_OriginOffset" xml:space="preserve"><value>金鑰起點位移</value></data>
+  <data name="TransformView_Saved" xml:space="preserve"><value>已儲存的轉換</value></data>
+  <data name="TransformView_SavedPlaceholder" xml:space="preserve"><value>載入已儲存的轉換</value></data>
+  <data name="TransformView_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="TransformView_Save" xml:space="preserve"><value>以此名稱儲存</value></data>
+  <data name="TransformView_PreviewTitle" xml:space="preserve"><value>預覽 (游標處的 16 位元組)</value></data>
+  <data name="TransformView_PreviewLines" xml:space="preserve"><value>{0}
+原始:  {1}
+顯示: {2}</value></data>
+  <data name="TransformView_XorTitle" xml:space="preserve"><value>XOR 檢視</value></data>
+  <data name="TransformView_Error_KeyEmpty" xml:space="preserve"><value>請輸入金鑰。</value></data>
+  <data name="TransformView_Error_KeyHex" xml:space="preserve"><value>金鑰必須是 Hex 位元組 (偶數個數字，例如 5A 3C)。</value></data>
+  <data name="TransformView_Error_KeyTooLong" xml:space="preserve"><value>金鑰最長 256 位元組。</value></data>
+  <data name="TransformView_Error_Operand" xml:space="preserve"><value>該值超出元素大小的範圍。</value></data>
+  <data name="TransformView_Error_Range" xml:space="preserve"><value>請輸入有效的範圍 (起點 0 或更大，長度 1 或更大)。</value></data>
+  <data name="TransformView_Error_Origin" xml:space="preserve"><value>請輸入有效的金鑰起點位移。</value></data>
+  <data name="TransformView_Error_OpCount" xml:space="preserve"><value>請新增 1 到 8 個作業。</value></data>
+  <data name="TransformView_Error_InvalidSize" xml:space="preserve"><value>元素大小必須是 1、2、4 或 8 位元組。</value></data>
+  <data name="TransformView_Error_BitCountOutOfRange" xml:space="preserve"><value>位元數必須介於 1 到元素位元數減 1 之間。</value></data>
+  <data name="TransformView_Error_InvalidRange" xml:space="preserve"><value>請輸入有效的範圍。</value></data>
+  <data name="TransformView_Error_PluginMissing" xml:space="preserve"><value>此轉換使用的外掛程式無法使用。</value></data>
+  <data name="TransformView_NotActive" xml:space="preserve"><value>沒有啟用任何轉換檢視。</value></data>
+  <data name="TransformView_LinkedView" xml:space="preserve"><value>無法在連結檢視上設定轉換檢視。</value></data>
+  <data name="TransformView_LengthNotice" xml:space="preserve"><value>在轉換檢視中無法進行會變更長度的編輯。</value></data>
+  <data name="TransformView_ReadOnlyNotice" xml:space="preserve"><value>此轉換檢視沒有反向轉換，因此無法編輯。請清除轉換檢視後再編輯。</value></data>
+  <data name="TransformView_ClearAction" xml:space="preserve"><value>清除轉換檢視</value></data>
+  <data name="TransformView_ApplyTitle" xml:space="preserve"><value>將轉換套用到資料</value></data>
+  <data name="TransformView_ApplyConfirm" xml:space="preserve"><value>要將轉換「{0}」寫入資料並清除轉換檢視嗎?</value></data>
+  <data name="Patch_Format_Auto" xml:space="preserve"><value>自動 (IPS 或 IPS32)</value></data>
+  <data name="Patch_Format_Ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Patch_Format_Ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Patch_Format_Ups" xml:space="preserve"><value>UPS</value></data>
+  <data name="Patch_Format_Bps" xml:space="preserve"><value>BPS</value></data>
+  <data name="Patch_Format_HexPatch" xml:space="preserve"><value>HexEditor 修補檔 (.hexpatch)</value></data>
+  <data name="Patch_Format_SelfApplying" xml:space="preserve"><value>自我套用 (EXE)</value></data>
+  <data name="Patch_Unavailable_IpsOffsetLimit" xml:space="preserve"><value>IPS 無法表示位移為 16 MiB (0x1000000) 或更大的變更。</value></data>
+  <data name="Patch_Unavailable_Ips32OffsetLimit" xml:space="preserve"><value>IPS32 無法表示位移為 4 GiB 或更大的變更。</value></data>
+  <data name="Patch_Unavailable_StubMissing" xml:space="preserve"><value>此組建不包含修補檔套用程式。</value></data>
+  <data name="Patch_UseOtherFormats" xml:space="preserve"><value>請使用 IPS32、UPS、BPS 或 HexEditor 修補檔格式。</value></data>
+  <data name="Patch_LinkedView" xml:space="preserve"><value>請在此連結檢視的原始索引標籤中建立修補檔。</value></data>
+  <data name="PatchCreate_Title" xml:space="preserve"><value>建立修補檔</value></data>
+  <data name="PatchCreate_Source" xml:space="preserve"><value>比較對象</value></data>
+  <data name="PatchCreate_SourceSaved" xml:space="preserve"><value>已儲存的內容與目前內容</value></data>
+  <data name="PatchCreate_SourceTabs" xml:space="preserve"><value>兩個檔案 (索引標籤): 從另一個索引標籤到此索引標籤</value></data>
+  <data name="PatchCreate_OtherTab" xml:space="preserve"><value>原始索引標籤</value></data>
+  <data name="PatchCreate_SourceHistory" xml:space="preserve"><value>記錄中的兩個點</value></data>
+  <data name="PatchCreate_FromPoint" xml:space="preserve"><value>從</value></data>
+  <data name="PatchCreate_ToPoint" xml:space="preserve"><value>到</value></data>
+  <data name="PatchCreate_HistoryPairText" xml:space="preserve"><value>從記錄節點 #{0} 到 #{1}</value></data>
+  <data name="PatchCreate_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="PatchCreate_AutoChoice" xml:space="preserve"><value>使用 {0}。</value></data>
+  <data name="PatchCreate_Rle" xml:space="preserve"><value>使用 RLE 記錄</value></data>
+  <data name="PatchCreate_FullHash" xml:space="preserve"><value>包含整個資料的 SHA-256 (大型檔案較慢)</value></data>
+  <data name="PatchCreate_DefaultFileName" xml:space="preserve"><value>要修補之檔案的預設檔名</value></data>
+  <data name="PatchCreate_Message" xml:space="preserve"><value>向使用者顯示的訊息</value></data>
+  <data name="PatchCreate_Architecture" xml:space="preserve"><value>套用程式</value></data>
+  <data name="PatchCreate_SmartScreen" xml:space="preserve"><value>此程式未經程式碼簽署。收件者執行時，Windows SmartScreen 會顯示警告。</value></data>
+  <data name="PatchCreate_Path" xml:space="preserve"><value>輸出檔案</value></data>
+  <data name="PatchCreate_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="PatchCreate_Computing" xml:space="preserve"><value>正在計算差異...</value></data>
+  <data name="PatchCreate_NoChanges" xml:space="preserve"><value>沒有差異。</value></data>
+  <data name="PatchCreate_SummaryText" xml:space="preserve"><value>記錄數: {0}，預估大小: {1}</value></data>
+  <data name="PatchCreate_Inefficient" xml:space="preserve"><value>此格式無法有效率地表示插入與刪除。請使用 BPS 或 HexEditor 修補檔格式。</value></data>
+  <data name="PatchCreate_Failed" xml:space="preserve"><value>無法計算差異: {0}</value></data>
+  <data name="PatchCreate_Create" xml:space="preserve"><value>建立</value></data>
+  <data name="Patch_Operation_Create" xml:space="preserve"><value>正在建立修補檔 {0}</value></data>
+  <data name="Patch_Operation_Verify" xml:space="preserve"><value>正在檢查修補後的資料</value></data>
+  <data name="Patch_Created" xml:space="preserve"><value>已建立 {0}。</value></data>
+  <data name="Patch_CreatedSelfApplying" xml:space="preserve"><value>已建立 {0}。它未經程式碼簽署，因此收件者執行時 Windows SmartScreen 會顯示警告。</value></data>
+  <data name="Patch_CreateFailed" xml:space="preserve"><value>無法建立修補檔: {0}</value></data>
+  <data name="PatchApply_Title" xml:space="preserve"><value>套用修補檔 {0}</value></data>
+  <data name="PatchApply_InfoText" xml:space="preserve"><value>格式: {0}
+記錄數: {1}
+要變更的位元組數: {2}
+套用後的長度: {3}</value></data>
+  <data name="PatchApply_Reverse" xml:space="preserve"><value>反向 (復原已套用的修補檔)</value></data>
+  <data name="PatchApply_VerificationText" xml:space="preserve"><value>原始檔案檢查: {0}</value></data>
+  <data name="PatchApply_Verifying" xml:space="preserve"><value>正在檢查...</value></data>
+  <data name="PatchApply_Match" xml:space="preserve"><value>相符</value></data>
+  <data name="PatchApply_Mismatch" xml:space="preserve"><value>不相符</value></data>
+  <data name="PatchApply_Unverifiable" xml:space="preserve"><value>無法檢查</value></data>
+  <data name="PatchApply_MismatchWarning" xml:space="preserve"><value>此修補檔可能是為其他檔案製作的。</value></data>
+  <data name="PatchApply_Apply" xml:space="preserve"><value>套用</value></data>
+  <data name="PatchApply_ApplyAnyway" xml:space="preserve"><value>仍然套用</value></data>
+  <data name="PatchApply_SkipVerification" xml:space="preserve"><value>略過檢查並套用</value></data>
+  <data name="Patch_Applied" xml:space="preserve"><value>已套用修補檔 {0}。</value></data>
+  <data name="Patch_Error_UnknownFormat" xml:space="preserve"><value>無法辨識修補檔格式。</value></data>
+  <data name="Patch_Error_Record" xml:space="preserve"><value>修補檔的第 {0} 筆記錄已損毀。</value></data>
+  <data name="Patch_Error_Corrupt" xml:space="preserve"><value>修補檔已損毀: {0}</value></data>
+  <data name="Patch_Error_FixedLength" xml:space="preserve"><value>無法將會變更長度的修補檔套用到此文件 (其長度固定)。</value></data>
+  <data name="Patch_Error_ResultMismatch" xml:space="preserve"><value>修補後的資料與修補檔中記錄的結果不一致。未套用修補檔。</value></data>
+  <data name="PatchApplier_Title" xml:space="preserve"><value>套用修補檔</value></data>
+  <data name="PatchApplier_NoPatch" xml:space="preserve"><value>此程式不包含修補檔。</value></data>
+  <data name="PatchApplier_Intro" xml:space="preserve"><value>此程式會將修補檔套用到檔案。請選取要修補的檔案。</value></data>
+  <data name="PatchApplier_SelectTitle" xml:space="preserve"><value>選取要修補的檔案</value></data>
+  <data name="PatchApplier_AllFiles" xml:space="preserve"><value>所有檔案</value></data>
+  <data name="PatchApplier_Mismatch" xml:space="preserve"><value>此修補檔可能是為其他檔案製作的: {0} 與修補檔中記錄的原始檔案不一致。
+
+仍要套用修補檔嗎?</value></data>
+  <data name="PatchApplier_Backup" xml:space="preserve"><value>套用修補檔前，要備份原始檔案 ({0}) 嗎?</value></data>
+  <data name="PatchApplier_Success" xml:space="preserve"><value>已將修補檔套用到 {0}。</value></data>
+  <data name="PatchApplier_BackupDone" xml:space="preserve"><value>原始檔案已另存為 {0}。</value></data>
+  <data name="PatchApplier_Failed" xml:space="preserve"><value>無法套用修補檔: {0}
+
+檔案未變更。</value></data>
+  <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>修補後的資料與修補檔中記錄的結果不一致。</value></data>
+  <data name="Cmd_compare_createPatch" xml:space="preserve"><value>根據比較結果建立修補檔...</value></data>
+  <data name="CmdAlias_compare_createPatch" xml:space="preserve"><value>修補檔 差異 ips ups bps hexpatch diff</value></data>
+  <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>從 {0} (左) 到 {1} (右)</value></data>
+  <data name="Patch_NoCompare" xml:space="preserve"><value>請先開啟一個比較。</value></data>
+  <data name="Patch_NoSpace" xml:space="preserve"><value>可用空間不足，無法寫入修補檔: 需要約 {0}，但只有 {1} 可用。</value></data>
+  <data name="TransformView_NoLinkedView" xml:space="preserve"><value>轉換檢視啟用期間無法開啟連結檢視。請先清除轉換檢視，或將該範圍以複本開啟。</value></data>
+  <data name="Menu_Data_Encrypt.Text" xml:space="preserve"><value>加密...</value></data>
+  <data name="Menu_Data_Encrypt.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Data_Decrypt.Text" xml:space="preserve"><value>解密...</value></data>
+  <data name="Menu_Data_Decrypt.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Compress.Text" xml:space="preserve"><value>壓縮...</value></data>
+  <data name="Menu_Data_Compress.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Data_Decompress.Text" xml:space="preserve"><value>解壓縮...</value></data>
+  <data name="Menu_Data_Decompress.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_SelectCompressed.Text" xml:space="preserve"><value>選取壓縮資料</value></data>
+  <data name="Menu_Data_SelectCompressed.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Yara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_Search_Yara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_data_encrypt" xml:space="preserve"><value>加密...</value></data>
+  <data name="CmdAlias_data_encrypt" xml:space="preserve"><value>加密 密碼 AES encrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_decrypt" xml:space="preserve"><value>解密...</value></data>
+  <data name="CmdAlias_data_decrypt" xml:space="preserve"><value>解密 密碼 AES decrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_compress" xml:space="preserve"><value>壓縮...</value></data>
+  <data name="CmdAlias_data_compress" xml:space="preserve"><value>壓縮 zlib gzip zstd lz4 xz compress</value></data>
+  <data name="Cmd_data_decompress" xml:space="preserve"><value>解壓縮...</value></data>
+  <data name="CmdAlias_data_decompress" xml:space="preserve"><value>解壓縮 解壓 inflate unzip zlib gzip zstd lz4 xz decompress</value></data>
+  <data name="Cmd_data_selectCompressed" xml:space="preserve"><value>選取壓縮資料</value></data>
+  <data name="CmdAlias_data_selectCompressed" xml:space="preserve"><value>選取 壓縮 範圍 deflate select compressed range</value></data>
+  <data name="Cmd_data_derived_writeBack" xml:space="preserve"><value>寫回到來源</value></data>
+  <data name="CmdAlias_data_derived_writeBack" xml:space="preserve"><value>寫回 衍生 重新壓縮 重新加密 write back derived recompress reencrypt</value></data>
+  <data name="Cmd_search_yara" xml:space="preserve"><value>YARA 掃描</value></data>
+  <data name="CmdAlias_search_yara" xml:space="preserve"><value>yara 規則 掃描 rules scan</value></data>
+  <data name="Cmd_view_panel_yara" xml:space="preserve"><value>切換 YARA</value></data>
+  <data name="CmdAlias_view_panel_yara" xml:space="preserve"><value>yara 面板 yara panel</value></data>
+  <data name="Panel_Yara_Title" xml:space="preserve"><value>YARA</value></data>
+  <data name="Set_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>需確認的解壓縮大小 (MiB)</value></data>
+  <data name="SetDesc_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>解壓縮後的資料超過此大小時，解壓縮會暫停並詢問是否繼續 (防範壓縮炸彈)。</value></data>
+  <data name="Set_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA: 區塊大小 (MiB)</value></data>
+  <data name="SetDesc_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA 以此大小的區塊掃描資料，每個區塊與前一個區塊的最後 64 KB 重疊。</value></data>
+  <data name="Set_search_yara_timeLimitSeconds" xml:space="preserve"><value>YARA: 時間限制 (秒)</value></data>
+  <data name="SetDesc_search_yara_timeLimitSeconds" xml:space="preserve"><value>掃描達到此時間限制時停止，並保留已找到的結果。</value></data>
+  <data name="Codec_Destination" xml:space="preserve"><value>將結果寫入</value></data>
+  <data name="Codec_DestReplace" xml:space="preserve"><value>取代選取範圍</value></data>
+  <data name="Codec_DestNewTab" xml:space="preserve"><value>在新索引標籤中開啟</value></data>
+  <data name="Codec_DestReadOnly" xml:space="preserve"><value>此文件為唯讀，因此結果會在新索引標籤中開啟。</value></data>
+  <data name="Codec_DestFixedLength" xml:space="preserve"><value>此文件的長度無法變更，因此結果會在新索引標籤中開啟。</value></data>
+  <data name="Codec_Error_MultipleRanges" xml:space="preserve"><value>此命令只能處理單一範圍。請選取一個範圍。</value></data>
+  <data name="Operation_Encrypt" xml:space="preserve"><value>加密</value></data>
+  <data name="Operation_Decrypt" xml:space="preserve"><value>解密</value></data>
+  <data name="Operation_Compress" xml:space="preserve"><value>壓縮</value></data>
+  <data name="Operation_Decompress" xml:space="preserve"><value>解壓縮</value></data>
+  <data name="Operation_SelectCompressed" xml:space="preserve"><value>選取壓縮資料</value></data>
+  <data name="Operation_WriteBack" xml:space="preserve"><value>寫回到來源</value></data>
+  <data name="Compression_Format_Deflate" xml:space="preserve"><value>deflate (原始)</value></data>
+  <data name="Compression_Format_Zlib" xml:space="preserve"><value>zlib</value></data>
+  <data name="Compression_Format_Gzip" xml:space="preserve"><value>gzip</value></data>
+  <data name="Compression_Format_Brotli" xml:space="preserve"><value>Brotli</value></data>
+  <data name="Compression_Format_Zstd" xml:space="preserve"><value>zstd</value></data>
+  <data name="Compression_Format_Lz4Frame" xml:space="preserve"><value>LZ4 (框架)</value></data>
+  <data name="Compression_Format_Lz4Block" xml:space="preserve"><value>LZ4 (區塊)</value></data>
+  <data name="Compression_Format_Lzma" xml:space="preserve"><value>LZMA (.lzma)</value></data>
+  <data name="Compression_Format_Xz" xml:space="preserve"><value>XZ</value></data>
+  <data name="Compress_Title" xml:space="preserve"><value>壓縮</value></data>
+  <data name="Compress_Run" xml:space="preserve"><value>壓縮</value></data>
+  <data name="Compress_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Compress_Level" xml:space="preserve"><value>壓縮等級</value></data>
+  <data name="Compress_LevelRangeText" xml:space="preserve"><value>{0}–{1} (標準 {2})</value></data>
+  <data name="Compress_GzipHeader" xml:space="preserve"><value>在標頭儲存檔名與修改時間</value></data>
+  <data name="Compress_Error_Lz4BlockLimit" xml:space="preserve"><value>LZ4 區塊格式將資料存放在單一區塊中，因此最多可壓縮 {0} GB。更大的資料請使用 LZ4 框架格式。</value></data>
+  <data name="Decompress_Title" xml:space="preserve"><value>解壓縮</value></data>
+  <data name="Decompress_Run" xml:space="preserve"><value>解壓縮</value></data>
+  <data name="Decompress_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Decompress_Auto" xml:space="preserve"><value>自動偵測</value></data>
+  <data name="Decompress_Clue" xml:space="preserve"><value>根據標頭偵測到: {0}</value></data>
+  <data name="Decompress_NoClue" xml:space="preserve"><value>標頭沒有格式簽章。如果偵測失敗，系統會要求您選擇格式。</value></data>
+  <data name="Decompress_Undetected" xml:space="preserve"><value>無法自動偵測格式。請選擇格式。</value></data>
+  <data name="Decompress_Trailing" xml:space="preserve"><value>壓縮資料在 {0} 位元組後結束；其餘 {1} 位元組未變更。</value></data>
+  <data name="Decompress_LimitTitle" xml:space="preserve"><value>解壓縮後的資料很大</value></data>
+  <data name="Decompress_LimitBody" xml:space="preserve"><value>解壓縮後的資料已超過 {0} (壓縮大小 {1} MB)。要繼續解壓縮嗎?</value></data>
+  <data name="Decompress_LimitGiB" xml:space="preserve"><value>{0} GiB</value></data>
+  <data name="Decompress_LimitMiB" xml:space="preserve"><value>{0} MiB</value></data>
+  <data name="Decompress_LimitContinue" xml:space="preserve"><value>繼續</value></data>
+  <data name="Decompress_LimitAbort" xml:space="preserve"><value>中止</value></data>
+  <data name="Decompress_ChecksumMismatch" xml:space="preserve"><value>{0} 總和檢查碼不相符，解壓縮後的資料可能已損毀。仍要使用結果嗎?</value></data>
+  <data name="Decompress_UseResult" xml:space="preserve"><value>使用結果</value></data>
+  <data name="Decompress_Corrupt" xml:space="preserve"><value>壓縮資料在位移 {0} 處已損毀。</value></data>
+  <data name="Decompress_Truncated" xml:space="preserve"><value>壓縮資料在位移 {0} 處意外結束。</value></data>
+  <data name="Decompress_Unsupported" xml:space="preserve"><value>此壓縮資料使用了不支援的功能: {0}</value></data>
+  <data name="Decompress_MemoryLimit" xml:space="preserve"><value>解壓縮這些資料需要的記憶體過多。</value></data>
+  <data name="Decompress_PartialAvailable" xml:space="preserve"><value>發生錯誤前已解壓縮 {0} 位元組。</value></data>
+  <data name="Decompress_OpenPartial" xml:space="preserve"><value>在新索引標籤中開啟已解壓縮的部分</value></data>
+  <data name="SelectCompressed_Found" xml:space="preserve"><value>已選取 {0} 壓縮資料: {1} 位元組 (解壓縮後 {2} 位元組)。</value></data>
+  <data name="SelectCompressed_NotFound" xml:space="preserve"><value>無法從游標位置讀取任何壓縮資料。</value></data>
+  <data name="Cipher_EncryptTitle" xml:space="preserve"><value>加密</value></data>
+  <data name="Cipher_DecryptTitle" xml:space="preserve"><value>解密</value></data>
+  <data name="Cipher_Encrypt" xml:space="preserve"><value>加密</value></data>
+  <data name="Cipher_Decrypt" xml:space="preserve"><value>解密</value></data>
+  <data name="Cipher_Algorithm" xml:space="preserve"><value>演算法</value></data>
+  <data name="Cipher_Algorithm_Aes128" xml:space="preserve"><value>AES-128</value></data>
+  <data name="Cipher_Algorithm_Aes192" xml:space="preserve"><value>AES-192</value></data>
+  <data name="Cipher_Algorithm_Aes256" xml:space="preserve"><value>AES-256</value></data>
+  <data name="Cipher_Algorithm_ChaCha20Poly1305" xml:space="preserve"><value>ChaCha20-Poly1305</value></data>
+  <data name="Cipher_Algorithm_TripleDes" xml:space="preserve"><value>3DES (TripleDES)</value></data>
+  <data name="Cipher_Algorithm_Des" xml:space="preserve"><value>DES</value></data>
+  <data name="Cipher_Algorithm_Rc4" xml:space="preserve"><value>RC4</value></data>
+  <data name="Cipher_Mode" xml:space="preserve"><value>模式</value></data>
+  <data name="Cipher_Mode_None" xml:space="preserve"><value>—</value></data>
+  <data name="Cipher_Mode_Ecb" xml:space="preserve"><value>ECB</value></data>
+  <data name="Cipher_Mode_Cbc" xml:space="preserve"><value>CBC</value></data>
+  <data name="Cipher_Mode_Cfb8" xml:space="preserve"><value>CFB8</value></data>
+  <data name="Cipher_Mode_Cfb128" xml:space="preserve"><value>CFB128</value></data>
+  <data name="Cipher_Mode_Ctr" xml:space="preserve"><value>CTR</value></data>
+  <data name="Cipher_Mode_Gcm" xml:space="preserve"><value>GCM</value></data>
+  <data name="Cipher_Padding" xml:space="preserve"><value>填補</value></data>
+  <data name="Cipher_Padding_Pkcs7" xml:space="preserve"><value>PKCS#7</value></data>
+  <data name="Cipher_Padding_Zeros" xml:space="preserve"><value>零</value></data>
+  <data name="Cipher_Padding_AnsiX923" xml:space="preserve"><value>ANSI X9.23</value></data>
+  <data name="Cipher_Padding_Iso10126" xml:space="preserve"><value>ISO 10126</value></data>
+  <data name="Cipher_Padding_None" xml:space="preserve"><value>無</value></data>
+  <data name="Cipher_InsecureText" xml:space="preserve"><value>這不是安全的方法。僅為相容性而使用。</value></data>
+  <data name="Cipher_Unsupported" xml:space="preserve"><value>此版本的 Windows 不提供 {0}。</value></data>
+  <data name="Cipher_AeadLimit" xml:space="preserve"><value>具驗證的加密 (GCM、ChaCha20-Poly1305) 不能用於大於 1 GiB 的資料。</value></data>
+  <data name="Cipher_KeySource" xml:space="preserve"><value>金鑰</value></data>
+  <data name="Cipher_KeyHex" xml:space="preserve"><value>以 Hex 輸入</value></data>
+  <data name="Cipher_KeyPassphrase" xml:space="preserve"><value>由通關密語產生 (PBKDF2-HMAC-SHA256)</value></data>
+  <data name="Cipher_Key" xml:space="preserve"><value>金鑰 (Hex)</value></data>
+  <data name="Cipher_Passphrase" xml:space="preserve"><value>通關密語</value></data>
+  <data name="Cipher_ShowKey" xml:space="preserve"><value>顯示</value></data>
+  <data name="Cipher_Iterations" xml:space="preserve"><value>反覆運算次數</value></data>
+  <data name="Cipher_Salt" xml:space="preserve"><value>鹽 (Hex)</value></data>
+  <data name="Cipher_SaltPlaceholder" xml:space="preserve"><value>留空: 產生 16 個隨機位元組</value></data>
+  <data name="Cipher_SaltGenerated" xml:space="preserve"><value>已產生隨機鹽。請妥善保存以便日後解密: {0}</value></data>
+  <data name="Cipher_Iv" xml:space="preserve"><value>IV (Hex)</value></data>
+  <data name="Cipher_IvBytes" xml:space="preserve"><value>IV (Hex，{0} 位元組)</value></data>
+  <data name="Cipher_NonceBytes" xml:space="preserve"><value>Nonce (Hex，{0} 位元組)</value></data>
+  <data name="Cipher_RandomIv" xml:space="preserve"><value>隨機產生</value></data>
+  <data name="Cipher_Aad" xml:space="preserve"><value>附加驗證資料 (Hex，選用)</value></data>
+  <data name="Cipher_TagAppend" xml:space="preserve"><value>將驗證標籤附加到結果末尾</value></data>
+  <data name="Cipher_TagSeparate" xml:space="preserve"><value>僅顯示驗證標籤</value></data>
+  <data name="Cipher_TagFromEnd" xml:space="preserve"><value>標籤: 選取範圍的最後 16 位元組</value></data>
+  <data name="Cipher_TagHex" xml:space="preserve"><value>標籤: 以 Hex 輸入</value></data>
+  <data name="Cipher_Tag" xml:space="preserve"><value>驗證標籤 (Hex，16 位元組)</value></data>
+  <data name="Cipher_TagResult" xml:space="preserve"><value>驗證標籤</value></data>
+  <data name="Cipher_Error_KeyHex" xml:space="preserve"><value>請以 Hex 位元組輸入金鑰。</value></data>
+  <data name="Cipher_Error_KeyLength" xml:space="preserve"><value>{0} 的金鑰為 {1} 位元組 (您輸入了 {2} 位元組)。</value></data>
+  <data name="Cipher_Error_IvLength" xml:space="preserve"><value>{0} 的 IV 為 {1} 位元組 (您輸入了 {2} 位元組)。</value></data>
+  <data name="Cipher_Error_NonceLength" xml:space="preserve"><value>{0} 的 nonce 為 {1} 位元組 (您輸入了 {2} 位元組)。</value></data>
+  <data name="Cipher_Error_TagLength" xml:space="preserve"><value>驗證標籤為 {0} 位元組 (您輸入了 {1} 位元組)。</value></data>
+  <data name="Cipher_Error_MissingTag" xml:space="preserve"><value>選取範圍比 16 位元組的驗證標籤還短。</value></data>
+  <data name="Cipher_Error_BlockMultiple" xml:space="preserve"><value>長度必須是區塊大小 ({0} 位元組) 的整數倍。</value></data>
+  <data name="Cipher_Error_Settings" xml:space="preserve"><value>設定無效。</value></data>
+  <data name="Cipher_Error_Padding" xml:space="preserve"><value>填補不正確。金鑰、IV 或模式可能有誤。</value></data>
+  <data name="Cipher_DecryptWithoutPadding" xml:space="preserve"><value>不處理填補直接解密</value></data>
+  <data name="Cipher_Error_Authentication" xml:space="preserve"><value>驗證失敗。金鑰、nonce、附加資料或資料不一致。資料未變更。</value></data>
+  <data name="Derived_TabRange" xml:space="preserve"><value> [0x{0}-0x{1} {2}]</value></data>
+  <data name="Derived_Label_Decompressed" xml:space="preserve"><value>已解壓縮</value></data>
+  <data name="Derived_Label_Decrypted" xml:space="preserve"><value>已解密</value></data>
+  <data name="Derived_Label_Compressed" xml:space="preserve"><value>已壓縮</value></data>
+  <data name="Derived_Label_Encrypted" xml:space="preserve"><value>已加密</value></data>
+  <data name="Derived_Label_Partial" xml:space="preserve"><value>部分已解壓縮</value></data>
+  <data name="Derived_Band" xml:space="preserve"><value>來源: {0}，範圍 {1}–{2}，{3}</value></data>
+  <data name="Derived_Transform_Decompressed" xml:space="preserve"><value>{0} 解壓縮</value></data>
+  <data name="Derived_Transform_Decrypted" xml:space="preserve"><value>{0} 解密</value></data>
+  <data name="Derived_WriteBack.Content" xml:space="preserve"><value>寫回到來源</value></data>
+  <data name="Derived_NotDerived" xml:space="preserve"><value>此索引標籤不是透過解壓縮或解密開啟的。</value></data>
+  <data name="Derived_ParentClosed" xml:space="preserve"><value>來源文件已關閉，因此無法再寫回此索引標籤。它現在是一般的新文件。</value></data>
+  <data name="Derived_TooDeep" xml:space="preserve"><value>衍生文件最多可巢狀 {0} 層。</value></data>
+  <data name="Derived_WriteBackTitle" xml:space="preserve"><value>寫回到來源</value></data>
+  <data name="Derived_WriteBackRun" xml:space="preserve"><value>寫回</value></data>
+  <data name="Derived_RangeChanged" xml:space="preserve"><value>自開啟此衍生文件以來，來源範圍已變更。</value></data>
+  <data name="Derived_Overwrite" xml:space="preserve"><value>覆寫並寫回</value></data>
+  <data name="Derived_KeyPrompt" xml:space="preserve"><value>請再次輸入金鑰以寫回 ({0})。金鑰不會被保留。</value></data>
+  <data name="Derived_NewNonce" xml:space="preserve"><value>產生新的 nonce (建議)</value></data>
+  <data name="Derived_SameNonce" xml:space="preserve"><value>使用與開啟時相同的 nonce</value></data>
+  <data name="Derived_NonceNoteText" xml:space="preserve"><value>同一金鑰重複使用 nonce 並不安全。nonce 的存放位置取決於資料格式，因此寫回後請自行更新。</value></data>
+  <data name="Derived_NewNonceValue" xml:space="preserve"><value>新 nonce (Hex)</value></data>
+  <data name="Derived_SaltRequired" xml:space="preserve"><value>請輸入加密資料時使用的鹽。</value></data>
+  <data name="Derived_FixedLength" xml:space="preserve"><value>來源文件的長度無法變更，因此未寫回 (長度將從 {0} 變為 {1} 位元組)。</value></data>
+  <data name="Derived_Written" xml:space="preserve"><value>已寫回到來源文件。</value></data>
+  <data name="Yara_RuleSet" xml:space="preserve"><value>規則集</value></data>
+  <data name="Yara_NoRuleSet" xml:space="preserve"><value>(未儲存)</value></data>
+  <data name="Yara_SaveSet" xml:space="preserve"><value>儲存集...</value></data>
+  <data name="Yara_SaveRun" xml:space="preserve"><value>儲存</value></data>
+  <data name="Yara_SetName" xml:space="preserve"><value>規則集名稱</value></data>
+  <data name="Yara_DeleteSet" xml:space="preserve"><value>刪除集</value></data>
+  <data name="Yara_AddFiles" xml:space="preserve"><value>新增規則檔案...</value></data>
+  <data name="Yara_AddFolder" xml:space="preserve"><value>新增資料夾...</value></data>
+  <data name="Yara_RemoveFiles" xml:space="preserve"><value>移除</value></data>
+  <data name="Yara_Files" xml:space="preserve"><value>規則檔案</value></data>
+  <data name="Yara_Externals" xml:space="preserve"><value>外部變數 (名稱=值，每行一個)</value></data>
+  <data name="Yara_Scope" xml:space="preserve"><value>範圍</value></data>
+  <data name="Yara_Scope_Document" xml:space="preserve"><value>整份文件</value></data>
+  <data name="Yara_Scope_Selection" xml:space="preserve"><value>選取範圍</value></data>
+  <data name="Yara_Scope_Folder" xml:space="preserve"><value>資料夾中的檔案</value></data>
+  <data name="Yara_Folder" xml:space="preserve"><value>資料夾</value></data>
+  <data name="Yara_Mask" xml:space="preserve"><value>檔案</value></data>
+  <data name="Yara_Scan" xml:space="preserve"><value>掃描</value></data>
+  <data name="Yara_KindName" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_LimitationText" xml:space="preserve"><value>資料以 {0} MiB 的區塊掃描，相鄰區塊重疊 {1} KB。在大於一個區塊的文件中，長度超過重疊部分的字串以及跨區塊的條件可能找不到。</value></data>
+  <data name="Yara_Scanning" xml:space="preserve"><value>正在掃描...</value></data>
+  <data name="Yara_NoRules" xml:space="preserve"><value>請先新增規則檔案。</value></data>
+  <data name="Yara_CompileErrors" xml:space="preserve"><value>規則中有 {0} 個錯誤。掃描未開始。</value></data>
+  <data name="Yara_Matched" xml:space="preserve"><value>符合了 {0} 條規則。</value></data>
+  <data name="Yara_TimedOut" xml:space="preserve"><value>已達到時間限制。</value></data>
+  <data name="Yara_Cancelled" xml:space="preserve"><value>掃描已取消。</value></data>
+  <data name="Yara_TooManyMatches" xml:space="preserve"><value>符合項目過多；僅保留前 1,000,000 個: {0}</value></data>
+  <data name="Yara_Console" xml:space="preserve"><value>主控台:</value></data>
+  <data name="Yara_InternalError" xml:space="preserve"><value>YARA 內部錯誤 ({0}): {1}</value></data>
+  <data name="Yara_DetailsText" xml:space="preserve"><value>規則: {0}  命名空間: {1}  標籤: {2}&#xA;中繼資料:&#xA;{3}</value></data>
+  <data name="Yara_ErrorsName" xml:space="preserve"><value>規則錯誤</value></data>
+  <data name="Yara_FolderResultsName" xml:space="preserve"><value>檔案中的符合項目</value></data>
+  <data name="Yara_FolderMissing" xml:space="preserve"><value>請輸入一個已存在的資料夾。</value></data>
+  <data name="Yara_FolderError" xml:space="preserve"><value>無法讀取該資料夾: {0}</value></data>
+  <data name="Yara_FolderDone" xml:space="preserve"><value>已掃描 {0} 個檔案；{1} 個檔案有符合項目。</value></data>
+  <data name="Yara_AnnotationSource" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_Column_Rule" xml:space="preserve"><value>規則</value></data>
+  <data name="Yara_Column_Namespace" xml:space="preserve"><value>命名空間</value></data>
+  <data name="Yara_Column_Tags" xml:space="preserve"><value>標籤</value></data>
+  <data name="Yara_Column_Meta" xml:space="preserve"><value>中繼資料</value></data>
+  <data name="Yara_Column_String" xml:space="preserve"><value>字串</value></data>
+  <data name="Codec_Error_Failed" xml:space="preserve"><value>作業失敗: {0}</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>連線到遠端(1)</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB 伺服器(G)...</value></data>
+  <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP(F)...</value></data>
+  <data name="Menu_File_OpenSftp.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReceiveUdp.Text" xml:space="preserve"><value>接收 UDP(U)...</value></data>
+  <data name="Menu_File_ReceiveUdp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveSnapshot.Text" xml:space="preserve"><value>儲存快照(N)...</value></data>
+  <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>另存為 Minidump(M)...</value></data>
+  <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>封包(3)</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>儲存處理程序快照...</value></data>
+  <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>快照 傾印 記憶體 snapshot hexsnap dump memory</value></data>
+  <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>另存為 Minidump...</value></data>
+  <data name="CmdAlias_file_saveMinidump" xml:space="preserve"><value>傾印 偵錯工具 dump dmp windbg debugger</value></data>
+  <data name="Cmd_file_connectGdb" xml:space="preserve"><value>連線到 GDB 伺服器...</value></data>
+  <data name="CmdAlias_file_connectGdb" xml:space="preserve"><value>gdb 遠端 qemu openocd gdbserver remote</value></data>
+  <data name="Cmd_file_openSftp" xml:space="preserve"><value>透過 SFTP 開啟...</value></data>
+  <data name="CmdAlias_file_openSftp" xml:space="preserve"><value>ssh sftp 遠端 伺服器 remote server</value></data>
+  <data name="Cmd_file_receiveUdp" xml:space="preserve"><value>接收 UDP...</value></data>
+  <data name="CmdAlias_file_receiveUdp" xml:space="preserve"><value>udp 網路 封包 接聽 network packet datagram listen</value></data>
+  <data name="Cmd_file_reconnect" xml:space="preserve"><value>重新連線</value></data>
+  <data name="CmdAlias_file_reconnect" xml:space="preserve"><value>遠端 重新連線 中斷 remote reconnect disconnected</value></data>
+  <data name="Cmd_view_panel_packets" xml:space="preserve"><value>封包面板</value></data>
+  <data name="CmdAlias_view_panel_packets" xml:space="preserve"><value>udp 封包 清單 udp packet list</value></data>
+  <data name="Set_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB 伺服器要求逾時 (秒)</value></data>
+  <data name="SetDesc_remote_gdb_timeoutSeconds" xml:space="preserve"><value>如果 GDB 伺服器在此時間內未回應要求，則視為連線已中斷。</value></data>
+  <data name="Set_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>透過 SFTP 僅寫入已變更的範圍前先確認</value></data>
+  <data name="SetDesc_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>如果儲存時連線中斷，遠端檔案可能只被重寫了一部分。</value></data>
+  <data name="Set_remote_udp_followEnd" xml:space="preserve"><value>接收 UDP 時跟隨末尾</value></data>
+  <data name="SetDesc_remote_udp_followEnd" xml:space="preserve"><value>游標位於 UDP 文件末尾時，新資料到達後自動捲動到新資料。</value></data>
+  <data name="Remote_StateConnected" xml:space="preserve"><value>已連線</value></data>
+  <data name="Remote_StateConnecting" xml:space="preserve"><value>正在連線</value></data>
+  <data name="Remote_StateDisconnected" xml:space="preserve"><value>已中斷連線</value></data>
+  <data name="Remote_StatusGdb" xml:space="preserve"><value>GDB {0} ({1})</value></data>
+  <data name="Remote_StatusSftp" xml:space="preserve"><value>SFTP {0} ({1})</value></data>
+  <data name="Remote_StatusUdp" xml:space="preserve"><value>UDP {0}: {1, plural, other {# 個封包}}，{2} ({3})</value></data>
+  <data name="Remote_Disconnected" xml:space="preserve"><value>與 {0} 的連線已中斷。未儲存的變更仍會保留。</value></data>
+  <data name="Remote_Reconnect" xml:space="preserve"><value>重新連線</value></data>
+  <data name="Remote_Reconnected" xml:space="preserve"><value>已重新連線。</value></data>
+  <data name="Remote_ReconnectFailed" xml:space="preserve"><value>無法重新連線: {0}</value></data>
+  <data name="Remote_AlreadyConnected" xml:space="preserve"><value>遠端目標已連線。</value></data>
+  <data name="Remote_NotRemote" xml:space="preserve"><value>僅適用於 GDB 伺服器和 SFTP 文件。</value></data>
+  <data name="Session_RemoteNotConnected" xml:space="preserve"><value>未連線: {0}</value></data>
+  <data name="Session_ConnectRemote.Content" xml:space="preserve"><value>連線</value></data>
+  <data name="Capture_SnapshotTitle" xml:space="preserve"><value>儲存快照</value></data>
+  <data name="Capture_MinidumpTitle" xml:space="preserve"><value>另存為 Minidump</value></data>
+  <data name="Capture_Scope" xml:space="preserve"><value>要包含的區域</value></data>
+  <data name="Capture_ScopeAll" xml:space="preserve"><value>所有可讀取區域</value></data>
+  <data name="Capture_ScopeSelected" xml:space="preserve"><value>記憶體對應中選取的區域或模組</value></data>
+  <data name="Capture_ScopeWritable" xml:space="preserve"><value>僅可寫入區域</value></data>
+  <data name="Capture_Pause" xml:space="preserve"><value>擷取時暫停處理程序</value></data>
+  <data name="Capture_Path" xml:space="preserve"><value>儲存到</value></data>
+  <data name="Capture_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="Capture_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="Capture_SavingSnapshot" xml:space="preserve"><value>正在儲存快照 {0}</value></data>
+  <data name="Capture_SavingMinidump" xml:space="preserve"><value>正在儲存 Minidump {0}</value></data>
+  <data name="Capture_Saved" xml:space="preserve"><value>已儲存 {0}。</value></data>
+  <data name="Capture_Cancelled" xml:space="preserve"><value>已取消。不完整的檔案已刪除。</value></data>
+  <data name="Capture_ProcessExited" xml:space="preserve"><value>擷取期間處理程序已結束。擷取已停止，不完整的檔案已刪除。</value></data>
+  <data name="Capture_Error" xml:space="preserve"><value>無法儲存: {0}</value></data>
+  <data name="Capture_PauseFailed" xml:space="preserve"><value>無法暫停處理程序，因此在執行時進行了擷取。內容可能不一致。</value></data>
+  <data name="Capture_Unreadable" xml:space="preserve"><value>{0, plural, other {# 個區域}} (共 {1}) 無法讀取。</value></data>
+  <data name="FileType_Minidump" xml:space="preserve"><value>Minidump</value></data>
+  <data name="Snapshot_SaveAsGuide" xml:space="preserve"><value>無法將處理程序記憶體儲存為檔案。請使用 檔案 &gt; 匯出 &gt; 儲存快照。</value></data>
+  <data name="Gdb_Title" xml:space="preserve"><value>連線到 GDB 伺服器</value></data>
+  <data name="Gdb_Host" xml:space="preserve"><value>主機</value></data>
+  <data name="Gdb_Port" xml:space="preserve"><value>連接埠</value></data>
+  <data name="Gdb_AddressWidth" xml:space="preserve"><value>位址寬度</value></data>
+  <data name="Gdb_Width32" xml:space="preserve"><value>32 位元</value></data>
+  <data name="Gdb_Width64" xml:space="preserve"><value>64 位元</value></data>
+  <data name="Gdb_ReadOnly" xml:space="preserve"><value>以唯讀方式開啟</value></data>
+  <data name="Gdb_Note" xml:space="preserve"><value>僅讀寫目標記憶體。不使用執行控制 (停止、繼續、中斷點)。</value></data>
+  <data name="Gdb_Connect" xml:space="preserve"><value>連線</value></data>
+  <data name="Gdb_Connecting" xml:space="preserve"><value>正在連線到 {0}...</value></data>
+  <data name="Gdb_ConnectFailed" xml:space="preserve"><value>無法連線到 GDB 伺服器 ({0}，{1})。</value></data>
+  <data name="Gdb_ProtocolError" xml:space="preserve"><value>無法解譯 GDB 伺服器的回應。已中斷連線。</value></data>
+  <data name="Gdb_WriteBody" xml:space="preserve"><value>要將 {1, plural, other {# 位元組}}寫入 GDB 伺服器 {0} 上目標的記憶體嗎?</value></data>
+  <data name="Gdb_ImmediateConfirm" xml:space="preserve"><value>要開啟即時寫入嗎? 每次編輯都會立即寫入 {0} 上目標的記憶體。</value></data>
+  <data name="Gdb_WriteDisconnected" xml:space="preserve"><value>與 {0} 的連線已中斷，因此部分變更未寫入。</value></data>
+  <data name="Gdb_WriteRejected" xml:space="preserve"><value>目標拒絕了寫入</value></data>
+  <data name="Gdb_SaveAsUnavailable" xml:space="preserve"><value>無法將 GDB 目標的整個位址空間儲存為檔案。請使用 檔案 &gt; 儲存選取範圍。</value></data>
+  <data name="Sftp_Title" xml:space="preserve"><value>透過 SFTP 開啟</value></data>
+  <data name="Sftp_Host" xml:space="preserve"><value>主機</value></data>
+  <data name="Sftp_Port" xml:space="preserve"><value>連接埠</value></data>
+  <data name="Sftp_User" xml:space="preserve"><value>使用者名稱</value></data>
+  <data name="Sftp_Method" xml:space="preserve"><value>驗證</value></data>
+  <data name="Sftp_MethodPassword" xml:space="preserve"><value>密碼</value></data>
+  <data name="Sftp_MethodKeyFile" xml:space="preserve"><value>金鑰檔案</value></data>
+  <data name="Sftp_MethodAgent" xml:space="preserve"><value>SSH 代理程式 (OpenSSH agent、Pageant)</value></data>
+  <data name="Sftp_Password" xml:space="preserve"><value>密碼</value></data>
+  <data name="Sftp_KeyFile" xml:space="preserve"><value>金鑰檔案</value></data>
+  <data name="Sftp_Passphrase" xml:space="preserve"><value>通關密語 (如果金鑰有設定)</value></data>
+  <data name="Sftp_Save" xml:space="preserve"><value>將密碼儲存到 Windows 認證管理員</value></data>
+  <data name="Sftp_Connect" xml:space="preserve"><value>連線</value></data>
+  <data name="Sftp_Connecting" xml:space="preserve"><value>正在連線到 {0}...</value></data>
+  <data name="Sftp_AuthFailed" xml:space="preserve"><value>{0} 驗證失敗。請檢查使用者名稱以及密碼或金鑰。</value></data>
+  <data name="Sftp_ConnectFailed" xml:space="preserve"><value>無法連線到 {0} ({1})。</value></data>
+  <data name="Sftp_PermissionDenied" xml:space="preserve"><value>權限被拒: {0}</value></data>
+  <data name="Sftp_NotFound" xml:space="preserve"><value>找不到遠端檔案: {0}</value></data>
+  <data name="Sftp_OpenFailed" xml:space="preserve"><value>無法開啟 {0}: {1}</value></data>
+  <data name="Sftp_HostKeyUnknownTitle" xml:space="preserve"><value>未知的主機</value></data>
+  <data name="Sftp_HostKeyUnknownBody" xml:space="preserve"><value>這是第一次連線到 {0}。
+
+主機金鑰類型: {1}
+SHA-256 指紋: {2}
+
+僅在指紋與伺服器一致時才連線。</value></data>
+  <data name="Sftp_HostKeyTrust" xml:space="preserve"><value>信任並連線</value></data>
+  <data name="Sftp_HostKeyChangedTitle" xml:space="preserve"><value>警告: 主機金鑰已變更</value></data>
+  <data name="Sftp_HostKeyChangedBody" xml:space="preserve"><value>{0} 的主機金鑰與您之前信任的金鑰不同。可能有人正在攔截此連線。
+
+新的主機金鑰類型: {1}
+新的 SHA-256 指紋: {2}
+
+之前信任的: {3} {4}
+
+除非您選擇取代金鑰，否則不會建立連線。</value></data>
+  <data name="Sftp_HostKeyReplace" xml:space="preserve"><value>取代金鑰並連線</value></data>
+  <data name="SftpPicker_Title" xml:space="preserve"><value>選擇遠端檔案 ({0})</value></data>
+  <data name="SftpPicker_Path" xml:space="preserve"><value>資料夾</value></data>
+  <data name="SftpPicker_List" xml:space="preserve"><value>檔案</value></data>
+  <data name="SftpPicker_Up" xml:space="preserve"><value>上一層</value></data>
+  <data name="SftpPicker_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="SftpPicker_ListFailed" xml:space="preserve"><value>無法列出該資料夾: {0}</value></data>
+  <data name="Sftp_SaveTitle" xml:space="preserve"><value>儲存到遠端檔案</value></data>
+  <data name="Sftp_PartialWriteBody" xml:space="preserve"><value>僅寫入已變更的範圍。如果儲存時連線中斷，遠端檔案可能只被重寫了一部分。</value></data>
+  <data name="Sftp_PartialWriteSkip" xml:space="preserve"><value>不再詢問</value></data>
+  <data name="Sftp_SaveWrite" xml:space="preserve"><value>儲存</value></data>
+  <data name="Sftp_Saving" xml:space="preserve"><value>正在儲存 {0}</value></data>
+  <data name="Sftp_Saved" xml:space="preserve"><value>已儲存 {0}。</value></data>
+  <data name="Sftp_SavePermission" xml:space="preserve"><value>您沒有寫入 {0} 的權限。</value></data>
+  <data name="Sftp_SavePartial" xml:space="preserve"><value>儲存時連線中斷。遠端檔案可能只被重寫了一部分。您的變更仍會保留。</value></data>
+  <data name="Sftp_SaveDisconnected" xml:space="preserve"><value>儲存時連線中斷。遠端檔案未被取代。您的變更仍會保留。</value></data>
+  <data name="Sftp_SaveFailed" xml:space="preserve"><value>無法儲存: {0}</value></data>
+  <data name="Sftp_Changed" xml:space="preserve"><value>遠端檔案 {0} 已被其他程式變更。</value></data>
+  <data name="Sftp_ChangedModified" xml:space="preserve"><value>遠端檔案 {0} 已被其他程式變更。重新載入將捨棄您的變更。</value></data>
+  <data name="Sftp_Reload" xml:space="preserve"><value>重新載入</value></data>
+  <data name="Udp_Title" xml:space="preserve"><value>接收 UDP</value></data>
+  <data name="Udp_Address" xml:space="preserve"><value>接聽位址</value></data>
+  <data name="Udp_Port" xml:space="preserve"><value>連接埠</value></data>
+  <data name="Udp_PortPlaceholder" xml:space="preserve"><value>1-65535</value></data>
+  <data name="Udp_LimitMiB" xml:space="preserve"><value>最多保留 (MiB，1-{0})</value></data>
+  <data name="Udp_FirewallNote" xml:space="preserve"><value>接聽 127.0.0.1 以外的位址時，可能會顯示 Windows 防火牆提示。</value></data>
+  <data name="Udp_ReceiveOnly" xml:space="preserve"><value>僅接收，不傳送任何內容。</value></data>
+  <data name="Udp_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Udp_TabName" xml:space="preserve"><value>UDP {0}</value></data>
+  <data name="Udp_PortInUse" xml:space="preserve"><value>連接埠 {0} 正被其他應用程式使用。</value></data>
+  <data name="Udp_StartFailed" xml:space="preserve"><value>無法開始接收: {0}</value></data>
+  <data name="Udp_LimitReached" xml:space="preserve"><value>已達到上限 ({0})，錄製已停止。</value></data>
+  <data name="Udp_DiscardOld" xml:space="preserve"><value>捨棄舊資料並繼續</value></data>
+  <data name="Udp_StateReceiving" xml:space="preserve"><value>正在接收</value></data>
+  <data name="Udp_StatePaused" xml:space="preserve"><value>已暫停</value></data>
+  <data name="Udp_StateLimit" xml:space="preserve"><value>已達上限</value></data>
+  <data name="Udp_StateStopped" xml:space="preserve"><value>已停止</value></data>
+  <data name="Udp_Saved" xml:space="preserve"><value>已將接收的資料儲存到 {0}。</value></data>
+  <data name="Udp_SaveFailed" xml:space="preserve"><value>無法儲存: {0}</value></data>
+  <data name="Panel_Packets_Title" xml:space="preserve"><value>封包</value></data>
+  <data name="Packets_List" xml:space="preserve"><value>封包</value></data>
+  <data name="Packets_Pause" xml:space="preserve"><value>暫停</value></data>
+  <data name="Packets_Resume" xml:space="preserve"><value>繼續</value></data>
+  <data name="Packets_Clear" xml:space="preserve"><value>清除</value></data>
+  <data name="Packets_ExportCsv" xml:space="preserve"><value>匯出 CSV...</value></data>
+  <data name="Packets_ExportJson" xml:space="preserve"><value>匯出 JSON...</value></data>
+  <data name="Packets_Exported" xml:space="preserve"><value>已匯出 {0}。</value></data>
+  <data name="Packets_NotUdp" xml:space="preserve"><value>開啟 UDP 接收文件 (檔案 &gt; 連線到遠端 &gt; 接收 UDP) 即可檢視其封包。</value></data>
+  <data name="Panel_Calculator_Title" xml:space="preserve"><value>計算機</value></data>
+  <data name="Panel_Converter_Title" xml:space="preserve"><value>進位與類型轉換器</value></data>
+  <data name="Panel_Float_Title" xml:space="preserve"><value>浮點數視覺化檢視器</value></data>
+  <data name="Panel_CharTable_Title" xml:space="preserve"><value>字元表</value></data>
+  <data name="Panel_Color_Title" xml:space="preserve"><value>色彩選取器</value></data>
+  <data name="Panel_DateTime_Title" xml:space="preserve"><value>日期與時間轉換器</value></data>
+  <data name="Panel_ChecksumResults_Title" xml:space="preserve"><value>總和檢查碼結果</value></data>
+  <data name="Panel_FolderCompare_Title" xml:space="preserve"><value>資料夾比較</value></data>
+  <data name="Menu_Tools_Calculator.Text" xml:space="preserve"><value>計算機(C)</value></data>
+  <data name="Menu_Tools_Calculator.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Converter.Text" xml:space="preserve"><value>進位與類型轉換器(V)</value></data>
+  <data name="Menu_Tools_Converter.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FloatVisualizer.Text" xml:space="preserve"><value>浮點數視覺化檢視器(F)</value></data>
+  <data name="Menu_Tools_FloatVisualizer.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_CharTable.Text" xml:space="preserve"><value>字元表(A)</value></data>
+  <data name="Menu_Tools_CharTable.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_ColorPicker.Text" xml:space="preserve"><value>色彩選取器(L)</value></data>
+  <data name="Menu_Tools_ColorPicker.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_DateTime.Text" xml:space="preserve"><value>日期與時間轉換器(D)</value></data>
+  <data name="Menu_Tools_DateTime.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools.Text" xml:space="preserve"><value>檔案工具(I)</value></data>
+  <data name="Menu_Tools_FileTools.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.Text" xml:space="preserve"><value>建立總和檢查碼檔案(C)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.Text" xml:space="preserve"><value>驗證總和檢查碼檔案(V)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.Text" xml:space="preserve"><value>比較資料夾(F)...</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="CmdCategory_tools" xml:space="preserve"><value>工具</value></data>
+  <data name="CmdCategory_fileTools" xml:space="preserve"><value>檔案工具</value></data>
+  <data name="Cmd_tools_calculator" xml:space="preserve"><value>計算機</value></data>
+  <data name="CmdAlias_tools_calculator" xml:space="preserve"><value>計算 運算式 Hex calc calculate expression hex</value></data>
+  <data name="Cmd_tools_calculator_programmer" xml:space="preserve"><value>計算機 (程式設計人員模式)</value></data>
+  <data name="CmdAlias_tools_calculator_programmer" xml:space="preserve"><value>計算 程式設計人員 位元 位元運算 calc programmer bits bitwise</value></data>
+  <data name="Cmd_tools_converter" xml:space="preserve"><value>進位與類型轉換器</value></data>
+  <data name="CmdAlias_tools_converter" xml:space="preserve"><value>轉換 進位 位元組順序 convert base radix endian ascii utf base64</value></data>
+  <data name="Cmd_tools_floatVisualizer" xml:space="preserve"><value>浮點數視覺化檢視器</value></data>
+  <data name="CmdAlias_tools_floatVisualizer" xml:space="preserve"><value>浮點數 單精確度 雙精確度 float double ieee 754 half bfloat16 x87 bits</value></data>
+  <data name="Cmd_tools_charTable" xml:space="preserve"><value>字元表</value></data>
+  <data name="CmdAlias_tools_charTable" xml:space="preserve"><value>字元表 字碼頁 字元 名稱 character table code page ascii ebcdic unicode name</value></data>
+  <data name="Cmd_tools_colorPicker" xml:space="preserve"><value>色彩選取器</value></data>
+  <data name="CmdAlias_tools_colorPicker" xml:space="preserve"><value>色彩 檢色器 像素 color colour picker rgb565 bgra pixel</value></data>
+  <data name="Cmd_tools_dateTime" xml:space="preserve"><value>日期與時間轉換器</value></data>
+  <data name="CmdAlias_tools_dateTime" xml:space="preserve"><value>日期 時間 時間戳記 date time timestamp filetime unix dos ole converter</value></data>
+  <data name="Cmd_tools_checksum_create" xml:space="preserve"><value>建立總和檢查碼檔案</value></data>
+  <data name="CmdAlias_tools_checksum_create" xml:space="preserve"><value>總和檢查碼 雜湊 檔案 建立 checksum sha256sums md5 sfv hash file create</value></data>
+  <data name="Cmd_tools_checksum_verify" xml:space="preserve"><value>驗證總和檢查碼檔案</value></data>
+  <data name="CmdAlias_tools_checksum_verify" xml:space="preserve"><value>總和檢查碼 雜湊 檔案 驗證 檢查 checksum sha256sums md5 sfv hash file verify check</value></data>
+  <data name="Cmd_tools_folderCompare" xml:space="preserve"><value>比較資料夾</value></data>
+  <data name="CmdAlias_tools_folderCompare" xml:space="preserve"><value>資料夾 目錄 比較 差異 folder directory compare diff</value></data>
+  <data name="Tool_CopyValue" xml:space="preserve"><value>複製 {0}</value></data>
+  <data name="Tool_Error_End" xml:space="preserve"><value>無法寫入: 游標之後只剩 {0, plural, other {# 位元組}}，但需要 {1, plural, other {# 位元組}}。</value></data>
+  <data name="ToolTable_ExportCsv" xml:space="preserve"><value>匯出 CSV</value></data>
+  <data name="ToolTable_ExportJson" xml:space="preserve"><value>匯出 JSON</value></data>
+  <data name="ToolTable_Filter" xml:space="preserve"><value>篩選</value></data>
+  <data name="ToolTable_List" xml:space="preserve"><value>結果</value></data>
+  <data name="ToolTable_SortBy" xml:space="preserve"><value>依 {0} 排序</value></data>
+  <data name="ToolTable_Exported" xml:space="preserve"><value>已儲存 {0}。</value></data>
+  <data name="GoTo_Error_NotInteger" xml:space="preserve"><value>{0} 需要整數。</value></data>
+  <data name="Calc_Input" xml:space="preserve"><value>運算式</value></data>
+  <data name="Calc_Placeholder" xml:space="preserve"><value>例如: 0x1F00 + 10h * 2</value></data>
+  <data name="Calc_Overflow" xml:space="preserve"><value>溢位</value></data>
+  <data name="Calc_Programmer" xml:space="preserve"><value>程式設計人員</value></data>
+  <data name="Calc_Row_Hex" xml:space="preserve"><value>十六進位</value></data>
+  <data name="Calc_Row_Dec" xml:space="preserve"><value>十進位</value></data>
+  <data name="Calc_Row_DecUnsigned" xml:space="preserve"><value>十進位 (無號)</value></data>
+  <data name="Calc_Row_Oct" xml:space="preserve"><value>八進位</value></data>
+  <data name="Calc_Row_Bin" xml:space="preserve"><value>二進位</value></data>
+  <data name="Calc_Row_Size" xml:space="preserve"><value>檔案大小</value></data>
+  <data name="Calc_Row_Float" xml:space="preserve"><value>浮點數</value></data>
+  <data name="Calc_WriteSize" xml:space="preserve"><value>大小</value></data>
+  <data name="Calc_Bytes" xml:space="preserve"><value>{0, plural, other {# 位元組}}</value></data>
+  <data name="Calc_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Calc_EndianLittle" xml:space="preserve"><value>小端序</value></data>
+  <data name="Calc_EndianBig" xml:space="preserve"><value>大端序</value></data>
+  <data name="Calc_GoTo" xml:space="preserve"><value>移至此位置</value></data>
+  <data name="Calc_Write" xml:space="preserve"><value>寫入游標處</value></data>
+  <data name="Calc_SelectLength" xml:space="preserve"><value>用作選取長度</value></data>
+  <data name="Calc_History" xml:space="preserve"><value>記錄</value></data>
+  <data name="Calc_Error_NoOffset" xml:space="preserve"><value>結果不能用作位移。</value></data>
+  <data name="Calc_Error_NoDocument" xml:space="preserve"><value>沒有開啟任何文件。</value></data>
+  <data name="Calc_Error_NoLength" xml:space="preserve"><value>結果不是從游標起的有效長度。</value></data>
+  <data name="Calc_Error_TooBig" xml:space="preserve"><value>該值無法放入 {0, plural, other {# 位元組}}。</value></data>
+  <data name="Calc_Error_NoData" xml:space="preserve"><value>游標處的資料不足。</value></data>
+  <data name="Calc_Width" xml:space="preserve"><value>位元寬度</value></data>
+  <data name="Calc_Bits" xml:space="preserve"><value>{0} 位元</value></data>
+  <data name="Calc_Signed" xml:space="preserve"><value>有號</value></data>
+  <data name="Calc_ReadCursor" xml:space="preserve"><value>從游標處讀取</value></data>
+  <data name="Calc_BitTable" xml:space="preserve"><value>位元</value></data>
+  <data name="Calc_BitName" xml:space="preserve"><value>第 {0} 位元，值 {1}</value></data>
+  <data name="Calc_BitFieldValue" xml:space="preserve"><value>第 {0} 到 {1} 位元: {2} ({3})</value></data>
+  <data name="Calc_CopyExpression" xml:space="preserve"><value>複製運算式</value></data>
+  <data name="Calc_Operand" xml:space="preserve"><value>運算元 (用於 AND、OR、XOR、NAND、NOR)</value></data>
+  <data name="Calc_Op_AND" xml:space="preserve"><value>AND</value></data>
+  <data name="Calc_Op_OR" xml:space="preserve"><value>OR</value></data>
+  <data name="Calc_Op_XOR" xml:space="preserve"><value>XOR</value></data>
+  <data name="Calc_Op_NOT" xml:space="preserve"><value>NOT</value></data>
+  <data name="Calc_Op_NAND" xml:space="preserve"><value>NAND</value></data>
+  <data name="Calc_Op_NOR" xml:space="preserve"><value>NOR</value></data>
+  <data name="Calc_Op_ShiftLeft" xml:space="preserve"><value>&lt;&lt;</value></data>
+  <data name="Calc_Op_ShiftRight" xml:space="preserve"><value>&gt;&gt; (邏輯)</value></data>
+  <data name="Calc_Op_ShiftRightArithmetic" xml:space="preserve"><value>&gt;&gt; (算術)</value></data>
+  <data name="Calc_Op_RotateLeft" xml:space="preserve"><value>循環左移</value></data>
+  <data name="Calc_Op_RotateRight" xml:space="preserve"><value>循環右移</value></data>
+  <data name="Calc_Op_Negate" xml:space="preserve"><value>取負</value></data>
+  <data name="Calc_Op_ByteSwap" xml:space="preserve"><value>位元組交換</value></data>
+  <data name="Conv_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Conv_EndianLittle" xml:space="preserve"><value>小端序</value></data>
+  <data name="Conv_EndianBig" xml:space="preserve"><value>大端序</value></data>
+  <data name="Conv_CodePageChoice" xml:space="preserve"><value>字碼頁</value></data>
+  <data name="Conv_Hex" xml:space="preserve"><value>位元組 (Hex)</value></data>
+  <data name="Conv_HexInteger" xml:space="preserve"><value>十六進位</value></data>
+  <data name="Conv_UDec" xml:space="preserve"><value>十進位 (無號)</value></data>
+  <data name="Conv_SDec" xml:space="preserve"><value>十進位 (有號)</value></data>
+  <data name="Conv_Oct" xml:space="preserve"><value>八進位</value></data>
+  <data name="Conv_Bin" xml:space="preserve"><value>二進位</value></data>
+  <data name="Conv_Half" xml:space="preserve"><value>half</value></data>
+  <data name="Conv_Float" xml:space="preserve"><value>float</value></data>
+  <data name="Conv_Double" xml:space="preserve"><value>double</value></data>
+  <data name="Conv_Ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Conv_Utf8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Conv_Utf16Le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Conv_Utf16Be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Conv_Utf32Le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Conv_Utf32Be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Conv_CodePage" xml:space="preserve"><value>字碼頁中的文字</value></data>
+  <data name="Conv_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Conv_ReadCursor" xml:space="preserve"><value>從游標處讀取</value></data>
+  <data name="Conv_WriteCursor" xml:space="preserve"><value>寫入游標處</value></data>
+  <data name="Conv_SendSearch" xml:space="preserve"><value>傳送到搜尋列</value></data>
+  <data name="Conv_Error_InvalidHex" xml:space="preserve"><value>請輸入 Hex 位元組，例如 DE AD BE EF (數字個數須為偶數)。</value></data>
+  <data name="Conv_Error_TooLong" xml:space="preserve"><value>最多 {0} 位元組。</value></data>
+  <data name="Conv_Error_InvalidNumber" xml:space="preserve"><value>該數字無效。</value></data>
+  <data name="Conv_Error_OutOfRange" xml:space="preserve"><value>該值無法放入 8 位元組。</value></data>
+  <data name="Conv_Error_Unencodable" xml:space="preserve"><value>此編碼無法表示字元 {0}。</value></data>
+  <data name="Conv_Error_UnknownCodePage" xml:space="preserve"><value>此字碼頁無法使用。</value></data>
+  <data name="Conv_Error_InvalidBase64" xml:space="preserve"><value>不是有效的 Base64。</value></data>
+  <data name="Conv_Error_NoData" xml:space="preserve"><value>游標處沒有資料。</value></data>
+  <data name="Conv_Warning_Invalid" xml:space="preserve"><value>這些位元組在此編碼中無效。顯示的是取代字元。</value></data>
+  <data name="Float_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Float_Format_half" xml:space="preserve"><value>half (16 位元)</value></data>
+  <data name="Float_Format_bfloat16" xml:space="preserve"><value>bfloat16 (16 位元)</value></data>
+  <data name="Float_Format_float" xml:space="preserve"><value>float (32 位元)</value></data>
+  <data name="Float_Format_double" xml:space="preserve"><value>double (64 位元)</value></data>
+  <data name="Float_Format_x87" xml:space="preserve"><value>x87 擴充精確度 (80 位元)</value></data>
+  <data name="Float_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Float_EndianLittle" xml:space="preserve"><value>小端序</value></data>
+  <data name="Float_EndianBig" xml:space="preserve"><value>大端序</value></data>
+  <data name="Float_Decimal" xml:space="preserve"><value>十進位值</value></data>
+  <data name="Float_HexInput" xml:space="preserve"><value>位元組 (Hex)</value></data>
+  <data name="Float_BitTable" xml:space="preserve"><value>位元配置</value></data>
+  <data name="Float_Section_Sign" xml:space="preserve"><value>符號</value></data>
+  <data name="Float_Section_Exponent" xml:space="preserve"><value>指數 ({0} 位元)</value></data>
+  <data name="Float_Section_Mantissa" xml:space="preserve"><value>尾數 ({0} 位元)</value></data>
+  <data name="Float_Name_Sign" xml:space="preserve"><value>符號位元 {0}，值 {1}</value></data>
+  <data name="Float_Name_Exponent" xml:space="preserve"><value>指數位元 {0}，值 {1}</value></data>
+  <data name="Float_Name_Mantissa" xml:space="preserve"><value>尾數位元 {0}，值 {1}</value></data>
+  <data name="Float_Row_BitsHex" xml:space="preserve"><value>位元 (Hex)</value></data>
+  <data name="Float_Row_Sign" xml:space="preserve"><value>符號</value></data>
+  <data name="Float_Row_Exponent" xml:space="preserve"><value>指數</value></data>
+  <data name="Float_Row_Mantissa" xml:space="preserve"><value>尾數</value></data>
+  <data name="Float_Row_Class" xml:space="preserve"><value>類別</value></data>
+  <data name="Float_Row_Shortest" xml:space="preserve"><value>值 (最短表示)</value></data>
+  <data name="Float_Row_Exact" xml:space="preserve"><value>精確值</value></data>
+  <data name="Float_Row_HexFloat" xml:space="preserve"><value>Hex 浮點數</value></data>
+  <data name="Float_Row_NextUp" xml:space="preserve"><value>下一個更大的值</value></data>
+  <data name="Float_Row_NextDown" xml:space="preserve"><value>下一個更小的值</value></data>
+  <data name="Float_Row_Ulp" xml:space="preserve"><value>ULP</value></data>
+  <data name="Float_Row_Error" xml:space="preserve"><value>捨入誤差</value></data>
+  <data name="Float_ExponentText" xml:space="preserve"><value>{0} (有偏 {1}，無偏 {2})</value></data>
+  <data name="Float_ExponentTextSpecial" xml:space="preserve"><value>{0} (有偏 {1}，特殊值)</value></data>
+  <data name="Float_Class_Normal" xml:space="preserve"><value>正規化數</value></data>
+  <data name="Float_Class_Subnormal" xml:space="preserve"><value>非正規化數</value></data>
+  <data name="Float_Class_Zero" xml:space="preserve"><value>零</value></data>
+  <data name="Float_Class_Infinity" xml:space="preserve"><value>無窮大</value></data>
+  <data name="Float_Class_NaN" xml:space="preserve"><value>NaN</value></data>
+  <data name="Float_Class_Invalid" xml:space="preserve"><value>無效的 x87 編碼</value></data>
+  <data name="Float_Class_NaNQuiet" xml:space="preserve"><value>NaN (安靜，酬載 {0})</value></data>
+  <data name="Float_Class_NaNSignaling" xml:space="preserve"><value>NaN (訊號，酬載 {0})</value></data>
+  <data name="Float_Error_InvalidNumber" xml:space="preserve"><value>請輸入十進位值，例如 0.1、inf、-inf 或 nan。</value></data>
+  <data name="Float_Error_OutOfRange" xml:space="preserve"><value>指數過大。</value></data>
+  <data name="Float_Error_InvalidHex" xml:space="preserve"><value>請輸入符合此格式的 Hex 數字。</value></data>
+  <data name="Float_Error_NoData" xml:space="preserve"><value>游標處的資料不足。</value></data>
+  <data name="Float_ReadCursor" xml:space="preserve"><value>從游標處讀取</value></data>
+  <data name="Float_WriteCursor" xml:space="preserve"><value>寫入游標處</value></data>
+  <data name="Chars_Encoding" xml:space="preserve"><value>字元編碼</value></data>
+  <data name="Chars_Base" xml:space="preserve"><value>標題</value></data>
+  <data name="Chars_Base_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Chars_Base_Dec" xml:space="preserve"><value>十進位</value></data>
+  <data name="Chars_Base_Oct" xml:space="preserve"><value>八進位</value></data>
+  <data name="Chars_ListMode" xml:space="preserve"><value>清單檢視</value></data>
+  <data name="Chars_Search" xml:space="preserve"><value>尋找字元</value></data>
+  <data name="Chars_SearchPlaceholder" xml:space="preserve"><value>字元、名稱或碼位 (U+3042)</value></data>
+  <data name="Chars_SearchButton" xml:space="preserve"><value>尋找</value></data>
+  <data name="Chars_NotFound" xml:space="preserve"><value>在此編碼中找不到。</value></data>
+  <data name="Chars_TableName" xml:space="preserve"><value>字元表</value></data>
+  <data name="Chars_TrailTableName" xml:space="preserve"><value>第二位元組表</value></data>
+  <data name="Chars_TrailTitle" xml:space="preserve"><value>前導位元組 {0} 之後的第二位元組</value></data>
+  <data name="Chars_Row_Hex" xml:space="preserve"><value>位元組 (Hex)</value></data>
+  <data name="Chars_Row_Dec" xml:space="preserve"><value>位元組 (十進位)</value></data>
+  <data name="Chars_Row_Oct" xml:space="preserve"><value>位元組 (八進位)</value></data>
+  <data name="Chars_Row_Bin" xml:space="preserve"><value>位元組 (二進位)</value></data>
+  <data name="Chars_Row_Char" xml:space="preserve"><value>字元</value></data>
+  <data name="Chars_Row_CodePoint" xml:space="preserve"><value>碼位</value></data>
+  <data name="Chars_Row_Name" xml:space="preserve"><value>名稱 (英文)</value></data>
+  <data name="Chars_Row_Utf8" xml:space="preserve"><value>UTF-8 位元組</value></data>
+  <data name="Chars_Row_Utf16" xml:space="preserve"><value>UTF-16 位元組</value></data>
+  <data name="Chars_Utf16Endian" xml:space="preserve"><value>UTF-16 位元組順序 (LE / BE)</value></data>
+  <data name="Chars_Insert" xml:space="preserve"><value>在游標處插入</value></data>
+  <data name="Chars_CopyChar" xml:space="preserve"><value>複製字元</value></data>
+  <data name="Chars_CopyBytes" xml:space="preserve"><value>複製位元組值</value></data>
+  <data name="Color_Picker" xml:space="preserve"><value>色彩</value></data>
+  <data name="Color_Swatch" xml:space="preserve"><value>色彩預覽</value></data>
+  <data name="Color_Hex" xml:space="preserve"><value>Hex 色彩 (#RRGGBB 或 #AARRGGBB)</value></data>
+  <data name="Color_Error_Hex" xml:space="preserve"><value>請輸入 #RRGGBB 或 #AARRGGBB。</value></data>
+  <data name="Color_Components" xml:space="preserve"><value>R {0}，G {1}，B {2}，A {3}</value></data>
+  <data name="Color_Formats" xml:space="preserve"><value>像素格式</value></data>
+  <data name="Color_Format" xml:space="preserve"><value>讀取、寫入與搜尋所用的格式</value></data>
+  <data name="Color_EndianOf" xml:space="preserve"><value>{0} 的位元組順序</value></data>
+  <data name="Color_ReadCursor" xml:space="preserve"><value>從游標處讀取</value></data>
+  <data name="Color_WriteCursor" xml:space="preserve"><value>寫入游標處</value></data>
+  <data name="Color_Search" xml:space="preserve"><value>尋找此色彩</value></data>
+  <data name="Color_Error_NoData" xml:space="preserve"><value>游標處的資料不足。</value></data>
+  <data name="Time_Zone" xml:space="preserve"><value>時區</value></data>
+  <data name="Time_Zone_Utc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Time_Zone_Local" xml:space="preserve"><value>本地時間</value></data>
+  <data name="Time_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="Time_EndianLittle" xml:space="preserve"><value>小端序</value></data>
+  <data name="Time_EndianBig" xml:space="preserve"><value>大端序</value></data>
+  <data name="Time_Date" xml:space="preserve"><value>日期與時間 (ISO 8601)</value></data>
+  <data name="Time_Row_Iso" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Time_Row_Regional" xml:space="preserve"><value>地區格式</value></data>
+  <data name="Time_Now" xml:space="preserve"><value>現在</value></data>
+  <data name="Time_Decimal" xml:space="preserve"><value>十進位</value></data>
+  <data name="Time_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Time_Bytes" xml:space="preserve"><value>位元組</value></data>
+  <data name="Time_NotRepresentable" xml:space="preserve"><value>無法表示</value></data>
+  <data name="Time_Format" xml:space="preserve"><value>讀取與寫入所用的格式</value></data>
+  <data name="Time_ReadCursor" xml:space="preserve"><value>從游標處讀取</value></data>
+  <data name="Time_WriteCursor" xml:space="preserve"><value>寫入游標處</value></data>
+  <data name="Time_Error_InvalidDate" xml:space="preserve"><value>請輸入日期，例如 2024-02-29T12:34:56Z，或輸入 now。</value></data>
+  <data name="Time_Error_InvalidNumber" xml:space="preserve"><value>該數字無效。</value></data>
+  <data name="Time_Error_OutOfRange" xml:space="preserve"><value>該值超出此格式的範圍。</value></data>
+  <data name="Time_Error_InvalidHex" xml:space="preserve"><value>請輸入與此格式長度相同的 Hex 位元組。</value></data>
+  <data name="Time_Error_NotEnoughData" xml:space="preserve"><value>資料不足。</value></data>
+  <data name="Time_Error_ReadFailed" xml:space="preserve"><value>無法從游標處讀取日期。</value></data>
+  <data name="Time_Format_unix32" xml:space="preserve"><value>Unix 時間 (32 位元，秒)</value></data>
+  <data name="Time_Format_unix32u" xml:space="preserve"><value>Unix 時間 (無號 32 位元，秒)</value></data>
+  <data name="Time_Format_unix64" xml:space="preserve"><value>Unix 時間 (64 位元，秒)</value></data>
+  <data name="Time_Format_unixms" xml:space="preserve"><value>Unix 時間 (64 位元，毫秒)</value></data>
+  <data name="Time_Format_unixus" xml:space="preserve"><value>Unix 時間 (64 位元，微秒)</value></data>
+  <data name="Time_Format_unixns" xml:space="preserve"><value>Unix 時間 (64 位元，奈秒)</value></data>
+  <data name="Time_Format_filetime" xml:space="preserve"><value>FILETIME</value></data>
+  <data name="Time_Format_dos" xml:space="preserve"><value>DOS 日期與時間</value></data>
+  <data name="Time_Format_ole" xml:space="preserve"><value>OLE 自動化日期</value></data>
+  <data name="Time_Format_hfsplus" xml:space="preserve"><value>HFS+</value></data>
+  <data name="Time_Format_apfs" xml:space="preserve"><value>APFS (奈秒)</value></data>
+  <data name="Time_Format_java" xml:space="preserve"><value>Java (毫秒)</value></data>
+  <data name="Time_Format_dotnet" xml:space="preserve"><value>.NET DateTime.Ticks</value></data>
+  <data name="Time_Format_gps" xml:space="preserve"><value>GPS 時間 (秒)</value></data>
+  <data name="Time_Format_cocoa" xml:space="preserve"><value>Mac 絕對時間 (Cocoa)</value></data>
+  <data name="Sums_CreateTitle" xml:space="preserve"><value>建立總和檢查碼檔案</value></data>
+  <data name="Sums_Create" xml:space="preserve"><value>建立</value></data>
+  <data name="Sums_Targets" xml:space="preserve"><value>檔案與資料夾 (每行一個)</value></data>
+  <data name="Sums_AddFiles" xml:space="preserve"><value>新增檔案...</value></data>
+  <data name="Sums_AddFolder" xml:space="preserve"><value>新增資料夾...</value></data>
+  <data name="Sums_Subfolders" xml:space="preserve"><value>包含子資料夾</value></data>
+  <data name="Sums_Algorithm" xml:space="preserve"><value>演算法</value></data>
+  <data name="Sums_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Sums_Format_Gnu" xml:space="preserve"><value>GNU (SHA256SUMS)</value></data>
+  <data name="Sums_Format_Bsd" xml:space="preserve"><value>BSD (CHECKSUM.SHA256)</value></data>
+  <data name="Sums_Format_Sidecar" xml:space="preserve"><value>每個目標一個檔案 (.sha256)</value></data>
+  <data name="Sums_Format_Sfv" xml:space="preserve"><value>SFV (僅 CRC-32)</value></data>
+  <data name="Sums_BinaryMark" xml:space="preserve"><value>將行標記為二進位 (*)</value></data>
+  <data name="Sums_SeparatorSlash" xml:space="preserve"><value>路徑分隔符號 /</value></data>
+  <data name="Sums_SeparatorBackslash" xml:space="preserve"><value>路徑分隔符號 \</value></data>
+  <data name="Sums_LineLf" xml:space="preserve"><value>換行字元 LF</value></data>
+  <data name="Sums_LineCrLf" xml:space="preserve"><value>換行字元 CRLF</value></data>
+  <data name="Sums_OutputName" xml:space="preserve"><value>輸出檔名</value></data>
+  <data name="Sums_Info" xml:space="preserve"><value>將對 {0, plural, other {# 個檔案}}計算雜湊。輸出: {1}</value></data>
+  <data name="Sums_Error_NoTarget" xml:space="preserve"><value>請至少新增一個檔案或資料夾。</value></data>
+  <data name="Sums_Error_Missing" xml:space="preserve"><value>部分檔案或資料夾不存在。</value></data>
+  <data name="Sums_Error_NoFiles" xml:space="preserve"><value>沒有要計算雜湊的檔案。</value></data>
+  <data name="Sums_Error_Write" xml:space="preserve"><value>無法寫入總和檢查碼檔案: {0}</value></data>
+  <data name="Sums_Error_Read" xml:space="preserve"><value>無法讀取 {0}: {1}</value></data>
+  <data name="Sums_Error_NotChecksum" xml:space="preserve"><value>{0} 不是總和檢查碼檔案，旁邊也沒有總和檢查碼檔案。</value></data>
+  <data name="Sums_Error_Running" xml:space="preserve"><value>總和檢查碼檢查已在執行。</value></data>
+  <data name="Sums_OverwriteTitle" xml:space="preserve"><value>要取代現有檔案嗎?</value></data>
+  <data name="Sums_OverwriteBody" xml:space="preserve"><value>{0, plural, other {這 # 個檔案已存在，將被覆寫。}}</value></data>
+  <data name="Sums_Overwrite" xml:space="preserve"><value>覆寫</value></data>
+  <data name="Sums_OpCreate" xml:space="preserve"><value>建立總和檢查碼檔案 ({0, plural, other {# 個檔案}})</value></data>
+  <data name="Sums_OpVerify" xml:space="preserve"><value>驗證 {0}</value></data>
+  <data name="Sums_Cancelled" xml:space="preserve"><value>已取消建立總和檢查碼檔案。</value></data>
+  <data name="Sums_Done" xml:space="preserve"><value>已為 {0, plural, other {# 個檔案}}建立總和檢查碼檔案: {1}</value></data>
+  <data name="Sums_WrittenMany" xml:space="preserve"><value>{0, plural, other {# 個檔案}}</value></data>
+  <data name="Sums_SkippedTitle" xml:space="preserve"><value>無法讀取的檔案</value></data>
+  <data name="Sums_SkippedBody" xml:space="preserve"><value>{0, plural, other {# 個檔案無法讀取，未包含在總和檢查碼檔案中。}}</value></data>
+  <data name="Sums_SidecarTitle" xml:space="preserve"><value>要用總和檢查碼檔案驗證嗎?</value></data>
+  <data name="Sums_SidecarBody" xml:space="preserve"><value>{0} 不是總和檢查碼檔案，但它旁邊有 {1}。要用 {1} 驗證 {0} 嗎?</value></data>
+  <data name="Sums_SidecarUse" xml:space="preserve"><value>驗證</value></data>
+  <data name="Sums_Verify" xml:space="preserve"><value>驗證</value></data>
+  <data name="Sums_InfoBar" xml:space="preserve"><value>這是一個總和檢查碼檔案。</value></data>
+  <data name="Sums_AskAlgorithmTitle" xml:space="preserve"><value>選擇演算法</value></data>
+  <data name="Sums_AskAlgorithmBody" xml:space="preserve"><value>無法偵測部分行的演算法。請選擇總和檢查碼所用的演算法。</value></data>
+  <data name="Sums_Verifying" xml:space="preserve"><value>正在驗證...</value></data>
+  <data name="Sums_Verifying2" xml:space="preserve"><value>正在驗證: {0}</value></data>
+  <data name="Sums_VerifyCancelled" xml:space="preserve"><value>已取消: {0}</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>已略過 {0, plural, other {# 行}}格式錯誤的行。行號: {1}</value></data>
+  <data name="Sums_Summary_Match" xml:space="preserve"><value>相符 {0}</value></data>
+  <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>不相符 {0}</value></data>
+  <data name="Sums_Summary_Missing" xml:space="preserve"><value>遺失 {0}</value></data>
+  <data name="Sums_Summary_ReadError" xml:space="preserve"><value>讀取錯誤 {0}</value></data>
+  <data name="Sums_Summary_None" xml:space="preserve"><value>沒有項目</value></data>
+  <data name="Sums_SummarySeparator" xml:space="preserve"><value>， </value></data>
+  <data name="Sums_Status_Match" xml:space="preserve"><value>相符</value></data>
+  <data name="Sums_Status_Mismatch" xml:space="preserve"><value>不相符</value></data>
+  <data name="Sums_Status_Missing" xml:space="preserve"><value>遺失</value></data>
+  <data name="Sums_Status_ReadError" xml:space="preserve"><value>讀取錯誤</value></data>
+  <data name="Sums_Filter_All" xml:space="preserve"><value>全部</value></data>
+  <data name="Sums_Col_State" xml:space="preserve"><value>狀態</value></data>
+  <data name="Sums_Col_Path" xml:space="preserve"><value>路徑</value></data>
+  <data name="Sums_Col_Expected" xml:space="preserve"><value>預期值</value></data>
+  <data name="Sums_Col_Actual" xml:space="preserve"><value>計算值</value></data>
+  <data name="Sums_Col_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Sums_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="FolderCmp_Title" xml:space="preserve"><value>比較資料夾</value></data>
+  <data name="FolderCmp_Compare" xml:space="preserve"><value>比較</value></data>
+  <data name="FolderCmp_Left" xml:space="preserve"><value>左側資料夾</value></data>
+  <data name="FolderCmp_Right" xml:space="preserve"><value>右側資料夾</value></data>
+  <data name="FolderCmp_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="FolderCmp_Subfolders" xml:space="preserve"><value>包含子資料夾</value></data>
+  <data name="FolderCmp_Pattern" xml:space="preserve"><value>檔名模式 (例如 *.bin；留空表示全部)</value></data>
+  <data name="FolderCmp_Hash" xml:space="preserve"><value>依 SHA-256 比較並顯示其值</value></data>
+  <data name="FolderCmp_Error_Missing" xml:space="preserve"><value>該資料夾不存在。</value></data>
+  <data name="FolderCmp_Error_Running" xml:space="preserve"><value>資料夾比較已在執行。</value></data>
+  <data name="FolderCmp_Op" xml:space="preserve"><value>比較資料夾 {0} 和 {1}</value></data>
+  <data name="FolderCmp_Comparing" xml:space="preserve"><value>正在比較...</value></data>
+  <data name="FolderCmp_Comparing2" xml:space="preserve"><value>正在比較: {0}</value></data>
+  <data name="FolderCmp_Cancelled" xml:space="preserve"><value>已取消: {0}</value></data>
+  <data name="FolderCmp_Status_Same" xml:space="preserve"><value>相同</value></data>
+  <data name="FolderCmp_Status_Different" xml:space="preserve"><value>不同</value></data>
+  <data name="FolderCmp_Status_LeftOnly" xml:space="preserve"><value>僅左側有</value></data>
+  <data name="FolderCmp_Status_RightOnly" xml:space="preserve"><value>僅右側有</value></data>
+  <data name="FolderCmp_Status_ReadError" xml:space="preserve"><value>讀取錯誤</value></data>
+  <data name="FolderCmp_Filter_HideSame" xml:space="preserve"><value>隱藏相同的檔案</value></data>
+  <data name="FolderCmp_Filter_All" xml:space="preserve"><value>全部</value></data>
+  <data name="FolderCmp_Col_State" xml:space="preserve"><value>狀態</value></data>
+  <data name="FolderCmp_Col_Path" xml:space="preserve"><value>相對路徑</value></data>
+  <data name="FolderCmp_Col_LeftSize" xml:space="preserve"><value>左側大小</value></data>
+  <data name="FolderCmp_Col_RightSize" xml:space="preserve"><value>右側大小</value></data>
+  <data name="FolderCmp_Col_FirstDiff" xml:space="preserve"><value>第一處差異</value></data>
+  <data name="FolderCmp_Summary_Same" xml:space="preserve"><value>相同 {0}</value></data>
+  <data name="FolderCmp_Summary_Different" xml:space="preserve"><value>不同 {0}</value></data>
+  <data name="FolderCmp_Summary_LeftOnly" xml:space="preserve"><value>僅左側有 {0}</value></data>
+  <data name="FolderCmp_Summary_RightOnly" xml:space="preserve"><value>僅右側有 {0}</value></data>
+  <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>讀取錯誤 {0}</value></data>
+  <data name="FolderCmp_Summary_None" xml:space="preserve"><value>沒有檔案</value></data>
+  <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>在檔案比較中開啟</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>在浮點數視覺化檢視器中開啟</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>在色彩選取器中開啟</value></data>
+  <data name="Menu_File_ExportPdf.Text" xml:space="preserve"><value>PDF(P)...</value></data>
+  <data name="Menu_File_ExportPdf.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Print.Text" xml:space="preserve"><value>列印(T)...</value></data>
+  <data name="Menu_File_Print.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_PrintPreview.Text" xml:space="preserve"><value>列印預覽(Q)...</value></data>
+  <data name="Menu_File_PrintPreview.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_Ads.Text" xml:space="preserve"><value>替代資料流(H)...</value></data>
+  <data name="Menu_File_Ads.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Split.Text" xml:space="preserve"><value>分割檔案(S)...</value></data>
+  <data name="Menu_Tools_FileTools_Split.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_FileTools_Join.Text" xml:space="preserve"><value>合併檔案(J)...</value></data>
+  <data name="Menu_Tools_FileTools_Join.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.Text" xml:space="preserve"><value>交錯(L)...</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.Text" xml:space="preserve"><value>解交錯(D)...</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools_Shred.Text" xml:space="preserve"><value>安全刪除(H)...</value></data>
+  <data name="Menu_Tools_FileTools_Shred.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Ads.Text" xml:space="preserve"><value>替代資料流(A)...</value></data>
+  <data name="Menu_Tools_FileTools_Ads.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_file_print" xml:space="preserve"><value>列印</value></data>
+  <data name="CmdAlias_file_print" xml:space="preserve"><value>列印 印表機 版面設定 紙張 print printer page setup paper</value></data>
+  <data name="Cmd_file_printPreview" xml:space="preserve"><value>列印預覽</value></data>
+  <data name="CmdAlias_file_printPreview" xml:space="preserve"><value>列印 預覽 頁面 print preview page</value></data>
+  <data name="Cmd_file_exportPdf" xml:space="preserve"><value>匯出為 PDF</value></data>
+  <data name="CmdAlias_file_exportPdf" xml:space="preserve"><value>pdf 匯出 列印 儲存 pdf export print save</value></data>
+  <data name="Cmd_file_ads_open" xml:space="preserve"><value>開啟替代資料流</value></data>
+  <data name="CmdAlias_file_ads_open" xml:space="preserve"><value>替代資料流 ads alternate data stream ntfs zone identifier</value></data>
+  <data name="Cmd_tools_ads" xml:space="preserve"><value>管理替代資料流</value></data>
+  <data name="CmdAlias_tools_ads" xml:space="preserve"><value>替代資料流 列出 建立 刪除 ads alternate data stream ntfs list create delete</value></data>
+  <data name="Cmd_tools_files_split" xml:space="preserve"><value>分割</value></data>
+  <data name="CmdAlias_tools_files_split" xml:space="preserve"><value>分割 拆分 檔案 部分 split cut divide file parts</value></data>
+  <data name="Cmd_tools_files_join" xml:space="preserve"><value>合併</value></data>
+  <data name="CmdAlias_tools_files_join" xml:space="preserve"><value>合併 連接 檔案 join concatenate merge files</value></data>
+  <data name="Cmd_tools_files_interleave" xml:space="preserve"><value>交錯</value></data>
+  <data name="CmdAlias_tools_files_interleave" xml:space="preserve"><value>交錯 合併 rom 位元組 interleave merge rom bytes</value></data>
+  <data name="Cmd_tools_files_deinterleave" xml:space="preserve"><value>解交錯</value></data>
+  <data name="CmdAlias_tools_files_deinterleave" xml:space="preserve"><value>解交錯 分割 偶數 奇數 rom 位元組 deinterleave split even odd rom bytes</value></data>
+  <data name="Cmd_tools_files_shred" xml:space="preserve"><value>安全刪除</value></data>
+  <data name="CmdAlias_tools_files_shred" xml:space="preserve"><value>粉碎 安全刪除 清除 覆寫 shred secure delete wipe overwrite erase</value></data>
+  <data name="Tab_Ads" xml:space="preserve"><value>替代資料流...</value></data>
+  <data name="Panel_Ads_Title" xml:space="preserve"><value>替代資料流</value></data>
+  <data name="Set_files_adsNotice" xml:space="preserve"><value>檔案有替代資料流時通知</value></data>
+  <data name="SetDesc_files_adsNotice" xml:space="preserve"><value>開啟 NTFS 上帶有主要資料流以外其他資料流的檔案時，顯示含有「顯示清單」按鈕的訊息。</value></data>
+  <data name="WriteBlock_Enabled" xml:space="preserve"><value>寫入保護模式已開啟。</value></data>
+  <data name="FileList_List" xml:space="preserve"><value>檔案清單</value></data>
+  <data name="FileList_Add" xml:space="preserve"><value>新增...</value></data>
+  <data name="FileList_AddFolder" xml:space="preserve"><value>新增資料夾...</value></data>
+  <data name="FileList_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="FileList_Remove_Key" xml:space="preserve"><value>R</value></data>
+  <data name="FileList_Up" xml:space="preserve"><value>上移</value></data>
+  <data name="FileList_Up_Key" xml:space="preserve"><value>U</value></data>
+  <data name="FileList_Down" xml:space="preserve"><value>下移</value></data>
+  <data name="FileList_Down_Key" xml:space="preserve"><value>D</value></data>
+  <data name="FileList_SortName" xml:space="preserve"><value>依名稱排序</value></data>
+  <data name="FileList_SortNatural" xml:space="preserve"><value>自然排序</value></data>
+  <data name="FileOps_Input" xml:space="preserve"><value>輸入</value></data>
+  <data name="FileOps_InputDocument" xml:space="preserve"><value>使用中的文件</value></data>
+  <data name="FileOps_InputDocumentNamed" xml:space="preserve"><value>使用中的文件: {0}</value></data>
+  <data name="FileOps_InputFile" xml:space="preserve"><value>檔案</value></data>
+  <data name="FileOps_FilePath" xml:space="preserve"><value>檔案路徑</value></data>
+  <data name="FileOps_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="FileOps_Error_NoInput" xml:space="preserve"><value>請選擇輸入文件或現有的檔案。</value></data>
+  <data name="FileOps_Error_NothingToDo" xml:space="preserve"><value>沒有可處理的資料。</value></data>
+  <data name="FileOps_Error_Argument" xml:space="preserve"><value>有一個值超出範圍。</value></data>
+  <data name="FileOps_Error_Names" xml:space="preserve"><value>此檔名格式無法產生互不相同的名稱。</value></data>
+  <data name="FileOps_Error_Unreadable" xml:space="preserve"><value>有些檔案無法讀取。</value></data>
+  <data name="FileOps_OverwriteTitle" xml:space="preserve"><value>要覆寫現有檔案嗎?</value></data>
+  <data name="FileOps_OverwriteBody" xml:space="preserve"><value>{0, plural, other {目的地已存在 # 個檔案。}}</value></data>
+  <data name="FileOps_Overwrite" xml:space="preserve"><value>覆寫</value></data>
+  <data name="FileOps_NoSpaceTitle" xml:space="preserve"><value>可用空間不足</value></data>
+  <data name="FileOps_NoSpaceBody" xml:space="preserve"><value>目的磁碟區 {0} 有 {2} 位元組可用，但需要 {1} 位元組。未寫入任何內容。</value></data>
+  <data name="FileOps_KeepTitle" xml:space="preserve"><value>要保留已完成的檔案嗎?</value></data>
+  <data name="FileOps_KeepBody" xml:space="preserve"><value>{1} 在此之前已完成 {0, plural, other {# 個檔案}}。</value></data>
+  <data name="FileOps_Keep" xml:space="preserve"><value>保留</value></data>
+  <data name="FileOps_DeleteCompleted" xml:space="preserve"><value>刪除</value></data>
+  <data name="FileOps_Cancelled" xml:space="preserve"><value>作業已取消。</value></data>
+  <data name="FileOps_CancelledDeleted" xml:space="preserve"><value>作業已取消，已建立的檔案已被刪除。</value></data>
+  <data name="FileOps_ErrorTitle" xml:space="preserve"><value>檔案工具錯誤</value></data>
+  <data name="FileOps_CreatedList" xml:space="preserve"><value>{0, plural, other {發生錯誤前已建立 # 個檔案:}}</value></data>
+  <data name="Split_Title" xml:space="preserve"><value>分割檔案</value></data>
+  <data name="Split_Run" xml:space="preserve"><value>分割</value></data>
+  <data name="Split_Method" xml:space="preserve"><value>分割方式</value></data>
+  <data name="Split_BySize" xml:space="preserve"><value>每個檔案的大小</value></data>
+  <data name="Split_Size" xml:space="preserve"><value>大小 (例如 4G、1.44M、0x10000)</value></data>
+  <data name="Split_ByCount" xml:space="preserve"><value>檔案數量 (2 到 10,000)</value></data>
+  <data name="Split_Count" xml:space="preserve"><value>檔案數量</value></data>
+  <data name="Split_Align" xml:space="preserve"><value>使大小為此位元組數的整數倍</value></data>
+  <data name="Split_ByPositions" xml:space="preserve"><value>位移</value></data>
+  <data name="Split_Positions" xml:space="preserve"><value>位移 (每行一個)</value></data>
+  <data name="Split_UseBookmarks" xml:space="preserve"><value>同時使用文件的書籤位置</value></data>
+  <data name="Split_Output" xml:space="preserve"><value>輸出</value></data>
+  <data name="Split_OutputFolder" xml:space="preserve"><value>輸出資料夾 (留空 = 與輸入相同的資料夾)</value></data>
+  <data name="Split_NameFormat" xml:space="preserve"><value>檔名格式</value></data>
+  <data name="Split_JoinScript" xml:space="preserve"><value>建立用於合併各部分的命令檔 (copy /b)</value></data>
+  <data name="Split_Checksum" xml:space="preserve"><value>為來源檔案和各部分建立總和檢查碼檔案</value></data>
+  <data name="Split_Summary" xml:space="preserve"><value>{0, plural, other {# 個檔案}}: {1} 到 {2}，共 {3} 位元組</value></data>
+  <data name="Split_Error_Size" xml:space="preserve"><value>請輸入每個檔案的大小。</value></data>
+  <data name="Split_Error_Count" xml:space="preserve"><value>請輸入 2 到 10,000 之間的檔案數量。</value></data>
+  <data name="Split_Error_Positions" xml:space="preserve"><value>有一個位移無效。</value></data>
+  <data name="Split_Operation" xml:space="preserve"><value>正在分割 {0}</value></data>
+  <data name="Split_Done" xml:space="preserve"><value>已在 {1} 中分割為 {0, plural, other {# 個檔案}}</value></data>
+  <data name="Join_Title" xml:space="preserve"><value>合併檔案</value></data>
+  <data name="Join_Run" xml:space="preserve"><value>合併</value></data>
+  <data name="Join_Files" xml:space="preserve"><value>檔案 (依合併順序)</value></data>
+  <data name="Join_SequenceBody" xml:space="preserve"><value>是否同時新增從 {0} 開始的編號檔案 ({1, plural, other {另外 # 個檔案}})?</value></data>
+  <data name="Join_SequenceAll" xml:space="preserve"><value>新增所有編號檔案</value></data>
+  <data name="Join_SequenceOne" xml:space="preserve"><value>僅新增此檔案</value></data>
+  <data name="Join_Total" xml:space="preserve"><value>{0, plural, other {# 個檔案}}，共 {1} 位元組</value></data>
+  <data name="Join_PadNone" xml:space="preserve"><value>檔案之間不填補</value></data>
+  <data name="Join_PadAlign" xml:space="preserve"><value>讓每個檔案從 N 位元組的整數倍位置開始</value></data>
+  <data name="Join_Align" xml:space="preserve"><value>對齊位元組數</value></data>
+  <data name="Join_PadValue" xml:space="preserve"><value>填補值 (Hex 位元組)</value></data>
+  <data name="Join_OutNew" xml:space="preserve"><value>將結果以新文件開啟</value></data>
+  <data name="Join_OutFile" xml:space="preserve"><value>將結果儲存到檔案</value></data>
+  <data name="Join_OutPath" xml:space="preserve"><value>輸出檔案</value></data>
+  <data name="Join_Error_Empty" xml:space="preserve"><value>請至少新增一個檔案。</value></data>
+  <data name="Join_Error_Missing" xml:space="preserve"><value>找不到檔案: {0}</value></data>
+  <data name="Join_Error_Align" xml:space="preserve"><value>請輸入 1 位元組或更大的對齊值。</value></data>
+  <data name="Join_Error_PadValue" xml:space="preserve"><value>請輸入一個 Hex 位元組，例如 00 或 FF。</value></data>
+  <data name="Join_Error_OutPath" xml:space="preserve"><value>請輸入輸出檔案。</value></data>
+  <data name="Join_Error_SameFile" xml:space="preserve"><value>輸出檔案是輸入檔案之一。</value></data>
+  <data name="Join_Error_Unreadable" xml:space="preserve"><value>無法讀取這些檔案，因此未合併任何內容:</value></data>
+  <data name="Join_Error_Write" xml:space="preserve"><value>無法寫入檔案: {0}</value></data>
+  <data name="Join_DocumentName" xml:space="preserve"><value>已合併 {0}</value></data>
+  <data name="Join_Operation" xml:space="preserve"><value>正在合併為 {0}</value></data>
+  <data name="Join_Done" xml:space="preserve"><value>已合併為 {0}</value></data>
+  <data name="Join_ChangedDuringJoin" xml:space="preserve"><value>這些來源檔案在合併期間發生了變更: {0}</value></data>
+  <data name="Deint_Title" xml:space="preserve"><value>解交錯</value></data>
+  <data name="Deint_Run" xml:space="preserve"><value>解交錯</value></data>
+  <data name="Deint_Count" xml:space="preserve"><value>輸出數量 (2 到 16)</value></data>
+  <data name="Deint_Unit" xml:space="preserve"><value>單位</value></data>
+  <data name="Deint_Unit1" xml:space="preserve"><value>1 位元組</value></data>
+  <data name="Deint_Unit2" xml:space="preserve"><value>2 位元組</value></data>
+  <data name="Deint_Unit4" xml:space="preserve"><value>4 位元組</value></data>
+  <data name="Deint_Unit8" xml:space="preserve"><value>8 位元組</value></data>
+  <data name="Deint_UnitCustom" xml:space="preserve"><value>其他位元組數</value></data>
+  <data name="Deint_UnitBytes" xml:space="preserve"><value>單位 (位元組)</value></data>
+  <data name="Deint_Pad" xml:space="preserve"><value>用某個值填補末尾缺少的部分</value></data>
+  <data name="Deint_Keep" xml:space="preserve"><value>將剩餘位元組保留在最後一個輸出中</value></data>
+  <data name="Deint_PadValue" xml:space="preserve"><value>值 (Hex 位元組)</value></data>
+  <data name="Deint_Error_Count" xml:space="preserve"><value>請輸入 2 到 16 之間的數字。</value></data>
+  <data name="Deint_Error_Unit" xml:space="preserve"><value>請輸入 1 位元組到 1 MiB 的單位。</value></data>
+  <data name="Deint_Summary" xml:space="preserve"><value>{0, plural, other {# 個輸出}}: {1} 位元組</value></data>
+  <data name="Deint_Operation" xml:space="preserve"><value>正在解交錯 {0}</value></data>
+  <data name="Deint_Done" xml:space="preserve"><value>已將 {0, plural, other {# 個檔案}}寫入 {1}</value></data>
+  <data name="Inter_Title" xml:space="preserve"><value>交錯</value></data>
+  <data name="Inter_Run" xml:space="preserve"><value>交錯</value></data>
+  <data name="Inter_Inputs" xml:space="preserve"><value>輸入檔案 (依順序)</value></data>
+  <data name="Inter_PadShort" xml:space="preserve"><value>用某個值填補較短的輸入</value></data>
+  <data name="Inter_ErrorOnMismatch" xml:space="preserve"><value>長度不同時回報錯誤</value></data>
+  <data name="Inter_Error_Count" xml:space="preserve"><value>請新增 2 到 16 個檔案。</value></data>
+  <data name="Interleave_Error_Length" xml:space="preserve"><value>輸入的長度不同。</value></data>
+  <data name="Inter_Summary" xml:space="preserve"><value>{0, plural, other {# 個輸入}}: {1} 位元組</value></data>
+  <data name="Inter_DocumentName" xml:space="preserve"><value>已交錯 {0}</value></data>
+  <data name="Inter_Operation" xml:space="preserve"><value>正在交錯 {0, plural, other {# 個檔案}}</value></data>
+  <data name="Inter_Done" xml:space="preserve"><value>已交錯為 {0}</value></data>
+  <data name="Shred_Title" xml:space="preserve"><value>安全刪除</value></data>
+  <data name="Shred_Run" xml:space="preserve"><value>刪除...</value></data>
+  <data name="Shred_Targets" xml:space="preserve"><value>要刪除的檔案和資料夾</value></data>
+  <data name="Shred_Method" xml:space="preserve"><value>覆寫方式</value></data>
+  <data name="Shred_Method_Zero" xml:space="preserve"><value>用零覆寫一次 (預設)</value></data>
+  <data name="Shred_Method_Random" xml:space="preserve"><value>用隨機資料覆寫一次</value></data>
+  <data name="Shred_Method_Dod" xml:space="preserve"><value>DoD 5220.22-M (3 次: 00、FF、隨機)</value></data>
+  <data name="Shred_Method_Custom" xml:space="preserve"><value>自訂</value></data>
+  <data name="Shred_Method_CustomSummary" xml:space="preserve"><value>自訂 ({0, plural, other {# 次}})</value></data>
+  <data name="Shred_Passes" xml:space="preserve"><value>次數 (1 到 35)</value></data>
+  <data name="Shred_Patterns" xml:space="preserve"><value>每一次的模式，每行一個 (Hex 位元組或 random)</value></data>
+  <data name="Shred_Verify" xml:space="preserve"><value>回讀並驗證最後一次</value></data>
+  <data name="Shred_Error_Passes" xml:space="preserve"><value>請輸入 1 到 35 之間的次數。</value></data>
+  <data name="Shred_Error_Pattern" xml:space="preserve"><value>模式無效: {0}</value></data>
+  <data name="Shred_Reject_Open" xml:space="preserve"><value>{0} 已在此應用程式中開啟。請先關閉它。</value></data>
+  <data name="Shred_Reject_System" xml:space="preserve"><value>Windows 和 Program Files 等系統資料夾不能作為目標。</value></data>
+  <data name="Shred_Reject_Root" xml:space="preserve"><value>磁碟機根目錄不能作為目標。</value></data>
+  <data name="Shred_Reject_Missing" xml:space="preserve"><value>找不到: {0}</value></data>
+  <data name="Shred_Confirm_Title" xml:space="preserve"><value>要永久刪除嗎?</value></data>
+  <data name="Shred_Confirm_Primary" xml:space="preserve"><value>永久刪除</value></data>
+  <data name="Shred_Confirm_Summary" xml:space="preserve"><value>{0, plural, other {# 個檔案}}，共 {1} 位元組。方式: {2}。</value></data>
+  <data name="Shred_Confirm_Irreversible" xml:space="preserve"><value>此動作無法復原。檔案不會進入資源回收筒，也無法還原。</value></data>
+  <data name="Shred_Limit_Ssd" xml:space="preserve"><value>在 SSD、USB 快閃磁碟機和 SD 卡上，平均抹寫可能導致原始資料在覆寫後仍保留在其他位置。</value></data>
+  <data name="Shred_Limit_Copies" xml:space="preserve"><value>原始資料可能仍保留在磁碟區陰影複製、備份、OneDrive 等同步資料夾、壓縮、加密或重複資料刪除的檔案，以及 ReFS 等寫入時複製檔案系統中。</value></data>
+  <data name="Shred_Limit_Free" xml:space="preserve"><value>此工具不會清除可用空間和檔案閒置空間。</value></data>
+  <data name="Shred_Confirm_Verify" xml:space="preserve"><value>將回讀並驗證最後一次。</value></data>
+  <data name="Shred_Operation" xml:space="preserve"><value>安全刪除 {0, plural, other {# 個檔案}}</value></data>
+  <data name="Shred_Done" xml:space="preserve"><value>{0, plural, other {已安全刪除 # 個檔案。}}</value></data>
+  <data name="Shred_Cancelled" xml:space="preserve"><value>已取消，此前已刪除 {0, plural, other {# 個檔案}}。</value></data>
+  <data name="Shred_ResultTitle" xml:space="preserve"><value>安全刪除結果</value></data>
+  <data name="Shred_Failures" xml:space="preserve"><value>{0, plural, other {有 # 個檔案無法刪除}} (已刪除 {1} 個):</value></data>
+  <data name="Shred_Failure_InUse" xml:space="preserve"><value>正被其他程式使用</value></data>
+  <data name="Shred_Failure_Access" xml:space="preserve"><value>存取被拒</value></data>
+  <data name="Shred_Failure_Missing" xml:space="preserve"><value>找不到檔案</value></data>
+  <data name="Shred_Corrupted" xml:space="preserve"><value>{0, plural, other {有 # 個檔案只被部分覆寫並保留在原處，其內容已損毀:}}</value></data>
+  <data name="Ads_Col_Name" xml:space="preserve"><value>資料流</value></data>
+  <data name="Ads_Col_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Ads_Col_Head" xml:space="preserve"><value>開頭位元組</value></data>
+  <data name="Ads_Col_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Ads_Filter_All" xml:space="preserve"><value>所有資料流</value></data>
+  <data name="Ads_Choose" xml:space="preserve"><value>選擇檔案...</value></data>
+  <data name="Ads_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="Ads_Create" xml:space="preserve"><value>建立...</value></data>
+  <data name="Ads_Rename" xml:space="preserve"><value>重新命名...</value></data>
+  <data name="Ads_Delete" xml:space="preserve"><value>刪除...</value></data>
+  <data name="Ads_Export" xml:space="preserve"><value>匯出...</value></data>
+  <data name="Ads_Import" xml:space="preserve"><value>匯入...</value></data>
+  <data name="Ads_NoFile" xml:space="preserve"><value>請先開啟磁碟上的檔案。</value></data>
+  <data name="Ads_Unsupported" xml:space="preserve"><value>此磁碟區不支援替代資料流。</value></data>
+  <data name="Ads_Summary" xml:space="preserve"><value>{0}: {1, plural, other {# 個資料流}}</value></data>
+  <data name="Ads_SummaryUnsupported" xml:space="preserve"><value>{0}: 此磁碟區不支援替代資料流。</value></data>
+  <data name="Ads_SummaryError" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ads_Known_ZoneIdentifier" xml:space="preserve"><value>網路標記 (檔案來自網際網路)</value></data>
+  <data name="Ads_Known_SummaryInformation" xml:space="preserve"><value>文件摘要屬性</value></data>
+  <data name="Ads_Known_DocumentSummaryInformation" xml:space="preserve"><value>文件摘要屬性 (擴充)</value></data>
+  <data name="Ads_Known_Afp" xml:space="preserve"><value>Mac 檔案資訊</value></data>
+  <data name="Ads_Known_Encryptable" xml:space="preserve"><value>加密標記</value></data>
+  <data name="Ads_Known_Favicon" xml:space="preserve"><value>網站圖示</value></data>
+  <data name="Ads_Known_OutlookExpress" xml:space="preserve"><value>郵件用戶端屬性</value></data>
+  <data name="Ads_Known_System" xml:space="preserve"><value>系統資料流</value></data>
+  <data name="Ads_CreateTitle" xml:space="preserve"><value>建立資料流</value></data>
+  <data name="Ads_CreateRun" xml:space="preserve"><value>建立</value></data>
+  <data name="Ads_RenameTitle" xml:space="preserve"><value>重新命名資料流</value></data>
+  <data name="Ads_RenameRun" xml:space="preserve"><value>重新命名</value></data>
+  <data name="Ads_NameHeader" xml:space="preserve"><value>資料流名稱</value></data>
+  <data name="Ads_Error_InvalidName" xml:space="preserve"><value>名稱不能包含 : \ / 或控制字元。</value></data>
+  <data name="Ads_Error_Exists" xml:space="preserve"><value>已存在同名的資料流。</value></data>
+  <data name="Ads_Error_NotFound" xml:space="preserve"><value>找不到。</value></data>
+  <data name="Ads_Error_Access" xml:space="preserve"><value>存取被拒。</value></data>
+  <data name="Ads_Error_InUse" xml:space="preserve"><value>正被其他程式使用。</value></data>
+  <data name="Ads_Error_Refs" xml:space="preserve"><value>ReFS 限制了替代資料流的大小，因此無法儲存。</value></data>
+  <data name="Ads_Error_Default" xml:space="preserve"><value>無法重新命名或刪除主要資料流。</value></data>
+  <data name="Ads_Error_Open" xml:space="preserve"><value>無法開啟 {0}: {1}</value></data>
+  <data name="Ads_Error_OpenInTab" xml:space="preserve"><value>{0} 已在索引標籤中開啟。請先關閉該索引標籤。</value></data>
+  <data name="Ads_Error_Write" xml:space="preserve"><value>無法寫入檔案: {0}</value></data>
+  <data name="Ads_Delete_Title" xml:space="preserve"><value>要刪除該資料流嗎?</value></data>
+  <data name="Ads_Delete_Body" xml:space="preserve"><value>要刪除資料流 {0} ({1} 位元組) 嗎?</value></data>
+  <data name="Ads_Delete_Irreversible" xml:space="preserve"><value>此動作無法復原。</value></data>
+  <data name="Ads_Delete_Run" xml:space="preserve"><value>刪除</value></data>
+  <data name="Ads_Import_Title" xml:space="preserve"><value>要取代資料流的內容嗎?</value></data>
+  <data name="Ads_Import_Body" xml:space="preserve"><value>{0} 的內容將被您接下來選擇的檔案取代。</value></data>
+  <data name="Ads_Import_Run" xml:space="preserve"><value>選擇檔案</value></data>
+  <data name="Ads_Operation_Rename" xml:space="preserve"><value>正在重新命名資料流 {0}</value></data>
+  <data name="Ads_Operation_Export" xml:space="preserve"><value>正在匯出資料流 {0}</value></data>
+  <data name="Ads_Operation_Import" xml:space="preserve"><value>正在匯入到資料流 {0}</value></data>
+  <data name="Ads_Exported" xml:space="preserve"><value>已匯出到 {0}</value></data>
+  <data name="Ads_ExportType" xml:space="preserve"><value>二進位檔案</value></data>
+  <data name="Ads_Notice" xml:space="preserve"><value>{0, plural, other {此檔案有 # 個替代資料流。}}</value></data>
+  <data name="Ads_ShowList" xml:space="preserve"><value>顯示清單</value></data>
+  <data name="Print_Title" xml:space="preserve"><value>列印</value></data>
+  <data name="Print_PdfTitle" xml:space="preserve"><value>匯出為 PDF</value></data>
+  <data name="Print_Run" xml:space="preserve"><value>列印</value></data>
+  <data name="Print_SavePdf" xml:space="preserve"><value>另存為 PDF...</value></data>
+  <data name="Print_Printer" xml:space="preserve"><value>印表機</value></data>
+  <data name="Print_Range" xml:space="preserve"><value>列印範圍</value></data>
+  <data name="Print_RangeAll" xml:space="preserve"><value>全部</value></data>
+  <data name="Print_RangeSelection" xml:space="preserve"><value>選取範圍</value></data>
+  <data name="Print_RangeOffsets" xml:space="preserve"><value>位移範圍</value></data>
+  <data name="Print_Offsets" xml:space="preserve"><value>位移 (起點:長度 或 起點..終點)</value></data>
+  <data name="Print_RangePages" xml:space="preserve"><value>頁</value></data>
+  <data name="Print_PagesHint" xml:space="preserve"><value>頁碼 (例如 1-3, 8)</value></data>
+  <data name="Print_Paper" xml:space="preserve"><value>紙張</value></data>
+  <data name="Print_Orientation" xml:space="preserve"><value>方向</value></data>
+  <data name="Print_Portrait" xml:space="preserve"><value>直向</value></data>
+  <data name="Print_Landscape" xml:space="preserve"><value>橫向</value></data>
+  <data name="Print_Margins" xml:space="preserve"><value>邊界</value></data>
+  <data name="Print_MarginTop" xml:space="preserve"><value>上</value></data>
+  <data name="Print_MarginBottom" xml:space="preserve"><value>下</value></data>
+  <data name="Print_MarginLeft" xml:space="preserve"><value>左</value></data>
+  <data name="Print_MarginRight" xml:space="preserve"><value>右</value></data>
+  <data name="Print_Font" xml:space="preserve"><value>字型</value></data>
+  <data name="Print_FontSize" xml:space="preserve"><value>大小</value></data>
+  <data name="Print_BytesPerRow" xml:space="preserve"><value>每列位元組數</value></data>
+  <data name="Print_FitToPaper" xml:space="preserve"><value>符合紙張</value></data>
+  <data name="Print_Columns" xml:space="preserve"><value>欄</value></data>
+  <data name="Print_ColOffset" xml:space="preserve"><value>位移</value></data>
+  <data name="Print_ColHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Print_ColText" xml:space="preserve"><value>文字</value></data>
+  <data name="Print_ColorMode" xml:space="preserve"><value>色彩</value></data>
+  <data name="Print_ColorBW" xml:space="preserve"><value>黑白 (底線和網底)</value></data>
+  <data name="Print_ColorColor" xml:space="preserve"><value>彩色 (背景色彩)</value></data>
+  <data name="Print_HeaderFooter" xml:space="preserve"><value>頁首和頁尾 (用大括號括起 name、path、page、pages、date、time、range、size、modified)</value></data>
+  <data name="Print_HeaderLeft" xml:space="preserve"><value>頁首左側</value></data>
+  <data name="Print_HeaderCenter" xml:space="preserve"><value>頁首中間</value></data>
+  <data name="Print_HeaderRight" xml:space="preserve"><value>頁首右側</value></data>
+  <data name="Print_FooterLeft" xml:space="preserve"><value>頁尾左側</value></data>
+  <data name="Print_FooterCenter" xml:space="preserve"><value>頁尾中間</value></data>
+  <data name="Print_FooterRight" xml:space="preserve"><value>頁尾右側</value></data>
+  <data name="Print_Copies" xml:space="preserve"><value>份數 (1 到 999)</value></data>
+  <data name="Print_SaveDefaults" xml:space="preserve"><value>儲存為預設值</value></data>
+  <data name="Print_DefaultsSaved" xml:space="preserve"><value>已將列印設定儲存為預設值。</value></data>
+  <data name="Print_Status" xml:space="preserve"><value>{0, plural, other {# 頁}}，每列 {1} 位元組，每頁 {2} 列</value></data>
+  <data name="Print_Error_Margin" xml:space="preserve"><value>邊界必須介於 0 到 50 公釐之間。</value></data>
+  <data name="Print_Error_Offsets" xml:space="preserve"><value>位移範圍無效。</value></data>
+  <data name="Print_Error_PageRange" xml:space="preserve"><value>頁碼範圍無效。請使用 1-3, 8 這樣的形式。</value></data>
+  <data name="Print_Error_Nothing" xml:space="preserve"><value>此範圍內沒有可列印的內容。</value></data>
+  <data name="Print_Error_Limit" xml:space="preserve"><value>{0} 頁超過了 {1} 頁的上限。請縮小範圍。</value></data>
+  <data name="Print_Error_NoFont" xml:space="preserve"><value>找不到可用的 TrueType 字型。</value></data>
+  <data name="Print_Error_Failed" xml:space="preserve"><value>無法列印: {0}</value></data>
+  <data name="Print_Error_PdfFailed" xml:space="preserve"><value>無法寫入 PDF: {0}</value></data>
+  <data name="Print_Confirm_Title" xml:space="preserve"><value>要列印很多頁嗎?</value></data>
+  <data name="Print_Confirm_Body" xml:space="preserve"><value>{0, plural, other {將列印 # 頁。}}請確認紙張數量。</value></data>
+  <data name="Print_Confirm_Run" xml:space="preserve"><value>列印</value></data>
+  <data name="Print_Confirm_Change" xml:space="preserve"><value>變更範圍</value></data>
+  <data name="Print_Operation" xml:space="preserve"><value>正在列印 {0}</value></data>
+  <data name="Print_Operation_Pdf" xml:space="preserve"><value>正在寫入 PDF {0}</value></data>
+  <data name="Print_Done" xml:space="preserve"><value>已列印 {0, plural, other {# 頁}}。</value></data>
+  <data name="Print_PdfDone" xml:space="preserve"><value>已儲存 {0} ({1, plural, other {# 頁}})。</value></data>
+  <data name="Print_Cancelled" xml:space="preserve"><value>已取消列印。</value></data>
+  <data name="Print_Unreadable" xml:space="preserve"><value>部分範圍無法讀取，已列印為 ??。</value></data>
+  <data name="Print_Modified" xml:space="preserve"><value>(已修改)</value></data>
+  <data name="Print_PdfFileType" xml:space="preserve"><value>PDF 文件</value></data>
+  <data name="Print_Preview_Name" xml:space="preserve"><value>列印預覽</value></data>
+  <data name="Print_Preview_First" xml:space="preserve"><value>第一頁</value></data>
+  <data name="Print_Preview_Previous" xml:space="preserve"><value>上一頁</value></data>
+  <data name="Print_Preview_Next" xml:space="preserve"><value>下一頁</value></data>
+  <data name="Print_Preview_Last" xml:space="preserve"><value>最後一頁</value></data>
+  <data name="Print_Preview_PageNumber" xml:space="preserve"><value>頁碼</value></data>
+  <data name="Print_Preview_Zoom" xml:space="preserve"><value>縮放</value></data>
+  <data name="Print_Preview_TwoPages" xml:space="preserve"><value>雙頁</value></data>
+  <data name="Print_Preview_Info" xml:space="preserve"><value>第 {0} / {1} 頁</value></data>
+  <data name="Print_Zoom_FitPage" xml:space="preserve"><value>整頁</value></data>
+  <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>符合寬度</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>選擇資料夾...</value></data>
 </root>

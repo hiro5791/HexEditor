@@ -53,6 +53,11 @@ public sealed partial class Document
     /// </summary>
     public Document CreateLinkedView(long offset, long length)
     {
+        if (_viewTransform is not null)
+        {
+            throw new InvalidOperationException("変換ビューの間は連動ビューを作れません。");
+        }
+
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (length <= 0 || offset < 0 || offset + length > Length)
         {

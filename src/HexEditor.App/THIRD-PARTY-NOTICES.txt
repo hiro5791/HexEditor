@@ -52,6 +52,23 @@ The license and the notices of the components that Monaco contains are in
 Assets\Monaco\LICENSE.txt and Assets\Monaco\ThirdPartyNotices.txt.
 
 -------------------------------------------------------------------------------
+SSH.NET 2026.0.0 (SSH / SFTP client for remote files)
+https://github.com/sshnet/SSH.NET
+License: MIT License. Copyright (c) Renci, Oleg Kapeljushnik, Gert Driesen,
+Rob Hague and contributors.
+
+-------------------------------------------------------------------------------
+BouncyCastle.Cryptography 2.7.0 (cryptography used by SSH.NET; Ed25519 verification of the online template index)
+https://github.com/bcgit/bc-csharp
+License: MIT License. Copyright (c) 2000-2025 The Legion of the Bouncy Castle
+Inc. (https://www.bouncycastle.org).
+
+-------------------------------------------------------------------------------
+Microsoft.Extensions.Logging.Abstractions (used by SSH.NET)
+https://github.com/dotnet/runtime
+License: MIT License. Copyright (c) .NET Foundation and Contributors.
+
+-------------------------------------------------------------------------------
 Microsoft Edge WebView2 (Microsoft.Web.WebView2; part of the Windows App SDK)
 https://learn.microsoft.com/microsoft-edge/webview2/
 License: Microsoft Software License Terms (BSD-style license for the SDK).
@@ -62,6 +79,59 @@ Roslyn (Microsoft.CodeAnalysis; C# script component only - not included in
 the application, downloaded separately when C# scripts are first used)
 https://github.com/dotnet/roslyn
 License: MIT License. Copyright (c) .NET Foundation and Contributors.
+
+-------------------------------------------------------------------------------
+Iced 1.21.0 (x86 / x64 disassembler and assembler)
+https://github.com/icedland/iced
+License: MIT License. Copyright (C) 2018-present iced project and contributors.
+
+-------------------------------------------------------------------------------
+Capstone 4.0 (disassembly framework; native capstone.dll for x64 and ARM64)
+https://www.capstone-engine.org/
+License: BSD 3-Clause License (below). Copyright (c) 2013, COSEINC.
+Capstone contains code derived from LLVM, which is licensed under the
+University of Illinois/NCSA Open Source License. Copyright (c) 2003-2013
+University of Illinois at Urbana-Champaign.
+The native library comes from the NuGet package Gee.External.Capstone 2.3.0
+(Capstone.NET, https://github.com/9ee1/Capstone.NET), MIT License,
+Copyright (c) Ahmed Garhy. Only the native library of the package is used.
+
+-------------------------------------------------------------------------------
+Ed25519 reference implementation (RFC 8032, section 6; verifies the signature of
+the online template repository index)
+https://www.rfc-editor.org/rfc/rfc8032
+Ported to C#. Code components of RFCs are licensed under the Simplified BSD
+License (Revised BSD License) as described in the IETF Trust Legal Provisions.
+Copyright (c) 2017 IETF Trust and the persons identified as the document
+authors (S. Josefsson, I. Liusvaara). All rights reserved.
+
+-------------------------------------------------------------------------------
+ZstdSharp.Port 0.8.6 (zstd compression and decompression)
+https://github.com/oleg-st/ZstdSharp
+License: MIT License. Copyright (c) 2021-present Oleg Stepanischev.
+ZstdSharp is a port of zstd (https://github.com/facebook/zstd), BSD 3-Clause
+License, Copyright (c) Meta Platforms, Inc. and affiliates.
+
+-------------------------------------------------------------------------------
+K4os.Compression.LZ4 1.3.8, K4os.Compression.LZ4.Streams 1.3.8,
+K4os.Hash.xxHash 1.0.8 (LZ4 compression, XXH32 / XXH64)
+https://github.com/MiloszKrajewski/K4os.Compression.LZ4
+License: MIT License. Copyright (c) 2017-2024 Milosz Krajewski.
+K4os.Compression.LZ4 is a port of LZ4 (https://github.com/lz4/lz4), BSD 2-Clause
+License, Copyright (c) Yann Collet.
+
+-------------------------------------------------------------------------------
+Joveler.Compression.XZ 5.0.0 (package of liblzma)
+https://github.com/ied206/Joveler.Compression
+License: MIT License. Copyright (c) Hajin Jang.
+Only the native liblzma.dll of the package is used.
+
+-------------------------------------------------------------------------------
+XZ Utils 5.6.4 (liblzma.dll; XZ and LZMA compression and decompression)
+https://tukaani.org/xz/
+License: BSD Zero Clause License (0BSD). Copyright (C) The XZ Utils authors and
+contributors. Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted.
 
 ===============================================================================
 BSD 2-Clause License (Jint)
@@ -88,7 +158,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
-BSD 3-Clause License (Acornima)
+BSD 3-Clause License (Acornima, Capstone)
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

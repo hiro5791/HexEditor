@@ -9,7 +9,6 @@
   <data name="Cli_Hint_Help" xml:space="preserve"><value>Kullanım için 'hexed --help' (veya 'hexed &lt;command&gt; --help') komutunu çalıştırın.</value></data>
   <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
   <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Beklenmeyen hata ({0}). Ayrıntılar {1} konumuna yazıldı.</value></data>
-
   <data name="Cli_Help_Main" xml:space="preserve"><value>Kullanım: hexed &lt;command&gt; [bağımsız değişkenler] [seçenekler]
           hexed &lt;file&gt; [seçenekler]          (şununla aynı: hexed open &lt;file&gt;)
 
@@ -43,7 +42,6 @@ Ofsetler, uzunluklar ve aralıklar ifade kabul eder. Önek olmayan sayı ondalı
 0x kullanın. Aralık start:length veya start..end biçimindedir (end dahil değildir); 'end' dosya
 uzunluğudur (örneğin end-16:16). PowerShell'de $ içeren değerleri tek tırnak içine alın
 (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_open" xml:space="preserve"><value>Kullanım: hexed open [paths...] [seçenekler]
 
 Dosyaları HexEditor penceresinde açar. HexEditor zaten çalışıyorsa dosyalar orada sekme olarak açılır.
@@ -73,7 +71,6 @@ Seçenekler:
       --test-hooks &lt;file&gt;  Hata enjeksiyonunu etkinleştirir (yalnızca test derlemeleri)
 
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_hash" xml:space="preserve"><value>Kullanım: hexed hash [paths...] [seçenekler]
           hexed hash --check &lt;checksum file&gt; [seçenekler]
 
@@ -94,7 +91,6 @@ Seçenekler:
 
 Çıkış kodları: 0 başarılı, 1 --check ile uyuşmazlık, 3 bir dosya okunamadı.
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_dump" xml:space="preserve"><value>Kullanım: hexed dump &lt;path&gt; [seçenekler]
 
 Bir dosyanın (veya bir aralığın) hex dökümünü standart çıktıya yazdırır. Bellek kullanımı boyuta bağlı değildir.
@@ -112,7 +108,6 @@ Seçenekler:
 
 Çıkış kodları: Aralık dosyanın dışındaysa 2.
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_compare" xml:space="preserve"><value>Kullanım: hexed compare &lt;path1&gt; &lt;path2&gt; [seçenekler]
 
 İki dosyayı karşılaştırır ve farkları yazdırır.
@@ -129,7 +124,6 @@ Seçenekler:
 
 Çıkış kodları: 0 aynı, 1 farklı, 3 bir dosya okunamadı.
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_run" xml:space="preserve"><value>Kullanım: hexed run &lt;script&gt; [files...] [seçenekler]
 
 Bir betiği pencere açmadan çalıştırır. Dosyalar sırayla açılır (app.documents); ilki
@@ -148,7 +142,6 @@ Seçenekler:
 Varsayılan olarak yalnızca betiğin doc.save() çağırdığı belgeler kaydedilir.
 Bir betiğin çıkış kodu app.exit(code) ile ayarlanabilir. 2 ile 10 arası kodların anlamları
 'hexed --help' içinde listelenmiştir; kendi anlamlarınız için 64 veya üzerini kullanın.</value></data>
-
   <data name="Cli_Help_template" xml:space="preserve"><value>Kullanım: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [seçenekler]
 
 Bir dosyaya yapı şablonu uygular ve sonucu yazdırır.
@@ -163,23 +156,21 @@ Seçenekler:
 
 Çıkış kodları: Şablon hatası için 4.
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Help_patch" xml:space="preserve"><value>Kullanım: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [seçenekler]
 
-Bir dosyaya yama dosyası uygular. -o ve --in-place seçeneklerinden biri gereklidir. Bu sürüm IPS
-ve IPS32 yamalarını uygular.
+Bir dosyaya yama dosyası uygular. -o ve --in-place seçeneklerinden biri gereklidir. Bu sürüm IPS,
+IPS32, UPS, BPS ve .hexpatch yamalarını uygular.
 
 Seçenekler:
   -o, --output &lt;path&gt;       Yamalanmış dosyayı buraya yazar (hedef değişmez)
       --in-place            Hedefi güvenli şekilde değiştirir (önce geçici bir dosya yazılır)
-      --format &lt;f&gt;          auto (varsayılan), ips veya ips32
+      --format &lt;f&gt;          auto (varsayılan), ips, ips32, ups, bps veya hexpatch
       --verify-before &lt;a:v&gt; Önce hedefin karmasını denetler (örneğin sha256:ab12...);
                             farklıysa çıkış kodu 1 olur ve hiçbir şey yazılmaz
       --verify-after &lt;a:v&gt;  Sonucu yazmadan önce karmasını denetler
       --dry-run             Kayıt ve değişen bayt sayısını yazdırır; hiçbir şey uygulamaz
 
 Çıkış kodları: 1 doğrulama başarısız, 8 yama bozuk.</value></data>
-
   <data name="Cli_Help_convert" xml:space="preserve"><value>Kullanım: hexed convert &lt;input&gt; &lt;output&gt; [seçenekler]
 
 Bir dosyayı HexEditor'ın içe/dışa aktarma biçimleri arasında dönüştürür.
@@ -199,7 +190,6 @@ harfle ve tireyle yazılır, örneğin --record-length 32, --start-address 0x080
 --encoding utf8.
 
 Çıkış kodları: Girişteki sağlama toplamı veya biçim hatası için 8.</value></data>
-
   <data name="Cli_Help_find" xml:space="preserve"><value>Kullanım: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [seçenekler]
 
 Dosyalarda arar ve her eşleşme için "path  offset  length" yazdırır.
@@ -217,7 +207,6 @@ Seçenekler:
 
 Çıkış kodları: 0 bulundu, 1 bulunamadı, 3 bir dosya okunamadı.
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
-
   <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Bilinmeyen komut veya dosya: {0}. Komutlar: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
   <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Bilinmeyen dil: {0}. 23 görüntü dili etiketinden birini kullanın (örneğin en, ja, zh-Hans).</value></data>
   <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>'{1}' için bilinmeyen {0} seçeneği.</value></data>
@@ -243,7 +232,6 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} bu sürümde kullanılamıyor.</value></data>
   <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Veri {0} biçimine sığmıyor (sınır {1}).</value></data>
   <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Bilinmeyen karakter kodlaması: {0}</value></data>
-
   <data name="Cli_Expression_Empty" xml:space="preserve"><value>ifade boş</value></data>
   <data name="Cli_Expression_Syntax" xml:space="preserve"><value>söz dizimi hatası</value></data>
   <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>bir parantez kapatılmamış</value></data>
@@ -255,7 +243,7 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>geçerli bir sayı değil</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>veri burada okunamıyor</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>komut satırında kullanılamaz</value></data>
-
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>değer bir tam sayı değil</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu tam olarak bir algoritma gerektirir. Birden çoğu için --format bsd veya text kullanın.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range standart girişle kullanılamaz.</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Bilinmeyen algoritma: {0}. Kimlikler için 'hexed hash --algorithm list' çalıştırın.</value></data>
@@ -264,9 +252,7 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>{0} için algoritma anlaşılamıyor. --algorithm ile belirtin.</value></data>
   <data name="Cli_Check_Failed" xml:space="preserve"><value>Hesaplanan {0} sağlama toplamı EŞLEŞMEDİ.</value></data>
   <data name="Cli_Check_Missing" xml:space="preserve"><value>Listelenen {0} dosya eksik.</value></data>
-
   <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Bilinmeyen stil: {0}. 'hexed dump --help' komutuna bakın.</value></data>
-
   <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' tam olarak iki yol gerektirir.</value></data>
   <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Bilinmeyen mod: {0}. byte veya resync kullanın.</value></data>
   <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>değişti</value></data>
@@ -278,11 +264,9 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Dosyalar aynı.</value></data>
   <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Dosyalar farklı (ilk fark {0} konumunda).</value></data>
   <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>{0} aralık okunamadı.</value></data>
-
   <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>--hex, --text ve --regex seçeneklerinden tam olarak birini belirtin.</value></data>
   <data name="Cli_Error_Pattern" xml:space="preserve"><value>Arama deseni geçerli değil ({0}).</value></data>
   <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: okunamayan {1} aralık atlandı.</value></data>
-
   <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Kullanım: hexed convert &lt;input&gt; &lt;output&gt; [seçenekler]</value></data>
   <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>IPS yamaları 'hexed convert' ile değil 'hexed patch' ile uygulanır.</value></data>
   <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Şunun için geçersiz değer: {0}</value></data>
@@ -295,13 +279,11 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: satır {1}, sütun {2} konumunda biçim hatası ({3}).
 {4}</value></data>
   <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>{0} sağlama toplamı hatası yok sayıldı.</value></data>
-
   <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Kullanım: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>-o &lt;output&gt; veya --in-place belirtin (asıl dosyanın yanlışlıkla değişmemesi için).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o ve --in-place birlikte kullanılamaz.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>{0} çıkış yolu hedef veya yama dosyası. Hedefi değiştirmek için --in-place kullanın.</value></data>
   <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} bir yama biçimi değil. auto, ips veya ips32 kullanın.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: UPS, BPS ve .hexpatch yamaları bu sürümde desteklenmiyor. IPS ve IPS32 destekleniyor.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} tanınabilir bir yama dosyası değil.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: yama {1}. kayıtta bozuk (dosya ofseti {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} bir {1} yaması değil.</value></data>
@@ -310,13 +292,15 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Yamalanmış {0} beklenen karmaya sahip değil (--verify-after). Hiçbir şey yazılmadı.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>{0} kayıt uygulandı, {1} bayt değişti, uzunluk değişimi {2}. {3} yazıldı.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>biçim</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: yama {1}. kayıtta bozuk.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: yama bozuk ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} başka bir dosya için olabilir: yamada kayıtlı özgün veri {1} ile eşleşmiyor. Hiçbir şey yazılmadı.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>{0} yamasının uygulanma sonucu, yamada kayıtlı sonuçla eşleşmiyor. Hiçbir şey yazılmadı.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} kayıt, {1} bayt değişecek, uzunluk değişimi {2}, yeni uzunluk {3}</value></data>
-
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>--template ve --auto seçeneklerinden tam olarak birini belirtin.</value></data>
   <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>"{0}" şablonu bulunamadı. Standart bir şablonun adını (örneğin pe, png) veya bir .hxt ya da .ksy dosyasının yolunu kullanın.</value></data>
   <data name="Cli_Template_NoMatch" xml:space="preserve"><value>{0} ile eşleşen şablon yok.</value></data>
   <data name="Cli_Error_Template" xml:space="preserve"><value>Şablon hatası: {0}</value></data>
-
   <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Kullanım: hexed run &lt;script&gt; [files...] [seçenekler]</value></data>
   <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>--save, --save-as ve --dry-run seçeneklerinden yalnızca birini kullanın.</value></data>
   <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly, --save veya --save-as ile birleştirilemez.</value></data>
@@ -326,13 +310,11 @@ PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').
   <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} açık olan dosya. Üzerine yazmak için --save kullanın.</value></data>
   <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: {1} bayt değişti (kaydedilmedi: --dry-run)</value></data>
   <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} içinde kaydedilmemiş değişiklikler var. Kaydedilmediler (--save veya doc.save() kullanın).</value></data>
-
   <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Bilinmeyen görüntü dili: {0}. 23 görüntü dili etiketinden birini kullanın (örneğin ar, ja).</value></data>
   <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Bilinmeyen sahte yerel ayar: {0}. qps-ploc veya qps-plocm kullanın.</value></data>
   <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>HexEditor.exe, hexed.exe'nin yanında bulunamadı.</value></data>
   <data name="Cli_Error_GuiStart" xml:space="preserve"><value>{0} başlatılamıyor: {1}</value></data>
   <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor, belgeler kapanmadan önce {0} koduyla çıktı.</value></data>
-
   <data name="Cli_Unregister_Done" xml:space="preserve"><value>Tüm kayıtlar kaldırıldı.</value></data>
   <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Kaldırıldı: {0}</value></data>
   <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Kaldırılamadı: {0} ({1})</value></data>

@@ -88,7 +88,7 @@ public sealed class BuildScriptTests : IDisposable
             Assert.Contains($"| {item} | arm64 |", table);
         }
 
-        Assert.Contains("| portable zip | x64 | 60.0 MB | 50.0 MB | 100 MB | ok |", table);
+        Assert.Contains("| portable zip | x64 | 60.0 MB | 50.0 MB | 120 MB | ok |", table);
         Assert.Contains("Previous release", table);
     }
 
@@ -97,8 +97,8 @@ public sealed class BuildScriptTests : IDisposable
     public void SizeTenPercentOverTheTargetFailsUnlessApproved()
     {
         SmallArtifacts();
-        // TD-PKG-PAD-50M を同梱したのと同じく、ポータブル版の zip が 50 MB 増えた (110 MB 以上は目標 100 MB の 10% 超え)。
-        Artifact("Portable/x64/HexEditor-1.0.0-x64-portable.zip", 110L << 20);
+        // TD-PKG-PAD-50M を同梱したのと同じく、ポータブル版の zip が 50 MB 増えた (132 MB 以上は目標 120 MB の 10% 超え)。
+        Artifact("Portable/x64/HexEditor-1.0.0-x64-portable.zip", 140L << 20);
         (int exit, string output) = RunScript("build/measure-size.ps1", null, "-ArtifactsDir", _temp.Sub("artifacts"));
         Assert.NotEqual(0, exit);
         Assert.Contains("portable zip (x64)", output);

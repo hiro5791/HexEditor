@@ -24,21 +24,33 @@ public sealed class SnapshotManager(string tempDirectory) : IDisposable
     }
 
     /// <summary>
-    /// プロセスメモリのスナップショットを一時フォルダに作る (ANA-09 の仕様 1)。<paramref name="pauseTarget"/> は未実装のため無視する
-    /// (ENG-35 の仕様 2 の一時停止はフェーズ 4)。作ったファイルは <see cref="Dispose"/> で削除する。
+    /// プロセスメモリのスナップショットを一時フォルダに作る (ANA-09 の仕様 1)。作ったファイルは <see cref="Dispose"/> で削除する。
     /// </summary>
     public SnapshotByteSource CreateTemporary(ProcessMemoryByteSource source, string? name = null, SnapshotScope scope = SnapshotScope.AllReadable,
         IReadOnlyCollection<long>? selected = null, LongRunningOperation? operation = null)
     {
+        IReadOnlyList<(long, long)> ranges = scope == SnapshotScope.Selected && selected is not null
+            ? [.. source.MemoryRegions.Where(r => selected.Contains(r.BaseAddress)).Select(r => (r.BaseAddress, r.Size))]
+            : [];
+        return CreateTemporary(source, name, new ProcessCaptureOptions { Scope = scope, SelectedRanges = ranges, RefreshRegions = false }, operation).Source;
+    }
+
+    /// <summary>
+    /// ENG-35 の作成処理 (対象の選択・一時停止を含む。仕様 1〜3) で、一時フォルダにスナップショットを作る (ANA-09 の仕様 1)。
+    /// </summary>
+    public (SnapshotByteSource Source, ProcessCaptureSummary Summary) CreateTemporary(ProcessMemoryByteSource source, string? name,
+        ProcessCaptureOptions options, LongRunningOperation? operation = null)
+    {
         Directory.CreateDirectory(tempDirectory);
         string path = Path.Combine(tempDirectory, $"snap-{Guid.NewGuid():N}{HexSnapshot.Extension}");
-        SnapshotMetadata metadata = HexSnapshot.Capture(source, path, scope, selected, operation);
+        SnapshotCaptureResult result = HexSnapshot.Write(source, path, options, operation);
         lock (_lock)
         {
             _temporary.Add(path);
         }
 
-        return new SnapshotByteSource(path, metadata, name ?? $"{metadata.ProcessName} {metadata.CapturedUtc.ToLocalTime():HH:mm:ss}");
+        SnapshotMetadata metadata = result.Metadata;
+        return (new SnapshotByteSource(path, metadata, name ?? $"{metadata.ProcessName} {metadata.CapturedUtc.ToLocalTime():HH:mm:ss}"), result.Summary);
     }
 
     /// <summary>一時スナップショットを管理から外す (「名前を付けて保存」したとき。ANA-09 の仕様 9)。</summary>

@@ -1,0 +1,24 @@
+#pragma name "BMP pixels (TC-TPL-16-01)"
+struct BITMAPFILEHEADER {
+    char bfType[2];
+    le u32 bfSize;
+    le u16 bfReserved1;
+    le u16 bfReserved2;
+    le u32 bfOffBits;
+};
+struct BITMAPINFOHEADER {
+    le u32 biSize;
+    le s32 biWidth;
+    le s32 biHeight;
+    le u16 biPlanes;
+    le u16 biBitCount;
+    le u32 biCompression;
+    le u32 biSizeImage;
+    le s32 biXPelsPerMeter;
+    le s32 biYPelsPerMeter;
+    le u32 biClrUsed;
+    le u32 biClrImportant;
+};
+BITMAPFILEHEADER file_hdr;
+BITMAPINFOHEADER info_hdr;
+u8 pixels[64] @ file_hdr.bfOffBits [[visualize("bitmap", 4, 4, "bgra8")]];

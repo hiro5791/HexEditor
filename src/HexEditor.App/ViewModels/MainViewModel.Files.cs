@@ -83,7 +83,12 @@ public sealed partial class MainViewModel
             return;
         }
 
-        Recent.Record(path, vm.DisplayName, _files.UtcNow());
+        // 代替データストリーム (ENG-37) のドキュメントは、最近使ったファイル (ジャンプリストを含む) に入れない。
+        if (!Core.Tools.Files.AlternateStreams.IsStreamPath(path))
+        {
+            Recent.Record(path, vm.DisplayName, _files.UtcNow());
+        }
+
         if (restorePosition && _files.RestorePosition() && _files.Documents.GetPosition(path) is { } position)
         {
             DocumentPosition fitted = position.ClampTo(vm.Document.Length);
@@ -329,7 +334,7 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel? OpenRestored(SessionTab tab, Func<SessionTab, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
     {
-        DocumentViewModel? vm = tab.Kind == SessionTabKind.Disk ? AddMissing(tab, insertAt)
+        DocumentViewModel? vm = tab.Kind is SessionTabKind.Disk or SessionTabKind.Remote ? AddMissing(tab, insertAt)
             : File.Exists(tab.Path) ? open(tab) : AddMissing(tab, insertAt);
         if (vm is null)
         {

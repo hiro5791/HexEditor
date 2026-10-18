@@ -88,10 +88,11 @@ public sealed partial class MainWindow
 
         if (doc.Editor.ReadOnly)
         {
-            return CommandState.Unavailable(Loc.Get("Command_ReadOnly"));
+            // 逆変換のない変換ビュー (EDIT-45 の仕様 7) は、その理由を示す。
+            return CommandState.Unavailable(Loc.Get(doc.Document.IsTransformReadOnly ? "TransformView_ReadOnlyNotice" : "Command_ReadOnly"));
         }
 
-        return more?.Invoke(doc) is { } reason ? CommandState.Unavailable(reason) : CommandState.Available;
+        return more?.Invoke(doc) is { } reason ? CommandState.Unavailable(TransformViewNotice(reason, doc)) : CommandState.Available;
     }
 
     private CommandState NeedsDocument(Func<DocumentViewModel, string?> more) =>
@@ -128,8 +129,12 @@ public sealed partial class MainWindow
             Save_Click(this, e);
         }, () => ActiveScriptEditor is not null || ActiveTemplateEditor is not null ? CommandState.Available
             : NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        // プロセスメモリ・GDB サーバーのアドレス空間全体は書き出さない: 「名前を付けて保存」を無効にし、スナップショットの保存へ案内する
+        // (ENG-21 の仕様 9、ENG-35)。
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
-            () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+            () => NeedsDocument(d => SaveTarget() is null ? Loc.Get("Command_ReadOnly")
+                : d.IsProcessMemory ? Loc.Get("Snapshot_SaveAsGuide")
+                : d.Gdb is not null ? Loc.Get("Gdb_SaveAsUnavailable") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
         Commands.Register("file.close", () => Close_Click(this, e), NeedsDocument);
         Commands.Register("file.closeAll", () => CloseAll_Click(this, e), NeedsDocument);
@@ -175,6 +180,11 @@ public sealed partial class MainWindow
         RegisterSelectionCommands();
         RegisterUserClipboardCommands();
         RegisterDataCommands();
+        RegisterTransformViewCommands();
+        RegisterPatchCommands();
+        RegisterDataCodecCommands();
+        RegisterYaraCommands();
+        RegisterBranchingHistoryCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);
@@ -241,9 +251,11 @@ public sealed partial class MainWindow
 
         // ---- 解析 ----
         RegisterHashCommands();
+        RegisterToolsCalcCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
         RegisterTemplateCommands();
+        RegisterDisassemblyCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();

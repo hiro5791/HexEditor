@@ -165,13 +165,13 @@
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>วิธีใช้: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [ตัวเลือก]
 
-ใช้ไฟล์แพตช์กับไฟล์ ต้องระบุอย่างใดอย่างหนึ่งระหว่าง -o และ --in-place เวอร์ชันนี้ใช้แพตช์ IPS
-และ IPS32 ได้
+ใช้ไฟล์แพตช์กับไฟล์ ต้องระบุอย่างใดอย่างหนึ่งระหว่าง -o และ --in-place เวอร์ชันนี้ใช้แพตช์ IPS,
+IPS32, UPS, BPS และ .hexpatch ได้
 
 ตัวเลือก:
   -o, --output &lt;path&gt;       เขียนไฟล์ที่แพตช์แล้วที่นี่ (ไม่เปลี่ยนไฟล์เป้าหมาย)
       --in-place            แทนที่ไฟล์เป้าหมายอย่างปลอดภัย (เขียนไฟล์ชั่วคราวก่อน)
-      --format &lt;f&gt;          auto (ค่าเริ่มต้น), ips หรือ ips32
+      --format &lt;f&gt;          auto (ค่าเริ่มต้น), ips, ips32, ups, bps หรือ hexpatch
       --verify-before &lt;a:v&gt; ตรวจสอบแฮชของไฟล์เป้าหมายก่อน (เช่น sha256:ab12...);
                             ถ้าต่างกัน รหัสออก 1 และไม่เขียนอะไร
       --verify-after &lt;a:v&gt;  ตรวจสอบแฮชของผลลัพธ์ก่อนเขียน
@@ -254,6 +254,7 @@
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>อ่านข้อมูลตรงนี้ไม่ได้</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>ใช้ไม่ได้ในบรรทัดคำสั่ง</value></data>
 
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>ค่าไม่ใช่จำนวนเต็ม</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu ต้องใช้อัลกอริทึมเดียวเท่านั้น หากใช้หลายอัลกอริทึมให้ใช้ --format bsd หรือ text</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>ใช้ --range กับอินพุตมาตรฐานไม่ได้</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>ไม่รู้จักอัลกอริทึม: {0} ดูรหัสได้ด้วย 'hexed hash --algorithm list'</value></data>
@@ -298,8 +299,7 @@
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>ระบุ -o &lt;output&gt; หรือ --in-place (เพื่อไม่ให้ไฟล์เดิมเปลี่ยนโดยไม่ตั้งใจ)</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>ใช้ -o และ --in-place พร้อมกันไม่ได้</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>พาธเอาต์พุต {0} เป็นไฟล์เป้าหมายหรือแพตช์ ใช้ --in-place เพื่อแทนที่ไฟล์เป้าหมาย</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ไม่ใช่รูปแบบแพตช์ ใช้ auto, ips หรือ ips32</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: เวอร์ชันนี้ไม่รองรับแพตช์ UPS, BPS และ .hexpatch รองรับ IPS และ IPS32</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ไม่ใช่รูปแบบแพตช์ ใช้ auto, ips, ips32, ups, bps หรือ hexpatch</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} ไม่ใช่ไฟล์แพตช์ที่รู้จัก</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: แพตช์เสียหายที่เรคคอร์ด {1} (ออฟเซ็ตไฟล์ {2})</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} ไม่ใช่แพตช์ {1}</value></data>
@@ -308,6 +308,10 @@
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>แฮชของ {0} ที่แพตช์แล้วไม่ตรงกับที่คาดไว้ (--verify-after) ไม่ได้เขียนอะไร</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>ใช้ {0} เรคคอร์ด เปลี่ยน {1} ไบต์ ความยาวเปลี่ยน {2} เขียน {3} แล้ว</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: แพตช์เสียหายที่เรคคอร์ด {1}</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: แพตช์เสียหาย ({1})</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} อาจใช้สำหรับไฟล์อื่น: ต้นฉบับที่บันทึกไว้ในแพตช์ไม่ตรงกับ {1} ไม่ได้เขียนอะไร</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>ผลของการใช้ {0} ไม่ตรงกับผลลัพธ์ที่บันทึกไว้ในแพตช์ ไม่ได้เขียนอะไร</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} เรคคอร์ด จะเปลี่ยน {1} ไบต์ ความยาวเปลี่ยน {2} ความยาวใหม่ {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>ระบุเพียงหนึ่งอย่างจาก --template และ --auto</value></data>

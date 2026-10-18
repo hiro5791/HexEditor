@@ -923,6 +923,8 @@ struct ZlibBlock {
 - [ ] 壊れた PNG を `image` で表示しても、アプリが落ちずエラーが表示される。
 - [ ] 構造体の配列が表で表示され、CSV で保存できる。
 
+実装の注記 (TPL-16): 内容は Core の `TemplateVisualizer.Create` が作り (引数の誤り・読み込み・デコードの失敗は例外にせず「表示できません: 理由」の内容にする)、パネルはウィンドウごとの「ビジュアライザ」パネル (`templateVisualizer`。02 の VIEW-36 の「画像表示」とは別のパネル)。結果ツリーの `visualize` 属性を持つノードの行に「表示」ボタン (絵のアイコン) を置き、右クリックメニューに「ビジュアライザで表示」、コマンド `templates.visualize` を置く。`indexed8` のパレットは 4 番目の引数で、パレットのパターン (パス。例: `pal`) か Hex の文字列を渡す。パレットの形式は既定で RGB の 3 バイト、5 番目の引数を `"bgra8"` にすると BMP の 4 バイト (B、G、R、予約)。`bgra8` と `rgba8` で 4 バイト目がすべて 0 のデータ (32 bit・BI_RGB の BMP の予約のバイト) は不透明として表示する (受け入れ基準 1)。画像のファイル形式のデコードは Windows の画像コーデック (WIC) で行い、例外を捕まえて理由を表示する。逆アセンブルは、64 MB を全部解釈すると命令の一覧が大きくなりすぎるため、先頭の 100,000 命令まで表示し、残りがあれば上限の表示を出す。表の行は表示するときに作る (大きな配列でもすべてを先に作らない)。CSV は UTF-8 (BOM 付き)・CRLF・RFC 4180 の引用。音声の再生は Windows のメディア再生で WAV を流す。テスト用のビルドでは、渡したサンプル列を記録するだけの仮想の出力に差し替えられ、再生位置はテスト用の命令で進める (TC-TPL-16-02)。
+
 ### TPL-17 プラグマ (メタ情報・自動適用の条件・上限)
 
 | 項目 | 内容 |
@@ -1024,7 +1026,7 @@ struct ZlibBlock {
    | `std.section` | `create`、`copy`、`append`、`size`、`open_in_tab` (結果ツリーからの操作を促すだけで、テンプレートからタブは開かない) |
    | `std.ptr` | `relative_to(基準)`、`null_if(値)` などポインタの補助関数 |
    | `std.type` | よく使う型の定義: `magic<"…">` (指定のバイト列であることを確認する型)、`guid`、`ipv4`、`filetime` などの組み込み型の別名、`Size<T>`、`Bitmask<T>` |
-   | `std.sys` | `demangle(文字列)` (06 の ANA-30。ANA-30 はフェーズ 4 のため、それまでは引数をそのまま返す)、`file_name()` (ドキュメントのファイル名だけ。パスは返さない)、`file_extension()`、`detected_mime()` (06 の ANA-17) |
+   | `std.sys` | `demangle(文字列)` (06 の ANA-30 のデマングラ。デマングルできない名前はそのまま返す)、`file_name()` (ドキュメントのファイル名だけ。パスは返さない)、`file_extension()`、`detected_mime()` (06 の ANA-17) |
    | `std.pe` / `std.elf` / `std.macho` | 実行形式の補助関数 (`rva_to_offset`、`va_to_offset`、セクションの検索)。標準テンプレート (TPL-34) で使う |
 
 3. 標準ライブラリの関数は、データの読み込み・計算だけを行い、ファイル・ネットワーク・時刻・乱数・環境変数を使わない (TPL-37)。同じテンプレート・同じデータでは常に同じ結果になる。
@@ -1737,6 +1739,8 @@ struct ZlibBlock {
 - [ ] 索引の署名を改ざんすると、その索引は使われない。
 - [ ] 設定でインターネット接続をオフにすると、通信が一切行われない。
 - [ ] 通信の内容に、開いているファイルの名前や内容が含まれない。
+
+実装の注記 (TPL-36): 索引は JSON (`{ "format": 1, "name": …, "templates": [ { "id", "name": { 言語: 表示名 }, "description": { 言語: 説明 }, "author", "version", "license", "categories", "extensions", "mime", "minAppVersion", "sha256", "size", "kind": "hxt" | "ksy", "usesExtensions", "file" } ] }`)。`file` は索引からの相対 URL で、索引と同じサーバーのものだけを取りに行く。`id` は英数字・`-`・`_`・`.` だけ (ファイル名に使う。Windows の予約されたデバイス名 `CON`・`NUL`・`COM1` などは使えない)。署名は索引の URL に `.sig` を付けたファイル (索引のバイト列そのものに対する Ed25519 の 64 バイト。Base64 の文字列でもよい)。.NET に Ed25519 がないため、配布物に入っている検証済みの実装 (BouncyCastle.Cryptography。SSH.NET の依存) で検証する (Core の `Ed25519`。RFC 8032 の厳密な検証: S が L 以上の署名・点を復元できない公開鍵は不一致。テストは RFC 8032 のテストベクトル)。ダウンロードしたファイルは SHA-256 と大きさを照合してから一時ファイルに書いて置き換え、合わなければ何も残さない。インストールの記録は `templates-online/installed.json`。公式のリポジトリの置き場所と鍵は未決定のため、決まるまで公式のリポジトリは持たない (利用者が追加したリポジトリだけ)。テスト用のビルドだけ、設定 `test.templates.officialRepository` (索引の URL) と `test.templates.officialKey` (公開鍵) で公式の扱いのリポジトリを差し替えられ、ループバックの HTTP も使える。利用者が追加できるのは HTTPS の URL だけ。更新の確認は起動時に、前回から 1 日以上たっていて、インストール済みのテンプレートがあるときだけ行う (設定 `templates.online.checkUpdates`、自動更新は `templates.online.autoUpdate`。前回の確認の時刻は state.json)。通信の可否は 09 の UI-58 の「テンプレート・プラグインなどのダウンロード」(`network.downloads.enabled`、`network.offline`) に従い、アプリの通信の入口 (`NetworkClient`) だけを使う。管理画面の「オンライン」タブは、テンプレートの管理の設定の区画「オンラインのテンプレート」として置く。
 
 ## 7. 安全性
 

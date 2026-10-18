@@ -138,6 +138,11 @@
       ],
       "default": "border"
     },
+    "automation.rpc.enabled": {
+      "description": "Allow external automation (JSON-RPC over a named pipe)",
+      "type": "boolean",
+      "default": false
+    },
     "bookmarks.defaultColor": {
       "description": "Default bookmark color",
       "type": "string",
@@ -233,6 +238,77 @@
       "type": "boolean",
       "default": false
     },
+    "disassembly.addressColumn": {
+      "description": "Address column",
+      "type": "string",
+      "enum": [
+        "virtual",
+        "offset",
+        "both"
+      ],
+      "default": "virtual"
+    },
+    "disassembly.armRegisterAliases": {
+      "description": "ARM register aliases",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.branchLines": {
+      "description": "Branch lines",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.comments": {
+      "description": "Comment column",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.hexStyle": {
+      "description": "Hexadecimal numbers",
+      "type": "string",
+      "enum": [
+        "prefix",
+        "suffix"
+      ],
+      "default": "prefix"
+    },
+    "disassembly.maxBytes": {
+      "description": "Maximum bytes shown",
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 16,
+      "default": 8
+    },
+    "disassembly.showBytes": {
+      "description": "Show the bytes column",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.signedImmediates": {
+      "description": "Signed immediates",
+      "type": "boolean",
+      "default": false
+    },
+    "disassembly.syntax": {
+      "description": "x86 syntax",
+      "type": "string",
+      "enum": [
+        "intel",
+        "att",
+        "masm"
+      ],
+      "default": "intel"
+    },
+    "disassembly.uppercaseHex": {
+      "description": "Uppercase hexadecimal digits",
+      "type": "boolean",
+      "default": false
+    },
+    "disassembly.uppercaseMnemonics": {
+      "description": "Uppercase mnemonics and registers",
+      "type": "boolean",
+      "default": false
+    },
     "diskImage.suggest": {
       "description": "Suggest opening disk images as disk images",
       "type": "boolean",
@@ -255,6 +331,13 @@
         "encoding"
       ],
       "default": "ascii"
+    },
+    "edit.decompress.confirmSizeMiB": {
+      "description": "Decompression size to confirm (MiB)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1048576,
+      "default": 4096
     },
     "edit.defaultInputMode": {
       "description": "Input mode for newly opened files",
@@ -338,6 +421,20 @@
       ],
       "default": "none"
     },
+    "edit.transformView.copy": {
+      "description": "Copy in a transform view",
+      "type": "string",
+      "enum": [
+        "display",
+        "raw"
+      ],
+      "default": "display"
+    },
+    "edit.undo.branching": {
+      "description": "Use branching undo history",
+      "type": "boolean",
+      "default": false
+    },
     "edit.undo.clearOnSave": {
       "description": "Clear the undo history when saving",
       "type": "boolean",
@@ -349,6 +446,11 @@
       "minimum": 0,
       "maximum": 10,
       "default": 2
+    },
+    "files.adsNotice": {
+      "description": "Notify when a file has alternate data streams",
+      "type": "boolean",
+      "default": false
     },
     "files.autoReloadUnmodified": {
       "description": "Reload unmodified files automatically",
@@ -521,6 +623,23 @@
     },
     "recent.restorePosition": {
       "description": "Restore the last position",
+      "type": "boolean",
+      "default": true
+    },
+    "remote.gdb.timeoutSeconds": {
+      "description": "GDB server request timeout (seconds)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120,
+      "default": 5
+    },
+    "remote.sftp.confirmPartialWrite": {
+      "description": "Confirm before writing only the changed ranges over SFTP",
+      "type": "boolean",
+      "default": true
+    },
+    "remote.udp.followEnd": {
+      "description": "Follow the end while receiving UDP",
       "type": "boolean",
       "default": true
     },
@@ -714,6 +833,20 @@
       "type": "boolean",
       "default": true
     },
+    "search.yara.blockSizeMiB": {
+      "description": "YARA: block size (MiB)",
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 1024,
+      "default": 64
+    },
+    "search.yara.timeLimitSeconds": {
+      "description": "YARA: time limit (seconds)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400,
+      "default": 600
+    },
     "session.restoreOnStartup": {
       "description": "On startup",
       "type": "string",
@@ -786,6 +919,24 @@
     },
     "templates.inspector": {
       "description": "Inspector templates",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.online.autoUpdate": {
+      "description": "Update online templates automatically",
+      "type": "boolean",
+      "default": false
+    },
+    "templates.online.checkUpdates": {
+      "description": "Check online templates for updates at startup (once a day)",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.online.repositories": {
+      "description": "Template repositories",
       "type": "array",
       "items": {
         "type": "string"

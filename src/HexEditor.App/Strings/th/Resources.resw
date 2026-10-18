@@ -2376,7 +2376,7 @@
   <data name="Encoding_Name_cp939" xml:space="preserve"><value>EBCDIC ญี่ปุ่นผสมละติน (SO/SI)</value></data>
   <data name="Menu_View_EncodingMore.Text" xml:space="preserve"><value>การเข้ารหัสเพิ่มเติม(M)…</value></data>
   <data name="Menu_View_EncodingMore.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>มุมมอง: เลือกการเข้ารหัสข้อความ</value></data>
+  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>เลือกการเข้ารหัสข้อความ</value></data>
   <data name="CmdAlias_view_encoding_select" xml:space="preserve"><value>การเข้ารหัส โค้ดเพจ ชุดอักขระ charset code page ebcdic</value></data>
   <data name="EncodingList_Title" xml:space="preserve"><value>การเข้ารหัสข้อความ</value></data>
   <data name="EncodingList_Filter" xml:space="preserve"><value>กรองตามหมายเลขหรือชื่อ</value></data>
@@ -2447,23 +2447,23 @@
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>แสดงเครื่องหมายต่อเนื่องในอักขระหลายไบต์(C)</value></data>
   <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
-  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>ไปที่: นิบเบิลถัดไป</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>นิบเบิลถัดไป</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>นิบเบิล เคอร์เซอร์ nibble cursor</value></data>
-  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>ไปที่: นิบเบิลก่อนหน้า</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>นิบเบิลก่อนหน้า</value></data>
   <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>นิบเบิล เคอร์เซอร์ nibble cursor</value></data>
-  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>ไปที่: สลับระหว่างคอลัมน์ Hex และคอลัมน์ข้อความ</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>สลับระหว่างคอลัมน์ Hex และคอลัมน์ข้อความ</value></data>
   <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>สลับ คอลัมน์ ข้อความ tab column text hex</value></data>
-  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>มุมมอง: เว้นวรรคเพิ่มทุก 8 ไบต์</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>เพิ่มช่องว่างทุก 8 ไบต์</value></data>
   <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>ตัวคั่น กลุ่ม separator group</value></data>
-  <data name="Cmd_view_alternateText" xml:space="preserve"><value>มุมมอง: สลับสีในคอลัมน์ข้อความ</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>สลับสีในคอลัมน์ข้อความ</value></data>
   <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>สลับ สี แถบ alternate color stripes</value></data>
-  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>มุมมอง: ปัดจำนวนไบต์ต่อแถวอัตโนมัติเป็นกำลังของ 2</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>ปัดจำนวนไบต์ต่อแถวอัตโนมัติเป็นเลขยกกำลังของ 2</value></data>
   <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>ไบต์ต่อแถว อัตโนมัติ bytes per row auto</value></data>
-  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>มุมมอง: คั่นหลักของออฟเซ็ตด้วย :</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>คั่นหลักออฟเซ็ตด้วย :</value></data>
   <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>ออฟเซ็ต ทวิภาค ตัวคั่น offset colon</value></data>
-  <data name="Cmd_view_alignRows" xml:space="preserve"><value>มุมมอง: จัดแนวแถวตามที่อยู่</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>จัดแถวให้ตรงกับที่อยู่</value></data>
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ที่อยู่ฐาน เลื่อนแถว base address row shift</value></data>
-  <data name="Cmd_view_continuation" xml:space="preserve"><value>มุมมอง: เครื่องหมายต่อเนื่องในอักขระหลายไบต์</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>แสดงเครื่องหมายต่อเนื่องในอักขระหลายไบต์</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>หลายไบต์ ต่อเนื่อง utf-8 multibyte</value></data>
   <data name="Notice_OpenedReadOnly_AccessDenied" xml:space="preserve"><value>คุณไม่มีสิทธิ์เขียนลงในไฟล์นี้ จึงเปิดแบบอ่านอย่างเดียว เลือก “อนุญาตให้แก้ไข” เพื่อลองอีกครั้ง</value></data>
   <data name="Notice_OpenedReadOnly_SharingViolation" xml:space="preserve"><value>แอปอื่นเปิดไฟล์นี้เพื่อเขียนอยู่ จึงเปิดแบบอ่านอย่างเดียว เลือก “อนุญาตให้แก้ไข” เมื่อแอปอื่นทำงานเสร็จแล้ว</value></data>
@@ -2598,13 +2598,13 @@
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>การช่วยสำหรับการเข้าถึง</value></data>
   <data name="TranslationReport_Truncated" xml:space="preserve"><value>แสดง {0} สตริงแรกจากทั้งหมด {1} สตริง ค้นหาเพื่อจำกัดรายการให้แคบลง</value></data>
   <data name="SetGroup_translators" xml:space="preserve"><value>สำหรับผู้แปล</value></data>
-  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>ไปที่: กลุ่มก่อนหน้า</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>กลุ่มก่อนหน้า</value></data>
   <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>กลุ่ม ซ้าย ย้อนกลับ group left word move back</value></data>
-  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>ไปที่: กลุ่มถัดไป</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>กลุ่มถัดไป</value></data>
   <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>กลุ่ม ขวา ไปข้างหน้า group right word move forward</value></data>
-  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>มุมมอง: เลื่อนขึ้นหนึ่งแถว</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>เลื่อนขึ้นหนึ่งแถว</value></data>
   <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>เลื่อน แถว ขึ้น scroll line row up</value></data>
-  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>มุมมอง: เลื่อนลงหนึ่งแถว</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>เลื่อนลงหนึ่งแถว</value></data>
   <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>เลื่อน แถว ลง scroll line row down</value></data>
   <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>สัญลักษณ์สำหรับไบต์ที่ไม่ถูกต้อง</value></data>
   <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>วิธีแสดงไบต์ที่ไม่ถูกต้องตามการเข้ารหัสของคอลัมน์ข้อความ</value></data>
@@ -2621,7 +2621,7 @@
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>ตำแหน่งเริ่มต้น เศษ utf-32 start position phase 2</value></data>
   <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>มุมมอง: ถอดรหัส UTF-32 จากออฟเซ็ตที่เศษเป็น 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ตำแหน่งเริ่มต้น เศษ utf-32 start position phase 3</value></data>
-  <data name="Cmd_go_history" xml:space="preserve"><value>ไปที่: รายการประวัติ</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>รายการประวัติ</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>ประวัติ รายการ ย้อนกลับ ตำแหน่งล่าสุด jump history list back recent positions</value></data>
   <data name="GoTo_History_Name" xml:space="preserve"><value>ประวัติการป้อน</value></data>
   <data name="GoTo_History_Empty" xml:space="preserve"><value>ไม่มีประวัติ</value></data>
@@ -5408,15 +5408,14 @@
   <data name="Menu_Analysis_CreateSnapshot.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_Analysis_CompareSnapshots.Text" xml:space="preserve"><value>เปรียบเทียบสแนปช็อต(N)...</value></data>
   <data name="Menu_Analysis_CompareSnapshots.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>เปรียบเทียบ: สร้างสแนปช็อต</value></data>
+  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>สร้างสแนปช็อต</value></data>
   <data name="CmdAlias_compare_createSnapshot" xml:space="preserve"><value>สแนปช็อต โปรเซส หน่วยความจำ process memory snapshot</value></data>
-  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>เปรียบเทียบ: เปรียบเทียบสแนปช็อต</value></data>
+  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>เปรียบเทียบสแนปช็อต</value></data>
   <data name="CmdAlias_compare_snapshots" xml:space="preserve"><value>สแนปช็อต โปรเซส เปรียบเทียบ process memory snapshot</value></data>
   <data name="Snapshot_Name" xml:space="preserve"><value>ชื่อ</value></data>
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>สร้างสแนปช็อตของโปรเซส</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>สร้าง</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>กำลังสร้างสแนปช็อต {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>อ่าน {0} เพจ ({1}) ไม่ได้ และไม่ได้อยู่ในสแนปช็อต</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>ไม่สามารถสร้างหรือบันทึกสแนปช็อต ({0})</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>การเข้าถึงหน่วยความจำของโปรเซสถูกปฏิเสธ</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>ต้องมีสิทธิ์ผู้ดูแลระบบเพื่ออ่านโปรเซสนี้ สร้างสแนปช็อตอีกครั้งด้วยสิทธิ์ผู้ดูแลระบบหรือไม่</value></data>
@@ -5434,11 +5433,11 @@
   <data name="Menu_View_PresetSave.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_View_PresetManage.Text" xml:space="preserve"><value>จัดการค่าที่ตั้งไว้ล่วงหน้า(M)...</value></data>
   <data name="Menu_View_PresetManage.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_presetApply" xml:space="preserve"><value>มุมมอง: ใช้ค่าที่ตั้งไว้ล่วงหน้า</value></data>
+  <data name="Cmd_view_presetApply" xml:space="preserve"><value>ใช้พรีเซ็ต</value></data>
   <data name="CmdAlias_view_presetApply" xml:space="preserve"><value>ค่าที่ตั้งไว้ล่วงหน้า การตั้งค่ามุมมอง view settings preset</value></data>
-  <data name="Cmd_view_presetSave" xml:space="preserve"><value>มุมมอง: บันทึกการตั้งค่าปัจจุบันเป็นค่าที่ตั้งไว้ล่วงหน้า</value></data>
+  <data name="Cmd_view_presetSave" xml:space="preserve"><value>บันทึกการตั้งค่าปัจจุบันเป็นพรีเซ็ต</value></data>
   <data name="CmdAlias_view_presetSave" xml:space="preserve"><value>ค่าที่ตั้งไว้ล่วงหน้า บันทึก view settings preset</value></data>
-  <data name="Cmd_view_presetManage" xml:space="preserve"><value>มุมมอง: จัดการค่าที่ตั้งไว้ล่วงหน้า</value></data>
+  <data name="Cmd_view_presetManage" xml:space="preserve"><value>จัดการพรีเซ็ต</value></data>
   <data name="CmdAlias_view_presetManage" xml:space="preserve"><value>ค่าที่ตั้งไว้ล่วงหน้า จัดการ view settings preset</value></data>
   <data name="Preset_Name" xml:space="preserve"><value>ชื่อ</value></data>
   <data name="Preset_Extensions" xml:space="preserve"><value>ใช้โดยอัตโนมัติกับนามสกุลเหล่านี้ (ไม่บังคับ)</value></data>
@@ -5576,13 +5575,13 @@
   <data name="TplSeverity_Warning" xml:space="preserve"><value>คำเตือน</value></data>
   <data name="TplSeverity_Error" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
   <data name="CmdCategory_scripting" xml:space="preserve"><value>สคริปต์</value></data>
-  <data name="Cmd_scripting_run" xml:space="preserve"><value>สคริปต์: เรียกใช้</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>เรียกใช้</value></data>
   <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 เรียกใช้ สคริปต์ เรียกใช้ซ้ำ</value></data>
-  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>สคริปต์: เรียกใช้ไฟล์สคริปต์...</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>เรียกใช้ไฟล์สคริปต์...</value></data>
   <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx เรียกใช้ ไฟล์สคริปต์</value></data>
-  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>สคริปต์: หยุดทั้งหมด</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>หยุดสคริปต์ทั้งหมด</value></data>
   <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts หยุด ยกเลิก สคริปต์</value></data>
-  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>สคริปต์: เพิ่มคอมโพเนนต์สคริปต์ C#...</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>เพิ่มคอมโพเนนต์สคริปต์ C#...</value></data>
   <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install เพิ่ม คอมโพเนนต์สคริปต์ ติดตั้ง</value></data>
   <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>สคริปต์(R)</value></data>
   <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
@@ -5669,25 +5668,25 @@
   <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro เล่นซ้ำ มาโคร</value></data>
   <data name="Cmd_macro_repeat" xml:space="preserve"><value>เล่นซ้ำหลายครั้ง</value></data>
   <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop ซ้ำ มาโคร วนซ้ำ</value></data>
-  <data name="Cmd_cursor_left" xml:space="preserve"><value>เคอร์เซอร์: ซ้าย</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>ซ้าย</value></data>
   <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left เคอร์เซอร์ ย้าย ซ้าย</value></data>
-  <data name="Cmd_cursor_right" xml:space="preserve"><value>เคอร์เซอร์: ขวา</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>ขวา</value></data>
   <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right เคอร์เซอร์ ย้าย ขวา</value></data>
-  <data name="Cmd_cursor_up" xml:space="preserve"><value>เคอร์เซอร์: ขึ้น</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>ขึ้น</value></data>
   <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up เคอร์เซอร์ ย้าย ขึ้น</value></data>
-  <data name="Cmd_cursor_down" xml:space="preserve"><value>เคอร์เซอร์: ลง</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>ลง</value></data>
   <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down เคอร์เซอร์ ย้าย ลง</value></data>
-  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>เคอร์เซอร์: หน้าก่อนหน้า</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>หน้าก่อนหน้า</value></data>
   <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up เคอร์เซอร์ ย้าย หน้าก่อนหน้า</value></data>
-  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>เคอร์เซอร์: หน้าถัดไป</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>หน้าถัดไป</value></data>
   <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down เคอร์เซอร์ ย้าย หน้าถัดไป</value></data>
-  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>เคอร์เซอร์: ต้นบรรทัด</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>จุดเริ่มต้นแถว</value></data>
   <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start เคอร์เซอร์ ย้าย ต้นบรรทัด</value></data>
-  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>เคอร์เซอร์: ท้ายบรรทัด</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>จุดสิ้นสุดแถว</value></data>
   <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end เคอร์เซอร์ ย้าย ท้ายบรรทัด</value></data>
-  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>เคอร์เซอร์: ต้นไฟล์</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>จุดเริ่มต้นไฟล์</value></data>
   <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start เคอร์เซอร์ ย้าย ต้นไฟล์</value></data>
-  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>เคอร์เซอร์: ท้ายไฟล์</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>จุดสิ้นสุดไฟล์</value></data>
   <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end เคอร์เซอร์ ย้าย ท้ายไฟล์</value></data>
   <data name="Command_NoScriptEditor" xml:space="preserve"><value>ไม่มีตัวแก้ไขสคริปต์ที่แสดงอยู่</value></data>
   <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>รายการสคริปต์(I)</value></data>
@@ -6111,85 +6110,85 @@
   <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>หยุดเมื่ออ่านตรงนี้</value></data>
   <data name="CmdCategory_templates" xml:space="preserve"><value>เทมเพลต</value></data>
   <data name="CmdCategory_codeEditor" xml:space="preserve"><value>ตัวแก้ไขโค้ด</value></data>
-  <data name="Cmd_templates_apply" xml:space="preserve"><value>เทมเพลต: ใช้</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>ใช้</value></data>
   <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;โครงสร้าง;แยกวิเคราะห์</value></data>
-  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>เทมเพลต: ใช้จากตำแหน่งนี้</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>ใช้จากตำแหน่งนี้</value></data>
   <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;เคอร์เซอร์</value></data>
-  <data name="Cmd_templates_followType" xml:space="preserve"><value>เทมเพลต: แสดงชนิดที่เคอร์เซอร์</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>แสดงชนิดที่เคอร์เซอร์</value></data>
   <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;ติดตาม</value></data>
-  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>เทมเพลต: ใช้ Kaitai Struct</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>ใช้ Kaitai Struct</value></data>
   <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
-  <data name="Cmd_templates_rerun" xml:space="preserve"><value>เทมเพลต: เรียกใช้อีกครั้ง</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>เรียกใช้อีกครั้ง</value></data>
   <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;ประเมินใหม่</value></data>
-  <data name="Cmd_templates_remove" xml:space="preserve"><value>เทมเพลต: เอาการใช้ออก</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>เอาการใช้ออก</value></data>
   <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;ยกเลิกการใช้</value></data>
-  <data name="Cmd_templates_stop" xml:space="preserve"><value>เทมเพลต: หยุดการประเมิน</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>หยุดการประเมินผล</value></data>
   <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;ยกเลิก</value></data>
-  <data name="Cmd_templates_showResults" xml:space="preserve"><value>เทมเพลต: แสดงแผนผังผลลัพธ์</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>แสดงแผนผังผลลัพธ์</value></data>
   <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;แผนผัง</value></data>
-  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>เทมเพลต: แสดงเอาต์พุต</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>แสดงเอาต์พุต</value></data>
   <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;ข้อผิดพลาด</value></data>
-  <data name="Cmd_templates_editValue" xml:space="preserve"><value>เทมเพลต: แก้ไขค่า</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>แก้ไขค่า</value></data>
   <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;เปลี่ยน</value></data>
-  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>เทมเพลต: ไปที่คำจำกัดความ</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>ไปที่คำนิยาม</value></data>
   <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;การประกาศ</value></data>
-  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>เทมเพลต: ไปที่เป้าหมายของพอยน์เตอร์</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>ไปที่เป้าหมายของพอยน์เตอร์</value></data>
   <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;พอยน์เตอร์</value></data>
-  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>เทมเพลต: คัดลอกค่า</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>คัดลอกค่า</value></data>
   <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard;คลิปบอร์ด</value></data>
-  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>เทมเพลต: เพิ่มในบุ๊กมาร์ก</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>เพิ่มในบุ๊กมาร์ก</value></data>
   <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;บุ๊กมาร์ก</value></data>
-  <data name="Cmd_templates_export" xml:space="preserve"><value>เทมเพลต: ส่งออกผลลัพธ์</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>ส่งออกผลลัพธ์</value></data>
   <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;ส่งออก</value></data>
-  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>เทมเพลต: สลับการระบายสี</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>สลับการแสดงสี</value></data>
   <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;ไฮไลต์</value></data>
-  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>เทมเพลต: ค้นหาเทมเพลตที่ตรงกัน</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>ค้นหาเทมเพลตที่ตรงกัน</value></data>
   <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;ตรวจหา</value></data>
-  <data name="Cmd_templates_new" xml:space="preserve"><value>เทมเพลต: สร้างใหม่</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>สร้างใหม่</value></data>
   <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;สร้าง</value></data>
-  <data name="Cmd_templates_open" xml:space="preserve"><value>เทมเพลต: เปิด</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>เปิด</value></data>
   <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;ไฟล์</value></data>
-  <data name="Cmd_templates_edit" xml:space="preserve"><value>เทมเพลต: แก้ไข</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>แก้ไข</value></data>
   <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;ตัวแก้ไข</value></data>
-  <data name="Cmd_templates_manage" xml:space="preserve"><value>เทมเพลต: จัดการ</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>จัดการ</value></data>
   <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;ไลบรารี</value></data>
-  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>เทมเพลต: แปลง .ksy เป็น HXT</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>แปลง .ksy เป็น HXT</value></data>
   <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;แปลง</value></data>
-  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>เทมเพลต: เอกสารอ้างอิงไลบรารีมาตรฐาน</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>เอกสารอ้างอิงไลบรารีมาตรฐาน</value></data>
   <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;วิธีใช้ ฟังก์ชัน</value></data>
-  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>เทมเพลต: ทดลองเรียกใช้</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>ทดลองเรียกใช้</value></data>
   <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;ทดสอบ;ยังไม่ได้บันทึก</value></data>
-  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>เทมเพลต: หยุดเมื่ออ่านตรงนี้</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>หยุดเมื่ออ่านที่นี่</value></data>
   <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;จุดหยุดข้อมูล</value></data>
-  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>มุมมอง: แผงโครงสร้าง</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>แผงโครงสร้าง</value></data>
   <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;เทมเพลต ผลลัพธ์</value></data>
-  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>มุมมอง: แผงเอาต์พุตเทมเพลต</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>แผงเอาต์พุตของเทมเพลต</value></data>
   <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;ข้อผิดพลาด</value></data>
-  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เริ่มแก้ไขข้อบกพร่อง / ทำต่อ</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>เริ่มดีบัก / ดำเนินการต่อ</value></data>
   <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;เรียกใช้;แก้ไขข้อบกพร่อง</value></data>
-  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>ตัวแก้ไขโค้ด: หยุดแก้ไขข้อบกพร่อง</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>หยุดดีบัก</value></data>
   <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;สิ้นสุด</value></data>
-  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>ตัวแก้ไขโค้ด: สลับจุดหยุด</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>สลับจุดพัก</value></data>
   <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;จุดหยุด</value></data>
-  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ข้ามไปทีละขั้น</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>ข้ามทีละขั้น</value></data>
   <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;ถัดไป</value></data>
-  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ก้าวเข้า</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>เข้าไปทีละขั้น</value></data>
   <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;เข้า</value></data>
-  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ก้าวออก</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>ออกจากขั้นตอน</value></data>
   <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;ย้อนกลับ</value></data>
-  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เรียกใช้ถึงเคอร์เซอร์</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>เรียกใช้ถึงเคอร์เซอร์</value></data>
   <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;เคอร์เซอร์</value></data>
-  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>ตัวแก้ไขโค้ด: เพิ่มนิพจน์เฝ้าดู</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>เพิ่มนิพจน์เฝ้าดู</value></data>
   <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;เฝ้าดู</value></data>
-  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ไปที่คำจำกัดความ</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>ไปที่คำนิยาม</value></data>
   <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;การประกาศ</value></data>
-  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>ตัวแก้ไขโค้ด: ค้นหาการอ้างอิง</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>ค้นหาการอ้างอิง</value></data>
   <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;การใช้งาน</value></data>
-  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>ตัวแก้ไขโค้ด: จัดรูปแบบเอกสาร</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>จัดรูปแบบเอกสาร</value></data>
   <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;ย่อหน้า</value></data>
-  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>ตัวแก้ไขโค้ด: สลับข้อคิดเห็น</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>สลับความคิดเห็น</value></data>
   <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;ข้อคิดเห็น</value></data>
-  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>ตัวแก้ไขโค้ด: แสดงการเติมโค้ดอัตโนมัติ</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>แสดงการเติมข้อความอัตโนมัติ</value></data>
   <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;เติมอัตโนมัติ</value></data>
   <data name="SetCategory_templates" xml:space="preserve"><value>เทมเพลต</value></data>
   <data name="Set_templates_autoApply" xml:space="preserve"><value>ใช้อัตโนมัติ</value></data>
@@ -6488,7 +6487,7 @@
   <data name="Bookmark_EndianDocument" xml:space="preserve"><value>เอกสาร</value></data>
   <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>นิพจน์ตำแหน่ง</value></data>
   <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>เช่น u32le(0x3C)</value></data>
-  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>มุมมอง: แผงมุมมองภาพ</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>แผงมุมมองรูปภาพ</value></data>
   <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image ภาพ บิตแมป พิกเซล รูปภาพ</value></data>
   <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>มุมมองภาพ(V)</value></data>
   <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
@@ -6539,7 +6538,7 @@
   <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>โหมดออฟไลน์เปิดอยู่ (หรือปิดการดาวน์โหลด) จึงไม่ดาวน์โหลดคอมโพเนนต์ หากต้องการเพิ่มด้วยตนเอง ให้รับ {0} จากหน้ารีลีสของเวอร์ชันนี้ (บนพีซีเครื่องอื่นก็ได้หากจำเป็น) แล้วแตกไฟล์ไปที่ {1}</value></data>
   <data name="SafeMode_Notice" xml:space="preserve"><value>เริ่มในโหมดปลอดภัย ไม่โหลดปลั๊กอินและสคริปต์ที่เรียกใช้อัตโนมัติ</value></data>
   <data name="SafeMode_RestartNormally" xml:space="preserve"><value>รีสตาร์ตตามปกติ</value></data>
-  <data name="Cmd_templates_findValues" xml:space="preserve"><value>เทมเพลต: ค้นหาค่าของฟิลด์</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>ค้นหาค่าของฟิลด์</value></data>
   <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;ค้นหา;ฟิลด์;ค่า</value></data>
   <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>ไม่ได้ใช้เทมเพลตใดๆ</value></data>
   <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>ข้อผิดพลาดทางไวยากรณ์ที่อักขระ {0}: {1}</value></data>
@@ -6603,4 +6602,1595 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>เริ่มตัวแก้ไขโค้ด (WebView2) ไม่ได้ จึงใช้ตัวแก้ไขพื้นฐานที่มีฟีเจอร์น้อยกว่า การติดตั้ง Microsoft Edge WebView2 Runtime ใหม่อาจแก้ปัญหานี้ได้</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>รับ WebView2 Runtime</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>หากต้องการใช้การเติมข้อความอัตโนมัติ ให้เพิ่มคอมโพเนนต์สคริปต์ C# ก่อน</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>ไวยากรณ์ x86</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>ไวยากรณ์แอสเซมบลีสำหรับคำสั่ง x86 และ x64 ในรายการดิสแอสเซมบลีและตัวตรวจสอบข้อมูล</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>เลขฐานสิบหก</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>รูปแบบการเขียนเลขฐานสิบหกในรายการ</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>คำนำหน้า 0x (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>คำต่อท้าย h (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>ใช้ตัวพิมพ์ใหญ่กับเลขฐานสิบหก</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>แสดงหลักเลขฐานสิบหก A–F เป็นตัวพิมพ์ใหญ่</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>ค่าทันทีแบบมีเครื่องหมาย</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>แสดงค่าทันทีที่เป็นลบด้วยเครื่องหมายลบ แทนการแสดงเป็นเลขไม่มีเครื่องหมายที่มีค่ามาก (x86)</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>ใช้ตัวพิมพ์ใหญ่กับมนีโมนิกและรีจิสเตอร์</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>แสดงชื่อคำสั่งและชื่อรีจิสเตอร์เป็นตัวพิมพ์ใหญ่</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>นามแฝงรีจิสเตอร์ ARM</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>แสดงรีจิสเตอร์ ARM ด้วยนามแฝง (sp, lr, pc) แทนหมายเลข (r13, r14, r15)</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>แสดงคอลัมน์ไบต์</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>แสดงไบต์ของคำสั่งถัดจากที่อยู่</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>จำนวนไบต์สูงสุดที่แสดง</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>จำนวนไบต์ที่แสดงต่อคำสั่ง (4 ถึง 16) คำสั่งที่ยาวกว่านั้นจะลงท้ายด้วย “…”</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>คอลัมน์ที่อยู่</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>สิ่งที่คอลัมน์ที่อยู่แสดง</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>ที่อยู่เสมือน</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>ออฟเซ็ตของไฟล์</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>ทั้งสองอย่าง</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>เส้นแบรนช์</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>วาดลูกศรสำหรับแบรนช์และเส้นไปยังเป้าหมายของแบรนช์ที่อยู่ในมุมมอง</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>คอลัมน์ความคิดเห็น</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>แสดงชื่อสัญลักษณ์ ชื่อเป้าหมายของแบรนช์ และสตริงที่ถูกอ้างอิง</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>สลับแผงดิสแอสเซมบลี</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>ดิสแอสเซมเบลอร์ แอสเซมบลี โค้ด disassembler assembly code</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>ดิสแอสเซมเบิล</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>ดิสแอสเซมเบิล แอสเซมบลี โค้ด คำสั่ง disassembler assembly code instructions</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>ดิสแอสเซมเบิลจากเคอร์เซอร์</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>ดิสแอสเซมเบิล โค้ด ที่นี่ เคอร์เซอร์ disassembler code here</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>ไปที่ที่อยู่เสมือน</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>ที่อยู่เสมือน เซกชัน ที่อยู่ va rva address section</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>ไปที่จุดเข้า</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>จุดเข้า จุดเริ่มต้น เมน ไฟล์ปฏิบัติการ start main executable</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>ดิสแอสเซมเบิลเมธอด .NET</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>msil il cil dotnet เมธอด method</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>ถอดรหัสชื่อสัญลักษณ์...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>ถอดรหัส สัญลักษณ์ ชื่อ c++ rust demangle symbol undecorate</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>ไปที่เป้าหมายของแบรนช์</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>กระโดด เรียก ตาม jump call follow</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>ค้นหาการอ้างอิง</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>การอ้างอิงข้าม ผู้เรียก xref cross references callers</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>ค้นหารูปแบบคำสั่ง</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>ค้นหา คำสั่ง แอสเซมบลี search instructions assembly</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>แอสเซมเบิลคำสั่ง</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>แพตช์ แอสเซมเบิล คำสั่ง patch assemble instruction</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>คัดลอกแถวในรายการ</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>คัดลอก แอสเซมบลี copy assembly</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>ส่งออกเป็นแอสเซมบลี...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>บันทึก รายการ asm save listing asm</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>คำสั่ง</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>คำสั่ง ({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>คำสั่งไม่ถูกต้อง</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>ไม่สามารถใช้ดิสแอสเซมเบลอร์ได้</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>ไปที่เป้าหมายของแบรนช์</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>สถาปัตยกรรม</value></data>
+  <data name="Panel_Disassembly_Title" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="Menu_View_Disassembly.Text" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="Menu_Analysis_Disassemble.Text" xml:space="preserve"><value>ดิสแอสเซมเบิล(D)</value></data>
+  <data name="Menu_Analysis_Disassemble.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Analysis_Demangle.Text" xml:space="preserve"><value>ถอดรหัสชื่อสัญลักษณ์(M)...</value></data>
+  <data name="Menu_Analysis_Demangle.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="HexView_Menu_Disassemble" xml:space="preserve"><value>ดิสแอสเซมเบิล</value></data>
+  <data name="HexView_Menu_Demangle" xml:space="preserve"><value>ถอดรหัสชื่อสัญลักษณ์</value></data>
+  <data name="ToolPage_Demangle" xml:space="preserve"><value>ถอดรหัสชื่อสัญลักษณ์</value></data>
+  <data name="SearchResults_Column_Instruction" xml:space="preserve"><value>คำสั่ง</value></data>
+  <data name="Disasm_ListingName" xml:space="preserve"><value>รายการดิสแอสเซมบลี</value></data>
+  <data name="Disasm_Architecture" xml:space="preserve"><value>สถาปัตยกรรม</value></data>
+  <data name="Disasm_Mode" xml:space="preserve"><value>โหมด</value></data>
+  <data name="Disasm_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Disasm_Slice" xml:space="preserve"><value>สถาปัตยกรรมในยูนิเวอร์ซัลไบนารี</value></data>
+  <data name="Disasm_Start" xml:space="preserve"><value>จุดเริ่มต้น</value></data>
+  <data name="Disasm_StartTip" xml:space="preserve"><value>ตำแหน่งที่เริ่มดิสแอสเซมเบิล</value></data>
+  <data name="Disasm_StartCursor" xml:space="preserve"><value>ตำแหน่งเคอร์เซอร์</value></data>
+  <data name="Disasm_StartSelection" xml:space="preserve"><value>จุดเริ่มต้นของส่วนที่เลือก</value></data>
+  <data name="Disasm_StartOffset" xml:space="preserve"><value>ออฟเซ็ต...</value></data>
+  <data name="Disasm_StartAddress" xml:space="preserve"><value>ที่อยู่เสมือน...</value></data>
+  <data name="Disasm_StartEntry" xml:space="preserve"><value>จุดเข้า</value></data>
+  <data name="Disasm_BaseAuto" xml:space="preserve"><value>ฐาน: อัตโนมัติ</value></data>
+  <data name="Disasm_BaseAddress" xml:space="preserve"><value>ที่อยู่ฐาน (เว้นว่างเพื่อให้อัตโนมัติ)</value></data>
+  <data name="Disasm_Syntax" xml:space="preserve"><value>ไวยากรณ์ (x86)</value></data>
+  <data name="Disasm_Options" xml:space="preserve"><value>ตัวเลือกการแสดงผล</value></data>
+  <data name="Disasm_Follow" xml:space="preserve"><value>ตามเคอร์เซอร์</value></data>
+  <data name="Disasm_FindPattern" xml:space="preserve"><value>ค้นหาคำสั่ง</value></data>
+  <data name="Disasm_PatternPlaceholder" xml:space="preserve"><value>เช่น push rbp; mov rbp, rsp</value></data>
+  <data name="Disasm_PatternRegex" xml:space="preserve"><value>นิพจน์ปกติ</value></data>
+  <data name="Disasm_PatternFindAll" xml:space="preserve"><value>ค้นหาทั้งหมด</value></data>
+  <data name="Disasm_PatternClose" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Disasm_Sections" xml:space="preserve"><value>เซกชัน</value></data>
+  <data name="Disasm_Symbols" xml:space="preserve"><value>สัญลักษณ์</value></data>
+  <data name="Disasm_Methods" xml:space="preserve"><value>ชนิดและเมธอด</value></data>
+  <data name="Disasm_SymbolFilter" xml:space="preserve"><value>กรองตามชื่อ</value></data>
+  <data name="Disasm_SymbolKind_Function" xml:space="preserve"><value>ฟังก์ชัน</value></data>
+  <data name="Disasm_SymbolKind_Data" xml:space="preserve"><value>ข้อมูล</value></data>
+  <data name="Disasm_SymbolKind_Import" xml:space="preserve"><value>นำเข้า</value></data>
+  <data name="Disasm_SymbolKind_Export" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="Disasm_PluginArchitecture" xml:space="preserve"><value>จากปลั๊กอิน: {0}</value></data>
+  <data name="Disasm_EngineError" xml:space="preserve"><value>ไม่สามารถโหลดเอนจินดิสแอสเซมบลีได้: {0}</value></data>
+  <data name="Disasm_MostlyData" xml:space="preserve"><value>นี่อาจไม่ใช่โค้ดของสถาปัตยกรรมนี้</value></data>
+  <data name="Disasm_HeaderIssue" xml:space="preserve"><value>ไม่สามารถตีความส่วนหนึ่งของส่วนหัวได้: {0}</value></data>
+  <data name="Disasm_HeaderIssue_OutOfRange" xml:space="preserve"><value>ข้อมูลนอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_Unreadable" xml:space="preserve"><value>ไบต์ที่อ่านไม่ได้</value></data>
+  <data name="Disasm_HeaderIssue_StringOutOfRange" xml:space="preserve"><value>ชื่อที่อยู่นอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_TooManySections" xml:space="preserve"><value>มีเซกชันมากเกินไป</value></data>
+  <data name="Disasm_HeaderIssue_SectionTableOutside" xml:space="preserve"><value>ตารางเซกชันอยู่นอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_SectionOutside" xml:space="preserve"><value>เซกชันหนึ่งอยู่นอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_SectionNamesBroken" xml:space="preserve"><value>ชื่อเซกชันเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_ProgramHeadersOutside" xml:space="preserve"><value>โปรแกรมเฮดเดอร์อยู่นอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_ExportTableBroken" xml:space="preserve"><value>ตารางส่งออกเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_ImportTableBroken" xml:space="preserve"><value>ตารางนำเข้าเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_DelayImportTableBroken" xml:space="preserve"><value>ตารางนำเข้าแบบหน่วงโหลดเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_ExceptionTableBroken" xml:space="preserve"><value>ตารางข้อยกเว้นเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_RvaOutside" xml:space="preserve"><value>ที่อยู่นอกเซกชัน</value></data>
+  <data name="Disasm_HeaderIssue_SymbolTableBroken" xml:space="preserve"><value>ตารางสัญลักษณ์เสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_NoStringTable" xml:space="preserve"><value>ไม่มีตารางสตริง</value></data>
+  <data name="Disasm_HeaderIssue_PltBroken" xml:space="preserve"><value>การย้ายตำแหน่ง PLT เสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_FatHeaderBroken" xml:space="preserve"><value>ส่วนหัวของยูนิเวอร์ซัลไบนารีเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_SliceOutside" xml:space="preserve"><value>สไลซ์สถาปัตยกรรมหนึ่งอยู่นอกไฟล์</value></data>
+  <data name="Disasm_HeaderIssue_LoadCommandsBroken" xml:space="preserve"><value>คำสั่งโหลดเสียหาย</value></data>
+  <data name="Disasm_HeaderIssue_StubsBroken" xml:space="preserve"><value>สตับเสียหาย</value></data>
+  <data name="Disasm_DotNetMessage" xml:space="preserve"><value>นี่คือแอสเซมบลี .NET คุณสามารถดิสแอสเซมเบิลเมธอดของมันเป็น MSIL ได้</value></data>
+  <data name="Disasm_DotNetAction" xml:space="preserve"><value>แสดง MSIL</value></data>
+  <data name="Disasm_MetadataIssue" xml:space="preserve"><value>ไม่สามารถอ่านเมทาดาทาบางส่วนได้</value></data>
+  <data name="Disasm_MenuAssemble" xml:space="preserve"><value>แอสเซมเบิล...</value></data>
+  <data name="Disasm_MenuCopy" xml:space="preserve"><value>คัดลอก</value></data>
+  <data name="Disasm_NoTarget" xml:space="preserve"><value>คำสั่งนี้ไม่มีเป้าหมายของแบรนช์ที่ระบุได้</value></data>
+  <data name="Disasm_ExternalFunction" xml:space="preserve"><value>ฟังก์ชันภายนอก: {0}</value></data>
+  <data name="Disasm_TargetOutside" xml:space="preserve"><value>เป้าหมายของแบรนช์ {0} ไม่อยู่ในไฟล์</value></data>
+  <data name="Disasm_NotExecutable" xml:space="preserve"><value>เอกสารนี้ไม่ใช่ไฟล์ปฏิบัติการ (PE, ELF หรือ Mach-O)</value></data>
+  <data name="Disasm_NoEntryPoint" xml:space="preserve"><value>ไฟล์ปฏิบัติการนี้ไม่มีจุดเข้า</value></data>
+  <data name="Disasm_NotDotNet" xml:space="preserve"><value>เอกสารนี้ไม่ใช่แอสเซมบลี .NET</value></data>
+  <data name="Disasm_NotForMsil" xml:space="preserve"><value>ใช้ไม่ได้กับ MSIL</value></data>
+  <data name="Disasm_AssembleX86Only" xml:space="preserve"><value>การแอสเซมเบิลแทนที่ใช้ได้เฉพาะ x86 และ x64</value></data>
+  <data name="Disasm_Go" xml:space="preserve"><value>ไปที่</value></data>
+  <data name="Disasm_OutOfDocument" xml:space="preserve"><value>ออฟเซ็ตอยู่นอกเอกสาร</value></data>
+  <data name="Disasm_VirtualAddress" xml:space="preserve"><value>ที่อยู่เสมือน</value></data>
+  <data name="Disasm_NoSection" xml:space="preserve"><value>ที่อยู่นี้ไม่อยู่ในเซกชันใด ๆ</value></data>
+  <data name="Disasm_AddressResolved" xml:space="preserve"><value>ออฟเซ็ต {0} ({1})</value></data>
+  <data name="Disasm_ReferencesTo" xml:space="preserve"><value>การอ้างอิงถึง {0}</value></data>
+  <data name="Disasm_ReferencesKind" xml:space="preserve"><value>การอ้างอิง</value></data>
+  <data name="Disasm_PatternKind" xml:space="preserve"><value>รูปแบบคำสั่ง</value></data>
+  <data name="Disasm_PatternError" xml:space="preserve"><value>คอลัมน์ {0}: {1}</value></data>
+  <data name="Disasm_PatternError_Empty" xml:space="preserve"><value>ไม่มีคำสั่งในรูปแบบ</value></data>
+  <data name="Disasm_PatternError_Range" xml:space="preserve"><value>ช่วง {n} ไม่ถูกต้อง</value></data>
+  <data name="Disasm_PatternError_Brace" xml:space="preserve"><value>วงเล็บปีกกาไม่ครบคู่</value></data>
+  <data name="Disasm_PatternError_Regex" xml:space="preserve"><value>นิพจน์ปกติไม่ถูกต้อง</value></data>
+  <data name="Disasm_PatternEstimate" xml:space="preserve"><value>การค้นหาจะใช้เวลาประมาณ {0} วินาที</value></data>
+  <data name="Disasm_PatternNotFound" xml:space="preserve"><value>ไม่พบรายการที่ตรงกัน</value></data>
+  <data name="Disasm_AssemblyFile" xml:space="preserve"><value>รายการแอสเซมบลี</value></data>
+  <data name="Disasm_Exported" xml:space="preserve"><value>บันทึก {0} แล้ว</value></data>
+  <data name="Disasm_TipLength" xml:space="preserve"><value>ความยาว: {0} ไบต์</value></data>
+  <data name="Disasm_TipOperands" xml:space="preserve"><value>ตัวถูกดำเนินการ: {0}</value></data>
+  <data name="Disasm_TipRead" xml:space="preserve"><value>รีจิสเตอร์ที่อ่าน: {0}</value></data>
+  <data name="Disasm_TipWritten" xml:space="preserve"><value>รีจิสเตอร์ที่เขียน: {0}</value></data>
+  <data name="Disasm_TipGroups" xml:space="preserve"><value>กลุ่ม: {0}</value></data>
+  <data name="Disasm_AssembleInput" xml:space="preserve"><value>คำสั่งใหม่ (คั่นด้วย ;)</value></data>
+  <data name="Disasm_AssembleFillNop" xml:space="preserve"><value>เติมส่วนที่เหลือด้วย NOP (0x90)</value></data>
+  <data name="Disasm_AssembleKeep" xml:space="preserve"><value>คงไบต์ที่เหลือไว้</value></data>
+  <data name="Disasm_AssembleWrite" xml:space="preserve"><value>เขียน</value></data>
+  <data name="Disasm_AssembleResult" xml:space="preserve"><value>{0} ({1} ไบต์)</value></data>
+  <data name="Disasm_AssembleOverwrites" xml:space="preserve"><value>การดำเนินการนี้จะเขียนทับ: {0} ด้วย</value></data>
+  <data name="Disasm_AssembleError" xml:space="preserve"><value>ไม่สามารถแอสเซมเบิลได้ ({0}): {1}</value></data>
+  <data name="Disasm_AssembleError_Syntax" xml:space="preserve"><value>ข้อผิดพลาดทางไวยากรณ์</value></data>
+  <data name="Disasm_AssembleError_UnknownMnemonic" xml:space="preserve"><value>คำสั่งที่ไม่รู้จัก</value></data>
+  <data name="Disasm_AssembleError_Operands" xml:space="preserve"><value>ตัวถูกดำเนินการไม่ถูกต้อง</value></data>
+  <data name="Disasm_AssembleError_Encode" xml:space="preserve"><value>ไม่สามารถเข้ารหัสได้</value></data>
+  <data name="Disasm_UndoAssemble" xml:space="preserve"><value>แอสเซมเบิล</value></data>
+  <data name="Demangle_Input" xml:space="preserve"><value>ชื่อที่ถูกแมงเกิล (หนึ่งชื่อต่อบรรทัด)</value></data>
+  <data name="Demangle_InputPlaceholder" xml:space="preserve"><value>_ZN3foo3barEi</value></data>
+  <data name="Demangle_Output" xml:space="preserve"><value>ผลลัพธ์</value></data>
+  <data name="Demangle_ShortNames" xml:space="preserve"><value>ชื่อแบบสั้น (ไม่มีชนิดพารามิเตอร์และชนิดที่ส่งกลับ)</value></data>
+  <data name="Demangle_RustHash" xml:space="preserve"><value>แสดงแฮชของ Rust</value></data>
+  <data name="Demangle_Copy" xml:space="preserve"><value>คัดลอก</value></data>
+  <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (ไม่สามารถถอดรหัสได้)</value></data>
+  <data name="Demangle_Converting" xml:space="preserve"><value>กำลังแปลง...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>แสดงโค้ดเนทีฟ</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>แสดงโค้ดเนทีฟ ReadyToRun ของเมธอดนี้</value></data>
+  <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Panel_TemplateVisualizer_Title" xml:space="preserve"><value>ตัวแสดงภาพ</value></data>
+  <data name="Cmd_view_panel_templateVisualizer" xml:space="preserve"><value>แผงตัวแสดงภาพของเทมเพลต</value></data>
+  <data name="CmdAlias_view_panel_templateVisualizer" xml:space="preserve"><value>ตัวแสดงภาพ เทมเพลต รูปภาพ เสียง ตาราง แผนภูมิ visualizer template image audio table chart</value></data>
+  <data name="Cmd_templates_visualize" xml:space="preserve"><value>แสดงในตัวแสดงภาพ</value></data>
+  <data name="CmdAlias_templates_visualize" xml:space="preserve"><value>แสดงภาพ รูปภาพ เสียง รูปคลื่น ตาราง แผนภูมิ visualize image audio waveform table chart</value></data>
+  <data name="Menu_View_TemplateVisualizer.Text" xml:space="preserve"><value>ตัวแสดงภาพของเทมเพลต(2)</value></data>
+  <data name="Menu_View_TemplateVisualizer.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="TplMenu_Visualize" xml:space="preserve"><value>แสดงในตัวแสดงภาพ</value></data>
+  <data name="TplVis_ShowButton" xml:space="preserve"><value>แสดง {0} ในตัวแสดงภาพ</value></data>
+  <data name="TplVis_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="TplVis_Play" xml:space="preserve"><value>เล่น</value></data>
+  <data name="TplVis_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="TplVis_Seek" xml:space="preserve"><value>ตำแหน่งการเล่น</value></data>
+  <data name="TplVis_Nothing" xml:space="preserve"><value>เลือกโหนดที่มีตัวแสดงภาพ (แอตทริบิวต์ visualize) ในแผนผังโครงสร้าง</value></data>
+  <data name="TplVis_NoVisualizer" xml:space="preserve"><value>โหนดที่เลือกไม่มีตัวแสดงภาพ</value></data>
+  <data name="TplVis_Header" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="TplVis_Kind_Bitmap" xml:space="preserve"><value>รูปภาพ</value></data>
+  <data name="TplVis_Kind_Image" xml:space="preserve"><value>รูปภาพ</value></data>
+  <data name="TplVis_Kind_Audio" xml:space="preserve"><value>เสียง</value></data>
+  <data name="TplVis_Kind_Disassembly" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="TplVis_Kind_Table" xml:space="preserve"><value>ตาราง</value></data>
+  <data name="TplVis_Kind_Chart" xml:space="preserve"><value>แผนภูมิ</value></data>
+  <data name="TplVis_Kind_Color" xml:space="preserve"><value>สี</value></data>
+  <data name="TplVis_Kind_Text" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="TplVis_Kind_Error" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
+  <data name="TplVis_CannotShow" xml:space="preserve"><value>ไม่สามารถแสดงได้: {0}</value></data>
+  <data name="TplVis_CannotShowImage" xml:space="preserve"><value>ไม่สามารถแสดงรูปภาพนี้ได้: {0}</value></data>
+  <data name="TplVis_Truncated" xml:space="preserve"><value>ข้อมูลมีขนาดเกินขีดจำกัด (64 MB หรือ 16,384 × 16,384 พิกเซลสำหรับรูปภาพ) จึงแสดงเฉพาะส่วนแรก</value></data>
+  <data name="TplVis_ImageAlt" xml:space="preserve"><value>รูปภาพ กว้าง {0} สูง {1} รูปแบบ {2}</value></data>
+  <data name="TplVis_AudioAlt" xml:space="preserve"><value>เสียง ความยาว {0} วินาที อัตราสุ่มตัวอย่าง {1} Hz {2} ช่องสัญญาณ</value></data>
+  <data name="TplVis_TableAlt" xml:space="preserve"><value>ตาราง {0} แถว {1} คอลัมน์</value></data>
+  <data name="TplVis_ChartAlt" xml:space="preserve"><value>แผนภูมิ {0} ค่า ตั้งแต่ {1} ถึง {2}</value></data>
+  <data name="TplVis_ColorAlt" xml:space="preserve"><value>สี {0}</value></data>
+  <data name="TplVis_WavFiles" xml:space="preserve"><value>เสียง WAV</value></data>
+  <data name="TplVis_CsvFiles" xml:space="preserve"><value>CSV (ค่าที่คั่นด้วยจุลภาค)</value></data>
+  <data name="Cmd_templates_online_browse" xml:space="preserve"><value>ค้นหาเทมเพลตออนไลน์</value></data>
+  <data name="CmdAlias_templates_online_browse" xml:space="preserve"><value>ออนไลน์ ที่เก็บ ดาวน์โหลด ติดตั้ง online repository download install</value></data>
+  <data name="Cmd_templates_online_checkUpdates" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
+  <data name="CmdAlias_templates_online_checkUpdates" xml:space="preserve"><value>ออนไลน์ อัปเดต เวอร์ชันใหม่ online update new version</value></data>
+  <data name="Menu_Templates_Online.Text" xml:space="preserve"><value>ค้นหาเทมเพลตออนไลน์(L)...</value></data>
+  <data name="Menu_Templates_Online.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="SetSection_TemplateOnline" xml:space="preserve"><value>เทมเพลตออนไลน์</value></data>
+  <data name="SetSearch_TemplateOnline" xml:space="preserve"><value>ออนไลน์ ที่เก็บ ดาวน์โหลด ติดตั้ง อัปเดต เทมเพลต online repository download install update templates</value></data>
+  <data name="Set_templates_online_checkUpdates" xml:space="preserve"><value>ตรวจหาการอัปเดตเทมเพลตออนไลน์เมื่อเริ่มต้น (วันละครั้ง)</value></data>
+  <data name="SetDesc_templates_online_checkUpdates" xml:space="preserve"><value>ระบบจะแจ้งเวอร์ชันใหม่ใน InfoBar จะไม่มีการอัปเดตใด ๆ หากคุณไม่อนุมัติ เว้นแต่จะเปิดการอัปเดตอัตโนมัติ</value></data>
+  <data name="Set_templates_online_autoUpdate" xml:space="preserve"><value>อัปเดตเทมเพลตออนไลน์โดยอัตโนมัติ</value></data>
+  <data name="SetDesc_templates_online_autoUpdate" xml:space="preserve"><value>ติดตั้งเวอร์ชันใหม่ที่พบจากการตรวจหาการอัปเดตโดยไม่ถาม</value></data>
+  <data name="Set_templates_online_repositories" xml:space="preserve"><value>ที่เก็บเทมเพลต</value></data>
+  <data name="SetDesc_templates_online_repositories" xml:space="preserve"><value>URL ดัชนีของที่เก็บที่คุณเพิ่ม (HTTPS)</value></data>
+  <data name="Tpl_OriginOnline" xml:space="preserve"><value>ออนไลน์</value></data>
+  <data name="TplOnline_OfficialRepository" xml:space="preserve"><value>ที่เก็บอย่างเป็นทางการ</value></data>
+  <data name="TplOnline_Search" xml:space="preserve"><value>ค้นหาเทมเพลตออนไลน์</value></data>
+  <data name="TplOnline_Category" xml:space="preserve"><value>หมวดหมู่</value></data>
+  <data name="TplOnline_AllCategories" xml:space="preserve"><value>ทุกหมวดหมู่</value></data>
+  <data name="TplOnline_Refresh" xml:space="preserve"><value>รีเฟรช</value></data>
+  <data name="TplOnline_CheckUpdates" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
+  <data name="TplOnline_Repositories" xml:space="preserve"><value>ที่เก็บที่คุณเพิ่ม</value></data>
+  <data name="TplOnline_RepoUrl" xml:space="preserve"><value>URL ดัชนีของที่เก็บ</value></data>
+  <data name="TplOnline_AddRepo" xml:space="preserve"><value>เพิ่มที่เก็บ</value></data>
+  <data name="TplOnline_BadUrl" xml:space="preserve"><value>ป้อน URL แบบ HTTPS ของดัชนีที่เก็บ (index.json)</value></data>
+  <data name="TplOnline_NoRepositories" xml:space="preserve"><value>ไม่ได้กำหนดค่าที่เก็บใด ๆ</value></data>
+  <data name="TplOnline_Loading" xml:space="preserve"><value>กำลังโหลดที่เก็บ...</value></data>
+  <data name="TplOnline_Disabled" xml:space="preserve"><value>เทมเพลตออนไลน์ถูกปิดอยู่</value></data>
+  <data name="TplOnline_OpenSettings" xml:space="preserve"><value>เปิดการตั้งค่า</value></data>
+  <data name="TplOnline_Unavailable" xml:space="preserve"><value>ไม่สามารถเชื่อมต่อกับที่เก็บได้: {0}</value></data>
+  <data name="TplOnline_Tampered" xml:space="preserve"><value>ไม่สามารถตรวจสอบดัชนีของ {0} ได้จึงไม่ใช้งาน ไฟล์อาจถูกแก้ไขโดยมิชอบ</value></data>
+  <data name="TplOnline_Invalid" xml:space="preserve"><value>ไม่สามารถอ่านดัชนีของ {0} ได้: {1}</value></data>
+  <data name="TplOnline_NoMatch" xml:space="preserve"><value>ไม่มีเทมเพลตที่ตรงกัน</value></data>
+  <data name="TplOnline_License" xml:space="preserve"><value>สัญญาอนุญาต: {0}</value></data>
+  <data name="TplOnline_Author" xml:space="preserve"><value>ผู้เขียน: {0}</value></data>
+  <data name="TplOnline_InstalledVersion" xml:space="preserve"><value>ติดตั้งแล้ว: {0}</value></data>
+  <data name="TplOnline_Unsigned" xml:space="preserve"><value>ไม่ได้ลงนาม</value></data>
+  <data name="TplOnline_UsesExtensions" xml:space="preserve"><value>ใช้ฟังก์ชันสคริปต์</value></data>
+  <data name="TplOnline_Install" xml:space="preserve"><value>ติดตั้ง</value></data>
+  <data name="TplOnline_Update" xml:space="preserve"><value>อัปเดต</value></data>
+  <data name="TplOnline_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="TplOnline_Source" xml:space="preserve"><value>ดูซอร์ส</value></data>
+  <data name="TplOnline_SourceTitle" xml:space="preserve"><value>ซอร์สของ {0}</value></data>
+  <data name="TplOnline_FileTampered" xml:space="preserve"><value>ไฟล์อาจถูกแก้ไขโดยมิชอบ</value></data>
+  <data name="TplOnline_FileTamperedNamed" xml:space="preserve"><value>ไม่ได้ติดตั้ง {0} ไฟล์อาจถูกแก้ไขโดยมิชอบ</value></data>
+  <data name="TplOnline_Downloading" xml:space="preserve"><value>กำลังดาวน์โหลดเทมเพลต: {0}</value></data>
+  <data name="TplOnline_Installed" xml:space="preserve"><value>ติดตั้ง {0} {1} แล้ว</value></data>
+  <data name="TplOnline_ExtensionsTitle" xml:space="preserve"><value>ติดตั้ง {0} หรือไม่</value></data>
+  <data name="TplOnline_ExtensionsText" xml:space="preserve"><value>เทมเพลตนี้ใช้ฟังก์ชันสคริปต์ (ส่วนขยายเทมเพลต) ฟังก์ชันจะทำงานด้วยสิทธิ์และข้อจำกัดของสคริปต์ ติดตั้งเฉพาะเทมเพลตจากผู้เขียนที่คุณไว้วางใจ</value></data>
+  <data name="TplOnline_UpdatesAvailable" xml:space="preserve"><value>มีเวอร์ชันใหม่ของเทมเพลตออนไลน์: {0}</value></data>
+  <data name="TplOnline_NoUpdates" xml:space="preserve"><value>เทมเพลตออนไลน์ทั้งหมดเป็นเวอร์ชันล่าสุดแล้ว</value></data>
+  <data name="SetGroup_templatesOnline" xml:space="preserve"><value>เทมเพลตออนไลน์</value></data>
+  <data name="SetGroup_rpc" xml:space="preserve"><value>ระบบอัตโนมัติภายนอก</value></data>
+  <data name="Set_automation_rpc_enabled" xml:space="preserve"><value>อนุญาตระบบอัตโนมัติภายนอก (JSON-RPC ผ่านเนมด์ไปป์)</value></data>
+  <data name="SetDesc_automation_rpc_enabled" xml:space="preserve"><value>โปรแกรมอื่นในบัญชีของคุณ (PowerShell, Python, เครื่องมือทดสอบ) สามารถควบคุม HexEditor ได้ การเชื่อมต่อครั้งแรกของแต่ละโปรแกรมจะขออนุญาตจากคุณ ปิดไว้ตามค่าเริ่มต้น</value></data>
+  <data name="Status_AutomationOn" xml:space="preserve"><value>ระบบอัตโนมัติภายนอก: เปิด</value></data>
+  <data name="Status_AutomationConnections" xml:space="preserve"><value>(เชื่อมต่อ {0})</value></data>
+  <data name="Rpc_Writing" xml:space="preserve"><value>ถูกควบคุมโดยโปรแกรมภายนอก: {0}</value></data>
+  <data name="Rpc_Disconnect" xml:space="preserve"><value>ตัดการเชื่อมต่อ</value></data>
+  <data name="RpcTrust_Title" xml:space="preserve"><value>อนุญาตการเชื่อมต่อจาก {0} หรือไม่</value></data>
+  <data name="RpcTrust_Program" xml:space="preserve"><value>โปรแกรม: {0}</value></data>
+  <data name="RpcTrust_Signer" xml:space="preserve"><value>ผู้ลงนาม: {0}</value></data>
+  <data name="RpcTrust_Description" xml:space="preserve"><value>โปรแกรมนี้ต้องการควบคุม HexEditor ผ่านระบบอัตโนมัติภายนอก โดยสามารถอ่านและแก้ไขเอกสารที่เปิดอยู่ เปิดและบันทึกไฟล์ และใช้ฟังก์ชันอัตโนมัติอื่น ๆ ได้ อนุญาตเฉพาะโปรแกรมที่คุณไว้วางใจ</value></data>
+  <data name="RpcTrust_Unsigned" xml:space="preserve"><value>โปรแกรมนี้ไม่มีลายเซ็นดิจิทัลที่ถูกต้อง</value></data>
+  <data name="RpcTrust_AllowOnce" xml:space="preserve"><value>อนุญาตครั้งนี้เท่านั้น</value></data>
+  <data name="RpcTrust_Deny" xml:space="preserve"><value>ไม่อนุญาต</value></data>
+  <data name="SetSection_RpcClients" xml:space="preserve"><value>ระบบอัตโนมัติภายนอก</value></data>
+  <data name="SetSearch_RpcClients" xml:space="preserve"><value>ระบบอัตโนมัติภายนอก json-rpc เนมด์ไปป์ powershell python โปรแกรมที่อนุญาต external automation named pipe allowed programs</value></data>
+  <data name="RpcClients_Running" xml:space="preserve"><value>กำลังรอรับการเชื่อมต่อที่เนมด์ไปป์ด้านล่าง เฉพาะโปรแกรมในบัญชีของคุณบนพีซีเครื่องนี้เท่านั้นที่เชื่อมต่อได้</value></data>
+  <data name="RpcClients_Stopped" xml:space="preserve"><value>ไม่ได้รอรับการเชื่อมต่อ (เปิด "อนุญาตระบบอัตโนมัติภายนอก")</value></data>
+  <data name="RpcClients_StartError" xml:space="preserve"><value>ไม่สามารถสร้างเนมด์ไปป์ได้: {0}</value></data>
+  <data name="RpcClients_Module" xml:space="preserve"><value>โมดูล PowerShell: {0} (Import-Module) รายการเมธอด: {1}</value></data>
+  <data name="RpcClients_None" xml:space="preserve"><value>ไม่มีโปรแกรมที่ได้รับอนุญาตถาวร</value></data>
+  <data name="RpcClients_Allowed" xml:space="preserve"><value>อนุญาตเมื่อ {0}</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>ต้องใช้ HexEditor {0} ขึ้นไป</value></data>
+  <data name="Cmd_data_patch_create" xml:space="preserve"><value>สร้างแพตช์...</value></data>
+  <data name="CmdAlias_data_patch_create" xml:space="preserve"><value>แพตช์ ความแตกต่าง ips ups bps hexpatch diff</value></data>
+  <data name="Cmd_data_patch_apply" xml:space="preserve"><value>ใช้แพตช์...</value></data>
+  <data name="CmdAlias_data_patch_apply" xml:space="preserve"><value>แพตช์ ใช้แพตช์ ips ups bps hexpatch</value></data>
+  <data name="Cmd_data_transformView_define" xml:space="preserve"><value>การตั้งค่ามุมมองแปลง...</value></data>
+  <data name="CmdAlias_data_transformView_define" xml:space="preserve"><value>แปลง มุมมอง ถอดรหัส xor view decode</value></data>
+  <data name="Cmd_data_transformView_xor" xml:space="preserve"><value>มุมมอง XOR...</value></data>
+  <data name="CmdAlias_data_transformView_xor" xml:space="preserve"><value>xor คีย์ มุมมอง xor key view</value></data>
+  <data name="Cmd_data_transformView_clear" xml:space="preserve"><value>ล้างมุมมองแปลง</value></data>
+  <data name="CmdAlias_data_transformView_clear" xml:space="preserve"><value>เอาออก ล้าง xor มุมมอง remove xor view</value></data>
+  <data name="Cmd_data_transformView_applyToData" xml:space="preserve"><value>ใช้การแปลงนี้กับข้อมูล...</value></data>
+  <data name="CmdAlias_data_transformView_applyToData" xml:space="preserve"><value>เขียนกลับ ยืนยัน xor เขียน bake xor write</value></data>
+  <data name="Cmd_edit_history_save" xml:space="preserve"><value>บันทึกประวัติ...</value></data>
+  <data name="CmdAlias_edit_history_save" xml:space="preserve"><value>แผนผังเลิกทำ ประวัติ undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_load" xml:space="preserve"><value>โหลดประวัติ...</value></data>
+  <data name="CmdAlias_edit_history_load" xml:space="preserve"><value>แผนผังเลิกทำ ประวัติ undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_goToNode" xml:space="preserve"><value>ไปที่โหนดประวัติ...</value></data>
+  <data name="CmdAlias_edit_history_goToNode" xml:space="preserve"><value>แผนผังเลิกทำ สถานะที่ตั้งชื่อ undo tree named state</value></data>
+  <data name="Set_edit_undo_branching" xml:space="preserve"><value>ใช้ประวัติเลิกทำแบบแตกกิ่ง</value></data>
+  <data name="SetDesc_edit_undo_branching" xml:space="preserve"><value>เมื่อเลิกทำแล้วแก้ไขใหม่ จะเก็บการแก้ไขที่เลิกทำไว้เป็นกิ่งแยกแทนที่จะทิ้ง แผงประวัติสามารถแสดงกิ่งเหล่านี้เป็นแผนผังได้</value></data>
+  <data name="Set_edit_transformView_copy" xml:space="preserve"><value>คัดลอกในมุมมองแปลง</value></data>
+  <data name="SetDesc_edit_transformView_copy" xml:space="preserve"><value>สิ่งที่คำสั่งคัดลอกจะนำไปไว้ในคลิปบอร์ดขณะที่มุมมองแปลง (เช่น มุมมอง XOR) ทำงานอยู่</value></data>
+  <data name="SetOpt_edit_transformView_copy_display" xml:space="preserve"><value>ตามที่แสดง</value></data>
+  <data name="SetOpt_edit_transformView_copy_raw" xml:space="preserve"><value>ข้อมูลต้นฉบับ</value></data>
+  <data name="Menu_Data_Patch.Text" xml:space="preserve"><value>แพตช์</value></data>
+  <data name="Menu_Data_Patch.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Data_PatchCreate.Text" xml:space="preserve"><value>สร้างแพตช์...</value></data>
+  <data name="Menu_Data_PatchCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_PatchApply.Text" xml:space="preserve"><value>ใช้แพตช์...</value></data>
+  <data name="Menu_Data_PatchApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Data_TransformView.Text" xml:space="preserve"><value>มุมมองแปลง</value></data>
+  <data name="Menu_Data_TransformView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_TransformDefine.Text" xml:space="preserve"><value>การตั้งค่ามุมมองแปลง...</value></data>
+  <data name="Menu_Data_TransformDefine.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Data_TransformXor.Text" xml:space="preserve"><value>มุมมอง XOR...</value></data>
+  <data name="Menu_Data_TransformXor.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_TransformClear.Text" xml:space="preserve"><value>ล้างมุมมองแปลง</value></data>
+  <data name="Menu_Data_TransformClear.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_TransformApply.Text" xml:space="preserve"><value>ใช้การแปลงนี้กับข้อมูล...</value></data>
+  <data name="Menu_Data_TransformApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="History_TreeView" xml:space="preserve"><value>แสดงเป็นแผนผัง</value></data>
+  <data name="History_SaveHistory" xml:space="preserve"><value>บันทึกประวัติ</value></data>
+  <data name="History_LoadHistory" xml:space="preserve"><value>โหลดประวัติ</value></data>
+  <data name="History_CreatePatch.Text" xml:space="preserve"><value>สร้างแพตช์จากสองจุดนี้...</value></data>
+  <data name="History_NameNode.Text" xml:space="preserve"><value>ตั้งชื่อ...</value></data>
+  <data name="History_DeleteBranch.Text" xml:space="preserve"><value>ลบกิ่ง...</value></data>
+  <data name="History_Pin" xml:space="preserve"><value>ปักหมุด</value></data>
+  <data name="History_Unpin" xml:space="preserve"><value>เลิกปักหมุด</value></data>
+  <data name="History_PinnedMark" xml:space="preserve"><value>ปักหมุดแล้ว</value></data>
+  <data name="History_NodeDetails" xml:space="preserve"><value>ช่วง {0} ({1} ไบต์)  ก่อน: {2}  หลัง: {3}</value></data>
+  <data name="History_LinkedView" xml:space="preserve"><value>บันทึกและโหลดประวัติในแท็บต้นฉบับของมุมมองที่เชื่อมโยงนี้</value></data>
+  <data name="History_NoNamedNodes" xml:space="preserve"><value>ไม่มีโหนดประวัติที่ตั้งชื่อไว้ ตั้งชื่อโหนดในแผงประวัติ (มุมมองแผนผัง)</value></data>
+  <data name="HistorySave_Title" xml:space="preserve"><value>บันทึกประวัติ</value></data>
+  <data name="HistorySave_Path" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="HistorySave_FullHash" xml:space="preserve"><value>รวม SHA-256 ของไฟล์ต้นฉบับทั้งไฟล์ (ช้าสำหรับไฟล์ขนาดใหญ่)</value></data>
+  <data name="HistorySave_EstimateText" xml:space="preserve"><value>ขนาดโดยประมาณ: {0} ({1} โหนด)</value></data>
+  <data name="HistorySave_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="HistorySave_FileType" xml:space="preserve"><value>ประวัติ HexEditor</value></data>
+  <data name="HistorySave_NoSpace" xml:space="preserve"><value>พื้นที่ว่างไม่พอที่จะบันทึกประวัติ: ต้องใช้ {0} แต่เหลือเพียง {1}</value></data>
+  <data name="HistorySave_Operation" xml:space="preserve"><value>กำลังบันทึกประวัติ</value></data>
+  <data name="HistorySave_Done" xml:space="preserve"><value>บันทึกประวัติไปยัง {0} แล้ว</value></data>
+  <data name="HistorySave_Failed" xml:space="preserve"><value>ไม่สามารถบันทึกประวัติได้: {0}</value></data>
+  <data name="HistoryLoad_Title" xml:space="preserve"><value>โหลดประวัติ</value></data>
+  <data name="HistoryLoad_Checking" xml:space="preserve"><value>กำลังตรวจสอบไฟล์ประวัติ</value></data>
+  <data name="HistoryLoad_Mismatch" xml:space="preserve"><value>ไฟล์ต้นฉบับอาจเปลี่ยนแปลงไปตั้งแต่บันทึกประวัตินี้ ต้องการโหลดประวัติต่อไปหรือไม่</value></data>
+  <data name="HistoryLoad_LoadAnyway" xml:space="preserve"><value>โหลด</value></data>
+  <data name="HistoryLoad_Operation" xml:space="preserve"><value>กำลังโหลดประวัติ</value></data>
+  <data name="HistoryLoad_Done" xml:space="preserve"><value>โหลดประวัติจาก {0} แล้ว</value></data>
+  <data name="HistoryLoad_Failed" xml:space="preserve"><value>ไม่สามารถโหลดไฟล์ประวัติได้: {0}</value></data>
+  <data name="HistoryGoTo_Title" xml:space="preserve"><value>ไปที่โหนดประวัติ</value></data>
+  <data name="HistoryGoTo_Filter" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="HistoryGoTo_Go" xml:space="preserve"><value>ไปที่</value></data>
+  <data name="HistoryName_Title" xml:space="preserve"><value>ตั้งชื่อโหนดประวัติ</value></data>
+  <data name="HistoryName_Name" xml:space="preserve"><value>ชื่อ (1 ถึง 100 อักขระ)</value></data>
+  <data name="HistoryName_Note" xml:space="preserve"><value>เว้นว่างเพื่อลบชื่อ โหนดที่ตั้งชื่อแล้วจะไม่ถูกลบโดยการล้างอัตโนมัติ</value></data>
+  <data name="HistoryName_Ok" xml:space="preserve"><value>ตกลง</value></data>
+  <data name="HistoryDelete_Title" xml:space="preserve"><value>ลบกิ่ง</value></data>
+  <data name="HistoryDelete_Body" xml:space="preserve"><value>ลบโหนดนี้และโหนดทั้งหมดที่อยู่หลังจากนี้ในกิ่งนี้หรือไม่ การดำเนินการนี้ไม่สามารถเลิกทำได้</value></data>
+  <data name="HistoryDelete_Delete" xml:space="preserve"><value>ลบกิ่ง</value></data>
+  <data name="HistoryClose_Title" xml:space="preserve"><value>บันทึกประวัติของ {0} หรือไม่</value></data>
+  <data name="HistoryClose_Body" xml:space="preserve"><value>ประวัติมีโหนดที่ตั้งชื่อหรือปักหมุดไว้ ประวัติจะสูญหายเมื่อปิดแท็บ เว้นแต่คุณจะบันทึก</value></data>
+  <data name="HistoryClose_Save" xml:space="preserve"><value>บันทึกประวัติ</value></data>
+  <data name="HistoryClose_DontSave" xml:space="preserve"><value>ปิดโดยไม่บันทึก</value></data>
+  <data name="Inspector_InterpretOriginal.Content" xml:space="preserve"><value>ตีความข้อมูลต้นฉบับ</value></data>
+  <data name="Inspector_InterpretingOriginal" xml:space="preserve"><value>(ต้นฉบับ)</value></data>
+  <data name="Inspector_InterpretingTransformed" xml:space="preserve"><value>(แปลงแล้ว)</value></data>
+  <data name="TransformView_Badge" xml:space="preserve"><value>มุมมองแปลง: {0}</value></data>
+  <data name="TransformView_Title" xml:space="preserve"><value>มุมมองแปลง</value></data>
+  <data name="TransformView_Apply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="TransformView_ClearButton" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="TransformView_Ops" xml:space="preserve"><value>การดำเนินการ (ใช้จากบนลงล่าง สูงสุด 8 รายการ)</value></data>
+  <data name="TransformView_AddKind" xml:space="preserve"><value>การดำเนินการที่จะเพิ่ม</value></data>
+  <data name="TransformView_Add" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="TransformView_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="TransformView_Up" xml:space="preserve"><value>เลื่อนขึ้น</value></data>
+  <data name="TransformView_Down" xml:space="preserve"><value>เลื่อนลง</value></data>
+  <data name="TransformView_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="TransformView_Kind_Add" xml:space="preserve"><value>บวก</value></data>
+  <data name="TransformView_Kind_Subtract" xml:space="preserve"><value>ลบ</value></data>
+  <data name="TransformView_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="TransformView_Kind_RotateLeft" xml:space="preserve"><value>หมุนซ้าย</value></data>
+  <data name="TransformView_Kind_RotateRight" xml:space="preserve"><value>หมุนขวา</value></data>
+  <data name="TransformView_Kind_ByteSwap16" xml:space="preserve"><value>สลับไบต์ (16 บิต)</value></data>
+  <data name="TransformView_Kind_ByteSwap32" xml:space="preserve"><value>สลับไบต์ (32 บิต)</value></data>
+  <data name="TransformView_Kind_ByteSwap64" xml:space="preserve"><value>สลับไบต์ (64 บิต)</value></data>
+  <data name="TransformView_Kind_ReverseBits" xml:space="preserve"><value>กลับลำดับบิต</value></data>
+  <data name="TransformView_Kind_SwapNibbles" xml:space="preserve"><value>สลับนิบเบิล</value></data>
+  <data name="TransformView_Kind_Plugin" xml:space="preserve"><value>ปลั๊กอิน: {0}</value></data>
+  <data name="TransformView_KeyHex" xml:space="preserve"><value>คีย์ไบต์</value></data>
+  <data name="TransformView_Key" xml:space="preserve"><value>คีย์ (Hex 1 ถึง 256 ไบต์)</value></data>
+  <data name="TransformView_Plugin" xml:space="preserve"><value>การแปลงด้วยปลั๊กอิน</value></data>
+  <data name="TransformView_Scope" xml:space="preserve"><value>ช่วงและจุดเริ่มต้นของคีย์</value></data>
+  <data name="TransformView_Whole" xml:space="preserve"><value>ทั้งเอกสาร</value></data>
+  <data name="TransformView_Range" xml:space="preserve"><value>ช่วง</value></data>
+  <data name="TransformView_KeyOrigin" xml:space="preserve"><value>จุดเริ่มต้นของคีย์</value></data>
+  <data name="TransformView_Origin_Zero" xml:space="preserve"><value>นับจากออฟเซ็ต 0</value></data>
+  <data name="TransformView_Origin_Range" xml:space="preserve"><value>จากจุดเริ่มต้นของช่วง</value></data>
+  <data name="TransformView_Origin_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="TransformView_OriginOffset" xml:space="preserve"><value>ออฟเซ็ตจุดเริ่มต้นของคีย์</value></data>
+  <data name="TransformView_Saved" xml:space="preserve"><value>การแปลงที่บันทึกไว้</value></data>
+  <data name="TransformView_SavedPlaceholder" xml:space="preserve"><value>โหลดการแปลงที่บันทึกไว้</value></data>
+  <data name="TransformView_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="TransformView_Save" xml:space="preserve"><value>บันทึกด้วยชื่อนี้</value></data>
+  <data name="TransformView_PreviewTitle" xml:space="preserve"><value>ตัวอย่าง (16 ไบต์ที่เคอร์เซอร์)</value></data>
+  <data name="TransformView_PreviewLines" xml:space="preserve"><value>{0}
+ต้นฉบับ:  {1}
+ที่แสดง: {2}</value></data>
+  <data name="TransformView_XorTitle" xml:space="preserve"><value>มุมมอง XOR</value></data>
+  <data name="TransformView_Error_KeyEmpty" xml:space="preserve"><value>ป้อนคีย์</value></data>
+  <data name="TransformView_Error_KeyHex" xml:space="preserve"><value>คีย์ต้องเป็นไบต์ Hex (จำนวนหลักเป็นเลขคู่ เช่น 5A 3C)</value></data>
+  <data name="TransformView_Error_KeyTooLong" xml:space="preserve"><value>คีย์ยาวได้สูงสุด 256 ไบต์</value></data>
+  <data name="TransformView_Error_Operand" xml:space="preserve"><value>ค่าไม่พอดีกับขนาดองค์ประกอบ</value></data>
+  <data name="TransformView_Error_Range" xml:space="preserve"><value>ป้อนช่วงที่ถูกต้อง (จุดเริ่มต้น 0 ขึ้นไป ความยาว 1 ขึ้นไป)</value></data>
+  <data name="TransformView_Error_Origin" xml:space="preserve"><value>ป้อนออฟเซ็ตที่ถูกต้องสำหรับจุดเริ่มต้นของคีย์</value></data>
+  <data name="TransformView_Error_OpCount" xml:space="preserve"><value>เพิ่มการดำเนินการ 1 ถึง 8 รายการ</value></data>
+  <data name="TransformView_Error_InvalidSize" xml:space="preserve"><value>ขนาดองค์ประกอบต้องเป็น 1, 2, 4 หรือ 8 ไบต์</value></data>
+  <data name="TransformView_Error_BitCountOutOfRange" xml:space="preserve"><value>จำนวนบิตต้องอยู่ระหว่าง 1 ถึงขนาดบิตขององค์ประกอบลบ 1</value></data>
+  <data name="TransformView_Error_InvalidRange" xml:space="preserve"><value>ป้อนช่วงที่ถูกต้อง</value></data>
+  <data name="TransformView_Error_PluginMissing" xml:space="preserve"><value>ไม่มีปลั๊กอินที่การแปลงนี้ใช้อยู่</value></data>
+  <data name="TransformView_NotActive" xml:space="preserve"><value>ไม่มีมุมมองแปลงที่ใช้งานอยู่</value></data>
+  <data name="TransformView_LinkedView" xml:space="preserve"><value>ไม่สามารถตั้งมุมมองแปลงบนมุมมองที่เชื่อมโยงได้</value></data>
+  <data name="TransformView_LengthNotice" xml:space="preserve"><value>ไม่สามารถแก้ไขที่เปลี่ยนความยาวในมุมมองแปลงได้</value></data>
+  <data name="TransformView_ReadOnlyNotice" xml:space="preserve"><value>มุมมองแปลงนี้ไม่มีการแปลงย้อนกลับจึงแก้ไขไม่ได้ ล้างมุมมองแปลงเพื่อแก้ไข</value></data>
+  <data name="TransformView_ClearAction" xml:space="preserve"><value>ล้างมุมมองแปลง</value></data>
+  <data name="TransformView_ApplyTitle" xml:space="preserve"><value>ใช้การแปลงกับข้อมูล</value></data>
+  <data name="TransformView_ApplyConfirm" xml:space="preserve"><value>เขียนการแปลง "{0}" ลงในข้อมูลและล้างมุมมองแปลงหรือไม่</value></data>
+  <data name="Patch_Format_Auto" xml:space="preserve"><value>อัตโนมัติ (IPS หรือ IPS32)</value></data>
+  <data name="Patch_Format_Ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Patch_Format_Ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Patch_Format_Ups" xml:space="preserve"><value>UPS</value></data>
+  <data name="Patch_Format_Bps" xml:space="preserve"><value>BPS</value></data>
+  <data name="Patch_Format_HexPatch" xml:space="preserve"><value>แพตช์ HexEditor (.hexpatch)</value></data>
+  <data name="Patch_Format_SelfApplying" xml:space="preserve"><value>ใช้ได้ด้วยตัวเอง (EXE)</value></data>
+  <data name="Patch_Unavailable_IpsOffsetLimit" xml:space="preserve"><value>IPS ไม่สามารถแสดงการเปลี่ยนแปลงที่ออฟเซ็ต 16 MiB (0x1000000) ขึ้นไปได้</value></data>
+  <data name="Patch_Unavailable_Ips32OffsetLimit" xml:space="preserve"><value>IPS32 ไม่สามารถแสดงการเปลี่ยนแปลงที่ออฟเซ็ต 4 GiB ขึ้นไปได้</value></data>
+  <data name="Patch_Unavailable_StubMissing" xml:space="preserve"><value>บิลด์นี้ไม่มีโปรแกรมใช้แพตช์</value></data>
+  <data name="Patch_UseOtherFormats" xml:space="preserve"><value>ใช้ IPS32, UPS, BPS หรือรูปแบบแพตช์ของ HexEditor</value></data>
+  <data name="Patch_LinkedView" xml:space="preserve"><value>สร้างแพตช์ในแท็บต้นฉบับของมุมมองที่เชื่อมโยงนี้</value></data>
+  <data name="PatchCreate_Title" xml:space="preserve"><value>สร้างแพตช์</value></data>
+  <data name="PatchCreate_Source" xml:space="preserve"><value>เปรียบเทียบ</value></data>
+  <data name="PatchCreate_SourceSaved" xml:space="preserve"><value>เนื้อหาที่บันทึกไว้และเนื้อหาปัจจุบัน</value></data>
+  <data name="PatchCreate_SourceTabs" xml:space="preserve"><value>สองไฟล์ (แท็บ): จากแท็บอื่นไปยังแท็บนี้</value></data>
+  <data name="PatchCreate_OtherTab" xml:space="preserve"><value>แท็บต้นฉบับ</value></data>
+  <data name="PatchCreate_SourceHistory" xml:space="preserve"><value>สองจุดในประวัติ</value></data>
+  <data name="PatchCreate_FromPoint" xml:space="preserve"><value>จาก</value></data>
+  <data name="PatchCreate_ToPoint" xml:space="preserve"><value>ถึง</value></data>
+  <data name="PatchCreate_HistoryPairText" xml:space="preserve"><value>จากโหนดประวัติ #{0} ถึง #{1}</value></data>
+  <data name="PatchCreate_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="PatchCreate_AutoChoice" xml:space="preserve"><value>ใช้ {0}</value></data>
+  <data name="PatchCreate_Rle" xml:space="preserve"><value>ใช้เรคคอร์ด RLE</value></data>
+  <data name="PatchCreate_FullHash" xml:space="preserve"><value>รวม SHA-256 ของข้อมูลทั้งหมด (ช้าสำหรับไฟล์ขนาดใหญ่)</value></data>
+  <data name="PatchCreate_DefaultFileName" xml:space="preserve"><value>ชื่อไฟล์เริ่มต้นที่จะแพตช์</value></data>
+  <data name="PatchCreate_Message" xml:space="preserve"><value>ข้อความที่แสดงให้ผู้ใช้เห็น</value></data>
+  <data name="PatchCreate_Architecture" xml:space="preserve"><value>โปรแกรมใช้แพตช์</value></data>
+  <data name="PatchCreate_SmartScreen" xml:space="preserve"><value>โปรแกรมนี้ไม่ได้ลงนามโค้ด Windows SmartScreen จะแสดงคำเตือนเมื่อผู้รับเรียกใช้</value></data>
+  <data name="PatchCreate_Path" xml:space="preserve"><value>ไฟล์เอาต์พุต</value></data>
+  <data name="PatchCreate_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="PatchCreate_Computing" xml:space="preserve"><value>กำลังคำนวณความแตกต่าง...</value></data>
+  <data name="PatchCreate_NoChanges" xml:space="preserve"><value>ไม่มีความแตกต่าง</value></data>
+  <data name="PatchCreate_SummaryText" xml:space="preserve"><value>เรคคอร์ด: {0} ขนาดโดยประมาณ: {1}</value></data>
+  <data name="PatchCreate_Inefficient" xml:space="preserve"><value>รูปแบบนี้ไม่สามารถแสดงการแทรกและการลบได้อย่างมีประสิทธิภาพ ใช้ BPS หรือรูปแบบแพตช์ของ HexEditor</value></data>
+  <data name="PatchCreate_Failed" xml:space="preserve"><value>ไม่สามารถคำนวณความแตกต่างได้: {0}</value></data>
+  <data name="PatchCreate_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="Patch_Operation_Create" xml:space="preserve"><value>กำลังสร้างแพตช์ {0}</value></data>
+  <data name="Patch_Operation_Verify" xml:space="preserve"><value>กำลังตรวจสอบข้อมูลหลังแพตช์</value></data>
+  <data name="Patch_Created" xml:space="preserve"><value>สร้าง {0} แล้ว</value></data>
+  <data name="Patch_CreatedSelfApplying" xml:space="preserve"><value>สร้าง {0} แล้ว ไม่ได้ลงนามโค้ด Windows SmartScreen จึงจะแสดงคำเตือนเมื่อผู้รับเรียกใช้</value></data>
+  <data name="Patch_CreateFailed" xml:space="preserve"><value>ไม่สามารถสร้างแพตช์ได้: {0}</value></data>
+  <data name="PatchApply_Title" xml:space="preserve"><value>ใช้แพตช์ {0}</value></data>
+  <data name="PatchApply_InfoText" xml:space="preserve"><value>รูปแบบ: {0}
+เรคคอร์ด: {1}
+ไบต์ที่จะเปลี่ยน: {2}
+ความยาวหลังใช้: {3}</value></data>
+  <data name="PatchApply_Reverse" xml:space="preserve"><value>ย้อนกลับ (เลิกแพตช์ที่ใช้ไปแล้ว)</value></data>
+  <data name="PatchApply_VerificationText" xml:space="preserve"><value>การตรวจสอบต้นฉบับ: {0}</value></data>
+  <data name="PatchApply_Verifying" xml:space="preserve"><value>กำลังตรวจสอบ...</value></data>
+  <data name="PatchApply_Match" xml:space="preserve"><value>ตรงกัน</value></data>
+  <data name="PatchApply_Mismatch" xml:space="preserve"><value>ไม่ตรงกัน</value></data>
+  <data name="PatchApply_Unverifiable" xml:space="preserve"><value>ตรวจสอบไม่ได้</value></data>
+  <data name="PatchApply_MismatchWarning" xml:space="preserve"><value>แพตช์นี้อาจใช้สำหรับไฟล์อื่น</value></data>
+  <data name="PatchApply_Apply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="PatchApply_ApplyAnyway" xml:space="preserve"><value>ใช้ต่อไป</value></data>
+  <data name="PatchApply_SkipVerification" xml:space="preserve"><value>ข้ามการตรวจสอบและใช้</value></data>
+  <data name="Patch_Applied" xml:space="preserve"><value>ใช้แพตช์ {0} แล้ว</value></data>
+  <data name="Patch_Error_UnknownFormat" xml:space="preserve"><value>ไม่รู้จักรูปแบบแพตช์</value></data>
+  <data name="Patch_Error_Record" xml:space="preserve"><value>เรคคอร์ดที่ {0} ของแพตช์เสียหาย</value></data>
+  <data name="Patch_Error_Corrupt" xml:space="preserve"><value>แพตช์เสียหาย: {0}</value></data>
+  <data name="Patch_Error_FixedLength" xml:space="preserve"><value>ไม่สามารถใช้แพตช์ที่เปลี่ยนความยาวกับเอกสารนี้ได้ (ความยาวคงที่)</value></data>
+  <data name="Patch_Error_ResultMismatch" xml:space="preserve"><value>ข้อมูลหลังแพตช์ไม่ตรงกับผลลัพธ์ที่บันทึกไว้ในแพตช์ จึงไม่ได้ใช้แพตช์</value></data>
+  <data name="PatchApplier_Title" xml:space="preserve"><value>ใช้แพตช์</value></data>
+  <data name="PatchApplier_NoPatch" xml:space="preserve"><value>โปรแกรมนี้ไม่มีแพตช์</value></data>
+  <data name="PatchApplier_Intro" xml:space="preserve"><value>โปรแกรมนี้ใช้แพตช์กับไฟล์ เลือกไฟล์ที่จะแพตช์</value></data>
+  <data name="PatchApplier_SelectTitle" xml:space="preserve"><value>เลือกไฟล์ที่จะแพตช์</value></data>
+  <data name="PatchApplier_AllFiles" xml:space="preserve"><value>ไฟล์ทั้งหมด</value></data>
+  <data name="PatchApplier_Mismatch" xml:space="preserve"><value>แพตช์นี้อาจใช้สำหรับไฟล์อื่น: {0} ไม่ตรงกับต้นฉบับที่บันทึกไว้ในแพตช์
+
+ต้องการใช้แพตช์ต่อไปหรือไม่</value></data>
+  <data name="PatchApplier_Backup" xml:space="preserve"><value>สำรองไฟล์ต้นฉบับ ({0}) ก่อนใช้แพตช์หรือไม่</value></data>
+  <data name="PatchApplier_Success" xml:space="preserve"><value>ใช้แพตช์กับ {0} แล้ว</value></data>
+  <data name="PatchApplier_BackupDone" xml:space="preserve"><value>บันทึกไฟล์ต้นฉบับเป็น {0} แล้ว</value></data>
+  <data name="PatchApplier_Failed" xml:space="preserve"><value>ไม่สามารถใช้แพตช์ได้: {0}
+
+ไฟล์ไม่ได้เปลี่ยนแปลง</value></data>
+  <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>ข้อมูลหลังแพตช์ไม่ตรงกับผลลัพธ์ที่บันทึกไว้ในแพตช์</value></data>
+  <data name="Cmd_compare_createPatch" xml:space="preserve"><value>สร้างแพตช์จากการเปรียบเทียบ...</value></data>
+  <data name="CmdAlias_compare_createPatch" xml:space="preserve"><value>แพตช์ ความแตกต่าง ips ups bps hexpatch diff</value></data>
+  <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>จาก {0} (ซ้าย) ถึง {1} (ขวา)</value></data>
+  <data name="Patch_NoCompare" xml:space="preserve"><value>เปิดการเปรียบเทียบก่อน</value></data>
+  <data name="Patch_NoSpace" xml:space="preserve"><value>พื้นที่ว่างไม่พอที่จะเขียนแพตช์: ต้องใช้ประมาณ {0} แต่เหลือเพียง {1}</value></data>
+  <data name="TransformView_NoLinkedView" xml:space="preserve"><value>ไม่สามารถเปิดมุมมองที่เชื่อมโยงขณะที่มุมมองแปลงทำงานอยู่ ล้างมุมมองแปลงก่อน หรือเปิดช่วงนั้นเป็นสำเนา</value></data>
+  <data name="Menu_Data_Encrypt.Text" xml:space="preserve"><value>เข้ารหัส...</value></data>
+  <data name="Menu_Data_Encrypt.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Data_Decrypt.Text" xml:space="preserve"><value>ถอดรหัส...</value></data>
+  <data name="Menu_Data_Decrypt.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Compress.Text" xml:space="preserve"><value>บีบอัด...</value></data>
+  <data name="Menu_Data_Compress.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Data_Decompress.Text" xml:space="preserve"><value>คลายการบีบอัด...</value></data>
+  <data name="Menu_Data_Decompress.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_SelectCompressed.Text" xml:space="preserve"><value>เลือกข้อมูลที่บีบอัด</value></data>
+  <data name="Menu_Data_SelectCompressed.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Yara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_Search_Yara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_data_encrypt" xml:space="preserve"><value>เข้ารหัส...</value></data>
+  <data name="CmdAlias_data_encrypt" xml:space="preserve"><value>เข้ารหัส รหัสลับ AES encrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_decrypt" xml:space="preserve"><value>ถอดรหัส...</value></data>
+  <data name="CmdAlias_data_decrypt" xml:space="preserve"><value>ถอดรหัส รหัสลับ AES decrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_compress" xml:space="preserve"><value>บีบอัด...</value></data>
+  <data name="CmdAlias_data_compress" xml:space="preserve"><value>บีบอัด zlib gzip zstd lz4 xz compress</value></data>
+  <data name="Cmd_data_decompress" xml:space="preserve"><value>คลายการบีบอัด...</value></data>
+  <data name="CmdAlias_data_decompress" xml:space="preserve"><value>คลายการบีบอัด แตกไฟล์ inflate unzip zlib gzip zstd lz4 xz decompress</value></data>
+  <data name="Cmd_data_selectCompressed" xml:space="preserve"><value>เลือกข้อมูลที่บีบอัด</value></data>
+  <data name="CmdAlias_data_selectCompressed" xml:space="preserve"><value>เลือก บีบอัด ช่วง deflate select compressed range</value></data>
+  <data name="Cmd_data_derived_writeBack" xml:space="preserve"><value>เขียนกลับไปยังต้นทาง</value></data>
+  <data name="CmdAlias_data_derived_writeBack" xml:space="preserve"><value>เขียนกลับ สืบทอด บีบอัดใหม่ เข้ารหัสใหม่ write back derived recompress reencrypt</value></data>
+  <data name="Cmd_search_yara" xml:space="preserve"><value>สแกน YARA</value></data>
+  <data name="CmdAlias_search_yara" xml:space="preserve"><value>yara กฎ สแกน rules scan</value></data>
+  <data name="Cmd_view_panel_yara" xml:space="preserve"><value>สลับ YARA</value></data>
+  <data name="CmdAlias_view_panel_yara" xml:space="preserve"><value>yara แผง yara panel</value></data>
+  <data name="Panel_Yara_Title" xml:space="preserve"><value>YARA</value></data>
+  <data name="Set_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>ขนาดการคลายการบีบอัดที่ต้องยืนยัน (MiB)</value></data>
+  <data name="SetDesc_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>เมื่อข้อมูลที่คลายการบีบอัดมีขนาดเกินค่านี้ การคลายการบีบอัดจะหยุดชั่วคราวและถามว่าจะดำเนินการต่อหรือไม่ (ป้องกันระเบิดบีบอัด)</value></data>
+  <data name="Set_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA: ขนาดบล็อก (MiB)</value></data>
+  <data name="SetDesc_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA สแกนข้อมูลเป็นบล็อกขนาดนี้ โดยแต่ละบล็อกจะซ้อนทับกับ 64 KB สุดท้ายของบล็อกก่อนหน้า</value></data>
+  <data name="Set_search_yara_timeLimitSeconds" xml:space="preserve"><value>YARA: ขีดจำกัดเวลา (วินาที)</value></data>
+  <data name="SetDesc_search_yara_timeLimitSeconds" xml:space="preserve"><value>การสแกนจะหยุดเมื่อถึงขีดจำกัดเวลานี้และเก็บผลลัพธ์ที่พบไว้</value></data>
+  <data name="Codec_Destination" xml:space="preserve"><value>เขียนผลลัพธ์ไปที่</value></data>
+  <data name="Codec_DestReplace" xml:space="preserve"><value>แทนที่ส่วนที่เลือก</value></data>
+  <data name="Codec_DestNewTab" xml:space="preserve"><value>เปิดในแท็บใหม่</value></data>
+  <data name="Codec_DestReadOnly" xml:space="preserve"><value>เอกสารเป็นแบบอ่านอย่างเดียว ผลลัพธ์จึงเปิดในแท็บใหม่</value></data>
+  <data name="Codec_DestFixedLength" xml:space="preserve"><value>ไม่สามารถเปลี่ยนความยาวของเอกสารนี้ได้ ผลลัพธ์จึงเปิดในแท็บใหม่</value></data>
+  <data name="Codec_Error_MultipleRanges" xml:space="preserve"><value>คำสั่งนี้ทำงานกับช่วงเดียวเท่านั้น เลือกช่วงเดียว</value></data>
+  <data name="Operation_Encrypt" xml:space="preserve"><value>เข้ารหัส</value></data>
+  <data name="Operation_Decrypt" xml:space="preserve"><value>ถอดรหัส</value></data>
+  <data name="Operation_Compress" xml:space="preserve"><value>บีบอัด</value></data>
+  <data name="Operation_Decompress" xml:space="preserve"><value>คลายการบีบอัด</value></data>
+  <data name="Operation_SelectCompressed" xml:space="preserve"><value>เลือกข้อมูลที่บีบอัด</value></data>
+  <data name="Operation_WriteBack" xml:space="preserve"><value>เขียนกลับไปยังต้นทาง</value></data>
+  <data name="Compression_Format_Deflate" xml:space="preserve"><value>deflate (ดิบ)</value></data>
+  <data name="Compression_Format_Zlib" xml:space="preserve"><value>zlib</value></data>
+  <data name="Compression_Format_Gzip" xml:space="preserve"><value>gzip</value></data>
+  <data name="Compression_Format_Brotli" xml:space="preserve"><value>Brotli</value></data>
+  <data name="Compression_Format_Zstd" xml:space="preserve"><value>zstd</value></data>
+  <data name="Compression_Format_Lz4Frame" xml:space="preserve"><value>LZ4 (เฟรม)</value></data>
+  <data name="Compression_Format_Lz4Block" xml:space="preserve"><value>LZ4 (บล็อก)</value></data>
+  <data name="Compression_Format_Lzma" xml:space="preserve"><value>LZMA (.lzma)</value></data>
+  <data name="Compression_Format_Xz" xml:space="preserve"><value>XZ</value></data>
+  <data name="Compress_Title" xml:space="preserve"><value>บีบอัด</value></data>
+  <data name="Compress_Run" xml:space="preserve"><value>บีบอัด</value></data>
+  <data name="Compress_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Compress_Level" xml:space="preserve"><value>ระดับการบีบอัด</value></data>
+  <data name="Compress_LevelRangeText" xml:space="preserve"><value>{0}–{1} (มาตรฐาน {2})</value></data>
+  <data name="Compress_GzipHeader" xml:space="preserve"><value>เก็บชื่อไฟล์และเวลาที่แก้ไขไว้ในส่วนหัว</value></data>
+  <data name="Compress_Error_Lz4BlockLimit" xml:space="preserve"><value>รูปแบบบล็อกของ LZ4 เก็บข้อมูลในบล็อกเดียว จึงบีบอัดได้สูงสุด {0} GB ใช้รูปแบบเฟรมของ LZ4 สำหรับข้อมูลที่ใหญ่กว่า</value></data>
+  <data name="Decompress_Title" xml:space="preserve"><value>คลายการบีบอัด</value></data>
+  <data name="Decompress_Run" xml:space="preserve"><value>คลายการบีบอัด</value></data>
+  <data name="Decompress_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Decompress_Auto" xml:space="preserve"><value>ตรวจหาอัตโนมัติ</value></data>
+  <data name="Decompress_Clue" xml:space="preserve"><value>ตรวจพบจากส่วนหัว: {0}</value></data>
+  <data name="Decompress_NoClue" xml:space="preserve"><value>ส่วนหัวไม่มีลายเซ็นรูปแบบ หากตรวจหาไม่สำเร็จ ระบบจะขอให้คุณเลือกรูปแบบ</value></data>
+  <data name="Decompress_Undetected" xml:space="preserve"><value>ไม่สามารถตรวจหารูปแบบอัตโนมัติได้ เลือกรูปแบบ</value></data>
+  <data name="Decompress_Trailing" xml:space="preserve"><value>ข้อมูลที่บีบอัดสิ้นสุดหลังจาก {0} ไบต์ ส่วนที่เหลืออีก {1} ไบต์ไม่ได้เปลี่ยนแปลง</value></data>
+  <data name="Decompress_LimitTitle" xml:space="preserve"><value>ข้อมูลที่คลายการบีบอัดมีขนาดใหญ่</value></data>
+  <data name="Decompress_LimitBody" xml:space="preserve"><value>ข้อมูลที่คลายการบีบอัดมีขนาดเกิน {0} แล้ว (ขนาดที่บีบอัด {1} MB) คลายการบีบอัดต่อหรือไม่</value></data>
+  <data name="Decompress_LimitGiB" xml:space="preserve"><value>{0} GiB</value></data>
+  <data name="Decompress_LimitMiB" xml:space="preserve"><value>{0} MiB</value></data>
+  <data name="Decompress_LimitContinue" xml:space="preserve"><value>ดำเนินการต่อ</value></data>
+  <data name="Decompress_LimitAbort" xml:space="preserve"><value>ยกเลิก</value></data>
+  <data name="Decompress_ChecksumMismatch" xml:space="preserve"><value>เช็กซัม {0} ไม่ตรงกัน ข้อมูลที่คลายการบีบอัดอาจเสียหาย ใช้ผลลัพธ์ต่อไปหรือไม่</value></data>
+  <data name="Decompress_UseResult" xml:space="preserve"><value>ใช้ผลลัพธ์</value></data>
+  <data name="Decompress_Corrupt" xml:space="preserve"><value>ข้อมูลที่บีบอัดเสียหายที่ออฟเซ็ต {0}</value></data>
+  <data name="Decompress_Truncated" xml:space="preserve"><value>ข้อมูลที่บีบอัดสิ้นสุดโดยไม่คาดคิดที่ออฟเซ็ต {0}</value></data>
+  <data name="Decompress_Unsupported" xml:space="preserve"><value>ข้อมูลที่บีบอัดนี้ใช้คุณสมบัติที่ไม่รองรับ: {0}</value></data>
+  <data name="Decompress_MemoryLimit" xml:space="preserve"><value>การคลายการบีบอัดข้อมูลนี้ต้องใช้หน่วยความจำมากเกินไป</value></data>
+  <data name="Decompress_PartialAvailable" xml:space="preserve"><value>คลายการบีบอัดได้ {0} ไบต์ก่อนเกิดข้อผิดพลาด</value></data>
+  <data name="Decompress_OpenPartial" xml:space="preserve"><value>เปิดส่วนที่คลายการบีบอัดแล้วในแท็บใหม่</value></data>
+  <data name="SelectCompressed_Found" xml:space="preserve"><value>เลือกข้อมูลที่บีบอัดแบบ {0} แล้ว: {1} ไบต์ (ขนาดหลังคลายการบีบอัด {2} ไบต์)</value></data>
+  <data name="SelectCompressed_NotFound" xml:space="preserve"><value>ไม่พบข้อมูลที่บีบอัดที่อ่านได้จากตำแหน่งเคอร์เซอร์</value></data>
+  <data name="Cipher_EncryptTitle" xml:space="preserve"><value>เข้ารหัส</value></data>
+  <data name="Cipher_DecryptTitle" xml:space="preserve"><value>ถอดรหัส</value></data>
+  <data name="Cipher_Encrypt" xml:space="preserve"><value>เข้ารหัส</value></data>
+  <data name="Cipher_Decrypt" xml:space="preserve"><value>ถอดรหัส</value></data>
+  <data name="Cipher_Algorithm" xml:space="preserve"><value>อัลกอริทึม</value></data>
+  <data name="Cipher_Algorithm_Aes128" xml:space="preserve"><value>AES-128</value></data>
+  <data name="Cipher_Algorithm_Aes192" xml:space="preserve"><value>AES-192</value></data>
+  <data name="Cipher_Algorithm_Aes256" xml:space="preserve"><value>AES-256</value></data>
+  <data name="Cipher_Algorithm_ChaCha20Poly1305" xml:space="preserve"><value>ChaCha20-Poly1305</value></data>
+  <data name="Cipher_Algorithm_TripleDes" xml:space="preserve"><value>3DES (TripleDES)</value></data>
+  <data name="Cipher_Algorithm_Des" xml:space="preserve"><value>DES</value></data>
+  <data name="Cipher_Algorithm_Rc4" xml:space="preserve"><value>RC4</value></data>
+  <data name="Cipher_Mode" xml:space="preserve"><value>โหมด</value></data>
+  <data name="Cipher_Mode_None" xml:space="preserve"><value>—</value></data>
+  <data name="Cipher_Mode_Ecb" xml:space="preserve"><value>ECB</value></data>
+  <data name="Cipher_Mode_Cbc" xml:space="preserve"><value>CBC</value></data>
+  <data name="Cipher_Mode_Cfb8" xml:space="preserve"><value>CFB8</value></data>
+  <data name="Cipher_Mode_Cfb128" xml:space="preserve"><value>CFB128</value></data>
+  <data name="Cipher_Mode_Ctr" xml:space="preserve"><value>CTR</value></data>
+  <data name="Cipher_Mode_Gcm" xml:space="preserve"><value>GCM</value></data>
+  <data name="Cipher_Padding" xml:space="preserve"><value>การเติมช่องว่าง (padding)</value></data>
+  <data name="Cipher_Padding_Pkcs7" xml:space="preserve"><value>PKCS#7</value></data>
+  <data name="Cipher_Padding_Zeros" xml:space="preserve"><value>ศูนย์</value></data>
+  <data name="Cipher_Padding_AnsiX923" xml:space="preserve"><value>ANSI X9.23</value></data>
+  <data name="Cipher_Padding_Iso10126" xml:space="preserve"><value>ISO 10126</value></data>
+  <data name="Cipher_Padding_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="Cipher_InsecureText" xml:space="preserve"><value>วิธีนี้ไม่ปลอดภัย ใช้เพื่อความเข้ากันได้เท่านั้น</value></data>
+  <data name="Cipher_Unsupported" xml:space="preserve"><value>{0} ไม่พร้อมใช้งานใน Windows เวอร์ชันนี้</value></data>
+  <data name="Cipher_AeadLimit" xml:space="preserve"><value>การเข้ารหัสแบบมีการพิสูจน์ตัวตน (GCM, ChaCha20-Poly1305) ใช้กับข้อมูลที่ใหญ่กว่า 1 GiB ไม่ได้</value></data>
+  <data name="Cipher_KeySource" xml:space="preserve"><value>คีย์</value></data>
+  <data name="Cipher_KeyHex" xml:space="preserve"><value>ป้อนเป็น Hex</value></data>
+  <data name="Cipher_KeyPassphrase" xml:space="preserve"><value>สร้างจากวลีรหัสผ่าน (PBKDF2-HMAC-SHA256)</value></data>
+  <data name="Cipher_Key" xml:space="preserve"><value>คีย์ (Hex)</value></data>
+  <data name="Cipher_Passphrase" xml:space="preserve"><value>วลีรหัสผ่าน</value></data>
+  <data name="Cipher_ShowKey" xml:space="preserve"><value>แสดง</value></data>
+  <data name="Cipher_Iterations" xml:space="preserve"><value>จำนวนรอบ</value></data>
+  <data name="Cipher_Salt" xml:space="preserve"><value>ซอลต์ (Hex)</value></data>
+  <data name="Cipher_SaltPlaceholder" xml:space="preserve"><value>เว้นว่าง: สร้าง 16 ไบต์แบบสุ่ม</value></data>
+  <data name="Cipher_SaltGenerated" xml:space="preserve"><value>สร้างซอลต์แบบสุ่มแล้ว เก็บไว้เพื่อใช้ถอดรหัสภายหลัง: {0}</value></data>
+  <data name="Cipher_Iv" xml:space="preserve"><value>IV (Hex)</value></data>
+  <data name="Cipher_IvBytes" xml:space="preserve"><value>IV (Hex {0} ไบต์)</value></data>
+  <data name="Cipher_NonceBytes" xml:space="preserve"><value>Nonce (Hex {0} ไบต์)</value></data>
+  <data name="Cipher_RandomIv" xml:space="preserve"><value>สร้างแบบสุ่ม</value></data>
+  <data name="Cipher_Aad" xml:space="preserve"><value>ข้อมูลพิสูจน์ตัวตนเพิ่มเติม (Hex ไม่บังคับ)</value></data>
+  <data name="Cipher_TagAppend" xml:space="preserve"><value>ต่อแท็กพิสูจน์ตัวตนท้ายผลลัพธ์</value></data>
+  <data name="Cipher_TagSeparate" xml:space="preserve"><value>แสดงเฉพาะแท็กพิสูจน์ตัวตน</value></data>
+  <data name="Cipher_TagFromEnd" xml:space="preserve"><value>แท็ก: 16 ไบต์สุดท้ายของส่วนที่เลือก</value></data>
+  <data name="Cipher_TagHex" xml:space="preserve"><value>แท็ก: ป้อนเป็น Hex</value></data>
+  <data name="Cipher_Tag" xml:space="preserve"><value>แท็กพิสูจน์ตัวตน (Hex 16 ไบต์)</value></data>
+  <data name="Cipher_TagResult" xml:space="preserve"><value>แท็กพิสูจน์ตัวตน</value></data>
+  <data name="Cipher_Error_KeyHex" xml:space="preserve"><value>ป้อนคีย์เป็นไบต์ Hex</value></data>
+  <data name="Cipher_Error_KeyLength" xml:space="preserve"><value>คีย์ของ {0} ยาว {1} ไบต์ (คุณป้อน {2} ไบต์)</value></data>
+  <data name="Cipher_Error_IvLength" xml:space="preserve"><value>IV ของ {0} ยาว {1} ไบต์ (คุณป้อน {2} ไบต์)</value></data>
+  <data name="Cipher_Error_NonceLength" xml:space="preserve"><value>nonce ของ {0} ยาว {1} ไบต์ (คุณป้อน {2} ไบต์)</value></data>
+  <data name="Cipher_Error_TagLength" xml:space="preserve"><value>แท็กพิสูจน์ตัวตนยาว {0} ไบต์ (คุณป้อน {1} ไบต์)</value></data>
+  <data name="Cipher_Error_MissingTag" xml:space="preserve"><value>ส่วนที่เลือกสั้นกว่าแท็กพิสูจน์ตัวตนขนาด 16 ไบต์</value></data>
+  <data name="Cipher_Error_BlockMultiple" xml:space="preserve"><value>ความยาวต้องเป็นผลคูณของขนาดบล็อก ({0} ไบต์)</value></data>
+  <data name="Cipher_Error_Settings" xml:space="preserve"><value>การตั้งค่าไม่ถูกต้อง</value></data>
+  <data name="Cipher_Error_Padding" xml:space="preserve"><value>การเติมช่องว่างไม่ถูกต้อง คีย์ IV หรือโหมดอาจผิด</value></data>
+  <data name="Cipher_DecryptWithoutPadding" xml:space="preserve"><value>ถอดรหัสโดยไม่จัดการ padding</value></data>
+  <data name="Cipher_Error_Authentication" xml:space="preserve"><value>การพิสูจน์ตัวตนล้มเหลว คีย์ nonce ข้อมูลเพิ่มเติม หรือข้อมูลไม่ตรงกัน ข้อมูลไม่ได้เปลี่ยนแปลง</value></data>
+  <data name="Derived_TabRange" xml:space="preserve"><value> [0x{0}-0x{1} {2}]</value></data>
+  <data name="Derived_Label_Decompressed" xml:space="preserve"><value>คลายการบีบอัดแล้ว</value></data>
+  <data name="Derived_Label_Decrypted" xml:space="preserve"><value>ถอดรหัสแล้ว</value></data>
+  <data name="Derived_Label_Compressed" xml:space="preserve"><value>บีบอัดแล้ว</value></data>
+  <data name="Derived_Label_Encrypted" xml:space="preserve"><value>เข้ารหัสแล้ว</value></data>
+  <data name="Derived_Label_Partial" xml:space="preserve"><value>คลายการบีบอัดบางส่วน</value></data>
+  <data name="Derived_Band" xml:space="preserve"><value>ต้นทาง: {0} ช่วง {1}–{2} {3}</value></data>
+  <data name="Derived_Transform_Decompressed" xml:space="preserve"><value>การคลายการบีบอัด {0}</value></data>
+  <data name="Derived_Transform_Decrypted" xml:space="preserve"><value>การถอดรหัส {0}</value></data>
+  <data name="Derived_WriteBack.Content" xml:space="preserve"><value>เขียนกลับไปยังต้นทาง</value></data>
+  <data name="Derived_NotDerived" xml:space="preserve"><value>แท็บนี้ไม่ได้เปิดจากการคลายการบีบอัดหรือถอดรหัส</value></data>
+  <data name="Derived_ParentClosed" xml:space="preserve"><value>เอกสารต้นทางถูกปิดแล้ว จึงไม่สามารถเขียนกลับจากแท็บนี้ได้อีก ตอนนี้เป็นเอกสารใหม่ธรรมดา</value></data>
+  <data name="Derived_TooDeep" xml:space="preserve"><value>เอกสารที่สืบทอดซ้อนกันได้สูงสุด {0} ระดับ</value></data>
+  <data name="Derived_WriteBackTitle" xml:space="preserve"><value>เขียนกลับไปยังต้นทาง</value></data>
+  <data name="Derived_WriteBackRun" xml:space="preserve"><value>เขียนกลับ</value></data>
+  <data name="Derived_RangeChanged" xml:space="preserve"><value>ช่วงต้นทางเปลี่ยนแปลงไปตั้งแต่เปิดเอกสารที่สืบทอดนี้</value></data>
+  <data name="Derived_Overwrite" xml:space="preserve"><value>เขียนทับและเขียนกลับ</value></data>
+  <data name="Derived_KeyPrompt" xml:space="preserve"><value>ป้อนคีย์อีกครั้งเพื่อเขียนกลับ ({0}) ระบบจะไม่เก็บคีย์ไว้</value></data>
+  <data name="Derived_NewNonce" xml:space="preserve"><value>สร้าง nonce ใหม่ (แนะนำ)</value></data>
+  <data name="Derived_SameNonce" xml:space="preserve"><value>ใช้ nonce เดียวกับตอนเปิด</value></data>
+  <data name="Derived_NonceNoteText" xml:space="preserve"><value>การใช้ nonce ซ้ำกับคีย์เดิมไม่ปลอดภัย ตำแหน่งที่เก็บ nonce ขึ้นกับรูปแบบข้อมูล จึงต้องอัปเดตเองหลังเขียนกลับ</value></data>
+  <data name="Derived_NewNonceValue" xml:space="preserve"><value>nonce ใหม่ (Hex)</value></data>
+  <data name="Derived_SaltRequired" xml:space="preserve"><value>ป้อนซอลต์ที่ใช้ตอนเข้ารหัสข้อมูล</value></data>
+  <data name="Derived_FixedLength" xml:space="preserve"><value>ไม่สามารถเปลี่ยนความยาวของเอกสารต้นทางได้ จึงไม่ได้เขียนกลับ (ความยาวจะเปลี่ยนจาก {0} เป็น {1} ไบต์)</value></data>
+  <data name="Derived_Written" xml:space="preserve"><value>เขียนกลับไปยังเอกสารต้นทางแล้ว</value></data>
+  <data name="Yara_RuleSet" xml:space="preserve"><value>ชุดกฎ</value></data>
+  <data name="Yara_NoRuleSet" xml:space="preserve"><value>(ยังไม่ได้บันทึก)</value></data>
+  <data name="Yara_SaveSet" xml:space="preserve"><value>บันทึกชุด...</value></data>
+  <data name="Yara_SaveRun" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Yara_SetName" xml:space="preserve"><value>ชื่อชุดกฎ</value></data>
+  <data name="Yara_DeleteSet" xml:space="preserve"><value>ลบชุด</value></data>
+  <data name="Yara_AddFiles" xml:space="preserve"><value>เพิ่มไฟล์กฎ...</value></data>
+  <data name="Yara_AddFolder" xml:space="preserve"><value>เพิ่มโฟลเดอร์...</value></data>
+  <data name="Yara_RemoveFiles" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="Yara_Files" xml:space="preserve"><value>ไฟล์กฎ</value></data>
+  <data name="Yara_Externals" xml:space="preserve"><value>ตัวแปรภายนอก (ชื่อ=ค่า หนึ่งรายการต่อบรรทัด)</value></data>
+  <data name="Yara_Scope" xml:space="preserve"><value>ขอบเขต</value></data>
+  <data name="Yara_Scope_Document" xml:space="preserve"><value>ทั้งเอกสาร</value></data>
+  <data name="Yara_Scope_Selection" xml:space="preserve"><value>ส่วนที่เลือก</value></data>
+  <data name="Yara_Scope_Folder" xml:space="preserve"><value>ไฟล์ในโฟลเดอร์</value></data>
+  <data name="Yara_Folder" xml:space="preserve"><value>โฟลเดอร์</value></data>
+  <data name="Yara_Mask" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Yara_Scan" xml:space="preserve"><value>สแกน</value></data>
+  <data name="Yara_KindName" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_LimitationText" xml:space="preserve"><value>ข้อมูลถูกสแกนเป็นบล็อกขนาด {0} MiB ที่ซ้อนทับกัน {1} KB ในเอกสารที่ใหญ่กว่าหนึ่งบล็อก อาจไม่พบสตริงที่ยาวกว่าส่วนที่ซ้อนทับและเงื่อนไขที่คร่อมหลายบล็อก</value></data>
+  <data name="Yara_Scanning" xml:space="preserve"><value>กำลังสแกน...</value></data>
+  <data name="Yara_NoRules" xml:space="preserve"><value>เพิ่มไฟล์กฎก่อน</value></data>
+  <data name="Yara_CompileErrors" xml:space="preserve"><value>กฎมีข้อผิดพลาด {0} รายการ การสแกนไม่ได้เริ่มต้น</value></data>
+  <data name="Yara_Matched" xml:space="preserve"><value>ตรงกับกฎ {0} ข้อ</value></data>
+  <data name="Yara_TimedOut" xml:space="preserve"><value>ถึงขีดจำกัดเวลาแล้ว</value></data>
+  <data name="Yara_Cancelled" xml:space="preserve"><value>ยกเลิกการสแกนแล้ว</value></data>
+  <data name="Yara_TooManyMatches" xml:space="preserve"><value>พบรายการที่ตรงกันมากเกินไป เก็บไว้เฉพาะ 1,000,000 รายการแรกสำหรับ: {0}</value></data>
+  <data name="Yara_Console" xml:space="preserve"><value>คอนโซล:</value></data>
+  <data name="Yara_InternalError" xml:space="preserve"><value>ข้อผิดพลาดภายในของ YARA ({0}): {1}</value></data>
+  <data name="Yara_DetailsText" xml:space="preserve"><value>กฎ: {0}  เนมสเปซ: {1}  แท็ก: {2}&#xA;เมทา:&#xA;{3}</value></data>
+  <data name="Yara_ErrorsName" xml:space="preserve"><value>ข้อผิดพลาดของกฎ</value></data>
+  <data name="Yara_FolderResultsName" xml:space="preserve"><value>รายการที่ตรงกันในไฟล์</value></data>
+  <data name="Yara_FolderMissing" xml:space="preserve"><value>ป้อนโฟลเดอร์ที่มีอยู่</value></data>
+  <data name="Yara_FolderError" xml:space="preserve"><value>ไม่สามารถอ่านโฟลเดอร์ได้: {0}</value></data>
+  <data name="Yara_FolderDone" xml:space="preserve"><value>สแกน {0} ไฟล์ พบรายการที่ตรงกันใน {1} ไฟล์</value></data>
+  <data name="Yara_AnnotationSource" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_Column_Rule" xml:space="preserve"><value>กฎ</value></data>
+  <data name="Yara_Column_Namespace" xml:space="preserve"><value>เนมสเปซ</value></data>
+  <data name="Yara_Column_Tags" xml:space="preserve"><value>แท็ก</value></data>
+  <data name="Yara_Column_Meta" xml:space="preserve"><value>เมทา</value></data>
+  <data name="Yara_Column_String" xml:space="preserve"><value>สตริง</value></data>
+  <data name="Codec_Error_Failed" xml:space="preserve"><value>การดำเนินการล้มเหลว: {0}</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>เชื่อมต่อกับระยะไกล(1)</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>เซิร์ฟเวอร์ GDB(G)...</value></data>
+  <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP(F)...</value></data>
+  <data name="Menu_File_OpenSftp.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReceiveUdp.Text" xml:space="preserve"><value>รับ UDP(U)...</value></data>
+  <data name="Menu_File_ReceiveUdp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveSnapshot.Text" xml:space="preserve"><value>บันทึกสแนปช็อต(N)...</value></data>
+  <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>บันทึกเป็น Minidump(M)...</value></data>
+  <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>แพ็กเก็ต(3)</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>บันทึกสแนปช็อตของโปรเซส...</value></data>
+  <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>สแนปช็อต ดัมพ์ หน่วยความจำ snapshot hexsnap dump memory</value></data>
+  <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>บันทึกเป็น Minidump...</value></data>
+  <data name="CmdAlias_file_saveMinidump" xml:space="preserve"><value>ดัมพ์ ดีบักเกอร์ dump dmp windbg debugger</value></data>
+  <data name="Cmd_file_connectGdb" xml:space="preserve"><value>เชื่อมต่อกับเซิร์ฟเวอร์ GDB...</value></data>
+  <data name="CmdAlias_file_connectGdb" xml:space="preserve"><value>gdb ระยะไกล qemu openocd gdbserver remote</value></data>
+  <data name="Cmd_file_openSftp" xml:space="preserve"><value>เปิดด้วย SFTP...</value></data>
+  <data name="CmdAlias_file_openSftp" xml:space="preserve"><value>ssh sftp ระยะไกล เซิร์ฟเวอร์ remote server</value></data>
+  <data name="Cmd_file_receiveUdp" xml:space="preserve"><value>รับ UDP...</value></data>
+  <data name="CmdAlias_file_receiveUdp" xml:space="preserve"><value>udp เครือข่าย แพ็กเก็ต ฟัง network packet datagram listen</value></data>
+  <data name="Cmd_file_reconnect" xml:space="preserve"><value>เชื่อมต่อใหม่</value></data>
+  <data name="CmdAlias_file_reconnect" xml:space="preserve"><value>ระยะไกล เชื่อมต่อใหม่ ขาด remote reconnect disconnected</value></data>
+  <data name="Cmd_view_panel_packets" xml:space="preserve"><value>แผงแพ็กเก็ต</value></data>
+  <data name="CmdAlias_view_panel_packets" xml:space="preserve"><value>udp แพ็กเก็ต รายการ udp packet list</value></data>
+  <data name="Set_remote_gdb_timeoutSeconds" xml:space="preserve"><value>เวลารอคำขอของเซิร์ฟเวอร์ GDB (วินาที)</value></data>
+  <data name="SetDesc_remote_gdb_timeoutSeconds" xml:space="preserve"><value>หากเซิร์ฟเวอร์ GDB ไม่ตอบคำขอภายในเวลานี้ จะถือว่าการเชื่อมต่อขาดหาย</value></data>
+  <data name="Set_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>ยืนยันก่อนเขียนเฉพาะช่วงที่เปลี่ยนแปลงผ่าน SFTP</value></data>
+  <data name="SetDesc_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>หากการเชื่อมต่อขาดระหว่างบันทึก ไฟล์ระยะไกลอาจถูกเขียนใหม่เพียงบางส่วน</value></data>
+  <data name="Set_remote_udp_followEnd" xml:space="preserve"><value>ตามไปที่ส่วนท้ายขณะรับ UDP</value></data>
+  <data name="SetDesc_remote_udp_followEnd" xml:space="preserve"><value>เมื่อเคอร์เซอร์อยู่ท้ายเอกสาร UDP จะเลื่อนไปยังข้อมูลใหม่เมื่อมีข้อมูลเข้ามา</value></data>
+  <data name="Remote_StateConnected" xml:space="preserve"><value>เชื่อมต่อแล้ว</value></data>
+  <data name="Remote_StateConnecting" xml:space="preserve"><value>กำลังเชื่อมต่อ</value></data>
+  <data name="Remote_StateDisconnected" xml:space="preserve"><value>ตัดการเชื่อมต่อแล้ว</value></data>
+  <data name="Remote_StatusGdb" xml:space="preserve"><value>GDB {0} ({1})</value></data>
+  <data name="Remote_StatusSftp" xml:space="preserve"><value>SFTP {0} ({1})</value></data>
+  <data name="Remote_StatusUdp" xml:space="preserve"><value>UDP {0}: {1, plural, other {# แพ็กเก็ต}} {2} ({3})</value></data>
+  <data name="Remote_Disconnected" xml:space="preserve"><value>การเชื่อมต่อกับ {0} ขาดหาย การเปลี่ยนแปลงที่ยังไม่ได้บันทึกยังคงอยู่</value></data>
+  <data name="Remote_Reconnect" xml:space="preserve"><value>เชื่อมต่อใหม่</value></data>
+  <data name="Remote_Reconnected" xml:space="preserve"><value>เชื่อมต่อใหม่แล้ว</value></data>
+  <data name="Remote_ReconnectFailed" xml:space="preserve"><value>ไม่สามารถเชื่อมต่อใหม่ได้: {0}</value></data>
+  <data name="Remote_AlreadyConnected" xml:space="preserve"><value>เป้าหมายระยะไกลเชื่อมต่ออยู่แล้ว</value></data>
+  <data name="Remote_NotRemote" xml:space="preserve"><value>ใช้ได้เฉพาะเอกสารเซิร์ฟเวอร์ GDB และ SFTP</value></data>
+  <data name="Session_RemoteNotConnected" xml:space="preserve"><value>ไม่ได้เชื่อมต่อ: {0}</value></data>
+  <data name="Session_ConnectRemote.Content" xml:space="preserve"><value>เชื่อมต่อ</value></data>
+  <data name="Capture_SnapshotTitle" xml:space="preserve"><value>บันทึกสแนปช็อต</value></data>
+  <data name="Capture_MinidumpTitle" xml:space="preserve"><value>บันทึกเป็น Minidump</value></data>
+  <data name="Capture_Scope" xml:space="preserve"><value>บริเวณที่จะรวม</value></data>
+  <data name="Capture_ScopeAll" xml:space="preserve"><value>ทุกบริเวณที่อ่านได้</value></data>
+  <data name="Capture_ScopeSelected" xml:space="preserve"><value>บริเวณหรือโมดูลที่เลือกในแผนที่หน่วยความจำ</value></data>
+  <data name="Capture_ScopeWritable" xml:space="preserve"><value>เฉพาะบริเวณที่เขียนได้</value></data>
+  <data name="Capture_Pause" xml:space="preserve"><value>หยุดโปรเซสชั่วคราวขณะจับภาพ</value></data>
+  <data name="Capture_Path" xml:space="preserve"><value>บันทึกไปที่</value></data>
+  <data name="Capture_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="Capture_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Capture_SavingSnapshot" xml:space="preserve"><value>กำลังบันทึกสแนปช็อต {0}</value></data>
+  <data name="Capture_SavingMinidump" xml:space="preserve"><value>กำลังบันทึก Minidump {0}</value></data>
+  <data name="Capture_Saved" xml:space="preserve"><value>บันทึก {0} แล้ว</value></data>
+  <data name="Capture_Cancelled" xml:space="preserve"><value>ยกเลิกแล้ว ไฟล์ที่เขียนไม่ครบถูกลบแล้ว</value></data>
+  <data name="Capture_ProcessExited" xml:space="preserve"><value>โปรเซสสิ้นสุดระหว่างจับภาพ หยุดการจับภาพแล้ว และลบไฟล์ที่เขียนไม่ครบแล้ว</value></data>
+  <data name="Capture_Error" xml:space="preserve"><value>ไม่สามารถบันทึกได้: {0}</value></data>
+  <data name="Capture_PauseFailed" xml:space="preserve"><value>ไม่สามารถหยุดโปรเซสชั่วคราวได้ จึงจับภาพขณะที่ยังทำงานอยู่ เนื้อหาอาจไม่สอดคล้องกัน</value></data>
+  <data name="Capture_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่าน {0, plural, other {# บริเวณ}} (จากทั้งหมด {1}) ได้</value></data>
+  <data name="FileType_Minidump" xml:space="preserve"><value>Minidump</value></data>
+  <data name="Snapshot_SaveAsGuide" xml:space="preserve"><value>ไม่สามารถบันทึกหน่วยความจำของโปรเซสเป็นไฟล์ได้ ใช้ ไฟล์ &gt; ส่งออก &gt; บันทึกสแนปช็อต</value></data>
+  <data name="Gdb_Title" xml:space="preserve"><value>เชื่อมต่อกับเซิร์ฟเวอร์ GDB</value></data>
+  <data name="Gdb_Host" xml:space="preserve"><value>โฮสต์</value></data>
+  <data name="Gdb_Port" xml:space="preserve"><value>พอร์ต</value></data>
+  <data name="Gdb_AddressWidth" xml:space="preserve"><value>ความกว้างของที่อยู่</value></data>
+  <data name="Gdb_Width32" xml:space="preserve"><value>32 บิต</value></data>
+  <data name="Gdb_Width64" xml:space="preserve"><value>64 บิต</value></data>
+  <data name="Gdb_ReadOnly" xml:space="preserve"><value>เปิดแบบอ่านอย่างเดียว</value></data>
+  <data name="Gdb_Note" xml:space="preserve"><value>อ่านและเขียนเฉพาะหน่วยความจำของเป้าหมาย ไม่ใช้การควบคุมการทำงาน (หยุด ทำงานต่อ จุดพัก)</value></data>
+  <data name="Gdb_Connect" xml:space="preserve"><value>เชื่อมต่อ</value></data>
+  <data name="Gdb_Connecting" xml:space="preserve"><value>กำลังเชื่อมต่อกับ {0}...</value></data>
+  <data name="Gdb_ConnectFailed" xml:space="preserve"><value>ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ GDB ({0}, {1}) ได้</value></data>
+  <data name="Gdb_ProtocolError" xml:space="preserve"><value>ไม่สามารถตีความการตอบกลับจากเซิร์ฟเวอร์ GDB ได้ ตัดการเชื่อมต่อแล้ว</value></data>
+  <data name="Gdb_WriteBody" xml:space="preserve"><value>เขียน {1, plural, other {# ไบต์}} ลงในหน่วยความจำของเป้าหมายบนเซิร์ฟเวอร์ GDB {0} หรือไม่</value></data>
+  <data name="Gdb_ImmediateConfirm" xml:space="preserve"><value>เปิดการเขียนทันทีหรือไม่ ทุกการแก้ไขจะถูกเขียนลงในหน่วยความจำของเป้าหมายบน {0} ทันที</value></data>
+  <data name="Gdb_WriteDisconnected" xml:space="preserve"><value>การเชื่อมต่อกับ {0} ขาดหาย จึงมีบางการเปลี่ยนแปลงที่ไม่ได้เขียน</value></data>
+  <data name="Gdb_WriteRejected" xml:space="preserve"><value>เป้าหมายปฏิเสธการเขียน</value></data>
+  <data name="Gdb_SaveAsUnavailable" xml:space="preserve"><value>ไม่สามารถบันทึกพื้นที่ที่อยู่ทั้งหมดของเป้าหมาย GDB เป็นไฟล์ได้ ใช้ ไฟล์ &gt; บันทึกส่วนที่เลือก</value></data>
+  <data name="Sftp_Title" xml:space="preserve"><value>เปิดด้วย SFTP</value></data>
+  <data name="Sftp_Host" xml:space="preserve"><value>โฮสต์</value></data>
+  <data name="Sftp_Port" xml:space="preserve"><value>พอร์ต</value></data>
+  <data name="Sftp_User" xml:space="preserve"><value>ชื่อผู้ใช้</value></data>
+  <data name="Sftp_Method" xml:space="preserve"><value>การพิสูจน์ตัวตน</value></data>
+  <data name="Sftp_MethodPassword" xml:space="preserve"><value>รหัสผ่าน</value></data>
+  <data name="Sftp_MethodKeyFile" xml:space="preserve"><value>ไฟล์คีย์</value></data>
+  <data name="Sftp_MethodAgent" xml:space="preserve"><value>SSH เอเจนต์ (OpenSSH agent, Pageant)</value></data>
+  <data name="Sftp_Password" xml:space="preserve"><value>รหัสผ่าน</value></data>
+  <data name="Sftp_KeyFile" xml:space="preserve"><value>ไฟล์คีย์</value></data>
+  <data name="Sftp_Passphrase" xml:space="preserve"><value>วลีรหัสผ่าน (หากคีย์มี)</value></data>
+  <data name="Sftp_Save" xml:space="preserve"><value>บันทึกรหัสผ่านใน Windows Credential Manager</value></data>
+  <data name="Sftp_Connect" xml:space="preserve"><value>เชื่อมต่อ</value></data>
+  <data name="Sftp_Connecting" xml:space="preserve"><value>กำลังเชื่อมต่อกับ {0}...</value></data>
+  <data name="Sftp_AuthFailed" xml:space="preserve"><value>การพิสูจน์ตัวตนสำหรับ {0} ล้มเหลว ตรวจสอบชื่อผู้ใช้และรหัสผ่านหรือคีย์</value></data>
+  <data name="Sftp_ConnectFailed" xml:space="preserve"><value>ไม่สามารถเชื่อมต่อกับ {0} ({1}) ได้</value></data>
+  <data name="Sftp_PermissionDenied" xml:space="preserve"><value>ถูกปฏิเสธสิทธิ์: {0}</value></data>
+  <data name="Sftp_NotFound" xml:space="preserve"><value>ไม่พบไฟล์ระยะไกล: {0}</value></data>
+  <data name="Sftp_OpenFailed" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้: {1}</value></data>
+  <data name="Sftp_HostKeyUnknownTitle" xml:space="preserve"><value>โฮสต์ที่ไม่รู้จัก</value></data>
+  <data name="Sftp_HostKeyUnknownBody" xml:space="preserve"><value>นี่เป็นการเชื่อมต่อกับ {0} ครั้งแรก
+
+ชนิดคีย์โฮสต์: {1}
+ลายนิ้วมือ SHA-256: {2}
+
+เชื่อมต่อเฉพาะเมื่อลายนิ้วมือตรงกับเซิร์ฟเวอร์</value></data>
+  <data name="Sftp_HostKeyTrust" xml:space="preserve"><value>เชื่อถือและเชื่อมต่อ</value></data>
+  <data name="Sftp_HostKeyChangedTitle" xml:space="preserve"><value>คำเตือน: คีย์โฮสต์เปลี่ยนไป</value></data>
+  <data name="Sftp_HostKeyChangedBody" xml:space="preserve"><value>คีย์โฮสต์ของ {0} ต่างจากคีย์ที่คุณเคยเชื่อถือ อาจมีผู้แอบดักการเชื่อมต่อ
+
+ชนิดคีย์โฮสต์ใหม่: {1}
+ลายนิ้วมือ SHA-256 ใหม่: {2}
+
+ที่เคยเชื่อถือ: {3} {4}
+
+จะไม่เชื่อมต่อเว้นแต่คุณเลือกแทนที่คีย์</value></data>
+  <data name="Sftp_HostKeyReplace" xml:space="preserve"><value>แทนที่คีย์และเชื่อมต่อ</value></data>
+  <data name="SftpPicker_Title" xml:space="preserve"><value>เลือกไฟล์ระยะไกล ({0})</value></data>
+  <data name="SftpPicker_Path" xml:space="preserve"><value>โฟลเดอร์</value></data>
+  <data name="SftpPicker_List" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="SftpPicker_Up" xml:space="preserve"><value>ขึ้นไป</value></data>
+  <data name="SftpPicker_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="SftpPicker_ListFailed" xml:space="preserve"><value>ไม่สามารถแสดงรายการโฟลเดอร์ได้: {0}</value></data>
+  <data name="Sftp_SaveTitle" xml:space="preserve"><value>บันทึกลงไฟล์ระยะไกล</value></data>
+  <data name="Sftp_PartialWriteBody" xml:space="preserve"><value>เขียนเฉพาะช่วงที่เปลี่ยนแปลง หากการเชื่อมต่อขาดระหว่างบันทึก ไฟล์ระยะไกลอาจถูกเขียนใหม่เพียงบางส่วน</value></data>
+  <data name="Sftp_PartialWriteSkip" xml:space="preserve"><value>ไม่ต้องถามอีก</value></data>
+  <data name="Sftp_SaveWrite" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Sftp_Saving" xml:space="preserve"><value>กำลังบันทึก {0}</value></data>
+  <data name="Sftp_Saved" xml:space="preserve"><value>บันทึก {0} แล้ว</value></data>
+  <data name="Sftp_SavePermission" xml:space="preserve"><value>คุณไม่มีสิทธิ์เขียน {0}</value></data>
+  <data name="Sftp_SavePartial" xml:space="preserve"><value>การเชื่อมต่อขาดระหว่างบันทึก ไฟล์ระยะไกลอาจถูกเขียนใหม่เพียงบางส่วน การเปลี่ยนแปลงของคุณยังคงอยู่</value></data>
+  <data name="Sftp_SaveDisconnected" xml:space="preserve"><value>การเชื่อมต่อขาดระหว่างบันทึก ไฟล์ระยะไกลไม่ได้ถูกแทนที่ การเปลี่ยนแปลงของคุณยังคงอยู่</value></data>
+  <data name="Sftp_SaveFailed" xml:space="preserve"><value>ไม่สามารถบันทึกได้: {0}</value></data>
+  <data name="Sftp_Changed" xml:space="preserve"><value>ไฟล์ระยะไกล {0} ถูกโปรแกรมอื่นเปลี่ยนแปลง</value></data>
+  <data name="Sftp_ChangedModified" xml:space="preserve"><value>ไฟล์ระยะไกล {0} ถูกโปรแกรมอื่นเปลี่ยนแปลง การโหลดใหม่จะทิ้งการเปลี่ยนแปลงของคุณ</value></data>
+  <data name="Sftp_Reload" xml:space="preserve"><value>โหลดใหม่</value></data>
+  <data name="Udp_Title" xml:space="preserve"><value>รับ UDP</value></data>
+  <data name="Udp_Address" xml:space="preserve"><value>ฟังที่</value></data>
+  <data name="Udp_Port" xml:space="preserve"><value>พอร์ต</value></data>
+  <data name="Udp_PortPlaceholder" xml:space="preserve"><value>1-65535</value></data>
+  <data name="Udp_LimitMiB" xml:space="preserve"><value>เก็บสูงสุด (MiB 1-{0})</value></data>
+  <data name="Udp_FirewallNote" xml:space="preserve"><value>การฟังที่ที่อยู่อื่นที่ไม่ใช่ 127.0.0.1 อาจทำให้ไฟร์วอลล์ของ Windows แสดงข้อความแจ้ง</value></data>
+  <data name="Udp_ReceiveOnly" xml:space="preserve"><value>รับอย่างเดียว ไม่ส่งอะไรออกไป</value></data>
+  <data name="Udp_Start" xml:space="preserve"><value>เริ่ม</value></data>
+  <data name="Udp_TabName" xml:space="preserve"><value>UDP {0}</value></data>
+  <data name="Udp_PortInUse" xml:space="preserve"><value>พอร์ต {0} ถูกแอปอื่นใช้อยู่</value></data>
+  <data name="Udp_StartFailed" xml:space="preserve"><value>ไม่สามารถเริ่มรับได้: {0}</value></data>
+  <data name="Udp_LimitReached" xml:space="preserve"><value>ถึงขีดจำกัด ({0}) แล้ว จึงหยุดบันทึก</value></data>
+  <data name="Udp_DiscardOld" xml:space="preserve"><value>ทิ้งข้อมูลเก่าและดำเนินการต่อ</value></data>
+  <data name="Udp_StateReceiving" xml:space="preserve"><value>กำลังรับ</value></data>
+  <data name="Udp_StatePaused" xml:space="preserve"><value>หยุดชั่วคราว</value></data>
+  <data name="Udp_StateLimit" xml:space="preserve"><value>ถึงขีดจำกัด</value></data>
+  <data name="Udp_StateStopped" xml:space="preserve"><value>หยุดแล้ว</value></data>
+  <data name="Udp_Saved" xml:space="preserve"><value>บันทึกข้อมูลที่รับไปยัง {0} แล้ว</value></data>
+  <data name="Udp_SaveFailed" xml:space="preserve"><value>ไม่สามารถบันทึกได้: {0}</value></data>
+  <data name="Panel_Packets_Title" xml:space="preserve"><value>แพ็กเก็ต</value></data>
+  <data name="Packets_List" xml:space="preserve"><value>แพ็กเก็ต</value></data>
+  <data name="Packets_Pause" xml:space="preserve"><value>หยุดชั่วคราว</value></data>
+  <data name="Packets_Resume" xml:space="preserve"><value>ทำต่อ</value></data>
+  <data name="Packets_Clear" xml:space="preserve"><value>ล้าง</value></data>
+  <data name="Packets_ExportCsv" xml:space="preserve"><value>ส่งออก CSV...</value></data>
+  <data name="Packets_ExportJson" xml:space="preserve"><value>ส่งออก JSON...</value></data>
+  <data name="Packets_Exported" xml:space="preserve"><value>ส่งออก {0} แล้ว</value></data>
+  <data name="Packets_NotUdp" xml:space="preserve"><value>เปิดเอกสารรับ UDP (ไฟล์ &gt; เชื่อมต่อกับระยะไกล &gt; รับ UDP) เพื่อดูแพ็กเก็ต</value></data>
+  <data name="Panel_Calculator_Title" xml:space="preserve"><value>เครื่องคิดเลข</value></data>
+  <data name="Panel_Converter_Title" xml:space="preserve"><value>ตัวแปลงฐานและชนิด</value></data>
+  <data name="Panel_Float_Title" xml:space="preserve"><value>ตัวแสดงภาพเลขทศนิยมลอยตัว</value></data>
+  <data name="Panel_CharTable_Title" xml:space="preserve"><value>ตารางอักขระ</value></data>
+  <data name="Panel_Color_Title" xml:space="preserve"><value>ตัวเลือกสี</value></data>
+  <data name="Panel_DateTime_Title" xml:space="preserve"><value>ตัวแปลงวันที่และเวลา</value></data>
+  <data name="Panel_ChecksumResults_Title" xml:space="preserve"><value>ผลลัพธ์เช็กซัม</value></data>
+  <data name="Panel_FolderCompare_Title" xml:space="preserve"><value>การเปรียบเทียบโฟลเดอร์</value></data>
+  <data name="Menu_Tools_Calculator.Text" xml:space="preserve"><value>เครื่องคิดเลข(C)</value></data>
+  <data name="Menu_Tools_Calculator.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Converter.Text" xml:space="preserve"><value>ตัวแปลงฐานและชนิด(V)</value></data>
+  <data name="Menu_Tools_Converter.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FloatVisualizer.Text" xml:space="preserve"><value>ตัวแสดงภาพเลขทศนิยมลอยตัว(F)</value></data>
+  <data name="Menu_Tools_FloatVisualizer.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_CharTable.Text" xml:space="preserve"><value>ตารางอักขระ(A)</value></data>
+  <data name="Menu_Tools_CharTable.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_ColorPicker.Text" xml:space="preserve"><value>ตัวเลือกสี(L)</value></data>
+  <data name="Menu_Tools_ColorPicker.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_DateTime.Text" xml:space="preserve"><value>ตัวแปลงวันที่และเวลา(D)</value></data>
+  <data name="Menu_Tools_DateTime.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools.Text" xml:space="preserve"><value>เครื่องมือไฟล์(I)</value></data>
+  <data name="Menu_Tools_FileTools.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.Text" xml:space="preserve"><value>สร้างไฟล์เช็กซัม(C)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.Text" xml:space="preserve"><value>ตรวจสอบไฟล์เช็กซัม(V)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.Text" xml:space="preserve"><value>เปรียบเทียบโฟลเดอร์(F)...</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="CmdCategory_tools" xml:space="preserve"><value>เครื่องมือ</value></data>
+  <data name="CmdCategory_fileTools" xml:space="preserve"><value>เครื่องมือไฟล์</value></data>
+  <data name="Cmd_tools_calculator" xml:space="preserve"><value>เครื่องคิดเลข</value></data>
+  <data name="CmdAlias_tools_calculator" xml:space="preserve"><value>คำนวณ นิพจน์ Hex calc calculate expression hex</value></data>
+  <data name="Cmd_tools_calculator_programmer" xml:space="preserve"><value>เครื่องคิดเลข (โหมดโปรแกรมเมอร์)</value></data>
+  <data name="CmdAlias_tools_calculator_programmer" xml:space="preserve"><value>คำนวณ โปรแกรมเมอร์ บิต ระดับบิต calc programmer bits bitwise</value></data>
+  <data name="Cmd_tools_converter" xml:space="preserve"><value>ตัวแปลงฐานและชนิด</value></data>
+  <data name="CmdAlias_tools_converter" xml:space="preserve"><value>แปลง ฐาน ลำดับไบต์ convert base radix endian ascii utf base64</value></data>
+  <data name="Cmd_tools_floatVisualizer" xml:space="preserve"><value>ตัวแสดงภาพเลขทศนิยมลอยตัว</value></data>
+  <data name="CmdAlias_tools_floatVisualizer" xml:space="preserve"><value>เลขทศนิยมลอยตัว float double ieee 754 half bfloat16 x87 bits</value></data>
+  <data name="Cmd_tools_charTable" xml:space="preserve"><value>ตารางอักขระ</value></data>
+  <data name="CmdAlias_tools_charTable" xml:space="preserve"><value>ตารางอักขระ โค้ดเพจ อักขระ ชื่อ character table code page ascii ebcdic unicode name</value></data>
+  <data name="Cmd_tools_colorPicker" xml:space="preserve"><value>ตัวเลือกสี</value></data>
+  <data name="CmdAlias_tools_colorPicker" xml:space="preserve"><value>สี ตัวเลือกสี พิกเซล color colour picker rgb565 bgra pixel</value></data>
+  <data name="Cmd_tools_dateTime" xml:space="preserve"><value>ตัวแปลงวันที่และเวลา</value></data>
+  <data name="CmdAlias_tools_dateTime" xml:space="preserve"><value>วันที่ เวลา ไทม์สแตมป์ date time timestamp filetime unix dos ole converter</value></data>
+  <data name="Cmd_tools_checksum_create" xml:space="preserve"><value>สร้างไฟล์เช็กซัม</value></data>
+  <data name="CmdAlias_tools_checksum_create" xml:space="preserve"><value>เช็กซัม แฮช ไฟล์ สร้าง checksum sha256sums md5 sfv hash file create</value></data>
+  <data name="Cmd_tools_checksum_verify" xml:space="preserve"><value>ตรวจสอบไฟล์เช็กซัม</value></data>
+  <data name="CmdAlias_tools_checksum_verify" xml:space="preserve"><value>เช็กซัม แฮช ไฟล์ ตรวจสอบ checksum sha256sums md5 sfv hash file verify check</value></data>
+  <data name="Cmd_tools_folderCompare" xml:space="preserve"><value>เปรียบเทียบโฟลเดอร์</value></data>
+  <data name="CmdAlias_tools_folderCompare" xml:space="preserve"><value>โฟลเดอร์ ไดเรกทอรี เปรียบเทียบ ความแตกต่าง folder directory compare diff</value></data>
+  <data name="Tool_CopyValue" xml:space="preserve"><value>คัดลอก {0}</value></data>
+  <data name="Tool_Error_End" xml:space="preserve"><value>ไม่สามารถเขียนได้: หลังเคอร์เซอร์เหลือเพียง {0, plural, other {# ไบต์}} แต่ต้องการ {1, plural, other {# ไบต์}}</value></data>
+  <data name="ToolTable_ExportCsv" xml:space="preserve"><value>ส่งออก CSV</value></data>
+  <data name="ToolTable_ExportJson" xml:space="preserve"><value>ส่งออก JSON</value></data>
+  <data name="ToolTable_Filter" xml:space="preserve"><value>กรอง</value></data>
+  <data name="ToolTable_List" xml:space="preserve"><value>ผลลัพธ์</value></data>
+  <data name="ToolTable_SortBy" xml:space="preserve"><value>เรียงตาม {0}</value></data>
+  <data name="ToolTable_Exported" xml:space="preserve"><value>บันทึก {0} แล้ว</value></data>
+  <data name="GoTo_Error_NotInteger" xml:space="preserve"><value>{0} ต้องใช้จำนวนเต็ม</value></data>
+  <data name="Calc_Input" xml:space="preserve"><value>นิพจน์</value></data>
+  <data name="Calc_Placeholder" xml:space="preserve"><value>เช่น 0x1F00 + 10h * 2</value></data>
+  <data name="Calc_Overflow" xml:space="preserve"><value>โอเวอร์โฟลว์</value></data>
+  <data name="Calc_Programmer" xml:space="preserve"><value>โปรแกรมเมอร์</value></data>
+  <data name="Calc_Row_Hex" xml:space="preserve"><value>เลขฐานสิบหก</value></data>
+  <data name="Calc_Row_Dec" xml:space="preserve"><value>เลขฐานสิบ</value></data>
+  <data name="Calc_Row_DecUnsigned" xml:space="preserve"><value>เลขฐานสิบ (ไม่มีเครื่องหมาย)</value></data>
+  <data name="Calc_Row_Oct" xml:space="preserve"><value>เลขฐานแปด</value></data>
+  <data name="Calc_Row_Bin" xml:space="preserve"><value>เลขฐานสอง</value></data>
+  <data name="Calc_Row_Size" xml:space="preserve"><value>ขนาดไฟล์</value></data>
+  <data name="Calc_Row_Float" xml:space="preserve"><value>เลขทศนิยมลอยตัว</value></data>
+  <data name="Calc_WriteSize" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Calc_Bytes" xml:space="preserve"><value>{0, plural, other {# ไบต์}}</value></data>
+  <data name="Calc_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Calc_EndianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Calc_EndianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Calc_GoTo" xml:space="preserve"><value>ไปที่ตำแหน่งนี้</value></data>
+  <data name="Calc_Write" xml:space="preserve"><value>เขียนที่เคอร์เซอร์</value></data>
+  <data name="Calc_SelectLength" xml:space="preserve"><value>ใช้เป็นความยาวที่เลือก</value></data>
+  <data name="Calc_History" xml:space="preserve"><value>ประวัติ</value></data>
+  <data name="Calc_Error_NoOffset" xml:space="preserve"><value>ไม่สามารถใช้ผลลัพธ์เป็นออฟเซ็ตได้</value></data>
+  <data name="Calc_Error_NoDocument" xml:space="preserve"><value>ไม่มีเอกสารที่เปิดอยู่</value></data>
+  <data name="Calc_Error_NoLength" xml:space="preserve"><value>ผลลัพธ์ไม่ใช่ความยาวที่ถูกต้องจากเคอร์เซอร์</value></data>
+  <data name="Calc_Error_TooBig" xml:space="preserve"><value>ค่าไม่พอดีกับ {0, plural, other {# ไบต์}}</value></data>
+  <data name="Calc_Error_NoData" xml:space="preserve"><value>ข้อมูลที่เคอร์เซอร์ไม่เพียงพอ</value></data>
+  <data name="Calc_Width" xml:space="preserve"><value>ความกว้างบิต</value></data>
+  <data name="Calc_Bits" xml:space="preserve"><value>{0} บิต</value></data>
+  <data name="Calc_Signed" xml:space="preserve"><value>มีเครื่องหมาย</value></data>
+  <data name="Calc_ReadCursor" xml:space="preserve"><value>อ่านจากเคอร์เซอร์</value></data>
+  <data name="Calc_BitTable" xml:space="preserve"><value>บิต</value></data>
+  <data name="Calc_BitName" xml:space="preserve"><value>บิต {0} ค่า {1}</value></data>
+  <data name="Calc_BitFieldValue" xml:space="preserve"><value>บิต {0} ถึง {1}: {2} ({3})</value></data>
+  <data name="Calc_CopyExpression" xml:space="preserve"><value>คัดลอกนิพจน์</value></data>
+  <data name="Calc_Operand" xml:space="preserve"><value>ตัวถูกดำเนินการ (สำหรับ AND, OR, XOR, NAND, NOR)</value></data>
+  <data name="Calc_Op_AND" xml:space="preserve"><value>AND</value></data>
+  <data name="Calc_Op_OR" xml:space="preserve"><value>OR</value></data>
+  <data name="Calc_Op_XOR" xml:space="preserve"><value>XOR</value></data>
+  <data name="Calc_Op_NOT" xml:space="preserve"><value>NOT</value></data>
+  <data name="Calc_Op_NAND" xml:space="preserve"><value>NAND</value></data>
+  <data name="Calc_Op_NOR" xml:space="preserve"><value>NOR</value></data>
+  <data name="Calc_Op_ShiftLeft" xml:space="preserve"><value>&lt;&lt;</value></data>
+  <data name="Calc_Op_ShiftRight" xml:space="preserve"><value>&gt;&gt; (ตรรกะ)</value></data>
+  <data name="Calc_Op_ShiftRightArithmetic" xml:space="preserve"><value>&gt;&gt; (เลขคณิต)</value></data>
+  <data name="Calc_Op_RotateLeft" xml:space="preserve"><value>หมุนซ้าย</value></data>
+  <data name="Calc_Op_RotateRight" xml:space="preserve"><value>หมุนขวา</value></data>
+  <data name="Calc_Op_Negate" xml:space="preserve"><value>กลับเครื่องหมาย</value></data>
+  <data name="Calc_Op_ByteSwap" xml:space="preserve"><value>สลับไบต์</value></data>
+  <data name="Conv_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Conv_EndianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Conv_EndianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Conv_CodePageChoice" xml:space="preserve"><value>โค้ดเพจ</value></data>
+  <data name="Conv_Hex" xml:space="preserve"><value>ไบต์ (Hex)</value></data>
+  <data name="Conv_HexInteger" xml:space="preserve"><value>เลขฐานสิบหก</value></data>
+  <data name="Conv_UDec" xml:space="preserve"><value>เลขฐานสิบ (ไม่มีเครื่องหมาย)</value></data>
+  <data name="Conv_SDec" xml:space="preserve"><value>เลขฐานสิบ (มีเครื่องหมาย)</value></data>
+  <data name="Conv_Oct" xml:space="preserve"><value>เลขฐานแปด</value></data>
+  <data name="Conv_Bin" xml:space="preserve"><value>เลขฐานสอง</value></data>
+  <data name="Conv_Half" xml:space="preserve"><value>half</value></data>
+  <data name="Conv_Float" xml:space="preserve"><value>float</value></data>
+  <data name="Conv_Double" xml:space="preserve"><value>double</value></data>
+  <data name="Conv_Ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Conv_Utf8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Conv_Utf16Le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Conv_Utf16Be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Conv_Utf32Le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Conv_Utf32Be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Conv_CodePage" xml:space="preserve"><value>ข้อความในโค้ดเพจ</value></data>
+  <data name="Conv_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Conv_ReadCursor" xml:space="preserve"><value>อ่านจากเคอร์เซอร์</value></data>
+  <data name="Conv_WriteCursor" xml:space="preserve"><value>เขียนที่เคอร์เซอร์</value></data>
+  <data name="Conv_SendSearch" xml:space="preserve"><value>ส่งไปยังแถบค้นหา</value></data>
+  <data name="Conv_Error_InvalidHex" xml:space="preserve"><value>ป้อนไบต์ Hex เช่น DE AD BE EF (จำนวนหลักเป็นเลขคู่)</value></data>
+  <data name="Conv_Error_TooLong" xml:space="preserve"><value>สูงสุด {0} ไบต์</value></data>
+  <data name="Conv_Error_InvalidNumber" xml:space="preserve"><value>ตัวเลขไม่ถูกต้อง</value></data>
+  <data name="Conv_Error_OutOfRange" xml:space="preserve"><value>ค่าไม่พอดีกับ 8 ไบต์</value></data>
+  <data name="Conv_Error_Unencodable" xml:space="preserve"><value>การเข้ารหัสนี้ไม่สามารถแสดงอักขระ {0} ได้</value></data>
+  <data name="Conv_Error_UnknownCodePage" xml:space="preserve"><value>ไม่มีโค้ดเพจนี้</value></data>
+  <data name="Conv_Error_InvalidBase64" xml:space="preserve"><value>ไม่ใช่ Base64 ที่ถูกต้อง</value></data>
+  <data name="Conv_Error_NoData" xml:space="preserve"><value>ไม่มีข้อมูลที่เคอร์เซอร์</value></data>
+  <data name="Conv_Warning_Invalid" xml:space="preserve"><value>ไบต์เหล่านี้ไม่ถูกต้องในการเข้ารหัสนี้ จึงแสดงอักขระแทนที่</value></data>
+  <data name="Float_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Float_Format_half" xml:space="preserve"><value>half (16 บิต)</value></data>
+  <data name="Float_Format_bfloat16" xml:space="preserve"><value>bfloat16 (16 บิต)</value></data>
+  <data name="Float_Format_float" xml:space="preserve"><value>float (32 บิต)</value></data>
+  <data name="Float_Format_double" xml:space="preserve"><value>double (64 บิต)</value></data>
+  <data name="Float_Format_x87" xml:space="preserve"><value>x87 แบบขยาย (80 บิต)</value></data>
+  <data name="Float_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Float_EndianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Float_EndianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Float_Decimal" xml:space="preserve"><value>ค่าฐานสิบ</value></data>
+  <data name="Float_HexInput" xml:space="preserve"><value>ไบต์ (Hex)</value></data>
+  <data name="Float_BitTable" xml:space="preserve"><value>เลย์เอาต์ของบิต</value></data>
+  <data name="Float_Section_Sign" xml:space="preserve"><value>เครื่องหมาย</value></data>
+  <data name="Float_Section_Exponent" xml:space="preserve"><value>เลขชี้กำลัง ({0} บิต)</value></data>
+  <data name="Float_Section_Mantissa" xml:space="preserve"><value>แมนทิสซา ({0} บิต)</value></data>
+  <data name="Float_Name_Sign" xml:space="preserve"><value>บิตเครื่องหมาย {0} ค่า {1}</value></data>
+  <data name="Float_Name_Exponent" xml:space="preserve"><value>บิตเลขชี้กำลัง {0} ค่า {1}</value></data>
+  <data name="Float_Name_Mantissa" xml:space="preserve"><value>บิตแมนทิสซา {0} ค่า {1}</value></data>
+  <data name="Float_Row_BitsHex" xml:space="preserve"><value>บิต (Hex)</value></data>
+  <data name="Float_Row_Sign" xml:space="preserve"><value>เครื่องหมาย</value></data>
+  <data name="Float_Row_Exponent" xml:space="preserve"><value>เลขชี้กำลัง</value></data>
+  <data name="Float_Row_Mantissa" xml:space="preserve"><value>แมนทิสซา</value></data>
+  <data name="Float_Row_Class" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Float_Row_Shortest" xml:space="preserve"><value>ค่า (แบบสั้นที่สุด)</value></data>
+  <data name="Float_Row_Exact" xml:space="preserve"><value>ค่าที่แน่นอน</value></data>
+  <data name="Float_Row_HexFloat" xml:space="preserve"><value>เลขทศนิยมลอยตัวแบบ Hex</value></data>
+  <data name="Float_Row_NextUp" xml:space="preserve"><value>ค่าที่มากกว่าถัดไป</value></data>
+  <data name="Float_Row_NextDown" xml:space="preserve"><value>ค่าที่น้อยกว่าถัดไป</value></data>
+  <data name="Float_Row_Ulp" xml:space="preserve"><value>ULP</value></data>
+  <data name="Float_Row_Error" xml:space="preserve"><value>ค่าคลาดเคลื่อนจากการปัดเศษ</value></data>
+  <data name="Float_ExponentText" xml:space="preserve"><value>{0} (ไบแอส {1} ไม่มีไบแอส {2})</value></data>
+  <data name="Float_ExponentTextSpecial" xml:space="preserve"><value>{0} (ไบแอส {1} ค่าพิเศษ)</value></data>
+  <data name="Float_Class_Normal" xml:space="preserve"><value>จำนวนปกติ</value></data>
+  <data name="Float_Class_Subnormal" xml:space="preserve"><value>จำนวนซับนอร์มอล</value></data>
+  <data name="Float_Class_Zero" xml:space="preserve"><value>ศูนย์</value></data>
+  <data name="Float_Class_Infinity" xml:space="preserve"><value>อนันต์</value></data>
+  <data name="Float_Class_NaN" xml:space="preserve"><value>NaN</value></data>
+  <data name="Float_Class_Invalid" xml:space="preserve"><value>การเข้ารหัส x87 ไม่ถูกต้อง</value></data>
+  <data name="Float_Class_NaNQuiet" xml:space="preserve"><value>NaN (quiet, เพย์โหลด {0})</value></data>
+  <data name="Float_Class_NaNSignaling" xml:space="preserve"><value>NaN (signaling, เพย์โหลด {0})</value></data>
+  <data name="Float_Error_InvalidNumber" xml:space="preserve"><value>ป้อนค่าฐานสิบ เช่น 0.1, inf, -inf หรือ nan</value></data>
+  <data name="Float_Error_OutOfRange" xml:space="preserve"><value>เลขชี้กำลังมากเกินไป</value></data>
+  <data name="Float_Error_InvalidHex" xml:space="preserve"><value>ป้อน Hex ที่พอดีกับรูปแบบนี้</value></data>
+  <data name="Float_Error_NoData" xml:space="preserve"><value>ข้อมูลที่เคอร์เซอร์ไม่เพียงพอ</value></data>
+  <data name="Float_ReadCursor" xml:space="preserve"><value>อ่านจากเคอร์เซอร์</value></data>
+  <data name="Float_WriteCursor" xml:space="preserve"><value>เขียนที่เคอร์เซอร์</value></data>
+  <data name="Chars_Encoding" xml:space="preserve"><value>การเข้ารหัสอักขระ</value></data>
+  <data name="Chars_Base" xml:space="preserve"><value>หัวเรื่อง</value></data>
+  <data name="Chars_Base_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Chars_Base_Dec" xml:space="preserve"><value>เลขฐานสิบ</value></data>
+  <data name="Chars_Base_Oct" xml:space="preserve"><value>เลขฐานแปด</value></data>
+  <data name="Chars_ListMode" xml:space="preserve"><value>มุมมองรายการ</value></data>
+  <data name="Chars_Search" xml:space="preserve"><value>ค้นหาอักขระ</value></data>
+  <data name="Chars_SearchPlaceholder" xml:space="preserve"><value>อักขระ ชื่อ หรือโค้ดพอยต์ (U+3042)</value></data>
+  <data name="Chars_SearchButton" xml:space="preserve"><value>ค้นหา</value></data>
+  <data name="Chars_NotFound" xml:space="preserve"><value>ไม่พบในการเข้ารหัสนี้</value></data>
+  <data name="Chars_TableName" xml:space="preserve"><value>ตารางอักขระ</value></data>
+  <data name="Chars_TrailTableName" xml:space="preserve"><value>ตารางไบต์ที่สอง</value></data>
+  <data name="Chars_TrailTitle" xml:space="preserve"><value>ไบต์ที่สองหลังไบต์นำ {0}</value></data>
+  <data name="Chars_Row_Hex" xml:space="preserve"><value>ไบต์ (Hex)</value></data>
+  <data name="Chars_Row_Dec" xml:space="preserve"><value>ไบต์ (เลขฐานสิบ)</value></data>
+  <data name="Chars_Row_Oct" xml:space="preserve"><value>ไบต์ (เลขฐานแปด)</value></data>
+  <data name="Chars_Row_Bin" xml:space="preserve"><value>ไบต์ (เลขฐานสอง)</value></data>
+  <data name="Chars_Row_Char" xml:space="preserve"><value>อักขระ</value></data>
+  <data name="Chars_Row_CodePoint" xml:space="preserve"><value>โค้ดพอยต์</value></data>
+  <data name="Chars_Row_Name" xml:space="preserve"><value>ชื่อ (ภาษาอังกฤษ)</value></data>
+  <data name="Chars_Row_Utf8" xml:space="preserve"><value>ไบต์ UTF-8</value></data>
+  <data name="Chars_Row_Utf16" xml:space="preserve"><value>ไบต์ UTF-16</value></data>
+  <data name="Chars_Utf16Endian" xml:space="preserve"><value>ลำดับไบต์ UTF-16 (LE / BE)</value></data>
+  <data name="Chars_Insert" xml:space="preserve"><value>แทรกที่เคอร์เซอร์</value></data>
+  <data name="Chars_CopyChar" xml:space="preserve"><value>คัดลอกอักขระ</value></data>
+  <data name="Chars_CopyBytes" xml:space="preserve"><value>คัดลอกค่าไบต์</value></data>
+  <data name="Color_Picker" xml:space="preserve"><value>สี</value></data>
+  <data name="Color_Swatch" xml:space="preserve"><value>ตัวอย่างสี</value></data>
+  <data name="Color_Hex" xml:space="preserve"><value>สี Hex (#RRGGBB หรือ #AARRGGBB)</value></data>
+  <data name="Color_Error_Hex" xml:space="preserve"><value>ป้อน #RRGGBB หรือ #AARRGGBB</value></data>
+  <data name="Color_Components" xml:space="preserve"><value>R {0} G {1} B {2} A {3}</value></data>
+  <data name="Color_Formats" xml:space="preserve"><value>รูปแบบพิกเซล</value></data>
+  <data name="Color_Format" xml:space="preserve"><value>รูปแบบสำหรับอ่าน เขียน และค้นหา</value></data>
+  <data name="Color_EndianOf" xml:space="preserve"><value>ลำดับไบต์ของ {0}</value></data>
+  <data name="Color_ReadCursor" xml:space="preserve"><value>อ่านจากเคอร์เซอร์</value></data>
+  <data name="Color_WriteCursor" xml:space="preserve"><value>เขียนที่เคอร์เซอร์</value></data>
+  <data name="Color_Search" xml:space="preserve"><value>ค้นหาสีนี้</value></data>
+  <data name="Color_Error_NoData" xml:space="preserve"><value>ข้อมูลที่เคอร์เซอร์ไม่เพียงพอ</value></data>
+  <data name="Time_Zone" xml:space="preserve"><value>เขตเวลา</value></data>
+  <data name="Time_Zone_Utc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Time_Zone_Local" xml:space="preserve"><value>เวลาท้องถิ่น</value></data>
+  <data name="Time_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="Time_EndianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Time_EndianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Time_Date" xml:space="preserve"><value>วันที่และเวลา (ISO 8601)</value></data>
+  <data name="Time_Row_Iso" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Time_Row_Regional" xml:space="preserve"><value>รูปแบบตามภูมิภาค</value></data>
+  <data name="Time_Now" xml:space="preserve"><value>ตอนนี้</value></data>
+  <data name="Time_Decimal" xml:space="preserve"><value>เลขฐานสิบ</value></data>
+  <data name="Time_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Time_Bytes" xml:space="preserve"><value>ไบต์</value></data>
+  <data name="Time_NotRepresentable" xml:space="preserve"><value>ไม่สามารถแสดงได้</value></data>
+  <data name="Time_Format" xml:space="preserve"><value>รูปแบบสำหรับอ่านและเขียน</value></data>
+  <data name="Time_ReadCursor" xml:space="preserve"><value>อ่านจากเคอร์เซอร์</value></data>
+  <data name="Time_WriteCursor" xml:space="preserve"><value>เขียนที่เคอร์เซอร์</value></data>
+  <data name="Time_Error_InvalidDate" xml:space="preserve"><value>ป้อนวันที่ เช่น 2024-02-29T12:34:56Z หรือ now</value></data>
+  <data name="Time_Error_InvalidNumber" xml:space="preserve"><value>ตัวเลขไม่ถูกต้อง</value></data>
+  <data name="Time_Error_OutOfRange" xml:space="preserve"><value>ค่าอยู่นอกช่วงของรูปแบบนี้</value></data>
+  <data name="Time_Error_InvalidHex" xml:space="preserve"><value>ป้อนไบต์ Hex ที่มีความยาวเท่ากับรูปแบบนี้</value></data>
+  <data name="Time_Error_NotEnoughData" xml:space="preserve"><value>ข้อมูลไม่เพียงพอ</value></data>
+  <data name="Time_Error_ReadFailed" xml:space="preserve"><value>ไม่สามารถอ่านวันที่จากเคอร์เซอร์ได้</value></data>
+  <data name="Time_Format_unix32" xml:space="preserve"><value>เวลา Unix (32 บิต วินาที)</value></data>
+  <data name="Time_Format_unix32u" xml:space="preserve"><value>เวลา Unix (32 บิตไม่มีเครื่องหมาย วินาที)</value></data>
+  <data name="Time_Format_unix64" xml:space="preserve"><value>เวลา Unix (64 บิต วินาที)</value></data>
+  <data name="Time_Format_unixms" xml:space="preserve"><value>เวลา Unix (64 บิต มิลลิวินาที)</value></data>
+  <data name="Time_Format_unixus" xml:space="preserve"><value>เวลา Unix (64 บิต ไมโครวินาที)</value></data>
+  <data name="Time_Format_unixns" xml:space="preserve"><value>เวลา Unix (64 บิต นาโนวินาที)</value></data>
+  <data name="Time_Format_filetime" xml:space="preserve"><value>FILETIME</value></data>
+  <data name="Time_Format_dos" xml:space="preserve"><value>วันที่และเวลา DOS</value></data>
+  <data name="Time_Format_ole" xml:space="preserve"><value>วันที่ OLE Automation</value></data>
+  <data name="Time_Format_hfsplus" xml:space="preserve"><value>HFS+</value></data>
+  <data name="Time_Format_apfs" xml:space="preserve"><value>APFS (นาโนวินาที)</value></data>
+  <data name="Time_Format_java" xml:space="preserve"><value>Java (มิลลิวินาที)</value></data>
+  <data name="Time_Format_dotnet" xml:space="preserve"><value>.NET DateTime.Ticks</value></data>
+  <data name="Time_Format_gps" xml:space="preserve"><value>เวลา GPS (วินาที)</value></data>
+  <data name="Time_Format_cocoa" xml:space="preserve"><value>เวลาสัมบูรณ์ของ Mac (Cocoa)</value></data>
+  <data name="Sums_CreateTitle" xml:space="preserve"><value>สร้างไฟล์เช็กซัม</value></data>
+  <data name="Sums_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="Sums_Targets" xml:space="preserve"><value>ไฟล์และโฟลเดอร์ (หนึ่งรายการต่อบรรทัด)</value></data>
+  <data name="Sums_AddFiles" xml:space="preserve"><value>เพิ่มไฟล์...</value></data>
+  <data name="Sums_AddFolder" xml:space="preserve"><value>เพิ่มโฟลเดอร์...</value></data>
+  <data name="Sums_Subfolders" xml:space="preserve"><value>รวมโฟลเดอร์ย่อย</value></data>
+  <data name="Sums_Algorithm" xml:space="preserve"><value>อัลกอริทึม</value></data>
+  <data name="Sums_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Sums_Format_Gnu" xml:space="preserve"><value>GNU (SHA256SUMS)</value></data>
+  <data name="Sums_Format_Bsd" xml:space="preserve"><value>BSD (CHECKSUM.SHA256)</value></data>
+  <data name="Sums_Format_Sidecar" xml:space="preserve"><value>หนึ่งไฟล์ต่อหนึ่งเป้าหมาย (.sha256)</value></data>
+  <data name="Sums_Format_Sfv" xml:space="preserve"><value>SFV (CRC-32 เท่านั้น)</value></data>
+  <data name="Sums_BinaryMark" xml:space="preserve"><value>ทำเครื่องหมายแถวว่าเป็นไบนารี (*)</value></data>
+  <data name="Sums_SeparatorSlash" xml:space="preserve"><value>ตัวคั่นเส้นทาง /</value></data>
+  <data name="Sums_SeparatorBackslash" xml:space="preserve"><value>ตัวคั่นเส้นทาง \</value></data>
+  <data name="Sums_LineLf" xml:space="preserve"><value>ตัวขึ้นบรรทัด LF</value></data>
+  <data name="Sums_LineCrLf" xml:space="preserve"><value>ตัวขึ้นบรรทัด CRLF</value></data>
+  <data name="Sums_OutputName" xml:space="preserve"><value>ชื่อไฟล์เอาต์พุต</value></data>
+  <data name="Sums_Info" xml:space="preserve"><value>จะคำนวณแฮชของ {0, plural, other {# ไฟล์}} เอาต์พุต: {1}</value></data>
+  <data name="Sums_Error_NoTarget" xml:space="preserve"><value>เพิ่มไฟล์หรือโฟลเดอร์อย่างน้อยหนึ่งรายการ</value></data>
+  <data name="Sums_Error_Missing" xml:space="preserve"><value>ไฟล์หรือโฟลเดอร์บางรายการไม่มีอยู่</value></data>
+  <data name="Sums_Error_NoFiles" xml:space="preserve"><value>ไม่มีไฟล์ที่จะคำนวณแฮช</value></data>
+  <data name="Sums_Error_Write" xml:space="preserve"><value>ไม่สามารถเขียนไฟล์เช็กซัมได้: {0}</value></data>
+  <data name="Sums_Error_Read" xml:space="preserve"><value>ไม่สามารถอ่าน {0} ได้: {1}</value></data>
+  <data name="Sums_Error_NotChecksum" xml:space="preserve"><value>{0} ไม่ใช่ไฟล์เช็กซัม และไม่มีไฟล์เช็กซัมอยู่ข้างกัน</value></data>
+  <data name="Sums_Error_Running" xml:space="preserve"><value>กำลังตรวจสอบเช็กซัมอยู่แล้ว</value></data>
+  <data name="Sums_OverwriteTitle" xml:space="preserve"><value>แทนที่ไฟล์ที่มีอยู่หรือไม่</value></data>
+  <data name="Sums_OverwriteBody" xml:space="preserve"><value>{0, plural, other {มี # ไฟล์นี้อยู่แล้วและจะถูกเขียนทับ}}</value></data>
+  <data name="Sums_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
+  <data name="Sums_OpCreate" xml:space="preserve"><value>สร้างไฟล์เช็กซัม ({0, plural, other {# ไฟล์}})</value></data>
+  <data name="Sums_OpVerify" xml:space="preserve"><value>ตรวจสอบ {0}</value></data>
+  <data name="Sums_Cancelled" xml:space="preserve"><value>ยกเลิกการสร้างไฟล์เช็กซัมแล้ว</value></data>
+  <data name="Sums_Done" xml:space="preserve"><value>สร้างไฟล์เช็กซัมสำหรับ {0, plural, other {# ไฟล์}} แล้ว: {1}</value></data>
+  <data name="Sums_WrittenMany" xml:space="preserve"><value>{0, plural, other {# ไฟล์}}</value></data>
+  <data name="Sums_SkippedTitle" xml:space="preserve"><value>ไฟล์ที่อ่านไม่ได้</value></data>
+  <data name="Sums_SkippedBody" xml:space="preserve"><value>{0, plural, other {ไม่สามารถอ่าน # ไฟล์ได้ และไม่อยู่ในไฟล์เช็กซัม}}</value></data>
+  <data name="Sums_SidecarTitle" xml:space="preserve"><value>ตรวจสอบด้วยไฟล์เช็กซัมหรือไม่</value></data>
+  <data name="Sums_SidecarBody" xml:space="preserve"><value>{0} ไม่ใช่ไฟล์เช็กซัม แต่มี {1} อยู่ข้างกัน ตรวจสอบ {0} ด้วย {1} หรือไม่</value></data>
+  <data name="Sums_SidecarUse" xml:space="preserve"><value>ตรวจสอบ</value></data>
+  <data name="Sums_Verify" xml:space="preserve"><value>ตรวจสอบ</value></data>
+  <data name="Sums_InfoBar" xml:space="preserve"><value>นี่คือไฟล์เช็กซัม</value></data>
+  <data name="Sums_AskAlgorithmTitle" xml:space="preserve"><value>เลือกอัลกอริทึม</value></data>
+  <data name="Sums_AskAlgorithmBody" xml:space="preserve"><value>ไม่สามารถตรวจหาอัลกอริทึมของบางแถวได้ เลือกอัลกอริทึมของเช็กซัม</value></data>
+  <data name="Sums_Verifying" xml:space="preserve"><value>กำลังตรวจสอบ...</value></data>
+  <data name="Sums_Verifying2" xml:space="preserve"><value>กำลังตรวจสอบ: {0}</value></data>
+  <data name="Sums_VerifyCancelled" xml:space="preserve"><value>ยกเลิกแล้ว: {0}</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>ข้าม {0, plural, other {# แถว}}ที่มีรูปแบบไม่ถูกต้อง หมายเลขแถว: {1}</value></data>
+  <data name="Sums_Summary_Match" xml:space="preserve"><value>ตรงกัน {0}</value></data>
+  <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>ไม่ตรงกัน {0}</value></data>
+  <data name="Sums_Summary_Missing" xml:space="preserve"><value>ไม่พบ {0}</value></data>
+  <data name="Sums_Summary_ReadError" xml:space="preserve"><value>ข้อผิดพลาดการอ่าน {0}</value></data>
+  <data name="Sums_Summary_None" xml:space="preserve"><value>ไม่มีรายการ</value></data>
+  <data name="Sums_SummarySeparator" xml:space="preserve"><value>, </value></data>
+  <data name="Sums_Status_Match" xml:space="preserve"><value>ตรงกัน</value></data>
+  <data name="Sums_Status_Mismatch" xml:space="preserve"><value>ไม่ตรงกัน</value></data>
+  <data name="Sums_Status_Missing" xml:space="preserve"><value>ไม่พบ</value></data>
+  <data name="Sums_Status_ReadError" xml:space="preserve"><value>ข้อผิดพลาดการอ่าน</value></data>
+  <data name="Sums_Filter_All" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="Sums_Col_State" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="Sums_Col_Path" xml:space="preserve"><value>เส้นทาง</value></data>
+  <data name="Sums_Col_Expected" xml:space="preserve"><value>ค่าที่คาดไว้</value></data>
+  <data name="Sums_Col_Actual" xml:space="preserve"><value>ค่าที่คำนวณได้</value></data>
+  <data name="Sums_Col_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Sums_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="FolderCmp_Title" xml:space="preserve"><value>เปรียบเทียบโฟลเดอร์</value></data>
+  <data name="FolderCmp_Compare" xml:space="preserve"><value>เปรียบเทียบ</value></data>
+  <data name="FolderCmp_Left" xml:space="preserve"><value>โฟลเดอร์ด้านซ้าย</value></data>
+  <data name="FolderCmp_Right" xml:space="preserve"><value>โฟลเดอร์ด้านขวา</value></data>
+  <data name="FolderCmp_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="FolderCmp_Subfolders" xml:space="preserve"><value>รวมโฟลเดอร์ย่อย</value></data>
+  <data name="FolderCmp_Pattern" xml:space="preserve"><value>รูปแบบชื่อไฟล์ (เช่น *.bin เว้นว่างเพื่อเลือกทั้งหมด)</value></data>
+  <data name="FolderCmp_Hash" xml:space="preserve"><value>เปรียบเทียบด้วย SHA-256 และแสดงค่า</value></data>
+  <data name="FolderCmp_Error_Missing" xml:space="preserve"><value>ไม่มีโฟลเดอร์นี้</value></data>
+  <data name="FolderCmp_Error_Running" xml:space="preserve"><value>กำลังเปรียบเทียบโฟลเดอร์อยู่แล้ว</value></data>
+  <data name="FolderCmp_Op" xml:space="preserve"><value>เปรียบเทียบโฟลเดอร์ {0} และ {1}</value></data>
+  <data name="FolderCmp_Comparing" xml:space="preserve"><value>กำลังเปรียบเทียบ...</value></data>
+  <data name="FolderCmp_Comparing2" xml:space="preserve"><value>กำลังเปรียบเทียบ: {0}</value></data>
+  <data name="FolderCmp_Cancelled" xml:space="preserve"><value>ยกเลิกแล้ว: {0}</value></data>
+  <data name="FolderCmp_Status_Same" xml:space="preserve"><value>เหมือนกัน</value></data>
+  <data name="FolderCmp_Status_Different" xml:space="preserve"><value>ต่างกัน</value></data>
+  <data name="FolderCmp_Status_LeftOnly" xml:space="preserve"><value>มีเฉพาะด้านซ้าย</value></data>
+  <data name="FolderCmp_Status_RightOnly" xml:space="preserve"><value>มีเฉพาะด้านขวา</value></data>
+  <data name="FolderCmp_Status_ReadError" xml:space="preserve"><value>ข้อผิดพลาดการอ่าน</value></data>
+  <data name="FolderCmp_Filter_HideSame" xml:space="preserve"><value>ซ่อนไฟล์ที่เหมือนกัน</value></data>
+  <data name="FolderCmp_Filter_All" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="FolderCmp_Col_State" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="FolderCmp_Col_Path" xml:space="preserve"><value>เส้นทางสัมพัทธ์</value></data>
+  <data name="FolderCmp_Col_LeftSize" xml:space="preserve"><value>ขนาดด้านซ้าย</value></data>
+  <data name="FolderCmp_Col_RightSize" xml:space="preserve"><value>ขนาดด้านขวา</value></data>
+  <data name="FolderCmp_Col_FirstDiff" xml:space="preserve"><value>ความแตกต่างแรก</value></data>
+  <data name="FolderCmp_Summary_Same" xml:space="preserve"><value>เหมือนกัน {0}</value></data>
+  <data name="FolderCmp_Summary_Different" xml:space="preserve"><value>ต่างกัน {0}</value></data>
+  <data name="FolderCmp_Summary_LeftOnly" xml:space="preserve"><value>มีเฉพาะด้านซ้าย {0}</value></data>
+  <data name="FolderCmp_Summary_RightOnly" xml:space="preserve"><value>มีเฉพาะด้านขวา {0}</value></data>
+  <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>ข้อผิดพลาดการอ่าน {0}</value></data>
+  <data name="FolderCmp_Summary_None" xml:space="preserve"><value>ไม่มีไฟล์</value></data>
+  <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>เปิดในการเปรียบเทียบไฟล์</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>เปิดในตัวแสดงภาพเลขทศนิยมลอยตัว</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>เปิดในตัวเลือกสี</value></data>
+  <data name="Menu_File_ExportPdf.Text" xml:space="preserve"><value>PDF(P)...</value></data>
+  <data name="Menu_File_ExportPdf.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Print.Text" xml:space="preserve"><value>พิมพ์(T)...</value></data>
+  <data name="Menu_File_Print.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_PrintPreview.Text" xml:space="preserve"><value>ตัวอย่างก่อนพิมพ์(Q)...</value></data>
+  <data name="Menu_File_PrintPreview.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_Ads.Text" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก(H)...</value></data>
+  <data name="Menu_File_Ads.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Split.Text" xml:space="preserve"><value>แยกไฟล์(S)...</value></data>
+  <data name="Menu_Tools_FileTools_Split.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_FileTools_Join.Text" xml:space="preserve"><value>รวมไฟล์(J)...</value></data>
+  <data name="Menu_Tools_FileTools_Join.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.Text" xml:space="preserve"><value>อินเทอร์ลีฟ(L)...</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.Text" xml:space="preserve"><value>ดีอินเทอร์ลีฟ(D)...</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools_Shred.Text" xml:space="preserve"><value>ลบอย่างปลอดภัย(H)...</value></data>
+  <data name="Menu_Tools_FileTools_Shred.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Ads.Text" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก(A)...</value></data>
+  <data name="Menu_Tools_FileTools_Ads.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_file_print" xml:space="preserve"><value>พิมพ์</value></data>
+  <data name="CmdAlias_file_print" xml:space="preserve"><value>พิมพ์ เครื่องพิมพ์ ตั้งค่าหน้ากระดาษ กระดาษ print printer page setup paper</value></data>
+  <data name="Cmd_file_printPreview" xml:space="preserve"><value>ตัวอย่างก่อนพิมพ์</value></data>
+  <data name="CmdAlias_file_printPreview" xml:space="preserve"><value>พิมพ์ ตัวอย่าง หน้า print preview page</value></data>
+  <data name="Cmd_file_exportPdf" xml:space="preserve"><value>ส่งออกเป็น PDF</value></data>
+  <data name="CmdAlias_file_exportPdf" xml:space="preserve"><value>pdf ส่งออก พิมพ์ บันทึก pdf export print save</value></data>
+  <data name="Cmd_file_ads_open" xml:space="preserve"><value>เปิดสตรีมข้อมูลทางเลือก</value></data>
+  <data name="CmdAlias_file_ads_open" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก ads alternate data stream ntfs zone identifier</value></data>
+  <data name="Cmd_tools_ads" xml:space="preserve"><value>จัดการสตรีมข้อมูลทางเลือก</value></data>
+  <data name="CmdAlias_tools_ads" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก แสดงรายการ สร้าง ลบ ads alternate data stream ntfs list create delete</value></data>
+  <data name="Cmd_tools_files_split" xml:space="preserve"><value>แยก</value></data>
+  <data name="CmdAlias_tools_files_split" xml:space="preserve"><value>แยก แบ่ง ไฟล์ ส่วน split cut divide file parts</value></data>
+  <data name="Cmd_tools_files_join" xml:space="preserve"><value>รวม</value></data>
+  <data name="CmdAlias_tools_files_join" xml:space="preserve"><value>รวม ต่อ ไฟล์ join concatenate merge files</value></data>
+  <data name="Cmd_tools_files_interleave" xml:space="preserve"><value>อินเทอร์ลีฟ</value></data>
+  <data name="CmdAlias_tools_files_interleave" xml:space="preserve"><value>อินเทอร์ลีฟ รวม rom ไบต์ interleave merge rom bytes</value></data>
+  <data name="Cmd_tools_files_deinterleave" xml:space="preserve"><value>ดีอินเทอร์ลีฟ</value></data>
+  <data name="CmdAlias_tools_files_deinterleave" xml:space="preserve"><value>ดีอินเทอร์ลีฟ แยก คู่ คี่ rom ไบต์ deinterleave split even odd rom bytes</value></data>
+  <data name="Cmd_tools_files_shred" xml:space="preserve"><value>ลบอย่างปลอดภัย</value></data>
+  <data name="CmdAlias_tools_files_shred" xml:space="preserve"><value>ทำลาย ลบอย่างปลอดภัย ล้าง เขียนทับ shred secure delete wipe overwrite erase</value></data>
+  <data name="Tab_Ads" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก...</value></data>
+  <data name="Panel_Ads_Title" xml:space="preserve"><value>สตรีมข้อมูลทางเลือก</value></data>
+  <data name="Set_files_adsNotice" xml:space="preserve"><value>แจ้งเตือนเมื่อไฟล์มีสตรีมข้อมูลทางเลือก</value></data>
+  <data name="SetDesc_files_adsNotice" xml:space="preserve"><value>แสดงข้อความพร้อมปุ่ม แสดงรายการ เมื่อคุณเปิดไฟล์บน NTFS ที่มีสตรีมอื่นนอกเหนือจากสตรีมหลัก</value></data>
+  <data name="WriteBlock_Enabled" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียนอยู่</value></data>
+  <data name="FileList_List" xml:space="preserve"><value>รายการไฟล์</value></data>
+  <data name="FileList_Add" xml:space="preserve"><value>เพิ่ม...</value></data>
+  <data name="FileList_AddFolder" xml:space="preserve"><value>เพิ่มโฟลเดอร์...</value></data>
+  <data name="FileList_Remove" xml:space="preserve"><value>เอาออก</value></data>
+  <data name="FileList_Remove_Key" xml:space="preserve"><value>R</value></data>
+  <data name="FileList_Up" xml:space="preserve"><value>เลื่อนขึ้น</value></data>
+  <data name="FileList_Up_Key" xml:space="preserve"><value>U</value></data>
+  <data name="FileList_Down" xml:space="preserve"><value>เลื่อนลง</value></data>
+  <data name="FileList_Down_Key" xml:space="preserve"><value>D</value></data>
+  <data name="FileList_SortName" xml:space="preserve"><value>เรียงตามชื่อ</value></data>
+  <data name="FileList_SortNatural" xml:space="preserve"><value>เรียงแบบธรรมชาติ</value></data>
+  <data name="FileOps_Input" xml:space="preserve"><value>อินพุต</value></data>
+  <data name="FileOps_InputDocument" xml:space="preserve"><value>เอกสารที่ใช้งานอยู่</value></data>
+  <data name="FileOps_InputDocumentNamed" xml:space="preserve"><value>เอกสารที่ใช้งานอยู่: {0}</value></data>
+  <data name="FileOps_InputFile" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="FileOps_FilePath" xml:space="preserve"><value>เส้นทางไฟล์</value></data>
+  <data name="FileOps_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="FileOps_Error_NoInput" xml:space="preserve"><value>เลือกเอกสารอินพุตหรือไฟล์ที่มีอยู่</value></data>
+  <data name="FileOps_Error_NothingToDo" xml:space="preserve"><value>ไม่มีข้อมูลที่จะประมวลผล</value></data>
+  <data name="FileOps_Error_Argument" xml:space="preserve"><value>มีค่าหนึ่งอยู่นอกช่วง</value></data>
+  <data name="FileOps_Error_Names" xml:space="preserve"><value>รูปแบบชื่อไฟล์ไม่ทำให้ได้ชื่อที่ไม่ซ้ำกัน</value></data>
+  <data name="FileOps_Error_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่านบางไฟล์ได้</value></data>
+  <data name="FileOps_OverwriteTitle" xml:space="preserve"><value>เขียนทับไฟล์ที่มีอยู่หรือไม่</value></data>
+  <data name="FileOps_OverwriteBody" xml:space="preserve"><value>{0, plural, other {ปลายทางมี # ไฟล์อยู่แล้ว}}</value></data>
+  <data name="FileOps_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
+  <data name="FileOps_NoSpaceTitle" xml:space="preserve"><value>พื้นที่ว่างไม่พอ</value></data>
+  <data name="FileOps_NoSpaceBody" xml:space="preserve"><value>วอลุ่มปลายทาง {0} มีที่ว่าง {2} ไบต์ แต่ต้องใช้ {1} ไบต์ ไม่มีการเขียนข้อมูล</value></data>
+  <data name="FileOps_KeepTitle" xml:space="preserve"><value>เก็บไฟล์ที่เสร็จแล้วไว้หรือไม่</value></data>
+  <data name="FileOps_KeepBody" xml:space="preserve"><value>{1} ก่อนหน้านั้นเสร็จแล้ว {0, plural, other {# ไฟล์}}</value></data>
+  <data name="FileOps_Keep" xml:space="preserve"><value>เก็บไว้</value></data>
+  <data name="FileOps_DeleteCompleted" xml:space="preserve"><value>ลบ</value></data>
+  <data name="FileOps_Cancelled" xml:space="preserve"><value>ยกเลิกการดำเนินการแล้ว</value></data>
+  <data name="FileOps_CancelledDeleted" xml:space="preserve"><value>ยกเลิกการดำเนินการแล้ว และลบไฟล์ที่สร้างไว้แล้ว</value></data>
+  <data name="FileOps_ErrorTitle" xml:space="preserve"><value>ข้อผิดพลาดของเครื่องมือไฟล์</value></data>
+  <data name="FileOps_CreatedList" xml:space="preserve"><value>{0, plural, other {สร้าง # ไฟล์ก่อนเกิดข้อผิดพลาด:}}</value></data>
+  <data name="Split_Title" xml:space="preserve"><value>แยกไฟล์</value></data>
+  <data name="Split_Run" xml:space="preserve"><value>แยก</value></data>
+  <data name="Split_Method" xml:space="preserve"><value>แยกตาม</value></data>
+  <data name="Split_BySize" xml:space="preserve"><value>ขนาดของแต่ละไฟล์</value></data>
+  <data name="Split_Size" xml:space="preserve"><value>ขนาด (เช่น 4G, 1.44M, 0x10000)</value></data>
+  <data name="Split_ByCount" xml:space="preserve"><value>จำนวนไฟล์ (2 ถึง 10,000)</value></data>
+  <data name="Split_Count" xml:space="preserve"><value>จำนวนไฟล์</value></data>
+  <data name="Split_Align" xml:space="preserve"><value>ทำให้ขนาดเป็นผลคูณของจำนวนไบต์นี้</value></data>
+  <data name="Split_ByPositions" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Split_Positions" xml:space="preserve"><value>ออฟเซ็ต (หนึ่งรายการต่อบรรทัด)</value></data>
+  <data name="Split_UseBookmarks" xml:space="preserve"><value>ใช้ตำแหน่งบุ๊กมาร์กของเอกสารด้วย</value></data>
+  <data name="Split_Output" xml:space="preserve"><value>เอาต์พุต</value></data>
+  <data name="Split_OutputFolder" xml:space="preserve"><value>โฟลเดอร์เอาต์พุต (ว่าง = โฟลเดอร์เดียวกับอินพุต)</value></data>
+  <data name="Split_NameFormat" xml:space="preserve"><value>รูปแบบชื่อไฟล์</value></data>
+  <data name="Split_JoinScript" xml:space="preserve"><value>สร้างไฟล์คำสั่งที่รวมส่วนต่าง ๆ (copy /b)</value></data>
+  <data name="Split_Checksum" xml:space="preserve"><value>สร้างไฟล์เช็กซัมของต้นฉบับและส่วนต่าง ๆ</value></data>
+  <data name="Split_Summary" xml:space="preserve"><value>{0, plural, other {# ไฟล์}}: {1} ถึง {2} รวม {3} ไบต์</value></data>
+  <data name="Split_Error_Size" xml:space="preserve"><value>ป้อนขนาดของแต่ละไฟล์</value></data>
+  <data name="Split_Error_Count" xml:space="preserve"><value>ป้อนจำนวนไฟล์ตั้งแต่ 2 ถึง 10,000</value></data>
+  <data name="Split_Error_Positions" xml:space="preserve"><value>มีออฟเซ็ตหนึ่งที่ไม่ถูกต้อง</value></data>
+  <data name="Split_Operation" xml:space="preserve"><value>กำลังแยก {0}</value></data>
+  <data name="Split_Done" xml:space="preserve"><value>แยกเป็น {0, plural, other {# ไฟล์}} ใน {1} แล้ว</value></data>
+  <data name="Join_Title" xml:space="preserve"><value>รวมไฟล์</value></data>
+  <data name="Join_Run" xml:space="preserve"><value>รวม</value></data>
+  <data name="Join_Files" xml:space="preserve"><value>ไฟล์ (ตามลำดับการรวม)</value></data>
+  <data name="Join_SequenceBody" xml:space="preserve"><value>เพิ่มไฟล์ที่มีหมายเลขต่อจาก {0} ด้วยหรือไม่ ({1, plural, other {อีก # ไฟล์}})</value></data>
+  <data name="Join_SequenceAll" xml:space="preserve"><value>เพิ่มไฟล์ที่มีหมายเลขทั้งหมด</value></data>
+  <data name="Join_SequenceOne" xml:space="preserve"><value>เพิ่มเฉพาะไฟล์นี้</value></data>
+  <data name="Join_Total" xml:space="preserve"><value>{0, plural, other {# ไฟล์}} รวม {1} ไบต์</value></data>
+  <data name="Join_PadNone" xml:space="preserve"><value>ไม่เติมช่องว่างระหว่างไฟล์</value></data>
+  <data name="Join_PadAlign" xml:space="preserve"><value>เริ่มทุกไฟล์ที่ตำแหน่งซึ่งเป็นผลคูณของ N ไบต์</value></data>
+  <data name="Join_Align" xml:space="preserve"><value>การจัดแนวเป็นไบต์</value></data>
+  <data name="Join_PadValue" xml:space="preserve"><value>ค่าที่ใช้เติม (ไบต์ Hex)</value></data>
+  <data name="Join_OutNew" xml:space="preserve"><value>เปิดผลลัพธ์เป็นเอกสารใหม่</value></data>
+  <data name="Join_OutFile" xml:space="preserve"><value>บันทึกผลลัพธ์ลงไฟล์</value></data>
+  <data name="Join_OutPath" xml:space="preserve"><value>ไฟล์เอาต์พุต</value></data>
+  <data name="Join_Error_Empty" xml:space="preserve"><value>เพิ่มไฟล์อย่างน้อยหนึ่งไฟล์</value></data>
+  <data name="Join_Error_Missing" xml:space="preserve"><value>ไม่พบไฟล์: {0}</value></data>
+  <data name="Join_Error_Align" xml:space="preserve"><value>ป้อนการจัดแนวตั้งแต่ 1 ไบต์ขึ้นไป</value></data>
+  <data name="Join_Error_PadValue" xml:space="preserve"><value>ป้อนไบต์ Hex หนึ่งไบต์ เช่น 00 หรือ FF</value></data>
+  <data name="Join_Error_OutPath" xml:space="preserve"><value>ป้อนไฟล์เอาต์พุต</value></data>
+  <data name="Join_Error_SameFile" xml:space="preserve"><value>ไฟล์เอาต์พุตเป็นหนึ่งในไฟล์อินพุต</value></data>
+  <data name="Join_Error_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่านไฟล์เหล่านี้ได้ จึงไม่ได้รวมอะไร:</value></data>
+  <data name="Join_Error_Write" xml:space="preserve"><value>ไม่สามารถเขียนไฟล์ได้: {0}</value></data>
+  <data name="Join_DocumentName" xml:space="preserve"><value>{0} ที่รวมแล้ว</value></data>
+  <data name="Join_Operation" xml:space="preserve"><value>กำลังรวมเป็น {0}</value></data>
+  <data name="Join_Done" xml:space="preserve"><value>รวมเป็น {0} แล้ว</value></data>
+  <data name="Join_ChangedDuringJoin" xml:space="preserve"><value>ไฟล์ต้นทางเหล่านี้เปลี่ยนแปลงระหว่างการรวม: {0}</value></data>
+  <data name="Deint_Title" xml:space="preserve"><value>ดีอินเทอร์ลีฟ</value></data>
+  <data name="Deint_Run" xml:space="preserve"><value>ดีอินเทอร์ลีฟ</value></data>
+  <data name="Deint_Count" xml:space="preserve"><value>จำนวนเอาต์พุต (2 ถึง 16)</value></data>
+  <data name="Deint_Unit" xml:space="preserve"><value>หน่วย</value></data>
+  <data name="Deint_Unit1" xml:space="preserve"><value>1 ไบต์</value></data>
+  <data name="Deint_Unit2" xml:space="preserve"><value>2 ไบต์</value></data>
+  <data name="Deint_Unit4" xml:space="preserve"><value>4 ไบต์</value></data>
+  <data name="Deint_Unit8" xml:space="preserve"><value>8 ไบต์</value></data>
+  <data name="Deint_UnitCustom" xml:space="preserve"><value>จำนวนไบต์อื่น</value></data>
+  <data name="Deint_UnitBytes" xml:space="preserve"><value>หน่วย (ไบต์)</value></data>
+  <data name="Deint_Pad" xml:space="preserve"><value>เติมส่วนท้ายที่ขาดด้วยค่า</value></data>
+  <data name="Deint_Keep" xml:space="preserve"><value>เก็บไบต์ที่เหลือไว้ในเอาต์พุตสุดท้าย</value></data>
+  <data name="Deint_PadValue" xml:space="preserve"><value>ค่า (ไบต์ Hex)</value></data>
+  <data name="Deint_Error_Count" xml:space="preserve"><value>ป้อนตัวเลขตั้งแต่ 2 ถึง 16</value></data>
+  <data name="Deint_Error_Unit" xml:space="preserve"><value>ป้อนหน่วยตั้งแต่ 1 ไบต์ถึง 1 MiB</value></data>
+  <data name="Deint_Summary" xml:space="preserve"><value>{0, plural, other {# เอาต์พุต}}: {1} ไบต์</value></data>
+  <data name="Deint_Operation" xml:space="preserve"><value>กำลังดีอินเทอร์ลีฟ {0}</value></data>
+  <data name="Deint_Done" xml:space="preserve"><value>เขียน {0, plural, other {# ไฟล์}} ลงใน {1} แล้ว</value></data>
+  <data name="Inter_Title" xml:space="preserve"><value>อินเทอร์ลีฟ</value></data>
+  <data name="Inter_Run" xml:space="preserve"><value>อินเทอร์ลีฟ</value></data>
+  <data name="Inter_Inputs" xml:space="preserve"><value>ไฟล์อินพุต (ตามลำดับ)</value></data>
+  <data name="Inter_PadShort" xml:space="preserve"><value>เติมอินพุตที่สั้นกว่าด้วยค่า</value></data>
+  <data name="Inter_ErrorOnMismatch" xml:space="preserve"><value>ล้มเหลวเมื่อความยาวต่างกัน</value></data>
+  <data name="Inter_Error_Count" xml:space="preserve"><value>เพิ่มไฟล์ 2 ถึง 16 ไฟล์</value></data>
+  <data name="Interleave_Error_Length" xml:space="preserve"><value>อินพุตมีความยาวต่างกัน</value></data>
+  <data name="Inter_Summary" xml:space="preserve"><value>{0, plural, other {# อินพุต}}: {1} ไบต์</value></data>
+  <data name="Inter_DocumentName" xml:space="preserve"><value>{0} ที่อินเทอร์ลีฟแล้ว</value></data>
+  <data name="Inter_Operation" xml:space="preserve"><value>กำลังอินเทอร์ลีฟ {0, plural, other {# ไฟล์}}</value></data>
+  <data name="Inter_Done" xml:space="preserve"><value>อินเทอร์ลีฟเป็น {0} แล้ว</value></data>
+  <data name="Shred_Title" xml:space="preserve"><value>ลบอย่างปลอดภัย</value></data>
+  <data name="Shred_Run" xml:space="preserve"><value>ลบ...</value></data>
+  <data name="Shred_Targets" xml:space="preserve"><value>ไฟล์และโฟลเดอร์ที่จะลบ</value></data>
+  <data name="Shred_Method" xml:space="preserve"><value>วิธีเขียนทับ</value></data>
+  <data name="Shred_Method_Zero" xml:space="preserve"><value>เขียนทับด้วยศูนย์หนึ่งรอบ (ค่าเริ่มต้น)</value></data>
+  <data name="Shred_Method_Random" xml:space="preserve"><value>เขียนทับด้วยข้อมูลสุ่มหนึ่งรอบ</value></data>
+  <data name="Shred_Method_Dod" xml:space="preserve"><value>DoD 5220.22-M (3 รอบ: 00, FF, สุ่ม)</value></data>
+  <data name="Shred_Method_Custom" xml:space="preserve"><value>กำหนดเอง</value></data>
+  <data name="Shred_Method_CustomSummary" xml:space="preserve"><value>กำหนดเอง ({0, plural, other {# รอบ}})</value></data>
+  <data name="Shred_Passes" xml:space="preserve"><value>จำนวนรอบ (1 ถึง 35)</value></data>
+  <data name="Shred_Patterns" xml:space="preserve"><value>รูปแบบของแต่ละรอบ หนึ่งรายการต่อบรรทัด (ไบต์ Hex หรือ random)</value></data>
+  <data name="Shred_Verify" xml:space="preserve"><value>อ่านกลับและตรวจสอบรอบสุดท้าย</value></data>
+  <data name="Shred_Error_Passes" xml:space="preserve"><value>ป้อนจำนวนรอบตั้งแต่ 1 ถึง 35</value></data>
+  <data name="Shred_Error_Pattern" xml:space="preserve"><value>รูปแบบไม่ถูกต้อง: {0}</value></data>
+  <data name="Shred_Reject_Open" xml:space="preserve"><value>{0} เปิดอยู่ในแอปนี้ ปิดก่อน</value></data>
+  <data name="Shred_Reject_System" xml:space="preserve"><value>ไม่สามารถใช้โฟลเดอร์ระบบ เช่น Windows และ Program Files เป็นเป้าหมายได้</value></data>
+  <data name="Shred_Reject_Root" xml:space="preserve"><value>ไม่สามารถใช้รากของไดรฟ์เป็นเป้าหมายได้</value></data>
+  <data name="Shred_Reject_Missing" xml:space="preserve"><value>ไม่พบ: {0}</value></data>
+  <data name="Shred_Confirm_Title" xml:space="preserve"><value>ลบถาวรหรือไม่</value></data>
+  <data name="Shred_Confirm_Primary" xml:space="preserve"><value>ลบถาวร</value></data>
+  <data name="Shred_Confirm_Summary" xml:space="preserve"><value>{0, plural, other {# ไฟล์}} รวม {1} ไบต์ วิธี: {2}</value></data>
+  <data name="Shred_Confirm_Irreversible" xml:space="preserve"><value>ไม่สามารถเลิกทำได้ ไฟล์จะไม่ไปที่ถังขยะและกู้คืนไม่ได้</value></data>
+  <data name="Shred_Limit_Ssd" xml:space="preserve"><value>บน SSD แฟลชไดรฟ์ USB และการ์ด SD การกระจายการสึกหรออาจทำให้ข้อมูลเดิมยังคงอยู่ที่อื่นแม้เขียนทับแล้ว</value></data>
+  <data name="Shred_Limit_Copies" xml:space="preserve"><value>ข้อมูลเดิมอาจยังคงอยู่ใน Volume Shadow Copy ข้อมูลสำรอง โฟลเดอร์ที่ซิงค์ เช่น OneDrive ไฟล์ที่บีบอัด เข้ารหัส หรือลดข้อมูลซ้ำซ้อน และระบบไฟล์แบบ copy-on-write เช่น ReFS</value></data>
+  <data name="Shred_Limit_Free" xml:space="preserve"><value>เครื่องมือนี้ไม่ล้างพื้นที่ว่างและพื้นที่สแลก</value></data>
+  <data name="Shred_Confirm_Verify" xml:space="preserve"><value>จะอ่านกลับและตรวจสอบรอบสุดท้าย</value></data>
+  <data name="Shred_Operation" xml:space="preserve"><value>ลบ {0, plural, other {# ไฟล์}} อย่างปลอดภัย</value></data>
+  <data name="Shred_Done" xml:space="preserve"><value>{0, plural, other {ลบ # ไฟล์อย่างปลอดภัยแล้ว}}</value></data>
+  <data name="Shred_Cancelled" xml:space="preserve"><value>ยกเลิกหลังจากลบ {0, plural, other {# ไฟล์}} แล้ว</value></data>
+  <data name="Shred_ResultTitle" xml:space="preserve"><value>ผลลัพธ์การลบอย่างปลอดภัย</value></data>
+  <data name="Shred_Failures" xml:space="preserve"><value>{0, plural, other {ไม่สามารถลบ # ไฟล์ได้}} (ลบแล้ว {1}):</value></data>
+  <data name="Shred_Failure_InUse" xml:space="preserve"><value>ถูกโปรแกรมอื่นใช้อยู่</value></data>
+  <data name="Shred_Failure_Access" xml:space="preserve"><value>ถูกปฏิเสธการเข้าถึง</value></data>
+  <data name="Shred_Failure_Missing" xml:space="preserve"><value>ไม่พบไฟล์</value></data>
+  <data name="Shred_Corrupted" xml:space="preserve"><value>{0, plural, other {มี # ไฟล์ที่ถูกเขียนทับเพียงบางส่วนและคงอยู่ที่เดิม เนื้อหาเสียหาย:}}</value></data>
+  <data name="Ads_Col_Name" xml:space="preserve"><value>สตรีม</value></data>
+  <data name="Ads_Col_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Ads_Col_Head" xml:space="preserve"><value>ไบต์แรก</value></data>
+  <data name="Ads_Col_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Ads_Filter_All" xml:space="preserve"><value>ทุกสตรีม</value></data>
+  <data name="Ads_Choose" xml:space="preserve"><value>เลือกไฟล์...</value></data>
+  <data name="Ads_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Ads_Create" xml:space="preserve"><value>สร้าง...</value></data>
+  <data name="Ads_Rename" xml:space="preserve"><value>เปลี่ยนชื่อ...</value></data>
+  <data name="Ads_Delete" xml:space="preserve"><value>ลบ...</value></data>
+  <data name="Ads_Export" xml:space="preserve"><value>ส่งออก...</value></data>
+  <data name="Ads_Import" xml:space="preserve"><value>นำเข้า...</value></data>
+  <data name="Ads_NoFile" xml:space="preserve"><value>เปิดไฟล์บนดิสก์ก่อน</value></data>
+  <data name="Ads_Unsupported" xml:space="preserve"><value>วอลุ่มนี้ไม่รองรับสตรีมข้อมูลทางเลือก</value></data>
+  <data name="Ads_Summary" xml:space="preserve"><value>{0}: {1, plural, other {# สตรีม}}</value></data>
+  <data name="Ads_SummaryUnsupported" xml:space="preserve"><value>{0}: วอลุ่มนี้ไม่รองรับสตรีมข้อมูลทางเลือก</value></data>
+  <data name="Ads_SummaryError" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ads_Known_ZoneIdentifier" xml:space="preserve"><value>Mark of the Web (ไฟล์มาจากอินเทอร์เน็ต)</value></data>
+  <data name="Ads_Known_SummaryInformation" xml:space="preserve"><value>คุณสมบัติสรุปของเอกสาร</value></data>
+  <data name="Ads_Known_DocumentSummaryInformation" xml:space="preserve"><value>คุณสมบัติสรุปของเอกสาร (ขยาย)</value></data>
+  <data name="Ads_Known_Afp" xml:space="preserve"><value>ข้อมูลไฟล์ Mac</value></data>
+  <data name="Ads_Known_Encryptable" xml:space="preserve"><value>เครื่องหมายการเข้ารหัส</value></data>
+  <data name="Ads_Known_Favicon" xml:space="preserve"><value>ไอคอนเว็บไซต์</value></data>
+  <data name="Ads_Known_OutlookExpress" xml:space="preserve"><value>คุณสมบัติของไคลเอนต์อีเมล</value></data>
+  <data name="Ads_Known_System" xml:space="preserve"><value>สตรีมระบบ</value></data>
+  <data name="Ads_CreateTitle" xml:space="preserve"><value>สร้างสตรีม</value></data>
+  <data name="Ads_CreateRun" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="Ads_RenameTitle" xml:space="preserve"><value>เปลี่ยนชื่อสตรีม</value></data>
+  <data name="Ads_RenameRun" xml:space="preserve"><value>เปลี่ยนชื่อ</value></data>
+  <data name="Ads_NameHeader" xml:space="preserve"><value>ชื่อสตรีม</value></data>
+  <data name="Ads_Error_InvalidName" xml:space="preserve"><value>ชื่อต้องไม่มี : \ / หรืออักขระควบคุม</value></data>
+  <data name="Ads_Error_Exists" xml:space="preserve"><value>มีสตรีมชื่อนี้อยู่แล้ว</value></data>
+  <data name="Ads_Error_NotFound" xml:space="preserve"><value>ไม่พบ</value></data>
+  <data name="Ads_Error_Access" xml:space="preserve"><value>ถูกปฏิเสธการเข้าถึง</value></data>
+  <data name="Ads_Error_InUse" xml:space="preserve"><value>ถูกโปรแกรมอื่นใช้อยู่</value></data>
+  <data name="Ads_Error_Refs" xml:space="preserve"><value>ReFS จำกัดขนาดของสตรีมข้อมูลทางเลือก จึงไม่สามารถบันทึกได้</value></data>
+  <data name="Ads_Error_Default" xml:space="preserve"><value>ไม่สามารถเปลี่ยนชื่อหรือลบสตรีมหลักได้</value></data>
+  <data name="Ads_Error_Open" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้: {1}</value></data>
+  <data name="Ads_Error_OpenInTab" xml:space="preserve"><value>{0} เปิดอยู่ในแท็บ ปิดแท็บก่อน</value></data>
+  <data name="Ads_Error_Write" xml:space="preserve"><value>ไม่สามารถเขียนไฟล์ได้: {0}</value></data>
+  <data name="Ads_Delete_Title" xml:space="preserve"><value>ลบสตรีมหรือไม่</value></data>
+  <data name="Ads_Delete_Body" xml:space="preserve"><value>ลบสตรีม {0} ({1} ไบต์) หรือไม่</value></data>
+  <data name="Ads_Delete_Irreversible" xml:space="preserve"><value>ไม่สามารถเลิกทำได้</value></data>
+  <data name="Ads_Delete_Run" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Ads_Import_Title" xml:space="preserve"><value>แทนที่เนื้อหาของสตรีมหรือไม่</value></data>
+  <data name="Ads_Import_Body" xml:space="preserve"><value>เนื้อหาของ {0} จะถูกแทนที่ด้วยไฟล์ที่คุณเลือกต่อไป</value></data>
+  <data name="Ads_Import_Run" xml:space="preserve"><value>เลือกไฟล์</value></data>
+  <data name="Ads_Operation_Rename" xml:space="preserve"><value>กำลังเปลี่ยนชื่อสตรีม {0}</value></data>
+  <data name="Ads_Operation_Export" xml:space="preserve"><value>กำลังส่งออกสตรีม {0}</value></data>
+  <data name="Ads_Operation_Import" xml:space="preserve"><value>กำลังนำเข้าไปยังสตรีม {0}</value></data>
+  <data name="Ads_Exported" xml:space="preserve"><value>ส่งออกไปยัง {0} แล้ว</value></data>
+  <data name="Ads_ExportType" xml:space="preserve"><value>ไฟล์ไบนารี</value></data>
+  <data name="Ads_Notice" xml:space="preserve"><value>{0, plural, other {ไฟล์นี้มีสตรีมข้อมูลทางเลือก # สตรีม}}</value></data>
+  <data name="Ads_ShowList" xml:space="preserve"><value>แสดงรายการ</value></data>
+  <data name="Print_Title" xml:space="preserve"><value>พิมพ์</value></data>
+  <data name="Print_PdfTitle" xml:space="preserve"><value>ส่งออกเป็น PDF</value></data>
+  <data name="Print_Run" xml:space="preserve"><value>พิมพ์</value></data>
+  <data name="Print_SavePdf" xml:space="preserve"><value>บันทึกเป็น PDF...</value></data>
+  <data name="Print_Printer" xml:space="preserve"><value>เครื่องพิมพ์</value></data>
+  <data name="Print_Range" xml:space="preserve"><value>ช่วงการพิมพ์</value></data>
+  <data name="Print_RangeAll" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="Print_RangeSelection" xml:space="preserve"><value>ส่วนที่เลือก</value></data>
+  <data name="Print_RangeOffsets" xml:space="preserve"><value>ช่วงออฟเซ็ต</value></data>
+  <data name="Print_Offsets" xml:space="preserve"><value>ออฟเซ็ต (จุดเริ่ม:ความยาว หรือ จุดเริ่ม..จุดสิ้นสุด)</value></data>
+  <data name="Print_RangePages" xml:space="preserve"><value>หน้า</value></data>
+  <data name="Print_PagesHint" xml:space="preserve"><value>หน้า (เช่น 1-3, 8)</value></data>
+  <data name="Print_Paper" xml:space="preserve"><value>กระดาษ</value></data>
+  <data name="Print_Orientation" xml:space="preserve"><value>การวางแนว</value></data>
+  <data name="Print_Portrait" xml:space="preserve"><value>แนวตั้ง</value></data>
+  <data name="Print_Landscape" xml:space="preserve"><value>แนวนอน</value></data>
+  <data name="Print_Margins" xml:space="preserve"><value>ระยะขอบ</value></data>
+  <data name="Print_MarginTop" xml:space="preserve"><value>บน</value></data>
+  <data name="Print_MarginBottom" xml:space="preserve"><value>ล่าง</value></data>
+  <data name="Print_MarginLeft" xml:space="preserve"><value>ซ้าย</value></data>
+  <data name="Print_MarginRight" xml:space="preserve"><value>ขวา</value></data>
+  <data name="Print_Font" xml:space="preserve"><value>แบบอักษร</value></data>
+  <data name="Print_FontSize" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Print_BytesPerRow" xml:space="preserve"><value>ไบต์ต่อแถว</value></data>
+  <data name="Print_FitToPaper" xml:space="preserve"><value>ปรับให้พอดีกับกระดาษ</value></data>
+  <data name="Print_Columns" xml:space="preserve"><value>คอลัมน์</value></data>
+  <data name="Print_ColOffset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Print_ColHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Print_ColText" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Print_ColorMode" xml:space="preserve"><value>สี</value></data>
+  <data name="Print_ColorBW" xml:space="preserve"><value>ขาวดำ (ขีดเส้นใต้และแรเงา)</value></data>
+  <data name="Print_ColorColor" xml:space="preserve"><value>สี (สีพื้นหลัง)</value></data>
+  <data name="Print_HeaderFooter" xml:space="preserve"><value>ส่วนหัวและส่วนท้าย (ใส่ name, path, page, pages, date, time, range, size, modified ในวงเล็บปีกกา)</value></data>
+  <data name="Print_HeaderLeft" xml:space="preserve"><value>ส่วนหัวด้านซ้าย</value></data>
+  <data name="Print_HeaderCenter" xml:space="preserve"><value>ส่วนหัวตรงกลาง</value></data>
+  <data name="Print_HeaderRight" xml:space="preserve"><value>ส่วนหัวด้านขวา</value></data>
+  <data name="Print_FooterLeft" xml:space="preserve"><value>ส่วนท้ายด้านซ้าย</value></data>
+  <data name="Print_FooterCenter" xml:space="preserve"><value>ส่วนท้ายตรงกลาง</value></data>
+  <data name="Print_FooterRight" xml:space="preserve"><value>ส่วนท้ายด้านขวา</value></data>
+  <data name="Print_Copies" xml:space="preserve"><value>จำนวนสำเนา (1 ถึง 999)</value></data>
+  <data name="Print_SaveDefaults" xml:space="preserve"><value>บันทึกเป็นค่าเริ่มต้น</value></data>
+  <data name="Print_DefaultsSaved" xml:space="preserve"><value>บันทึกการตั้งค่าการพิมพ์เป็นค่าเริ่มต้นแล้ว</value></data>
+  <data name="Print_Status" xml:space="preserve"><value>{0, plural, other {# หน้า}} {1} ไบต์ต่อแถว {2} แถวต่อหน้า</value></data>
+  <data name="Print_Error_Margin" xml:space="preserve"><value>ระยะขอบต้องอยู่ระหว่าง 0 ถึง 50 มม.</value></data>
+  <data name="Print_Error_Offsets" xml:space="preserve"><value>ช่วงออฟเซ็ตไม่ถูกต้อง</value></data>
+  <data name="Print_Error_PageRange" xml:space="preserve"><value>ช่วงหน้าไม่ถูกต้อง ใช้รูปแบบ เช่น 1-3, 8</value></data>
+  <data name="Print_Error_Nothing" xml:space="preserve"><value>ไม่มีสิ่งที่จะพิมพ์ในช่วงนี้</value></data>
+  <data name="Print_Error_Limit" xml:space="preserve"><value>{0} หน้าเกินขีดจำกัด {1} หน้า ลดช่วงให้แคบลง</value></data>
+  <data name="Print_Error_NoFont" xml:space="preserve"><value>ไม่พบแบบอักษร TrueType ที่ใช้ได้</value></data>
+  <data name="Print_Error_Failed" xml:space="preserve"><value>ไม่สามารถพิมพ์ได้: {0}</value></data>
+  <data name="Print_Error_PdfFailed" xml:space="preserve"><value>ไม่สามารถเขียน PDF ได้: {0}</value></data>
+  <data name="Print_Confirm_Title" xml:space="preserve"><value>พิมพ์หลายหน้าหรือไม่</value></data>
+  <data name="Print_Confirm_Body" xml:space="preserve"><value>{0, plural, other {จะพิมพ์ # หน้า}} ตรวจสอบปริมาณกระดาษ</value></data>
+  <data name="Print_Confirm_Run" xml:space="preserve"><value>พิมพ์</value></data>
+  <data name="Print_Confirm_Change" xml:space="preserve"><value>เปลี่ยนช่วง</value></data>
+  <data name="Print_Operation" xml:space="preserve"><value>กำลังพิมพ์ {0}</value></data>
+  <data name="Print_Operation_Pdf" xml:space="preserve"><value>กำลังเขียน PDF {0}</value></data>
+  <data name="Print_Done" xml:space="preserve"><value>พิมพ์ {0, plural, other {# หน้า}} แล้ว</value></data>
+  <data name="Print_PdfDone" xml:space="preserve"><value>บันทึก {0} แล้ว ({1, plural, other {# หน้า}})</value></data>
+  <data name="Print_Cancelled" xml:space="preserve"><value>ยกเลิกการพิมพ์แล้ว</value></data>
+  <data name="Print_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่านบางช่วงได้ และพิมพ์เป็น ??</value></data>
+  <data name="Print_Modified" xml:space="preserve"><value>(แก้ไขแล้ว)</value></data>
+  <data name="Print_PdfFileType" xml:space="preserve"><value>เอกสาร PDF</value></data>
+  <data name="Print_Preview_Name" xml:space="preserve"><value>ตัวอย่างก่อนพิมพ์</value></data>
+  <data name="Print_Preview_First" xml:space="preserve"><value>หน้าแรก</value></data>
+  <data name="Print_Preview_Previous" xml:space="preserve"><value>หน้าก่อนหน้า</value></data>
+  <data name="Print_Preview_Next" xml:space="preserve"><value>หน้าถัดไป</value></data>
+  <data name="Print_Preview_Last" xml:space="preserve"><value>หน้าสุดท้าย</value></data>
+  <data name="Print_Preview_PageNumber" xml:space="preserve"><value>หมายเลขหน้า</value></data>
+  <data name="Print_Preview_Zoom" xml:space="preserve"><value>ซูม</value></data>
+  <data name="Print_Preview_TwoPages" xml:space="preserve"><value>สองหน้า</value></data>
+  <data name="Print_Preview_Info" xml:space="preserve"><value>หน้า {0} / {1}</value></data>
+  <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ทั้งหน้า</value></data>
+  <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>พอดีความกว้าง</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>เลือกโฟลเดอร์...</value></data>
 </root>

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    自己適用型パッチ (03 の EDIT-44) の適用プログラム。HexEditor を持っていない人がパッチを当てるための小さな実行ファイル。
+    アプリはこの実行ファイルの後ろに独自形式のパッチを付けて出力する (Core の SelfPatchBuilder、末尾の目印は SelfPatchContainer)。
+    作り方は .NET の NativeAOT (仕様 5 の決定。.NET の実行環境のない PC で動く)。発行 (dotnet publish -r win-x64 / win-arm64) には
+    C++ のビルドツールが要り、build/publish.ps1 が x64 と ARM64 の両方を作って PatchApplier\<arch>\HexPatchApply.stub としてアプリに入れる
+    (拡張子を .exe にしないのは、配布物の署名の処理でこのファイルに署名しないため。出力する実行ファイルには署名しない。仕様 3)。
+    パッチの読み込みと適用は Core の src/HexEditor.Core/Patches/Shared のファイルを共有する。UI は Windows の標準のダイアログだけを使う。
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <AssemblyName>HexPatchApply</AssemblyName>
+    <RootNamespace>HexEditor.PatchApplier</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <StackTraceSupport>false</StackTraceSupport>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\HexEditor.Core\Patches\Shared\*.cs" Link="Shared\%(Filename)%(Extension)" />
+    <Compile Include="..\HexEditor.Platform\Localization\DisplayLanguages.cs" Link="Shared\DisplayLanguages.cs" />
+  </ItemGroup>
+
+</Project>

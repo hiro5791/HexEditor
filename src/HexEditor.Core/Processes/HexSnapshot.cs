@@ -46,6 +46,9 @@ public sealed record SnapshotRegion(long BaseAddress, long Size, uint Protect, R
 /// <summary>読めなかった範囲。</summary>
 public sealed record SnapshotGap(long BaseAddress, long Size);
 
+/// <summary>スナップショットの保存の結果 (ENG-35)。</summary>
+public sealed record SnapshotCaptureResult(SnapshotMetadata Metadata, ProcessCaptureSummary Summary);
+
 /// <summary>
 /// プロセスのスナップショットのファイル形式 (ENG-35 の仕様 3) の読み書き。
 /// <code>[マジック "HXSNAP01" 8][メタデータの長さ u32][メタデータ (UTF-8 JSON)][データ (各領域は 4 KiB 境界から)]</code>
@@ -70,40 +73,76 @@ public static class HexSnapshot
     public static SnapshotMetadata Capture(ProcessMemoryByteSource source, string path, SnapshotScope scope = SnapshotScope.AllReadable,
         IReadOnlyCollection<long>? selectedRegionBases = null, LongRunningOperation? operation = null)
     {
-        IReadOnlyList<MemoryRegion> regions = [.. source.MemoryRegions.Where(r => Include(r, scope, selectedRegionBases)).OrderBy(r => r.BaseAddress)];
+        IReadOnlyList<(long, long)> selected = scope == SnapshotScope.Selected && selectedRegionBases is not null
+            ? [.. source.MemoryRegions.Where(r => selectedRegionBases.Contains(r.BaseAddress)).Select(r => (r.BaseAddress, r.Size))]
+            : [];
+        return Write(source, path, new ProcessCaptureOptions { Scope = scope, SelectedRanges = selected, RefreshRegions = false }, operation).Metadata;
+    }
+
+    /// <summary>
+    /// スナップショットを保存する (ENG-35 の仕様 1〜3、「巨大ファイル・長時間処理」「エラー」)。同じフォルダの一時ファイルに書き、完了したら
+    /// 名前を変えて確定する。キャンセル・失敗・取得中のプロセスの終了では一時ファイルを削除し、<paramref name="path"/> の既存のファイルは
+    /// 変えない。取得の前に空き容量を確かめる (<see cref="ProcessCaptureOptions.Volumes"/>)。
+    /// </summary>
+    public static SnapshotCaptureResult Write(ProcessMemoryByteSource source, string path, ProcessCaptureOptions options,
+        LongRunningOperation? operation = null)
+    {
+        string temp = ProcessCapture.TempPathFor(path);
+        try
+        {
+            SnapshotCaptureResult result = WriteCore(source, temp, options, operation);
+            ProcessCapture.Commit(temp, path);
+            return result;
+        }
+        catch
+        {
+            // 途中で失敗した (キャンセル・権限不足・書き込みの失敗・プロセスの終了): 作りかけのファイルを残さない。
+            ProcessCapture.TryDelete(temp);
+            throw;
+        }
+    }
+
+    private static SnapshotCaptureResult WriteCore(ProcessMemoryByteSource source, string path, ProcessCaptureOptions options,
+        LongRunningOperation? operation)
+    {
+        using ProcessCapture.PauseScope pause = ProcessCapture.Pause(source.Memory, options.PauseTarget);
+        if (options.RefreshRegions)
+        {
+            try
+            {
+                source.RefreshRegions();
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+            {
+                // 取り直せない (終了した): 開いたときの一覧で続け、読み込みで終了を検出する。
+            }
+        }
+
+        if (source.HasExited || source.Memory.HasExited)
+        {
+            throw new ProcessExitedDuringCaptureException();
+        }
+
+        IReadOnlyList<MemoryRegion> regions = ProcessCapture.SelectRegions(source.MemoryRegions, options);
+        IReadOnlyList<ProcessModule> modules = source.Modules;
         long total = regions.Sum(r => r.Size);
+        long metadataReserve = AlignUp(4096 + (regions.Count * 200L) + (modules.Count * 400L), Alignment);
+        ProcessCapture.CheckSpace(path, metadataReserve + total + (regions.Count * (long)Alignment), options.Volumes);
         operation?.SetTotal(total);
 
         var written = new List<SnapshotRegion>();
         var gaps = new List<SnapshotGap>();
-        byte[] buffer = new byte[ProcessMemoryByteSource.MaxTransfer];
+        byte[] buffer = new byte[ProcessCapture.ChunkSize];
         long done = 0;
         bool denied = false;
-
-        try
+        long dataStart;
+        long headerEnd = Magic.Length + 4;
+        using (var stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
         {
-            return Write();
-        }
-        catch
-        {
-            // 途中で失敗した (キャンセル・権限不足・書き込みの失敗): 作りかけのファイルを残さない。
-            TryDelete(path);
-            throw;
-        }
-
-        SnapshotMetadata Write()
-        {
-        using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
-        {
-            // メタデータの長さは後で書くため、まず仮のヘッダ分を空ける。領域のデータは 4 KiB 境界から始める。
+            // メタデータの長さとメタデータは後で書くため、見積もった分を空ける。領域のデータは 4 KiB 境界から始める。
             stream.Write(Magic);
-            Span<byte> placeholder = stackalloc byte[4];
-            stream.Write(placeholder);
-            long headerEnd = stream.Position;
-
-            // データ部の開始を 4 KiB に揃える。メタデータの大きさが分からないため、十分な見積もりで空ける。
-            long metadataReserve = AlignUp(2048 + (regions.Count * 160L) + (source.Modules.Count * 256L), Alignment);
-            long dataStart = AlignUp(headerEnd + metadataReserve, Alignment);
+            stream.Write(stackalloc byte[4]);
+            dataStart = AlignUp(headerEnd + metadataReserve, Alignment);
             stream.SetLength(dataStart);
             stream.Position = dataStart;
 
@@ -112,30 +151,22 @@ public static class HexSnapshot
                 operation?.CancellationToken.ThrowIfCancellationRequested();
                 long fileOffset = AlignUp(stream.Position, Alignment);
                 stream.Position = fileOffset;
-                long regionBaseOffset = region.BaseAddress - source.BaseAddress;
-                bool anyWritten = false;
+                int gapsBefore = gaps.Count;
+                long gapBytesBefore = gaps.Sum(g => g.Size);
                 for (long pos = 0; pos < region.Size; pos += buffer.Length)
                 {
+                    operation?.CancellationToken.ThrowIfCancellationRequested();
                     int n = (int)Math.Min(buffer.Length, region.Size - pos);
-                    ReadResult read = source.Read(regionBaseOffset + pos, buffer.AsSpan(0, n));
-                    if (read.IsComplete)
-                    {
-                        stream.Write(buffer, 0, n);
-                        anyWritten = true;
-                    }
-                    else
-                    {
-                        // 読めなかったページはデータに含めず、メタデータに記録する。
-                        gaps.Add(new SnapshotGap(region.BaseAddress + pos, n));
-                        denied |= read.Unreadable.Any(u => u.Reason == UnreadableReason.AccessDenied || u.ErrorCode == Devices.Win32Errors.AccessDenied);
-                        stream.Position += n;
-                    }
+                    ProcessCapture.ReadChunk(source.Memory, region.BaseAddress + pos, buffer.AsSpan(0, n), gaps, ref denied);
 
+                    // 読めなかったページは 0 のまま位置だけ進める (データには含めない。位置は領域の先頭からの位置で決まる)。
+                    stream.Write(buffer, 0, n);
                     done += n;
                     operation?.Report(done);
                 }
 
-                if (anyWritten)
+                bool allUnreadable = gaps.Sum(g => g.Size) - gapBytesBefore >= region.Size && gaps.Count > gapsBefore;
+                if (!allUnreadable)
                 {
                     written.Add(new SnapshotRegion(region.BaseAddress, region.Size, region.Protect, region.Type, region.MappedName, fileOffset));
                 }
@@ -147,24 +178,42 @@ public static class HexSnapshot
             {
                 throw new ProcessAccessException(ProcessOpenFailure.AccessDenied, Devices.Win32Errors.AccessDenied, "Access denied.");
             }
+        }
 
-            var metadata = new SnapshotMetadata
-            {
-                ProcessName = source.ProcessName,
-                Pid = source.Pid,
-                Architecture = source.Memory.Architecture,
-                CapturedUtc = DateTime.UtcNow,
-                AddressLimit = source.Memory.AddressLimit,
-                Regions = written,
-                Modules = source.Modules,
-                UnreadablePages = gaps,
-            };
-            byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata, Json);
-            if (headerEnd + json.Length > dataStart)
-            {
-                throw new IOException("The snapshot metadata did not fit in the reserved header.");
-            }
+        var metadata = new SnapshotMetadata
+        {
+            ProcessName = source.ProcessName,
+            Pid = source.Pid,
+            Architecture = source.Memory.Architecture,
+            CapturedUtc = DateTime.UtcNow,
+            AddressLimit = source.Memory.AddressLimit,
+            Regions = written,
+            Modules = modules,
+            UnreadablePages = gaps,
+        };
+        metadata = WriteMetadata(path, metadata, dataStart, operation);
+        (int unreadableRegions, long unreadableBytes) = ProcessCapture.Summarize(regions, gaps);
+        return new SnapshotCaptureResult(metadata, new ProcessCaptureSummary
+        {
+            PauseFailed = pause.Failed,
+            UnreadableRegions = unreadableRegions,
+            UnreadableBytes = unreadableBytes,
+            Regions = written.Count,
+            CapturedBytes = total - unreadableBytes,
+        });
+    }
 
+    /// <summary>
+    /// メタデータを書く。見積もった領域に収まらない場合 (読めなかったページが非常に多い) は、データ部をずらした新しいファイルに写す
+    /// (各領域の位置は 4 KiB の倍数だけずらすので、4 KiB 境界のまま)。
+    /// </summary>
+    private static SnapshotMetadata WriteMetadata(string path, SnapshotMetadata metadata, long dataStart, LongRunningOperation? operation)
+    {
+        long headerEnd = Magic.Length + 4;
+        byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata, Json);
+        if (headerEnd + json.Length <= dataStart)
+        {
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.None);
             stream.Position = Magic.Length;
             Span<byte> size = stackalloc byte[4];
             BinaryPrimitives.WriteInt32LittleEndian(size, json.Length);
@@ -172,6 +221,42 @@ public static class HexSnapshot
             stream.Write(json);
             return metadata;
         }
+
+        // 位置の桁が増えても収まるよう、余裕を持ってずらす。
+        long newStart = AlignUp(headerEnd + json.Length + 4096, Alignment);
+        long delta = newStart - dataStart;
+        SnapshotMetadata moved = metadata with { Regions = [.. metadata.Regions.Select(r => r with { FileOffset = r.FileOffset + delta })] };
+        json = JsonSerializer.SerializeToUtf8Bytes(moved, Json);
+        string relocated = path + ".move";
+        try
+        {
+            using (var source = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var target = new FileStream(relocated, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                target.Write(Magic);
+                Span<byte> size = stackalloc byte[4];
+                BinaryPrimitives.WriteInt32LittleEndian(size, json.Length);
+                target.Write(size);
+                target.Write(json);
+                target.SetLength(newStart);
+                target.Position = newStart;
+                source.Position = dataStart;
+                byte[] buffer = new byte[ProcessCapture.ChunkSize];
+                int n;
+                while ((n = source.Read(buffer)) > 0)
+                {
+                    operation?.CancellationToken.ThrowIfCancellationRequested();
+                    target.Write(buffer, 0, n);
+                }
+            }
+
+            File.Move(relocated, path, overwrite: true);
+            return moved;
+        }
+        catch
+        {
+            ProcessCapture.TryDelete(relocated);
+            throw;
         }
     }
 
@@ -190,40 +275,97 @@ public static class HexSnapshot
         }
     }
 
-    private static void TryDelete(string path)
+    /// <summary>メタデータの大きさの上限 (領域・モジュール・読めなかったページの一覧。巨大な値で大きな配列を確保しない)。</summary>
+    public const int MaxMetadataBytes = 256 * 1024 * 1024;
+
+    /// <summary>
+    /// スナップショットのメタデータを読む。ファイルは信頼できない入力として扱い、形式の誤り (途中で終わっている、JSON が壊れている、
+    /// 領域が範囲外・重なっている・負の値など) はすべて <see cref="InvalidDataException"/> にする。
+    /// </summary>
+    public static SnapshotMetadata ReadMetadata(Stream stream)
     {
         try
         {
-            File.Delete(path);
+            Span<byte> magic = stackalloc byte[8];
+            stream.ReadExactly(magic);
+            if (!magic.SequenceEqual(Magic))
+            {
+                throw new InvalidDataException("Not a .hexsnap file.");
+            }
+
+            Span<byte> size = stackalloc byte[4];
+            stream.ReadExactly(size);
+            int length = BinaryPrimitives.ReadInt32LittleEndian(size);
+            if (length <= 0 || length > MaxMetadataBytes || (stream.CanSeek && length > stream.Length - stream.Position))
+            {
+                throw new InvalidDataException("The snapshot metadata length is not valid.");
+            }
+
+            byte[] json = new byte[length];
+            stream.ReadExactly(json);
+            SnapshotMetadata metadata = JsonSerializer.Deserialize<SnapshotMetadata>(json, Json) ?? throw new InvalidDataException("Empty snapshot metadata.");
+            return Validate(metadata);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (EndOfStreamException ex)
         {
+            throw new InvalidDataException("The snapshot file is truncated.", ex);
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidDataException("The snapshot metadata is not valid: " + ex.Message, ex);
         }
     }
 
-    private static bool Include(MemoryRegion region, SnapshotScope scope, IReadOnlyCollection<long>? selected) =>
-        region.State == RegionState.Commit && region.IsReadable && scope switch
-        {
-            SnapshotScope.WritableOnly => region.IsWritable,
-            SnapshotScope.Selected => selected is not null && selected.Contains(region.BaseAddress),
-            _ => true,
-        };
-
-    /// <summary>スナップショットのメタデータを読む。</summary>
-    public static SnapshotMetadata ReadMetadata(Stream stream)
+    /// <summary>
+    /// 読み込んだメタデータを確かめる: アドレス空間の長さが 0 以上、領域は空でなく、アドレス空間の中にあり、重ならない (アドレスの順にする)。
+    /// ファイル内の位置は 0 以上。読めなかったページも負でない。
+    /// </summary>
+    private static SnapshotMetadata Validate(SnapshotMetadata metadata)
     {
-        Span<byte> magic = stackalloc byte[8];
-        stream.ReadExactly(magic);
-        if (!magic.SequenceEqual(Magic))
+        if (metadata.AddressLimit < 0 || metadata.Regions is null)
         {
-            throw new InvalidDataException("Not a .hexsnap file.");
+            throw new InvalidDataException("The snapshot metadata is not valid.");
         }
 
-        Span<byte> size = stackalloc byte[4];
-        stream.ReadExactly(size);
-        byte[] json = new byte[BinaryPrimitives.ReadInt32LittleEndian(size)];
-        stream.ReadExactly(json);
-        return JsonSerializer.Deserialize<SnapshotMetadata>(json, Json) ?? throw new InvalidDataException("Empty snapshot metadata.");
+        var regions = new List<SnapshotRegion>(metadata.Regions.Count);
+        foreach (SnapshotRegion? r in metadata.Regions)
+        {
+            if (r is null || r.BaseAddress < 0 || r.Size <= 0 || r.FileOffset < 0 || r.Size > metadata.AddressLimit - r.BaseAddress
+                || r.Size > long.MaxValue - r.FileOffset)
+            {
+                throw new InvalidDataException("A snapshot region is out of range.");
+            }
+
+            regions.Add(r);
+        }
+
+        regions.Sort((a, b) => a.BaseAddress.CompareTo(b.BaseAddress));
+        for (int i = 1; i < regions.Count; i++)
+        {
+            if (regions[i].BaseAddress < regions[i - 1].BaseAddress + regions[i - 1].Size)
+            {
+                throw new InvalidDataException("Snapshot regions overlap.");
+            }
+        }
+
+        var gaps = new List<SnapshotGap>();
+        foreach (SnapshotGap? g in metadata.UnreadablePages ?? [])
+        {
+            if (g is null || g.BaseAddress < 0 || g.Size <= 0 || g.Size > long.MaxValue - g.BaseAddress)
+            {
+                throw new InvalidDataException("An unreadable page range is out of range.");
+            }
+
+            gaps.Add(g);
+        }
+
+        return metadata with
+        {
+            ProcessName = metadata.ProcessName ?? string.Empty,
+            Regions = regions,
+            Modules = [.. (metadata.Modules ?? []).Where(m => m is not null)],
+            UnreadablePages = gaps,
+        };
     }
 
     private static long AlignUp(long value, long alignment) => (value + alignment - 1) / alignment * alignment;

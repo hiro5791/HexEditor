@@ -21,6 +21,14 @@
 
         <!--  対象範囲と要素の設定 (06 の 0.1、ANA-10 の仕様 1〜3)  -->
         <local:WrapPanel>
+            <!--  変換ビュー (EDIT-45 の仕様 11、06 の 0.1.1)  -->
+            <TextBlock
+                Margin="0,0,8,4"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Stats_TransformView"
+                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                Text="{x:Bind ViewModel.TransformNote, Mode=OneWay}"
+                Visibility="{x:Bind ViewModel.HasTransformNote, Mode=OneWay}" />
             <ComboBox
                 x:Name="TargetChoice"
                 x:Uid="Stats_Target"

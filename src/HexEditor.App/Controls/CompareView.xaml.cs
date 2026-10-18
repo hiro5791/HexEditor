@@ -34,7 +34,7 @@ public sealed partial class CompareView : UserControl
     private static readonly string?[] ToolbarCommands =
     [
         "compare.recompare", null, "compare.previousDiff", "compare.nextDiff", null, "compare.syncScroll", "compare.layout",
-        null, "compare.copyLeft", "compare.copyRight", "compare.copyAllLeft", "compare.copyAllRight", null, "compare.saveReport",
+        null, "compare.copyLeft", "compare.copyRight", "compare.copyAllLeft", "compare.copyAllRight", null, "compare.saveReport", "compare.createPatch",
     ];
 
     private readonly ICompareViewHost _host;

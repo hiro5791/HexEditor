@@ -92,6 +92,19 @@ public sealed class InspectorLayout : IEquatable<InspectorLayout>
         return new InspectorLayout(Groups, rows);
     }
 
+    /// <summary>
+    /// 逆アセンブルの行のアーキテクチャを変える (INSP-16 の仕様 1。行の設定)。行の位置と表示・非表示はそのまま。
+    /// </summary>
+    public InspectorLayout WithDisasmArchitecture(string typeId, string architectureId)
+    {
+        if (!InspectorTypes.IsDisasm(typeId) || InspectorTypes.DisasmType(architectureId) is not { } type || type.Id == typeId)
+        {
+            return this;
+        }
+
+        return new InspectorLayout(Groups, [.. Rows.Where(r => r.TypeId != type.Id).Select(r => r.TypeId == typeId ? r with { TypeId = type.Id } : r)]);
+    }
+
     /// <summary>行の設定で加えた固定小数点の行を外す (一覧の型の行は外せない。非表示にする)。</summary>
     public InspectorLayout WithoutRow(string typeId)
     {
@@ -231,7 +244,9 @@ public sealed class InspectorLayout : IEquatable<InspectorLayout>
                 }
             }
 
-            foreach (InspectorType t in InspectorTypes.All.Where(t => rows.All(r => r.TypeId != t.Id)))
+            // 逆アセンブルの行はアーキテクチャを変えても 1 行 (既定の x86 64 bit の行を加え直さない)。
+            foreach (InspectorType t in InspectorTypes.All.Where(t => rows.All(r => r.TypeId != t.Id)
+                && !(InspectorTypes.IsDisasm(t.Id) && rows.Any(r => InspectorTypes.IsDisasm(r.TypeId)))))
             {
                 rows.Add(new InspectorRowConfig(t.Id, InspectorTypes.Basic.Contains(t.Id)));
             }

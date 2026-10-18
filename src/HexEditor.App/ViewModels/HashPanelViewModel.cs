@@ -471,6 +471,11 @@ public sealed partial class HashPanelViewModel : ObservableObject
     /// <summary>計算した範囲 (書き込みの警告などに使う)。</summary>
     public IReadOnlyList<HashRange> LastRanges => _lastRanges;
 
+    /// <summary>変換ビュー (EDIT-45 の仕様 11) の表示: 変換後のデータを対象にしているときは「変換ビュー: …」。</summary>
+    public string TransformNote => _target?.Document.ViewTransform is { } t ? Loc.Format("TransformView_Badge", t.Label) : string.Empty;
+
+    public bool HasTransformNote => _target?.Document.ViewTransform is not null;
+
     /// <summary>計算の対象のドキュメント (選んでいるタブ)。</summary>
     public DocumentViewModel? Target
     {
@@ -513,6 +518,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
             {
                 _target.EditorChanged += Editor_Changed;
                 _target.Document.Changed += Document_Changed;
+                OnPropertyChanged(nameof(TransformNote));
+                OnPropertyChanged(nameof(HasTransformNote));
                 IsStale = Rows.Count > 0 && _computedSnapshot is not null && !ReferenceEquals(_target.Document.Current, _computedSnapshot);
             }
 
@@ -831,9 +838,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     public void CopyChecksumLine(HashRowViewModel? row) => SetClipboardText?.Invoke(HashExport.ChecksumLines(RowsOrAll(row), DocumentFileName));
 
-    public void CopyJson() => SetClipboardText?.Invoke(HashExport.Json(Rows.Select(r => r.Row), Display));
+    public void CopyJson() => SetClipboardText?.Invoke(HashExport.Json(Rows.Select(r => r.Row), Display, _computedSnapshot?.Transform?.Label));
 
-    public void CopyCsv() => SetClipboardText?.Invoke(HashExport.Csv(Rows.Select(r => r.Row), Display));
+    public void CopyCsv() => SetClipboardText?.Invoke(HashExport.Csv(Rows.Select(r => r.Row), Display, _computedSnapshot?.Transform?.Label));
 
     /// <summary>「チェックサムファイルとして保存...」(ANA-22 の仕様 2)。</summary>
     public async Task SaveChecksumFileAsync(HashRowViewModel row)
@@ -1125,6 +1132,12 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     private void Document_Changed(object? sender, DocumentChangedEventArgs e)
     {
+        if (e.Kind == DocumentChangeKind.ViewTransformChanged)
+        {
+            OnPropertyChanged(nameof(TransformNote));
+            OnPropertyChanged(nameof(HasTransformNote));
+        }
+
         if (_computedSnapshot is not null && Rows.Count > 0 && _target is { } doc)
         {
             IsStale = !ReferenceEquals(doc.Document.Current, _computedSnapshot);

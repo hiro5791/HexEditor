@@ -224,8 +224,10 @@ public sealed partial class StatisticsViewModel : ObservableObject
     [ObservableProperty]
     public partial string ResultNote { get; set; } = string.Empty;
 
-    /// <summary>変換ビュー (EDIT-45) の表示 (0.1.1)。変換ビューができるまでは空。</summary>
-    public string TransformNote => string.Empty;
+    /// <summary>変換ビュー (EDIT-45 の仕様 11、06 の 0.1.1) の表示: 変換後のデータを対象にしているときは「変換ビュー: …」。</summary>
+    public string TransformNote => _target?.Document.ViewTransform is { } t ? Services.Loc.Format("TransformView_Badge", t.Label) : string.Empty;
+
+    public bool HasTransformNote => _target?.Document.ViewTransform is not null;
 
     /// <summary>計算の対象のドキュメント (選んでいるタブ)。</summary>
     public DocumentViewModel? Target
@@ -252,6 +254,8 @@ public sealed partial class StatisticsViewModel : ObservableObject
             {
                 _target.Editor.Changed += Editor_Changed;
                 _target.Document.Changed += Document_Changed;
+                OnPropertyChanged(nameof(TransformNote));
+                OnPropertyChanged(nameof(HasTransformNote));
                 if (DocumentBigEndian?.Invoke(_target) is bool big)
                 {
                     BigEndian = big;
@@ -559,6 +563,12 @@ public sealed partial class StatisticsViewModel : ObservableObject
 
     private void Document_Changed(object? sender, DocumentChangedEventArgs e)
     {
+        if (e.Kind == DocumentChangeKind.ViewTransformChanged)
+        {
+            OnPropertyChanged(nameof(TransformNote));
+            OnPropertyChanged(nameof(HasTransformNote));
+        }
+
         if (_computedSnapshot is not null && Result is not null && _target is { } doc)
         {
             IsStale = !ReferenceEquals(doc.Document.Current, _computedSnapshot);
@@ -681,7 +691,9 @@ public sealed partial class StatisticsViewModel : ObservableObject
 
         try
         {
-            string content = json ? StatisticsExport.Json(r) : StatisticsExport.Csv(r);
+            // 変換ビューのデータを数えた結果はその旨を記録する (06 の 0.1.1)。
+            string? transform = _computedSnapshot?.Transform?.Label;
+            string content = json ? StatisticsExport.Json(r, transform) : StatisticsExport.Csv(r, transform);
             await File.WriteAllTextAsync(path, content);
             StatusText = Loc.Format("Stats_Saved", Path.GetFileName(path));
         }

@@ -166,13 +166,13 @@ W PowerShellu wartości zawierające $ umieszczaj w apostrofach (na przykład '$
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Użycie: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Stosuje plik łatki do pliku. Wymagana jest jedna z opcji -o i --in-place. Ta wersja stosuje łatki IPS
-i IPS32.
+Stosuje plik łatki do pliku. Wymagana jest jedna z opcji -o i --in-place. Ta wersja stosuje łatki IPS,
+IPS32, UPS, BPS i .hexpatch.
 
 Opcje:
   -o, --output &lt;path&gt;       Zapisuje tutaj załatany plik (cel nie jest zmieniany)
       --in-place            Bezpiecznie zastępuje cel (najpierw zapisywany jest plik tymczasowy)
-      --format &lt;f&gt;          auto (domyślnie), ips lub ips32
+      --format &lt;f&gt;          auto (domyślnie), ips, ips32, ups, bps lub hexpatch
       --verify-before &lt;a:v&gt; Najpierw sprawdza hash celu (na przykład sha256:ab12...);
                             kod zakończenia 1 i nic nie jest zapisywane, jeśli się różni
       --verify-after &lt;a:v&gt;  Sprawdza hash wyniku przed zapisem
@@ -255,6 +255,7 @@ W PowerShellu wartości zawierające $ umieszczaj w apostrofach (na przykład '$
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>nieprawidłowa liczba</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>nie można tu odczytać danych</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>niedostępne w wierszu polecenia</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>wartość nie jest liczbą całkowitą</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu wymaga dokładnie jednego algorytmu. Dla kilku użyj --format bsd lub text.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range nie może być używane ze standardowym wejściem.</value></data>
@@ -300,8 +301,7 @@ W PowerShellu wartości zawierające $ umieszczaj w apostrofach (na przykład '$
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Podaj -o &lt;output&gt; lub --in-place (aby oryginalny plik nie został zmieniony przez pomyłkę).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o i --in-place nie mogą być używane razem.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Ścieżka wyjściowa {0} jest celem lub łatką. Użyj --in-place, aby zastąpić cel.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} nie jest formatem łatki. Użyj auto, ips lub ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: łatki UPS, BPS i .hexpatch nie są obsługiwane w tej wersji. IPS i IPS32 są.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} nie jest formatem łatki. Użyj auto, ips, ips32, ups, bps lub hexpatch.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} nie jest rozpoznawalnym plikiem łatki.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: łatka jest uszkodzona w rekordzie {1} (przesunięcie w pliku {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} nie jest łatką {1}.</value></data>
@@ -310,6 +310,10 @@ W PowerShellu wartości zawierające $ umieszczaj w apostrofach (na przykład '$
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Załatany {0} nie ma oczekiwanego hasha (--verify-after). Nic nie zapisano.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>Zastosowano rekordów: {0}, zmieniono bajtów: {1}, zmiana długości {2}. Zapisano {3}.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>format</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: łatka jest uszkodzona w rekordzie {1}.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: łatka jest uszkodzona ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} może być przeznaczony dla innego pliku: oryginał zapisany w łatce nie zgadza się z {1}. Nic nie zapisano.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Wynik zastosowania {0} nie zgadza się z wynikiem zapisanym w łatce. Nic nie zapisano.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>Rekordów: {0}, bajtów do zmiany: {1}, zmiana długości {2}, nowa długość {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Podaj dokładnie jedną z opcji --template i --auto.</value></data>

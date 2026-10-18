@@ -20,6 +20,27 @@ public static class PluginIntegration
     {
         HashCatalog.SetPlugins([.. manager.Registry.Usable<IHashAlgorithm>().Select(x => HashAlgorithmOf(manager, x.Registration, x.Extension))]);
         FileTypeDetector.GlobalDetectors = () => [.. manager.Registry.Usable<SdkFileTypeDetector>().Select(x => (CoreFileTypeDetector)new FileTypeAdapter(manager, x.Registration, x.Extension))];
+
+        // 逆アセンブラ (06 の ANA-23。アーキテクチャの一覧の「その他」に出す)。呼び出しは PluginGuard を通す。
+        Disassembly.DisasmArchitectures.SetPlugins([.. manager.Registry.Usable<IDisassembler>().Select(x =>
+            (x.Registration.Id, (IDisassembler)new GuardedDisassembler(x.Registration, x.Extension), PluginNameOf(manager, x.Registration)))]);
+    }
+
+    /// <summary>プラグインの逆アセンブラの呼び出しを <see cref="PluginGuard"/> で包む (例外・止めたプラグインは「解釈できない」にする)。</summary>
+    private sealed class GuardedDisassembler(RegisteredExtension registration, IDisassembler inner) : IDisassembler
+    {
+        public string Id => registration.Id;
+
+        public string DisplayName => registration.DisplayName;
+
+        public string Architecture => registration.Guard.Invoke("Architecture", () => inner.Architecture, registration.DisplayName);
+
+        public IReadOnlyList<DisassembledInstruction> Disassemble(ReadOnlySpan<byte> code, long address, int maxInstructions)
+        {
+            // ReadOnlySpan はラムダに渡せないため、配列に写してから呼ぶ (渡すのは 1 命令ぶんの最大長だけ)。
+            byte[] copy = code.ToArray();
+            return registration.Guard.Invoke("Disassemble", () => inner.Disassemble(copy, address, maxInstructions), [], uiThread: true);
+        }
     }
 
     /// <summary>登録簿が変わったら <see cref="Apply"/> し直す (App・CLI が 1 回呼ぶ)。</summary>
@@ -279,6 +300,50 @@ public static class PluginIntegration
     /// <summary>データ演算の一覧に出すプラグインの変換。</summary>
     public static IReadOnlyList<(RegisteredExtension Registration, IDataTransform Transform)> DataTransforms() =>
         PluginManager.Current?.Registry.Usable<IDataTransform>() ?? [];
+
+    // ---- 変換ビュー (03 の EDIT-45) ----
+
+    /// <summary>変換ビューの演算に出すプラグインの変換 (<c>ITransformView</c>)。</summary>
+    public static IReadOnlyList<(RegisteredExtension Registration, ITransformView Transform)> TransformViews() =>
+        PluginManager.Current?.Registry.Usable<ITransformView>() ?? [];
+
+    /// <summary>
+    /// 拡張ポイントの ID からプラグインの変換を引く (変換ビューの定義の <see cref="Editing.TransformView.TransformOpKind.Plugin"/>)。プラグインの呼び出しは
+    /// ガードを通し、例外を出した場合はデータを変えない (描画の途中でアプリを止めない)。
+    /// </summary>
+    public static Editing.TransformView.IPluginTransform? TransformView(string id) =>
+        TransformViews().FirstOrDefault(t => t.Registration.Id == id) is { Registration: not null } found ? new GuardedTransform(found.Registration, found.Transform) : null;
+
+    private sealed class GuardedTransform(RegisteredExtension registration, ITransformView transform) : Editing.TransformView.IPluginTransform
+    {
+        public bool CanInverse { get; } = registration.Guard.Invoke("CanInverse", () => transform.CanInverse, false);
+
+        public void Forward(long offset, Span<byte> data) => Call("Forward", offset, data, inverse: false);
+
+        public void Inverse(long offset, Span<byte> data) => Call("Inverse", offset, data, inverse: true);
+
+        private void Call(string what, long offset, Span<byte> data, bool inverse)
+        {
+            byte[] buffer = data.ToArray();
+            bool done = registration.Guard.Invoke(what, () =>
+            {
+                if (inverse)
+                {
+                    transform.Inverse(offset, buffer);
+                }
+                else
+                {
+                    transform.Forward(offset, buffer);
+                }
+
+                return true;
+            }, false);
+            if (done)
+            {
+                buffer.CopyTo(data);
+            }
+        }
+    }
 
     // ---- テンプレートの関数 (07) ----
 

@@ -437,8 +437,8 @@ public sealed class TemplateEditingUiTests
         }
 
         // 行の状態 (Follow) は追従の再計算の後に埋まるため、埋まるまで待つ。
+        // 行の内容は表示に合わせて読み込み直すことがあり、続けて読むと一時的に空になる。待つ条件で確かめる。
         await app.WaitUntilAsync(async () => await SecondApplicationStatusAsync() == "Follow", Wait, "the Follow status of the second application");
-        Assert.Equal("Follow", await SecondApplicationStatusAsync());
         JsonArray focus = (await app.SendAsync("highlights"))["segments"]!.AsArray();
         Assert.Contains(focus, h => h!["tag"]!.GetValue<string>() == "templateFollow" && h["background"] is null);
 

@@ -164,12 +164,12 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>使い方: hexed patch &lt;対象&gt; &lt;パッチ&gt; (-o &lt;出力パス&gt; | --in-place) [オプション]
 
-ファイルにパッチを適用します。-o と --in-place のどちらかが必要です。この版は IPS と IPS32 のパッチを適用します。
+ファイルにパッチを適用します。-o と --in-place のどちらかが必要です。この版は IPS、IPS32、UPS、BPS、.hexpatch のパッチを適用します。
 
 オプション:
   -o, --output &lt;パス&gt;       適用後のファイルをここに書く (対象は変えない)
       --in-place            対象を安全に置き換える (一時ファイルに書いてから置き換える)
-      --format &lt;形式&gt;       auto (既定)、ips、ips32
+      --format &lt;形式&gt;       auto (既定)、ips、ips32、ups、bps、hexpatch
       --verify-before &lt;a:v&gt; 先に対象のハッシュを確認する (例: sha256:ab12...)。
                             違えば終了コード 1 で何も書かない
       --verify-after &lt;a:v&gt;  書く前に、適用後のハッシュを確認する
@@ -251,6 +251,7 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>数値として読めません</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>ここではデータを読めません</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>コマンドラインでは使えません</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>整数ではありません</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu のアルゴリズムは 1 つだけです。複数のときは --format bsd か text を使ってください。</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>標準入力には --range を使えません。</value></data>
@@ -296,8 +297,7 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>-o &lt;出力パス&gt; か --in-place を指定してください (誤って元のファイルを変えないため)。</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o と --in-place は同時に指定できません。</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>出力先 {0} が対象またはパッチと同じです。対象を置き換えるときは --in-place を使ってください。</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} はパッチの形式ではありません。auto、ips、ips32 のどれかを指定してください。</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: UPS・BPS・.hexpatch のパッチはこの版では扱えません (IPS と IPS32 は扱えます)。</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} はパッチの形式ではありません。auto、ips、ips32、ups、bps、hexpatch のどれかを指定してください。</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} はパッチファイルとして認識できません。</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: パッチのレコード {1} (ファイル内の位置 {2}) が壊れています。</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} は {1} のパッチではありません。</value></data>
@@ -306,6 +306,10 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>適用後の {0} のハッシュが期待した値と違います (--verify-after)。何も書きませんでした。</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>レコード {0} 件を適用しました (変更 {1} バイト、長さの変化 {2})。{3} に書きました。</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: パッチのレコード {1} が壊れています。</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: パッチが壊れています ({1})。</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} は別のファイル用の可能性があります。パッチに記録された変換前の内容が {1} と一致しません。何も書きませんでした。</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>{0} を適用した結果が、パッチに記録された内容と一致しません。何も書きませんでした。</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>レコード {0} 件、変更されるバイト {1}、長さの変化 {2}、適用後の長さ {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>--template と --auto はどちらか 1 つだけを指定してください。</value></data>

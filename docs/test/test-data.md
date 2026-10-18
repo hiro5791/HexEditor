@@ -31,7 +31,7 @@
 | TD-TEXT-SJIS | 4 KiB | 日本語の文を Shift_JIS にしたもの (半角カナ・機種依存文字を含む) |
 | TD-TEXT-EBCDIC | 4 KiB | 英文を EBCDIC (コードページ 037) にしたもの |
 | TD-PE-X64 | 約 10 KiB | 既知の内容の小さな Windows 実行ファイル (x64)。ソースはリポジトリに置き、同じ内容になるようにビルドする (ビルドの仕組みができるまでは、生成ツールが最小の構造 (8 KiB) を直接書き出す) |
-| TD-ELF-X64 | 約 10 KiB | 同じく Linux 実行ファイル (x64) (同じく当面は最小の構造 (8 KiB) を直接書き出す) |
+| TD-ELF-X64 | 8 KiB | 同じく Linux 実行ファイル (x64)。生成ツールが直接書き出す: PT_LOAD 1 つと、.text (`_start`・`main`)・.plt (`puts@plt`・`exit@plt`)・.got.plt・.dynsym・.dynstr・.rela.plt・.symtab・.strtab のセクション |
 | TD-PNG | 約 1 KiB | 16×16 の PNG 画像 |
 | TD-ZIP | 約 2 KiB | テキストファイル 3 つを入れた ZIP |
 | TD-IHEX | 約 3 KiB | Intel HEX (32 bit のアドレス拡張と、アドレスの飛びを含む) |

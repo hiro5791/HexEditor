@@ -2376,7 +2376,7 @@
   <data name="Encoding_Name_cp939" xml:space="preserve"><value>EBCDIC 일본어 라틴 혼합(SO/SI)</value></data>
   <data name="Menu_View_EncodingMore.Text" xml:space="preserve"><value>기타 인코딩(M)…</value></data>
   <data name="Menu_View_EncodingMore.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>보기: 텍스트 인코딩 선택</value></data>
+  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>텍스트 인코딩 선택</value></data>
   <data name="CmdAlias_view_encoding_select" xml:space="preserve"><value>인코딩 선택 문자 집합 코드 페이지 charset code page ebcdic</value></data>
   <data name="EncodingList_Title" xml:space="preserve"><value>텍스트 인코딩</value></data>
   <data name="EncodingList_Filter" xml:space="preserve"><value>번호 또는 이름으로 필터링</value></data>
@@ -2447,23 +2447,23 @@
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>멀티바이트 문자의 연속 표시 기호 표시(C)</value></data>
   <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
-  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>이동: 다음 니블</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>다음 니블</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>니블 커서 다음 nibble cursor</value></data>
-  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>이동: 이전 니블</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>이전 니블</value></data>
   <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>니블 커서 이전 nibble cursor</value></data>
-  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>이동: Hex 열과 텍스트 열 간 전환</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>Hex 열과 텍스트 열 전환</value></data>
   <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>열 전환 탭 텍스트 tab column text hex</value></data>
-  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>보기: 8바이트마다 간격 추가</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>8바이트마다 공백 추가</value></data>
   <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>구분 간격 그룹 separator group</value></data>
-  <data name="Cmd_view_alternateText" xml:space="preserve"><value>보기: 텍스트 열에서 색 번갈아 표시</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>텍스트 열 색상 교차 표시</value></data>
   <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>번갈아 색 줄무늬 alternate color stripes</value></data>
-  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>보기: 자동 행당 바이트 수를 2의 거듭제곱으로 맞춤</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>자동 줄당 바이트 수를 2의 거듭제곱으로 맞춤</value></data>
   <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>행당 바이트 수 자동 거듭제곱 bytes per row auto</value></data>
-  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>보기: 오프셋 자릿수를 :로 구분</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>오프셋 숫자를 :로 구분</value></data>
   <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>오프셋 콜론 구분 offset colon</value></data>
-  <data name="Cmd_view_alignRows" xml:space="preserve"><value>보기: 행을 주소에 맞춰 정렬</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>주소에 맞춰 줄 정렬</value></data>
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>기준 주소 행 시작 이동 정렬 base address row shift</value></data>
-  <data name="Cmd_view_continuation" xml:space="preserve"><value>보기: 멀티바이트 문자의 연속 표시 기호</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>멀티바이트 문자에 연속 표시</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>연속 표시 멀티바이트 utf-8 multibyte</value></data>
   <data name="Notice_OpenedReadOnly_AccessDenied" xml:space="preserve"><value>이 파일에 쓸 권한이 없어 읽기 전용으로 열었습니다. 다시 시도하려면 [편집 허용]을 선택하세요.</value></data>
   <data name="Notice_OpenedReadOnly_SharingViolation" xml:space="preserve"><value>다른 앱이 쓰기용으로 이 파일을 열어 두어 읽기 전용으로 열었습니다. 다른 앱의 작업이 끝나면 [편집 허용]을 선택하세요.</value></data>
@@ -2598,13 +2598,13 @@
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>접근성</value></data>
   <data name="TranslationReport_Truncated" xml:space="preserve"><value>문자열 {1}개 중 처음 {0}개를 표시합니다. 검색하여 목록을 좁히세요.</value></data>
   <data name="SetGroup_translators" xml:space="preserve"><value>번역자용</value></data>
-  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>이동: 이전 그룹</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>이전 그룹</value></data>
   <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>이전 그룹 왼쪽 단어 뒤로 이동 group left word move back</value></data>
-  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>이동: 다음 그룹</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>다음 그룹</value></data>
   <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>다음 그룹 오른쪽 단어 앞으로 이동 group right word move forward</value></data>
-  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>보기: 한 행 위로 스크롤</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>한 줄 위로 스크롤</value></data>
   <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>위로 스크롤 한 줄 행 scroll line row up</value></data>
-  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>보기: 한 행 아래로 스크롤</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>한 줄 아래로 스크롤</value></data>
   <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>아래로 스크롤 한 줄 행 scroll line row down</value></data>
   <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>잘못된 바이트의 기호</value></data>
   <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>텍스트 열의 인코딩에서 올바르지 않은 바이트를 표시하는 방법입니다.</value></data>
@@ -2621,7 +2621,7 @@
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>UTF-32 시작 위치 나머지 2 utf-32 start position phase 2</value></data>
   <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>보기: 나머지가 3인 오프셋부터 UTF-32 디코딩</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>UTF-32 시작 위치 나머지 3 utf-32 start position phase 3</value></data>
-  <data name="Cmd_go_history" xml:space="preserve"><value>이동: 기록 목록</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>기록 목록</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>이동 기록 목록 뒤로 최근 위치 jump history list back recent positions</value></data>
   <data name="GoTo_History_Name" xml:space="preserve"><value>입력 기록</value></data>
   <data name="GoTo_History_Empty" xml:space="preserve"><value>기록 없음</value></data>
@@ -5408,15 +5408,14 @@
   <data name="Menu_Analysis_CreateSnapshot.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_Analysis_CompareSnapshots.Text" xml:space="preserve"><value>스냅숏 비교(N)...</value></data>
   <data name="Menu_Analysis_CompareSnapshots.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>비교: 스냅숏 만들기</value></data>
+  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>스냅숏 만들기</value></data>
   <data name="CmdAlias_compare_createSnapshot" xml:space="preserve"><value>스냅숏 만들기 프로세스 메모리 비교 process memory snapshot</value></data>
-  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>비교: 스냅숏 비교</value></data>
+  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>스냅숏 비교</value></data>
   <data name="CmdAlias_compare_snapshots" xml:space="preserve"><value>스냅숏 비교 프로세스 메모리 process memory snapshot</value></data>
   <data name="Snapshot_Name" xml:space="preserve"><value>이름</value></data>
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>프로세스 스냅숏 만들기</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>만들기</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>스냅숏 {0} 만드는 중</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0}개 페이지({1})를 읽을 수 없어 스냅숏에 포함되지 않았습니다.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>스냅숏을 만들거나 저장할 수 없습니다({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>프로세스 메모리에 대한 액세스가 거부되었습니다.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>이 프로세스를 읽으려면 관리자 권한이 필요합니다. 관리자 권한으로 스냅숏을 다시 만드시겠습니까?</value></data>
@@ -5434,11 +5433,11 @@
   <data name="Menu_View_PresetSave.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_View_PresetManage.Text" xml:space="preserve"><value>프리셋 관리(M)...</value></data>
   <data name="Menu_View_PresetManage.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Cmd_view_presetApply" xml:space="preserve"><value>보기: 프리셋 적용</value></data>
+  <data name="Cmd_view_presetApply" xml:space="preserve"><value>프리셋 적용</value></data>
   <data name="CmdAlias_view_presetApply" xml:space="preserve"><value>보기 설정 프리셋 적용 view settings preset</value></data>
-  <data name="Cmd_view_presetSave" xml:space="preserve"><value>보기: 현재 설정을 프리셋으로 저장</value></data>
+  <data name="Cmd_view_presetSave" xml:space="preserve"><value>현재 설정을 프리셋으로 저장</value></data>
   <data name="CmdAlias_view_presetSave" xml:space="preserve"><value>보기 설정 프리셋 저장 view settings preset</value></data>
-  <data name="Cmd_view_presetManage" xml:space="preserve"><value>보기: 프리셋 관리</value></data>
+  <data name="Cmd_view_presetManage" xml:space="preserve"><value>프리셋 관리</value></data>
   <data name="CmdAlias_view_presetManage" xml:space="preserve"><value>보기 설정 프리셋 관리 view settings preset</value></data>
   <data name="Preset_Name" xml:space="preserve"><value>이름</value></data>
   <data name="Preset_Extensions" xml:space="preserve"><value>다음 확장자에 자동 적용(선택 사항)</value></data>
@@ -5576,13 +5575,13 @@
   <data name="TplSeverity_Warning" xml:space="preserve"><value>경고</value></data>
   <data name="TplSeverity_Error" xml:space="preserve"><value>오류</value></data>
   <data name="CmdCategory_scripting" xml:space="preserve"><value>스크립트</value></data>
-  <data name="Cmd_scripting_run" xml:space="preserve"><value>스크립트: 실행</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>실행</value></data>
   <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5 실행 스크립트 다시 실행</value></data>
-  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>스크립트: 스크립트 파일 실행...</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>스크립트 파일 실행...</value></data>
   <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx 스크립트 파일 실행</value></data>
-  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>스크립트: 모두 중지</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>모든 스크립트 중지</value></data>
   <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts 중지 취소 스크립트</value></data>
-  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>스크립트: C# 스크립트 구성 요소 추가...</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>C# 스크립트 구성 요소 추가...</value></data>
   <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install 추가 스크립트 구성 요소 설치</value></data>
   <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>스크립트(R)</value></data>
   <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
@@ -5669,25 +5668,25 @@
   <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>replay last macro 다시 재생 매크로</value></data>
   <data name="Cmd_macro_repeat" xml:space="preserve"><value>반복 재생</value></data>
   <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>repeat macro loop 반복 매크로 루프</value></data>
-  <data name="Cmd_cursor_left" xml:space="preserve"><value>커서: 왼쪽</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>왼쪽</value></data>
   <data name="CmdAlias_cursor_left" xml:space="preserve"><value>cursor move left 커서 이동 왼쪽</value></data>
-  <data name="Cmd_cursor_right" xml:space="preserve"><value>커서: 오른쪽</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>오른쪽</value></data>
   <data name="CmdAlias_cursor_right" xml:space="preserve"><value>cursor move right 커서 이동 오른쪽</value></data>
-  <data name="Cmd_cursor_up" xml:space="preserve"><value>커서: 위쪽</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>위쪽</value></data>
   <data name="CmdAlias_cursor_up" xml:space="preserve"><value>cursor move up 커서 이동 위쪽</value></data>
-  <data name="Cmd_cursor_down" xml:space="preserve"><value>커서: 아래쪽</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>아래쪽</value></data>
   <data name="CmdAlias_cursor_down" xml:space="preserve"><value>cursor move down 커서 이동 아래쪽</value></data>
-  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>커서: 페이지 위로</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>페이지 위로</value></data>
   <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>cursor move page up 커서 이동 페이지 위로</value></data>
-  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>커서: 페이지 아래로</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>페이지 아래로</value></data>
   <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>cursor move page down 커서 이동 페이지 아래로</value></data>
-  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>커서: 줄 시작</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>줄 시작</value></data>
   <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>cursor move line start 커서 이동 줄 시작</value></data>
-  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>커서: 줄 끝</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>줄 끝</value></data>
   <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>cursor move line end 커서 이동 줄 끝</value></data>
-  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>커서: 파일 시작</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>파일 시작</value></data>
   <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>cursor move file start 커서 이동 파일 시작</value></data>
-  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>커서: 파일 끝</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>파일 끝</value></data>
   <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>cursor move file end 커서 이동 파일 끝</value></data>
   <data name="Command_NoScriptEditor" xml:space="preserve"><value>표시된 스크립트 편집기가 없습니다.</value></data>
   <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>스크립트 목록(I)</value></data>
@@ -6111,85 +6110,85 @@
   <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>여기를 읽을 때 중단</value></data>
   <data name="CmdCategory_templates" xml:space="preserve"><value>템플릿</value></data>
   <data name="CmdCategory_codeEditor" xml:space="preserve"><value>코드 편집기</value></data>
-  <data name="Cmd_templates_apply" xml:space="preserve"><value>템플릿: 적용</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>적용</value></data>
   <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse;구조;구문 분석</value></data>
-  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>템플릿: 여기서부터 적용</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>여기서부터 적용</value></data>
   <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor;커서</value></data>
-  <data name="Cmd_templates_followType" xml:space="preserve"><value>템플릿: 커서 위치의 형식 표시</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>커서 위치의 형식 표시</value></data>
   <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow;따라가기</value></data>
-  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>템플릿: Kaitai Struct 적용</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Kaitai Struct 적용</value></data>
   <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
-  <data name="Cmd_templates_rerun" xml:space="preserve"><value>템플릿: 다시 실행</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>다시 실행</value></data>
   <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate;다시 평가</value></data>
-  <data name="Cmd_templates_remove" xml:space="preserve"><value>템플릿: 적용 제거</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>적용 제거</value></data>
   <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply;적용 해제</value></data>
-  <data name="Cmd_templates_stop" xml:space="preserve"><value>템플릿: 평가 중지</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>평가 중지</value></data>
   <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel;취소</value></data>
-  <data name="Cmd_templates_showResults" xml:space="preserve"><value>템플릿: 결과 트리 표시</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>결과 트리 표시</value></data>
   <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree;트리</value></data>
-  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>템플릿: 출력 표시</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>출력 표시</value></data>
   <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors;오류</value></data>
-  <data name="Cmd_templates_editValue" xml:space="preserve"><value>템플릿: 값 편집</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>값 편집</value></data>
   <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change;변경</value></data>
-  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>템플릿: 정의로 이동</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>정의로 이동</value></data>
   <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration;선언</value></data>
-  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>템플릿: 포인터 대상으로 이동</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>포인터 대상으로 이동</value></data>
   <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer;포인터</value></data>
-  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>템플릿: 값 복사</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>값 복사</value></data>
   <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard;클립보드</value></data>
-  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>템플릿: 책갈피에 추가</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>책갈피에 추가</value></data>
   <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark;책갈피</value></data>
-  <data name="Cmd_templates_export" xml:space="preserve"><value>템플릿: 결과 내보내기</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>결과 내보내기</value></data>
   <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv;내보내기</value></data>
-  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>템플릿: 색 지정 전환</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>색칠 전환</value></data>
   <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight;강조</value></data>
-  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>템플릿: 일치하는 템플릿 찾기</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>일치하는 템플릿 찾기</value></data>
   <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect;감지</value></data>
-  <data name="Cmd_templates_new" xml:space="preserve"><value>템플릿: 새로 만들기</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>새로 만들기</value></data>
   <data name="CmdAlias_templates_new" xml:space="preserve"><value>create;만들기</value></data>
-  <data name="Cmd_templates_open" xml:space="preserve"><value>템플릿: 열기</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>열기</value></data>
   <data name="CmdAlias_templates_open" xml:space="preserve"><value>file;파일</value></data>
-  <data name="Cmd_templates_edit" xml:space="preserve"><value>템플릿: 편집</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>편집</value></data>
   <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor;편집기</value></data>
-  <data name="Cmd_templates_manage" xml:space="preserve"><value>템플릿: 관리</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>관리</value></data>
   <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library;라이브러리</value></data>
-  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>템플릿: .ksy를 HXT로 변환</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>.ksy를 HXT로 변환</value></data>
   <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;변환</value></data>
-  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>템플릿: 표준 라이브러리 참조</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>표준 라이브러리 참조</value></data>
   <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>help functions;도움말 함수</value></data>
-  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>템플릿: 시험 실행</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>시험 실행</value></data>
   <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved;테스트;저장 안 됨</value></data>
-  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>템플릿: 여기를 읽을 때 중단</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>여기를 읽을 때 중단</value></data>
   <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint;데이터 중단점</value></data>
-  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>보기: 구조 패널</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>구조 패널</value></data>
   <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results;템플릿 결과</value></data>
-  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>보기: 템플릿 출력 패널</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>템플릿 출력 패널</value></data>
   <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors;오류</value></data>
-  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>코드 편집기: 디버깅 시작 / 계속</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>디버깅 시작 / 계속</value></data>
   <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug;실행;디버그</value></data>
-  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>코드 편집기: 디버깅 중지</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>디버깅 중지</value></data>
   <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end;끝</value></data>
-  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>코드 편집기: 중단점 설정/해제</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>중단점 설정/해제</value></data>
   <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break;중단점</value></data>
-  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>코드 편집기: 프로시저 단위 실행</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>프로시저 단위 실행</value></data>
   <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next;다음</value></data>
-  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>코드 편집기: 한 단계씩 코드 실행</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>한 단계씩 코드 실행</value></data>
   <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter;진입</value></data>
-  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>코드 편집기: 프로시저 나가기</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>프로시저 나가기</value></data>
   <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return;반환</value></data>
-  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>코드 편집기: 커서까지 실행</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>커서까지 실행</value></data>
   <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor;커서</value></data>
-  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>코드 편집기: 조사식 추가</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>조사식 추가</value></data>
   <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch;조사식</value></data>
-  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>코드 편집기: 정의로 이동</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>정의로 이동</value></data>
   <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration;선언</value></data>
-  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>코드 편집기: 참조 찾기</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>참조 찾기</value></data>
   <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages;사용처</value></data>
-  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>코드 편집기: 문서 서식 지정</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>문서 서식 지정</value></data>
   <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent;들여쓰기</value></data>
-  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>코드 편집기: 주석 설정/해제</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>주석 설정/해제</value></data>
   <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment;주석</value></data>
-  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>코드 편집기: 자동 완성 표시</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>자동 완성 표시</value></data>
   <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense;자동 완성</value></data>
   <data name="SetCategory_templates" xml:space="preserve"><value>템플릿</value></data>
   <data name="Set_templates_autoApply" xml:space="preserve"><value>자동 적용</value></data>
@@ -6488,7 +6487,7 @@
   <data name="Bookmark_EndianDocument" xml:space="preserve"><value>문서</value></data>
   <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>위치 식</value></data>
   <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>예: u32le(0x3C)</value></data>
-  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>보기: 이미지 보기 패널</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>이미지 보기 패널</value></data>
   <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image 시각화 비트맵 픽셀 그림 이미지</value></data>
   <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>이미지 보기(V)</value></data>
   <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
@@ -6539,7 +6538,7 @@
   <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>오프라인 모드가 켜져 있거나 다운로드가 꺼져 있어 구성 요소를 다운로드하지 않습니다. 직접 추가하려면 이 버전의 릴리스 페이지에서 {0}을(를) 받아(필요하면 다른 PC에서) {1}에 압축을 푸세요.</value></data>
   <data name="SafeMode_Notice" xml:space="preserve"><value>안전 모드로 시작했습니다. 플러그인과 자동 실행 스크립트는 로드되지 않습니다.</value></data>
   <data name="SafeMode_RestartNormally" xml:space="preserve"><value>정상적으로 다시 시작</value></data>
-  <data name="Cmd_templates_findValues" xml:space="preserve"><value>템플릿: 필드 값 찾기</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>필드 값 찾기</value></data>
   <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value;검색;필드;값</value></data>
   <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>적용된 템플릿이 없습니다.</value></data>
   <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>{0}번째 문자에서 구문 오류: {1}</value></data>
@@ -6603,4 +6602,1595 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>코드 편집기(WebView2)를 시작할 수 없어 기능이 적은 기본 편집기를 사용합니다. Microsoft Edge WebView2 런타임을 다시 설치하면 해결될 수 있습니다.</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 런타임 받기</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>자동 완성을 사용하려면 C# 스크립트 구성 요소를 추가하세요.</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>디스어셈블리</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>x86 구문</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>디스어셈블리 목록과 데이터 검사기에서 x86 및 x64 명령어에 사용하는 어셈블리 구문입니다.</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>16진수</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>목록에서 16진수를 표기하는 방식입니다.</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>0x 접두사 (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>h 접미사 (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>16진수 숫자를 대문자로 표시</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>16진수 숫자 A–F를 대문자로 표시합니다.</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>부호 있는 즉시 값</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>음수 즉시 값을 큰 부호 없는 수 대신 마이너스 부호가 붙은 수로 표시합니다(x86).</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>니모닉과 레지스터를 대문자로 표시</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>명령어 이름과 레지스터 이름을 대문자로 표시합니다.</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM 레지스터 별칭</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM 레지스터를 번호(r13, r14, r15) 대신 별칭(sp, lr, pc)으로 표시합니다.</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>바이트 열 표시</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>주소 옆에 명령어의 바이트를 표시합니다.</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>최대 표시 바이트 수</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>명령어마다 표시할 바이트 수(4~16)입니다. 더 긴 명령어는 “…”로 끝납니다.</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>주소 열</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>주소 열에 표시할 내용입니다.</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>가상 주소</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>파일 오프셋</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>둘 다</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>분기선</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>분기에 화살표를 그리고, 화면에 보이는 분기 대상까지 선을 그립니다.</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>주석 열</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>심볼 이름, 분기 대상 이름, 참조되는 문자열을 표시합니다.</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>디스어셈블리</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>디스어셈블리 패널 표시/숨기기</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>디스어셈블러 어셈블리 코드 disassembler assembly code</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>디스어셈블</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>디스어셈블 어셈블리 코드 명령어 disassembler assembly code instructions</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>커서부터 디스어셈블</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>디스어셈블 코드 여기 커서 disassembler code here</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>가상 주소로 이동</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>가상 주소 섹션 주소 va rva address section</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>진입점으로 이동</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>진입점 시작 메인 실행 파일 start main executable</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>.NET 메서드 디스어셈블</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>msil il cil dotnet 메서드 method</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>심볼 이름 디맹글...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>디맹글 심볼 이름 c++ rust demangle symbol undecorate</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>분기 대상으로 이동</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>점프 호출 따라가기 jump call follow</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>참조 찾기</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>교차 참조 호출자 xref cross references callers</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>명령어 패턴 찾기</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>검색 명령어 어셈블리 search instructions assembly</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>명령어 어셈블</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>패치 어셈블 명령어 patch assemble instruction</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>목록 줄 복사</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>복사 어셈블리 copy assembly</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>어셈블리로 내보내기...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>저장 목록 asm save listing asm</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>명령어</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>명령어({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>잘못된 명령어</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>디스어셈블러를 사용할 수 없음</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>분기 대상으로 이동</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>아키텍처</value></data>
+  <data name="Panel_Disassembly_Title" xml:space="preserve"><value>디스어셈블리</value></data>
+  <data name="Menu_View_Disassembly.Text" xml:space="preserve"><value>디스어셈블리</value></data>
+  <data name="Menu_Analysis_Disassemble.Text" xml:space="preserve"><value>디스어셈블(D)</value></data>
+  <data name="Menu_Analysis_Disassemble.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Analysis_Demangle.Text" xml:space="preserve"><value>심볼 이름 디맹글(M)...</value></data>
+  <data name="Menu_Analysis_Demangle.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="HexView_Menu_Disassemble" xml:space="preserve"><value>디스어셈블</value></data>
+  <data name="HexView_Menu_Demangle" xml:space="preserve"><value>심볼 이름 디맹글</value></data>
+  <data name="ToolPage_Demangle" xml:space="preserve"><value>심볼 이름 디맹글</value></data>
+  <data name="SearchResults_Column_Instruction" xml:space="preserve"><value>명령어</value></data>
+  <data name="Disasm_ListingName" xml:space="preserve"><value>디스어셈블리 목록</value></data>
+  <data name="Disasm_Architecture" xml:space="preserve"><value>아키텍처</value></data>
+  <data name="Disasm_Mode" xml:space="preserve"><value>모드</value></data>
+  <data name="Disasm_Endian" xml:space="preserve"><value>엔디언</value></data>
+  <data name="Disasm_Slice" xml:space="preserve"><value>유니버설 바이너리 내 아키텍처</value></data>
+  <data name="Disasm_Start" xml:space="preserve"><value>시작 위치</value></data>
+  <data name="Disasm_StartTip" xml:space="preserve"><value>디스어셈블을 시작할 위치</value></data>
+  <data name="Disasm_StartCursor" xml:space="preserve"><value>커서 위치</value></data>
+  <data name="Disasm_StartSelection" xml:space="preserve"><value>선택 영역의 시작</value></data>
+  <data name="Disasm_StartOffset" xml:space="preserve"><value>오프셋...</value></data>
+  <data name="Disasm_StartAddress" xml:space="preserve"><value>가상 주소...</value></data>
+  <data name="Disasm_StartEntry" xml:space="preserve"><value>진입점</value></data>
+  <data name="Disasm_BaseAuto" xml:space="preserve"><value>기준: 자동</value></data>
+  <data name="Disasm_BaseAddress" xml:space="preserve"><value>기준 주소(비워 두면 자동)</value></data>
+  <data name="Disasm_Syntax" xml:space="preserve"><value>구문(x86)</value></data>
+  <data name="Disasm_Options" xml:space="preserve"><value>표시 옵션</value></data>
+  <data name="Disasm_Follow" xml:space="preserve"><value>커서 따라가기</value></data>
+  <data name="Disasm_FindPattern" xml:space="preserve"><value>명령어 찾기</value></data>
+  <data name="Disasm_PatternPlaceholder" xml:space="preserve"><value>예: push rbp; mov rbp, rsp</value></data>
+  <data name="Disasm_PatternRegex" xml:space="preserve"><value>정규식</value></data>
+  <data name="Disasm_PatternFindAll" xml:space="preserve"><value>모두 찾기</value></data>
+  <data name="Disasm_PatternClose" xml:space="preserve"><value>닫기</value></data>
+  <data name="Disasm_Sections" xml:space="preserve"><value>섹션</value></data>
+  <data name="Disasm_Symbols" xml:space="preserve"><value>심볼</value></data>
+  <data name="Disasm_Methods" xml:space="preserve"><value>형식 및 메서드</value></data>
+  <data name="Disasm_SymbolFilter" xml:space="preserve"><value>이름으로 필터링</value></data>
+  <data name="Disasm_SymbolKind_Function" xml:space="preserve"><value>함수</value></data>
+  <data name="Disasm_SymbolKind_Data" xml:space="preserve"><value>데이터</value></data>
+  <data name="Disasm_SymbolKind_Import" xml:space="preserve"><value>가져오기</value></data>
+  <data name="Disasm_SymbolKind_Export" xml:space="preserve"><value>내보내기</value></data>
+  <data name="Disasm_PluginArchitecture" xml:space="preserve"><value>플러그인 제공: {0}</value></data>
+  <data name="Disasm_EngineError" xml:space="preserve"><value>디스어셈블리 엔진을 불러올 수 없습니다: {0}</value></data>
+  <data name="Disasm_MostlyData" xml:space="preserve"><value>이 아키텍처의 코드가 아닐 수 있습니다.</value></data>
+  <data name="Disasm_HeaderIssue" xml:space="preserve"><value>헤더의 일부를 해석할 수 없습니다: {0}</value></data>
+  <data name="Disasm_HeaderIssue_OutOfRange" xml:space="preserve"><value>파일 밖의 데이터</value></data>
+  <data name="Disasm_HeaderIssue_Unreadable" xml:space="preserve"><value>읽을 수 없는 바이트</value></data>
+  <data name="Disasm_HeaderIssue_StringOutOfRange" xml:space="preserve"><value>파일 밖의 이름</value></data>
+  <data name="Disasm_HeaderIssue_TooManySections" xml:space="preserve"><value>섹션이 너무 많음</value></data>
+  <data name="Disasm_HeaderIssue_SectionTableOutside" xml:space="preserve"><value>섹션 테이블이 파일 밖에 있음</value></data>
+  <data name="Disasm_HeaderIssue_SectionOutside" xml:space="preserve"><value>섹션 하나가 파일 밖에 있음</value></data>
+  <data name="Disasm_HeaderIssue_SectionNamesBroken" xml:space="preserve"><value>섹션 이름이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_ProgramHeadersOutside" xml:space="preserve"><value>프로그램 헤더가 파일 밖에 있음</value></data>
+  <data name="Disasm_HeaderIssue_ExportTableBroken" xml:space="preserve"><value>내보내기 테이블이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_ImportTableBroken" xml:space="preserve"><value>가져오기 테이블이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_DelayImportTableBroken" xml:space="preserve"><value>지연 로드 가져오기 테이블이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_ExceptionTableBroken" xml:space="preserve"><value>예외 테이블이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_RvaOutside" xml:space="preserve"><value>섹션 밖의 주소</value></data>
+  <data name="Disasm_HeaderIssue_SymbolTableBroken" xml:space="preserve"><value>심볼 테이블이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_NoStringTable" xml:space="preserve"><value>문자열 테이블 없음</value></data>
+  <data name="Disasm_HeaderIssue_PltBroken" xml:space="preserve"><value>PLT 재배치가 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_FatHeaderBroken" xml:space="preserve"><value>유니버설 바이너리 헤더가 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_SliceOutside" xml:space="preserve"><value>아키텍처 슬라이스 하나가 파일 밖에 있음</value></data>
+  <data name="Disasm_HeaderIssue_LoadCommandsBroken" xml:space="preserve"><value>로드 명령이 손상됨</value></data>
+  <data name="Disasm_HeaderIssue_StubsBroken" xml:space="preserve"><value>스텁이 손상됨</value></data>
+  <data name="Disasm_DotNetMessage" xml:space="preserve"><value>.NET 어셈블리입니다. 메서드를 MSIL로 디스어셈블할 수 있습니다.</value></data>
+  <data name="Disasm_DotNetAction" xml:space="preserve"><value>MSIL 표시</value></data>
+  <data name="Disasm_MetadataIssue" xml:space="preserve"><value>메타데이터의 일부를 읽을 수 없습니다.</value></data>
+  <data name="Disasm_MenuAssemble" xml:space="preserve"><value>어셈블...</value></data>
+  <data name="Disasm_MenuCopy" xml:space="preserve"><value>복사</value></data>
+  <data name="Disasm_NoTarget" xml:space="preserve"><value>이 명령어에는 확인할 수 있는 분기 대상이 없습니다.</value></data>
+  <data name="Disasm_ExternalFunction" xml:space="preserve"><value>외부 함수: {0}</value></data>
+  <data name="Disasm_TargetOutside" xml:space="preserve"><value>분기 대상 {0}이(가) 파일에 없습니다.</value></data>
+  <data name="Disasm_NotExecutable" xml:space="preserve"><value>이 문서는 실행 파일(PE, ELF, Mach-O)이 아닙니다.</value></data>
+  <data name="Disasm_NoEntryPoint" xml:space="preserve"><value>이 실행 파일에는 진입점이 없습니다.</value></data>
+  <data name="Disasm_NotDotNet" xml:space="preserve"><value>이 문서는 .NET 어셈블리가 아닙니다.</value></data>
+  <data name="Disasm_NotForMsil" xml:space="preserve"><value>MSIL에서는 사용할 수 없습니다.</value></data>
+  <data name="Disasm_AssembleX86Only" xml:space="preserve"><value>제자리 어셈블은 x86 및 x64에서만 사용할 수 있습니다.</value></data>
+  <data name="Disasm_Go" xml:space="preserve"><value>이동</value></data>
+  <data name="Disasm_OutOfDocument" xml:space="preserve"><value>오프셋이 문서 범위를 벗어났습니다.</value></data>
+  <data name="Disasm_VirtualAddress" xml:space="preserve"><value>가상 주소</value></data>
+  <data name="Disasm_NoSection" xml:space="preserve"><value>이 주소는 어떤 섹션에도 속하지 않습니다.</value></data>
+  <data name="Disasm_AddressResolved" xml:space="preserve"><value>오프셋 {0}({1})</value></data>
+  <data name="Disasm_ReferencesTo" xml:space="preserve"><value>{0}에 대한 참조</value></data>
+  <data name="Disasm_ReferencesKind" xml:space="preserve"><value>참조</value></data>
+  <data name="Disasm_PatternKind" xml:space="preserve"><value>명령어 패턴</value></data>
+  <data name="Disasm_PatternError" xml:space="preserve"><value>{0}열: {1}</value></data>
+  <data name="Disasm_PatternError_Empty" xml:space="preserve"><value>패턴에 명령어가 없음</value></data>
+  <data name="Disasm_PatternError_Range" xml:space="preserve"><value>{n} 범위가 잘못됨</value></data>
+  <data name="Disasm_PatternError_Brace" xml:space="preserve"><value>중괄호가 짝이 맞지 않음</value></data>
+  <data name="Disasm_PatternError_Regex" xml:space="preserve"><value>정규식이 잘못됨</value></data>
+  <data name="Disasm_PatternEstimate" xml:space="preserve"><value>검색에 약 {0}초가 걸립니다.</value></data>
+  <data name="Disasm_PatternNotFound" xml:space="preserve"><value>일치하는 항목이 없습니다.</value></data>
+  <data name="Disasm_AssemblyFile" xml:space="preserve"><value>어셈블리 목록</value></data>
+  <data name="Disasm_Exported" xml:space="preserve"><value>{0}을(를) 저장했습니다.</value></data>
+  <data name="Disasm_TipLength" xml:space="preserve"><value>길이: {0}바이트</value></data>
+  <data name="Disasm_TipOperands" xml:space="preserve"><value>피연산자: {0}</value></data>
+  <data name="Disasm_TipRead" xml:space="preserve"><value>읽는 레지스터: {0}</value></data>
+  <data name="Disasm_TipWritten" xml:space="preserve"><value>쓰는 레지스터: {0}</value></data>
+  <data name="Disasm_TipGroups" xml:space="preserve"><value>그룹: {0}</value></data>
+  <data name="Disasm_AssembleInput" xml:space="preserve"><value>새 명령어(;로 구분)</value></data>
+  <data name="Disasm_AssembleFillNop" xml:space="preserve"><value>나머지를 NOP(0x90)으로 채움</value></data>
+  <data name="Disasm_AssembleKeep" xml:space="preserve"><value>나머지 바이트 유지</value></data>
+  <data name="Disasm_AssembleWrite" xml:space="preserve"><value>쓰기</value></data>
+  <data name="Disasm_AssembleResult" xml:space="preserve"><value>{0}({1}바이트)</value></data>
+  <data name="Disasm_AssembleOverwrites" xml:space="preserve"><value>다음도 덮어씁니다: {0}</value></data>
+  <data name="Disasm_AssembleError" xml:space="preserve"><value>어셈블할 수 없습니다({0}): {1}</value></data>
+  <data name="Disasm_AssembleError_Syntax" xml:space="preserve"><value>구문 오류</value></data>
+  <data name="Disasm_AssembleError_UnknownMnemonic" xml:space="preserve"><value>알 수 없는 명령어</value></data>
+  <data name="Disasm_AssembleError_Operands" xml:space="preserve"><value>잘못된 피연산자</value></data>
+  <data name="Disasm_AssembleError_Encode" xml:space="preserve"><value>인코딩할 수 없음</value></data>
+  <data name="Disasm_UndoAssemble" xml:space="preserve"><value>어셈블</value></data>
+  <data name="Demangle_Input" xml:space="preserve"><value>맹글링된 이름(한 줄에 하나)</value></data>
+  <data name="Demangle_InputPlaceholder" xml:space="preserve"><value>_ZN3foo3barEi</value></data>
+  <data name="Demangle_Output" xml:space="preserve"><value>결과</value></data>
+  <data name="Demangle_ShortNames" xml:space="preserve"><value>짧은 이름(매개 변수 및 반환 형식 제외)</value></data>
+  <data name="Demangle_RustHash" xml:space="preserve"><value>Rust 해시 표시</value></data>
+  <data name="Demangle_Copy" xml:space="preserve"><value>복사</value></data>
+  <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (디맹글할 수 없음)</value></data>
+  <data name="Demangle_Converting" xml:space="preserve"><value>변환하는 중...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>네이티브 코드 표시</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>이 메서드의 ReadyToRun 네이티브 코드 표시</value></data>
+  <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Panel_TemplateVisualizer_Title" xml:space="preserve"><value>시각화 도구</value></data>
+  <data name="Cmd_view_panel_templateVisualizer" xml:space="preserve"><value>템플릿 시각화 도구 패널</value></data>
+  <data name="CmdAlias_view_panel_templateVisualizer" xml:space="preserve"><value>시각화 도구 템플릿 이미지 오디오 표 차트 visualizer template image audio table chart</value></data>
+  <data name="Cmd_templates_visualize" xml:space="preserve"><value>시각화 도구에 표시</value></data>
+  <data name="CmdAlias_templates_visualize" xml:space="preserve"><value>시각화 이미지 오디오 파형 표 차트 visualize image audio waveform table chart</value></data>
+  <data name="Menu_View_TemplateVisualizer.Text" xml:space="preserve"><value>템플릿 시각화 도구(2)</value></data>
+  <data name="Menu_View_TemplateVisualizer.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="TplMenu_Visualize" xml:space="preserve"><value>시각화 도구에 표시</value></data>
+  <data name="TplVis_ShowButton" xml:space="preserve"><value>시각화 도구에 {0} 표시</value></data>
+  <data name="TplVis_Save" xml:space="preserve"><value>저장</value></data>
+  <data name="TplVis_Play" xml:space="preserve"><value>재생</value></data>
+  <data name="TplVis_Stop" xml:space="preserve"><value>중지</value></data>
+  <data name="TplVis_Seek" xml:space="preserve"><value>재생 위치</value></data>
+  <data name="TplVis_Nothing" xml:space="preserve"><value>구조 트리에서 시각화 도구(visualize 특성)가 있는 노드를 선택하세요.</value></data>
+  <data name="TplVis_NoVisualizer" xml:space="preserve"><value>선택한 노드에는 시각화 도구가 없습니다</value></data>
+  <data name="TplVis_Header" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="TplVis_Kind_Bitmap" xml:space="preserve"><value>이미지</value></data>
+  <data name="TplVis_Kind_Image" xml:space="preserve"><value>이미지</value></data>
+  <data name="TplVis_Kind_Audio" xml:space="preserve"><value>오디오</value></data>
+  <data name="TplVis_Kind_Disassembly" xml:space="preserve"><value>디스어셈블리</value></data>
+  <data name="TplVis_Kind_Table" xml:space="preserve"><value>표</value></data>
+  <data name="TplVis_Kind_Chart" xml:space="preserve"><value>차트</value></data>
+  <data name="TplVis_Kind_Color" xml:space="preserve"><value>색</value></data>
+  <data name="TplVis_Kind_Text" xml:space="preserve"><value>텍스트</value></data>
+  <data name="TplVis_Kind_Error" xml:space="preserve"><value>오류</value></data>
+  <data name="TplVis_CannotShow" xml:space="preserve"><value>표시할 수 없습니다: {0}</value></data>
+  <data name="TplVis_CannotShowImage" xml:space="preserve"><value>이 이미지를 표시할 수 없습니다: {0}</value></data>
+  <data name="TplVis_Truncated" xml:space="preserve"><value>데이터가 제한(64MB, 이미지는 16,384 × 16,384픽셀)을 초과합니다. 처음 부분만 표시됩니다.</value></data>
+  <data name="TplVis_ImageAlt" xml:space="preserve"><value>이미지, 너비 {0}, 높이 {1}, 형식 {2}</value></data>
+  <data name="TplVis_AudioAlt" xml:space="preserve"><value>오디오, 길이 {0}초, 샘플링 속도 {1}Hz, {2}채널</value></data>
+  <data name="TplVis_TableAlt" xml:space="preserve"><value>표, {0}행, {1}열</value></data>
+  <data name="TplVis_ChartAlt" xml:space="preserve"><value>차트, 값 {0}개, {1}~{2}</value></data>
+  <data name="TplVis_ColorAlt" xml:space="preserve"><value>색 {0}</value></data>
+  <data name="TplVis_WavFiles" xml:space="preserve"><value>WAV 오디오</value></data>
+  <data name="TplVis_CsvFiles" xml:space="preserve"><value>CSV(쉼표로 구분된 값)</value></data>
+  <data name="Cmd_templates_online_browse" xml:space="preserve"><value>온라인 템플릿 찾기</value></data>
+  <data name="CmdAlias_templates_online_browse" xml:space="preserve"><value>온라인 저장소 다운로드 설치 online repository download install</value></data>
+  <data name="Cmd_templates_online_checkUpdates" xml:space="preserve"><value>업데이트 확인</value></data>
+  <data name="CmdAlias_templates_online_checkUpdates" xml:space="preserve"><value>온라인 업데이트 새 버전 online update new version</value></data>
+  <data name="Menu_Templates_Online.Text" xml:space="preserve"><value>온라인 템플릿 찾기(L)...</value></data>
+  <data name="Menu_Templates_Online.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="SetSection_TemplateOnline" xml:space="preserve"><value>온라인 템플릿</value></data>
+  <data name="SetSearch_TemplateOnline" xml:space="preserve"><value>온라인 저장소 다운로드 설치 업데이트 템플릿 online repository download install update templates</value></data>
+  <data name="Set_templates_online_checkUpdates" xml:space="preserve"><value>시작할 때 온라인 템플릿 업데이트 확인(하루에 한 번)</value></data>
+  <data name="SetDesc_templates_online_checkUpdates" xml:space="preserve"><value>새 버전은 InfoBar로 알려 줍니다. 자동 업데이트를 켜지 않으면 사용자의 승인 없이는 아무것도 업데이트되지 않습니다.</value></data>
+  <data name="Set_templates_online_autoUpdate" xml:space="preserve"><value>온라인 템플릿 자동 업데이트</value></data>
+  <data name="SetDesc_templates_online_autoUpdate" xml:space="preserve"><value>업데이트 확인에서 찾은 새 버전을 묻지 않고 설치합니다.</value></data>
+  <data name="Set_templates_online_repositories" xml:space="preserve"><value>템플릿 저장소</value></data>
+  <data name="SetDesc_templates_online_repositories" xml:space="preserve"><value>사용자가 추가한 저장소의 인덱스 URL(HTTPS)입니다.</value></data>
+  <data name="Tpl_OriginOnline" xml:space="preserve"><value>온라인</value></data>
+  <data name="TplOnline_OfficialRepository" xml:space="preserve"><value>공식 저장소</value></data>
+  <data name="TplOnline_Search" xml:space="preserve"><value>온라인 템플릿 검색</value></data>
+  <data name="TplOnline_Category" xml:space="preserve"><value>범주</value></data>
+  <data name="TplOnline_AllCategories" xml:space="preserve"><value>모든 범주</value></data>
+  <data name="TplOnline_Refresh" xml:space="preserve"><value>새로 고침</value></data>
+  <data name="TplOnline_CheckUpdates" xml:space="preserve"><value>업데이트 확인</value></data>
+  <data name="TplOnline_Repositories" xml:space="preserve"><value>추가한 저장소</value></data>
+  <data name="TplOnline_RepoUrl" xml:space="preserve"><value>저장소 인덱스 URL</value></data>
+  <data name="TplOnline_AddRepo" xml:space="preserve"><value>저장소 추가</value></data>
+  <data name="TplOnline_BadUrl" xml:space="preserve"><value>저장소 인덱스(index.json)의 HTTPS URL을 입력하세요.</value></data>
+  <data name="TplOnline_NoRepositories" xml:space="preserve"><value>구성된 저장소가 없습니다.</value></data>
+  <data name="TplOnline_Loading" xml:space="preserve"><value>저장소를 불러오는 중...</value></data>
+  <data name="TplOnline_Disabled" xml:space="preserve"><value>온라인 템플릿이 꺼져 있습니다.</value></data>
+  <data name="TplOnline_OpenSettings" xml:space="preserve"><value>설정 열기</value></data>
+  <data name="TplOnline_Unavailable" xml:space="preserve"><value>저장소에 연결할 수 없습니다: {0}</value></data>
+  <data name="TplOnline_Tampered" xml:space="preserve"><value>{0}의 인덱스를 확인할 수 없어 사용하지 않습니다. 파일이 변조되었을 수 있습니다.</value></data>
+  <data name="TplOnline_Invalid" xml:space="preserve"><value>{0}의 인덱스를 읽을 수 없습니다: {1}</value></data>
+  <data name="TplOnline_NoMatch" xml:space="preserve"><value>일치하는 템플릿이 없습니다.</value></data>
+  <data name="TplOnline_License" xml:space="preserve"><value>라이선스: {0}</value></data>
+  <data name="TplOnline_Author" xml:space="preserve"><value>작성자: {0}</value></data>
+  <data name="TplOnline_InstalledVersion" xml:space="preserve"><value>설치됨: {0}</value></data>
+  <data name="TplOnline_Unsigned" xml:space="preserve"><value>서명되지 않음</value></data>
+  <data name="TplOnline_UsesExtensions" xml:space="preserve"><value>스크립트 함수 사용</value></data>
+  <data name="TplOnline_Install" xml:space="preserve"><value>설치</value></data>
+  <data name="TplOnline_Update" xml:space="preserve"><value>업데이트</value></data>
+  <data name="TplOnline_Remove" xml:space="preserve"><value>제거</value></data>
+  <data name="TplOnline_Source" xml:space="preserve"><value>소스 보기</value></data>
+  <data name="TplOnline_SourceTitle" xml:space="preserve"><value>{0}의 소스</value></data>
+  <data name="TplOnline_FileTampered" xml:space="preserve"><value>파일이 변조되었을 수 있습니다.</value></data>
+  <data name="TplOnline_FileTamperedNamed" xml:space="preserve"><value>{0}을(를) 설치하지 않았습니다. 파일이 변조되었을 수 있습니다.</value></data>
+  <data name="TplOnline_Downloading" xml:space="preserve"><value>템플릿 다운로드 중: {0}</value></data>
+  <data name="TplOnline_Installed" xml:space="preserve"><value>{0} {1}을(를) 설치했습니다</value></data>
+  <data name="TplOnline_ExtensionsTitle" xml:space="preserve"><value>{0}을(를) 설치할까요?</value></data>
+  <data name="TplOnline_ExtensionsText" xml:space="preserve"><value>이 템플릿은 스크립트 함수(템플릿 확장)를 사용합니다. 함수는 스크립트와 같은 권한과 제한으로 실행됩니다. 신뢰하는 작성자의 템플릿만 설치하세요.</value></data>
+  <data name="TplOnline_UpdatesAvailable" xml:space="preserve"><value>온라인 템플릿의 새 버전이 있습니다: {0}</value></data>
+  <data name="TplOnline_NoUpdates" xml:space="preserve"><value>모든 온라인 템플릿이 최신 상태입니다.</value></data>
+  <data name="SetGroup_templatesOnline" xml:space="preserve"><value>온라인 템플릿</value></data>
+  <data name="SetGroup_rpc" xml:space="preserve"><value>외부 자동화</value></data>
+  <data name="Set_automation_rpc_enabled" xml:space="preserve"><value>외부 자동화 허용(명명된 파이프를 통한 JSON-RPC)</value></data>
+  <data name="SetDesc_automation_rpc_enabled" xml:space="preserve"><value>사용자 계정의 다른 프로그램(PowerShell, Python, 테스트 도구)이 HexEditor를 조작할 수 있습니다. 각 프로그램이 처음 연결할 때 허가를 요청합니다. 기본값은 꺼짐입니다.</value></data>
+  <data name="Status_AutomationOn" xml:space="preserve"><value>외부 자동화: 켜짐</value></data>
+  <data name="Status_AutomationConnections" xml:space="preserve"><value>({0}개 연결됨)</value></data>
+  <data name="Rpc_Writing" xml:space="preserve"><value>외부 프로그램이 조작 중: {0}</value></data>
+  <data name="Rpc_Disconnect" xml:space="preserve"><value>연결 끊기</value></data>
+  <data name="RpcTrust_Title" xml:space="preserve"><value>{0}의 연결을 허용할까요?</value></data>
+  <data name="RpcTrust_Program" xml:space="preserve"><value>프로그램: {0}</value></data>
+  <data name="RpcTrust_Signer" xml:space="preserve"><value>서명자: {0}</value></data>
+  <data name="RpcTrust_Description" xml:space="preserve"><value>이 프로그램이 외부 자동화를 통해 HexEditor를 조작하려고 합니다. 열려 있는 문서를 읽고 편집하고, 파일을 열고 저장하고, 다른 자동화 기능을 사용할 수 있습니다. 신뢰하는 프로그램만 허용하세요.</value></data>
+  <data name="RpcTrust_Unsigned" xml:space="preserve"><value>이 프로그램에는 유효한 디지털 서명이 없습니다.</value></data>
+  <data name="RpcTrust_AllowOnce" xml:space="preserve"><value>이번만 허용</value></data>
+  <data name="RpcTrust_Deny" xml:space="preserve"><value>허용 안 함</value></data>
+  <data name="SetSection_RpcClients" xml:space="preserve"><value>외부 자동화</value></data>
+  <data name="SetSearch_RpcClients" xml:space="preserve"><value>외부 자동화 json-rpc 명명된 파이프 powershell python 허용된 프로그램 external automation named pipe allowed programs</value></data>
+  <data name="RpcClients_Running" xml:space="preserve"><value>아래 명명된 파이프에서 대기 중입니다. 이 PC에서 사용자 계정의 프로그램만 연결할 수 있습니다.</value></data>
+  <data name="RpcClients_Stopped" xml:space="preserve"><value>대기하지 않음("외부 자동화 허용"을 켜세요).</value></data>
+  <data name="RpcClients_StartError" xml:space="preserve"><value>명명된 파이프를 만들 수 없습니다: {0}</value></data>
+  <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell 모듈: {0}(Import-Module). 메서드 목록: {1}</value></data>
+  <data name="RpcClients_None" xml:space="preserve"><value>영구적으로 허용된 프로그램이 없습니다.</value></data>
+  <data name="RpcClients_Allowed" xml:space="preserve"><value>{0}에 허용됨</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>HexEditor {0} 이상 필요</value></data>
+  <data name="Cmd_data_patch_create" xml:space="preserve"><value>패치 만들기...</value></data>
+  <data name="CmdAlias_data_patch_create" xml:space="preserve"><value>패치 차이 ips ups bps hexpatch diff</value></data>
+  <data name="Cmd_data_patch_apply" xml:space="preserve"><value>패치 적용...</value></data>
+  <data name="CmdAlias_data_patch_apply" xml:space="preserve"><value>패치 적용 ips ups bps hexpatch</value></data>
+  <data name="Cmd_data_transformView_define" xml:space="preserve"><value>변환 보기 설정...</value></data>
+  <data name="CmdAlias_data_transformView_define" xml:space="preserve"><value>변환 보기 디코딩 xor view decode</value></data>
+  <data name="Cmd_data_transformView_xor" xml:space="preserve"><value>XOR 보기...</value></data>
+  <data name="CmdAlias_data_transformView_xor" xml:space="preserve"><value>XOR 키 보기 xor key view</value></data>
+  <data name="Cmd_data_transformView_clear" xml:space="preserve"><value>변환 보기 지우기</value></data>
+  <data name="CmdAlias_data_transformView_clear" xml:space="preserve"><value>제거 지우기 xor 보기 remove xor view</value></data>
+  <data name="Cmd_data_transformView_applyToData" xml:space="preserve"><value>이 변환을 데이터에 적용...</value></data>
+  <data name="CmdAlias_data_transformView_applyToData" xml:space="preserve"><value>되쓰기 확정 xor 쓰기 bake xor write</value></data>
+  <data name="Cmd_edit_history_save" xml:space="preserve"><value>기록 저장...</value></data>
+  <data name="CmdAlias_edit_history_save" xml:space="preserve"><value>실행 취소 트리 기록 undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_load" xml:space="preserve"><value>기록 불러오기...</value></data>
+  <data name="CmdAlias_edit_history_load" xml:space="preserve"><value>실행 취소 트리 기록 undo tree hexhist</value></data>
+  <data name="Cmd_edit_history_goToNode" xml:space="preserve"><value>기록 노드로 이동...</value></data>
+  <data name="CmdAlias_edit_history_goToNode" xml:space="preserve"><value>실행 취소 트리 이름 있는 상태 undo tree named state</value></data>
+  <data name="Set_edit_undo_branching" xml:space="preserve"><value>분기형 실행 취소 기록 사용</value></data>
+  <data name="SetDesc_edit_undo_branching" xml:space="preserve"><value>실행 취소 후 새로 편집하면 취소된 편집을 버리지 않고 별도의 분기로 유지합니다. 기록 패널에서 분기를 트리로 볼 수 있습니다.</value></data>
+  <data name="Set_edit_transformView_copy" xml:space="preserve"><value>변환 보기에서 복사</value></data>
+  <data name="SetDesc_edit_transformView_copy" xml:space="preserve"><value>변환 보기(예: XOR 보기)가 켜져 있을 때 복사가 클립보드에 넣는 내용입니다.</value></data>
+  <data name="SetOpt_edit_transformView_copy_display" xml:space="preserve"><value>표시된 대로</value></data>
+  <data name="SetOpt_edit_transformView_copy_raw" xml:space="preserve"><value>원본 데이터</value></data>
+  <data name="Menu_Data_Patch.Text" xml:space="preserve"><value>패치</value></data>
+  <data name="Menu_Data_Patch.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Data_PatchCreate.Text" xml:space="preserve"><value>패치 만들기...</value></data>
+  <data name="Menu_Data_PatchCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_PatchApply.Text" xml:space="preserve"><value>패치 적용...</value></data>
+  <data name="Menu_Data_PatchApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Data_TransformView.Text" xml:space="preserve"><value>변환 보기</value></data>
+  <data name="Menu_Data_TransformView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_TransformDefine.Text" xml:space="preserve"><value>변환 보기 설정...</value></data>
+  <data name="Menu_Data_TransformDefine.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Data_TransformXor.Text" xml:space="preserve"><value>XOR 보기...</value></data>
+  <data name="Menu_Data_TransformXor.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_TransformClear.Text" xml:space="preserve"><value>변환 보기 지우기</value></data>
+  <data name="Menu_Data_TransformClear.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_TransformApply.Text" xml:space="preserve"><value>이 변환을 데이터에 적용...</value></data>
+  <data name="Menu_Data_TransformApply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="History_TreeView" xml:space="preserve"><value>트리로 표시</value></data>
+  <data name="History_SaveHistory" xml:space="preserve"><value>기록 저장</value></data>
+  <data name="History_LoadHistory" xml:space="preserve"><value>기록 불러오기</value></data>
+  <data name="History_CreatePatch.Text" xml:space="preserve"><value>이 두 지점으로 패치 만들기...</value></data>
+  <data name="History_NameNode.Text" xml:space="preserve"><value>이름 지정...</value></data>
+  <data name="History_DeleteBranch.Text" xml:space="preserve"><value>분기 삭제...</value></data>
+  <data name="History_Pin" xml:space="preserve"><value>고정</value></data>
+  <data name="History_Unpin" xml:space="preserve"><value>고정 해제</value></data>
+  <data name="History_PinnedMark" xml:space="preserve"><value>고정됨</value></data>
+  <data name="History_NodeDetails" xml:space="preserve"><value>범위 {0}({1}바이트)  이전: {2}  이후: {3}</value></data>
+  <data name="History_LinkedView" xml:space="preserve"><value>이 연결된 보기의 원래 탭에서 기록을 저장하고 불러옵니다.</value></data>
+  <data name="History_NoNamedNodes" xml:space="preserve"><value>이름이 지정된 기록 노드가 없습니다. 기록 패널(트리 보기)에서 노드에 이름을 지정하세요.</value></data>
+  <data name="HistorySave_Title" xml:space="preserve"><value>기록 저장</value></data>
+  <data name="HistorySave_Path" xml:space="preserve"><value>파일</value></data>
+  <data name="HistorySave_FullHash" xml:space="preserve"><value>원본 파일 전체의 SHA-256 포함(큰 파일은 느림)</value></data>
+  <data name="HistorySave_EstimateText" xml:space="preserve"><value>예상 크기: {0}(노드 {1}개)</value></data>
+  <data name="HistorySave_Save" xml:space="preserve"><value>저장</value></data>
+  <data name="HistorySave_FileType" xml:space="preserve"><value>HexEditor 기록</value></data>
+  <data name="HistorySave_NoSpace" xml:space="preserve"><value>기록을 저장할 여유 공간이 부족합니다. {0}이(가) 필요하지만 {1}만 남아 있습니다.</value></data>
+  <data name="HistorySave_Operation" xml:space="preserve"><value>기록 저장 중</value></data>
+  <data name="HistorySave_Done" xml:space="preserve"><value>기록을 {0}에 저장했습니다.</value></data>
+  <data name="HistorySave_Failed" xml:space="preserve"><value>기록을 저장할 수 없습니다: {0}</value></data>
+  <data name="HistoryLoad_Title" xml:space="preserve"><value>기록 불러오기</value></data>
+  <data name="HistoryLoad_Checking" xml:space="preserve"><value>기록 파일 확인 중</value></data>
+  <data name="HistoryLoad_Mismatch" xml:space="preserve"><value>이 기록을 저장한 이후 원본 파일이 변경되었을 수 있습니다. 그래도 기록을 불러올까요?</value></data>
+  <data name="HistoryLoad_LoadAnyway" xml:space="preserve"><value>불러오기</value></data>
+  <data name="HistoryLoad_Operation" xml:space="preserve"><value>기록 불러오는 중</value></data>
+  <data name="HistoryLoad_Done" xml:space="preserve"><value>{0}에서 기록을 불러왔습니다.</value></data>
+  <data name="HistoryLoad_Failed" xml:space="preserve"><value>기록 파일을 불러올 수 없습니다: {0}</value></data>
+  <data name="HistoryGoTo_Title" xml:space="preserve"><value>기록 노드로 이동</value></data>
+  <data name="HistoryGoTo_Filter" xml:space="preserve"><value>이름</value></data>
+  <data name="HistoryGoTo_Go" xml:space="preserve"><value>이동</value></data>
+  <data name="HistoryName_Title" xml:space="preserve"><value>기록 노드 이름 지정</value></data>
+  <data name="HistoryName_Name" xml:space="preserve"><value>이름(1~100자)</value></data>
+  <data name="HistoryName_Note" xml:space="preserve"><value>비워 두면 이름이 제거됩니다. 이름이 지정된 노드는 자동 정리로 삭제되지 않습니다.</value></data>
+  <data name="HistoryName_Ok" xml:space="preserve"><value>확인</value></data>
+  <data name="HistoryDelete_Title" xml:space="preserve"><value>분기 삭제</value></data>
+  <data name="HistoryDelete_Body" xml:space="preserve"><value>이 노드와 이 분기에서 그 이후의 모든 노드를 삭제할까요? 이 작업은 되돌릴 수 없습니다.</value></data>
+  <data name="HistoryDelete_Delete" xml:space="preserve"><value>분기 삭제</value></data>
+  <data name="HistoryClose_Title" xml:space="preserve"><value>{0}의 기록을 저장할까요?</value></data>
+  <data name="HistoryClose_Body" xml:space="preserve"><value>기록에 이름이 지정되었거나 고정된 노드가 있습니다. 저장하지 않으면 탭을 닫을 때 기록이 사라집니다.</value></data>
+  <data name="HistoryClose_Save" xml:space="preserve"><value>기록 저장</value></data>
+  <data name="HistoryClose_DontSave" xml:space="preserve"><value>저장하지 않고 닫기</value></data>
+  <data name="Inspector_InterpretOriginal.Content" xml:space="preserve"><value>원본 데이터 해석</value></data>
+  <data name="Inspector_InterpretingOriginal" xml:space="preserve"><value>(원본)</value></data>
+  <data name="Inspector_InterpretingTransformed" xml:space="preserve"><value>(변환됨)</value></data>
+  <data name="TransformView_Badge" xml:space="preserve"><value>변환 보기: {0}</value></data>
+  <data name="TransformView_Title" xml:space="preserve"><value>변환 보기</value></data>
+  <data name="TransformView_Apply" xml:space="preserve"><value>적용</value></data>
+  <data name="TransformView_ClearButton" xml:space="preserve"><value>지우기</value></data>
+  <data name="TransformView_Ops" xml:space="preserve"><value>작업(위에서부터 차례로 적용, 최대 8개)</value></data>
+  <data name="TransformView_AddKind" xml:space="preserve"><value>추가할 작업</value></data>
+  <data name="TransformView_Add" xml:space="preserve"><value>추가</value></data>
+  <data name="TransformView_Remove" xml:space="preserve"><value>제거</value></data>
+  <data name="TransformView_Up" xml:space="preserve"><value>위로 이동</value></data>
+  <data name="TransformView_Down" xml:space="preserve"><value>아래로 이동</value></data>
+  <data name="TransformView_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="TransformView_Kind_Add" xml:space="preserve"><value>더하기</value></data>
+  <data name="TransformView_Kind_Subtract" xml:space="preserve"><value>빼기</value></data>
+  <data name="TransformView_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="TransformView_Kind_RotateLeft" xml:space="preserve"><value>왼쪽 회전</value></data>
+  <data name="TransformView_Kind_RotateRight" xml:space="preserve"><value>오른쪽 회전</value></data>
+  <data name="TransformView_Kind_ByteSwap16" xml:space="preserve"><value>바이트 교환(16비트)</value></data>
+  <data name="TransformView_Kind_ByteSwap32" xml:space="preserve"><value>바이트 교환(32비트)</value></data>
+  <data name="TransformView_Kind_ByteSwap64" xml:space="preserve"><value>바이트 교환(64비트)</value></data>
+  <data name="TransformView_Kind_ReverseBits" xml:space="preserve"><value>비트 순서 뒤집기</value></data>
+  <data name="TransformView_Kind_SwapNibbles" xml:space="preserve"><value>니블 교환</value></data>
+  <data name="TransformView_Kind_Plugin" xml:space="preserve"><value>플러그인: {0}</value></data>
+  <data name="TransformView_KeyHex" xml:space="preserve"><value>바이트 키</value></data>
+  <data name="TransformView_Key" xml:space="preserve"><value>키(Hex, 1~256바이트)</value></data>
+  <data name="TransformView_Plugin" xml:space="preserve"><value>플러그인 변환</value></data>
+  <data name="TransformView_Scope" xml:space="preserve"><value>범위와 키 시작 위치</value></data>
+  <data name="TransformView_Whole" xml:space="preserve"><value>문서 전체</value></data>
+  <data name="TransformView_Range" xml:space="preserve"><value>범위</value></data>
+  <data name="TransformView_KeyOrigin" xml:space="preserve"><value>키 시작 위치</value></data>
+  <data name="TransformView_Origin_Zero" xml:space="preserve"><value>오프셋 0부터 계산</value></data>
+  <data name="TransformView_Origin_Range" xml:space="preserve"><value>범위의 시작부터</value></data>
+  <data name="TransformView_Origin_Offset" xml:space="preserve"><value>오프셋</value></data>
+  <data name="TransformView_OriginOffset" xml:space="preserve"><value>키 시작 오프셋</value></data>
+  <data name="TransformView_Saved" xml:space="preserve"><value>저장된 변환</value></data>
+  <data name="TransformView_SavedPlaceholder" xml:space="preserve"><value>저장된 변환 불러오기</value></data>
+  <data name="TransformView_Name" xml:space="preserve"><value>이름</value></data>
+  <data name="TransformView_Save" xml:space="preserve"><value>이 이름으로 저장</value></data>
+  <data name="TransformView_PreviewTitle" xml:space="preserve"><value>미리 보기(커서 위치의 16바이트)</value></data>
+  <data name="TransformView_PreviewLines" xml:space="preserve"><value>{0}
+원본:  {1}
+표시: {2}</value></data>
+  <data name="TransformView_XorTitle" xml:space="preserve"><value>XOR 보기</value></data>
+  <data name="TransformView_Error_KeyEmpty" xml:space="preserve"><value>키를 입력하세요.</value></data>
+  <data name="TransformView_Error_KeyHex" xml:space="preserve"><value>키는 Hex 바이트여야 합니다(짝수 개의 숫자, 예: 5A 3C).</value></data>
+  <data name="TransformView_Error_KeyTooLong" xml:space="preserve"><value>키는 최대 256바이트까지 가능합니다.</value></data>
+  <data name="TransformView_Error_Operand" xml:space="preserve"><value>값이 요소 크기에 맞지 않습니다.</value></data>
+  <data name="TransformView_Error_Range" xml:space="preserve"><value>올바른 범위를 입력하세요(시작 0 이상, 길이 1 이상).</value></data>
+  <data name="TransformView_Error_Origin" xml:space="preserve"><value>키 시작 위치의 올바른 오프셋을 입력하세요.</value></data>
+  <data name="TransformView_Error_OpCount" xml:space="preserve"><value>작업을 1~8개 추가하세요.</value></data>
+  <data name="TransformView_Error_InvalidSize" xml:space="preserve"><value>요소 크기는 1, 2, 4 또는 8바이트여야 합니다.</value></data>
+  <data name="TransformView_Error_BitCountOutOfRange" xml:space="preserve"><value>비트 수는 1부터 요소 비트 크기 - 1까지여야 합니다.</value></data>
+  <data name="TransformView_Error_InvalidRange" xml:space="preserve"><value>올바른 범위를 입력하세요.</value></data>
+  <data name="TransformView_Error_PluginMissing" xml:space="preserve"><value>이 변환에 사용된 플러그인을 사용할 수 없습니다.</value></data>
+  <data name="TransformView_NotActive" xml:space="preserve"><value>활성화된 변환 보기가 없습니다.</value></data>
+  <data name="TransformView_LinkedView" xml:space="preserve"><value>연결된 보기에는 변환 보기를 설정할 수 없습니다.</value></data>
+  <data name="TransformView_LengthNotice" xml:space="preserve"><value>변환 보기에서는 길이가 바뀌는 편집을 할 수 없습니다.</value></data>
+  <data name="TransformView_ReadOnlyNotice" xml:space="preserve"><value>이 변환 보기에는 역변환이 없어 편집할 수 없습니다. 편집하려면 변환 보기를 지우세요.</value></data>
+  <data name="TransformView_ClearAction" xml:space="preserve"><value>변환 보기 지우기</value></data>
+  <data name="TransformView_ApplyTitle" xml:space="preserve"><value>변환을 데이터에 적용</value></data>
+  <data name="TransformView_ApplyConfirm" xml:space="preserve"><value>변환 "{0}"을(를) 데이터에 쓰고 변환 보기를 지울까요?</value></data>
+  <data name="Patch_Format_Auto" xml:space="preserve"><value>자동(IPS 또는 IPS32)</value></data>
+  <data name="Patch_Format_Ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Patch_Format_Ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Patch_Format_Ups" xml:space="preserve"><value>UPS</value></data>
+  <data name="Patch_Format_Bps" xml:space="preserve"><value>BPS</value></data>
+  <data name="Patch_Format_HexPatch" xml:space="preserve"><value>HexEditor 패치(.hexpatch)</value></data>
+  <data name="Patch_Format_SelfApplying" xml:space="preserve"><value>자체 적용(EXE)</value></data>
+  <data name="Patch_Unavailable_IpsOffsetLimit" xml:space="preserve"><value>IPS는 오프셋이 16MiB(0x1000000) 이상인 변경을 표현할 수 없습니다.</value></data>
+  <data name="Patch_Unavailable_Ips32OffsetLimit" xml:space="preserve"><value>IPS32는 오프셋이 4GiB 이상인 변경을 표현할 수 없습니다.</value></data>
+  <data name="Patch_Unavailable_StubMissing" xml:space="preserve"><value>이 빌드에는 패치 적용 프로그램이 포함되어 있지 않습니다.</value></data>
+  <data name="Patch_UseOtherFormats" xml:space="preserve"><value>IPS32, UPS, BPS 또는 HexEditor 패치 형식을 사용하세요.</value></data>
+  <data name="Patch_LinkedView" xml:space="preserve"><value>이 연결된 보기의 원래 탭에서 패치를 만드세요.</value></data>
+  <data name="PatchCreate_Title" xml:space="preserve"><value>패치 만들기</value></data>
+  <data name="PatchCreate_Source" xml:space="preserve"><value>비교 대상</value></data>
+  <data name="PatchCreate_SourceSaved" xml:space="preserve"><value>저장된 내용과 현재 내용</value></data>
+  <data name="PatchCreate_SourceTabs" xml:space="preserve"><value>파일 두 개(탭): 다른 탭에서 이 탭으로</value></data>
+  <data name="PatchCreate_OtherTab" xml:space="preserve"><value>원래 탭</value></data>
+  <data name="PatchCreate_SourceHistory" xml:space="preserve"><value>기록의 두 지점</value></data>
+  <data name="PatchCreate_FromPoint" xml:space="preserve"><value>시작</value></data>
+  <data name="PatchCreate_ToPoint" xml:space="preserve"><value>끝</value></data>
+  <data name="PatchCreate_HistoryPairText" xml:space="preserve"><value>기록 노드 #{0}에서 #{1}까지</value></data>
+  <data name="PatchCreate_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="PatchCreate_AutoChoice" xml:space="preserve"><value>{0}을(를) 사용합니다.</value></data>
+  <data name="PatchCreate_Rle" xml:space="preserve"><value>RLE 레코드 사용</value></data>
+  <data name="PatchCreate_FullHash" xml:space="preserve"><value>전체 데이터의 SHA-256 포함(큰 파일은 느림)</value></data>
+  <data name="PatchCreate_DefaultFileName" xml:space="preserve"><value>패치할 기본 파일 이름</value></data>
+  <data name="PatchCreate_Message" xml:space="preserve"><value>사용자에게 표시할 메시지</value></data>
+  <data name="PatchCreate_Architecture" xml:space="preserve"><value>적용 프로그램</value></data>
+  <data name="PatchCreate_SmartScreen" xml:space="preserve"><value>이 프로그램은 코드 서명이 되어 있지 않습니다. 받는 사람이 실행하면 Windows SmartScreen에서 경고가 표시됩니다.</value></data>
+  <data name="PatchCreate_Path" xml:space="preserve"><value>출력 파일</value></data>
+  <data name="PatchCreate_Browse" xml:space="preserve"><value>찾아보기...</value></data>
+  <data name="PatchCreate_Computing" xml:space="preserve"><value>차이를 계산하는 중...</value></data>
+  <data name="PatchCreate_NoChanges" xml:space="preserve"><value>차이가 없습니다.</value></data>
+  <data name="PatchCreate_SummaryText" xml:space="preserve"><value>레코드: {0}, 예상 크기: {1}</value></data>
+  <data name="PatchCreate_Inefficient" xml:space="preserve"><value>이 형식은 삽입과 삭제를 효율적으로 표현할 수 없습니다. BPS 또는 HexEditor 패치 형식을 사용하세요.</value></data>
+  <data name="PatchCreate_Failed" xml:space="preserve"><value>차이를 계산할 수 없습니다: {0}</value></data>
+  <data name="PatchCreate_Create" xml:space="preserve"><value>만들기</value></data>
+  <data name="Patch_Operation_Create" xml:space="preserve"><value>패치 {0} 만드는 중</value></data>
+  <data name="Patch_Operation_Verify" xml:space="preserve"><value>패치된 데이터 확인 중</value></data>
+  <data name="Patch_Created" xml:space="preserve"><value>{0}을(를) 만들었습니다.</value></data>
+  <data name="Patch_CreatedSelfApplying" xml:space="preserve"><value>{0}을(를) 만들었습니다. 코드 서명이 되어 있지 않아 받는 사람이 실행하면 Windows SmartScreen에서 경고가 표시됩니다.</value></data>
+  <data name="Patch_CreateFailed" xml:space="preserve"><value>패치를 만들 수 없습니다: {0}</value></data>
+  <data name="PatchApply_Title" xml:space="preserve"><value>패치 {0} 적용</value></data>
+  <data name="PatchApply_InfoText" xml:space="preserve"><value>형식: {0}
+레코드: {1}
+변경할 바이트: {2}
+적용 후 길이: {3}</value></data>
+  <data name="PatchApply_Reverse" xml:space="preserve"><value>되돌리기(이미 적용한 패치 취소)</value></data>
+  <data name="PatchApply_VerificationText" xml:space="preserve"><value>원본 확인: {0}</value></data>
+  <data name="PatchApply_Verifying" xml:space="preserve"><value>확인 중...</value></data>
+  <data name="PatchApply_Match" xml:space="preserve"><value>일치</value></data>
+  <data name="PatchApply_Mismatch" xml:space="preserve"><value>불일치</value></data>
+  <data name="PatchApply_Unverifiable" xml:space="preserve"><value>확인할 수 없음</value></data>
+  <data name="PatchApply_MismatchWarning" xml:space="preserve"><value>이 패치는 다른 파일용일 수 있습니다.</value></data>
+  <data name="PatchApply_Apply" xml:space="preserve"><value>적용</value></data>
+  <data name="PatchApply_ApplyAnyway" xml:space="preserve"><value>그래도 적용</value></data>
+  <data name="PatchApply_SkipVerification" xml:space="preserve"><value>확인을 건너뛰고 적용</value></data>
+  <data name="Patch_Applied" xml:space="preserve"><value>패치 {0}을(를) 적용했습니다.</value></data>
+  <data name="Patch_Error_UnknownFormat" xml:space="preserve"><value>패치 형식을 인식할 수 없습니다.</value></data>
+  <data name="Patch_Error_Record" xml:space="preserve"><value>패치의 레코드 {0}이(가) 손상되었습니다.</value></data>
+  <data name="Patch_Error_Corrupt" xml:space="preserve"><value>패치가 손상되었습니다: {0}</value></data>
+  <data name="Patch_Error_FixedLength" xml:space="preserve"><value>길이를 바꾸는 패치는 이 문서에 적용할 수 없습니다(길이가 고정되어 있음).</value></data>
+  <data name="Patch_Error_ResultMismatch" xml:space="preserve"><value>패치된 데이터가 패치에 기록된 결과와 일치하지 않습니다. 패치를 적용하지 않았습니다.</value></data>
+  <data name="PatchApplier_Title" xml:space="preserve"><value>패치 적용</value></data>
+  <data name="PatchApplier_NoPatch" xml:space="preserve"><value>이 프로그램에는 패치가 들어 있지 않습니다.</value></data>
+  <data name="PatchApplier_Intro" xml:space="preserve"><value>이 프로그램은 파일에 패치를 적용합니다. 패치할 파일을 선택하세요.</value></data>
+  <data name="PatchApplier_SelectTitle" xml:space="preserve"><value>패치할 파일 선택</value></data>
+  <data name="PatchApplier_AllFiles" xml:space="preserve"><value>모든 파일</value></data>
+  <data name="PatchApplier_Mismatch" xml:space="preserve"><value>이 패치는 다른 파일용일 수 있습니다. {0}이(가) 패치에 기록된 원본과 일치하지 않습니다.
+
+그래도 패치를 적용할까요?</value></data>
+  <data name="PatchApplier_Backup" xml:space="preserve"><value>패치를 적용하기 전에 원본 파일({0})을 백업할까요?</value></data>
+  <data name="PatchApplier_Success" xml:space="preserve"><value>패치를 {0}에 적용했습니다.</value></data>
+  <data name="PatchApplier_BackupDone" xml:space="preserve"><value>원본 파일을 {0}(으)로 저장했습니다.</value></data>
+  <data name="PatchApplier_Failed" xml:space="preserve"><value>패치를 적용할 수 없습니다: {0}
+
+파일은 변경되지 않았습니다.</value></data>
+  <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>패치된 데이터가 패치에 기록된 결과와 일치하지 않습니다.</value></data>
+  <data name="Cmd_compare_createPatch" xml:space="preserve"><value>비교 결과로 패치 만들기...</value></data>
+  <data name="CmdAlias_compare_createPatch" xml:space="preserve"><value>패치 차이 ips ups bps hexpatch diff</value></data>
+  <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>{0}(왼쪽)에서 {1}(오른쪽)으로</value></data>
+  <data name="Patch_NoCompare" xml:space="preserve"><value>먼저 비교를 여세요.</value></data>
+  <data name="Patch_NoSpace" xml:space="preserve"><value>패치를 쓸 여유 공간이 부족합니다. 약 {0}이(가) 필요하지만 {1}만 남아 있습니다.</value></data>
+  <data name="TransformView_NoLinkedView" xml:space="preserve"><value>변환 보기가 활성화된 동안에는 연결된 보기를 열 수 없습니다. 먼저 변환 보기를 지우거나 범위를 사본으로 여세요.</value></data>
+  <data name="Menu_Data_Encrypt.Text" xml:space="preserve"><value>암호화...</value></data>
+  <data name="Menu_Data_Encrypt.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Data_Decrypt.Text" xml:space="preserve"><value>암호 해독...</value></data>
+  <data name="Menu_Data_Decrypt.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Compress.Text" xml:space="preserve"><value>압축...</value></data>
+  <data name="Menu_Data_Compress.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Data_Decompress.Text" xml:space="preserve"><value>압축 풀기...</value></data>
+  <data name="Menu_Data_Decompress.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Data_SelectCompressed.Text" xml:space="preserve"><value>압축된 데이터 선택</value></data>
+  <data name="Menu_Data_SelectCompressed.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Yara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_Search_Yara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_data_encrypt" xml:space="preserve"><value>암호화...</value></data>
+  <data name="CmdAlias_data_encrypt" xml:space="preserve"><value>암호화 암호 AES encrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_decrypt" xml:space="preserve"><value>암호 해독...</value></data>
+  <data name="CmdAlias_data_decrypt" xml:space="preserve"><value>암호 해독 복호화 AES decrypt aes cipher crypto</value></data>
+  <data name="Cmd_data_compress" xml:space="preserve"><value>압축...</value></data>
+  <data name="CmdAlias_data_compress" xml:space="preserve"><value>압축 zlib gzip zstd lz4 xz compress</value></data>
+  <data name="Cmd_data_decompress" xml:space="preserve"><value>압축 풀기...</value></data>
+  <data name="CmdAlias_data_decompress" xml:space="preserve"><value>압축 풀기 해제 inflate unzip zlib gzip zstd lz4 xz decompress</value></data>
+  <data name="Cmd_data_selectCompressed" xml:space="preserve"><value>압축된 데이터 선택</value></data>
+  <data name="CmdAlias_data_selectCompressed" xml:space="preserve"><value>선택 압축 범위 deflate select compressed range</value></data>
+  <data name="Cmd_data_derived_writeBack" xml:space="preserve"><value>원본에 되쓰기</value></data>
+  <data name="CmdAlias_data_derived_writeBack" xml:space="preserve"><value>되쓰기 파생 다시 압축 다시 암호화 write back derived recompress reencrypt</value></data>
+  <data name="Cmd_search_yara" xml:space="preserve"><value>YARA 검사</value></data>
+  <data name="CmdAlias_search_yara" xml:space="preserve"><value>yara 규칙 검사 rules scan</value></data>
+  <data name="Cmd_view_panel_yara" xml:space="preserve"><value>YARA 표시/숨기기</value></data>
+  <data name="CmdAlias_view_panel_yara" xml:space="preserve"><value>yara 패널 yara panel</value></data>
+  <data name="Panel_Yara_Title" xml:space="preserve"><value>YARA</value></data>
+  <data name="Set_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>확인이 필요한 압축 해제 크기(MiB)</value></data>
+  <data name="SetDesc_edit_decompress_confirmSizeMiB" xml:space="preserve"><value>압축을 푼 데이터가 이 크기를 넘으면 압축 해제를 일시 중지하고 계속할지 묻습니다(압축 폭탄 방지).</value></data>
+  <data name="Set_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA: 블록 크기(MiB)</value></data>
+  <data name="SetDesc_search_yara_blockSizeMiB" xml:space="preserve"><value>YARA는 이 크기의 블록 단위로 데이터를 검사하며, 각 블록은 이전 블록의 마지막 64KB와 겹칩니다.</value></data>
+  <data name="Set_search_yara_timeLimitSeconds" xml:space="preserve"><value>YARA: 시간 제한(초)</value></data>
+  <data name="SetDesc_search_yara_timeLimitSeconds" xml:space="preserve"><value>검사는 이 시간 제한에 도달하면 중지되고 지금까지 찾은 결과를 유지합니다.</value></data>
+  <data name="Codec_Destination" xml:space="preserve"><value>결과를 쓸 위치</value></data>
+  <data name="Codec_DestReplace" xml:space="preserve"><value>선택 영역 바꾸기</value></data>
+  <data name="Codec_DestNewTab" xml:space="preserve"><value>새 탭에서 열기</value></data>
+  <data name="Codec_DestReadOnly" xml:space="preserve"><value>문서가 읽기 전용이므로 결과가 새 탭에서 열립니다.</value></data>
+  <data name="Codec_DestFixedLength" xml:space="preserve"><value>이 문서의 길이는 바꿀 수 없으므로 결과가 새 탭에서 열립니다.</value></data>
+  <data name="Codec_Error_MultipleRanges" xml:space="preserve"><value>이 명령은 범위 하나에서만 작동합니다. 범위를 하나만 선택하세요.</value></data>
+  <data name="Operation_Encrypt" xml:space="preserve"><value>암호화</value></data>
+  <data name="Operation_Decrypt" xml:space="preserve"><value>암호 해독</value></data>
+  <data name="Operation_Compress" xml:space="preserve"><value>압축</value></data>
+  <data name="Operation_Decompress" xml:space="preserve"><value>압축 풀기</value></data>
+  <data name="Operation_SelectCompressed" xml:space="preserve"><value>압축된 데이터 선택</value></data>
+  <data name="Operation_WriteBack" xml:space="preserve"><value>원본에 되쓰기</value></data>
+  <data name="Compression_Format_Deflate" xml:space="preserve"><value>deflate(원시)</value></data>
+  <data name="Compression_Format_Zlib" xml:space="preserve"><value>zlib</value></data>
+  <data name="Compression_Format_Gzip" xml:space="preserve"><value>gzip</value></data>
+  <data name="Compression_Format_Brotli" xml:space="preserve"><value>Brotli</value></data>
+  <data name="Compression_Format_Zstd" xml:space="preserve"><value>zstd</value></data>
+  <data name="Compression_Format_Lz4Frame" xml:space="preserve"><value>LZ4(프레임)</value></data>
+  <data name="Compression_Format_Lz4Block" xml:space="preserve"><value>LZ4(블록)</value></data>
+  <data name="Compression_Format_Lzma" xml:space="preserve"><value>LZMA(.lzma)</value></data>
+  <data name="Compression_Format_Xz" xml:space="preserve"><value>XZ</value></data>
+  <data name="Compress_Title" xml:space="preserve"><value>압축</value></data>
+  <data name="Compress_Run" xml:space="preserve"><value>압축</value></data>
+  <data name="Compress_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Compress_Level" xml:space="preserve"><value>압축 수준</value></data>
+  <data name="Compress_LevelRangeText" xml:space="preserve"><value>{0}–{1}(표준 {2})</value></data>
+  <data name="Compress_GzipHeader" xml:space="preserve"><value>헤더에 파일 이름과 수정 시간 저장</value></data>
+  <data name="Compress_Error_Lz4BlockLimit" xml:space="preserve"><value>LZ4 블록 형식은 데이터를 블록 하나에 담으므로 최대 {0}GB까지 압축할 수 있습니다. 더 큰 데이터에는 LZ4 프레임 형식을 사용하세요.</value></data>
+  <data name="Decompress_Title" xml:space="preserve"><value>압축 풀기</value></data>
+  <data name="Decompress_Run" xml:space="preserve"><value>압축 풀기</value></data>
+  <data name="Decompress_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Decompress_Auto" xml:space="preserve"><value>자동 감지</value></data>
+  <data name="Decompress_Clue" xml:space="preserve"><value>헤더에서 감지됨: {0}</value></data>
+  <data name="Decompress_NoClue" xml:space="preserve"><value>헤더에 형식 시그니처가 없습니다. 감지하지 못하면 형식을 선택하라는 메시지가 표시됩니다.</value></data>
+  <data name="Decompress_Undetected" xml:space="preserve"><value>형식을 자동으로 감지할 수 없습니다. 형식을 선택하세요.</value></data>
+  <data name="Decompress_Trailing" xml:space="preserve"><value>압축 데이터가 {0}바이트 뒤에서 끝납니다. 나머지 {1}바이트는 변경되지 않았습니다.</value></data>
+  <data name="Decompress_LimitTitle" xml:space="preserve"><value>압축을 푼 데이터가 큼</value></data>
+  <data name="Decompress_LimitBody" xml:space="preserve"><value>압축을 푼 데이터가 {0}을(를) 넘었습니다(압축 크기 {1}MB). 계속 압축을 풀까요?</value></data>
+  <data name="Decompress_LimitGiB" xml:space="preserve"><value>{0}GiB</value></data>
+  <data name="Decompress_LimitMiB" xml:space="preserve"><value>{0}MiB</value></data>
+  <data name="Decompress_LimitContinue" xml:space="preserve"><value>계속</value></data>
+  <data name="Decompress_LimitAbort" xml:space="preserve"><value>중단</value></data>
+  <data name="Decompress_ChecksumMismatch" xml:space="preserve"><value>{0} 체크섬이 일치하지 않아 압축을 푼 데이터가 손상되었을 수 있습니다. 그래도 결과를 사용할까요?</value></data>
+  <data name="Decompress_UseResult" xml:space="preserve"><value>결과 사용</value></data>
+  <data name="Decompress_Corrupt" xml:space="preserve"><value>오프셋 {0}에서 압축 데이터가 손상되었습니다.</value></data>
+  <data name="Decompress_Truncated" xml:space="preserve"><value>오프셋 {0}에서 압축 데이터가 예기치 않게 끝났습니다.</value></data>
+  <data name="Decompress_Unsupported" xml:space="preserve"><value>이 압축 데이터는 지원되지 않는 기능을 사용합니다: {0}</value></data>
+  <data name="Decompress_MemoryLimit" xml:space="preserve"><value>이 데이터의 압축을 풀려면 메모리가 너무 많이 필요합니다.</value></data>
+  <data name="Decompress_PartialAvailable" xml:space="preserve"><value>오류가 발생하기 전에 {0}바이트의 압축을 풀었습니다.</value></data>
+  <data name="Decompress_OpenPartial" xml:space="preserve"><value>압축을 푼 부분을 새 탭에서 열기</value></data>
+  <data name="SelectCompressed_Found" xml:space="preserve"><value>{0} 압축 데이터를 선택했습니다: {1}바이트(압축 해제 크기 {2}바이트).</value></data>
+  <data name="SelectCompressed_NotFound" xml:space="preserve"><value>커서 위치에서 읽을 수 있는 압축 데이터가 없습니다.</value></data>
+  <data name="Cipher_EncryptTitle" xml:space="preserve"><value>암호화</value></data>
+  <data name="Cipher_DecryptTitle" xml:space="preserve"><value>암호 해독</value></data>
+  <data name="Cipher_Encrypt" xml:space="preserve"><value>암호화</value></data>
+  <data name="Cipher_Decrypt" xml:space="preserve"><value>암호 해독</value></data>
+  <data name="Cipher_Algorithm" xml:space="preserve"><value>알고리즘</value></data>
+  <data name="Cipher_Algorithm_Aes128" xml:space="preserve"><value>AES-128</value></data>
+  <data name="Cipher_Algorithm_Aes192" xml:space="preserve"><value>AES-192</value></data>
+  <data name="Cipher_Algorithm_Aes256" xml:space="preserve"><value>AES-256</value></data>
+  <data name="Cipher_Algorithm_ChaCha20Poly1305" xml:space="preserve"><value>ChaCha20-Poly1305</value></data>
+  <data name="Cipher_Algorithm_TripleDes" xml:space="preserve"><value>3DES (TripleDES)</value></data>
+  <data name="Cipher_Algorithm_Des" xml:space="preserve"><value>DES</value></data>
+  <data name="Cipher_Algorithm_Rc4" xml:space="preserve"><value>RC4</value></data>
+  <data name="Cipher_Mode" xml:space="preserve"><value>모드</value></data>
+  <data name="Cipher_Mode_None" xml:space="preserve"><value>—</value></data>
+  <data name="Cipher_Mode_Ecb" xml:space="preserve"><value>ECB</value></data>
+  <data name="Cipher_Mode_Cbc" xml:space="preserve"><value>CBC</value></data>
+  <data name="Cipher_Mode_Cfb8" xml:space="preserve"><value>CFB8</value></data>
+  <data name="Cipher_Mode_Cfb128" xml:space="preserve"><value>CFB128</value></data>
+  <data name="Cipher_Mode_Ctr" xml:space="preserve"><value>CTR</value></data>
+  <data name="Cipher_Mode_Gcm" xml:space="preserve"><value>GCM</value></data>
+  <data name="Cipher_Padding" xml:space="preserve"><value>패딩</value></data>
+  <data name="Cipher_Padding_Pkcs7" xml:space="preserve"><value>PKCS#7</value></data>
+  <data name="Cipher_Padding_Zeros" xml:space="preserve"><value>0</value></data>
+  <data name="Cipher_Padding_AnsiX923" xml:space="preserve"><value>ANSI X9.23</value></data>
+  <data name="Cipher_Padding_Iso10126" xml:space="preserve"><value>ISO 10126</value></data>
+  <data name="Cipher_Padding_None" xml:space="preserve"><value>없음</value></data>
+  <data name="Cipher_InsecureText" xml:space="preserve"><value>안전한 방식이 아닙니다. 호환성이 필요할 때만 사용하세요.</value></data>
+  <data name="Cipher_Unsupported" xml:space="preserve"><value>이 Windows 버전에서는 {0}을(를) 사용할 수 없습니다.</value></data>
+  <data name="Cipher_AeadLimit" xml:space="preserve"><value>인증된 암호화(GCM, ChaCha20-Poly1305)는 1GiB보다 큰 데이터에 사용할 수 없습니다.</value></data>
+  <data name="Cipher_KeySource" xml:space="preserve"><value>키</value></data>
+  <data name="Cipher_KeyHex" xml:space="preserve"><value>Hex로 입력</value></data>
+  <data name="Cipher_KeyPassphrase" xml:space="preserve"><value>암호 문구로 생성(PBKDF2-HMAC-SHA256)</value></data>
+  <data name="Cipher_Key" xml:space="preserve"><value>키(Hex)</value></data>
+  <data name="Cipher_Passphrase" xml:space="preserve"><value>암호 문구</value></data>
+  <data name="Cipher_ShowKey" xml:space="preserve"><value>표시</value></data>
+  <data name="Cipher_Iterations" xml:space="preserve"><value>반복 횟수</value></data>
+  <data name="Cipher_Salt" xml:space="preserve"><value>솔트(Hex)</value></data>
+  <data name="Cipher_SaltPlaceholder" xml:space="preserve"><value>비워 두면 임의의 16바이트를 생성합니다</value></data>
+  <data name="Cipher_SaltGenerated" xml:space="preserve"><value>임의의 솔트를 생성했습니다. 나중에 암호를 해독하려면 보관하세요: {0}</value></data>
+  <data name="Cipher_Iv" xml:space="preserve"><value>IV(Hex)</value></data>
+  <data name="Cipher_IvBytes" xml:space="preserve"><value>IV(Hex, {0}바이트)</value></data>
+  <data name="Cipher_NonceBytes" xml:space="preserve"><value>Nonce(Hex, {0}바이트)</value></data>
+  <data name="Cipher_RandomIv" xml:space="preserve"><value>임의로 생성</value></data>
+  <data name="Cipher_Aad" xml:space="preserve"><value>추가 인증 데이터(Hex, 선택)</value></data>
+  <data name="Cipher_TagAppend" xml:space="preserve"><value>인증 태그를 결과 뒤에 추가</value></data>
+  <data name="Cipher_TagSeparate" xml:space="preserve"><value>인증 태그만 표시</value></data>
+  <data name="Cipher_TagFromEnd" xml:space="preserve"><value>태그: 선택 영역의 마지막 16바이트</value></data>
+  <data name="Cipher_TagHex" xml:space="preserve"><value>태그: Hex로 입력</value></data>
+  <data name="Cipher_Tag" xml:space="preserve"><value>인증 태그(Hex, 16바이트)</value></data>
+  <data name="Cipher_TagResult" xml:space="preserve"><value>인증 태그</value></data>
+  <data name="Cipher_Error_KeyHex" xml:space="preserve"><value>키를 Hex 바이트로 입력하세요.</value></data>
+  <data name="Cipher_Error_KeyLength" xml:space="preserve"><value>{0}의 키는 {1}바이트입니다({2}바이트를 입력했습니다).</value></data>
+  <data name="Cipher_Error_IvLength" xml:space="preserve"><value>{0}의 IV는 {1}바이트입니다({2}바이트를 입력했습니다).</value></data>
+  <data name="Cipher_Error_NonceLength" xml:space="preserve"><value>{0}의 nonce는 {1}바이트입니다({2}바이트를 입력했습니다).</value></data>
+  <data name="Cipher_Error_TagLength" xml:space="preserve"><value>인증 태그는 {0}바이트입니다({1}바이트를 입력했습니다).</value></data>
+  <data name="Cipher_Error_MissingTag" xml:space="preserve"><value>선택 영역이 16바이트 인증 태그보다 짧습니다.</value></data>
+  <data name="Cipher_Error_BlockMultiple" xml:space="preserve"><value>길이는 블록 크기({0}바이트)의 배수여야 합니다.</value></data>
+  <data name="Cipher_Error_Settings" xml:space="preserve"><value>설정이 올바르지 않습니다.</value></data>
+  <data name="Cipher_Error_Padding" xml:space="preserve"><value>패딩이 올바르지 않습니다. 키, IV 또는 모드가 잘못되었을 수 있습니다.</value></data>
+  <data name="Cipher_DecryptWithoutPadding" xml:space="preserve"><value>패딩 없이 암호 해독</value></data>
+  <data name="Cipher_Error_Authentication" xml:space="preserve"><value>인증에 실패했습니다. 키, nonce, 추가 데이터 또는 데이터가 다릅니다. 데이터는 변경되지 않았습니다.</value></data>
+  <data name="Derived_TabRange" xml:space="preserve"><value> [0x{0}-0x{1} {2}]</value></data>
+  <data name="Derived_Label_Decompressed" xml:space="preserve"><value>압축 해제됨</value></data>
+  <data name="Derived_Label_Decrypted" xml:space="preserve"><value>암호 해독됨</value></data>
+  <data name="Derived_Label_Compressed" xml:space="preserve"><value>압축됨</value></data>
+  <data name="Derived_Label_Encrypted" xml:space="preserve"><value>암호화됨</value></data>
+  <data name="Derived_Label_Partial" xml:space="preserve"><value>일부 압축 해제됨</value></data>
+  <data name="Derived_Band" xml:space="preserve"><value>원본: {0}, 범위 {1}–{2}, {3}</value></data>
+  <data name="Derived_Transform_Decompressed" xml:space="preserve"><value>{0} 압축 해제</value></data>
+  <data name="Derived_Transform_Decrypted" xml:space="preserve"><value>{0} 암호 해독</value></data>
+  <data name="Derived_WriteBack.Content" xml:space="preserve"><value>원본에 되쓰기</value></data>
+  <data name="Derived_NotDerived" xml:space="preserve"><value>이 탭은 압축 해제나 암호 해독으로 열린 것이 아닙니다.</value></data>
+  <data name="Derived_ParentClosed" xml:space="preserve"><value>원본 문서가 닫혀서 이 탭은 더 이상 되쓰기할 수 없습니다. 이제 일반 새 문서입니다.</value></data>
+  <data name="Derived_TooDeep" xml:space="preserve"><value>파생 문서는 최대 {0}단계까지 중첩할 수 있습니다.</value></data>
+  <data name="Derived_WriteBackTitle" xml:space="preserve"><value>원본에 되쓰기</value></data>
+  <data name="Derived_WriteBackRun" xml:space="preserve"><value>되쓰기</value></data>
+  <data name="Derived_RangeChanged" xml:space="preserve"><value>이 파생 문서를 연 이후 원본 범위가 변경되었습니다.</value></data>
+  <data name="Derived_Overwrite" xml:space="preserve"><value>덮어쓰고 되쓰기</value></data>
+  <data name="Derived_KeyPrompt" xml:space="preserve"><value>되쓰기하려면 키를 다시 입력하세요({0}). 키는 저장되지 않습니다.</value></data>
+  <data name="Derived_NewNonce" xml:space="preserve"><value>새 nonce 생성(권장)</value></data>
+  <data name="Derived_SameNonce" xml:space="preserve"><value>열었을 때와 같은 nonce 사용</value></data>
+  <data name="Derived_NonceNoteText" xml:space="preserve"><value>같은 키로 nonce를 재사용하는 것은 안전하지 않습니다. nonce가 저장되는 위치는 데이터 형식에 따라 다르므로, 되쓰기 후 직접 갱신하세요.</value></data>
+  <data name="Derived_NewNonceValue" xml:space="preserve"><value>새 nonce(Hex)</value></data>
+  <data name="Derived_SaltRequired" xml:space="preserve"><value>데이터를 암호화할 때 사용한 솔트를 입력하세요.</value></data>
+  <data name="Derived_FixedLength" xml:space="preserve"><value>원본 문서의 길이는 바꿀 수 없어 되쓰기하지 않았습니다(길이가 {0}바이트에서 {1}바이트로 바뀜).</value></data>
+  <data name="Derived_Written" xml:space="preserve"><value>원본 문서에 되썼습니다.</value></data>
+  <data name="Yara_RuleSet" xml:space="preserve"><value>규칙 집합</value></data>
+  <data name="Yara_NoRuleSet" xml:space="preserve"><value>(저장 안 됨)</value></data>
+  <data name="Yara_SaveSet" xml:space="preserve"><value>집합 저장...</value></data>
+  <data name="Yara_SaveRun" xml:space="preserve"><value>저장</value></data>
+  <data name="Yara_SetName" xml:space="preserve"><value>규칙 집합 이름</value></data>
+  <data name="Yara_DeleteSet" xml:space="preserve"><value>집합 삭제</value></data>
+  <data name="Yara_AddFiles" xml:space="preserve"><value>규칙 파일 추가...</value></data>
+  <data name="Yara_AddFolder" xml:space="preserve"><value>폴더 추가...</value></data>
+  <data name="Yara_RemoveFiles" xml:space="preserve"><value>제거</value></data>
+  <data name="Yara_Files" xml:space="preserve"><value>규칙 파일</value></data>
+  <data name="Yara_Externals" xml:space="preserve"><value>외부 변수(이름=값, 한 줄에 하나)</value></data>
+  <data name="Yara_Scope" xml:space="preserve"><value>범위</value></data>
+  <data name="Yara_Scope_Document" xml:space="preserve"><value>문서 전체</value></data>
+  <data name="Yara_Scope_Selection" xml:space="preserve"><value>선택 영역</value></data>
+  <data name="Yara_Scope_Folder" xml:space="preserve"><value>폴더의 파일</value></data>
+  <data name="Yara_Folder" xml:space="preserve"><value>폴더</value></data>
+  <data name="Yara_Mask" xml:space="preserve"><value>파일</value></data>
+  <data name="Yara_Scan" xml:space="preserve"><value>검사</value></data>
+  <data name="Yara_KindName" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_LimitationText" xml:space="preserve"><value>데이터는 {0}MiB 블록 단위로 검사하며 블록끼리 {1}KB가 겹칩니다. 블록 하나보다 큰 문서에서는 겹치는 부분보다 긴 문자열이나 블록에 걸친 조건을 찾지 못할 수 있습니다.</value></data>
+  <data name="Yara_Scanning" xml:space="preserve"><value>검사하는 중...</value></data>
+  <data name="Yara_NoRules" xml:space="preserve"><value>먼저 규칙 파일을 추가하세요.</value></data>
+  <data name="Yara_CompileErrors" xml:space="preserve"><value>규칙에 오류가 {0}개 있습니다. 검사를 시작하지 않았습니다.</value></data>
+  <data name="Yara_Matched" xml:space="preserve"><value>규칙 {0}개가 일치했습니다.</value></data>
+  <data name="Yara_TimedOut" xml:space="preserve"><value>시간 제한에 도달했습니다.</value></data>
+  <data name="Yara_Cancelled" xml:space="preserve"><value>검사가 취소되었습니다.</value></data>
+  <data name="Yara_TooManyMatches" xml:space="preserve"><value>일치 항목이 너무 많아 처음 1,000,000개만 유지합니다: {0}</value></data>
+  <data name="Yara_Console" xml:space="preserve"><value>콘솔:</value></data>
+  <data name="Yara_InternalError" xml:space="preserve"><value>YARA 내부 오류({0}): {1}</value></data>
+  <data name="Yara_DetailsText" xml:space="preserve"><value>규칙: {0}  네임스페이스: {1}  태그: {2}&#xA;메타:&#xA;{3}</value></data>
+  <data name="Yara_ErrorsName" xml:space="preserve"><value>규칙 오류</value></data>
+  <data name="Yara_FolderResultsName" xml:space="preserve"><value>파일의 일치 항목</value></data>
+  <data name="Yara_FolderMissing" xml:space="preserve"><value>존재하는 폴더를 입력하세요.</value></data>
+  <data name="Yara_FolderError" xml:space="preserve"><value>폴더를 읽을 수 없습니다: {0}</value></data>
+  <data name="Yara_FolderDone" xml:space="preserve"><value>파일 {0}개를 검사했으며 {1}개 파일에서 일치 항목이 있습니다.</value></data>
+  <data name="Yara_AnnotationSource" xml:space="preserve"><value>YARA</value></data>
+  <data name="Yara_Column_Rule" xml:space="preserve"><value>규칙</value></data>
+  <data name="Yara_Column_Namespace" xml:space="preserve"><value>네임스페이스</value></data>
+  <data name="Yara_Column_Tags" xml:space="preserve"><value>태그</value></data>
+  <data name="Yara_Column_Meta" xml:space="preserve"><value>메타</value></data>
+  <data name="Yara_Column_String" xml:space="preserve"><value>문자열</value></data>
+  <data name="Codec_Error_Failed" xml:space="preserve"><value>작업에 실패했습니다: {0}</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>원격에 연결(1)</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB 서버(G)...</value></data>
+  <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP(F)...</value></data>
+  <data name="Menu_File_OpenSftp.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReceiveUdp.Text" xml:space="preserve"><value>UDP 수신(U)...</value></data>
+  <data name="Menu_File_ReceiveUdp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveSnapshot.Text" xml:space="preserve"><value>스냅숏 저장(N)...</value></data>
+  <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>Minidump로 저장(M)...</value></data>
+  <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>패킷(3)</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>프로세스 스냅숏 저장...</value></data>
+  <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>스냅숏 덤프 메모리 snapshot hexsnap dump memory</value></data>
+  <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>Minidump로 저장...</value></data>
+  <data name="CmdAlias_file_saveMinidump" xml:space="preserve"><value>덤프 디버거 dump dmp windbg debugger</value></data>
+  <data name="Cmd_file_connectGdb" xml:space="preserve"><value>GDB 서버에 연결...</value></data>
+  <data name="CmdAlias_file_connectGdb" xml:space="preserve"><value>gdb 원격 qemu openocd gdbserver remote</value></data>
+  <data name="Cmd_file_openSftp" xml:space="preserve"><value>SFTP로 열기...</value></data>
+  <data name="CmdAlias_file_openSftp" xml:space="preserve"><value>ssh sftp 원격 서버 remote server</value></data>
+  <data name="Cmd_file_receiveUdp" xml:space="preserve"><value>UDP 수신...</value></data>
+  <data name="CmdAlias_file_receiveUdp" xml:space="preserve"><value>udp 네트워크 패킷 수신 대기 network packet datagram listen</value></data>
+  <data name="Cmd_file_reconnect" xml:space="preserve"><value>다시 연결</value></data>
+  <data name="CmdAlias_file_reconnect" xml:space="preserve"><value>원격 다시 연결 끊김 remote reconnect disconnected</value></data>
+  <data name="Cmd_view_panel_packets" xml:space="preserve"><value>패킷 패널</value></data>
+  <data name="CmdAlias_view_panel_packets" xml:space="preserve"><value>udp 패킷 목록 udp packet list</value></data>
+  <data name="Set_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB 서버 요청 제한 시간(초)</value></data>
+  <data name="SetDesc_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB 서버가 이 시간 안에 요청에 응답하지 않으면 연결이 끊어진 것으로 처리합니다.</value></data>
+  <data name="Set_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>SFTP로 변경된 범위만 쓰기 전에 확인</value></data>
+  <data name="SetDesc_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>저장하는 도중 연결이 끊기면 원격 파일의 일부만 다시 쓰였을 수 있습니다.</value></data>
+  <data name="Set_remote_udp_followEnd" xml:space="preserve"><value>UDP 수신 중 끝 따라가기</value></data>
+  <data name="SetDesc_remote_udp_followEnd" xml:space="preserve"><value>커서가 UDP 문서의 끝에 있으면 새 데이터가 도착할 때 자동으로 스크롤합니다.</value></data>
+  <data name="Remote_StateConnected" xml:space="preserve"><value>연결됨</value></data>
+  <data name="Remote_StateConnecting" xml:space="preserve"><value>연결하는 중</value></data>
+  <data name="Remote_StateDisconnected" xml:space="preserve"><value>연결 끊김</value></data>
+  <data name="Remote_StatusGdb" xml:space="preserve"><value>GDB {0}({1})</value></data>
+  <data name="Remote_StatusSftp" xml:space="preserve"><value>SFTP {0}({1})</value></data>
+  <data name="Remote_StatusUdp" xml:space="preserve"><value>UDP {0}: {1, plural, other {패킷 #개}}, {2}({3})</value></data>
+  <data name="Remote_Disconnected" xml:space="preserve"><value>{0}과(와)의 연결이 끊겼습니다. 저장하지 않은 변경 내용은 유지됩니다.</value></data>
+  <data name="Remote_Reconnect" xml:space="preserve"><value>다시 연결</value></data>
+  <data name="Remote_Reconnected" xml:space="preserve"><value>다시 연결했습니다.</value></data>
+  <data name="Remote_ReconnectFailed" xml:space="preserve"><value>다시 연결할 수 없습니다: {0}</value></data>
+  <data name="Remote_AlreadyConnected" xml:space="preserve"><value>원격 대상이 연결되어 있습니다.</value></data>
+  <data name="Remote_NotRemote" xml:space="preserve"><value>GDB 서버 및 SFTP 문서에서만 사용할 수 있습니다.</value></data>
+  <data name="Session_RemoteNotConnected" xml:space="preserve"><value>연결되지 않음: {0}</value></data>
+  <data name="Session_ConnectRemote.Content" xml:space="preserve"><value>연결</value></data>
+  <data name="Capture_SnapshotTitle" xml:space="preserve"><value>스냅숏 저장</value></data>
+  <data name="Capture_MinidumpTitle" xml:space="preserve"><value>Minidump로 저장</value></data>
+  <data name="Capture_Scope" xml:space="preserve"><value>포함할 영역</value></data>
+  <data name="Capture_ScopeAll" xml:space="preserve"><value>읽을 수 있는 모든 영역</value></data>
+  <data name="Capture_ScopeSelected" xml:space="preserve"><value>메모리 맵에서 선택한 영역 또는 모듈</value></data>
+  <data name="Capture_ScopeWritable" xml:space="preserve"><value>쓰기 가능한 영역만</value></data>
+  <data name="Capture_Pause" xml:space="preserve"><value>캡처하는 동안 프로세스 일시 중지</value></data>
+  <data name="Capture_Path" xml:space="preserve"><value>저장 위치</value></data>
+  <data name="Capture_Browse" xml:space="preserve"><value>찾아보기...</value></data>
+  <data name="Capture_Save" xml:space="preserve"><value>저장</value></data>
+  <data name="Capture_SavingSnapshot" xml:space="preserve"><value>스냅숏 {0} 저장 중</value></data>
+  <data name="Capture_SavingMinidump" xml:space="preserve"><value>Minidump {0} 저장 중</value></data>
+  <data name="Capture_Saved" xml:space="preserve"><value>{0}을(를) 저장했습니다.</value></data>
+  <data name="Capture_Cancelled" xml:space="preserve"><value>취소되었습니다. 일부만 저장된 파일은 삭제했습니다.</value></data>
+  <data name="Capture_ProcessExited" xml:space="preserve"><value>캡처하는 동안 프로세스가 종료되었습니다. 캡처를 중지하고 일부만 저장된 파일은 삭제했습니다.</value></data>
+  <data name="Capture_Error" xml:space="preserve"><value>저장할 수 없습니다: {0}</value></data>
+  <data name="Capture_PauseFailed" xml:space="preserve"><value>프로세스를 일시 중지할 수 없어 실행 중에 캡처했습니다. 내용이 일관되지 않을 수 있습니다.</value></data>
+  <data name="Capture_Unreadable" xml:space="preserve"><value>{0, plural, other {영역 #개}}(총 {1}개)를 읽을 수 없습니다.</value></data>
+  <data name="FileType_Minidump" xml:space="preserve"><value>Minidump</value></data>
+  <data name="Snapshot_SaveAsGuide" xml:space="preserve"><value>프로세스 메모리는 파일로 저장할 수 없습니다. 파일 &gt; 내보내기 &gt; 스냅숏 저장을 사용하세요.</value></data>
+  <data name="Gdb_Title" xml:space="preserve"><value>GDB 서버에 연결</value></data>
+  <data name="Gdb_Host" xml:space="preserve"><value>호스트</value></data>
+  <data name="Gdb_Port" xml:space="preserve"><value>포트</value></data>
+  <data name="Gdb_AddressWidth" xml:space="preserve"><value>주소 너비</value></data>
+  <data name="Gdb_Width32" xml:space="preserve"><value>32비트</value></data>
+  <data name="Gdb_Width64" xml:space="preserve"><value>64비트</value></data>
+  <data name="Gdb_ReadOnly" xml:space="preserve"><value>읽기 전용으로 열기</value></data>
+  <data name="Gdb_Note" xml:space="preserve"><value>대상 메모리만 읽고 씁니다. 실행 제어(중지, 계속, 중단점)는 사용하지 않습니다.</value></data>
+  <data name="Gdb_Connect" xml:space="preserve"><value>연결</value></data>
+  <data name="Gdb_Connecting" xml:space="preserve"><value>{0}에 연결하는 중...</value></data>
+  <data name="Gdb_ConnectFailed" xml:space="preserve"><value>GDB 서버({0}, {1})에 연결할 수 없습니다.</value></data>
+  <data name="Gdb_ProtocolError" xml:space="preserve"><value>GDB 서버의 응답을 해석할 수 없습니다. 연결을 끊었습니다.</value></data>
+  <data name="Gdb_WriteBody" xml:space="preserve"><value>GDB 서버 {0}의 대상 메모리에 {1, plural, other {#바이트}}를 쓸까요?</value></data>
+  <data name="Gdb_ImmediateConfirm" xml:space="preserve"><value>즉시 쓰기를 켤까요? 편집할 때마다 {0}의 대상 메모리에 바로 기록됩니다.</value></data>
+  <data name="Gdb_WriteDisconnected" xml:space="preserve"><value>{0}과(와)의 연결이 끊겨 일부 변경 내용이 기록되지 않았습니다.</value></data>
+  <data name="Gdb_WriteRejected" xml:space="preserve"><value>대상이 쓰기를 거부했습니다</value></data>
+  <data name="Gdb_SaveAsUnavailable" xml:space="preserve"><value>GDB 대상의 전체 주소 공간은 파일로 저장할 수 없습니다. 파일 &gt; 선택 영역 저장을 사용하세요.</value></data>
+  <data name="Sftp_Title" xml:space="preserve"><value>SFTP로 열기</value></data>
+  <data name="Sftp_Host" xml:space="preserve"><value>호스트</value></data>
+  <data name="Sftp_Port" xml:space="preserve"><value>포트</value></data>
+  <data name="Sftp_User" xml:space="preserve"><value>사용자 이름</value></data>
+  <data name="Sftp_Method" xml:space="preserve"><value>인증</value></data>
+  <data name="Sftp_MethodPassword" xml:space="preserve"><value>암호</value></data>
+  <data name="Sftp_MethodKeyFile" xml:space="preserve"><value>키 파일</value></data>
+  <data name="Sftp_MethodAgent" xml:space="preserve"><value>SSH 에이전트(OpenSSH agent, Pageant)</value></data>
+  <data name="Sftp_Password" xml:space="preserve"><value>암호</value></data>
+  <data name="Sftp_KeyFile" xml:space="preserve"><value>키 파일</value></data>
+  <data name="Sftp_Passphrase" xml:space="preserve"><value>암호 문구(키에 설정된 경우)</value></data>
+  <data name="Sftp_Save" xml:space="preserve"><value>암호를 Windows 자격 증명 관리자에 저장</value></data>
+  <data name="Sftp_Connect" xml:space="preserve"><value>연결</value></data>
+  <data name="Sftp_Connecting" xml:space="preserve"><value>{0}에 연결하는 중...</value></data>
+  <data name="Sftp_AuthFailed" xml:space="preserve"><value>{0} 인증에 실패했습니다. 사용자 이름과 암호 또는 키를 확인하세요.</value></data>
+  <data name="Sftp_ConnectFailed" xml:space="preserve"><value>{0}({1})에 연결할 수 없습니다.</value></data>
+  <data name="Sftp_PermissionDenied" xml:space="preserve"><value>권한이 거부되었습니다: {0}</value></data>
+  <data name="Sftp_NotFound" xml:space="preserve"><value>원격 파일을 찾을 수 없습니다: {0}</value></data>
+  <data name="Sftp_OpenFailed" xml:space="preserve"><value>{0}을(를) 열 수 없습니다: {1}</value></data>
+  <data name="Sftp_HostKeyUnknownTitle" xml:space="preserve"><value>알 수 없는 호스트</value></data>
+  <data name="Sftp_HostKeyUnknownBody" xml:space="preserve"><value>{0}에 처음 연결합니다.
+
+호스트 키 형식: {1}
+SHA-256 지문: {2}
+
+지문이 서버와 일치할 때만 연결하세요.</value></data>
+  <data name="Sftp_HostKeyTrust" xml:space="preserve"><value>신뢰하고 연결</value></data>
+  <data name="Sftp_HostKeyChangedTitle" xml:space="preserve"><value>경고: 호스트 키가 변경되었습니다</value></data>
+  <data name="Sftp_HostKeyChangedBody" xml:space="preserve"><value>{0}의 호스트 키가 이전에 신뢰한 키와 다릅니다. 누군가 연결을 가로채고 있을 수 있습니다.
+
+새 호스트 키 형식: {1}
+새 SHA-256 지문: {2}
+
+이전에 신뢰한 키: {3} {4}
+
+키를 바꾸기로 선택하지 않으면 연결하지 않습니다.</value></data>
+  <data name="Sftp_HostKeyReplace" xml:space="preserve"><value>키를 바꾸고 연결</value></data>
+  <data name="SftpPicker_Title" xml:space="preserve"><value>원격 파일 선택({0})</value></data>
+  <data name="SftpPicker_Path" xml:space="preserve"><value>폴더</value></data>
+  <data name="SftpPicker_List" xml:space="preserve"><value>파일</value></data>
+  <data name="SftpPicker_Up" xml:space="preserve"><value>위로</value></data>
+  <data name="SftpPicker_Open" xml:space="preserve"><value>열기</value></data>
+  <data name="SftpPicker_ListFailed" xml:space="preserve"><value>폴더 목록을 가져올 수 없습니다: {0}</value></data>
+  <data name="Sftp_SaveTitle" xml:space="preserve"><value>원격 파일에 저장</value></data>
+  <data name="Sftp_PartialWriteBody" xml:space="preserve"><value>변경된 범위만 기록합니다. 저장하는 도중 연결이 끊기면 원격 파일의 일부만 다시 쓰였을 수 있습니다.</value></data>
+  <data name="Sftp_PartialWriteSkip" xml:space="preserve"><value>다시 묻지 않음</value></data>
+  <data name="Sftp_SaveWrite" xml:space="preserve"><value>저장</value></data>
+  <data name="Sftp_Saving" xml:space="preserve"><value>{0} 저장 중</value></data>
+  <data name="Sftp_Saved" xml:space="preserve"><value>{0}을(를) 저장했습니다.</value></data>
+  <data name="Sftp_SavePermission" xml:space="preserve"><value>{0}에 쓸 권한이 없습니다.</value></data>
+  <data name="Sftp_SavePartial" xml:space="preserve"><value>저장하는 도중 연결이 끊겼습니다. 원격 파일의 일부만 다시 쓰였을 수 있습니다. 변경 내용은 유지됩니다.</value></data>
+  <data name="Sftp_SaveDisconnected" xml:space="preserve"><value>저장하는 도중 연결이 끊겼습니다. 원격 파일은 바뀌지 않았습니다. 변경 내용은 유지됩니다.</value></data>
+  <data name="Sftp_SaveFailed" xml:space="preserve"><value>저장할 수 없습니다: {0}</value></data>
+  <data name="Sftp_Changed" xml:space="preserve"><value>원격 파일 {0}이(가) 다른 프로그램에서 변경되었습니다.</value></data>
+  <data name="Sftp_ChangedModified" xml:space="preserve"><value>원격 파일 {0}이(가) 다른 프로그램에서 변경되었습니다. 다시 불러오면 변경 내용이 사라집니다.</value></data>
+  <data name="Sftp_Reload" xml:space="preserve"><value>다시 불러오기</value></data>
+  <data name="Udp_Title" xml:space="preserve"><value>UDP 수신</value></data>
+  <data name="Udp_Address" xml:space="preserve"><value>수신 대기 주소</value></data>
+  <data name="Udp_Port" xml:space="preserve"><value>포트</value></data>
+  <data name="Udp_PortPlaceholder" xml:space="preserve"><value>1-65535</value></data>
+  <data name="Udp_LimitMiB" xml:space="preserve"><value>최대 보관량(MiB, 1-{0})</value></data>
+  <data name="Udp_FirewallNote" xml:space="preserve"><value>127.0.0.1이 아닌 주소에서 수신 대기하면 Windows 방화벽 알림이 표시될 수 있습니다.</value></data>
+  <data name="Udp_ReceiveOnly" xml:space="preserve"><value>수신만 하며 아무것도 보내지 않습니다.</value></data>
+  <data name="Udp_Start" xml:space="preserve"><value>시작</value></data>
+  <data name="Udp_TabName" xml:space="preserve"><value>UDP {0}</value></data>
+  <data name="Udp_PortInUse" xml:space="preserve"><value>포트 {0}을(를) 다른 앱에서 사용 중입니다.</value></data>
+  <data name="Udp_StartFailed" xml:space="preserve"><value>수신을 시작할 수 없습니다: {0}</value></data>
+  <data name="Udp_LimitReached" xml:space="preserve"><value>제한({0})에 도달하여 기록을 중지했습니다.</value></data>
+  <data name="Udp_DiscardOld" xml:space="preserve"><value>이전 데이터를 버리고 계속</value></data>
+  <data name="Udp_StateReceiving" xml:space="preserve"><value>수신 중</value></data>
+  <data name="Udp_StatePaused" xml:space="preserve"><value>일시 중지됨</value></data>
+  <data name="Udp_StateLimit" xml:space="preserve"><value>제한 도달</value></data>
+  <data name="Udp_StateStopped" xml:space="preserve"><value>중지됨</value></data>
+  <data name="Udp_Saved" xml:space="preserve"><value>수신한 데이터를 {0}에 저장했습니다.</value></data>
+  <data name="Udp_SaveFailed" xml:space="preserve"><value>저장할 수 없습니다: {0}</value></data>
+  <data name="Panel_Packets_Title" xml:space="preserve"><value>패킷</value></data>
+  <data name="Packets_List" xml:space="preserve"><value>패킷</value></data>
+  <data name="Packets_Pause" xml:space="preserve"><value>일시 중지</value></data>
+  <data name="Packets_Resume" xml:space="preserve"><value>계속</value></data>
+  <data name="Packets_Clear" xml:space="preserve"><value>지우기</value></data>
+  <data name="Packets_ExportCsv" xml:space="preserve"><value>CSV 내보내기...</value></data>
+  <data name="Packets_ExportJson" xml:space="preserve"><value>JSON 내보내기...</value></data>
+  <data name="Packets_Exported" xml:space="preserve"><value>{0}을(를) 내보냈습니다.</value></data>
+  <data name="Packets_NotUdp" xml:space="preserve"><value>UDP 수신 문서(파일 &gt; 원격에 연결 &gt; UDP 수신)를 열면 패킷을 볼 수 있습니다.</value></data>
+  <data name="Panel_Calculator_Title" xml:space="preserve"><value>계산기</value></data>
+  <data name="Panel_Converter_Title" xml:space="preserve"><value>진법 및 형식 변환기</value></data>
+  <data name="Panel_Float_Title" xml:space="preserve"><value>부동 소수점 시각화 도구</value></data>
+  <data name="Panel_CharTable_Title" xml:space="preserve"><value>문자표</value></data>
+  <data name="Panel_Color_Title" xml:space="preserve"><value>색 선택기</value></data>
+  <data name="Panel_DateTime_Title" xml:space="preserve"><value>날짜 및 시간 변환기</value></data>
+  <data name="Panel_ChecksumResults_Title" xml:space="preserve"><value>체크섬 결과</value></data>
+  <data name="Panel_FolderCompare_Title" xml:space="preserve"><value>폴더 비교</value></data>
+  <data name="Menu_Tools_Calculator.Text" xml:space="preserve"><value>계산기(C)</value></data>
+  <data name="Menu_Tools_Calculator.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Converter.Text" xml:space="preserve"><value>진법 및 형식 변환기(V)</value></data>
+  <data name="Menu_Tools_Converter.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FloatVisualizer.Text" xml:space="preserve"><value>부동 소수점 시각화 도구(F)</value></data>
+  <data name="Menu_Tools_FloatVisualizer.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_CharTable.Text" xml:space="preserve"><value>문자표(A)</value></data>
+  <data name="Menu_Tools_CharTable.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_ColorPicker.Text" xml:space="preserve"><value>색 선택기(L)</value></data>
+  <data name="Menu_Tools_ColorPicker.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_DateTime.Text" xml:space="preserve"><value>날짜 및 시간 변환기(D)</value></data>
+  <data name="Menu_Tools_DateTime.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools.Text" xml:space="preserve"><value>파일 도구(I)</value></data>
+  <data name="Menu_Tools_FileTools.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.Text" xml:space="preserve"><value>체크섬 파일 만들기(C)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.Text" xml:space="preserve"><value>체크섬 파일 확인(V)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.Text" xml:space="preserve"><value>폴더 비교(F)...</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="CmdCategory_tools" xml:space="preserve"><value>도구</value></data>
+  <data name="CmdCategory_fileTools" xml:space="preserve"><value>파일 도구</value></data>
+  <data name="Cmd_tools_calculator" xml:space="preserve"><value>계산기</value></data>
+  <data name="CmdAlias_tools_calculator" xml:space="preserve"><value>계산 수식 Hex calc calculate expression hex</value></data>
+  <data name="Cmd_tools_calculator_programmer" xml:space="preserve"><value>계산기(프로그래머 모드)</value></data>
+  <data name="CmdAlias_tools_calculator_programmer" xml:space="preserve"><value>계산 프로그래머 비트 비트 연산 calc programmer bits bitwise</value></data>
+  <data name="Cmd_tools_converter" xml:space="preserve"><value>진법 및 형식 변환기</value></data>
+  <data name="CmdAlias_tools_converter" xml:space="preserve"><value>변환 진법 엔디언 convert base radix endian ascii utf base64</value></data>
+  <data name="Cmd_tools_floatVisualizer" xml:space="preserve"><value>부동 소수점 시각화 도구</value></data>
+  <data name="CmdAlias_tools_floatVisualizer" xml:space="preserve"><value>부동 소수점 실수 float double ieee 754 half bfloat16 x87 bits</value></data>
+  <data name="Cmd_tools_charTable" xml:space="preserve"><value>문자표</value></data>
+  <data name="CmdAlias_tools_charTable" xml:space="preserve"><value>문자표 코드 페이지 문자 이름 character table code page ascii ebcdic unicode name</value></data>
+  <data name="Cmd_tools_colorPicker" xml:space="preserve"><value>색 선택기</value></data>
+  <data name="CmdAlias_tools_colorPicker" xml:space="preserve"><value>색 색상 선택기 픽셀 color colour picker rgb565 bgra pixel</value></data>
+  <data name="Cmd_tools_dateTime" xml:space="preserve"><value>날짜 및 시간 변환기</value></data>
+  <data name="CmdAlias_tools_dateTime" xml:space="preserve"><value>날짜 시간 타임스탬프 date time timestamp filetime unix dos ole converter</value></data>
+  <data name="Cmd_tools_checksum_create" xml:space="preserve"><value>체크섬 파일 만들기</value></data>
+  <data name="CmdAlias_tools_checksum_create" xml:space="preserve"><value>체크섬 해시 파일 만들기 checksum sha256sums md5 sfv hash file create</value></data>
+  <data name="Cmd_tools_checksum_verify" xml:space="preserve"><value>체크섬 파일 확인</value></data>
+  <data name="CmdAlias_tools_checksum_verify" xml:space="preserve"><value>체크섬 해시 파일 확인 검사 checksum sha256sums md5 sfv hash file verify check</value></data>
+  <data name="Cmd_tools_folderCompare" xml:space="preserve"><value>폴더 비교</value></data>
+  <data name="CmdAlias_tools_folderCompare" xml:space="preserve"><value>폴더 디렉터리 비교 차이 folder directory compare diff</value></data>
+  <data name="Tool_CopyValue" xml:space="preserve"><value>{0} 복사</value></data>
+  <data name="Tool_Error_End" xml:space="preserve"><value>쓸 수 없습니다: 커서 뒤에 {0, plural, other {#바이트}}만 남았지만 {1, plural, other {#바이트}}가 필요합니다.</value></data>
+  <data name="ToolTable_ExportCsv" xml:space="preserve"><value>CSV 내보내기</value></data>
+  <data name="ToolTable_ExportJson" xml:space="preserve"><value>JSON 내보내기</value></data>
+  <data name="ToolTable_Filter" xml:space="preserve"><value>필터</value></data>
+  <data name="ToolTable_List" xml:space="preserve"><value>결과</value></data>
+  <data name="ToolTable_SortBy" xml:space="preserve"><value>{0} 기준 정렬</value></data>
+  <data name="ToolTable_Exported" xml:space="preserve"><value>{0}을(를) 저장했습니다.</value></data>
+  <data name="GoTo_Error_NotInteger" xml:space="preserve"><value>{0}에는 정수가 필요합니다.</value></data>
+  <data name="Calc_Input" xml:space="preserve"><value>수식</value></data>
+  <data name="Calc_Placeholder" xml:space="preserve"><value>예: 0x1F00 + 10h * 2</value></data>
+  <data name="Calc_Overflow" xml:space="preserve"><value>오버플로</value></data>
+  <data name="Calc_Programmer" xml:space="preserve"><value>프로그래머</value></data>
+  <data name="Calc_Row_Hex" xml:space="preserve"><value>16진수</value></data>
+  <data name="Calc_Row_Dec" xml:space="preserve"><value>10진수</value></data>
+  <data name="Calc_Row_DecUnsigned" xml:space="preserve"><value>10진수(부호 없음)</value></data>
+  <data name="Calc_Row_Oct" xml:space="preserve"><value>8진수</value></data>
+  <data name="Calc_Row_Bin" xml:space="preserve"><value>2진수</value></data>
+  <data name="Calc_Row_Size" xml:space="preserve"><value>파일 크기</value></data>
+  <data name="Calc_Row_Float" xml:space="preserve"><value>부동 소수점</value></data>
+  <data name="Calc_WriteSize" xml:space="preserve"><value>크기</value></data>
+  <data name="Calc_Bytes" xml:space="preserve"><value>{0, plural, other {#바이트}}</value></data>
+  <data name="Calc_Endian" xml:space="preserve"><value>바이트 순서</value></data>
+  <data name="Calc_EndianLittle" xml:space="preserve"><value>리틀 엔디언</value></data>
+  <data name="Calc_EndianBig" xml:space="preserve"><value>빅 엔디언</value></data>
+  <data name="Calc_GoTo" xml:space="preserve"><value>이 위치로 이동</value></data>
+  <data name="Calc_Write" xml:space="preserve"><value>커서 위치에 쓰기</value></data>
+  <data name="Calc_SelectLength" xml:space="preserve"><value>선택 길이로 사용</value></data>
+  <data name="Calc_History" xml:space="preserve"><value>기록</value></data>
+  <data name="Calc_Error_NoOffset" xml:space="preserve"><value>결과를 오프셋으로 사용할 수 없습니다.</value></data>
+  <data name="Calc_Error_NoDocument" xml:space="preserve"><value>열려 있는 문서가 없습니다.</value></data>
+  <data name="Calc_Error_NoLength" xml:space="preserve"><value>결과가 커서 위치부터의 올바른 길이가 아닙니다.</value></data>
+  <data name="Calc_Error_TooBig" xml:space="preserve"><value>값이 {0, plural, other {#바이트}}에 들어가지 않습니다.</value></data>
+  <data name="Calc_Error_NoData" xml:space="preserve"><value>커서 위치의 데이터가 부족합니다.</value></data>
+  <data name="Calc_Width" xml:space="preserve"><value>비트 너비</value></data>
+  <data name="Calc_Bits" xml:space="preserve"><value>{0}비트</value></data>
+  <data name="Calc_Signed" xml:space="preserve"><value>부호 있음</value></data>
+  <data name="Calc_ReadCursor" xml:space="preserve"><value>커서 위치에서 읽기</value></data>
+  <data name="Calc_BitTable" xml:space="preserve"><value>비트</value></data>
+  <data name="Calc_BitName" xml:space="preserve"><value>비트 {0}, 값 {1}</value></data>
+  <data name="Calc_BitFieldValue" xml:space="preserve"><value>비트 {0}~{1}: {2}({3})</value></data>
+  <data name="Calc_CopyExpression" xml:space="preserve"><value>수식 복사</value></data>
+  <data name="Calc_Operand" xml:space="preserve"><value>피연산자(AND, OR, XOR, NAND, NOR용)</value></data>
+  <data name="Calc_Op_AND" xml:space="preserve"><value>AND</value></data>
+  <data name="Calc_Op_OR" xml:space="preserve"><value>OR</value></data>
+  <data name="Calc_Op_XOR" xml:space="preserve"><value>XOR</value></data>
+  <data name="Calc_Op_NOT" xml:space="preserve"><value>NOT</value></data>
+  <data name="Calc_Op_NAND" xml:space="preserve"><value>NAND</value></data>
+  <data name="Calc_Op_NOR" xml:space="preserve"><value>NOR</value></data>
+  <data name="Calc_Op_ShiftLeft" xml:space="preserve"><value>&lt;&lt;</value></data>
+  <data name="Calc_Op_ShiftRight" xml:space="preserve"><value>&gt;&gt;(논리)</value></data>
+  <data name="Calc_Op_ShiftRightArithmetic" xml:space="preserve"><value>&gt;&gt;(산술)</value></data>
+  <data name="Calc_Op_RotateLeft" xml:space="preserve"><value>왼쪽 회전</value></data>
+  <data name="Calc_Op_RotateRight" xml:space="preserve"><value>오른쪽 회전</value></data>
+  <data name="Calc_Op_Negate" xml:space="preserve"><value>부호 반전</value></data>
+  <data name="Calc_Op_ByteSwap" xml:space="preserve"><value>바이트 교환</value></data>
+  <data name="Conv_Endian" xml:space="preserve"><value>바이트 순서</value></data>
+  <data name="Conv_EndianLittle" xml:space="preserve"><value>리틀 엔디언</value></data>
+  <data name="Conv_EndianBig" xml:space="preserve"><value>빅 엔디언</value></data>
+  <data name="Conv_CodePageChoice" xml:space="preserve"><value>코드 페이지</value></data>
+  <data name="Conv_Hex" xml:space="preserve"><value>바이트(Hex)</value></data>
+  <data name="Conv_HexInteger" xml:space="preserve"><value>16진수</value></data>
+  <data name="Conv_UDec" xml:space="preserve"><value>10진수(부호 없음)</value></data>
+  <data name="Conv_SDec" xml:space="preserve"><value>10진수(부호 있음)</value></data>
+  <data name="Conv_Oct" xml:space="preserve"><value>8진수</value></data>
+  <data name="Conv_Bin" xml:space="preserve"><value>2진수</value></data>
+  <data name="Conv_Half" xml:space="preserve"><value>half</value></data>
+  <data name="Conv_Float" xml:space="preserve"><value>float</value></data>
+  <data name="Conv_Double" xml:space="preserve"><value>double</value></data>
+  <data name="Conv_Ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Conv_Utf8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Conv_Utf16Le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Conv_Utf16Be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Conv_Utf32Le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Conv_Utf32Be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Conv_CodePage" xml:space="preserve"><value>코드 페이지의 텍스트</value></data>
+  <data name="Conv_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Conv_ReadCursor" xml:space="preserve"><value>커서 위치에서 읽기</value></data>
+  <data name="Conv_WriteCursor" xml:space="preserve"><value>커서 위치에 쓰기</value></data>
+  <data name="Conv_SendSearch" xml:space="preserve"><value>검색 표시줄로 보내기</value></data>
+  <data name="Conv_Error_InvalidHex" xml:space="preserve"><value>DE AD BE EF와 같은 Hex 바이트를 입력하세요(짝수 개의 숫자).</value></data>
+  <data name="Conv_Error_TooLong" xml:space="preserve"><value>최대 {0}바이트입니다.</value></data>
+  <data name="Conv_Error_InvalidNumber" xml:space="preserve"><value>올바른 숫자가 아닙니다.</value></data>
+  <data name="Conv_Error_OutOfRange" xml:space="preserve"><value>값이 8바이트에 들어가지 않습니다.</value></data>
+  <data name="Conv_Error_Unencodable" xml:space="preserve"><value>이 인코딩으로는 문자 {0}을(를) 표현할 수 없습니다.</value></data>
+  <data name="Conv_Error_UnknownCodePage" xml:space="preserve"><value>이 코드 페이지를 사용할 수 없습니다.</value></data>
+  <data name="Conv_Error_InvalidBase64" xml:space="preserve"><value>올바른 Base64가 아닙니다.</value></data>
+  <data name="Conv_Error_NoData" xml:space="preserve"><value>커서 위치에 데이터가 없습니다.</value></data>
+  <data name="Conv_Warning_Invalid" xml:space="preserve"><value>이 바이트는 이 인코딩에서 올바르지 않습니다. 대체 문자로 표시됩니다.</value></data>
+  <data name="Float_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Float_Format_half" xml:space="preserve"><value>half(16비트)</value></data>
+  <data name="Float_Format_bfloat16" xml:space="preserve"><value>bfloat16(16비트)</value></data>
+  <data name="Float_Format_float" xml:space="preserve"><value>float(32비트)</value></data>
+  <data name="Float_Format_double" xml:space="preserve"><value>double(64비트)</value></data>
+  <data name="Float_Format_x87" xml:space="preserve"><value>x87 확장(80비트)</value></data>
+  <data name="Float_Endian" xml:space="preserve"><value>바이트 순서</value></data>
+  <data name="Float_EndianLittle" xml:space="preserve"><value>리틀 엔디언</value></data>
+  <data name="Float_EndianBig" xml:space="preserve"><value>빅 엔디언</value></data>
+  <data name="Float_Decimal" xml:space="preserve"><value>10진수 값</value></data>
+  <data name="Float_HexInput" xml:space="preserve"><value>바이트(Hex)</value></data>
+  <data name="Float_BitTable" xml:space="preserve"><value>비트 배치</value></data>
+  <data name="Float_Section_Sign" xml:space="preserve"><value>부호</value></data>
+  <data name="Float_Section_Exponent" xml:space="preserve"><value>지수({0}비트)</value></data>
+  <data name="Float_Section_Mantissa" xml:space="preserve"><value>가수({0}비트)</value></data>
+  <data name="Float_Name_Sign" xml:space="preserve"><value>부호 비트 {0}, 값 {1}</value></data>
+  <data name="Float_Name_Exponent" xml:space="preserve"><value>지수 비트 {0}, 값 {1}</value></data>
+  <data name="Float_Name_Mantissa" xml:space="preserve"><value>가수 비트 {0}, 값 {1}</value></data>
+  <data name="Float_Row_BitsHex" xml:space="preserve"><value>비트(Hex)</value></data>
+  <data name="Float_Row_Sign" xml:space="preserve"><value>부호</value></data>
+  <data name="Float_Row_Exponent" xml:space="preserve"><value>지수</value></data>
+  <data name="Float_Row_Mantissa" xml:space="preserve"><value>가수</value></data>
+  <data name="Float_Row_Class" xml:space="preserve"><value>분류</value></data>
+  <data name="Float_Row_Shortest" xml:space="preserve"><value>값(가장 짧은 표현)</value></data>
+  <data name="Float_Row_Exact" xml:space="preserve"><value>정확한 값</value></data>
+  <data name="Float_Row_HexFloat" xml:space="preserve"><value>Hex 부동 소수점</value></data>
+  <data name="Float_Row_NextUp" xml:space="preserve"><value>다음으로 큰 값</value></data>
+  <data name="Float_Row_NextDown" xml:space="preserve"><value>다음으로 작은 값</value></data>
+  <data name="Float_Row_Ulp" xml:space="preserve"><value>ULP</value></data>
+  <data name="Float_Row_Error" xml:space="preserve"><value>반올림 오차</value></data>
+  <data name="Float_ExponentText" xml:space="preserve"><value>{0}(편향 {1}, 비편향 {2})</value></data>
+  <data name="Float_ExponentTextSpecial" xml:space="preserve"><value>{0}(편향 {1}, 특수 값)</value></data>
+  <data name="Float_Class_Normal" xml:space="preserve"><value>정규 수</value></data>
+  <data name="Float_Class_Subnormal" xml:space="preserve"><value>비정규 수</value></data>
+  <data name="Float_Class_Zero" xml:space="preserve"><value>0</value></data>
+  <data name="Float_Class_Infinity" xml:space="preserve"><value>무한대</value></data>
+  <data name="Float_Class_NaN" xml:space="preserve"><value>NaN</value></data>
+  <data name="Float_Class_Invalid" xml:space="preserve"><value>잘못된 x87 인코딩</value></data>
+  <data name="Float_Class_NaNQuiet" xml:space="preserve"><value>NaN(조용함, 페이로드 {0})</value></data>
+  <data name="Float_Class_NaNSignaling" xml:space="preserve"><value>NaN(시그널링, 페이로드 {0})</value></data>
+  <data name="Float_Error_InvalidNumber" xml:space="preserve"><value>0.1, inf, -inf, nan 같은 10진수 값을 입력하세요.</value></data>
+  <data name="Float_Error_OutOfRange" xml:space="preserve"><value>지수가 너무 큽니다.</value></data>
+  <data name="Float_Error_InvalidHex" xml:space="preserve"><value>이 형식에 맞는 Hex를 입력하세요.</value></data>
+  <data name="Float_Error_NoData" xml:space="preserve"><value>커서 위치의 데이터가 부족합니다.</value></data>
+  <data name="Float_ReadCursor" xml:space="preserve"><value>커서 위치에서 읽기</value></data>
+  <data name="Float_WriteCursor" xml:space="preserve"><value>커서 위치에 쓰기</value></data>
+  <data name="Chars_Encoding" xml:space="preserve"><value>문자 인코딩</value></data>
+  <data name="Chars_Base" xml:space="preserve"><value>제목</value></data>
+  <data name="Chars_Base_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Chars_Base_Dec" xml:space="preserve"><value>10진수</value></data>
+  <data name="Chars_Base_Oct" xml:space="preserve"><value>8진수</value></data>
+  <data name="Chars_ListMode" xml:space="preserve"><value>목록 보기</value></data>
+  <data name="Chars_Search" xml:space="preserve"><value>문자 찾기</value></data>
+  <data name="Chars_SearchPlaceholder" xml:space="preserve"><value>문자, 이름 또는 코드 포인트(U+3042)</value></data>
+  <data name="Chars_SearchButton" xml:space="preserve"><value>찾기</value></data>
+  <data name="Chars_NotFound" xml:space="preserve"><value>이 인코딩에서 찾을 수 없습니다.</value></data>
+  <data name="Chars_TableName" xml:space="preserve"><value>문자표</value></data>
+  <data name="Chars_TrailTableName" xml:space="preserve"><value>둘째 바이트 표</value></data>
+  <data name="Chars_TrailTitle" xml:space="preserve"><value>선행 바이트 {0} 뒤의 둘째 바이트</value></data>
+  <data name="Chars_Row_Hex" xml:space="preserve"><value>바이트(Hex)</value></data>
+  <data name="Chars_Row_Dec" xml:space="preserve"><value>바이트(10진수)</value></data>
+  <data name="Chars_Row_Oct" xml:space="preserve"><value>바이트(8진수)</value></data>
+  <data name="Chars_Row_Bin" xml:space="preserve"><value>바이트(2진수)</value></data>
+  <data name="Chars_Row_Char" xml:space="preserve"><value>문자</value></data>
+  <data name="Chars_Row_CodePoint" xml:space="preserve"><value>코드 포인트</value></data>
+  <data name="Chars_Row_Name" xml:space="preserve"><value>이름(영어)</value></data>
+  <data name="Chars_Row_Utf8" xml:space="preserve"><value>UTF-8 바이트</value></data>
+  <data name="Chars_Row_Utf16" xml:space="preserve"><value>UTF-16 바이트</value></data>
+  <data name="Chars_Utf16Endian" xml:space="preserve"><value>UTF-16 바이트 순서(LE / BE)</value></data>
+  <data name="Chars_Insert" xml:space="preserve"><value>커서 위치에 삽입</value></data>
+  <data name="Chars_CopyChar" xml:space="preserve"><value>문자 복사</value></data>
+  <data name="Chars_CopyBytes" xml:space="preserve"><value>바이트 값 복사</value></data>
+  <data name="Color_Picker" xml:space="preserve"><value>색</value></data>
+  <data name="Color_Swatch" xml:space="preserve"><value>색 미리 보기</value></data>
+  <data name="Color_Hex" xml:space="preserve"><value>Hex 색(#RRGGBB 또는 #AARRGGBB)</value></data>
+  <data name="Color_Error_Hex" xml:space="preserve"><value>#RRGGBB 또는 #AARRGGBB를 입력하세요.</value></data>
+  <data name="Color_Components" xml:space="preserve"><value>R {0}, G {1}, B {2}, A {3}</value></data>
+  <data name="Color_Formats" xml:space="preserve"><value>픽셀 형식</value></data>
+  <data name="Color_Format" xml:space="preserve"><value>읽기, 쓰기, 검색에 사용할 형식</value></data>
+  <data name="Color_EndianOf" xml:space="preserve"><value>{0}의 바이트 순서</value></data>
+  <data name="Color_ReadCursor" xml:space="preserve"><value>커서 위치에서 읽기</value></data>
+  <data name="Color_WriteCursor" xml:space="preserve"><value>커서 위치에 쓰기</value></data>
+  <data name="Color_Search" xml:space="preserve"><value>이 색 찾기</value></data>
+  <data name="Color_Error_NoData" xml:space="preserve"><value>커서 위치의 데이터가 부족합니다.</value></data>
+  <data name="Time_Zone" xml:space="preserve"><value>시간대</value></data>
+  <data name="Time_Zone_Utc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Time_Zone_Local" xml:space="preserve"><value>현지 시간</value></data>
+  <data name="Time_Endian" xml:space="preserve"><value>바이트 순서</value></data>
+  <data name="Time_EndianLittle" xml:space="preserve"><value>리틀 엔디언</value></data>
+  <data name="Time_EndianBig" xml:space="preserve"><value>빅 엔디언</value></data>
+  <data name="Time_Date" xml:space="preserve"><value>날짜 및 시간(ISO 8601)</value></data>
+  <data name="Time_Row_Iso" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Time_Row_Regional" xml:space="preserve"><value>지역 형식</value></data>
+  <data name="Time_Now" xml:space="preserve"><value>지금</value></data>
+  <data name="Time_Decimal" xml:space="preserve"><value>10진수</value></data>
+  <data name="Time_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Time_Bytes" xml:space="preserve"><value>바이트</value></data>
+  <data name="Time_NotRepresentable" xml:space="preserve"><value>표현할 수 없음</value></data>
+  <data name="Time_Format" xml:space="preserve"><value>읽기 및 쓰기에 사용할 형식</value></data>
+  <data name="Time_ReadCursor" xml:space="preserve"><value>커서 위치에서 읽기</value></data>
+  <data name="Time_WriteCursor" xml:space="preserve"><value>커서 위치에 쓰기</value></data>
+  <data name="Time_Error_InvalidDate" xml:space="preserve"><value>2024-02-29T12:34:56Z 같은 날짜 또는 now를 입력하세요.</value></data>
+  <data name="Time_Error_InvalidNumber" xml:space="preserve"><value>올바른 숫자가 아닙니다.</value></data>
+  <data name="Time_Error_OutOfRange" xml:space="preserve"><value>값이 이 형식의 범위를 벗어났습니다.</value></data>
+  <data name="Time_Error_InvalidHex" xml:space="preserve"><value>이 형식의 길이에 맞는 Hex 바이트를 입력하세요.</value></data>
+  <data name="Time_Error_NotEnoughData" xml:space="preserve"><value>데이터가 부족합니다.</value></data>
+  <data name="Time_Error_ReadFailed" xml:space="preserve"><value>커서 위치에서 날짜를 읽을 수 없습니다.</value></data>
+  <data name="Time_Format_unix32" xml:space="preserve"><value>Unix 시간(32비트, 초)</value></data>
+  <data name="Time_Format_unix32u" xml:space="preserve"><value>Unix 시간(부호 없는 32비트, 초)</value></data>
+  <data name="Time_Format_unix64" xml:space="preserve"><value>Unix 시간(64비트, 초)</value></data>
+  <data name="Time_Format_unixms" xml:space="preserve"><value>Unix 시간(64비트, 밀리초)</value></data>
+  <data name="Time_Format_unixus" xml:space="preserve"><value>Unix 시간(64비트, 마이크로초)</value></data>
+  <data name="Time_Format_unixns" xml:space="preserve"><value>Unix 시간(64비트, 나노초)</value></data>
+  <data name="Time_Format_filetime" xml:space="preserve"><value>FILETIME</value></data>
+  <data name="Time_Format_dos" xml:space="preserve"><value>DOS 날짜 및 시간</value></data>
+  <data name="Time_Format_ole" xml:space="preserve"><value>OLE 자동화 날짜</value></data>
+  <data name="Time_Format_hfsplus" xml:space="preserve"><value>HFS+</value></data>
+  <data name="Time_Format_apfs" xml:space="preserve"><value>APFS(나노초)</value></data>
+  <data name="Time_Format_java" xml:space="preserve"><value>Java(밀리초)</value></data>
+  <data name="Time_Format_dotnet" xml:space="preserve"><value>.NET DateTime.Ticks</value></data>
+  <data name="Time_Format_gps" xml:space="preserve"><value>GPS 시간(초)</value></data>
+  <data name="Time_Format_cocoa" xml:space="preserve"><value>Mac 절대 시간(Cocoa)</value></data>
+  <data name="Sums_CreateTitle" xml:space="preserve"><value>체크섬 파일 만들기</value></data>
+  <data name="Sums_Create" xml:space="preserve"><value>만들기</value></data>
+  <data name="Sums_Targets" xml:space="preserve"><value>파일 및 폴더(한 줄에 하나)</value></data>
+  <data name="Sums_AddFiles" xml:space="preserve"><value>파일 추가...</value></data>
+  <data name="Sums_AddFolder" xml:space="preserve"><value>폴더 추가...</value></data>
+  <data name="Sums_Subfolders" xml:space="preserve"><value>하위 폴더 포함</value></data>
+  <data name="Sums_Algorithm" xml:space="preserve"><value>알고리즘</value></data>
+  <data name="Sums_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Sums_Format_Gnu" xml:space="preserve"><value>GNU(SHA256SUMS)</value></data>
+  <data name="Sums_Format_Bsd" xml:space="preserve"><value>BSD(CHECKSUM.SHA256)</value></data>
+  <data name="Sums_Format_Sidecar" xml:space="preserve"><value>대상마다 파일 하나(.sha256)</value></data>
+  <data name="Sums_Format_Sfv" xml:space="preserve"><value>SFV(CRC-32만 해당)</value></data>
+  <data name="Sums_BinaryMark" xml:space="preserve"><value>줄을 이진으로 표시(*)</value></data>
+  <data name="Sums_SeparatorSlash" xml:space="preserve"><value>경로 구분 기호 /</value></data>
+  <data name="Sums_SeparatorBackslash" xml:space="preserve"><value>경로 구분 기호 \</value></data>
+  <data name="Sums_LineLf" xml:space="preserve"><value>줄 끝 LF</value></data>
+  <data name="Sums_LineCrLf" xml:space="preserve"><value>줄 끝 CRLF</value></data>
+  <data name="Sums_OutputName" xml:space="preserve"><value>출력 파일 이름</value></data>
+  <data name="Sums_Info" xml:space="preserve"><value>{0, plural, other {파일 #개}}의 해시를 계산합니다. 출력: {1}</value></data>
+  <data name="Sums_Error_NoTarget" xml:space="preserve"><value>파일이나 폴더를 하나 이상 추가하세요.</value></data>
+  <data name="Sums_Error_Missing" xml:space="preserve"><value>일부 파일 또는 폴더가 없습니다.</value></data>
+  <data name="Sums_Error_NoFiles" xml:space="preserve"><value>해시를 계산할 파일이 없습니다.</value></data>
+  <data name="Sums_Error_Write" xml:space="preserve"><value>체크섬 파일을 쓸 수 없습니다: {0}</value></data>
+  <data name="Sums_Error_Read" xml:space="preserve"><value>{0}을(를) 읽을 수 없습니다: {1}</value></data>
+  <data name="Sums_Error_NotChecksum" xml:space="preserve"><value>{0}은(는) 체크섬 파일이 아니며 옆에 체크섬 파일도 없습니다.</value></data>
+  <data name="Sums_Error_Running" xml:space="preserve"><value>체크섬 확인이 이미 실행 중입니다.</value></data>
+  <data name="Sums_OverwriteTitle" xml:space="preserve"><value>기존 파일을 바꿀까요?</value></data>
+  <data name="Sums_OverwriteBody" xml:space="preserve"><value>{0, plural, other {파일 #개가 이미 있으며 덮어씁니다.}}</value></data>
+  <data name="Sums_Overwrite" xml:space="preserve"><value>덮어쓰기</value></data>
+  <data name="Sums_OpCreate" xml:space="preserve"><value>체크섬 파일 만들기({0, plural, other {파일 #개}})</value></data>
+  <data name="Sums_OpVerify" xml:space="preserve"><value>{0} 확인</value></data>
+  <data name="Sums_Cancelled" xml:space="preserve"><value>체크섬 파일 만들기를 취소했습니다.</value></data>
+  <data name="Sums_Done" xml:space="preserve"><value>{0, plural, other {파일 #개}}의 체크섬 파일을 만들었습니다: {1}</value></data>
+  <data name="Sums_WrittenMany" xml:space="preserve"><value>{0, plural, other {파일 #개}}</value></data>
+  <data name="Sums_SkippedTitle" xml:space="preserve"><value>읽을 수 없는 파일</value></data>
+  <data name="Sums_SkippedBody" xml:space="preserve"><value>{0, plural, other {파일 #개를 읽을 수 없어 체크섬 파일에 포함되지 않았습니다.}}</value></data>
+  <data name="Sums_SidecarTitle" xml:space="preserve"><value>체크섬 파일로 확인할까요?</value></data>
+  <data name="Sums_SidecarBody" xml:space="preserve"><value>{0}은(는) 체크섬 파일이 아니지만 옆에 {1}이(가) 있습니다. {1}(으)로 {0}을(를) 확인할까요?</value></data>
+  <data name="Sums_SidecarUse" xml:space="preserve"><value>확인</value></data>
+  <data name="Sums_Verify" xml:space="preserve"><value>확인</value></data>
+  <data name="Sums_InfoBar" xml:space="preserve"><value>체크섬 파일입니다.</value></data>
+  <data name="Sums_AskAlgorithmTitle" xml:space="preserve"><value>알고리즘 선택</value></data>
+  <data name="Sums_AskAlgorithmBody" xml:space="preserve"><value>일부 줄의 알고리즘을 감지할 수 없습니다. 체크섬의 알고리즘을 선택하세요.</value></data>
+  <data name="Sums_Verifying" xml:space="preserve"><value>확인하는 중...</value></data>
+  <data name="Sums_Verifying2" xml:space="preserve"><value>확인하는 중: {0}</value></data>
+  <data name="Sums_VerifyCancelled" xml:space="preserve"><value>취소됨: {0}</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>형식이 잘못된 {0, plural, other {#개 줄}}을 건너뛰었습니다. 줄 번호: {1}</value></data>
+  <data name="Sums_Summary_Match" xml:space="preserve"><value>일치 {0}</value></data>
+  <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>불일치 {0}</value></data>
+  <data name="Sums_Summary_Missing" xml:space="preserve"><value>없음 {0}</value></data>
+  <data name="Sums_Summary_ReadError" xml:space="preserve"><value>읽기 오류 {0}</value></data>
+  <data name="Sums_Summary_None" xml:space="preserve"><value>항목 없음</value></data>
+  <data name="Sums_SummarySeparator" xml:space="preserve"><value>, </value></data>
+  <data name="Sums_Status_Match" xml:space="preserve"><value>일치</value></data>
+  <data name="Sums_Status_Mismatch" xml:space="preserve"><value>불일치</value></data>
+  <data name="Sums_Status_Missing" xml:space="preserve"><value>없음</value></data>
+  <data name="Sums_Status_ReadError" xml:space="preserve"><value>읽기 오류</value></data>
+  <data name="Sums_Filter_All" xml:space="preserve"><value>전체</value></data>
+  <data name="Sums_Col_State" xml:space="preserve"><value>상태</value></data>
+  <data name="Sums_Col_Path" xml:space="preserve"><value>경로</value></data>
+  <data name="Sums_Col_Expected" xml:space="preserve"><value>예상 값</value></data>
+  <data name="Sums_Col_Actual" xml:space="preserve"><value>계산된 값</value></data>
+  <data name="Sums_Col_Size" xml:space="preserve"><value>크기</value></data>
+  <data name="Sums_Open" xml:space="preserve"><value>열기</value></data>
+  <data name="FolderCmp_Title" xml:space="preserve"><value>폴더 비교</value></data>
+  <data name="FolderCmp_Compare" xml:space="preserve"><value>비교</value></data>
+  <data name="FolderCmp_Left" xml:space="preserve"><value>왼쪽 폴더</value></data>
+  <data name="FolderCmp_Right" xml:space="preserve"><value>오른쪽 폴더</value></data>
+  <data name="FolderCmp_Browse" xml:space="preserve"><value>찾아보기...</value></data>
+  <data name="FolderCmp_Subfolders" xml:space="preserve"><value>하위 폴더 포함</value></data>
+  <data name="FolderCmp_Pattern" xml:space="preserve"><value>파일 이름 패턴(예: *.bin, 비우면 모두)</value></data>
+  <data name="FolderCmp_Hash" xml:space="preserve"><value>SHA-256으로 비교하고 값 표시</value></data>
+  <data name="FolderCmp_Error_Missing" xml:space="preserve"><value>폴더가 없습니다.</value></data>
+  <data name="FolderCmp_Error_Running" xml:space="preserve"><value>폴더 비교가 이미 실행 중입니다.</value></data>
+  <data name="FolderCmp_Op" xml:space="preserve"><value>폴더 {0}과(와) {1} 비교</value></data>
+  <data name="FolderCmp_Comparing" xml:space="preserve"><value>비교하는 중...</value></data>
+  <data name="FolderCmp_Comparing2" xml:space="preserve"><value>비교하는 중: {0}</value></data>
+  <data name="FolderCmp_Cancelled" xml:space="preserve"><value>취소됨: {0}</value></data>
+  <data name="FolderCmp_Status_Same" xml:space="preserve"><value>동일</value></data>
+  <data name="FolderCmp_Status_Different" xml:space="preserve"><value>다름</value></data>
+  <data name="FolderCmp_Status_LeftOnly" xml:space="preserve"><value>왼쪽에만 있음</value></data>
+  <data name="FolderCmp_Status_RightOnly" xml:space="preserve"><value>오른쪽에만 있음</value></data>
+  <data name="FolderCmp_Status_ReadError" xml:space="preserve"><value>읽기 오류</value></data>
+  <data name="FolderCmp_Filter_HideSame" xml:space="preserve"><value>동일한 파일 숨기기</value></data>
+  <data name="FolderCmp_Filter_All" xml:space="preserve"><value>전체</value></data>
+  <data name="FolderCmp_Col_State" xml:space="preserve"><value>상태</value></data>
+  <data name="FolderCmp_Col_Path" xml:space="preserve"><value>상대 경로</value></data>
+  <data name="FolderCmp_Col_LeftSize" xml:space="preserve"><value>왼쪽 크기</value></data>
+  <data name="FolderCmp_Col_RightSize" xml:space="preserve"><value>오른쪽 크기</value></data>
+  <data name="FolderCmp_Col_FirstDiff" xml:space="preserve"><value>첫 번째 차이</value></data>
+  <data name="FolderCmp_Summary_Same" xml:space="preserve"><value>동일 {0}</value></data>
+  <data name="FolderCmp_Summary_Different" xml:space="preserve"><value>다름 {0}</value></data>
+  <data name="FolderCmp_Summary_LeftOnly" xml:space="preserve"><value>왼쪽에만 있음 {0}</value></data>
+  <data name="FolderCmp_Summary_RightOnly" xml:space="preserve"><value>오른쪽에만 있음 {0}</value></data>
+  <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>읽기 오류 {0}</value></data>
+  <data name="FolderCmp_Summary_None" xml:space="preserve"><value>파일 없음</value></data>
+  <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>파일 비교에서 열기</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>부동 소수점 시각화 도구에서 열기</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>색 선택기에서 열기</value></data>
+  <data name="Menu_File_ExportPdf.Text" xml:space="preserve"><value>PDF(P)...</value></data>
+  <data name="Menu_File_ExportPdf.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Print.Text" xml:space="preserve"><value>인쇄(T)...</value></data>
+  <data name="Menu_File_Print.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_PrintPreview.Text" xml:space="preserve"><value>인쇄 미리 보기(Q)...</value></data>
+  <data name="Menu_File_PrintPreview.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_Ads.Text" xml:space="preserve"><value>대체 데이터 스트림(H)...</value></data>
+  <data name="Menu_File_Ads.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Split.Text" xml:space="preserve"><value>파일 분할(S)...</value></data>
+  <data name="Menu_Tools_FileTools_Split.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_FileTools_Join.Text" xml:space="preserve"><value>파일 합치기(J)...</value></data>
+  <data name="Menu_Tools_FileTools_Join.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.Text" xml:space="preserve"><value>인터리브(L)...</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.Text" xml:space="preserve"><value>디인터리브(D)...</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools_Shred.Text" xml:space="preserve"><value>안전 삭제(H)...</value></data>
+  <data name="Menu_Tools_FileTools_Shred.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Ads.Text" xml:space="preserve"><value>대체 데이터 스트림(A)...</value></data>
+  <data name="Menu_Tools_FileTools_Ads.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_file_print" xml:space="preserve"><value>인쇄</value></data>
+  <data name="CmdAlias_file_print" xml:space="preserve"><value>인쇄 프린터 페이지 설정 용지 print printer page setup paper</value></data>
+  <data name="Cmd_file_printPreview" xml:space="preserve"><value>인쇄 미리 보기</value></data>
+  <data name="CmdAlias_file_printPreview" xml:space="preserve"><value>인쇄 미리 보기 페이지 print preview page</value></data>
+  <data name="Cmd_file_exportPdf" xml:space="preserve"><value>PDF로 내보내기</value></data>
+  <data name="CmdAlias_file_exportPdf" xml:space="preserve"><value>pdf 내보내기 인쇄 저장 pdf export print save</value></data>
+  <data name="Cmd_file_ads_open" xml:space="preserve"><value>대체 데이터 스트림 열기</value></data>
+  <data name="CmdAlias_file_ads_open" xml:space="preserve"><value>대체 데이터 스트림 ads alternate data stream ntfs zone identifier</value></data>
+  <data name="Cmd_tools_ads" xml:space="preserve"><value>대체 데이터 스트림 관리</value></data>
+  <data name="CmdAlias_tools_ads" xml:space="preserve"><value>대체 데이터 스트림 목록 만들기 삭제 ads alternate data stream ntfs list create delete</value></data>
+  <data name="Cmd_tools_files_split" xml:space="preserve"><value>분할</value></data>
+  <data name="CmdAlias_tools_files_split" xml:space="preserve"><value>분할 나누기 파일 조각 split cut divide file parts</value></data>
+  <data name="Cmd_tools_files_join" xml:space="preserve"><value>합치기</value></data>
+  <data name="CmdAlias_tools_files_join" xml:space="preserve"><value>합치기 연결 파일 join concatenate merge files</value></data>
+  <data name="Cmd_tools_files_interleave" xml:space="preserve"><value>인터리브</value></data>
+  <data name="CmdAlias_tools_files_interleave" xml:space="preserve"><value>인터리브 병합 rom 바이트 interleave merge rom bytes</value></data>
+  <data name="Cmd_tools_files_deinterleave" xml:space="preserve"><value>디인터리브</value></data>
+  <data name="CmdAlias_tools_files_deinterleave" xml:space="preserve"><value>디인터리브 분할 짝수 홀수 rom 바이트 deinterleave split even odd rom bytes</value></data>
+  <data name="Cmd_tools_files_shred" xml:space="preserve"><value>안전 삭제</value></data>
+  <data name="CmdAlias_tools_files_shred" xml:space="preserve"><value>파쇄 안전 삭제 완전 삭제 덮어쓰기 shred secure delete wipe overwrite erase</value></data>
+  <data name="Tab_Ads" xml:space="preserve"><value>대체 데이터 스트림...</value></data>
+  <data name="Panel_Ads_Title" xml:space="preserve"><value>대체 데이터 스트림</value></data>
+  <data name="Set_files_adsNotice" xml:space="preserve"><value>파일에 대체 데이터 스트림이 있으면 알림</value></data>
+  <data name="SetDesc_files_adsNotice" xml:space="preserve"><value>NTFS에서 기본 스트림 외의 스트림이 있는 파일을 열면 목록 표시 단추가 있는 메시지를 표시합니다.</value></data>
+  <data name="WriteBlock_Enabled" xml:space="preserve"><value>쓰기 방지 모드가 켜져 있습니다.</value></data>
+  <data name="FileList_List" xml:space="preserve"><value>파일 목록</value></data>
+  <data name="FileList_Add" xml:space="preserve"><value>추가...</value></data>
+  <data name="FileList_AddFolder" xml:space="preserve"><value>폴더 추가...</value></data>
+  <data name="FileList_Remove" xml:space="preserve"><value>제거</value></data>
+  <data name="FileList_Remove_Key" xml:space="preserve"><value>R</value></data>
+  <data name="FileList_Up" xml:space="preserve"><value>위로 이동</value></data>
+  <data name="FileList_Up_Key" xml:space="preserve"><value>U</value></data>
+  <data name="FileList_Down" xml:space="preserve"><value>아래로 이동</value></data>
+  <data name="FileList_Down_Key" xml:space="preserve"><value>D</value></data>
+  <data name="FileList_SortName" xml:space="preserve"><value>이름순 정렬</value></data>
+  <data name="FileList_SortNatural" xml:space="preserve"><value>자연 정렬</value></data>
+  <data name="FileOps_Input" xml:space="preserve"><value>입력</value></data>
+  <data name="FileOps_InputDocument" xml:space="preserve"><value>활성 문서</value></data>
+  <data name="FileOps_InputDocumentNamed" xml:space="preserve"><value>활성 문서: {0}</value></data>
+  <data name="FileOps_InputFile" xml:space="preserve"><value>파일</value></data>
+  <data name="FileOps_FilePath" xml:space="preserve"><value>파일 경로</value></data>
+  <data name="FileOps_Browse" xml:space="preserve"><value>찾아보기...</value></data>
+  <data name="FileOps_Error_NoInput" xml:space="preserve"><value>입력 문서나 기존 파일을 선택하세요.</value></data>
+  <data name="FileOps_Error_NothingToDo" xml:space="preserve"><value>처리할 데이터가 없습니다.</value></data>
+  <data name="FileOps_Error_Argument" xml:space="preserve"><value>값 하나가 범위를 벗어났습니다.</value></data>
+  <data name="FileOps_Error_Names" xml:space="preserve"><value>이 파일 이름 형식으로는 서로 다른 이름을 만들 수 없습니다.</value></data>
+  <data name="FileOps_Error_Unreadable" xml:space="preserve"><value>일부 파일을 읽을 수 없습니다.</value></data>
+  <data name="FileOps_OverwriteTitle" xml:space="preserve"><value>기존 파일을 덮어쓸까요?</value></data>
+  <data name="FileOps_OverwriteBody" xml:space="preserve"><value>{0, plural, other {대상에 이미 파일 #개가 있습니다.}}</value></data>
+  <data name="FileOps_Overwrite" xml:space="preserve"><value>덮어쓰기</value></data>
+  <data name="FileOps_NoSpaceTitle" xml:space="preserve"><value>여유 공간 부족</value></data>
+  <data name="FileOps_NoSpaceBody" xml:space="preserve"><value>대상 볼륨 {0}의 여유 공간은 {2}바이트이지만 {1}바이트가 필요합니다. 아무것도 쓰지 않았습니다.</value></data>
+  <data name="FileOps_KeepTitle" xml:space="preserve"><value>완료된 파일을 유지할까요?</value></data>
+  <data name="FileOps_KeepBody" xml:space="preserve"><value>{1} 그 전에 {0, plural, other {파일 #개}}가 완료되었습니다.</value></data>
+  <data name="FileOps_Keep" xml:space="preserve"><value>유지</value></data>
+  <data name="FileOps_DeleteCompleted" xml:space="preserve"><value>삭제</value></data>
+  <data name="FileOps_Cancelled" xml:space="preserve"><value>작업이 취소되었습니다.</value></data>
+  <data name="FileOps_CancelledDeleted" xml:space="preserve"><value>작업이 취소되었으며 만들어진 파일은 삭제되었습니다.</value></data>
+  <data name="FileOps_ErrorTitle" xml:space="preserve"><value>파일 도구 오류</value></data>
+  <data name="FileOps_CreatedList" xml:space="preserve"><value>{0, plural, other {오류가 발생하기 전에 파일 #개가 만들어졌습니다.}}</value></data>
+  <data name="Split_Title" xml:space="preserve"><value>파일 분할</value></data>
+  <data name="Split_Run" xml:space="preserve"><value>분할</value></data>
+  <data name="Split_Method" xml:space="preserve"><value>분할 기준</value></data>
+  <data name="Split_BySize" xml:space="preserve"><value>파일당 크기</value></data>
+  <data name="Split_Size" xml:space="preserve"><value>크기(예: 4G, 1.44M, 0x10000)</value></data>
+  <data name="Split_ByCount" xml:space="preserve"><value>파일 수(2~10,000)</value></data>
+  <data name="Split_Count" xml:space="preserve"><value>파일 수</value></data>
+  <data name="Split_Align" xml:space="preserve"><value>크기를 이 바이트 수의 배수로 맞춤</value></data>
+  <data name="Split_ByPositions" xml:space="preserve"><value>오프셋</value></data>
+  <data name="Split_Positions" xml:space="preserve"><value>오프셋(한 줄에 하나)</value></data>
+  <data name="Split_UseBookmarks" xml:space="preserve"><value>문서의 책갈피 위치도 사용</value></data>
+  <data name="Split_Output" xml:space="preserve"><value>출력</value></data>
+  <data name="Split_OutputFolder" xml:space="preserve"><value>출력 폴더(비우면 입력과 같은 폴더)</value></data>
+  <data name="Split_NameFormat" xml:space="preserve"><value>파일 이름 형식</value></data>
+  <data name="Split_JoinScript" xml:space="preserve"><value>각 조각을 합치는 명령 파일 만들기(copy /b)</value></data>
+  <data name="Split_Checksum" xml:space="preserve"><value>원본과 조각의 체크섬 파일 만들기</value></data>
+  <data name="Split_Summary" xml:space="preserve"><value>{0, plural, other {파일 #개}}: {1}~{2}, 총 {3}바이트</value></data>
+  <data name="Split_Error_Size" xml:space="preserve"><value>파일당 크기를 입력하세요.</value></data>
+  <data name="Split_Error_Count" xml:space="preserve"><value>파일 수를 2~10,000 사이로 입력하세요.</value></data>
+  <data name="Split_Error_Positions" xml:space="preserve"><value>오프셋 하나가 올바르지 않습니다.</value></data>
+  <data name="Split_Operation" xml:space="preserve"><value>{0} 분할 중</value></data>
+  <data name="Split_Done" xml:space="preserve"><value>{1}에 {0, plural, other {파일 #개}}로 분할했습니다</value></data>
+  <data name="Join_Title" xml:space="preserve"><value>파일 합치기</value></data>
+  <data name="Join_Run" xml:space="preserve"><value>합치기</value></data>
+  <data name="Join_Files" xml:space="preserve"><value>파일(합치는 순서)</value></data>
+  <data name="Join_SequenceBody" xml:space="preserve"><value>{0}부터 이어지는 번호 파일도 추가할까요({1, plural, other {파일 #개 더}})?</value></data>
+  <data name="Join_SequenceAll" xml:space="preserve"><value>번호가 붙은 파일 모두 추가</value></data>
+  <data name="Join_SequenceOne" xml:space="preserve"><value>이 파일만 추가</value></data>
+  <data name="Join_Total" xml:space="preserve"><value>{0, plural, other {파일 #개}}, 총 {1}바이트</value></data>
+  <data name="Join_PadNone" xml:space="preserve"><value>파일 사이에 패딩 없음</value></data>
+  <data name="Join_PadAlign" xml:space="preserve"><value>각 파일을 N바이트의 배수 위치에서 시작</value></data>
+  <data name="Join_Align" xml:space="preserve"><value>정렬 바이트 수</value></data>
+  <data name="Join_PadValue" xml:space="preserve"><value>패딩 값(Hex 바이트)</value></data>
+  <data name="Join_OutNew" xml:space="preserve"><value>결과를 새 문서로 열기</value></data>
+  <data name="Join_OutFile" xml:space="preserve"><value>결과를 파일로 저장</value></data>
+  <data name="Join_OutPath" xml:space="preserve"><value>출력 파일</value></data>
+  <data name="Join_Error_Empty" xml:space="preserve"><value>파일을 하나 이상 추가하세요.</value></data>
+  <data name="Join_Error_Missing" xml:space="preserve"><value>파일을 찾을 수 없습니다: {0}</value></data>
+  <data name="Join_Error_Align" xml:space="preserve"><value>정렬 값을 1바이트 이상으로 입력하세요.</value></data>
+  <data name="Join_Error_PadValue" xml:space="preserve"><value>00 또는 FF와 같은 Hex 바이트 하나를 입력하세요.</value></data>
+  <data name="Join_Error_OutPath" xml:space="preserve"><value>출력 파일을 입력하세요.</value></data>
+  <data name="Join_Error_SameFile" xml:space="preserve"><value>출력 파일이 입력 파일 중 하나입니다.</value></data>
+  <data name="Join_Error_Unreadable" xml:space="preserve"><value>이 파일들을 읽을 수 없어 아무것도 합치지 않았습니다:</value></data>
+  <data name="Join_Error_Write" xml:space="preserve"><value>파일을 쓸 수 없습니다: {0}</value></data>
+  <data name="Join_DocumentName" xml:space="preserve"><value>합친 {0}</value></data>
+  <data name="Join_Operation" xml:space="preserve"><value>{0}(으)로 합치는 중</value></data>
+  <data name="Join_Done" xml:space="preserve"><value>{0}(으)로 합쳤습니다</value></data>
+  <data name="Join_ChangedDuringJoin" xml:space="preserve"><value>합치는 동안 다음 원본 파일이 변경되었습니다: {0}</value></data>
+  <data name="Deint_Title" xml:space="preserve"><value>디인터리브</value></data>
+  <data name="Deint_Run" xml:space="preserve"><value>디인터리브</value></data>
+  <data name="Deint_Count" xml:space="preserve"><value>출력 수(2~16)</value></data>
+  <data name="Deint_Unit" xml:space="preserve"><value>단위</value></data>
+  <data name="Deint_Unit1" xml:space="preserve"><value>1바이트</value></data>
+  <data name="Deint_Unit2" xml:space="preserve"><value>2바이트</value></data>
+  <data name="Deint_Unit4" xml:space="preserve"><value>4바이트</value></data>
+  <data name="Deint_Unit8" xml:space="preserve"><value>8바이트</value></data>
+  <data name="Deint_UnitCustom" xml:space="preserve"><value>그 밖의 바이트 수</value></data>
+  <data name="Deint_UnitBytes" xml:space="preserve"><value>단위(바이트)</value></data>
+  <data name="Deint_Pad" xml:space="preserve"><value>부족한 끝부분을 값으로 채움</value></data>
+  <data name="Deint_Keep" xml:space="preserve"><value>남은 바이트를 마지막 출력에 유지</value></data>
+  <data name="Deint_PadValue" xml:space="preserve"><value>값(Hex 바이트)</value></data>
+  <data name="Deint_Error_Count" xml:space="preserve"><value>2~16 사이의 숫자를 입력하세요.</value></data>
+  <data name="Deint_Error_Unit" xml:space="preserve"><value>1바이트~1MiB 범위의 단위를 입력하세요.</value></data>
+  <data name="Deint_Summary" xml:space="preserve"><value>{0, plural, other {출력 #개}}: {1}바이트</value></data>
+  <data name="Deint_Operation" xml:space="preserve"><value>{0} 디인터리브 중</value></data>
+  <data name="Deint_Done" xml:space="preserve"><value>{0, plural, other {파일 #개}}를 {1}에 썼습니다</value></data>
+  <data name="Inter_Title" xml:space="preserve"><value>인터리브</value></data>
+  <data name="Inter_Run" xml:space="preserve"><value>인터리브</value></data>
+  <data name="Inter_Inputs" xml:space="preserve"><value>입력 파일(순서대로)</value></data>
+  <data name="Inter_PadShort" xml:space="preserve"><value>짧은 입력을 값으로 채움</value></data>
+  <data name="Inter_ErrorOnMismatch" xml:space="preserve"><value>길이가 다르면 실패 처리</value></data>
+  <data name="Inter_Error_Count" xml:space="preserve"><value>파일을 2~16개 추가하세요.</value></data>
+  <data name="Interleave_Error_Length" xml:space="preserve"><value>입력의 길이가 서로 다릅니다.</value></data>
+  <data name="Inter_Summary" xml:space="preserve"><value>{0, plural, other {입력 #개}}: {1}바이트</value></data>
+  <data name="Inter_DocumentName" xml:space="preserve"><value>인터리브된 {0}</value></data>
+  <data name="Inter_Operation" xml:space="preserve"><value>{0, plural, other {파일 #개}} 인터리브 중</value></data>
+  <data name="Inter_Done" xml:space="preserve"><value>{0}(으)로 인터리브했습니다</value></data>
+  <data name="Shred_Title" xml:space="preserve"><value>안전 삭제</value></data>
+  <data name="Shred_Run" xml:space="preserve"><value>삭제...</value></data>
+  <data name="Shred_Targets" xml:space="preserve"><value>삭제할 파일 및 폴더</value></data>
+  <data name="Shred_Method" xml:space="preserve"><value>덮어쓰기 방법</value></data>
+  <data name="Shred_Method_Zero" xml:space="preserve"><value>0으로 한 번 덮어쓰기(기본값)</value></data>
+  <data name="Shred_Method_Random" xml:space="preserve"><value>임의 데이터로 한 번 덮어쓰기</value></data>
+  <data name="Shred_Method_Dod" xml:space="preserve"><value>DoD 5220.22-M(3회: 00, FF, 임의)</value></data>
+  <data name="Shred_Method_Custom" xml:space="preserve"><value>사용자 지정</value></data>
+  <data name="Shred_Method_CustomSummary" xml:space="preserve"><value>사용자 지정({0, plural, other {#회}})</value></data>
+  <data name="Shred_Passes" xml:space="preserve"><value>반복 횟수(1~35)</value></data>
+  <data name="Shred_Patterns" xml:space="preserve"><value>각 회차의 패턴, 한 줄에 하나(Hex 바이트 또는 random)</value></data>
+  <data name="Shred_Verify" xml:space="preserve"><value>마지막 회차를 다시 읽어 확인</value></data>
+  <data name="Shred_Error_Passes" xml:space="preserve"><value>반복 횟수를 1~35 사이로 입력하세요.</value></data>
+  <data name="Shred_Error_Pattern" xml:space="preserve"><value>패턴이 올바르지 않습니다: {0}</value></data>
+  <data name="Shred_Reject_Open" xml:space="preserve"><value>{0}이(가) 이 앱에서 열려 있습니다. 먼저 닫으세요.</value></data>
+  <data name="Shred_Reject_System" xml:space="preserve"><value>Windows, Program Files 같은 시스템 폴더는 대상이 될 수 없습니다.</value></data>
+  <data name="Shred_Reject_Root" xml:space="preserve"><value>드라이브 루트는 대상이 될 수 없습니다.</value></data>
+  <data name="Shred_Reject_Missing" xml:space="preserve"><value>찾을 수 없음: {0}</value></data>
+  <data name="Shred_Confirm_Title" xml:space="preserve"><value>영구적으로 삭제할까요?</value></data>
+  <data name="Shred_Confirm_Primary" xml:space="preserve"><value>영구 삭제</value></data>
+  <data name="Shred_Confirm_Summary" xml:space="preserve"><value>{0, plural, other {파일 #개}}, 총 {1}바이트. 방법: {2}.</value></data>
+  <data name="Shred_Confirm_Irreversible" xml:space="preserve"><value>이 작업은 되돌릴 수 없습니다. 파일은 휴지통으로 이동하지 않으며 복원할 수 없습니다.</value></data>
+  <data name="Shred_Limit_Ssd" xml:space="preserve"><value>SSD, USB 플래시 드라이브, SD 카드에서는 웨어 레벨링 때문에 덮어쓴 뒤에도 원본 데이터가 다른 위치에 남을 수 있습니다.</value></data>
+  <data name="Shred_Limit_Copies" xml:space="preserve"><value>원본 데이터는 볼륨 섀도 복사본, 백업, OneDrive 같은 동기화 폴더, 압축·암호화·중복 제거된 파일, ReFS 같은 쓰기 시 복사 파일 시스템에 남아 있을 수 있습니다.</value></data>
+  <data name="Shred_Limit_Free" xml:space="preserve"><value>이 도구는 여유 공간과 슬랙 공간을 지우지 않습니다.</value></data>
+  <data name="Shred_Confirm_Verify" xml:space="preserve"><value>마지막 회차를 다시 읽어 확인합니다.</value></data>
+  <data name="Shred_Operation" xml:space="preserve"><value>{0, plural, other {파일 #개}} 안전 삭제</value></data>
+  <data name="Shred_Done" xml:space="preserve"><value>{0, plural, other {파일 #개를 안전하게 삭제했습니다.}}</value></data>
+  <data name="Shred_Cancelled" xml:space="preserve"><value>{0, plural, other {파일 #개}}를 삭제한 후 취소되었습니다.</value></data>
+  <data name="Shred_ResultTitle" xml:space="preserve"><value>안전 삭제 결과</value></data>
+  <data name="Shred_Failures" xml:space="preserve"><value>{0, plural, other {파일 #개를 삭제할 수 없습니다}}({1}개 삭제됨):</value></data>
+  <data name="Shred_Failure_InUse" xml:space="preserve"><value>다른 프로그램에서 사용 중</value></data>
+  <data name="Shred_Failure_Access" xml:space="preserve"><value>액세스가 거부됨</value></data>
+  <data name="Shred_Failure_Missing" xml:space="preserve"><value>파일을 찾을 수 없음</value></data>
+  <data name="Shred_Corrupted" xml:space="preserve"><value>{0, plural, other {파일 #개가 일부만 덮어써진 채 그대로 남아 있습니다. 내용이 손상되었습니다:}}</value></data>
+  <data name="Ads_Col_Name" xml:space="preserve"><value>스트림</value></data>
+  <data name="Ads_Col_Size" xml:space="preserve"><value>크기</value></data>
+  <data name="Ads_Col_Head" xml:space="preserve"><value>처음 바이트</value></data>
+  <data name="Ads_Col_Description" xml:space="preserve"><value>설명</value></data>
+  <data name="Ads_Filter_All" xml:space="preserve"><value>모든 스트림</value></data>
+  <data name="Ads_Choose" xml:space="preserve"><value>파일 선택...</value></data>
+  <data name="Ads_Open" xml:space="preserve"><value>열기</value></data>
+  <data name="Ads_Create" xml:space="preserve"><value>만들기...</value></data>
+  <data name="Ads_Rename" xml:space="preserve"><value>이름 바꾸기...</value></data>
+  <data name="Ads_Delete" xml:space="preserve"><value>삭제...</value></data>
+  <data name="Ads_Export" xml:space="preserve"><value>내보내기...</value></data>
+  <data name="Ads_Import" xml:space="preserve"><value>가져오기...</value></data>
+  <data name="Ads_NoFile" xml:space="preserve"><value>먼저 디스크의 파일을 여세요.</value></data>
+  <data name="Ads_Unsupported" xml:space="preserve"><value>이 볼륨은 대체 데이터 스트림을 지원하지 않습니다.</value></data>
+  <data name="Ads_Summary" xml:space="preserve"><value>{0}: {1, plural, other {스트림 #개}}</value></data>
+  <data name="Ads_SummaryUnsupported" xml:space="preserve"><value>{0}: 이 볼륨은 대체 데이터 스트림을 지원하지 않습니다.</value></data>
+  <data name="Ads_SummaryError" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ads_Known_ZoneIdentifier" xml:space="preserve"><value>웹 표시(인터넷에서 온 파일)</value></data>
+  <data name="Ads_Known_SummaryInformation" xml:space="preserve"><value>문서 요약 속성</value></data>
+  <data name="Ads_Known_DocumentSummaryInformation" xml:space="preserve"><value>문서 요약 속성(확장)</value></data>
+  <data name="Ads_Known_Afp" xml:space="preserve"><value>Mac 파일 정보</value></data>
+  <data name="Ads_Known_Encryptable" xml:space="preserve"><value>암호화 표시</value></data>
+  <data name="Ads_Known_Favicon" xml:space="preserve"><value>사이트 아이콘</value></data>
+  <data name="Ads_Known_OutlookExpress" xml:space="preserve"><value>메일 클라이언트 속성</value></data>
+  <data name="Ads_Known_System" xml:space="preserve"><value>시스템 스트림</value></data>
+  <data name="Ads_CreateTitle" xml:space="preserve"><value>스트림 만들기</value></data>
+  <data name="Ads_CreateRun" xml:space="preserve"><value>만들기</value></data>
+  <data name="Ads_RenameTitle" xml:space="preserve"><value>스트림 이름 바꾸기</value></data>
+  <data name="Ads_RenameRun" xml:space="preserve"><value>이름 바꾸기</value></data>
+  <data name="Ads_NameHeader" xml:space="preserve"><value>스트림 이름</value></data>
+  <data name="Ads_Error_InvalidName" xml:space="preserve"><value>이름에는 : \ / 또는 제어 문자를 사용할 수 없습니다.</value></data>
+  <data name="Ads_Error_Exists" xml:space="preserve"><value>같은 이름의 스트림이 이미 있습니다.</value></data>
+  <data name="Ads_Error_NotFound" xml:space="preserve"><value>찾을 수 없습니다.</value></data>
+  <data name="Ads_Error_Access" xml:space="preserve"><value>액세스가 거부되었습니다.</value></data>
+  <data name="Ads_Error_InUse" xml:space="preserve"><value>다른 프로그램에서 사용 중입니다.</value></data>
+  <data name="Ads_Error_Refs" xml:space="preserve"><value>ReFS는 대체 데이터 스트림의 크기를 제한하므로 저장할 수 없습니다.</value></data>
+  <data name="Ads_Error_Default" xml:space="preserve"><value>기본 스트림은 이름을 바꾸거나 삭제할 수 없습니다.</value></data>
+  <data name="Ads_Error_Open" xml:space="preserve"><value>{0}을(를) 열 수 없습니다: {1}</value></data>
+  <data name="Ads_Error_OpenInTab" xml:space="preserve"><value>{0}이(가) 탭에서 열려 있습니다. 먼저 탭을 닫으세요.</value></data>
+  <data name="Ads_Error_Write" xml:space="preserve"><value>파일을 쓸 수 없습니다: {0}</value></data>
+  <data name="Ads_Delete_Title" xml:space="preserve"><value>스트림을 삭제할까요?</value></data>
+  <data name="Ads_Delete_Body" xml:space="preserve"><value>스트림 {0}({1}바이트)을(를) 삭제할까요?</value></data>
+  <data name="Ads_Delete_Irreversible" xml:space="preserve"><value>이 작업은 되돌릴 수 없습니다.</value></data>
+  <data name="Ads_Delete_Run" xml:space="preserve"><value>삭제</value></data>
+  <data name="Ads_Import_Title" xml:space="preserve"><value>스트림 내용을 바꿀까요?</value></data>
+  <data name="Ads_Import_Body" xml:space="preserve"><value>{0}의 내용이 다음에 선택하는 파일로 바뀝니다.</value></data>
+  <data name="Ads_Import_Run" xml:space="preserve"><value>파일 선택</value></data>
+  <data name="Ads_Operation_Rename" xml:space="preserve"><value>스트림 {0} 이름 바꾸는 중</value></data>
+  <data name="Ads_Operation_Export" xml:space="preserve"><value>스트림 {0} 내보내는 중</value></data>
+  <data name="Ads_Operation_Import" xml:space="preserve"><value>스트림 {0}(으)로 가져오는 중</value></data>
+  <data name="Ads_Exported" xml:space="preserve"><value>{0}(으)로 내보냈습니다</value></data>
+  <data name="Ads_ExportType" xml:space="preserve"><value>이진 파일</value></data>
+  <data name="Ads_Notice" xml:space="preserve"><value>{0, plural, other {이 파일에는 대체 데이터 스트림이 #개 있습니다.}}</value></data>
+  <data name="Ads_ShowList" xml:space="preserve"><value>목록 표시</value></data>
+  <data name="Print_Title" xml:space="preserve"><value>인쇄</value></data>
+  <data name="Print_PdfTitle" xml:space="preserve"><value>PDF로 내보내기</value></data>
+  <data name="Print_Run" xml:space="preserve"><value>인쇄</value></data>
+  <data name="Print_SavePdf" xml:space="preserve"><value>PDF로 저장...</value></data>
+  <data name="Print_Printer" xml:space="preserve"><value>프린터</value></data>
+  <data name="Print_Range" xml:space="preserve"><value>인쇄 범위</value></data>
+  <data name="Print_RangeAll" xml:space="preserve"><value>모두</value></data>
+  <data name="Print_RangeSelection" xml:space="preserve"><value>선택 영역</value></data>
+  <data name="Print_RangeOffsets" xml:space="preserve"><value>오프셋 범위</value></data>
+  <data name="Print_Offsets" xml:space="preserve"><value>오프셋(시작:길이 또는 시작..끝)</value></data>
+  <data name="Print_RangePages" xml:space="preserve"><value>페이지</value></data>
+  <data name="Print_PagesHint" xml:space="preserve"><value>페이지(예: 1-3, 8)</value></data>
+  <data name="Print_Paper" xml:space="preserve"><value>용지</value></data>
+  <data name="Print_Orientation" xml:space="preserve"><value>방향</value></data>
+  <data name="Print_Portrait" xml:space="preserve"><value>세로</value></data>
+  <data name="Print_Landscape" xml:space="preserve"><value>가로</value></data>
+  <data name="Print_Margins" xml:space="preserve"><value>여백</value></data>
+  <data name="Print_MarginTop" xml:space="preserve"><value>위쪽</value></data>
+  <data name="Print_MarginBottom" xml:space="preserve"><value>아래쪽</value></data>
+  <data name="Print_MarginLeft" xml:space="preserve"><value>왼쪽</value></data>
+  <data name="Print_MarginRight" xml:space="preserve"><value>오른쪽</value></data>
+  <data name="Print_Font" xml:space="preserve"><value>글꼴</value></data>
+  <data name="Print_FontSize" xml:space="preserve"><value>크기</value></data>
+  <data name="Print_BytesPerRow" xml:space="preserve"><value>줄당 바이트 수</value></data>
+  <data name="Print_FitToPaper" xml:space="preserve"><value>용지에 맞춤</value></data>
+  <data name="Print_Columns" xml:space="preserve"><value>열</value></data>
+  <data name="Print_ColOffset" xml:space="preserve"><value>오프셋</value></data>
+  <data name="Print_ColHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Print_ColText" xml:space="preserve"><value>텍스트</value></data>
+  <data name="Print_ColorMode" xml:space="preserve"><value>색</value></data>
+  <data name="Print_ColorBW" xml:space="preserve"><value>흑백(밑줄 및 음영)</value></data>
+  <data name="Print_ColorColor" xml:space="preserve"><value>컬러(배경색)</value></data>
+  <data name="Print_HeaderFooter" xml:space="preserve"><value>머리글과 바닥글(중괄호로 name, path, page, pages, date, time, range, size, modified 지정)</value></data>
+  <data name="Print_HeaderLeft" xml:space="preserve"><value>머리글 왼쪽</value></data>
+  <data name="Print_HeaderCenter" xml:space="preserve"><value>머리글 가운데</value></data>
+  <data name="Print_HeaderRight" xml:space="preserve"><value>머리글 오른쪽</value></data>
+  <data name="Print_FooterLeft" xml:space="preserve"><value>바닥글 왼쪽</value></data>
+  <data name="Print_FooterCenter" xml:space="preserve"><value>바닥글 가운데</value></data>
+  <data name="Print_FooterRight" xml:space="preserve"><value>바닥글 오른쪽</value></data>
+  <data name="Print_Copies" xml:space="preserve"><value>매수(1~999)</value></data>
+  <data name="Print_SaveDefaults" xml:space="preserve"><value>기본값으로 저장</value></data>
+  <data name="Print_DefaultsSaved" xml:space="preserve"><value>인쇄 설정을 기본값으로 저장했습니다.</value></data>
+  <data name="Print_Status" xml:space="preserve"><value>{0, plural, other {#페이지}}, 줄당 {1}바이트, 페이지당 {2}줄</value></data>
+  <data name="Print_Error_Margin" xml:space="preserve"><value>여백은 0~50mm여야 합니다.</value></data>
+  <data name="Print_Error_Offsets" xml:space="preserve"><value>오프셋 범위가 올바르지 않습니다.</value></data>
+  <data name="Print_Error_PageRange" xml:space="preserve"><value>페이지 범위가 올바르지 않습니다. 1-3, 8 같은 형식을 사용하세요.</value></data>
+  <data name="Print_Error_Nothing" xml:space="preserve"><value>이 범위에는 인쇄할 내용이 없습니다.</value></data>
+  <data name="Print_Error_Limit" xml:space="preserve"><value>{0}페이지는 한도인 {1}페이지를 넘습니다. 범위를 좁히세요.</value></data>
+  <data name="Print_Error_NoFont" xml:space="preserve"><value>사용할 수 있는 TrueType 글꼴을 찾을 수 없습니다.</value></data>
+  <data name="Print_Error_Failed" xml:space="preserve"><value>인쇄할 수 없습니다: {0}</value></data>
+  <data name="Print_Error_PdfFailed" xml:space="preserve"><value>PDF를 쓸 수 없습니다: {0}</value></data>
+  <data name="Print_Confirm_Title" xml:space="preserve"><value>많은 페이지를 인쇄할까요?</value></data>
+  <data name="Print_Confirm_Body" xml:space="preserve"><value>{0, plural, other {#페이지를 인쇄합니다.}} 용지 양을 확인하세요.</value></data>
+  <data name="Print_Confirm_Run" xml:space="preserve"><value>인쇄</value></data>
+  <data name="Print_Confirm_Change" xml:space="preserve"><value>범위 변경</value></data>
+  <data name="Print_Operation" xml:space="preserve"><value>{0} 인쇄 중</value></data>
+  <data name="Print_Operation_Pdf" xml:space="preserve"><value>PDF {0} 쓰는 중</value></data>
+  <data name="Print_Done" xml:space="preserve"><value>{0, plural, other {#페이지}}를 인쇄했습니다.</value></data>
+  <data name="Print_PdfDone" xml:space="preserve"><value>{0}을(를) 저장했습니다({1, plural, other {#페이지}}).</value></data>
+  <data name="Print_Cancelled" xml:space="preserve"><value>인쇄가 취소되었습니다.</value></data>
+  <data name="Print_Unreadable" xml:space="preserve"><value>일부 범위를 읽을 수 없어 ??로 인쇄했습니다.</value></data>
+  <data name="Print_Modified" xml:space="preserve"><value>(수정됨)</value></data>
+  <data name="Print_PdfFileType" xml:space="preserve"><value>PDF 문서</value></data>
+  <data name="Print_Preview_Name" xml:space="preserve"><value>인쇄 미리 보기</value></data>
+  <data name="Print_Preview_First" xml:space="preserve"><value>첫 페이지</value></data>
+  <data name="Print_Preview_Previous" xml:space="preserve"><value>이전 페이지</value></data>
+  <data name="Print_Preview_Next" xml:space="preserve"><value>다음 페이지</value></data>
+  <data name="Print_Preview_Last" xml:space="preserve"><value>마지막 페이지</value></data>
+  <data name="Print_Preview_PageNumber" xml:space="preserve"><value>페이지 번호</value></data>
+  <data name="Print_Preview_Zoom" xml:space="preserve"><value>확대/축소</value></data>
+  <data name="Print_Preview_TwoPages" xml:space="preserve"><value>두 페이지</value></data>
+  <data name="Print_Preview_Info" xml:space="preserve"><value>{0} / {1}페이지</value></data>
+  <data name="Print_Zoom_FitPage" xml:space="preserve"><value>페이지 전체</value></data>
+  <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>너비에 맞춤</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>폴더 선택...</value></data>
 </root>

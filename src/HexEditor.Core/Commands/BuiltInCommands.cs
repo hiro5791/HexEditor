@@ -39,6 +39,14 @@ public static class BuiltInCommands
         // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
         new("file.openDiskImage", "file"),
         new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
+
+        // プロセスのスナップショット・ミニダンプの保存 (ENG-35)、リモートに接続 (ENG-40〜ENG-42)、切断したリモートの再接続。既定のキーはなし。
+        new("file.saveProcessSnapshot", "file") { Condition = "documentOpen" },
+        new("file.saveMinidump", "file") { Condition = "documentOpen" },
+        new("file.connectGdb", "file"),
+        new("file.openSftp", "file"),
+        new("file.receiveUdp", "file"),
+        new("file.reconnect", "file") { Condition = "documentOpen" },
         new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen && !readOnly" },
         new("file.saveAs", "file") { Icon = IconSaveAs, DefaultBindings = [K("Ctrl+Shift+S")], Condition = "documentOpen" },
         new("file.saveAll", "file") { Condition = "documentOpen" },
@@ -47,6 +55,12 @@ public static class BuiltInCommands
         new("file.export", "file") { Condition = "documentOpen" },
         new("file.exportSelection", "file") { Condition = "documentOpen" },
         new("file.saveSelection", "file") { Condition = "documentOpen" },
+
+        // ---- 印刷と PDF (11 の TOOL-01〜TOOL-03)、代替データストリーム (01 の ENG-37、11 の TOOL-21) ----
+        new("file.print", "file") { DefaultBindings = [K("Ctrl+P")], Condition = "documentOpen" },
+        new("file.printPreview", "file") { Condition = "documentOpen" },
+        new("file.exportPdf", "file") { Condition = "documentOpen" },
+        new("file.ads.open", "file") { Condition = "documentOpen" },
         new("workspace.save", "file") { Condition = "documentOpen" },
         new("workspace.open", "file"),
         new("file.reload", "file") { DefaultBindings = [K("Ctrl+R")], Condition = "documentOpen" },
@@ -180,6 +194,7 @@ public static class BuiltInCommands
         new("search.multiFile", "search") { DefaultBindings = [K("Ctrl+Shift+F")] },
         new("search.multiFileReplace", "search"),
         new("search.strings", "search") { Condition = "documentOpen" },
+        new("search.yara", "search"),
         new("search.multiTerm", "search") { Condition = "documentOpen" },
         new("search.mismatch", "search") { Condition = "documentOpen" },
 
@@ -318,17 +333,22 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.statistics", "view"),
         new("view.panel.fileType", "view"),
+        new("view.panel.disassembly", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
         new("view.panel.history", "view"),
         new("view.panel.clipboard", "view"),
         new("view.panel.formatIssues", "view"),
         new("view.panel.strings", "view"),
+        new("view.panel.yara", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
 
         // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
         new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
+
+        // パケットのパネル (ENG-42)。UDP の受信のドキュメントで自動表示する。既定のキーはなし。
+        new("view.panel.packets", "view") { Condition = "documentOpen" },
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 
@@ -417,6 +437,29 @@ public static class BuiltInCommands
         .. new[] { "upper", "lower", "swap" }.SelectMany(op => new[] { "ascii", "text" }.Select(method =>
             new CommandDefinition($"data.case.{op}.{method}", "data") { Condition = "documentOpen && !readOnly" })),
 
+        // パッチの作成と適用 (EDIT-42〜EDIT-44)。ショートカットは既定なし。
+        new("data.patch.create", "data") { Condition = "documentOpen" },
+        new("data.patch.apply", "data") { Condition = "documentOpen && !readOnly" },
+
+        // 変換ビュー (EDIT-45)。ショートカットは既定なし。
+        new("data.transformView.define", "data") { Condition = "documentOpen" },
+        new("data.transformView.xor", "data") { Condition = "documentOpen" },
+        new("data.transformView.clear", "data") { Condition = "documentOpen" },
+        new("data.transformView.applyToData", "data") { Condition = "documentOpen" },
+
+        // 暗号化と復号 (EDIT-40)、圧縮と展開 (EDIT-41)、派生ドキュメントの書き戻し (EDIT-46)。ショートカットは既定なし。
+        new("data.encrypt", "data") { Condition = "documentOpen" },
+        new("data.decrypt", "data") { Condition = "documentOpen" },
+        new("data.compress", "data") { Condition = "documentOpen" },
+        new("data.decompress", "data") { Condition = "documentOpen" },
+        new("data.selectCompressed", "data") { Condition = "documentOpen" },
+        new("data.derived.writeBack", "data") { Condition = "documentOpen" },
+
+        // 分岐する履歴 (EDIT-21)。ショートカットは既定なし。
+        new("edit.history.save", "edit") { Condition = "documentOpen" },
+        new("edit.history.load", "edit") { Condition = "documentOpen" },
+        new("edit.history.goToNode", "edit") { Condition = "documentOpen" },
+
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
@@ -438,6 +481,9 @@ public static class BuiltInCommands
         new("compare.copyAllRight", "compare"),
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
+
+        // 比較の結果画面の「パッチを作成」(EDIT-42 の「呼び出し」。左を変換前、右を変換後にする)。
+        new("compare.createPatch", "compare") { Icon = "\uE8A5" },
         new("compare.saveReport", "compare"),
 
         // プロセスのスナップショットと比較 (ANA-09)。既定のキーはなし。
@@ -460,6 +506,20 @@ public static class BuiltInCommands
         new("analysis.hash.customCrc", "analysis"),
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
+
+        // ---- 逆アセンブル (ANA-23〜ANA-30)。F12 の分岐先へ移動は templates.goToDefinition が受ける (00-overview 8.7)。既定のキーはなし ----
+        new("analysis.disassemble", "analysis") { Condition = "documentOpen" },
+        new("analysis.disassembleAtCursor", "analysis") { Condition = "documentOpen" },
+        new("analysis.goToVirtualAddress", "analysis") { Condition = "documentOpen" },
+        new("analysis.goToEntryPoint", "analysis") { Condition = "documentOpen" },
+        new("analysis.disassembleDotNet", "analysis") { Condition = "documentOpen" },
+        new("analysis.demangle", "analysis"),
+        new("disassembly.goToTarget", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.findReferences", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.findPattern", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.assemble", "disassembly") { Condition = "documentOpen && !readOnly" },
+        new("disassembly.copy", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.export", "disassembly") { Condition = "documentOpen" },
 
         // ---- 構造体テンプレート (07 の TPL-20〜TPL-35)。F12 は定義へ移動 (00-overview 8.2) ----
         new("templates.apply", "templates") { Condition = "documentOpen" },
@@ -488,7 +548,11 @@ public static class BuiltInCommands
         new("templates.libraryReference", "templates"),
         new("templates.tryRun", "templates"),
         new("templates.breakOnRead", "templates") { Condition = "documentOpen" },
+        new("templates.visualize", "templates") { Condition = "documentOpen" },
+        new("templates.online.browse", "templates"),
+        new("templates.online.checkUpdates", "templates"),
         new("view.panel.templates", "view"),
+        new("view.panel.templateVisualizer", "view"),
         new("view.panel.templateOutput", "view"),
 
         // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----
@@ -568,6 +632,26 @@ public static class BuiltInCommands
         new("scripting.debug", "scripting") { Condition = "scriptEditor" },
         new("scripting.pause", "scripting") { Condition = "scriptEditor" },
         new("scripting.clearOutput", "scripting"),
+
+        // ---- ツール: 電卓・変換・参照ツール (11 の TOOL-22〜TOOL-28)、チェックサムファイル・フォルダの比較 (TOOL-18〜TOOL-20)。既定のショートカットはなし ----
+        new("tools.calculator", "tools"),
+        new("tools.calculator.programmer", "tools"),
+        new("tools.converter", "tools"),
+        new("tools.floatVisualizer", "tools"),
+        new("tools.charTable", "tools"),
+        new("tools.colorPicker", "tools"),
+        new("tools.dateTime", "tools"),
+        new("tools.checksum.create", "fileTools"),
+        new("tools.checksum.verify", "fileTools"),
+        new("tools.folderCompare", "fileTools"),
+
+        // ---- ツール: ファイルツール (11 の TOOL-13〜TOOL-17、TOOL-21)。既定のショートカットはなし ----
+        new("tools.files.split", "fileTools"),
+        new("tools.files.join", "fileTools"),
+        new("tools.files.interleave", "fileTools"),
+        new("tools.files.deinterleave", "fileTools"),
+        new("tools.files.shred", "fileTools"),
+        new("tools.ads", "fileTools"),
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

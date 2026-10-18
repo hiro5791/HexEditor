@@ -88,6 +88,9 @@ public sealed partial class InspectorItemViewModel : ObservableObject
     /// <summary>表示を省いた値の全体 (文字列の行の「値をコピー」。INSP-10 の仕様 2)。なければ <see cref="Value"/>。</summary>
     public string? FullText { get; set; }
 
+    /// <summary>1 命令の逆アセンブルの行の分岐先のオフセット (INSP-16 の仕様 7)。</summary>
+    public long? BranchTarget { get; set; }
+
     /// <summary>色の行の色 (0xRRGGBBAA。INSP-12)。色の行でなければ null。</summary>
     public uint? Rgba { get; set; }
 
@@ -228,6 +231,18 @@ public sealed partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     public partial string OriginText { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 変換ビュー (EDIT-45) が有効なとき、変換前の元のデータを解釈する (ツールバーの「元のデータを解釈」。既定オフ = 変換後を解釈。INSP-01 の仕様 12)。
+    /// </summary>
+    [ObservableProperty]
+    public partial bool InterpretOriginal { get; set; }
+
+    /// <summary>変換ビューが有効か (「元のデータを解釈」の切り替えを出す)。</summary>
+    [ObservableProperty]
+    public partial bool TransformActive { get; set; }
+
+    partial void OnInterpretOriginalChanged(bool value) => Refresh();
+
     [ObservableProperty]
     public partial string EndianText { get; set; } = "LE";
 
@@ -324,8 +339,15 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>「ローカル時刻」の表示に使うタイムゾーン (テスト用のビルドでは差し替えられる)。</summary>
     public static TimeZoneInfo LocalTimeZone { get; set; } = TimeZoneInfo.Local;
 
+    /// <summary>1 命令の逆アセンブルの構文と数値の書式 (INSP-16 の仕様 2。06 の ANA-26 の設定。MainWindow が設定する)。</summary>
+    public static Func<Core.Disassembly.DisasmFormat>? DisasmFormatSource { get; set; }
+
+    /// <summary>1 命令の逆アセンブルの行の「分岐先へ移動」(INSP-16 の仕様 7)。引数は分岐先のオフセット。</summary>
+    public Action<long>? GoToBranchTarget { get; set; }
+
     public InspectorOptions Options => new()
     {
+        DisasmFormat = DisasmFormatSource?.Invoke() ?? Core.Disassembly.DisasmFormat.Default,
         IntegerBase = IntegerBase,
         DigitGrouping = _settings.GetBool(DigitGroupingKey, true),
         FloatFormat = FloatFormat,
@@ -423,7 +445,14 @@ public sealed partial class InspectorViewModel : ObservableObject
         Origin = DataInspector.OriginOf(editor, _settings.GetBool(CursorWithSelectionKey, false));
         OriginText = Loc.Format("Inspector_Origin", Origin.ToString(Origin > uint.MaxValue ? "X16" : "X8", CultureInfo.InvariantCulture));
 
-        DocumentSnapshot snapshot = doc.Document.Current;
+        // 変換ビュー: 既定は変換後 (Hex ビューの表示どおり) のバイト、「元のデータを解釈」なら変換前 (INSP-01 の仕様 12)。どちらかを起点の横に示す。
+        TransformActive = doc.Document.ViewTransform is not null;
+        if (TransformActive)
+        {
+            OriginText += " " + Loc.Get(InterpretOriginal ? "Inspector_InterpretingOriginal" : "Inspector_InterpretingTransformed");
+        }
+
+        DocumentSnapshot snapshot = TransformActive && InterpretOriginal ? doc.Document.DataSnapshot : doc.Document.Current;
         int count = (int)Math.Clamp(snapshot.Length - Origin, 0, Layout.ReadLength);
         _data = new byte[count];
         _states = new ByteState[count];
@@ -434,7 +463,7 @@ public sealed partial class InspectorViewModel : ObservableObject
             _states = _states[..count];
         }
 
-        InspectorOptions options = Options;
+        InspectorOptions options = Options with { DisasmAddress = Origin };
         IReadOnlyList<InspectorGroupResult> groups = DataInspector.Evaluate(_data, _states, Layout, Endian, options);
         var wanted = new List<InspectorItemViewModel>();
         foreach (InspectorGroupResult group in groups)
@@ -464,6 +493,7 @@ public sealed partial class InspectorViewModel : ObservableObject
                 row.ToolTip = r.Value.ToolTip ?? (r.Value.FullText is { Length: > 0 } full && full.Length > InspectorDecoder.MaxStringDisplay ? full[..Math.Min(full.Length, 4096)] : null)
                     ?? (ReadOnly ? Loc.Get("Inspector_ReadOnlyTip") : null);
                 row.FullText = r.Value.FullText;
+                row.BranchTarget = r.Value.BranchTarget;
                 if (row.Rgba != r.Value.Rgba || (r.Value.Rgba is not null) != row.HasSwatch)
                 {
                     row.Rgba = r.Value.Rgba;
@@ -555,9 +585,12 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>行の名前: 型の名前、反対のエンディアンの行は「int32 (BE)」、エンディアンに従わない行は「(固定)」付き。</summary>
     public static string RowName(string typeId, bool opposite, Endianness endian)
     {
-        string name = InspectorTypes.Get(typeId).Fixed is { } f
+        InspectorType type = InspectorTypes.Get(typeId);
+        string name = type.Fixed is { } f
             ? Loc.Format("Inspector_FixedName", f.IntegerBits, f.FractionBits, Loc.Get(f.Signed ? "Inspector_FixedSigned" : "Inspector_FixedUnsigned"), f.TotalBits)
-            : Loc.Get("Inspector_Row_" + typeId);
+            : type.DisasmArchitecture is { } arch
+                ? Loc.Format("Inspector_DisasmName", Core.Disassembly.DisasmArchitectures.Get(arch).DisplayName)
+                : Loc.Get("Inspector_Row_" + typeId);
         if (opposite)
         {
             return Loc.Format("Inspector_RowOpposite", name, endian == Endianness.Big ? "BE" : "LE");
@@ -763,7 +796,23 @@ public sealed partial class InspectorViewModel : ObservableObject
     private void Write(DocumentViewModel doc, byte[] bytes)
     {
         // 上書きで書き、長さを変えない。末尾を越える書き込みは入力の段階で誤りにしてある。
-        doc.Document.Overwrite(Origin, bytes, Loc.Get("Inspector_UndoDescription"));
+        doc.Document.Overwrite(Origin, ForWrite(doc, Origin, bytes), Loc.Get("Inspector_UndoDescription"));
+    }
+
+    /// <summary>
+    /// 書き込む値: 変換後を解釈しているときは表示上の値のまま (ドキュメントが逆変換して書く。EDIT-45 の仕様 6)。元のデータを解釈しているときは、
+    /// 逆変換されたときに元のデータの値になるよう、先に変換をかけておく。
+    /// </summary>
+    internal byte[] ForWrite(DocumentViewModel doc, long offset, byte[] bytes)
+    {
+        if (!InterpretOriginal || doc.Document.ViewTransform is not { } transform)
+        {
+            return bytes;
+        }
+
+        byte[] shown = (byte[])bytes.Clone();
+        transform.Forward(offset, shown);
+        return shown;
     }
 
     // ---- コピー (INSP-01 の仕様 7) ----
@@ -875,5 +924,7 @@ public static class InspectorStrings
         ErrorColor = Loc.Get("Inspector_ErrorColor"),
         ErrorEscape = Loc.Get("Inspector_ErrorEscape"),
         ErrorDigits = Loc.Get("Inspector_ErrorDigits"),
+        InvalidInstruction = Loc.Get("Inspector_InvalidInstruction"),
+        DisassemblerUnavailable = Loc.Get("Inspector_DisassemblerUnavailable"),
     };
 }

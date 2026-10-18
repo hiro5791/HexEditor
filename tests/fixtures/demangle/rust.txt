@@ -1,0 +1,11 @@
+# Rust (旧方式と v0): マングル名<TAB>期待する出力
+_ZN4core3ptr13drop_in_place17h0123456789abcdefE	core::ptr::drop_in_place
+_ZN3std2io5stdio6_print17h1234567890abcdefE	std::io::stdio::_print
+_ZN4core3fmt9Arguments6new_v117h0000000000000000E	core::fmt::Arguments::new_v1
+_ZN68_$LT$core..option..Option$LT$T$GT$$u20$as$u20$core..clone..Clone$GT$5clone17h0123456789abcdefE	<core::option::Option<T> as core::clone::Clone>::clone
+_RNvCs1234_7mycrate3foo	mycrate::foo
+_RNvNtCs1234_7mycrate3bar3baz	mycrate::bar::baz
+_RNvCsa_5hello4main	hello::main
+_RINvCs1234_7mycrate3fooiE	mycrate::foo::<isize>
+_RNvMCs1234_7mycrateNtB2_3Foo3new	<mycrate::Foo>::new
+_RNvXCs1234_7mycrateNtB2_3FooNtNtCs5678_4core5clone5Clone5clone	<mycrate::Foo as core::clone::Clone>::clone

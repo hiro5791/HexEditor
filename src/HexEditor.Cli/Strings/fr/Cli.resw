@@ -166,13 +166,13 @@ Dans PowerShell, placez les valeurs contenant $ entre apostrophes (par exemple '
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Utilisation : hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Applique un fichier de correctif à un fichier. L'une des options -o et --in-place est obligatoire. Cette version applique les correctifs IPS
-et IPS32.
+Applique un fichier de correctif à un fichier. L'une des options -o et --in-place est obligatoire. Cette version applique les correctifs IPS,
+IPS32, UPS, BPS et .hexpatch.
 
 Options :
   -o, --output &lt;path&gt;       Écrire le fichier corrigé ici (la cible n'est pas modifiée)
       --in-place            Remplacer la cible en toute sécurité (un fichier temporaire est d'abord écrit)
-      --format &lt;f&gt;          auto (par défaut), ips ou ips32
+      --format &lt;f&gt;          auto (par défaut), ips, ips32, ups, bps ou hexpatch
       --verify-before &lt;a:v&gt; Vérifier d'abord le hachage de la cible (par exemple sha256:ab12...) ;
                             code de sortie 1 et rien n'est écrit s'il diffère
       --verify-after &lt;a:v&gt;  Vérifier le hachage du résultat avant de l'écrire
@@ -255,6 +255,7 @@ Dans PowerShell, placez les valeurs contenant $ entre apostrophes (par exemple '
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>nombre non valide</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>les données sont illisibles ici</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>non disponible en ligne de commande</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>la valeur n'est pas un entier</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu nécessite exactement un algorithme. Utilisez --format bsd ou text pour plusieurs.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range ne peut pas être utilisé avec l'entrée standard.</value></data>
@@ -300,8 +301,7 @@ Dans PowerShell, placez les valeurs contenant $ entre apostrophes (par exemple '
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Indiquez -o &lt;output&gt; ou --in-place (afin que le fichier d'origine ne soit pas modifié par erreur).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o et --in-place ne peuvent pas être utilisés ensemble.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Le chemin de sortie {0} est la cible ou le correctif. Utilisez --in-place pour remplacer la cible.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} n'est pas un format de correctif. Utilisez auto, ips ou ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0} : les correctifs UPS, BPS et .hexpatch ne sont pas pris en charge dans cette version. IPS et IPS32 le sont.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} n'est pas un format de correctif. Utilisez auto, ips, ips32, ups, bps ou hexpatch.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} n'est pas un fichier de correctif reconnaissable.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0} : le correctif est corrompu à l'enregistrement {1} (décalage dans le fichier {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} n'est pas un correctif {1}.</value></data>
@@ -310,6 +310,10 @@ Dans PowerShell, placez les valeurs contenant $ entre apostrophes (par exemple '
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} corrigé n'a pas le hachage attendu (--verify-after). Rien n'a été écrit.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>{0} enregistrement(s) appliqué(s), {1} octet(s) modifié(s), variation de longueur {2}. {3} écrit.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>format</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0} : le correctif est corrompu à l'enregistrement {1}.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0} : le correctif est corrompu ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} est peut-être destiné à un autre fichier : l'original enregistré dans le correctif ne correspond pas à {1}. Rien n'a été écrit.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Le résultat de l'application de {0} ne correspond pas au résultat enregistré dans le correctif. Rien n'a été écrit.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} enregistrement(s), {1} octet(s) seraient modifiés, variation de longueur {2}, nouvelle longueur {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Indiquez exactement une des options --template et --auto.</value></data>

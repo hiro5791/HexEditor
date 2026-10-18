@@ -36,6 +36,7 @@ public sealed partial class MainWindow
         }
 
         RegisterSearchPanels();
+        RegisterYaraPanel();
     }
 
     /// <summary>検索履歴のキー (FIND-28。設定ではなくアプリの状態 state.json に置く)。</summary>
@@ -99,6 +100,7 @@ public sealed partial class MainWindow
         FindBar.ResultReported += (_, message) => ShowStatusMessage(message);
         InitializeSearchExtras();
         InitializeSearchPanels();
+        InitializeYaraPanel();
         AutomationProperties.SetAutomationId(SearchResults, "SearchResults");
         SearchResults.Visibility = Visibility.Collapsed;
         SearchResults.WindowId = AppWindow.Id;

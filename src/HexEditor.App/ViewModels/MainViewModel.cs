@@ -99,6 +99,13 @@ public sealed partial class MainViewModel : ObservableObject
             return existing.IsPending && Selected is { } opened ? opened : existing;
         }
 
+        // 保存したプロセスのスナップショット (.hexsnap) は、アドレス空間全体の読み取り専用のドキュメントとして開く (ENG-35 の仕様 4、
+        // ENG-14 の受け入れ基準 3: 書き戻す先がないため「編集を許可する」は出ない)。
+        if (Core.Processes.HexSnapshot.IsSnapshotFile(full))
+        {
+            return OpenSnapshotSource(Core.Processes.SnapshotByteSource.Open(full, Path.GetFileName(full)));
+        }
+
         FileByteSource source = FileByteSource.Open(full);
 
         // 読み取り専用で開く理由 (ENG-14 の仕様 1): 指定された、または書き込めない (読み取り専用のメディア、読み取り専用属性、書き込み権限が
@@ -303,8 +310,12 @@ public sealed partial class MainViewModel : ObservableObject
             }
 
             BeforeClose(vm, Documents.IndexOf(vm));
+
+            // 元のドキュメントを閉じると、派生ドキュメントは書き戻せなくなる (EDIT-46 の仕様 7)。
+            DetachDerivedTabsOf(vm);
         }
 
+        vm.Derived?.Dispose();
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
         if (!otherViews)

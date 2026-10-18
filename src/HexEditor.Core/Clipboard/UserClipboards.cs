@@ -54,9 +54,9 @@ public sealed class ClipboardEntry
     /// <summary>ドキュメントの範囲を参照する項目を作る。先頭 16 バイトはここで読む (キャッシュにあれば一瞬)。</summary>
     public static ClipboardEntry Capture(Document document, long offset, long length, DateTimeOffset? time = null)
     {
-        SnapshotRange range = document.CreateRange(document.Current, offset, length);
+        SnapshotRange range = document.CreateRange(document.ClipboardSnapshot, offset, length);
         byte[] head = new byte[(int)Math.Min(16, length)];
-        document.Current.Read(offset, head);
+        document.ClipboardSnapshot.Read(offset, head);
         return new ClipboardEntry(range, null, length, document.Source.DisplayName, offset, time ?? DateTimeOffset.Now, head);
     }
 

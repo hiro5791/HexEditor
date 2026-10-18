@@ -52,6 +52,8 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         }
 
         Views.TemplateSettingsSection.Register();
+        RegisterTemplateVisualizerPanel();
+        Views.OnlineTemplateSection.Register();
 
         // コマンドラインの --template (AUTO-37)
         CommandLineActions.ApplyTemplate = (window, doc, nameOrPath) => window.ApplyTemplateFromCommandLineAsync(doc, nameOrPath);
@@ -76,6 +78,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
     {
         var vm = new TemplatePanelViewModel(DispatcherQueue);
         vm.ResultsChanged += (_, _) => TemplateResultsChanged();
+        HookTemplateVisualizer(vm);
 #if HEX_TEST_HOOKS
         // テスト用のタイムゾーン (OS の設定を変えない): ツールチップの地域の時刻 (TPL-03 の仕様 5)
         if (TestHooks.Settings.TimeZone is { Length: > 0 } zone)
@@ -111,6 +114,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
 
     private void RegisterTemplateCommands()
     {
+        RegisterTemplateVisualizerCommands();
         Commands.Register("templates.apply", () => ApplyTemplateAsync(Editor is null ? 0 : 0), NeedsDocument);
         Commands.Register("templates.applyHere", () => ApplyTemplateAsync(Editor?.Cursor ?? 0), NeedsDocument);
         Commands.Register("templates.followType", () => ApplyTemplateAsync(Editor?.Cursor ?? 0, TemplateApplyKind.Follow), NeedsDocument);
@@ -827,6 +831,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         Add("OpenSection", "TplMenu_OpenSection", () => OpenTemplateSection(item), data?.Kind == TemplateNodeKind.Section);
         Add("ApplyHere", "TplMenu_ApplyHere", () => _ = ApplyTemplateAsync(data?.Offset ?? 0), data is not null && data.SectionName is null);
         Add("BreakOnRead", "TplMenu_BreakOnRead", () => BreakOnRead(data?.Offset ?? 0), node && TemplateEditorDebugging);
+        AddTemplateVisualizerMenuItem(menu, item);
         menu.Items.Add(new MenuFlyoutSeparator());
         if (TemplateVm.EntryOf(item) is { } entry)
         {
@@ -1276,6 +1281,20 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
                 await page.GoToDefinitionAsync();
                 return;
             }
+
+            // 逆アセンブルパネルにフォーカスがあれば、選んだ行の命令の分岐先へ移動する (06 の ANA-25 の仕様 4)。
+            if (n is DisassemblyPanel && DisasmVm.SelectedRow is { } disasmRow)
+            {
+                GoToDisasmTarget(disasmRow);
+                return;
+            }
+        }
+
+        // テンプレートの適用がなく、逆アセンブルパネルが開いていれば、カーソル位置を含む命令の分岐先へ移動する (ANA-25 の仕様 4)。
+        if (Vm.Selected is { } d && DocumentTemplates.Find(d.Document) is not { Entries.Count: > 0 })
+        {
+            DisassemblyF12();
+            return;
         }
 
         if (Vm.Selected is { } doc && Editor is { } editor && DocumentTemplates.Find(doc.Document) is { Entries.Count: > 0 } templates)

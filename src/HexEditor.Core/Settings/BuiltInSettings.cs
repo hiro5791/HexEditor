@@ -137,6 +137,10 @@ public static class BuiltInSettings
         new(View.EditingSettings.DeleteKeepsLengthKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 5 },
         new(View.EditingSettings.UndoCoalesceSecondsKey, SettingCategories.Editing, SettingKind.Int, 2) { Min = 0, Max = 10, Order = 6 },
         new(View.EditingSettings.ClearHistoryOnSaveKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 7 },
+
+        // 分岐する履歴 (EDIT-21。既定オフ) と、変換ビューでのコピー (EDIT-45 の仕様 12)。
+        new(View.EditingSettings.BranchingHistoryKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 8 },
+        new(View.EditingSettings.TransformViewCopyKey, SettingCategories.Editing, SettingKind.Choice, "display") { Options = ["display", "raw"], Order = 44 },
         new(View.EditingSettings.SelectPastedKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 31 },
         new(View.EditingSettings.FitOverwritePasteKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 32 },
         new(View.EditingSettings.ClipboardMaxSizeKey, SettingCategories.Editing, SettingKind.Int, View.EditingSettings.DefaultClipboardMaxMiB)
@@ -170,6 +174,14 @@ public static class BuiltInSettings
         new(View.EditingSettings.SelectionDragDropKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 53 },
         new(View.EditingSettings.ClipboardHistoryCountKey, SettingCategories.Editing, SettingKind.Int, 20) { Min = 0, Max = 100, Order = 54 },
         new(View.EditingSettings.UserClipboardPersistKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 55 },
+
+        // 展開の確認を出す大きさ (MiB。EDIT-41 の仕様 7: 圧縮爆弾への対策)。
+        new(Editing.Codecs.CodecSettings.DecompressConfirmKey, SettingCategories.Editing, SettingKind.Int, Editing.Codecs.CodecSettings.DefaultDecompressConfirmMiB)
+        {
+            Min = 1,
+            Max = Editing.Codecs.CodecSettings.MaxDecompressConfirmMiB,
+            Order = 56,
+        },
 
         // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
         new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
@@ -207,6 +219,20 @@ public static class BuiltInSettings
             Order = 130,
         },
 
+        // YARA のブロックの大きさ (MiB) と時間の上限 (秒) (FIND-33 の仕様 6・7)。
+        new(Search.Yara.YaraSettings.BlockSizeKey, SettingCategories.Search, SettingKind.Int, Search.Yara.YaraSettings.DefaultBlockSizeMiB)
+        {
+            Min = Search.Yara.YaraSettings.MinBlockSizeMiB,
+            Max = Search.Yara.YaraSettings.MaxBlockSizeMiB,
+            Order = 140,
+        },
+        new(Search.Yara.YaraSettings.TimeLimitKey, SettingCategories.Search, SettingKind.Int, Search.Yara.YaraSettings.DefaultTimeLimitSeconds)
+        {
+            Min = 1,
+            Max = Search.Yara.YaraSettings.MaxTimeLimitSeconds,
+            Order = 150,
+        },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },
@@ -222,6 +248,8 @@ public static class BuiltInSettings
         new(BackupSettings.GenerationsKey, SettingCategories.Files, SettingKind.Int, 1) { Min = 1, Max = BackupSettings.MaxGenerations, Order = 7 },
         new("save.recoveryIntervalMinutes", SettingCategories.Files, SettingKind.Int, 1) { Min = 0, Max = 60, Order = 8 },
         new(Saving.SavePlanner.ShiftInPlaceKey, SettingCategories.Files, SettingKind.Bool, false) { Order = 9 },
+        // 代替データストリームがあるファイルを開いたときに知らせる (ENG-37 の仕様 3。既定オフ)。
+        new("files.adsNotice", SettingCategories.Files, SettingKind.Bool, false) { Order = 11 },
         new(Formats.EncodedFile.GapFillKey, SettingCategories.Files, SettingKind.String, "FF") { Order = 9 },
         new("storage.tempDirectory", SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, RequiresRestart = true, Order = 10 },
 
@@ -253,6 +281,11 @@ public static class BuiltInSettings
         new(DeviceSettings.ProcessReadOnlyKey, SettingCategories.Advanced, SettingKind.Bool, true) { Order = 122, Group = "devices" },
         new(DeviceSettings.MemoryMapRefreshKey, SettingCategories.Advanced, SettingKind.Int, 5) { Min = 0, Max = 60, Order = 123, Group = "devices" },
         new(DeviceSettings.SuggestDiskImageKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 11 },
+
+        // リモートのデータソース (ENG-40〜ENG-42)。
+        new(Remote.RemoteSettings.GdbTimeoutKey, SettingCategories.Files, SettingKind.Int, 5) { Min = 1, Max = 120, Order = 12 },
+        new(Remote.RemoteSettings.SftpConfirmPartialWriteKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 13 },
+        new(Remote.RemoteSettings.UdpFollowEndKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 14 },
 
         // カスタム CRC (ANA-20 の仕様 5)。CRC カタログの項目名の JSON。
         new("hash.customCrc", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 103, ShowInPage = false },
@@ -300,6 +333,9 @@ public static class BuiltInSettings
         new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
         // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
         new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+
+        // ---- 自動化: 外部からの自動操作 (08 の AUTO-45)。既定はオフ (仕様 3)。他の PC に持ち出さない ----
+        new("automation.rpc.enabled", SettingCategories.Automation, SettingKind.Bool, false) { Order = 120, Group = "rpc", Exportable = false },
         // ---- 構造体テンプレート (07 の TPL-20、TPL-23、TPL-29、TPL-30、TPL-35) ----
         new("templates.autoApply", SettingCategories.Templates, SettingKind.Choice, "suggest") { Options = ["suggest", "always", "none"], Order = 10 },
         new("templates.autoReevaluate", SettingCategories.Templates, SettingKind.Bool, true) { Order = 20 },
@@ -309,6 +345,29 @@ public static class BuiltInSettings
         new("templates.folders", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 50, ShowInPage = false },
         new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
         new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
+        // オンラインのテンプレート (07 の TPL-36)。リポジトリの一覧は管理画面の「オンライン」で編集する。通信の可否はプライバシーの
+        // network.downloads.enabled / network.offline に従う (仕様 7)。
+        new("templates.online.repositories", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 80, ShowInPage = false },
+        new("templates.online.checkUpdates", SettingCategories.Templates, SettingKind.Bool, true) { Order = 90, Group = "templatesOnline" },
+        new("templates.online.autoUpdate", SettingCategories.Templates, SettingKind.Bool, false) { Order = 100, Group = "templatesOnline" },
+
+        // ---- 逆アセンブル (06 の ANA-26。キーと解釈は Disassembly.DisasmSettings) ----
+        new(Disassembly.DisasmSettings.SyntaxKey, SettingCategories.Disassembly, SettingKind.Choice, "intel") { Options = ["intel", "att", "masm"], Order = 10 },
+        new(Disassembly.DisasmSettings.HexStyleKey, SettingCategories.Disassembly, SettingKind.Choice, "prefix") { Options = ["prefix", "suffix"], Order = 20 },
+        new(Disassembly.DisasmSettings.UppercaseHexKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 30 },
+        new(Disassembly.DisasmSettings.SignedImmediatesKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 40 },
+        new(Disassembly.DisasmSettings.UppercaseMnemonicsKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 50 },
+        new(Disassembly.DisasmSettings.ArmRegisterAliasesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 60 },
+        new(Disassembly.DisasmSettings.ShowBytesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 70 },
+        new(Disassembly.DisasmSettings.MaxBytesKey, SettingCategories.Disassembly, SettingKind.Int, 8)
+        {
+            Min = Disassembly.DisasmFormat.MinBytes,
+            Max = Disassembly.DisasmFormat.MaxBytesLimit,
+            Order = 80,
+        },
+        new(Disassembly.DisasmSettings.AddressColumnKey, SettingCategories.Disassembly, SettingKind.Choice, "virtual") { Options = ["virtual", "offset", "both"], Order = 90 },
+        new(Disassembly.DisasmSettings.BranchLinesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 100 },
+        new(Disassembly.DisasmSettings.CommentsKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 110 },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
