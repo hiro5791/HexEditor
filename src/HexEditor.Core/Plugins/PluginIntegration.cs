@@ -20,6 +20,27 @@ public static class PluginIntegration
     {
         HashCatalog.SetPlugins([.. manager.Registry.Usable<IHashAlgorithm>().Select(x => HashAlgorithmOf(manager, x.Registration, x.Extension))]);
         FileTypeDetector.GlobalDetectors = () => [.. manager.Registry.Usable<SdkFileTypeDetector>().Select(x => (CoreFileTypeDetector)new FileTypeAdapter(manager, x.Registration, x.Extension))];
+
+        // 逆アセンブラ (06 の ANA-23。アーキテクチャの一覧の「その他」に出す)。呼び出しは PluginGuard を通す。
+        Disassembly.DisasmArchitectures.SetPlugins([.. manager.Registry.Usable<IDisassembler>().Select(x =>
+            (x.Registration.Id, (IDisassembler)new GuardedDisassembler(x.Registration, x.Extension), PluginNameOf(manager, x.Registration)))]);
+    }
+
+    /// <summary>プラグインの逆アセンブラの呼び出しを <see cref="PluginGuard"/> で包む (例外・止めたプラグインは「解釈できない」にする)。</summary>
+    private sealed class GuardedDisassembler(RegisteredExtension registration, IDisassembler inner) : IDisassembler
+    {
+        public string Id => registration.Id;
+
+        public string DisplayName => registration.DisplayName;
+
+        public string Architecture => registration.Guard.Invoke("Architecture", () => inner.Architecture, registration.DisplayName);
+
+        public IReadOnlyList<DisassembledInstruction> Disassemble(ReadOnlySpan<byte> code, long address, int maxInstructions)
+        {
+            // ReadOnlySpan はラムダに渡せないため、配列に写してから呼ぶ (渡すのは 1 命令ぶんの最大長だけ)。
+            byte[] copy = code.ToArray();
+            return registration.Guard.Invoke("Disassemble", () => inner.Disassemble(copy, address, maxInstructions), [], uiThread: true);
+        }
     }
 
     /// <summary>登録簿が変わったら <see cref="Apply"/> し直す (App・CLI が 1 回呼ぶ)。</summary>
