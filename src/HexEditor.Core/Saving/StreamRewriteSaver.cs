@@ -14,6 +14,9 @@ public static class StreamRewriteSaver
 {
     private const int BufferSize = 4 * 1024 * 1024;
 
+    /// <summary>テスト用: ストリームに最初の 1 回を書いた直後に呼ぶ (途中で失敗する状況を作る)。</summary>
+    internal static Action? AfterFirstWrite { get; set; }
+
     /// <summary>ジャーナルの大きさ (= 旧内容の長さ)。</summary>
     public static long JournalSize(DocumentSnapshot snapshot) => snapshot.Storage.Source.Length;
 
@@ -67,6 +70,7 @@ public static class StreamRewriteSaver
 
             // 3. ストリームを書き直す。ここから先はキャンセルできない。
             operation?.DisallowCancel();
+            snapshot.Storage.Owner.SuspendLock();
             started = true;
             using (Microsoft.Win32.SafeHandles.SafeFileHandle handle = AlternateStreams.OpenHandle(file, stream, FileMode.Open, FileAccess.Write))
             {
@@ -77,6 +81,7 @@ public static class StreamRewriteSaver
                 while ((n = input.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     RandomAccess.Write(handle, buffer.AsSpan(0, n), position);
+                    AfterFirstWrite?.Invoke();
                     position += n;
                     done += n;
                     operation?.Report(done);
