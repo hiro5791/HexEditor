@@ -25,9 +25,13 @@ public sealed class NamedPipeRpcListener : IAsyncDisposable
     /// <summary>同時に接続できる数。</summary>
     public const int MaxConnections = 16;
 
+    /// <summary>パイプの入出力のバッファ (0 だと、相手が読むまで書き込みが終わらない)。</summary>
+    public const int BufferSize = 64 * 1024;
+
     private readonly Func<PipeClientConnection, Task> _onConnection;
     private readonly CancellationTokenSource _stop = new();
     private readonly List<Task> _connections = [];
+    private readonly List<NamedPipeServerStream> _streams = [];
     private readonly Lock _lock = new();
     private NamedPipeServerStream? _waiting;
     private Task? _loop;
@@ -86,7 +90,7 @@ public sealed class NamedPipeRpcListener : IAsyncDisposable
 
     private NamedPipeServerStream Create(bool first) =>
         NamedPipeServerStreamAcl.Create(PipeName, PipeDirection.InOut, MaxConnections, PipeTransmissionMode.Byte,
-            PipeOptions.Asynchronous | PipeOptions.WriteThrough | (first ? PipeOptions.FirstPipeInstance : 0), 0, 0, CreateSecurity());
+            PipeOptions.Asynchronous | PipeOptions.WriteThrough | (first ? PipeOptions.FirstPipeInstance : 0), BufferSize, BufferSize, CreateSecurity());
 
     private async Task AcceptLoopAsync()
     {
@@ -128,6 +132,8 @@ public sealed class NamedPipeRpcListener : IAsyncDisposable
             {
                 _connections.RemoveAll(t => t.IsCompleted);
                 _connections.Add(handler);
+                _streams.RemoveAll(s => !s.IsConnected);
+                _streams.Add(server);
             }
 
             // 同時に接続できる数を超えたら、どれかが終わるまで次のインスタンスを作らない。
@@ -171,9 +177,26 @@ public sealed class NamedPipeRpcListener : IAsyncDisposable
         }
 
         Task[] running;
+        NamedPipeServerStream[] streams;
         lock (_lock)
         {
             running = [.. _connections];
+            streams = [.. _streams];
+        }
+
+        // 接続中のものも切る (読み込みを終わらせる)。
+        foreach (NamedPipeServerStream stream in streams)
+        {
+            try
+            {
+                if (stream.IsConnected)
+                {
+                    stream.Disconnect();
+                }
+            }
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
+            {
+            }
         }
 
         try

@@ -92,6 +92,42 @@ public sealed partial class MainWindow
         };
     }
 
-    private Task<JsonObject?> HandleTplAutoTestCommands3Async(string cmd, JsonObject request) => Task.FromResult<JsonObject?>(null);
+    /// <summary>
+    /// <c>rpc</c>: 外部からの自動操作 (08 の AUTO-45)。<c>action</c> が <c>state</c> (既定。待ち受け・パイプの有無・ステータスバーのアイコン・接続の数)・
+    /// <c>trust</c> (<c>path</c> の実行ファイルを「常に許可する」で記録する。テストの前提の「許可した記録を置いている」)・<c>allowed</c> (許可した一覧)。
+    /// </summary>
+    private Task<JsonObject?> HandleTplAutoTestCommands3Async(string cmd, JsonObject request)
+    {
+        if (cmd != "rpc")
+        {
+            return Task.FromResult<JsonObject?>(null);
+        }
+
+        string action = request["action"]?.GetValue<string>() ?? "state";
+        switch (action)
+        {
+            case "trust":
+                Core.Scripting.Rpc.JsonRpcTrust.Remember(Services.Scripting.ScriptingService.Trust, request["path"]!.GetValue<string>());
+                break;
+            case "allowed":
+                return Task.FromResult<JsonObject?>(new JsonObject
+                {
+                    ["paths"] = new JsonArray([.. Core.Scripting.Rpc.JsonRpcTrust.Allowed(Services.Scripting.ScriptingService.Trust)
+                        .Select(r => (JsonNode?)(r.DisplayPath ?? r.Key))]),
+                });
+        }
+
+        string pipe = Services.Automation.AutomationService.PipeName;
+        return Task.FromResult<JsonObject?>(new JsonObject
+        {
+            ["running"] = Services.Automation.AutomationService.IsRunning,
+            ["pipe"] = pipe,
+            ["pipeExists"] = Platform.Automation.NamedPipeRpcListener.Exists(pipe),
+            ["connections"] = Services.Automation.AutomationService.Connections,
+            ["error"] = Services.Automation.AutomationService.StartError,
+            ["statusVisible"] = StatusAutomation.Visibility == Microsoft.UI.Xaml.Visibility.Visible,
+            ["statusName"] = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(StatusAutomation),
+        });
+    }
 }
 #endif

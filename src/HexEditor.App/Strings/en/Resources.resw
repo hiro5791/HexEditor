@@ -6876,4 +6876,26 @@ Type: {4}</value></data>
   <data name="TplOnline_UpdatesAvailable" xml:space="preserve"><value>New versions of online templates are available: {0}</value></data>
   <data name="TplOnline_NoUpdates" xml:space="preserve"><value>All online templates are up to date.</value></data>
   <data name="SetGroup_templatesOnline" xml:space="preserve"><value>Online templates</value></data>
+  <data name="SetGroup_rpc" xml:space="preserve"><value>External automation</value></data>
+  <data name="Set_automation_rpc_enabled" xml:space="preserve"><value>Allow external automation (JSON-RPC over a named pipe)</value></data>
+  <data name="SetDesc_automation_rpc_enabled" xml:space="preserve"><value>Other programs of your account (PowerShell, Python, test tools) can operate HexEditor. The first connection from each program asks for your permission. Off by default.</value></data>
+  <data name="Status_AutomationOn" xml:space="preserve"><value>External automation: on</value></data>
+  <data name="Status_AutomationConnections" xml:space="preserve"><value>({0} connected)</value></data>
+  <data name="Rpc_Writing" xml:space="preserve"><value>Operated by an external program: {0}</value></data>
+  <data name="Rpc_Disconnect" xml:space="preserve"><value>Disconnect</value></data>
+  <data name="RpcTrust_Title" xml:space="preserve"><value>Allow the connection from {0}?</value></data>
+  <data name="RpcTrust_Program" xml:space="preserve"><value>Program: {0}</value></data>
+  <data name="RpcTrust_Signer" xml:space="preserve"><value>Signed by: {0}</value></data>
+  <data name="RpcTrust_Description" xml:space="preserve"><value>This program wants to operate HexEditor through external automation. It can read and edit the open documents, open and save files, and use the other automation functions. Allow only programs you trust.</value></data>
+  <data name="RpcTrust_Unsigned" xml:space="preserve"><value>The program has no valid digital signature.</value></data>
+  <data name="RpcTrust_AllowOnce" xml:space="preserve"><value>Allow this time</value></data>
+  <data name="RpcTrust_Deny" xml:space="preserve"><value>Don't allow</value></data>
+  <data name="SetSection_RpcClients" xml:space="preserve"><value>External automation</value></data>
+  <data name="SetSearch_RpcClients" xml:space="preserve"><value>external automation json-rpc named pipe powershell python allowed programs</value></data>
+  <data name="RpcClients_Running" xml:space="preserve"><value>Listening on the named pipe below. Only programs of your account on this PC can connect.</value></data>
+  <data name="RpcClients_Stopped" xml:space="preserve"><value>Not listening (turn on "Allow external automation").</value></data>
+  <data name="RpcClients_StartError" xml:space="preserve"><value>Cannot create the named pipe: {0}</value></data>
+  <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell module: {0} (Import-Module). Method list: {1}</value></data>
+  <data name="RpcClients_None" xml:space="preserve"><value>No program has been allowed permanently.</value></data>
+  <data name="RpcClients_Allowed" xml:space="preserve"><value>Allowed on {0}</value></data>
 </root>

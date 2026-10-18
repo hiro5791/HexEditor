@@ -57,6 +57,7 @@ public sealed partial class MainWindow
         Commands.Register("templates.visualize", () => ShowTemplateVisualizer(SelectedVisualizerNode()),
             () => NeedsDocument(_ => SelectedVisualizerNode() is null ? Loc.Get("TplVis_NoVisualizer") : null));
         RegisterOnlineTemplateCommands();
+        RegisterAutomationFeatures();
     }
 
     /// <summary>結果ツリーの選択と「表示」ボタンをつなぐ (<see cref="CreateTemplateVm"/> から呼ぶ)。</summary>

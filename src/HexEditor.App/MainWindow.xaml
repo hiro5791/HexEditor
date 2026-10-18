@@ -712,6 +712,15 @@
                     Visibility="Collapsed">
                     <FontIcon FontSize="14" Glyph="&#xE1A7;" />
                 </Button>
+                <!--  外部からの自動操作 (AUTO-45 の仕様 3): オンの間は必ず示す (利用者が隠せる項目にしない)。クリックで設定を開く。  -->
+                <Button
+                    x:Name="StatusAutomation"
+                    AutomationProperties.AutomationId="Status_Automation"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="automation"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE703;" />
+                </Button>
                 <Button
                     x:Name="NotificationHistoryButton"
                     x:Uid="Status_Notifications"

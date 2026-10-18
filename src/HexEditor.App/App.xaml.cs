@@ -249,6 +249,9 @@ public partial class App : Application
         // オンラインのテンプレートの更新の確認 (07 の TPL-36 の仕様 5)。
         window.StartOnlineTemplateUpdateCheck();
 
+        // 外部からの自動操作 (08 の AUTO-45。設定でオンのときだけ名前付きパイプで待ち受ける)。
+        Services.Automation.AutomationService.Initialize();
+
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();
 

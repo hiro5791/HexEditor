@@ -283,3 +283,53 @@ Select **Analysis > Structure templates > Manage templates** (or **Template: Man
 ### Use in the inspector {#inspector-templates}
 
 If you add `[[inspector("Display name")]]` to a type in a template, that type can appear in the data inspector. Select **Add inspector template** in the template manager to register it. The row in the inspector changes with the value at the cursor. See [Data inspector](inspector.md#user-types). Use fixed-size types of 4 KB or less. A warning appears if you register a variable-size type.
+
+## Visualizers {#visualizers}
+
+A visualizer shows the data of a pattern as something other than hex: an image, sound, disassembly, a table, a chart, a color or text. Add the `visualize` attribute to a pattern in the template.
+
+| Write | Shows |
+| --- | --- |
+| `visualize("bitmap", width, height, "format")` | Raw pixels. Formats: `gray8`, `rgb8`, `rgba8`, `bgra8`, `rgb565`, `indexed8`. For `indexed8`, give the palette pattern (RGB, or add `"bgra8"` for a BMP palette) as the next argument. Rows go from top to bottom without padding. |
+| `visualize("image")` | An image file: PNG, JPEG, GIF, BMP, ICO, TIFF or WebP |
+| `visualize("audio", sample rate, channels, "format")` | Sound. Formats: `pcm_u8`, `pcm_s16le`, `pcm_s16be`, `pcm_s24le`, `pcm_f32le` |
+| `visualize("disasm", "architecture", base address)` | Disassembly (the same engine as the disassembly view, for example `"x86-64"`) |
+| `visualize("table")` | An array of structures as a table, one column per member |
+| `visualize("chart", "line")` or `visualize("chart", "bar")` | An array of numbers as a chart |
+| `visualize("color")` | A large swatch of a color value |
+| `visualize("text", "encoding")` | The whole text, decoded with the encoding |
+
+Example:
+
+```text
+struct Rec { u8 tag[16]; le u32 no; u8 rest[44]; };
+Rec recs[16] [[visualize("table")]];
+```
+
+To see a visualizer:
+
+1. In the result tree, select a node that has a visualizer. The node shows a picture button.
+2. Select the button, or select **Show in the visualizer** in the right-click menu of the node.
+3. The **Visualizer** panel opens on the right. When the panel is open, selecting another node with a visualizer shows it at once.
+
+The top of the panel shows the kind and the size. For sound, use **Play**, **Stop** and the position bar; the waveform is drawn under them. **Save** writes images as PNG, sound as WAV and tables as CSV.
+
+A visualizer shows at most 64 MB of data, and images up to 16,384 × 16,384 pixels. If the data is larger, only the beginning is shown and the panel says so. If an image cannot be decoded, the panel shows "Cannot show this image" and the reason. HexEditor keeps working.
+
+## Online templates {#online-templates}
+
+You can find templates for more formats in online repositories, install them, and keep them up to date.
+
+1. Select **Analysis > Structure templates > Find online templates** (or **Template: Find online templates** in the command palette). The template manager opens at **Online templates**.
+2. Type in **Search online templates**, or choose a **Category**.
+3. Each entry shows its name, version, license, author and description. Select **View source** to read the template before you install it.
+4. Select **Install**. The template is ready at once: it appears in the template list with the origin "Online", and it is used for automatic selection.
+
+Installed templates are kept in the `templates-online` folder in your settings folder, apart from your own templates. **Update** installs a newer version, and **Remove** removes the template.
+
+- **Repositories you added**: type the HTTPS address of a repository index (`index.json`) and select **Add repository**. Templates from a repository without a signature show "Unsigned".
+- The official repository is signed. If its signature cannot be verified, its list is not used. A downloaded file is installed only if it matches the checksum in the index. Otherwise you see "The file may have been tampered with" and nothing is installed.
+- A template that uses script functions asks for your confirmation before it is installed. Downloaded templates run in the same safe environment as other templates.
+- **Check for updates at startup** (in **Settings > Templates**) checks once a day. When a newer version exists, an InfoBar tells you, and you select **Update** to install it. Turn on **Update online templates automatically** to install new versions without asking.
+- HexEditor sends only requests for the index and the template files. It never sends the names or the contents of your files.
+- The connection uses the proxy of Windows. To stop all downloads, turn off downloads or use offline mode in **Settings > Privacy**. Then the online page shows "Online templates are turned off." and **Open settings**, and HexEditor does not connect. Installed templates keep working.

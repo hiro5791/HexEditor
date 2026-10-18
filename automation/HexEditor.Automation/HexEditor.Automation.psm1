@@ -17,10 +17,11 @@ $script:NextId = 0
 function Get-HexEditorPipeName {
     <#
     .SYNOPSIS
-    Returns the pipe name of the current user (HexEditor.<SID>.rpc).
+    Returns the pipe name of the current user (HexEditor.<SID>.rpc). The environment variable HEXEDITOR_RPC_PIPE overrides it.
     #>
     [CmdletBinding()]
     param()
+    if ($env:HEXEDITOR_RPC_PIPE) { return $env:HEXEDITOR_RPC_PIPE }
     $sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
     "HexEditor.$sid.rpc"
 }

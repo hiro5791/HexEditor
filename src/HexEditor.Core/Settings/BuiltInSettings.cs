@@ -300,6 +300,9 @@ public static class BuiltInSettings
         new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
         // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
         new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+
+        // ---- 自動化: 外部からの自動操作 (08 の AUTO-45)。既定はオフ (仕様 3)。他の PC に持ち出さない ----
+        new("automation.rpc.enabled", SettingCategories.Automation, SettingKind.Bool, false) { Order = 120, Group = "rpc", Exportable = false },
         // ---- 構造体テンプレート (07 の TPL-20、TPL-23、TPL-29、TPL-30、TPL-35) ----
         new("templates.autoApply", SettingCategories.Templates, SettingKind.Choice, "suggest") { Options = ["suggest", "always", "none"], Order = 10 },
         new("templates.autoReevaluate", SettingCategories.Templates, SettingKind.Bool, true) { Order = 20 },
