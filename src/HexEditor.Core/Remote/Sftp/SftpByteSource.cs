@@ -23,6 +23,7 @@ public sealed class SftpByteSource : ByteSourceBase
         _file = file;
         _fileGeneration = connection.Generation;
         Uri = new SftpUri(connection.Endpoint, info.Path);
+        connection.AddUser();
     }
 
     /// <summary>リモートのファイルを開く (開く処理はファイルサイズに依存しない)。</summary>
@@ -230,10 +231,20 @@ public sealed class SftpByteSource : ByteSourceBase
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing && _file is { } file)
+        if (!disposing || Interlocked.Exchange(ref _disposed, 1) != 0)
+        {
+            return;
+        }
+
+        if (_file is { } file)
         {
             _file = null;
             _ = SafeCloseAsync(file);
         }
+
+        // 接続を使うデータソースがなくなったら切断する (保存前の版が読む元のデータソースも閉じるまで接続を保つ)。
+        Connection.RemoveUser();
     }
+
+    private int _disposed;
 }

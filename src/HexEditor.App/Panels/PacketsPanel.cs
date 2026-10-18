@@ -73,7 +73,13 @@ public sealed partial class PacketsPanel : UserControl, IPanelContent
         grid.Children.Add(_empty);
         Content = grid;
 
-        context.ActiveDocumentChanged += OnActiveDocumentChanged;
+        // パネルは移動 (ドック ↔ フローティング) で外れて付き直すので、表示されている間だけ購読する。
+        Loaded += (_, _) =>
+        {
+            context.ActiveDocumentChanged -= OnActiveDocumentChanged;
+            context.ActiveDocumentChanged += OnActiveDocumentChanged;
+            Refresh();
+        };
         Unloaded += (_, _) => context.ActiveDocumentChanged -= OnActiveDocumentChanged;
         Refresh();
     }

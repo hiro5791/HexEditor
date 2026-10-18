@@ -288,6 +288,22 @@ public sealed class SftpTests : IDisposable
     }
 
     [Fact]
+    public async Task Closing_the_document_closes_the_connection_after_a_replacing_save()
+    {
+        FakeSftpServer server = Server();
+        server.AddFile("/a.bin", 100, 1);
+        SftpConnection connection = await SftpConnection.ConnectAsync(Endpoint, KeyLogin, server, TrustedHosts(server));
+        var doc = new Document(await SftpByteSource.OpenAsync(connection, "/a.bin"));
+        doc.Insert(0, [1]);
+        doc.CompleteSave(await SftpSaver.ReplaceAsync(doc, (SftpByteSource)doc.Source));
+        Assert.Equal(1, server.ActiveSessions);
+
+        // 保存前の版が読む元のデータソースと、保存した後のデータソースの両方を閉じたら切断する。
+        doc.Dispose();
+        Assert.Equal(0, server.ActiveSessions);
+    }
+
+    [Fact]
     public async Task External_changes_are_detected_by_size_and_time()
     {
         FakeSftpServer server = Server();

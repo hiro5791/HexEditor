@@ -85,6 +85,18 @@ public sealed class FakeSftpServer : ISftpConnector
     /// <summary>認証まで済んで作られたセッションの数。</summary>
     public int SessionsCreated { get; private set; }
 
+    /// <summary>接続したままのセッションの数 (閉じたタブの接続が残っていないかの確認)。</summary>
+    public int ActiveSessions
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _sessions.Count(s => s.Connected);
+            }
+        }
+    }
+
     /// <summary>ホスト鍵を送った回数 (接続の試み)。</summary>
     public int HandshakeCount { get; private set; }
 

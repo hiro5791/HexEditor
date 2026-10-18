@@ -147,6 +147,20 @@ public sealed class SftpConnection : IDisposable
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    private int _users;
+
+    /// <summary>このデータソースが接続を使い始めた (データソースを開いたとき)。</summary>
+    internal void AddUser() => Interlocked.Increment(ref _users);
+
+    /// <summary>接続を使うデータソースが閉じた。使うものがなくなったら切断する (タブを閉じたとき)。</summary>
+    internal void RemoveUser()
+    {
+        if (Interlocked.Decrement(ref _users) <= 0)
+        {
+            Dispose();
+        }
+    }
+
     public void Dispose()
     {
         ISftpSession? old;
