@@ -21,6 +21,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Comparing files](compare.md)
 - [Statistics and analysis](statistics.md)
 - [Hashes and checksums](hashes.md)
+- [Disassembly](disassembly.md)
 - [Data operations](data-operations.md)
 - [Import and export](import-export.md)
 

@@ -18,6 +18,7 @@
     "compare",
     "statistics",
     "hashes",
+    "disassembly",
     "data-operations",
     "import-export",
     "templates",

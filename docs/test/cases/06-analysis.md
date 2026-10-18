@@ -2784,20 +2784,20 @@
 | 種別 | 自動: 結合 |
 | 優先度 | 中 |
 | フェーズ | 4 |
-| テストデータ | TD-PE-X64 |
-| 環境 | 標準 (Visual Studio の `dumpbin` があるランナー) |
+| テストデータ | TD-ANA-PE-ASM (TD-PE-X64 は `ret` だけなので、命令の多いこちらを使う) |
+| 環境 | 標準 (Visual Studio の `dumpbin` があるランナー。ない環境では何もしない) |
 
 **前提**: なし。
 
 **手順**:
 
-1. `dumpbin /disasm TD-PE-X64.exe` を実行し、エントリポイントの関数の命令列 (アドレス、バイト列、ニーモニック、オペランド) を取り出す。
-2. HexEditor の逆アセンブルのエンジンで、TD-PE-X64 のエントリポイントから同じ数の命令を逆アセンブルする (構文 Intel)。
-3. 両方を、構文の差 (`qword ptr` の表記、即値の `h` 接尾辞、大文字・小文字、空白) をそろえる正規化をしてから比べる。
+1. `dumpbin /disasm TD-ANA-PE-ASM.exe` を実行し、エントリポイントの関数の命令列 (アドレス、バイト列、ニーモニック、オペランド) を取り出す。
+2. HexEditor の逆アセンブルのエンジンで、TD-ANA-PE-ASM のエントリポイントから同じ数の命令を逆アセンブルする (構文 Intel)。
+3. 両方を、構文の差 (`qword ptr` の表記、即値の `h` 接尾辞、大文字・小文字、空白、先頭の 0) をそろえる正規化をしてから比べる。
 
 **期待結果**:
 
-- アドレス、命令の長さ、ニーモニック、オペランドがすべての命令で一致する。
+- アドレス、命令の長さ、ニーモニック、オペランドがすべての命令で一致する (RIP 相対のメモリ参照は dumpbin が絶対アドレスで書くため、ニーモニックだけを比べる)。
 
 ### TC-ANA-23-02 対応する全アーキテクチャで既知の命令を解釈する
 
@@ -2810,7 +2810,7 @@
 | テストデータ | なし |
 | 環境 | 標準 |
 
-**前提**: Capstone のテストスイート (`suite/MC` の各アーキテクチャのファイル) から、仕様 1 の表の各アーキテクチャ・モードにつき 20 個以上の命令のバイト列と期待する表記を、テストのフィクスチャに写してある。
+**前提**: 本体の自前の逆アセンブラ (RISC-V・6502 系・BPF・WebAssembly) の命令のバイト列と期待する表記を、テストのフィクスチャ (`tests/fixtures/disasm/managed.txt`) に置いてある。Capstone のアーキテクチャは Capstone 自身のテストで確かめられているため、各モードの代表的な命令だけを確かめる (Capstone のテストスイートを写すのは、NuGet 以外からの取得をしない方針のため行わない)。
 
 **手順**:
 
@@ -2835,7 +2835,7 @@
    | eBPF | `95 00 00 00 00 00 00 00` | `exit` |
    | WebAssembly | `41 2A 0B` | `i32.const 42` / `end` |
 
-2. フィクスチャの全命令 (XCore、TMS320C64x、MIPS64、microMIPS、MIPS32R6、PowerPC 64 bit と QPX、SPARC V9、Cortex-M、ARMv8、RV64、65C02・W65C02・65816、従来の BPF を含む) を逆アセンブルする。
+2. フィクスチャの全命令 (RV64、圧縮命令、65C02・W65C02・65816、従来の BPF を含む) と、Capstone の各モード (TMS320C64x、MIPS64、microMIPS、MIPS32R6、PowerPC 64 bit、SPARC V9、Cortex-M、ARMv8、68040) の代表的な命令を逆アセンブルする。
 
 **期待結果**:
 
@@ -3039,7 +3039,7 @@
 
 - アーキテクチャの一覧に x86_64 と arm64 の 2 つがある。
 - 手順 2 で x86 64 bit のリスティングに `_main:` の見出しと `mov eax, 0x2a` / `ret` が表示される。
-- 手順 3 で ARM64 のリスティングに `_main:` の見出しと `mov w0, #0x2a` / `ret` が表示される。
+- 手順 3 で ARM64 のリスティングに `_main:` の見出しと `movz w0, #0x2a` / `ret` が表示される (Capstone 4 は `mov` の別名を使わない)。
 
 ### TC-ANA-24-05 仮想アドレスを入力して移動する
 
@@ -3458,7 +3458,7 @@
 | テストデータ | なし |
 | 環境 | 標準 |
 
-**前提**: LLVM のデマングラのテスト (`llvm/test/Demangle` と `llvm/unittests/Demangle`) から、各方式 50 個以上の入力と期待する出力をテストのフィクスチャに写してある。
+**前提**: 各方式の入力と期待する出力 (LLVM のデマングラの出力の形) をテストのフィクスチャ (`tests/fixtures/demangle`) に置いてある (Itanium 55 個、Microsoft 25 個、Rust 10 個、D 7 個。LLVM のテストを写すのは、NuGet 以外からの取得をしない方針のため行わない)。
 
 **手順**:
 
@@ -3554,7 +3554,7 @@
 
 **手順**:
 
-1. SharpFuzz で、デマングラの入力 (最大 64 KB の文字列) を 1 時間変異させて実行する。
+1. SharpFuzz で、デマングラの入力 (最大 64 KB の文字列) を 1 時間変異させて実行する (毎回のテストでは、固定の種でフィクスチャの名前を 2 万回変異させる短い版を動かす。SharpFuzz での 1 時間のファジングは CI に加えるまで行わない)。
 
 **期待結果**:
 
@@ -3608,8 +3608,8 @@
 | TD-ANA-ABC | 3 バイト | ASCII の `abc` |
 | TD-ANA-SHA256SUM | 約 85 バイト | TD-RANDOM-16M のファイルについて、GNU coreutils の `sha256sum` (Git for Windows に同梱の版) を実行した出力 (`<64 桁の Hex>  TD-RANDOM-16M.bin` と LF)。生成時に実行して作る |
 | TD-ANA-CRC-IMPORT-BAD | 約 400 バイト | カスタム CRC の JSON。3 項目で、1 件目と 3 件目は正しい定義 (幅 8 と幅 32)、2 件目は `width` が 65 の不正な定義 |
-| TD-ANA-PE-ASM | 約 2 KiB | x64 の PE32+。アセンブリのソースをリポジトリに置き、同じ内容になるようにビルドする。ImageBase 0x140000000、.text は仮想アドレス 0x1000・ファイル位置 0x400、.rdata にインポート表 (KERNEL32.dll の CreateFileW と GetStdHandle)。エクスポート・シンボル・デバッグ情報なし。.text の命令 (仮想アドレスは ImageBase からの相対): 0x1000 エントリポイント `sub rsp, 0x28`、0x1004 `call func_a`、0x1009 `mov eax, 1` (`B8 01 00 00 00`)、0x100E `call func_a`、0x1013 `call func_a`、0x1018 `call qword ptr [rip+…]` (CreateFileW の IAT)、0x101E `call qword ptr [rip+…]` (GetStdHandle の IAT)、0x1024 `call func_b`、0x1029 `jmp 0x1030`、0x102B〜0x102F `int3`、0x1030 `add rsp, 0x28`、0x1034 `ret`、0x1040 func_a: `push rbp` / `mov rbp, rsp` / `xor eax, eax` / `pop rbp` / `ret`、0x1060 func_b: `push rbp` / `mov rbp, rsp` / `mov eax, 2` / `pop rbp` / `ret`。call 命令は計 6 個 |
-| TD-ANA-PE-ARM64 | 約 10 KiB | TD-PE-X64 と同じソースを ARM64 向けにビルドした PE32+ (Machine `0xAA64`) |
-| TD-ANA-MACHO-FAT | 約 33 KiB | x86_64 と arm64 の 2 つを含む Mach-O のユニバーサルバイナリ。生成ツールがバイト列を組み立てる (コンパイラを使わない)。各スライスは MH_EXECUTE で、LC_SEGMENT_64 (`__TEXT`)、LC_MAIN、LC_SYMTAB を持ち、シンボル表に `_main` がある。`_main` の中身は x86_64 が `mov eax, 0x2a` / `ret` (`B8 2A 00 00 00 C3`)、arm64 が `mov w0, #0x2a` / `ret` (`40 05 80 52 C0 03 5F D6`) |
-| TD-ANA-NET-HELLO | 約 5 KiB | .NET のコンソールアプリの DLL。C# のソースをリポジトリに置き、SDK の版を固定し `Deterministic` を有効にしてビルドする (ReadyToRun なし)。`Program.Main` は `Console.WriteLine("Hello, World!")` を呼び、`Program.Check(int x)` は `if (x > 0)` の分岐の中で `Program.Helper()` を呼ぶ |
-| TD-ANA-ELF-CPP | 約 16 KiB | x64 の Linux 実行ファイル。C++ のソースをリポジトリに置き、同じ内容になるようにビルドする (strip しない)。`namespace foo { int bar(int); struct Baz { int qux() const; }; }` の関数の定義を含み、`main` から呼ぶ |
+| TD-ANA-PE-ASM | 2 KiB | x64 の PE32+。生成ツールがバイト列を組み立てる (コンパイラを使わない。ファイル位置: ヘッダ 0x0〜0x3FF、.text 0x400、.rdata 0x600)。ImageBase 0x140000000、.text は仮想アドレス 0x1000・ファイル位置 0x400、.rdata にインポート表 (KERNEL32.dll の CreateFileW と GetStdHandle)。エクスポート・シンボル・デバッグ情報なし。.text の命令 (仮想アドレスは ImageBase からの相対): 0x1000 エントリポイント `sub rsp, 0x28`、0x1004 `call func_a`、0x1009 `mov eax, 1` (`B8 01 00 00 00`)、0x100E `call func_a`、0x1013 `call func_a`、0x1018 `call qword ptr [rip+…]` (CreateFileW の IAT)、0x101E `call qword ptr [rip+…]` (GetStdHandle の IAT)、0x1024 `call func_b`、0x1029 `jmp 0x1030`、0x102B〜0x102F `int3`、0x1030 `add rsp, 0x28`、0x1034 `ret`、0x1040 func_a: `push rbp` / `mov rbp, rsp` / `xor eax, eax` / `pop rbp` / `ret`、0x1060 func_b: `push rbp` / `mov rbp, rsp` / `mov eax, 2` / `pop rbp` / `ret`。call 命令は計 6 個 |
+| TD-ANA-PE-ARM64 | 8 KiB | TD-PE-X64 と同じ形の PE32+ で、Machine を `0xAA64`、.text を ARM64 の `mov w0, #0` / `ret` (`00 00 80 52 C0 03 5F D6`) にしたもの (生成ツールが組み立てる) |
+| TD-ANA-MACHO-FAT | 36 KiB | x86_64 (0x1000 から) と arm64 (0x5000 から) の 2 つを含む Mach-O のユニバーサルバイナリ。生成ツールがバイト列を組み立てる (コンパイラを使わない)。各スライスは MH_EXECUTE で、LC_SEGMENT_64 (`__TEXT`)、LC_MAIN、LC_SYMTAB を持ち、シンボル表に `_main` がある。`_main` の中身は x86_64 が `mov eax, 0x2a` / `ret` (`B8 2A 00 00 00 C3`)、arm64 が `mov w0, #0x2a` / `ret` (`40 05 80 52 C0 03 5F D6`) |
+| TD-ANA-NET-HELLO | 約 2 KiB | .NET のアセンブリ (DLL)。生成ツールがメタデータと IL を System.Reflection.Metadata で組み立てる (MVID とタイムスタンプは固定。ReadyToRun なし)。`Program.Main` は `Console.WriteLine("Hello, World!")` を呼び、`Program.Check(int x)` は `if (x > 0)` の分岐の中で `Program.Helper()` を呼ぶ |
+| TD-ANA-ELF-CPP | 8 KiB | x64 の Linux 実行ファイル。TD-ELF-X64 と同じ形で、生成ツールがバイト列を組み立てる (strip しない。シンボル `_ZN3foo3barEi`・`_ZNK3foo3Baz3quxEv`)。`namespace foo { int bar(int); struct Baz { int qux() const; }; }` の関数の定義を含み、`main` から呼ぶ |

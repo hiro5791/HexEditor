@@ -596,7 +596,7 @@ text の最初の位置 (序数比較)。なければ -1。
 
 `demangle(name) -> string`
 
-この版では名前をそのまま返す (デマングルは ANA-30 と同時)。
+C++・Rust・D のシンボル名をデマングルする (アプリの [デマングル](disassembly.md#demangle) と同じ)。デマングルできない名前はそのまま返す。
 
 ### std::sys::detected_mime
 
