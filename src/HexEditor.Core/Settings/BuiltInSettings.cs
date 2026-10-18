@@ -310,6 +310,24 @@ public static class BuiltInSettings
         new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
         new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
 
+        // ---- 逆アセンブル (06 の ANA-26。キーと解釈は Disassembly.DisasmSettings) ----
+        new(Disassembly.DisasmSettings.SyntaxKey, SettingCategories.Disassembly, SettingKind.Choice, "intel") { Options = ["intel", "att", "masm"], Order = 10 },
+        new(Disassembly.DisasmSettings.HexStyleKey, SettingCategories.Disassembly, SettingKind.Choice, "prefix") { Options = ["prefix", "suffix"], Order = 20 },
+        new(Disassembly.DisasmSettings.UppercaseHexKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 30 },
+        new(Disassembly.DisasmSettings.SignedImmediatesKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 40 },
+        new(Disassembly.DisasmSettings.UppercaseMnemonicsKey, SettingCategories.Disassembly, SettingKind.Bool, false) { Order = 50 },
+        new(Disassembly.DisasmSettings.ArmRegisterAliasesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 60 },
+        new(Disassembly.DisasmSettings.ShowBytesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 70 },
+        new(Disassembly.DisasmSettings.MaxBytesKey, SettingCategories.Disassembly, SettingKind.Int, 8)
+        {
+            Min = Disassembly.DisasmFormat.MinBytes,
+            Max = Disassembly.DisasmFormat.MaxBytesLimit,
+            Order = 80,
+        },
+        new(Disassembly.DisasmSettings.AddressColumnKey, SettingCategories.Disassembly, SettingKind.Choice, "virtual") { Options = ["virtual", "offset", "both"], Order = 90 },
+        new(Disassembly.DisasmSettings.BranchLinesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 100 },
+        new(Disassembly.DisasmSettings.CommentsKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 110 },
+
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
         // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。

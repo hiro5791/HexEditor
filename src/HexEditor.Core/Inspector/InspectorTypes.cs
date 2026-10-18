@@ -75,6 +75,9 @@ public sealed record InspectorType(string Id, InspectorGroup Group, int Size, bo
 {
     /// <summary>固定小数点の形式 (INSP-06 の仕様 3)。固定小数点の型でなければ null。</summary>
     public FixedPointFormat? Fixed { get; init; }
+
+    /// <summary>1 命令の逆アセンブルのアーキテクチャ (INSP-16 の仕様 1。06 の ANA-23 の ID)。逆アセンブルの型でなければ null。</summary>
+    public string? DisasmArchitecture { get; init; }
 }
 
 /// <summary>
@@ -203,6 +206,14 @@ public static class InspectorTypes
     public const string DotNetDateTime = "dotnetdatetime";
     public const string DigitsDateTime = "digitsdatetime";
 
+    // ---- INSP-16 1 命令の逆アセンブル ----
+
+    /// <summary>逆アセンブルの型の ID の接頭辞 (<c>disasm:x86-64</c>。後ろはアーキテクチャの ID)。</summary>
+    public const string DisasmPrefix = "disasm:";
+
+    /// <summary>既定の逆アセンブルの行 (x86 64 bit。INSP-16 の仕様 1)。</summary>
+    public const string Disasm = DisasmPrefix + HexEditor.Core.Disassembly.DisasmArchitectures.X86_64;
+
     /// <summary>すべての型 (既定の並び)。</summary>
     public static IReadOnlyList<InspectorType> All { get; } =
     [
@@ -275,6 +286,7 @@ public static class InspectorTypes
         new(Bgra8, InspectorGroup.Other, 4, HasEndian: false),
         new(Rgb8, InspectorGroup.Other, 3, HasEndian: false),
         new(Rgb565, InspectorGroup.Other, 2),
+        DisasmType(HexEditor.Core.Disassembly.DisasmArchitectures.X86_64)!,
     ];
 
     private static readonly Dictionary<string, InspectorType> ById = All.ToDictionary(t => t.Id);
@@ -286,9 +298,24 @@ public static class InspectorTypes
     public static InspectorType FixedType(FixedPointFormat format) =>
         new(format.Id, InspectorGroup.Float, format.TotalBits / 8, HasEndian: format.TotalBits > 8) { Fixed = format };
 
-    /// <summary>型を探す。固定小数点は一覧にない形式も ID から作る (行の設定で加えた行)。</summary>
+    /// <summary>型を探す。固定小数点と逆アセンブルは一覧にない形式・アーキテクチャも ID から作る (行の設定で変えた行)。</summary>
     public static InspectorType? Find(string id) =>
-        ById.TryGetValue(id, out InspectorType? t) ? t : FixedPointFormat.Parse(id) is { } format ? FixedType(format) : null;
+        ById.TryGetValue(id, out InspectorType? t) ? t
+        : FixedPointFormat.Parse(id) is { } format ? FixedType(format)
+        : id.StartsWith(DisasmPrefix, StringComparison.Ordinal) ? DisasmType(id[DisasmPrefix.Length..])
+        : null;
+
+    /// <summary>
+    /// 1 命令の逆アセンブルの型 (INSP-16)。長さは命令の長さ (可変長)。エンディアンを持つアーキテクチャだけがインスペクタのエンディアンに従う。
+    /// 知らないアーキテクチャなら null。
+    /// </summary>
+    public static InspectorType? DisasmType(string architectureId) =>
+        HexEditor.Core.Disassembly.DisasmArchitectures.Find(architectureId) is { } arch
+            ? new InspectorType(DisasmPrefix + arch.Id, InspectorGroup.Other, 1, HasEndian: arch.HasEndian, Variable: true) { DisasmArchitecture = arch.Id }
+            : null;
+
+    /// <summary>逆アセンブルの行か (INSP-16。書き換えできない。仕様 6)。</summary>
+    public static bool IsDisasm(string id) => id.StartsWith(DisasmPrefix, StringComparison.Ordinal);
 
     public static InspectorType Get(string id) => Find(id) ?? throw new ArgumentException($"未知の型です: {id}", nameof(id));
 
@@ -344,6 +371,9 @@ public sealed record InspectorOptions
 
     /// <summary>現在時刻 (入力の <c>now</c>)。</summary>
     public TimeProvider Time { get; init; } = TimeProvider.System;
+
+    /// <summary>1 命令の逆アセンブルの構文と数値の書式 (INSP-16 の仕様 2。06 の ANA-26 の設定)。</summary>
+    public HexEditor.Core.Disassembly.DisasmFormat DisasmFormat { get; init; } = HexEditor.Core.Disassembly.DisasmFormat.Default;
 
     /// <summary>
     /// 文字を表示できるか (代替フォントを含めて、どれかのフォントにその文字があるか。INSP-09 の仕様 3)。表示できない文字は
@@ -435,4 +465,8 @@ public sealed record InspectorText
     public string ErrorNotEncodable { get; init; } = "This character can't be written in {0}";
     public string ErrorPastEnd { get; init; } = "The value goes past the end of the document ({0} bytes needed, {1} left)";
     public string ErrorReadOnly { get; init; } = "The document is read-only";
+
+    // ---- INSP-16 1 命令の逆アセンブル ----
+    public string InvalidInstruction { get; init; } = "Invalid instruction";
+    public string DisassemblerUnavailable { get; init; } = "Disassembler unavailable";
 }

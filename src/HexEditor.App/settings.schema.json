@@ -233,6 +233,77 @@
       "type": "boolean",
       "default": false
     },
+    "disassembly.addressColumn": {
+      "description": "Address column",
+      "type": "string",
+      "enum": [
+        "virtual",
+        "offset",
+        "both"
+      ],
+      "default": "virtual"
+    },
+    "disassembly.armRegisterAliases": {
+      "description": "ARM register aliases",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.branchLines": {
+      "description": "Branch lines",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.comments": {
+      "description": "Comment column",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.hexStyle": {
+      "description": "Hexadecimal numbers",
+      "type": "string",
+      "enum": [
+        "prefix",
+        "suffix"
+      ],
+      "default": "prefix"
+    },
+    "disassembly.maxBytes": {
+      "description": "Maximum bytes shown",
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 16,
+      "default": 8
+    },
+    "disassembly.showBytes": {
+      "description": "Show the bytes column",
+      "type": "boolean",
+      "default": true
+    },
+    "disassembly.signedImmediates": {
+      "description": "Signed immediates",
+      "type": "boolean",
+      "default": false
+    },
+    "disassembly.syntax": {
+      "description": "x86 syntax",
+      "type": "string",
+      "enum": [
+        "intel",
+        "att",
+        "masm"
+      ],
+      "default": "intel"
+    },
+    "disassembly.uppercaseHex": {
+      "description": "Uppercase hexadecimal digits",
+      "type": "boolean",
+      "default": false
+    },
+    "disassembly.uppercaseMnemonics": {
+      "description": "Uppercase mnemonics and registers",
+      "type": "boolean",
+      "default": false
+    },
     "diskImage.suggest": {
       "description": "Suggest opening disk images as disk images",
       "type": "boolean",

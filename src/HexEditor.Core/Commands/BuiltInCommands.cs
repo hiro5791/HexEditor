@@ -318,6 +318,7 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.statistics", "view"),
         new("view.panel.fileType", "view"),
+        new("view.panel.disassembly", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
         new("view.panel.history", "view"),
@@ -460,6 +461,20 @@ public static class BuiltInCommands
         new("analysis.hash.customCrc", "analysis"),
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
+
+        // ---- 逆アセンブル (ANA-23〜ANA-30)。F12 の分岐先へ移動は templates.goToDefinition が受ける (00-overview 8.7)。既定のキーはなし ----
+        new("analysis.disassemble", "analysis") { Condition = "documentOpen" },
+        new("analysis.disassembleAtCursor", "analysis") { Condition = "documentOpen" },
+        new("analysis.goToVirtualAddress", "analysis") { Condition = "documentOpen" },
+        new("analysis.goToEntryPoint", "analysis") { Condition = "documentOpen" },
+        new("analysis.disassembleDotNet", "analysis") { Condition = "documentOpen" },
+        new("analysis.demangle", "analysis"),
+        new("disassembly.goToTarget", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.findReferences", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.findPattern", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.assemble", "disassembly") { Condition = "documentOpen && !readOnly" },
+        new("disassembly.copy", "disassembly") { Condition = "documentOpen" },
+        new("disassembly.export", "disassembly") { Condition = "documentOpen" },
 
         // ---- 構造体テンプレート (07 の TPL-20〜TPL-35)。F12 は定義へ移動 (00-overview 8.2) ----
         new("templates.apply", "templates") { Condition = "documentOpen" },

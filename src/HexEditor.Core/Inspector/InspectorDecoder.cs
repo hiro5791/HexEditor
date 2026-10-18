@@ -32,7 +32,11 @@ public sealed record InspectorComponent(string Id, string Name, string Value, in
 /// <see cref="Rgba"/> は色の行の色 (0xRRGGBBAA。色見本に使う。INSP-12 の仕様 2)。
 /// </summary>
 public sealed record InspectorValue(InspectorStatus Status, string Text, int ByteCount, string? ToolTip = null,
-    IReadOnlyList<InspectorComponent>? Components = null, string? FullText = null, uint? Rgba = null);
+    IReadOnlyList<InspectorComponent>? Components = null, string? FullText = null, uint? Rgba = null)
+{
+    /// <summary>分岐命令の分岐先 (起点からの相対位置。INSP-16 の仕様 7「分岐先へ移動」)。分岐先が求まらなければ null。</summary>
+    public long? BranchTarget { get; init; }
+}
 
 /// <summary>
 /// バイト列を型で解釈して表示の文字列にする (INSP-03、INSP-05、INSP-08、INSP-09、INSP-11、INSP-13)。
@@ -62,6 +66,11 @@ public static partial class InspectorDecoder
         if (type.FixedEndian)
         {
             endian = Endianness.Little;
+        }
+
+        if (type.DisasmArchitecture is { } arch)
+        {
+            return DecodeDisassembly(arch, data, states, endian, o);
         }
 
         switch (type.Id)

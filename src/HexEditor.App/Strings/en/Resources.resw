@@ -6603,4 +6603,68 @@ Type: {4}</value></data>
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>The code editor (WebView2) could not start, so a basic editor with fewer features is used. Reinstalling the Microsoft Edge WebView2 Runtime may fix this.</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Get the WebView2 Runtime</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>To use completion, add the C# script component.</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>Disassembly</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>x86 syntax</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>The assembly syntax for x86 and x64 instructions in the disassembly listing and the data inspector.</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>Hexadecimal numbers</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>How hexadecimal numbers are written in the listing.</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>0x prefix (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>h suffix (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>Uppercase hexadecimal digits</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>Show the hexadecimal digits A–F in uppercase.</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>Signed immediates</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>Show negative immediate values with a minus sign instead of as large unsigned numbers (x86).</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>Uppercase mnemonics and registers</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>Show instruction names and register names in uppercase.</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM register aliases</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>Show ARM registers by alias (sp, lr, pc) instead of by number (r13, r14, r15).</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>Show the bytes column</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>Show the instruction bytes next to the address.</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>Maximum bytes shown</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>The number of bytes shown for each instruction (4 to 16). Longer instructions end with “…”.</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>Address column</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>What the address column shows.</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>Virtual address</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>File offset</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>Both</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>Branch lines</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>Draw arrows for branches and lines to branch targets that are in view.</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>Comment column</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Show symbol names, branch target names and referenced strings.</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>Disassembly</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Toggle disassembly panel</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler assembly code</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Disassemble</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>disassembler assembly code instructions</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>Disassemble from cursor</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>disassembler code here</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>Go to virtual address</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>va rva address section</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>Go to entry point</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>start main executable</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>Disassemble .NET method</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>msil il cil dotnet method</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>Demangle symbol names...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>demangle c++ rust symbol undecorate</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>Go to branch target</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>jump call follow</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>Find references</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>xref cross references callers</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>Find instruction pattern</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>search instructions assembly</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>Assemble instruction</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>patch assemble instruction</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>Copy listing lines</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>copy assembly</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>Export as assembly...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>save listing asm</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>Instruction</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>Instruction ({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>Invalid instruction</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>Disassembler unavailable</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>Go to branch target</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>Architecture</value></data>
 </root>

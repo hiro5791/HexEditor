@@ -6603,4 +6603,68 @@
   <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>コードエディタ (WebView2) を起動できなかったため、機能の少ない簡易エディタを使っています。Microsoft Edge WebView2 ランタイムを入れ直すと直ることがあります。</value></data>
   <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 ランタイムを入手する</value></data>
   <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>補完を使うには C# スクリプト コンポーネントを追加してください。</value></data>
+  <data name="SetCategory_disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Set_disassembly_syntax" xml:space="preserve"><value>x86 の構文</value></data>
+  <data name="SetDesc_disassembly_syntax" xml:space="preserve"><value>逆アセンブルのリスティングとデータインスペクタで使う、x86 と x64 の命令の構文。</value></data>
+  <data name="SetOpt_disassembly_syntax_intel" xml:space="preserve"><value>Intel</value></data>
+  <data name="SetOpt_disassembly_syntax_att" xml:space="preserve"><value>AT&amp;T</value></data>
+  <data name="SetOpt_disassembly_syntax_masm" xml:space="preserve"><value>MASM</value></data>
+  <data name="Set_disassembly_hexStyle" xml:space="preserve"><value>16 進数の書式</value></data>
+  <data name="SetDesc_disassembly_hexStyle" xml:space="preserve"><value>リスティングの 16 進数の書き方。</value></data>
+  <data name="SetOpt_disassembly_hexStyle_prefix" xml:space="preserve"><value>0x 接頭辞 (0x10)</value></data>
+  <data name="SetOpt_disassembly_hexStyle_suffix" xml:space="preserve"><value>h 接尾辞 (10h)</value></data>
+  <data name="Set_disassembly_uppercaseHex" xml:space="preserve"><value>16 進数を大文字にする</value></data>
+  <data name="SetDesc_disassembly_uppercaseHex" xml:space="preserve"><value>16 進数の A〜F を大文字で表示します。</value></data>
+  <data name="Set_disassembly_signedImmediates" xml:space="preserve"><value>負の即値を符号付きで表示</value></data>
+  <data name="SetDesc_disassembly_signedImmediates" xml:space="preserve"><value>負の即値を、大きな符号なしの数ではなく、マイナス記号付きで表示します (x86)。</value></data>
+  <data name="Set_disassembly_uppercaseMnemonics" xml:space="preserve"><value>ニーモニックとレジスタ名を大文字にする</value></data>
+  <data name="SetDesc_disassembly_uppercaseMnemonics" xml:space="preserve"><value>命令名とレジスタ名を大文字で表示します。</value></data>
+  <data name="Set_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM のレジスタの別名</value></data>
+  <data name="SetDesc_disassembly_armRegisterAliases" xml:space="preserve"><value>ARM のレジスタを、番号 (r13、r14、r15) ではなく別名 (sp、lr、pc) で表示します。</value></data>
+  <data name="Set_disassembly_showBytes" xml:space="preserve"><value>バイト列の列を表示</value></data>
+  <data name="SetDesc_disassembly_showBytes" xml:space="preserve"><value>アドレスの横に命令のバイト列を表示します。</value></data>
+  <data name="Set_disassembly_maxBytes" xml:space="preserve"><value>表示する最大バイト数</value></data>
+  <data name="SetDesc_disassembly_maxBytes" xml:space="preserve"><value>1 命令あたりに表示するバイト数 (4〜16)。長い命令は「…」で省略します。</value></data>
+  <data name="Set_disassembly_addressColumn" xml:space="preserve"><value>アドレス列</value></data>
+  <data name="SetDesc_disassembly_addressColumn" xml:space="preserve"><value>アドレス列に表示する内容。</value></data>
+  <data name="SetOpt_disassembly_addressColumn_virtual" xml:space="preserve"><value>仮想アドレス</value></data>
+  <data name="SetOpt_disassembly_addressColumn_offset" xml:space="preserve"><value>ファイル上のオフセット</value></data>
+  <data name="SetOpt_disassembly_addressColumn_both" xml:space="preserve"><value>両方</value></data>
+  <data name="Set_disassembly_branchLines" xml:space="preserve"><value>分岐の線</value></data>
+  <data name="SetDesc_disassembly_branchLines" xml:space="preserve"><value>分岐の矢印と、表示範囲内の分岐先への線を描きます。</value></data>
+  <data name="Set_disassembly_comments" xml:space="preserve"><value>コメント列</value></data>
+  <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>シンボル名、分岐先の名前、参照している文字列を表示します。</value></data>
+  <data name="CmdCategory_disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>逆アセンブルパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>ぎゃくあせんぶるぱねる</value></data>
+  <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassemble" xml:space="preserve"><value>ぎゃくあせんぶる めいれい</value></data>
+  <data name="Cmd_analysis_disassembleAtCursor" xml:space="preserve"><value>カーソル位置から逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassembleAtCursor" xml:space="preserve"><value>かーそるいちからぎゃくあせんぶる</value></data>
+  <data name="Cmd_analysis_goToVirtualAddress" xml:space="preserve"><value>仮想アドレスへ移動</value></data>
+  <data name="CmdAlias_analysis_goToVirtualAddress" xml:space="preserve"><value>かそうあどれすへいどう</value></data>
+  <data name="Cmd_analysis_goToEntryPoint" xml:space="preserve"><value>エントリポイントへ移動</value></data>
+  <data name="CmdAlias_analysis_goToEntryPoint" xml:space="preserve"><value>えんとりぽいんとへいどう</value></data>
+  <data name="Cmd_analysis_disassembleDotNet" xml:space="preserve"><value>.NET のメソッドを逆アセンブル</value></data>
+  <data name="CmdAlias_analysis_disassembleDotNet" xml:space="preserve"><value>どっとねっと めそっど ぎゃくあせんぶる</value></data>
+  <data name="Cmd_analysis_demangle" xml:space="preserve"><value>シンボル名をデマングル...</value></data>
+  <data name="CmdAlias_analysis_demangle" xml:space="preserve"><value>でまんぐる しんぼるめい</value></data>
+  <data name="Cmd_disassembly_goToTarget" xml:space="preserve"><value>分岐先へ移動</value></data>
+  <data name="CmdAlias_disassembly_goToTarget" xml:space="preserve"><value>ぶんきさきへいどう</value></data>
+  <data name="Cmd_disassembly_findReferences" xml:space="preserve"><value>参照を探す</value></data>
+  <data name="CmdAlias_disassembly_findReferences" xml:space="preserve"><value>さんしょうをさがす くろすりふぁれんす</value></data>
+  <data name="Cmd_disassembly_findPattern" xml:space="preserve"><value>命令パターンを検索</value></data>
+  <data name="CmdAlias_disassembly_findPattern" xml:space="preserve"><value>めいれいぱたーんをけんさく</value></data>
+  <data name="Cmd_disassembly_assemble" xml:space="preserve"><value>命令を書き換える</value></data>
+  <data name="CmdAlias_disassembly_assemble" xml:space="preserve"><value>めいれいをかきかえる あせんぶる</value></data>
+  <data name="Cmd_disassembly_copy" xml:space="preserve"><value>リスティングの行をコピー</value></data>
+  <data name="CmdAlias_disassembly_copy" xml:space="preserve"><value>りすてぃんぐのぎょうをこぴー</value></data>
+  <data name="Cmd_disassembly_export" xml:space="preserve"><value>アセンブリとしてエクスポート...</value></data>
+  <data name="CmdAlias_disassembly_export" xml:space="preserve"><value>あせんぶりとしてえくすぽーと</value></data>
+  <data name="Inspector_Row_disasm" xml:space="preserve"><value>1 命令の逆アセンブル</value></data>
+  <data name="Inspector_DisasmName" xml:space="preserve"><value>1 命令の逆アセンブル ({0})</value></data>
+  <data name="Inspector_InvalidInstruction" xml:space="preserve"><value>不正な命令</value></data>
+  <data name="Inspector_DisassemblerUnavailable" xml:space="preserve"><value>逆アセンブラを使えません</value></data>
+  <data name="Inspector_MenuGoToBranchTarget" xml:space="preserve"><value>分岐先へ移動</value></data>
+  <data name="Inspector_DisasmArchitecture" xml:space="preserve"><value>アーキテクチャ</value></data>
 </root>
