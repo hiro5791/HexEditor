@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json.Nodes;
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
@@ -52,6 +53,17 @@ public sealed partial class MainWindow
         Commands.Register("data.patch.create", () => CreatePatchAsync(PatchDiffSource.Saved, null, null),
             () => NeedsDocument(d => d.Document.LinkedParent is not null ? Loc.Get("Patch_LinkedView") : null));
         Commands.Register("data.patch.apply", ApplyPatchAsync, () => NeedsEditable());
+
+        // 比較の結果画面の「パッチを作成」: 左の内容から右の内容へのパッチ (EDIT-42 の仕様 1 の「2 つのファイル (タブ)」)。
+        Commands.Register("compare.createPatch", async () =>
+        {
+            if (ActiveCompare is { } compare && Vm.Selected is not null)
+            {
+                await CreatePatchAsync(PatchDiffSource.History, null, null, (compare.Left.View.Document.DataSnapshot, compare.Right.View.Document.DataSnapshot,
+                    Loc.Format("PatchCreate_ComparePairText", compare.Left.Name, compare.Right.Name)));
+            }
+        }, () => ActiveCompare is null ? CommandState.Unavailable(Loc.Get("Patch_NoCompare"))
+            : Vm.Selected is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument")) : CommandState.Available);
     }
 
     private static string FormatName(PatchFormat? format) => Loc.Get("Patch_Format_" + (format?.ToString() ?? "Auto"));

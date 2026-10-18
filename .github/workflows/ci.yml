@@ -366,6 +366,59 @@ jobs:
           name: ui-nightly-results
           path: TestResults/
 
+  # 自己適用型パッチ (EDIT-44、TC-EDIT-44-01・TC-EDIT-44-02)。適用プログラム (NativeAOT。C++ のビルドツールが要る) をランナーの
+  # アーキテクチャ向けに発行し、HEXEDITOR_PATCH_STUB_DIR に置いて、アプリで作った patch.exe を UI オートメーションで操作して当てる。
+  # 適用プログラムは前面にダイアログを出すため、開発者の PC ではなく CI だけで動かす。毎晩と手動の実行。
+  self-patch:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-latest
+            arch: x64
+            platform: x64
+          - runner: windows-11-arm
+            arch: arm64
+            platform: ARM64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish the patch applier (NativeAOT)
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'patch-stub'
+          dotnet publish src/HexEditor.PatchApplier -c Release -r win-${{ matrix.arch }} -o (Join-Path $dir 'publish')
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          New-Item -ItemType Directory -Force (Join-Path $dir 'PatchApplier/${{ matrix.arch }}') | Out-Null
+          Copy-Item (Join-Path $dir 'publish/HexPatchApply.exe') (Join-Path $dir 'PatchApplier/${{ matrix.arch }}/HexPatchApply.stub')
+          "HEXEDITOR_PATCH_STUB_DIR=$dir" >> $env:GITHUB_ENV
+
+      - name: Build app (test build)
+        run: dotnet build src/HexEditor.App -c Debug -p:Platform=${{ matrix.platform }}
+
+      - name: Build UI tests
+        run: dotnet build tests/HexEditor.UITests -c Release -p:HexTestHooks=true
+
+      - name: Self-applying patch tests
+        env:
+          HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+          HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.SelfPatchTests" --logger "trx;LogFileName=self-patch.trx" --results-directory TestResults
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: self-patch-results-${{ matrix.arch }}
+          path: TestResults/
+
   # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
   # PNG と一覧 (index.html) を置く (成果物 screenshots-<組>)。時間がかかるため、言語を 5 つの組に分けて並列に撮る。
   # 前回の毎晩の実行の同じ組の成果物を基準 (HEXEDITOR_SCREENSHOTS_BASELINE) にし、切れた文字列が増えたらジョブの概要に警告を出す

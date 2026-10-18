@@ -6827,4 +6827,8 @@
 
 ファイルは変更していません。</value></data>
   <data name="PatchApplier_ResultMismatch" xml:space="preserve"><value>適用後の内容がパッチに記録された内容と一致しません。</value></data>
+  <data name="Cmd_compare_createPatch" xml:space="preserve"><value>比較からパッチを作成...</value></data>
+  <data name="CmdAlias_compare_createPatch" xml:space="preserve"><value>ひかくからぱっちをさくせい</value></data>
+  <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>{0} (左) から {1} (右) へ</value></data>
+  <data name="Patch_NoCompare" xml:space="preserve"><value>先に比較を開いてください。</value></data>
 </root>

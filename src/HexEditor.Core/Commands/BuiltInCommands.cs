@@ -453,6 +453,9 @@ public static class BuiltInCommands
         new("compare.copyAllRight", "compare"),
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
+
+        // 比較の結果画面の「パッチを作成」(EDIT-42 の「呼び出し」。左を変換前、右を変換後にする)。
+        new("compare.createPatch", "compare") { Icon = "\uE8A5" },
         new("compare.saveReport", "compare"),
 
         // プロセスのスナップショットと比較 (ANA-09)。既定のキーはなし。
