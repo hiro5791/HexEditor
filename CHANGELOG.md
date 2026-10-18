@@ -16,3 +16,6 @@ The release workflow uses the section for the tagged version as the release note
 - Command line `hexed` (open, hash, dump, compare, find, convert, patch, template, run): results on standard output, exit codes, JSON output, `--wait`, `--unregister`.
 - Calculator with programmer mode, base and data type converter, floating-point visualizer, character code table, color picker and date and time converter (Tools menu).
 - Checksum files: create (GNU, BSD, per-file, SFV) and verify, with an InfoBar when you open one; folder comparison.
+- Printing with a live preview, and PDF export with searchable text and embedded font subsets (File menu).
+- File tools: split, join, interleave and deinterleave files of any size, and secure delete (Tools > File tools).
+- NTFS alternate data streams: list, open as documents, create, rename, delete, export and import.

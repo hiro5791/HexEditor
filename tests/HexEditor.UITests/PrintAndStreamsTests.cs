@@ -360,6 +360,32 @@ public sealed class PrintAndStreamsTests
     });
 
     [Fact]
+    public Task A_file_with_streams_can_be_announced_when_opened_if_the_setting_is_on() => UiTestContext.RunAsync(async ctx =>
+    {
+        if (!Ntfs(ctx))
+        {
+            return;
+        }
+
+        string path = TestDataCatalog.Generate("TD-ENG-ADS", Path.Combine(ctx.Root, "ads"));
+
+        // 既定 (オフ) では知らせない。
+        AppSession plain = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Hooks() });
+        await plain.IdleAsync();
+        Assert.DoesNotContain("alternate data stream", plain.NotificationsText(), StringComparison.OrdinalIgnoreCase);
+        await plain.DisposeAsync();
+
+        string profile = ctx.NewProfile();
+        File.WriteAllText(Path.Combine(profile, "settings.json"), "{\"$schemaVersion\": 1, \"files.adsNotice\": true}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Profile = profile, Hooks = Hooks() });
+        await app.WaitUntilAsync(() => Task.FromResult(app.NotificationsText().Contains("2 alternate data streams", StringComparison.Ordinal)),
+            UiTest.Scaled(TimeSpan.FromSeconds(20)), "the notice");
+        Assert.Equal("Show list", await app.UiaNameAsync("Notification_Action"));
+        await app.CommandAsync("Notification_Action");
+        await app.WaitUntilAsync(async () => (await Ads(app, "state"))["rows"]!.AsArray().Count == 3, UiTest.Scaled(TimeSpan.FromSeconds(15)), "the stream list");
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-TOOL-21-03")]
     [Trait(UiTest.TC, "TC-ENG-37-04")]
     public Task Volumes_without_named_streams_show_the_unsupported_message() => UiTestContext.RunAsync(async ctx =>
