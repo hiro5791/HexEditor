@@ -44,6 +44,7 @@ public sealed partial class YaraPanel : UserControl
     private readonly ListView _folderResults = new() { Visibility = Visibility.Collapsed };
     private readonly List<string> _paths = [];
     private CancellationTokenSource? _running;
+    private YaraSearch? _lastSearch;
 
     public YaraPanel()
     {
@@ -176,6 +177,14 @@ public sealed partial class YaraPanel : UserControl
         ["limitation"] = _limitation.Text,
         ["details"] = _details.Text,
         ["running"] = IsRunning,
+        ["scanned"] = _lastSearch?.Result is not null,
+        ["timedOut"] = _lastSearch?.Result?.TimedOut ?? false,
+        ["rules"] = new JsonArray([.. (_lastSearch?.Result?.Rules ?? []).Select(r => (JsonNode?)new JsonObject
+        {
+            ["rule"] = r.Rule.Name,
+            ["namespace"] = r.Rule.Namespace,
+            ["strings"] = new JsonArray([.. r.Strings.Select(x => (JsonNode?)new JsonObject { ["id"] = x.Identifier, ["offset"] = x.Offset + _lastSearch!.ScanOffset, ["length"] = x.Length })]),
+        })]),
         ["sets"] = new JsonArray([.. _ruleSet.Items.OfType<ComboBoxItem>().Select(i => (JsonNode?)(i.Content as string))]),
         ["folderResults"] = new JsonArray([.. _folderResults.Items.OfType<YaraFileMatch>().Select(m => (JsonNode?)new JsonObject
         {
@@ -496,6 +505,7 @@ public sealed partial class YaraPanel : UserControl
         (search, SearchResults results) = YaraSearch.Create(editor.Document.Current, offset, length, rules, options,
             new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting, MaxMatches = limit }, m => ShowDetails(search!.RowOf(m)));
         AppLog.Info($"YARA: scan ({rules.Rules.Count} rules)");
+        _lastSearch = search;
         try
         {
             await Results.RunAsync([new SearchTarget(editor, string.Empty, results)], Loc.Get("Yara_KindName"),

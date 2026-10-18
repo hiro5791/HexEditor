@@ -25,7 +25,14 @@ public sealed partial class MainWindow
                     ? new JsonObject { ["format"] = r.Format.ToString(), ["consumed"] = r.ConsumedInput, ["output"] = r.OutputLength }
                     : new JsonObject { ["format"] = null };
             case "yaraPanel":
-                return Yara.TestState();
+                if (request["show"]?.GetValue<bool>() == true)
+                {
+                    ShowPanel(YaraPanelId);
+                }
+
+                JsonObject yara = Yara.TestState();
+                yara["results"] = TestResultsOf(Yara.Results, request);
+                return yara;
             case "yaraSet":
                 Yara.TestSet(request["files"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(), request["externals"]?.GetValue<string>(),
                     request["scope"]?.GetValue<int>(), request["folder"]?.GetValue<string>());
