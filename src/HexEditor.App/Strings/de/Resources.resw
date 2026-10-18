@@ -5416,7 +5416,6 @@ Details wurden hier gespeichert:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Prozess-Snapshot erstellen</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Erstellen</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Snapshot {0} wird erstellt</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} Seiten ({1}) konnten nicht gelesen werden und sind nicht im Snapshot enthalten.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Der Snapshot konnte nicht erstellt oder gespeichert werden ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Der Zugriff auf den Prozessspeicher wurde verweigert.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Zum Lesen dieses Prozesses sind Administratorrechte erforderlich. Snapshot mit Administratorrechten erneut erstellen?</value></data>

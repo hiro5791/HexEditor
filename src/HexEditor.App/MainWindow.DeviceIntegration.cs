@@ -73,6 +73,10 @@ public sealed partial class MainWindow
                 ShowNotice(message, InfoBarSeverity.Warning, doc,
                     actions: [new NotificationAction(Loc.Get("Device_Reconnect"), () => _ = ReconnectDeviceAsync(doc, device))]);
                 break;
+            case Core.Remote.Gdb.GdbByteSource or Core.Remote.Sftp.SftpByteSource:
+                // GDB サーバー・SFTP の切断 (ENG-40 の仕様 8、ENG-41 の仕様 7): 「再接続」ボタンを出す。未保存の変更は残る。
+                LastDisconnectNotice = ShowRemoteDisconnected(doc);
+                break;
             default:
                 LastDisconnectNotice = Loc.Get("Process_Exited");
                 SetAutoRefresh(doc, null);

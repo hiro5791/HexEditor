@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Δημιουργία στιγμιότυπου διεργασίας</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Δημιουργία</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Δημιουργία στιγμιότυπου {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση {0} σελίδων ({1}) και δεν περιλαμβάνονται στο στιγμιότυπο.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Δεν ήταν δυνατή η δημιουργία ή η αποθήκευση του στιγμιότυπου ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Δεν επιτρέπεται η πρόσβαση στη μνήμη της διεργασίας.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Απαιτούνται δικαιώματα διαχειριστή για την ανάγνωση αυτής της διεργασίας. Να δημιουργηθεί ξανά το στιγμιότυπο με δικαιώματα διαχειριστή;</value></data>

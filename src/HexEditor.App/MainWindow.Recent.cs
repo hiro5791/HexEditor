@@ -122,6 +122,10 @@ public sealed partial class MainWindow
             case RecentItemKind.DiskImage:
                 OpenRecentDiskImage(item);
                 break;
+            case RecentItemKind.Sftp:
+                // SFTP のファイル (ENG-41 の仕様 8・9): 接続ダイアログを接続先を入れた状態で出す (パスワードは記録していない)。
+                await OpenSftpUriAsync(item.Path);
+                break;
             default:
                 if (item.Options is { RangeStart: { } start, RangeLength: { } length })
                 {

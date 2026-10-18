@@ -5416,7 +5416,6 @@ Chi tiết đã được ghi vào:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Tạo ảnh chụp nhanh tiến trình</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Tạo</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Đang tạo ảnh chụp nhanh {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Không thể đọc {0} trang ({1}) và chúng không có trong ảnh chụp nhanh.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Không thể tạo hoặc lưu ảnh chụp nhanh ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Bị từ chối truy cập bộ nhớ tiến trình.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Cần quyền quản trị viên để đọc tiến trình này. Tạo lại ảnh chụp nhanh với quyền quản trị viên?</value></data>

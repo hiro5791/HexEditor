@@ -159,6 +159,15 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
 
     public bool FocusContent() => _tab.SelectedIndex == 1 ? _modules.Focus(FocusState.Programmatic) : _regions.Focus(FocusState.Programmatic);
 
+    /// <summary>
+    /// 選んでいる領域・モジュールの範囲 (仮想アドレス)。スナップショットの「選んだ領域・モジュール」(ENG-35 の仕様 1) に使う。選んでいなければ null。
+    /// </summary>
+    internal (long Start, long Length)? SelectedRange =>
+        _tab.SelectedIndex == 1
+            ? _modules.SelectedItem is ModuleRow m && _shownModules.FirstOrDefault(x => x.BaseAddress == m.Address) is { } module
+                ? (module.BaseAddress, module.Size) : null
+            : _regions.SelectedItem is RegionRow r ? (r.Row.Start, r.Row.Size) : null;
+
     /// <summary>表示している領域の行 (テスト用)。</summary>
     internal IReadOnlyList<string> RegionTexts => [.. _shownRows.Select(r => r.Text)];
 

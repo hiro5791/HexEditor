@@ -39,6 +39,14 @@ public static class BuiltInCommands
         // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
         new("file.openDiskImage", "file"),
         new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
+
+        // プロセスのスナップショット・ミニダンプの保存 (ENG-35)、リモートに接続 (ENG-40〜ENG-42)、切断したリモートの再接続。既定のキーはなし。
+        new("file.saveProcessSnapshot", "file") { Condition = "documentOpen" },
+        new("file.saveMinidump", "file") { Condition = "documentOpen" },
+        new("file.connectGdb", "file"),
+        new("file.openSftp", "file"),
+        new("file.receiveUdp", "file"),
+        new("file.reconnect", "file") { Condition = "documentOpen" },
         new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen && !readOnly" },
         new("file.saveAs", "file") { Icon = IconSaveAs, DefaultBindings = [K("Ctrl+Shift+S")], Condition = "documentOpen" },
         new("file.saveAll", "file") { Condition = "documentOpen" },
@@ -329,6 +337,9 @@ public static class BuiltInCommands
 
         // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
         new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
+
+        // パケットのパネル (ENG-42)。UDP の受信のドキュメントで自動表示する。既定のキーはなし。
+        new("view.panel.packets", "view") { Condition = "documentOpen" },
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 

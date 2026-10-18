@@ -5416,7 +5416,6 @@ Detaliile au fost scrise în:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Creare instantaneu de proces</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Creare</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Se creează instantaneul {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Pagini care nu au putut fi citite și nu sunt incluse în instantaneu: {0} ({1}).</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Instantaneul nu a putut fi creat sau salvat ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Accesul la memoria procesului a fost refuzat.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Pentru citirea acestui proces sunt necesare drepturi de administrator. Creați din nou instantaneul cu drepturi de administrator?</value></data>

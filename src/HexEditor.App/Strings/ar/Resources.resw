@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>إنشاء لقطة للعملية</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>إنشاء</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>جارٍ إنشاء اللقطة {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>تعذرت قراءة {0} صفحات ({1}) ولم يتم تضمينها في اللقطة.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>تعذر إنشاء اللقطة أو حفظها ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>تم رفض الوصول إلى ذاكرة العملية.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>يلزم صلاحيات المسؤول لقراءة هذه العملية. هل تريد إنشاء اللقطة مرة أخرى بصلاحيات المسؤول؟</value></data>

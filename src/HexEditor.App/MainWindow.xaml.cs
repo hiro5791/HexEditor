@@ -274,6 +274,23 @@ public sealed partial class MainWindow : Window
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveCoreAsync(DocumentViewModel doc, bool saveAs)
     {
+        // UDP の受信 (ENG-42 の仕様 6): 受信したデータを 1 つのファイルに書き出す (ドキュメントは受信を続ける)。
+        if (doc.Udp is not null)
+        {
+            return await SaveUdpAsAsync(doc);
+        }
+
+        // GDB サーバーの対象のメモリ (ENG-40 の仕様 6。ENG-34 と同じ確認)・SFTP のリモートのファイル (ENG-41 の仕様 5) は専用の経路。
+        if (!saveAs && doc.Gdb is not null)
+        {
+            return await SaveGdbAsync(doc);
+        }
+
+        if (!saveAs && doc.Sftp is not null)
+        {
+            return await SaveSftpAsync(doc);
+        }
+
         // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
         if (!saveAs && doc.IsDevice)
         {

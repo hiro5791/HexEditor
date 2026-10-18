@@ -5416,7 +5416,6 @@ Detail ditulis ke:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Buat snapshot proses</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Buat</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Membuat snapshot {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} halaman ({1}) tidak dapat dibaca dan tidak ada di snapshot.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Snapshot tidak dapat dibuat atau disimpan ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Akses ke memori proses ditolak.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Hak administrator diperlukan untuk membaca proses ini. Buat ulang snapshot dengan hak administrator?</value></data>

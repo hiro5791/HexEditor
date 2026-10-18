@@ -5416,7 +5416,6 @@ Ayrıntılar şuraya yazıldı:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>İşlem anlık görüntüsü oluştur</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Oluştur</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>{0} anlık görüntüsü oluşturuluyor</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} sayfa ({1}) okunamadı ve anlık görüntüde yok.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Anlık görüntü oluşturulamadı veya kaydedilemedi ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>İşlem belleğine erişim reddedildi.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Bu işlemi okumak için yönetici hakları gerekir. Anlık görüntü yönetici haklarıyla yeniden oluşturulsun mu?</value></data>

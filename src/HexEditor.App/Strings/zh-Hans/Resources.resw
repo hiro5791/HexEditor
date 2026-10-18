@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>创建进程快照</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>创建</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>正在创建快照 {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>有 {0} 页（{1}）无法读取，未包含在快照中。</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>无法创建或保存快照（{0}）。</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>对进程内存的访问被拒绝。</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>读取此进程需要管理员权限。是否以管理员权限重新创建快照？</value></data>

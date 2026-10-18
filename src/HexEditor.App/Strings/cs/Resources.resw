@@ -5416,7 +5416,6 @@ Podrobnosti byly zapsány do:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Vytvořit snímek procesu</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Vytvořit</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Vytváření snímku {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>Stránky, které nelze přečíst a nejsou ve snímku: {0} ({1}).</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Snímek nelze vytvořit ani uložit ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Přístup k paměti procesu byl odepřen.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Ke čtení tohoto procesu jsou potřeba oprávnění správce. Vytvořit snímek znovu s oprávněními správce?</value></data>

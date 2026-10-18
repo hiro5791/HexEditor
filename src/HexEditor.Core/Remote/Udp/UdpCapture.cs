@@ -209,6 +209,27 @@ public sealed class UdpCapture : IDisposable
         }
     }
 
+    /// <summary>保持しているパケットの数 (一覧を写さずに数える。パケットの一覧のパネルの仮想化に使う)。</summary>
+    public int PacketCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _packets.Count;
+            }
+        }
+    }
+
+    /// <summary><paramref name="index"/> 番目のパケット (範囲外なら null)。</summary>
+    public UdpPacket? PacketAtIndex(int index)
+    {
+        lock (_lock)
+        {
+            return index >= 0 && index < _packets.Count ? _packets[index] : null;
+        }
+    }
+
     /// <summary>位置を含むパケット。</summary>
     public UdpPacket? PacketAt(long position)
     {

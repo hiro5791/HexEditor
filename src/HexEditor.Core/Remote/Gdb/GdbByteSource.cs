@@ -22,6 +22,24 @@ public sealed record GdbEndpoint
 
     /// <summary>表示用の「ホスト:ポート」。</summary>
     public string Display => Host.Contains(':') && !Host.StartsWith('[') ? $"[{Host}]:{Port}" : $"{Host}:{Port}";
+
+    /// <summary>セッションに記録する形 (<c>gdb://ホスト:ポート/?bits=64&amp;readonly=1</c>。ENG-40 の仕様 9。復元しても自動で接続しない)。</summary>
+    public string ToUri(bool readOnly) =>
+        $"gdb://{Display}/?bits={AddressBits.ToString(System.Globalization.CultureInfo.InvariantCulture)}&readonly={(readOnly ? 1 : 0)}";
+
+    /// <summary><see cref="ToUri"/> の形を読む。形が違えば null。</summary>
+    public static (GdbEndpoint Endpoint, bool ReadOnly)? TryParseUri(string? text)
+    {
+        if (text is null || !text.StartsWith("gdb://", StringComparison.OrdinalIgnoreCase) || !Uri.TryCreate(text, UriKind.Absolute, out Uri? uri)
+            || uri.Port <= 0)
+        {
+            return null;
+        }
+
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        int bits = query["bits"] == "32" ? 32 : 64;
+        return (new GdbEndpoint { Host = uri.Host.Trim('[', ']'), Port = uri.Port, AddressBits = bits }, query["readonly"] != "0");
+    }
 }
 
 /// <summary>

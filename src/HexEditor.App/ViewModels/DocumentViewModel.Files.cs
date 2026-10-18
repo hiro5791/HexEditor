@@ -49,13 +49,19 @@ public sealed partial class DocumentViewModel
     /// <summary>見つからないタブの文言「ファイルが見つかりません: &lt;パス&gt;」。</summary>
     public string MissingText => MissingPath is null ? string.Empty
         : IsMissingDisk ? Services.Loc.Format("Session_DiskNotOpened", MissingPath)
+        : IsMissingRemote ? Services.Loc.Format("Session_RemoteNotConnected", MissingPath)
         : Services.Loc.Format("Session_Missing", MissingPath);
 
     /// <summary>セッションのディスクのタブで、まだ開いていない (権限の確認を取り消した。UI-31 の仕様 5)。「開く」ボタンを出す。</summary>
     public bool IsMissingDisk => MissingRecord?.Kind == SessionTabKind.Disk;
 
+    /// <summary>
+    /// セッションのリモートのタブ (SFTP・GDB) で、まだ接続していない (復元では自動で接続しない。ENG-40・ENG-41 の仕様 9)。「接続」ボタンを出す。
+    /// </summary>
+    public bool IsMissingRemote => MissingRecord?.Kind == SessionTabKind.Remote;
+
     /// <summary>見つからないファイルのタブ (「場所を探す」を出す)。</summary>
-    public bool IsMissingFile => IsMissing && !IsMissingDisk;
+    public bool IsMissingFile => IsMissing && !IsMissingDisk && !IsMissingRemote;
 
     /// <summary>セッションの記録 (見つからないタブは、見つかるまで元の記録をそのまま残す)。</summary>
     public SessionTab? MissingRecord { get; init; }
@@ -91,12 +97,15 @@ public sealed partial class DocumentViewModel
 
         FileStamp? stamp = OpenedStamp;
         Core.Devices.DeviceByteSource? device = Device;
+
+        // リモートのタブ (SFTP・GDB) は接続先を記録し、復元では自動で接続しない (ENG-40・ENG-41 の仕様 9)。パスワードは記録しない。
+        string? remote = Sftp?.Uri.ToString() ?? Gdb?.Endpoint.ToUri(Document.IsReadOnly);
         return new SessionTab
         {
             // ディスク・ボリュームのタブも記録する (UI-31 の仕様 5。開き直すときに権限を確かめる)。プロセスメモリは無題と同じく記録しない。
-            Kind = device is not null ? SessionTabKind.Disk : IsProcessMemory ? SessionTabKind.Process
+            Kind = device is not null ? SessionTabKind.Disk : remote is not null ? SessionTabKind.Remote : IsProcessMemory ? SessionTabKind.Process
                 : FilePath is null ? SessionTabKind.Untitled : SessionTabKind.File,
-            Path = device?.Path ?? FilePath,
+            Path = device?.Path ?? remote ?? FilePath,
             DisplayName = DisplayName,
             Pinned = IsPinned,
             ReadOnly = Document.ReadOnlyReason is ReadOnlyReason.User or ReadOnlyReason.OpenedReadOnly,

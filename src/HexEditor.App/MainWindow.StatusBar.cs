@@ -234,6 +234,9 @@ public sealed partial class MainWindow
             // 変換ビュー (EDIT-45 の仕様 9): 有効な間は隠せない項目として出す。
             ["transform"] = doc?.Document.ViewTransform is not null,
 
+            // リモートの接続先と接続状態 (ENG-40・ENG-41)、UDP の受信数と受信量 (ENG-42): リモートのドキュメントでは必ず示す。
+            ["remote"] = doc?.RemoteStatusText is { Length: > 0 },
+
             // プロセスメモリの即時書き込み (ENG-34): オンの間は必ず示す (利用者が隠せる項目にしない)。
             ["immediate"] = doc?.ImmediateWriteText is { Length: > 0 },
 
@@ -249,7 +252,7 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "transform" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "transform" or "remote" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusTransform.Content = doc?.Document.ViewTransform is { } transform ? Controls.HexView.TransformViewLabel(transform) : string.Empty;

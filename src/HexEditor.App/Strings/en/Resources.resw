@@ -5416,7 +5416,6 @@ Details were written to:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Create a process snapshot</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Create</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Creating snapshot {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} pages ({1}) could not be read and are not in the snapshot.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>The snapshot could not be created or saved ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Access to the process memory was denied.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Administrator rights are needed to read this process. Create the snapshot again with administrator rights?</value></data>
@@ -6833,4 +6832,173 @@ The file was not changed.</value></data>
   <data name="Patch_NoCompare" xml:space="preserve"><value>Open a comparison first.</value></data>
   <data name="Patch_NoSpace" xml:space="preserve"><value>There is not enough free space to write the patch: it needs about {0}, but only {1} is free.</value></data>
   <data name="TransformView_NoLinkedView" xml:space="preserve"><value>A linked view cannot be opened while a transform view is active. Clear the transform view first, or open the range as a copy.</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>Connect to Remote</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB Server...</value></data>
+  <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP...</value></data>
+  <data name="Menu_File_OpenSftp.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReceiveUdp.Text" xml:space="preserve"><value>Receive UDP...</value></data>
+  <data name="Menu_File_ReceiveUdp.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveSnapshot.Text" xml:space="preserve"><value>Save Snapshot...</value></data>
+  <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>Save as Minidump...</value></data>
+  <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>Packets</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>Save process snapshot...</value></data>
+  <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>snapshot hexsnap dump memory</value></data>
+  <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>Save as minidump...</value></data>
+  <data name="CmdAlias_file_saveMinidump" xml:space="preserve"><value>dump dmp windbg debugger</value></data>
+  <data name="Cmd_file_connectGdb" xml:space="preserve"><value>Connect to GDB server...</value></data>
+  <data name="CmdAlias_file_connectGdb" xml:space="preserve"><value>gdb remote qemu openocd gdbserver</value></data>
+  <data name="Cmd_file_openSftp" xml:space="preserve"><value>Open with SFTP...</value></data>
+  <data name="CmdAlias_file_openSftp" xml:space="preserve"><value>ssh sftp remote server</value></data>
+  <data name="Cmd_file_receiveUdp" xml:space="preserve"><value>Receive UDP...</value></data>
+  <data name="CmdAlias_file_receiveUdp" xml:space="preserve"><value>udp network packet datagram listen</value></data>
+  <data name="Cmd_file_reconnect" xml:space="preserve"><value>Reconnect</value></data>
+  <data name="CmdAlias_file_reconnect" xml:space="preserve"><value>remote reconnect disconnected</value></data>
+  <data name="Cmd_view_panel_packets" xml:space="preserve"><value>Packets panel</value></data>
+  <data name="CmdAlias_view_panel_packets" xml:space="preserve"><value>udp packet list</value></data>
+  <data name="Set_remote_gdb_timeoutSeconds" xml:space="preserve"><value>GDB server request timeout (seconds)</value></data>
+  <data name="SetDesc_remote_gdb_timeoutSeconds" xml:space="preserve"><value>If the GDB server does not answer a request within this time, the connection is treated as disconnected.</value></data>
+  <data name="Set_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>Confirm before writing only the changed ranges over SFTP</value></data>
+  <data name="SetDesc_remote_sftp_confirmPartialWrite" xml:space="preserve"><value>If the connection drops while saving, only part of the remote file may have been rewritten.</value></data>
+  <data name="Set_remote_udp_followEnd" xml:space="preserve"><value>Follow the end while receiving UDP</value></data>
+  <data name="SetDesc_remote_udp_followEnd" xml:space="preserve"><value>When the cursor is at the end of a UDP document, scroll to new data as it arrives.</value></data>
+  <data name="Remote_StateConnected" xml:space="preserve"><value>connected</value></data>
+  <data name="Remote_StateConnecting" xml:space="preserve"><value>connecting</value></data>
+  <data name="Remote_StateDisconnected" xml:space="preserve"><value>disconnected</value></data>
+  <data name="Remote_StatusGdb" xml:space="preserve"><value>GDB {0} ({1})</value></data>
+  <data name="Remote_StatusSftp" xml:space="preserve"><value>SFTP {0} ({1})</value></data>
+  <data name="Remote_StatusUdp" xml:space="preserve"><value>UDP {0}: {1, plural, one {# packet} other {# packets}}, {2} ({3})</value></data>
+  <data name="Remote_Disconnected" xml:space="preserve"><value>The connection to {0} was lost. Unsaved changes are kept.</value></data>
+  <data name="Remote_Reconnect" xml:space="preserve"><value>Reconnect</value></data>
+  <data name="Remote_Reconnected" xml:space="preserve"><value>Reconnected.</value></data>
+  <data name="Remote_ReconnectFailed" xml:space="preserve"><value>Could not reconnect: {0}</value></data>
+  <data name="Remote_AlreadyConnected" xml:space="preserve"><value>The remote target is connected.</value></data>
+  <data name="Remote_NotRemote" xml:space="preserve"><value>Available only for GDB server and SFTP documents.</value></data>
+  <data name="Session_RemoteNotConnected" xml:space="preserve"><value>Not connected: {0}</value></data>
+  <data name="Session_ConnectRemote.Content" xml:space="preserve"><value>Connect</value></data>
+  <data name="Capture_SnapshotTitle" xml:space="preserve"><value>Save snapshot</value></data>
+  <data name="Capture_MinidumpTitle" xml:space="preserve"><value>Save as minidump</value></data>
+  <data name="Capture_Scope" xml:space="preserve"><value>Regions to include</value></data>
+  <data name="Capture_ScopeAll" xml:space="preserve"><value>All readable regions</value></data>
+  <data name="Capture_ScopeSelected" xml:space="preserve"><value>Region or module selected in the memory map</value></data>
+  <data name="Capture_ScopeWritable" xml:space="preserve"><value>Writable regions only</value></data>
+  <data name="Capture_Pause" xml:space="preserve"><value>Pause the process while capturing</value></data>
+  <data name="Capture_Path" xml:space="preserve"><value>Save to</value></data>
+  <data name="Capture_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="Capture_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Capture_SavingSnapshot" xml:space="preserve"><value>Saving snapshot {0}</value></data>
+  <data name="Capture_SavingMinidump" xml:space="preserve"><value>Saving minidump {0}</value></data>
+  <data name="Capture_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Capture_Cancelled" xml:space="preserve"><value>Cancelled. The partial file was deleted.</value></data>
+  <data name="Capture_ProcessExited" xml:space="preserve"><value>The process exited during the capture. The capture was stopped and the partial file was deleted.</value></data>
+  <data name="Capture_Error" xml:space="preserve"><value>Could not save: {0}</value></data>
+  <data name="Capture_PauseFailed" xml:space="preserve"><value>The process could not be paused, so it was captured while running. The content may be inconsistent.</value></data>
+  <data name="Capture_Unreadable" xml:space="preserve"><value>{0, plural, one {# region} other {# regions}} ({1} in total) could not be read.</value></data>
+  <data name="FileType_Minidump" xml:space="preserve"><value>Minidump</value></data>
+  <data name="Snapshot_SaveAsGuide" xml:space="preserve"><value>Process memory cannot be saved as a file. Use File &gt; Export &gt; Save Snapshot.</value></data>
+  <data name="Gdb_Title" xml:space="preserve"><value>Connect to GDB server</value></data>
+  <data name="Gdb_Host" xml:space="preserve"><value>Host</value></data>
+  <data name="Gdb_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Gdb_AddressWidth" xml:space="preserve"><value>Address width</value></data>
+  <data name="Gdb_Width32" xml:space="preserve"><value>32 bit</value></data>
+  <data name="Gdb_Width64" xml:space="preserve"><value>64 bit</value></data>
+  <data name="Gdb_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
+  <data name="Gdb_Note" xml:space="preserve"><value>Reads and writes target memory only. Execution control (stop, resume, breakpoints) is not used.</value></data>
+  <data name="Gdb_Connect" xml:space="preserve"><value>Connect</value></data>
+  <data name="Gdb_Connecting" xml:space="preserve"><value>Connecting to {0}...</value></data>
+  <data name="Gdb_ConnectFailed" xml:space="preserve"><value>Could not connect to the GDB server ({0}, {1}).</value></data>
+  <data name="Gdb_ProtocolError" xml:space="preserve"><value>The reply from the GDB server could not be interpreted. Disconnected.</value></data>
+  <data name="Gdb_WriteBody" xml:space="preserve"><value>Write {1, plural, one {# byte} other {# bytes}} to the memory of the target on the GDB server {0}?</value></data>
+  <data name="Gdb_ImmediateConfirm" xml:space="preserve"><value>Turn on immediate write? Every edit is written to the memory of the target on {0} right away.</value></data>
+  <data name="Gdb_WriteDisconnected" xml:space="preserve"><value>The connection to {0} was lost, so some changes were not written.</value></data>
+  <data name="Gdb_WriteRejected" xml:space="preserve"><value>The target rejected the write</value></data>
+  <data name="Gdb_SaveAsUnavailable" xml:space="preserve"><value>The whole address space of a GDB target cannot be saved as a file. Use File &gt; Save Selection.</value></data>
+  <data name="Sftp_Title" xml:space="preserve"><value>Open with SFTP</value></data>
+  <data name="Sftp_Host" xml:space="preserve"><value>Host</value></data>
+  <data name="Sftp_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Sftp_User" xml:space="preserve"><value>User name</value></data>
+  <data name="Sftp_Method" xml:space="preserve"><value>Authentication</value></data>
+  <data name="Sftp_MethodPassword" xml:space="preserve"><value>Password</value></data>
+  <data name="Sftp_MethodKeyFile" xml:space="preserve"><value>Key file</value></data>
+  <data name="Sftp_MethodAgent" xml:space="preserve"><value>SSH agent (OpenSSH agent, Pageant)</value></data>
+  <data name="Sftp_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Sftp_KeyFile" xml:space="preserve"><value>Key file</value></data>
+  <data name="Sftp_Passphrase" xml:space="preserve"><value>Passphrase (if the key has one)</value></data>
+  <data name="Sftp_Save" xml:space="preserve"><value>Save the password in Windows Credential Manager</value></data>
+  <data name="Sftp_Connect" xml:space="preserve"><value>Connect</value></data>
+  <data name="Sftp_Connecting" xml:space="preserve"><value>Connecting to {0}...</value></data>
+  <data name="Sftp_AuthFailed" xml:space="preserve"><value>Authentication failed for {0}. Check the user name and the password or key.</value></data>
+  <data name="Sftp_ConnectFailed" xml:space="preserve"><value>Could not connect to {0} ({1}).</value></data>
+  <data name="Sftp_PermissionDenied" xml:space="preserve"><value>Permission denied: {0}</value></data>
+  <data name="Sftp_NotFound" xml:space="preserve"><value>The remote file was not found: {0}</value></data>
+  <data name="Sftp_OpenFailed" xml:space="preserve"><value>Could not open {0}: {1}</value></data>
+  <data name="Sftp_HostKeyUnknownTitle" xml:space="preserve"><value>Unknown host</value></data>
+  <data name="Sftp_HostKeyUnknownBody" xml:space="preserve"><value>This is the first connection to {0}.
+
+Host key type: {1}
+SHA-256 fingerprint: {2}
+
+Connect only if the fingerprint matches the server.</value></data>
+  <data name="Sftp_HostKeyTrust" xml:space="preserve"><value>Trust and connect</value></data>
+  <data name="Sftp_HostKeyChangedTitle" xml:space="preserve"><value>Warning: the host key has changed</value></data>
+  <data name="Sftp_HostKeyChangedBody" xml:space="preserve"><value>The host key of {0} is different from the key you trusted before. Someone may be intercepting the connection.
+
+New host key type: {1}
+New SHA-256 fingerprint: {2}
+
+Previously trusted: {3} {4}
+
+The connection is not made unless you choose to replace the key.</value></data>
+  <data name="Sftp_HostKeyReplace" xml:space="preserve"><value>Replace the key and connect</value></data>
+  <data name="SftpPicker_Title" xml:space="preserve"><value>Choose a remote file ({0})</value></data>
+  <data name="SftpPicker_Path" xml:space="preserve"><value>Folder</value></data>
+  <data name="SftpPicker_List" xml:space="preserve"><value>Files</value></data>
+  <data name="SftpPicker_Up" xml:space="preserve"><value>Up</value></data>
+  <data name="SftpPicker_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="SftpPicker_ListFailed" xml:space="preserve"><value>Could not list the folder: {0}</value></data>
+  <data name="Sftp_SaveTitle" xml:space="preserve"><value>Save to the remote file</value></data>
+  <data name="Sftp_PartialWriteBody" xml:space="preserve"><value>Only the changed ranges are written. If the connection drops while saving, only part of the remote file may be rewritten.</value></data>
+  <data name="Sftp_PartialWriteSkip" xml:space="preserve"><value>Do not ask again</value></data>
+  <data name="Sftp_SaveWrite" xml:space="preserve"><value>Save</value></data>
+  <data name="Sftp_Saving" xml:space="preserve"><value>Saving {0}</value></data>
+  <data name="Sftp_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Sftp_SavePermission" xml:space="preserve"><value>You do not have permission to write {0}.</value></data>
+  <data name="Sftp_SavePartial" xml:space="preserve"><value>The connection was lost while saving. Part of the remote file may have been rewritten. Your changes are kept.</value></data>
+  <data name="Sftp_SaveDisconnected" xml:space="preserve"><value>The connection was lost while saving. The remote file was not replaced. Your changes are kept.</value></data>
+  <data name="Sftp_SaveFailed" xml:space="preserve"><value>Could not save: {0}</value></data>
+  <data name="Sftp_Changed" xml:space="preserve"><value>The remote file {0} was changed by another program.</value></data>
+  <data name="Sftp_ChangedModified" xml:space="preserve"><value>The remote file {0} was changed by another program. Reloading discards your changes.</value></data>
+  <data name="Sftp_Reload" xml:space="preserve"><value>Reload</value></data>
+  <data name="Udp_Title" xml:space="preserve"><value>Receive UDP</value></data>
+  <data name="Udp_Address" xml:space="preserve"><value>Listen on</value></data>
+  <data name="Udp_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Udp_PortPlaceholder" xml:space="preserve"><value>1-65535</value></data>
+  <data name="Udp_LimitMiB" xml:space="preserve"><value>Maximum to keep (MiB, 1-{0})</value></data>
+  <data name="Udp_FirewallNote" xml:space="preserve"><value>Listening on an address other than 127.0.0.1 may show a Windows Firewall prompt.</value></data>
+  <data name="Udp_ReceiveOnly" xml:space="preserve"><value>Only receives. Nothing is sent.</value></data>
+  <data name="Udp_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Udp_TabName" xml:space="preserve"><value>UDP {0}</value></data>
+  <data name="Udp_PortInUse" xml:space="preserve"><value>Port {0} is in use by another app.</value></data>
+  <data name="Udp_StartFailed" xml:space="preserve"><value>Could not start receiving: {0}</value></data>
+  <data name="Udp_LimitReached" xml:space="preserve"><value>Recording stopped because the limit ({0}) was reached.</value></data>
+  <data name="Udp_DiscardOld" xml:space="preserve"><value>Discard old data and continue</value></data>
+  <data name="Udp_StateReceiving" xml:space="preserve"><value>receiving</value></data>
+  <data name="Udp_StatePaused" xml:space="preserve"><value>paused</value></data>
+  <data name="Udp_StateLimit" xml:space="preserve"><value>limit reached</value></data>
+  <data name="Udp_StateStopped" xml:space="preserve"><value>stopped</value></data>
+  <data name="Udp_Saved" xml:space="preserve"><value>Saved the received data to {0}.</value></data>
+  <data name="Udp_SaveFailed" xml:space="preserve"><value>Could not save: {0}</value></data>
+  <data name="Panel_Packets_Title" xml:space="preserve"><value>Packets</value></data>
+  <data name="Packets_List" xml:space="preserve"><value>Packets</value></data>
+  <data name="Packets_Pause" xml:space="preserve"><value>Pause</value></data>
+  <data name="Packets_Resume" xml:space="preserve"><value>Resume</value></data>
+  <data name="Packets_Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Packets_ExportCsv" xml:space="preserve"><value>Export CSV...</value></data>
+  <data name="Packets_ExportJson" xml:space="preserve"><value>Export JSON...</value></data>
+  <data name="Packets_Exported" xml:space="preserve"><value>Exported {0}.</value></data>
+  <data name="Packets_NotUdp" xml:space="preserve"><value>Open a UDP receive document (File &gt; Connect to Remote &gt; Receive UDP) to see its packets.</value></data>
 </root>

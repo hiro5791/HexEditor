@@ -5416,7 +5416,6 @@
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>프로세스 스냅숏 만들기</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>만들기</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>스냅숏 {0} 만드는 중</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0}개 페이지({1})를 읽을 수 없어 스냅숏에 포함되지 않았습니다.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>스냅숏을 만들거나 저장할 수 없습니다({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>프로세스 메모리에 대한 액세스가 거부되었습니다.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>이 프로세스를 읽으려면 관리자 권한이 필요합니다. 관리자 권한으로 스냅숏을 다시 만드시겠습니까?</value></data>

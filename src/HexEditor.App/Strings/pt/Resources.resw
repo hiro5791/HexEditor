@@ -5416,7 +5416,6 @@ Os detalhes foram gravados em:
   <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Criar um instantâneo do processo</value></data>
   <data name="Snapshot_Create" xml:space="preserve"><value>Criar</value></data>
   <data name="Snapshot_Creating" xml:space="preserve"><value>Criando o instantâneo {0}</value></data>
-  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} páginas ({1}) não puderam ser lidas e não estão no instantâneo.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>Não foi possível criar ou salvar o instantâneo ({0}).</value></data>
   <data name="Snapshot_AccessDenied" xml:space="preserve"><value>O acesso à memória do processo foi negado.</value></data>
   <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>São necessários direitos de administrador para ler este processo. Criar o instantâneo novamente com direitos de administrador?</value></data>
