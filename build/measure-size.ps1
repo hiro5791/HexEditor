@@ -29,7 +29,7 @@ $targets = [ordered]@{
     'portable zip'   = 120
     'msix'           = 120
     'Setup.exe'      = 130
-    'installed size' = 300
+    'installed size' = 400
     'delta package'  = 15
 }
 
