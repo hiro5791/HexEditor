@@ -117,7 +117,7 @@ public sealed class PackagingTests
 
         // この版をスキップ: 設定に記録され、自動の確認では出ない。
         await app.SendAsync("updateButton", new JsonObject { ["button"] = "Skip" });
-        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(Path.Combine(profile, "settings.json")).Contains("\"update.skippedVersion\": \"0.9.1\"")),
+        await app.WaitUntilAsync(() => Task.FromResult(UiHelpers.ReadWhileWritten(Path.Combine(profile, "settings.json")).Contains("\"update.skippedVersion\": \"0.9.1\"")),
             TimeSpan.FromSeconds(5), "the skipped version in settings.json");
         state = await app.SendAsync("updateCheck", new JsonObject { ["manual"] = false });
         Assert.False(state["barVisible"]!.GetValue<bool>());
@@ -270,7 +270,7 @@ public sealed class PackagingTests
         // スイッチも切れる。
         (await app.WaitForAsync("Settings_NetworkSwitch_Downloads")).Patterns.Toggle.Pattern.Toggle();
         await app.WaitUntilAsync(() => Task.FromResult(File.Exists(Path.Combine(profile, "settings.json"))
-            && File.ReadAllText(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
+            && UiHelpers.ReadWhileWritten(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
             TimeSpan.FromSeconds(5), "network.downloads.enabled = false in settings.json");
         await app.WaitUntilAsync(async () => !AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_Components")),
             TimeSpan.FromSeconds(5), "the Components switch to follow");
