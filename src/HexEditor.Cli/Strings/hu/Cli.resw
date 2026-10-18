@@ -257,6 +257,7 @@ PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek köz�
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>nem érvényes szám</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>az adatok itt nem olvashatók</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>nem érhető el a parancssorban</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>az érték nem egész szám</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>A --format gnu pontosan egy algoritmust igényel. Többhöz használja a --format bsd vagy text kapcsolót.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>A --range nem használható szabványos bemenettel.</value></data>
@@ -303,7 +304,6 @@ PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek köz�
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>A -o és a --in-place nem használható együtt.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>A(z) {0} kimeneti útvonal a célfájl vagy a javítás. A célfájl lecseréléséhez használja a --in-place kapcsolót.</value></data>
   <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>A --format {0} nem javítási formátum. Használja az auto, ips vagy ips32 értéket.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: az UPS, BPS és .hexpatch javítások ebben a verzióban nem támogatottak. Az IPS és az IPS32 igen.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>A(z) {0} nem felismerhető javítófájl.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: a javítás sérült a(z) {1}. rekordnál (fájleltolás: {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>A(z) {0} nem {1} javítás.</value></data>
@@ -312,6 +312,10 @@ PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek köz�
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>A javított {0} kivonata nem a várt (--verify-after). Semmi sem íródott.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>Alkalmazott rekordok: {0}, módosított bájtok: {1}, hosszváltozás: {2}. Kiírva: {3}.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>formátum</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: a patch sérült a(z) {1}. rekordnál.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: a patch sérült ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>A(z) {0} lehet, hogy másik fájlhoz készült: a patch-ben rögzített eredeti nem egyezik a(z) {1} fájllal. Semmi sem lett beírva.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>A(z) {0} alkalmazásának eredménye nem egyezik a patch-ben rögzített eredménnyel. Semmi sem lett beírva.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>rekordok: {0}, módosuló bájtok: {1}, hosszváltozás: {2}, új hossz: {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Adja meg a --template és az --auto közül pontosan az egyiket.</value></data>
