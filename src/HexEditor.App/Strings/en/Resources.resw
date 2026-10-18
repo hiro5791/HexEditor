@@ -7047,4 +7047,5 @@ The file was not changed.</value></data>
   <data name="Yara_Column_Tags" xml:space="preserve"><value>Tags</value></data>
   <data name="Yara_Column_Meta" xml:space="preserve"><value>Meta</value></data>
   <data name="Yara_Column_String" xml:space="preserve"><value>String</value></data>
+  <data name="Codec_Error_Failed" xml:space="preserve"><value>The operation failed: {0}</value></data>
 </root>

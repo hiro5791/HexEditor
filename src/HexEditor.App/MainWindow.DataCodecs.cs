@@ -37,14 +37,29 @@ public sealed partial class MainWindow
 
     private void RegisterDataCodecCommands()
     {
-        Commands.Register("data.encrypt", () => CipherAsync(encrypt: true), () => NeedsDocument());
-        Commands.Register("data.decrypt", () => CipherAsync(encrypt: false), () => NeedsDocument());
-        Commands.Register("data.compress", CompressAsync, () => NeedsDocument());
-        Commands.Register("data.decompress", () => DecompressAsync(null), () => NeedsDocument());
-        Commands.Register("data.selectCompressed", SelectCompressedAsync, () => NeedsDocument());
-        Commands.Register("data.derived.writeBack", WriteBackAsync,
+        Commands.Register("data.encrypt", Guard(() => CipherAsync(encrypt: true)), () => NeedsDocument());
+        Commands.Register("data.decrypt", Guard(() => CipherAsync(encrypt: false)), () => NeedsDocument());
+        Commands.Register("data.compress", Guard(CompressAsync), () => NeedsDocument());
+        Commands.Register("data.decompress", Guard(() => DecompressAsync(null)), () => NeedsDocument());
+        Commands.Register("data.selectCompressed", Guard(SelectCompressedAsync), () => NeedsDocument());
+        Commands.Register("data.derived.writeBack", Guard(WriteBackAsync),
             () => NeedsDocument(d => d.Derived is null ? Loc.Get("Derived_NotDerived") : d.Derived.IsDetached ? Loc.Get("Derived_ParentClosed") : null));
     }
+
+    /// <summary>想定外の失敗 (ライブラリの誤りなど) を InfoBar で示し、アプリを止めない。</summary>
+    private Func<Task> Guard(Func<Task> body) => async () =>
+    {
+        try
+        {
+            await body();
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or InvalidDataException or System.Security.Cryptography.CryptographicException
+            or ArgumentException or IOException or NotSupportedException or DllNotFoundException or EntryPointNotFoundException or OutOfMemoryException)
+        {
+            AppLog.Warning($"Data codec command failed: {ex.GetType().Name}");
+            ShowNotice(Loc.Format("Codec_Error_Failed", ex.Message), InfoBarSeverity.Error, Vm.Selected);
+        }
+    };
 
     internal static string CompressionFormatName(CompressionFormat format) => Loc.Get("Compression_Format_" + format);
 

@@ -516,9 +516,10 @@ public sealed partial class YaraPanel : UserControl
             ShowScanStatus(search.Result, search.Rows.Select(r => r.Rule).Distinct().Count());
             Scanned?.Invoke(this, (editor, search, offset));
         }
-        catch (Exception e) when (e is IOException or OutOfMemoryException or InvalidOperationException)
+        catch (Exception e) when (e is not OperationCanceledException)
         {
-            // YARA の内部エラー (読み込みの失敗・メモリ不足など)。エラーの種類と説明を示す (「エラー」)。
+            // YARA の内部エラー (読み込みの失敗・メモリ不足など)。エラーの種類と説明を示す (「エラー」)。ルールは信頼できない入力のため、
+            // 照合の失敗でアプリを止めない。
             _status.Text = Loc.Format("Yara_InternalError", e.GetType().Name, e.Message);
         }
         finally
@@ -621,9 +622,10 @@ public sealed partial class YaraPanel : UserControl
                             break;
                         }
                     }
-                    catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+                    catch (Exception e) when (e is not OperationCanceledException)
                     {
-                        AppLog.Info($"YARA: skipped {Path.GetFileName(path)}: {e.GetType().Name}");
+                        // 読めないファイル・照合の失敗は飛ばして続ける。
+                        AppLog.Info($"YARA: skipped a file: {e.GetType().Name}");
                     }
                 }
             }, cts.Token);
