@@ -569,6 +569,18 @@ public static class BuiltInCommands
         new("scripting.pause", "scripting") { Condition = "scriptEditor" },
         new("scripting.clearOutput", "scripting"),
 
+        // ---- ツール: 電卓・変換・参照ツール (11 の TOOL-22〜TOOL-28)、チェックサムファイル・フォルダの比較 (TOOL-18〜TOOL-20)。既定のショートカットはなし ----
+        new("tools.calculator", "tools"),
+        new("tools.calculator.programmer", "tools"),
+        new("tools.converter", "tools"),
+        new("tools.floatVisualizer", "tools"),
+        new("tools.charTable", "tools"),
+        new("tools.colorPicker", "tools"),
+        new("tools.dateTime", "tools"),
+        new("tools.checksum.create", "fileTools"),
+        new("tools.checksum.verify", "fileTools"),
+        new("tools.folderCompare", "fileTools"),
+
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
         new("macro.playLast", "macro"),

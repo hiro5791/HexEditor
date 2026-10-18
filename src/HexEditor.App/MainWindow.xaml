@@ -391,6 +391,19 @@
                             <MenuFlyoutItem x:Uid="Menu_Tools_Plugins_Manage" cmd:CommandUi.Id="plugins.manage" AutomationProperties.AutomationId="Command_PluginsManage" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
+                        <!--  電卓と変換・参照ツール (11 の TOOL-22〜TOOL-28)、ファイルツール (チェックサムファイル・フォルダの比較。TOOL-18〜TOOL-20)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Calculator" cmd:CommandUi.Id="tools.calculator" AutomationProperties.AutomationId="Command_Calculator" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Converter" cmd:CommandUi.Id="tools.converter" AutomationProperties.AutomationId="Command_Converter" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_FloatVisualizer" cmd:CommandUi.Id="tools.floatVisualizer" AutomationProperties.AutomationId="Command_FloatVisualizer" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_CharTable" cmd:CommandUi.Id="tools.charTable" AutomationProperties.AutomationId="Command_CharTable" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_ColorPicker" cmd:CommandUi.Id="tools.colorPicker" AutomationProperties.AutomationId="Command_ColorPicker" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_DateTime" cmd:CommandUi.Id="tools.dateTime" AutomationProperties.AutomationId="Command_DateTime" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Tools_FileTools" AutomationProperties.AutomationId="Menu_Tools_FileTools">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumCreate" cmd:CommandUi.Id="tools.checksum.create" AutomationProperties.AutomationId="Command_ChecksumCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumVerify" cmd:CommandUi.Id="tools.checksum.verify" AutomationProperties.AutomationId="Command_ChecksumVerify" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_FolderCompare" cmd:CommandUi.Id="tools.folderCompare" AutomationProperties.AutomationId="Command_FolderCompare" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">

@@ -70,6 +70,7 @@ public sealed partial class MainWindow
     {
         if (_closingConfirmed)
         {
+            DetachTools();
             WindowManager.Unregister(this);
             return;
         }

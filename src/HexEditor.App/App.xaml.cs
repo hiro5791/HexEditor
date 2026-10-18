@@ -140,6 +140,7 @@ public partial class App : Application
         MainWindow.RegisterStatisticsPanels(env.Locations.Settings);
         MainWindow.LoadCustomCrcs();
         MainWindow.RegisterAnnotationPanels();
+        MainWindow.RegisterToolsCalcPanels();
         MainWindow.RegisterSearchResultsPanel();
         MainWindow.RegisterSelectionPanels();
         MainWindow.RegisterFormatIssuesPanel();

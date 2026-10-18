@@ -241,6 +241,7 @@ public sealed partial class MainWindow
 
         // ---- 解析 ----
         RegisterHashCommands();
+        RegisterToolsCalcCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
         RegisterTemplateCommands();

@@ -218,6 +218,7 @@ public sealed partial class MainWindow : Window
 
         ApplyEditorSettings();
         UpdateSelectedViews();
+        OnToolDocumentChanged();
         UpdateTitle();
         UpdateCommandStates();
         UpdateEncodingMenu();
