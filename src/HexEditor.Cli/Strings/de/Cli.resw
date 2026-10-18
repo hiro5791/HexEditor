@@ -166,13 +166,13 @@ Setzen Sie in PowerShell Werte mit $ in einfache Anführungszeichen (zum Beispie
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Verwendung: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Wendet eine Patchdatei auf eine Datei an. Entweder -o oder --in-place ist erforderlich. Diese Version wendet IPS-
-und IPS32-Patches an.
+Wendet eine Patchdatei auf eine Datei an. Entweder -o oder --in-place ist erforderlich. Diese Version wendet IPS-,
+IPS32-, UPS-, BPS- und .hexpatch-Patches an.
 
 Optionen:
   -o, --output &lt;path&gt;       Die gepatchte Datei hierhin schreiben (das Ziel bleibt unverändert)
       --in-place            Das Ziel sicher ersetzen (zuerst wird eine temporäre Datei geschrieben)
-      --format &lt;f&gt;          auto (Standard), ips oder ips32
+      --format &lt;f&gt;          auto (Standard), ips, ips32, ups, bps oder hexpatch
       --verify-before &lt;a:v&gt; Zuerst den Hash des Ziels prüfen (zum Beispiel sha256:ab12...);
                             Exitcode 1, und es wird nichts geschrieben, wenn er abweicht
       --verify-after &lt;a:v&gt;  Den Hash des Ergebnisses vor dem Schreiben prüfen

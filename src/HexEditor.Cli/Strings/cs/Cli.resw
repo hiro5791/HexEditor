@@ -167,12 +167,12 @@ V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (napří
   <data name="Cli_Help_patch" xml:space="preserve"><value>Použití: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
 Použije soubor záplaty na soubor. Je vyžadována jedna z voleb -o a --in-place. Tato verze
-používá záplaty IPS a IPS32.
+používá záplaty IPS, IPS32, UPS, BPS a .hexpatch.
 
 Volby:
   -o, --output &lt;path&gt;       Zapsat opravený soubor sem (cílový soubor se nemění)
       --in-place            Bezpečně nahradit cílový soubor (nejprve se zapíše dočasný soubor)
-      --format &lt;f&gt;          auto (výchozí), ips nebo ips32
+      --format &lt;f&gt;          auto (výchozí), ips, ips32, ups, bps nebo hexpatch
       --verify-before &lt;a:v&gt; Nejprve zkontrolovat hash cílového souboru (například sha256:ab12...);
                             při rozdílu návratový kód 1 a nic se nezapíše
       --verify-after &lt;a:v&gt;  Zkontrolovat hash výsledku před zápisem

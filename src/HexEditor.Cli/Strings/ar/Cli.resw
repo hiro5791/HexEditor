@@ -159,12 +159,12 @@
   <data name="Cli_Help_patch" xml:space="preserve"><value>الاستخدام: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [الخيارات]
 
 يطبّق ملف تصحيح على ملف. أحد الخيارين -o و--in-place مطلوب. يطبّق هذا الإصدار تصحيحات IPS
-وIPS32.
+وIPS32 وUPS وBPS و.hexpatch.
 
 الخيارات:
   -o, --output &lt;path&gt;       يكتب الملف المصحَّح هنا (لا يتغير الهدف)
       --in-place            يستبدل الهدف بأمان (يُكتب ملف مؤقت أولًا)
-      --format &lt;f&gt;          auto (الافتراضي) أو ips أو ips32
+      --format &lt;f&gt;          auto (الافتراضي) أو ips أو ips32 أو ups أو bps أو hexpatch
       --verify-before &lt;a:v&gt; يتحقق من تجزئة الهدف أولًا (مثل sha256:ab12...)؛
                             رمز الخروج 1 ولا يُكتب شيء إذا اختلفت
       --verify-after &lt;a:v&gt;  يتحقق من تجزئة النتيجة قبل كتابتها

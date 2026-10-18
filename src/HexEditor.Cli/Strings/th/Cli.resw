@@ -165,13 +165,13 @@
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>วิธีใช้: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [ตัวเลือก]
 
-ใช้ไฟล์แพตช์กับไฟล์ ต้องระบุอย่างใดอย่างหนึ่งระหว่าง -o และ --in-place เวอร์ชันนี้ใช้แพตช์ IPS
-และ IPS32 ได้
+ใช้ไฟล์แพตช์กับไฟล์ ต้องระบุอย่างใดอย่างหนึ่งระหว่าง -o และ --in-place เวอร์ชันนี้ใช้แพตช์ IPS,
+IPS32, UPS, BPS และ .hexpatch ได้
 
 ตัวเลือก:
   -o, --output &lt;path&gt;       เขียนไฟล์ที่แพตช์แล้วที่นี่ (ไม่เปลี่ยนไฟล์เป้าหมาย)
       --in-place            แทนที่ไฟล์เป้าหมายอย่างปลอดภัย (เขียนไฟล์ชั่วคราวก่อน)
-      --format &lt;f&gt;          auto (ค่าเริ่มต้น), ips หรือ ips32
+      --format &lt;f&gt;          auto (ค่าเริ่มต้น), ips, ips32, ups, bps หรือ hexpatch
       --verify-before &lt;a:v&gt; ตรวจสอบแฮชของไฟล์เป้าหมายก่อน (เช่น sha256:ab12...);
                             ถ้าต่างกัน รหัสออก 1 และไม่เขียนอะไร
       --verify-after &lt;a:v&gt;  ตรวจสอบแฮชของผลลัพธ์ก่อนเขียน

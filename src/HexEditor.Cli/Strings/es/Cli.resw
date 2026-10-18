@@ -166,13 +166,13 @@ En PowerShell, pon entre comillas simples los valores que contengan $ (por ejemp
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Uso: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Aplica un archivo de parche a un archivo. Se requiere una de las opciones -o y --in-place. Esta versión aplica parches IPS
-e IPS32.
+Aplica un archivo de parche a un archivo. Se requiere una de las opciones -o y --in-place. Esta versión aplica parches IPS,
+IPS32, UPS, BPS y .hexpatch.
 
 Opciones:
   -o, --output &lt;path&gt;       Escribir aquí el archivo con el parche (el destino no se modifica)
       --in-place            Reemplazar el destino de forma segura (primero se escribe un archivo temporal)
-      --format &lt;f&gt;          auto (predeterminado), ips o ips32
+      --format &lt;f&gt;          auto (predeterminado), ips, ips32, ups, bps o hexpatch
       --verify-before &lt;a:v&gt; Comprobar primero el hash del destino (por ejemplo sha256:ab12...);
                             código de salida 1 y no se escribe nada si difiere
       --verify-after &lt;a:v&gt;  Comprobar el hash del resultado antes de escribirlo

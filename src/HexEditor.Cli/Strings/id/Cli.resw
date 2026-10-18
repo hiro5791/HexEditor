@@ -159,12 +159,12 @@ Di PowerShell, letakkan nilai yang berisi $ di dalam tanda kutip tunggal (misaln
   <data name="Cli_Help_patch" xml:space="preserve"><value>Penggunaan: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [opsi]
 
 Menerapkan file patch ke sebuah file. Salah satu dari -o dan --in-place wajib ada. Versi ini menerapkan patch
-IPS dan IPS32.
+IPS, IPS32, UPS, BPS, dan .hexpatch.
 
 Opsi:
   -o, --output &lt;path&gt;       Menulis file hasil patch di sini (target tidak diubah)
       --in-place            Mengganti target dengan aman (file sementara ditulis lebih dulu)
-      --format &lt;f&gt;          auto (default), ips, atau ips32
+      --format &lt;f&gt;          auto (default), ips, ips32, ups, bps, atau hexpatch
       --verify-before &lt;a:v&gt; Memeriksa hash target lebih dulu (misalnya sha256:ab12...);
                             kode keluar 1 dan tidak ada yang ditulis jika berbeda
       --verify-after &lt;a:v&gt;  Memeriksa hash hasil sebelum menuliskannya

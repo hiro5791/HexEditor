@@ -166,13 +166,13 @@ In PowerShell, put values that contain $ in single quotes (for example '$1F00').
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Usage: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Applies a patch file to a file. One of -o and --in-place is required. This version applies IPS
-and IPS32 patches.
+Applies a patch file to a file. One of -o and --in-place is required. This version applies IPS,
+IPS32, UPS, BPS and .hexpatch patches.
 
 Options:
   -o, --output &lt;path&gt;       Write the patched file here (the target is not changed)
       --in-place            Replace the target safely (a temporary file is written first)
-      --format &lt;f&gt;          auto (default), ips or ips32
+      --format &lt;f&gt;          auto (default), ips, ips32, ups, bps or hexpatch
       --verify-before &lt;a:v&gt; Check the hash of the target first (for example sha256:ab12...);
                             exit code 1 and nothing is written if it differs
       --verify-after &lt;a:v&gt;  Check the hash of the result before writing it

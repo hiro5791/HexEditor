@@ -158,13 +158,13 @@ app.activeDocument است.
 در PowerShell مقدارهای حاوی $ را در گیومهٔ تکی بگذارید (مثلاً '$1F00').</value></data>
   <data name="Cli_Help_patch" xml:space="preserve"><value>استفاده: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [گزینه‌ها]
 
-یک فایل وصله را روی فایل اعمال می‌کند. یکی از -o و --in-place لازم است. این نسخه وصله‌های IPS
-و IPS32 را اعمال می‌کند.
+یک فایل وصله را روی فایل اعمال می‌کند. یکی از -o و --in-place لازم است. این نسخه وصله‌های IPS،
+IPS32، UPS، BPS و .hexpatch را اعمال می‌کند.
 
 گزینه‌ها:
   -o, --output &lt;path&gt;       فایل وصله‌شده را اینجا می‌نویسد (هدف تغییر نمی‌کند)
       --in-place            هدف را با ایمنی جایگزین می‌کند (ابتدا یک فایل موقت نوشته می‌شود)
-      --format &lt;f&gt;          auto (پیش‌فرض)، ips یا ips32
+      --format &lt;f&gt;          auto (پیش‌فرض)، ips، ips32، ups، bps یا hexpatch
       --verify-before &lt;a:v&gt; ابتدا هش هدف را بررسی می‌کند (مثلاً sha256:ab12...)؛
                             در صورت تفاوت کد خروج 1 است و چیزی نوشته نمی‌شود
       --verify-after &lt;a:v&gt;  هش نتیجه را پیش از نوشتن بررسی می‌کند

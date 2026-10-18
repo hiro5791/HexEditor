@@ -166,13 +166,13 @@ Dans PowerShell, placez les valeurs contenant $ entre apostrophes (par exemple '
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Utilisation : hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Applique un fichier de correctif à un fichier. L'une des options -o et --in-place est obligatoire. Cette version applique les correctifs IPS
-et IPS32.
+Applique un fichier de correctif à un fichier. L'une des options -o et --in-place est obligatoire. Cette version applique les correctifs IPS,
+IPS32, UPS, BPS et .hexpatch.
 
 Options :
   -o, --output &lt;path&gt;       Écrire le fichier corrigé ici (la cible n'est pas modifiée)
       --in-place            Remplacer la cible en toute sécurité (un fichier temporaire est d'abord écrit)
-      --format &lt;f&gt;          auto (par défaut), ips ou ips32
+      --format &lt;f&gt;          auto (par défaut), ips, ips32, ups, bps ou hexpatch
       --verify-before &lt;a:v&gt; Vérifier d'abord le hachage de la cible (par exemple sha256:ab12...) ;
                             code de sortie 1 et rien n'est écrit s'il diffère
       --verify-after &lt;a:v&gt;  Vérifier le hachage du résultat avant de l'écrire

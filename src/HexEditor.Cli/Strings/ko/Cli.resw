@@ -166,13 +166,13 @@ PowerShell에서는 $가 들어 있는 값을 작은따옴표로 묶으세요(�
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>사용법: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [옵션]
 
-파일에 패치 파일을 적용합니다. -o와 --in-place 중 하나는 필수입니다. 이 버전은 IPS와
-IPS32 패치를 적용합니다.
+파일에 패치 파일을 적용합니다. -o와 --in-place 중 하나는 필수입니다. 이 버전은 IPS,
+IPS32, UPS, BPS, .hexpatch 패치를 적용합니다.
 
 옵션:
   -o, --output &lt;path&gt;       패치한 파일을 여기에 쓰기 (대상은 변경되지 않음)
       --in-place            대상을 안전하게 교체 (먼저 임시 파일에 씀)
-      --format &lt;f&gt;          auto(기본), ips 또는 ips32
+      --format &lt;f&gt;          auto(기본), ips, ips32, ups, bps 또는 hexpatch
       --verify-before &lt;a:v&gt; 먼저 대상의 해시 확인 (예: sha256:ab12...),
                             다르면 종료 코드 1이며 아무것도 쓰지 않음
       --verify-after &lt;a:v&gt;  쓰기 전에 결과의 해시 확인

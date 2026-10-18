@@ -165,13 +165,13 @@ Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Cách dùng: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [tùy chọn]
 
-Áp dụng tệp bản vá vào một tệp. Bắt buộc có một trong -o và --in-place. Phiên bản này áp dụng bản vá IPS
-và IPS32.
+Áp dụng tệp bản vá vào một tệp. Bắt buộc có một trong -o và --in-place. Phiên bản này áp dụng bản vá IPS,
+IPS32, UPS, BPS và .hexpatch.
 
 Tùy chọn:
   -o, --output &lt;path&gt;       Ghi tệp đã vá vào đây (tệp đích không đổi)
       --in-place            Thay thế tệp đích một cách an toàn (ghi tệp tạm trước)
-      --format &lt;f&gt;          auto (mặc định), ips hoặc ips32
+      --format &lt;f&gt;          auto (mặc định), ips, ips32, ups, bps hoặc hexpatch
       --verify-before &lt;a:v&gt; Kiểm tra trước hàm băm của tệp đích (ví dụ sha256:ab12...);
                             nếu khác thì mã thoát 1 và không ghi gì
       --verify-after &lt;a:v&gt;  Kiểm tra hàm băm của kết quả trước khi ghi

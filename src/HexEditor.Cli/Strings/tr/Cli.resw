@@ -158,13 +158,13 @@ Seçenekler:
 PowerShell'de $ içeren değerleri tek tırnak içine alın (örneğin '$1F00').</value></data>
   <data name="Cli_Help_patch" xml:space="preserve"><value>Kullanım: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [seçenekler]
 
-Bir dosyaya yama dosyası uygular. -o ve --in-place seçeneklerinden biri gereklidir. Bu sürüm IPS
-ve IPS32 yamalarını uygular.
+Bir dosyaya yama dosyası uygular. -o ve --in-place seçeneklerinden biri gereklidir. Bu sürüm IPS,
+IPS32, UPS, BPS ve .hexpatch yamalarını uygular.
 
 Seçenekler:
   -o, --output &lt;path&gt;       Yamalanmış dosyayı buraya yazar (hedef değişmez)
       --in-place            Hedefi güvenli şekilde değiştirir (önce geçici bir dosya yazılır)
-      --format &lt;f&gt;          auto (varsayılan), ips veya ips32
+      --format &lt;f&gt;          auto (varsayılan), ips, ips32, ups, bps veya hexpatch
       --verify-before &lt;a:v&gt; Önce hedefin karmasını denetler (örneğin sha256:ab12...);
                             farklıysa çıkış kodu 1 olur ve hiçbir şey yazılmaz
       --verify-after &lt;a:v&gt;  Sonucu yazmadan önce karmasını denetler

@@ -167,12 +167,12 @@
   <data name="Cli_Help_patch" xml:space="preserve"><value>Використання: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
 Застосовує файл патча до файлу. Потрібен один із параметрів -o та --in-place. У цій версії
-застосовуються патчі IPS та IPS32.
+застосовуються патчі IPS, IPS32, UPS, BPS та .hexpatch.
 
 Параметри:
   -o, --output &lt;path&gt;       Записати пропатчений файл сюди (цільовий файл не змінюється)
       --in-place            Безпечно замінити цільовий файл (спочатку записується тимчасовий файл)
-      --format &lt;f&gt;          auto (за замовчуванням), ips або ips32
+      --format &lt;f&gt;          auto (за замовчуванням), ips, ips32, ups, bps або hexpatch
       --verify-before &lt;a:v&gt; Спочатку перевірити хеш цільового файлу (наприклад, sha256:ab12...);
                             у разі незбігу код завершення 1 і нічого не записується
       --verify-after &lt;a:v&gt;  Перевірити хеш результату перед записом

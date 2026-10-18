@@ -167,12 +167,12 @@ Coduri de ieșire: 4 pentru o eroare de șablon.
   <data name="Cli_Help_patch" xml:space="preserve"><value>Utilizare: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
 Aplică un fișier patch unui fișier. Una dintre opțiunile -o și --in-place este obligatorie. Această
-versiune aplică patchuri IPS și IPS32.
+versiune aplică patchuri IPS, IPS32, UPS, BPS și .hexpatch.
 
 Opțiuni:
   -o, --output &lt;path&gt;       Scrie aici fișierul patch-uit (ținta nu se modifică)
       --in-place            Înlocuiește ținta în siguranță (mai întâi se scrie un fișier temporar)
-      --format &lt;f&gt;          auto (implicit), ips sau ips32
+      --format &lt;f&gt;          auto (implicit), ips, ips32, ups, bps sau hexpatch
       --verify-before &lt;a:v&gt; Verifică mai întâi hashul țintei (de exemplu sha256:ab12...);
                             cod de ieșire 1 și nu se scrie nimic dacă diferă
       --verify-after &lt;a:v&gt;  Verifică hashul rezultatului înainte de scriere

@@ -168,13 +168,13 @@ PowerShellben a $ jelet tartalmazó értékeket tegye szimpla idézőjelek köz�
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Használat: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Javítófájlt alkalmaz egy fájlra. A -o és a --in-place közül az egyik kötelező. Ez a verzió az IPS és
-az IPS32 javításokat alkalmazza.
+Javítófájlt alkalmaz egy fájlra. A -o és a --in-place közül az egyik kötelező. Ez a verzió az IPS, az
+IPS32, az UPS, a BPS és a .hexpatch javításokat alkalmazza.
 
 Kapcsolók:
   -o, --output &lt;path&gt;       A javított fájl írása ide (a célfájl nem változik)
       --in-place            A célfájl biztonságos lecserélése (előbb egy ideiglenes fájl készül)
-      --format &lt;f&gt;          auto (alapértelmezett), ips vagy ips32
+      --format &lt;f&gt;          auto (alapértelmezett), ips, ips32, ups, bps vagy hexpatch
       --verify-before &lt;a:v&gt; A célfájl kivonatának előzetes ellenőrzése (például sha256:ab12...);
                             eltérés esetén 1-es kilépési kód, és semmi sem íródik
       --verify-after &lt;a:v&gt;  Az eredmény kivonatának ellenőrzése írás előtt

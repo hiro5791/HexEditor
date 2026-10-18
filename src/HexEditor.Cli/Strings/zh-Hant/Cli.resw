@@ -165,13 +165,13 @@
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>用法: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [選項]
 
-將修補檔套用到檔案。-o 和 --in-place 必須指定其一。此版本可套用 IPS
-和 IPS32 修補檔。
+將修補檔套用到檔案。-o 和 --in-place 必須指定其一。此版本可套用 IPS、
+IPS32、UPS、BPS 和 .hexpatch 修補檔。
 
 選項:
   -o, --output &lt;path&gt;       將修補後的檔案寫到這裡 (不變更目標檔案)
       --in-place            安全地取代目標檔案 (先寫入暫存檔)
-      --format &lt;f&gt;          auto (預設)、ips 或 ips32
+      --format &lt;f&gt;          auto (預設)、ips、ips32、ups、bps 或 hexpatch
       --verify-before &lt;a:v&gt; 先檢查目標檔案的雜湊 (例如 sha256:ab12...);
                             不一致時結束代碼為 1，且不寫入任何內容
       --verify-after &lt;a:v&gt;  在寫入前檢查結果的雜湊

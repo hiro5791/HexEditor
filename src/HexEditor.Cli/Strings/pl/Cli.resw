@@ -166,13 +166,13 @@ W PowerShellu wartości zawierające $ umieszczaj w apostrofach (na przykład '$
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>Użycie: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
 
-Stosuje plik łatki do pliku. Wymagana jest jedna z opcji -o i --in-place. Ta wersja stosuje łatki IPS
-i IPS32.
+Stosuje plik łatki do pliku. Wymagana jest jedna z opcji -o i --in-place. Ta wersja stosuje łatki IPS,
+IPS32, UPS, BPS i .hexpatch.
 
 Opcje:
   -o, --output &lt;path&gt;       Zapisuje tutaj załatany plik (cel nie jest zmieniany)
       --in-place            Bezpiecznie zastępuje cel (najpierw zapisywany jest plik tymczasowy)
-      --format &lt;f&gt;          auto (domyślnie), ips lub ips32
+      --format &lt;f&gt;          auto (domyślnie), ips, ips32, ups, bps lub hexpatch
       --verify-before &lt;a:v&gt; Najpierw sprawdza hash celu (na przykład sha256:ab12...);
                             kod zakończenia 1 i nic nie jest zapisywane, jeśli się różni
       --verify-after &lt;a:v&gt;  Sprawdza hash wyniku przed zapisem

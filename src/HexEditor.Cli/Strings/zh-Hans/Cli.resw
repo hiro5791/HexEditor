@@ -165,13 +165,13 @@
 
   <data name="Cli_Help_patch" xml:space="preserve"><value>用法: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [选项]
 
-将补丁文件应用到文件。-o 和 --in-place 必须指定其一。此版本可应用 IPS
-和 IPS32 补丁。
+将补丁文件应用到文件。-o 和 --in-place 必须指定其一。此版本可应用 IPS、
+IPS32、UPS、BPS 和 .hexpatch 补丁。
 
 选项:
   -o, --output &lt;path&gt;       将打补丁后的文件写到这里 (不更改目标文件)
       --in-place            安全地替换目标文件 (先写入临时文件)
-      --format &lt;f&gt;          auto (默认)、ips 或 ips32
+      --format &lt;f&gt;          auto (默认)、ips、ips32、ups、bps 或 hexpatch
       --verify-before &lt;a:v&gt; 先检查目标文件的哈希 (例如 sha256:ab12...);
                             不一致时退出代码为 1，且不写入任何内容
       --verify-after &lt;a:v&gt;  在写入前检查结果的哈希
