@@ -90,6 +90,7 @@ public sealed partial class MainWindow
             {
                 App.Settings.Changed -= settingsChanged;
                 AttachDisasmEditor(null);
+                vm.Detach();
             }
         };
         return vm;

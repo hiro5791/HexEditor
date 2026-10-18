@@ -86,7 +86,7 @@ public sealed partial class DisassemblyViewModel : ObservableObject
     private DisasmFormat _format;
     private IReadOnlyList<DisasmRow> _rows = [];
     private int _visibleRows = 30;
-    private readonly HashSet<Document> _watched = [];
+    private readonly Dictionary<Document, EventHandler<DocumentChangedEventArgs>> _watched = [];
 
     public DisassemblyViewModel(DisasmFormat format) => _format = format;
 
@@ -164,10 +164,12 @@ public sealed partial class DisassemblyViewModel : ObservableObject
     {
         Document = doc;
         _state = doc is null ? null : _states.GetValue(doc.Document, _ => new DocState());
-        if (doc is not null && _watched.Add(doc.Document))
+        if (doc is not null && !_watched.ContainsKey(doc.Document))
         {
             Document d = doc.Document;
-            d.Changed += (_, e) => DocumentChanged(d, e);
+            EventHandler<DocumentChangedEventArgs> handler = (_, e) => DocumentChanged(d, e);
+            _watched[d] = handler;
+            d.Changed += handler;
         }
 
         if (_state is { ImageTask: null } s && doc is not null)
@@ -218,6 +220,24 @@ public sealed partial class DisassemblyViewModel : ObservableObject
                 Apply();
             }
         }, TaskScheduler.Default);
+    }
+
+    /// <summary>ウィンドウを閉じたときに、ドキュメントの変更の通知を外す (ドキュメントはほかのウィンドウに移っていることがある)。</summary>
+    public void Detach()
+    {
+        foreach ((Document d, EventHandler<DocumentChangedEventArgs> handler) in _watched)
+        {
+            d.Changed -= handler;
+        }
+
+        _watched.Clear();
+        foreach (DocState s in _states.Select(p => p.Value))
+        {
+            ResetListing(s);
+        }
+
+        Document = null;
+        _state = null;
     }
 
     /// <summary>実行形式の解釈を待つ (テスト用の命令とコマンドの前)。</summary>
