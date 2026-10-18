@@ -6963,4 +6963,324 @@ Type: {4}</value></data>
   <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>Open in file comparison</value></data>
   <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>Open in floating-point visualizer</value></data>
   <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>Open in color picker</value></data>
+  <data name="Menu_File_ExportPdf.Text" xml:space="preserve"><value>PDF...</value></data>
+  <data name="Menu_File_ExportPdf.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Print.Text" xml:space="preserve"><value>Print...</value></data>
+  <data name="Menu_File_Print.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_PrintPreview.Text" xml:space="preserve"><value>Print preview...</value></data>
+  <data name="Menu_File_PrintPreview.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_Ads.Text" xml:space="preserve"><value>Alternate data streams...</value></data>
+  <data name="Menu_File_Ads.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Split.Text" xml:space="preserve"><value>Split file...</value></data>
+  <data name="Menu_Tools_FileTools_Split.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_FileTools_Join.Text" xml:space="preserve"><value>Join files...</value></data>
+  <data name="Menu_Tools_FileTools_Join.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.Text" xml:space="preserve"><value>Interleave...</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.Text" xml:space="preserve"><value>Deinterleave...</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools_Shred.Text" xml:space="preserve"><value>Secure delete...</value></data>
+  <data name="Menu_Tools_FileTools_Shred.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Ads.Text" xml:space="preserve"><value>Alternate data streams...</value></data>
+  <data name="Menu_Tools_FileTools_Ads.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_file_print" xml:space="preserve"><value>File: Print</value></data>
+  <data name="CmdAlias_file_print" xml:space="preserve"><value>print printer page setup paper</value></data>
+  <data name="Cmd_file_printPreview" xml:space="preserve"><value>File: Print preview</value></data>
+  <data name="CmdAlias_file_printPreview" xml:space="preserve"><value>print preview page</value></data>
+  <data name="Cmd_file_exportPdf" xml:space="preserve"><value>File: Export as PDF</value></data>
+  <data name="CmdAlias_file_exportPdf" xml:space="preserve"><value>pdf export print save</value></data>
+  <data name="Cmd_file_ads_open" xml:space="preserve"><value>File: Open alternate data stream</value></data>
+  <data name="CmdAlias_file_ads_open" xml:space="preserve"><value>ads alternate data stream ntfs zone identifier</value></data>
+  <data name="Cmd_tools_ads" xml:space="preserve"><value>File tools: Manage alternate data streams</value></data>
+  <data name="CmdAlias_tools_ads" xml:space="preserve"><value>ads alternate data stream ntfs list create delete</value></data>
+  <data name="Cmd_tools_files_split" xml:space="preserve"><value>File tools: Split</value></data>
+  <data name="CmdAlias_tools_files_split" xml:space="preserve"><value>split cut divide file parts</value></data>
+  <data name="Cmd_tools_files_join" xml:space="preserve"><value>File tools: Join</value></data>
+  <data name="CmdAlias_tools_files_join" xml:space="preserve"><value>join concatenate merge files</value></data>
+  <data name="Cmd_tools_files_interleave" xml:space="preserve"><value>File tools: Interleave</value></data>
+  <data name="CmdAlias_tools_files_interleave" xml:space="preserve"><value>interleave merge rom bytes</value></data>
+  <data name="Cmd_tools_files_deinterleave" xml:space="preserve"><value>File tools: Deinterleave</value></data>
+  <data name="CmdAlias_tools_files_deinterleave" xml:space="preserve"><value>deinterleave split even odd rom bytes</value></data>
+  <data name="Cmd_tools_files_shred" xml:space="preserve"><value>File tools: Secure delete</value></data>
+  <data name="CmdAlias_tools_files_shred" xml:space="preserve"><value>shred secure delete wipe overwrite erase</value></data>
+  <data name="Tab_Ads" xml:space="preserve"><value>Alternate data streams...</value></data>
+  <data name="Panel_Ads_Title" xml:space="preserve"><value>Alternate data streams</value></data>
+  <data name="Set_files_adsNotice" xml:space="preserve"><value>Notify when a file has alternate data streams</value></data>
+  <data name="SetDesc_files_adsNotice" xml:space="preserve"><value>Shows a message with a Show list button when you open a file on NTFS that has streams other than the main one.</value></data>
+  <data name="WriteBlock_Enabled" xml:space="preserve"><value>Write-protect mode is on.</value></data>
+  <data name="FileList_List" xml:space="preserve"><value>File list</value></data>
+  <data name="FileList_Add" xml:space="preserve"><value>Add...</value></data>
+  <data name="FileList_AddFolder" xml:space="preserve"><value>Add folder...</value></data>
+  <data name="FileList_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="FileList_Remove_Key" xml:space="preserve"><value>R</value></data>
+  <data name="FileList_Up" xml:space="preserve"><value>Move up</value></data>
+  <data name="FileList_Up_Key" xml:space="preserve"><value>U</value></data>
+  <data name="FileList_Down" xml:space="preserve"><value>Move down</value></data>
+  <data name="FileList_Down_Key" xml:space="preserve"><value>D</value></data>
+  <data name="FileList_SortName" xml:space="preserve"><value>Sort by name</value></data>
+  <data name="FileList_SortNatural" xml:space="preserve"><value>Natural sort</value></data>
+  <data name="FileOps_Input" xml:space="preserve"><value>Input</value></data>
+  <data name="FileOps_InputDocument" xml:space="preserve"><value>Active document</value></data>
+  <data name="FileOps_InputDocumentNamed" xml:space="preserve"><value>Active document: {0}</value></data>
+  <data name="FileOps_InputFile" xml:space="preserve"><value>File</value></data>
+  <data name="FileOps_FilePath" xml:space="preserve"><value>File path</value></data>
+  <data name="FileOps_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="FileOps_Error_NoInput" xml:space="preserve"><value>Choose an input document or an existing file.</value></data>
+  <data name="FileOps_Error_NothingToDo" xml:space="preserve"><value>There is no data to process.</value></data>
+  <data name="FileOps_Error_Argument" xml:space="preserve"><value>A value is out of range.</value></data>
+  <data name="FileOps_Error_Names" xml:space="preserve"><value>The file name format does not give distinct names.</value></data>
+  <data name="FileOps_Error_Unreadable" xml:space="preserve"><value>Some files cannot be read.</value></data>
+  <data name="FileOps_OverwriteTitle" xml:space="preserve"><value>Overwrite existing files?</value></data>
+  <data name="FileOps_OverwriteBody" xml:space="preserve"><value>{0, plural, one {# file already exists in the destination.} other {# files already exist in the destination.}}</value></data>
+  <data name="FileOps_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="FileOps_NoSpaceTitle" xml:space="preserve"><value>Not enough free space</value></data>
+  <data name="FileOps_NoSpaceBody" xml:space="preserve"><value>The destination volume {0} has {2} bytes free, but {1} bytes are needed. Nothing was written.</value></data>
+  <data name="FileOps_KeepTitle" xml:space="preserve"><value>Keep the finished files?</value></data>
+  <data name="FileOps_KeepBody" xml:space="preserve"><value>{1} {0, plural, one {# file was finished before that.} other {# files were finished before that.}}</value></data>
+  <data name="FileOps_Keep" xml:space="preserve"><value>Keep them</value></data>
+  <data name="FileOps_DeleteCompleted" xml:space="preserve"><value>Delete them</value></data>
+  <data name="FileOps_Cancelled" xml:space="preserve"><value>The operation was cancelled.</value></data>
+  <data name="FileOps_CancelledDeleted" xml:space="preserve"><value>The operation was cancelled and the files that had been created were deleted.</value></data>
+  <data name="FileOps_ErrorTitle" xml:space="preserve"><value>File tool error</value></data>
+  <data name="FileOps_CreatedList" xml:space="preserve"><value>{0, plural, one {# file was created before the error:} other {# files were created before the error:}}</value></data>
+  <data name="Split_Title" xml:space="preserve"><value>Split file</value></data>
+  <data name="Split_Run" xml:space="preserve"><value>Split</value></data>
+  <data name="Split_Method" xml:space="preserve"><value>Split by</value></data>
+  <data name="Split_BySize" xml:space="preserve"><value>Size of each file</value></data>
+  <data name="Split_Size" xml:space="preserve"><value>Size (for example 4G, 1.44M, 0x10000)</value></data>
+  <data name="Split_ByCount" xml:space="preserve"><value>Number of files (2 to 10,000)</value></data>
+  <data name="Split_Count" xml:space="preserve"><value>Number of files</value></data>
+  <data name="Split_Align" xml:space="preserve"><value>Make sizes a multiple of this many bytes</value></data>
+  <data name="Split_ByPositions" xml:space="preserve"><value>Offsets</value></data>
+  <data name="Split_Positions" xml:space="preserve"><value>Offsets (one per line)</value></data>
+  <data name="Split_UseBookmarks" xml:space="preserve"><value>Also use the bookmark positions of the document</value></data>
+  <data name="Split_Output" xml:space="preserve"><value>Output</value></data>
+  <data name="Split_OutputFolder" xml:space="preserve"><value>Output folder (empty = same folder as the input)</value></data>
+  <data name="Split_NameFormat" xml:space="preserve"><value>File name format</value></data>
+  <data name="Split_JoinScript" xml:space="preserve"><value>Create a command file that joins the parts (copy /b)</value></data>
+  <data name="Split_Checksum" xml:space="preserve"><value>Create a checksum file of the source and the parts</value></data>
+  <data name="Split_Summary" xml:space="preserve"><value>{0, plural, one {# file} other {# files}}: {1} to {2}, {3} bytes in total</value></data>
+  <data name="Split_Error_Size" xml:space="preserve"><value>Enter the size of each file.</value></data>
+  <data name="Split_Error_Count" xml:space="preserve"><value>Enter a number of files from 2 to 10,000.</value></data>
+  <data name="Split_Error_Positions" xml:space="preserve"><value>An offset is not valid.</value></data>
+  <data name="Split_Operation" xml:space="preserve"><value>Splitting {0}</value></data>
+  <data name="Split_Done" xml:space="preserve"><value>Split into {0, plural, one {# file} other {# files}} in {1}</value></data>
+  <data name="Join_Title" xml:space="preserve"><value>Join files</value></data>
+  <data name="Join_Run" xml:space="preserve"><value>Join</value></data>
+  <data name="Join_Files" xml:space="preserve"><value>Files (in joining order)</value></data>
+  <data name="Join_SequenceBody" xml:space="preserve"><value>Also add the numbered files from {0} onward ({1, plural, one {# more file} other {# more files}})?</value></data>
+  <data name="Join_SequenceAll" xml:space="preserve"><value>Add all numbered files</value></data>
+  <data name="Join_SequenceOne" xml:space="preserve"><value>Add only this file</value></data>
+  <data name="Join_Total" xml:space="preserve"><value>{0, plural, one {# file} other {# files}}, {1} bytes in total</value></data>
+  <data name="Join_PadNone" xml:space="preserve"><value>No padding between files</value></data>
+  <data name="Join_PadAlign" xml:space="preserve"><value>Start every file at a multiple of N bytes</value></data>
+  <data name="Join_Align" xml:space="preserve"><value>Alignment in bytes</value></data>
+  <data name="Join_PadValue" xml:space="preserve"><value>Padding value (hex byte)</value></data>
+  <data name="Join_OutNew" xml:space="preserve"><value>Open the result as a new document</value></data>
+  <data name="Join_OutFile" xml:space="preserve"><value>Save the result to a file</value></data>
+  <data name="Join_OutPath" xml:space="preserve"><value>Output file</value></data>
+  <data name="Join_Error_Empty" xml:space="preserve"><value>Add at least one file.</value></data>
+  <data name="Join_Error_Missing" xml:space="preserve"><value>File not found: {0}</value></data>
+  <data name="Join_Error_Align" xml:space="preserve"><value>Enter an alignment of 1 byte or more.</value></data>
+  <data name="Join_Error_PadValue" xml:space="preserve"><value>Enter one byte in hex, for example 00 or FF.</value></data>
+  <data name="Join_Error_OutPath" xml:space="preserve"><value>Enter the output file.</value></data>
+  <data name="Join_Error_SameFile" xml:space="preserve"><value>The output file is one of the input files.</value></data>
+  <data name="Join_Error_Unreadable" xml:space="preserve"><value>These files cannot be read, so nothing was joined:</value></data>
+  <data name="Join_Error_Write" xml:space="preserve"><value>Could not write the file: {0}</value></data>
+  <data name="Join_DocumentName" xml:space="preserve"><value>Joined {0}</value></data>
+  <data name="Join_Operation" xml:space="preserve"><value>Joining into {0}</value></data>
+  <data name="Join_Done" xml:space="preserve"><value>Joined into {0}</value></data>
+  <data name="Join_ChangedDuringJoin" xml:space="preserve"><value>These source files changed while they were being joined: {0}</value></data>
+  <data name="Deint_Title" xml:space="preserve"><value>Deinterleave</value></data>
+  <data name="Deint_Run" xml:space="preserve"><value>Deinterleave</value></data>
+  <data name="Deint_Count" xml:space="preserve"><value>Number of outputs (2 to 16)</value></data>
+  <data name="Deint_Unit" xml:space="preserve"><value>Unit</value></data>
+  <data name="Deint_Unit1" xml:space="preserve"><value>1 byte</value></data>
+  <data name="Deint_Unit2" xml:space="preserve"><value>2 bytes</value></data>
+  <data name="Deint_Unit4" xml:space="preserve"><value>4 bytes</value></data>
+  <data name="Deint_Unit8" xml:space="preserve"><value>8 bytes</value></data>
+  <data name="Deint_UnitCustom" xml:space="preserve"><value>Other number of bytes</value></data>
+  <data name="Deint_UnitBytes" xml:space="preserve"><value>Unit in bytes</value></data>
+  <data name="Deint_Pad" xml:space="preserve"><value>Fill the missing end with a value</value></data>
+  <data name="Deint_Keep" xml:space="preserve"><value>Keep the leftover bytes in the last output</value></data>
+  <data name="Deint_PadValue" xml:space="preserve"><value>Value (hex byte)</value></data>
+  <data name="Deint_Error_Count" xml:space="preserve"><value>Enter a number from 2 to 16.</value></data>
+  <data name="Deint_Error_Unit" xml:space="preserve"><value>Enter a unit from 1 byte to 1 MiB.</value></data>
+  <data name="Deint_Summary" xml:space="preserve"><value>{0, plural, one {# output} other {# outputs}}: {1} bytes</value></data>
+  <data name="Deint_Operation" xml:space="preserve"><value>Deinterleaving {0}</value></data>
+  <data name="Deint_Done" xml:space="preserve"><value>Wrote {0, plural, one {# file} other {# files}} to {1}</value></data>
+  <data name="Inter_Title" xml:space="preserve"><value>Interleave</value></data>
+  <data name="Inter_Run" xml:space="preserve"><value>Interleave</value></data>
+  <data name="Inter_Inputs" xml:space="preserve"><value>Input files (in order)</value></data>
+  <data name="Inter_PadShort" xml:space="preserve"><value>Fill shorter inputs with a value</value></data>
+  <data name="Inter_ErrorOnMismatch" xml:space="preserve"><value>Fail when the lengths differ</value></data>
+  <data name="Inter_Error_Count" xml:space="preserve"><value>Add 2 to 16 files.</value></data>
+  <data name="Interleave_Error_Length" xml:space="preserve"><value>The inputs have different lengths.</value></data>
+  <data name="Inter_Summary" xml:space="preserve"><value>{0, plural, one {# input} other {# inputs}}: {1} bytes</value></data>
+  <data name="Inter_DocumentName" xml:space="preserve"><value>Interleaved {0}</value></data>
+  <data name="Inter_Operation" xml:space="preserve"><value>Interleaving {0, plural, one {# file} other {# files}}</value></data>
+  <data name="Inter_Done" xml:space="preserve"><value>Interleaved into {0}</value></data>
+  <data name="Shred_Title" xml:space="preserve"><value>Secure delete</value></data>
+  <data name="Shred_Run" xml:space="preserve"><value>Delete...</value></data>
+  <data name="Shred_Targets" xml:space="preserve"><value>Files and folders to delete</value></data>
+  <data name="Shred_Method" xml:space="preserve"><value>Overwrite method</value></data>
+  <data name="Shred_Method_Zero" xml:space="preserve"><value>Overwrite once with zeros (default)</value></data>
+  <data name="Shred_Method_Random" xml:space="preserve"><value>Overwrite once with random data</value></data>
+  <data name="Shred_Method_Dod" xml:space="preserve"><value>DoD 5220.22-M (3 passes: 00, FF, random)</value></data>
+  <data name="Shred_Method_Custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="Shred_Method_CustomSummary" xml:space="preserve"><value>Custom ({0, plural, one {# pass} other {# passes}})</value></data>
+  <data name="Shred_Passes" xml:space="preserve"><value>Number of passes (1 to 35)</value></data>
+  <data name="Shred_Patterns" xml:space="preserve"><value>Pattern of each pass, one per line (hex bytes or random)</value></data>
+  <data name="Shred_Verify" xml:space="preserve"><value>Read back and verify the last pass</value></data>
+  <data name="Shred_Error_Passes" xml:space="preserve"><value>Enter a number of passes from 1 to 35.</value></data>
+  <data name="Shred_Error_Pattern" xml:space="preserve"><value>The pattern is not valid: {0}</value></data>
+  <data name="Shred_Reject_Open" xml:space="preserve"><value>{0} is open in this app. Close it first.</value></data>
+  <data name="Shred_Reject_System" xml:space="preserve"><value>System folders such as Windows and Program Files cannot be targets.</value></data>
+  <data name="Shred_Reject_Root" xml:space="preserve"><value>A drive root cannot be a target.</value></data>
+  <data name="Shred_Reject_Missing" xml:space="preserve"><value>Not found: {0}</value></data>
+  <data name="Shred_Confirm_Title" xml:space="preserve"><value>Delete permanently?</value></data>
+  <data name="Shred_Confirm_Primary" xml:space="preserve"><value>Delete permanently</value></data>
+  <data name="Shred_Confirm_Summary" xml:space="preserve"><value>{0, plural, one {# file} other {# files}}, {1} bytes in total. Method: {2}.</value></data>
+  <data name="Shred_Confirm_Irreversible" xml:space="preserve"><value>This cannot be undone. The files do not go to the Recycle Bin and cannot be restored.</value></data>
+  <data name="Shred_Limit_Ssd" xml:space="preserve"><value>On SSDs, USB flash drives and SD cards, wear leveling can leave the original data somewhere else even after overwriting.</value></data>
+  <data name="Shred_Limit_Copies" xml:space="preserve"><value>Original data can remain in volume shadow copies, backups, synced folders such as OneDrive, compressed, encrypted or deduplicated files, and copy-on-write file systems such as ReFS.</value></data>
+  <data name="Shred_Limit_Free" xml:space="preserve"><value>Free space and slack space are not wiped by this tool.</value></data>
+  <data name="Shred_Confirm_Verify" xml:space="preserve"><value>The last pass is read back and verified.</value></data>
+  <data name="Shred_Operation" xml:space="preserve"><value>Secure delete of {0, plural, one {# file} other {# files}}</value></data>
+  <data name="Shred_Done" xml:space="preserve"><value>{0, plural, one {Securely deleted # file.} other {Securely deleted # files.}}</value></data>
+  <data name="Shred_Cancelled" xml:space="preserve"><value>Cancelled after deleting {0, plural, one {# file} other {# files}}.</value></data>
+  <data name="Shred_ResultTitle" xml:space="preserve"><value>Secure delete result</value></data>
+  <data name="Shred_Failures" xml:space="preserve"><value>{0, plural, one {# file could not be deleted} other {# files could not be deleted}} ({1} deleted):</value></data>
+  <data name="Shred_Failure_InUse" xml:space="preserve"><value>In use by another program</value></data>
+  <data name="Shred_Failure_Access" xml:space="preserve"><value>Access denied</value></data>
+  <data name="Shred_Failure_Missing" xml:space="preserve"><value>File not found</value></data>
+  <data name="Shred_Corrupted" xml:space="preserve"><value>{0, plural, one {# file was only partly overwritten and left in place. Its contents are corrupted:} other {# files were only partly overwritten and left in place. Their contents are corrupted:}}</value></data>
+  <data name="Ads_Col_Name" xml:space="preserve"><value>Stream</value></data>
+  <data name="Ads_Col_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Ads_Col_Head" xml:space="preserve"><value>First bytes</value></data>
+  <data name="Ads_Col_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Ads_Filter_All" xml:space="preserve"><value>All streams</value></data>
+  <data name="Ads_Choose" xml:space="preserve"><value>Choose file...</value></data>
+  <data name="Ads_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Ads_Create" xml:space="preserve"><value>Create...</value></data>
+  <data name="Ads_Rename" xml:space="preserve"><value>Rename...</value></data>
+  <data name="Ads_Delete" xml:space="preserve"><value>Delete...</value></data>
+  <data name="Ads_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="Ads_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="Ads_NoFile" xml:space="preserve"><value>Open a file on disk first.</value></data>
+  <data name="Ads_Unsupported" xml:space="preserve"><value>This volume does not support alternate data streams.</value></data>
+  <data name="Ads_Summary" xml:space="preserve"><value>{0}: {1, plural, one {# stream} other {# streams}}</value></data>
+  <data name="Ads_SummaryUnsupported" xml:space="preserve"><value>{0}: this volume does not support alternate data streams.</value></data>
+  <data name="Ads_SummaryError" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ads_Known_ZoneIdentifier" xml:space="preserve"><value>Mark of the web (file came from the Internet)</value></data>
+  <data name="Ads_Known_SummaryInformation" xml:space="preserve"><value>Document summary properties</value></data>
+  <data name="Ads_Known_DocumentSummaryInformation" xml:space="preserve"><value>Document summary properties (extended)</value></data>
+  <data name="Ads_Known_Afp" xml:space="preserve"><value>Mac file information</value></data>
+  <data name="Ads_Known_Encryptable" xml:space="preserve"><value>Encryption marker</value></data>
+  <data name="Ads_Known_Favicon" xml:space="preserve"><value>Site icon</value></data>
+  <data name="Ads_Known_OutlookExpress" xml:space="preserve"><value>Mail client property</value></data>
+  <data name="Ads_Known_System" xml:space="preserve"><value>System stream</value></data>
+  <data name="Ads_CreateTitle" xml:space="preserve"><value>Create stream</value></data>
+  <data name="Ads_CreateRun" xml:space="preserve"><value>Create</value></data>
+  <data name="Ads_RenameTitle" xml:space="preserve"><value>Rename stream</value></data>
+  <data name="Ads_RenameRun" xml:space="preserve"><value>Rename</value></data>
+  <data name="Ads_NameHeader" xml:space="preserve"><value>Stream name</value></data>
+  <data name="Ads_Error_InvalidName" xml:space="preserve"><value>The name cannot contain : \ / or control characters.</value></data>
+  <data name="Ads_Error_Exists" xml:space="preserve"><value>A stream with this name already exists.</value></data>
+  <data name="Ads_Error_NotFound" xml:space="preserve"><value>Not found.</value></data>
+  <data name="Ads_Error_Access" xml:space="preserve"><value>Access denied.</value></data>
+  <data name="Ads_Error_InUse" xml:space="preserve"><value>In use by another program.</value></data>
+  <data name="Ads_Error_Refs" xml:space="preserve"><value>ReFS limits the size of alternate data streams, so this cannot be saved.</value></data>
+  <data name="Ads_Error_Default" xml:space="preserve"><value>The main stream cannot be renamed or deleted.</value></data>
+  <data name="Ads_Error_Open" xml:space="preserve"><value>Could not open {0}: {1}</value></data>
+  <data name="Ads_Error_OpenInTab" xml:space="preserve"><value>{0} is open in a tab. Close the tab first.</value></data>
+  <data name="Ads_Error_Write" xml:space="preserve"><value>Could not write the file: {0}</value></data>
+  <data name="Ads_Delete_Title" xml:space="preserve"><value>Delete stream?</value></data>
+  <data name="Ads_Delete_Body" xml:space="preserve"><value>Delete the stream {0} ({1} bytes)?</value></data>
+  <data name="Ads_Delete_Irreversible" xml:space="preserve"><value>This cannot be undone.</value></data>
+  <data name="Ads_Delete_Run" xml:space="preserve"><value>Delete</value></data>
+  <data name="Ads_Import_Title" xml:space="preserve"><value>Replace stream contents?</value></data>
+  <data name="Ads_Import_Body" xml:space="preserve"><value>The contents of {0} will be replaced with the file you choose next.</value></data>
+  <data name="Ads_Import_Run" xml:space="preserve"><value>Choose file</value></data>
+  <data name="Ads_Operation_Rename" xml:space="preserve"><value>Renaming stream {0}</value></data>
+  <data name="Ads_Operation_Export" xml:space="preserve"><value>Exporting stream {0}</value></data>
+  <data name="Ads_Operation_Import" xml:space="preserve"><value>Importing into stream {0}</value></data>
+  <data name="Ads_Exported" xml:space="preserve"><value>Exported to {0}</value></data>
+  <data name="Ads_ExportType" xml:space="preserve"><value>Binary file</value></data>
+  <data name="Ads_Notice" xml:space="preserve"><value>{0, plural, one {This file has # alternate data stream.} other {This file has # alternate data streams.}}</value></data>
+  <data name="Ads_ShowList" xml:space="preserve"><value>Show list</value></data>
+  <data name="Print_Title" xml:space="preserve"><value>Print</value></data>
+  <data name="Print_PdfTitle" xml:space="preserve"><value>Export as PDF</value></data>
+  <data name="Print_Run" xml:space="preserve"><value>Print</value></data>
+  <data name="Print_SavePdf" xml:space="preserve"><value>Save as PDF...</value></data>
+  <data name="Print_Printer" xml:space="preserve"><value>Printer</value></data>
+  <data name="Print_Range" xml:space="preserve"><value>Print range</value></data>
+  <data name="Print_RangeAll" xml:space="preserve"><value>All</value></data>
+  <data name="Print_RangeSelection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Print_RangeOffsets" xml:space="preserve"><value>Offset range</value></data>
+  <data name="Print_Offsets" xml:space="preserve"><value>Offsets (start:length or start-end)</value></data>
+  <data name="Print_RangePages" xml:space="preserve"><value>Pages</value></data>
+  <data name="Print_PagesHint" xml:space="preserve"><value>Pages (for example 1-3, 8)</value></data>
+  <data name="Print_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="Print_Orientation" xml:space="preserve"><value>Orientation</value></data>
+  <data name="Print_Portrait" xml:space="preserve"><value>Portrait</value></data>
+  <data name="Print_Landscape" xml:space="preserve"><value>Landscape</value></data>
+  <data name="Print_Margins" xml:space="preserve"><value>Margins</value></data>
+  <data name="Print_MarginTop" xml:space="preserve"><value>Top</value></data>
+  <data name="Print_MarginBottom" xml:space="preserve"><value>Bottom</value></data>
+  <data name="Print_MarginLeft" xml:space="preserve"><value>Left</value></data>
+  <data name="Print_MarginRight" xml:space="preserve"><value>Right</value></data>
+  <data name="Print_Font" xml:space="preserve"><value>Font</value></data>
+  <data name="Print_FontSize" xml:space="preserve"><value>Size</value></data>
+  <data name="Print_BytesPerRow" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="Print_FitToPaper" xml:space="preserve"><value>Fit to paper</value></data>
+  <data name="Print_Columns" xml:space="preserve"><value>Columns</value></data>
+  <data name="Print_ColOffset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Print_ColHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Print_ColText" xml:space="preserve"><value>Text</value></data>
+  <data name="Print_ColorMode" xml:space="preserve"><value>Color</value></data>
+  <data name="Print_ColorBW" xml:space="preserve"><value>Black and white (underline and shading)</value></data>
+  <data name="Print_ColorColor" xml:space="preserve"><value>Color (background colors)</value></data>
+  <data name="Print_HeaderFooter" xml:space="preserve"><value>Header and footer (name, path, page, pages, date, time, range, size, modified in braces)</value></data>
+  <data name="Print_HeaderLeft" xml:space="preserve"><value>Header left</value></data>
+  <data name="Print_HeaderCenter" xml:space="preserve"><value>Header center</value></data>
+  <data name="Print_HeaderRight" xml:space="preserve"><value>Header right</value></data>
+  <data name="Print_FooterLeft" xml:space="preserve"><value>Footer left</value></data>
+  <data name="Print_FooterCenter" xml:space="preserve"><value>Footer center</value></data>
+  <data name="Print_FooterRight" xml:space="preserve"><value>Footer right</value></data>
+  <data name="Print_Copies" xml:space="preserve"><value>Copies (1 to 999)</value></data>
+  <data name="Print_SaveDefaults" xml:space="preserve"><value>Save as defaults</value></data>
+  <data name="Print_DefaultsSaved" xml:space="preserve"><value>Saved the print settings as defaults.</value></data>
+  <data name="Print_Status" xml:space="preserve"><value>{0, plural, one {# page} other {# pages}}, {1} bytes per row, {2} rows per page</value></data>
+  <data name="Print_Error_Margin" xml:space="preserve"><value>Margins must be from 0 to 50 mm.</value></data>
+  <data name="Print_Error_Offsets" xml:space="preserve"><value>The offset range is not valid.</value></data>
+  <data name="Print_Error_PageRange" xml:space="preserve"><value>The page range is not valid. Use a form such as 1-3, 8.</value></data>
+  <data name="Print_Error_Nothing" xml:space="preserve"><value>There is nothing to print in this range.</value></data>
+  <data name="Print_Error_Limit" xml:space="preserve"><value>{0} pages is more than the limit of {1} pages. Narrow the range.</value></data>
+  <data name="Print_Error_NoFont" xml:space="preserve"><value>No usable TrueType font was found.</value></data>
+  <data name="Print_Error_Failed" xml:space="preserve"><value>Could not print: {0}</value></data>
+  <data name="Print_Error_PdfFailed" xml:space="preserve"><value>Could not write the PDF: {0}</value></data>
+  <data name="Print_Confirm_Title" xml:space="preserve"><value>Print many pages?</value></data>
+  <data name="Print_Confirm_Body" xml:space="preserve"><value>{0, plural, one {# page will be printed.} other {# pages will be printed.}} Check the amount of paper.</value></data>
+  <data name="Print_Confirm_Run" xml:space="preserve"><value>Print</value></data>
+  <data name="Print_Confirm_Change" xml:space="preserve"><value>Change range</value></data>
+  <data name="Print_Operation" xml:space="preserve"><value>Printing {0}</value></data>
+  <data name="Print_Operation_Pdf" xml:space="preserve"><value>Writing PDF {0}</value></data>
+  <data name="Print_Done" xml:space="preserve"><value>Printed {0, plural, one {# page} other {# pages}}.</value></data>
+  <data name="Print_PdfDone" xml:space="preserve"><value>Saved {0} ({1, plural, one {# page} other {# pages}}).</value></data>
+  <data name="Print_Cancelled" xml:space="preserve"><value>Printing was cancelled.</value></data>
+  <data name="Print_Unreadable" xml:space="preserve"><value>Some ranges could not be read and were printed as ??.</value></data>
+  <data name="Print_Modified" xml:space="preserve"><value>(modified)</value></data>
+  <data name="Print_PdfFileType" xml:space="preserve"><value>PDF document</value></data>
+  <data name="Print_Preview_Name" xml:space="preserve"><value>Print preview</value></data>
+  <data name="Print_Preview_First" xml:space="preserve"><value>First page</value></data>
+  <data name="Print_Preview_Previous" xml:space="preserve"><value>Previous page</value></data>
+  <data name="Print_Preview_Next" xml:space="preserve"><value>Next page</value></data>
+  <data name="Print_Preview_Last" xml:space="preserve"><value>Last page</value></data>
+  <data name="Print_Preview_PageNumber" xml:space="preserve"><value>Page number</value></data>
+  <data name="Print_Preview_Zoom" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Print_Preview_TwoPages" xml:space="preserve"><value>Two pages</value></data>
+  <data name="Print_Preview_Info" xml:space="preserve"><value>{0} / {1} pages</value></data>
+  <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Whole page</value></data>
+  <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Fit width</value></data>
 </root>

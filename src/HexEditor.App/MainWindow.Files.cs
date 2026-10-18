@@ -105,6 +105,7 @@ public sealed partial class MainWindow
             AppLog.Debug($"Opened {path}");
             SuggestDiskImage(doc);
             SuggestChecksumVerify(doc);
+            NotifyAlternateStreams(doc);
             if (decode && !readOnly)
             {
                 _ = SuggestDecodingAsync(doc);

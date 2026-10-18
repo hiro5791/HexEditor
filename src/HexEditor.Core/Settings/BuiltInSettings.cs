@@ -222,6 +222,8 @@ public static class BuiltInSettings
         new(BackupSettings.GenerationsKey, SettingCategories.Files, SettingKind.Int, 1) { Min = 1, Max = BackupSettings.MaxGenerations, Order = 7 },
         new("save.recoveryIntervalMinutes", SettingCategories.Files, SettingKind.Int, 1) { Min = 0, Max = 60, Order = 8 },
         new(Saving.SavePlanner.ShiftInPlaceKey, SettingCategories.Files, SettingKind.Bool, false) { Order = 9 },
+        // 代替データストリームがあるファイルを開いたときに知らせる (ENG-37 の仕様 3。既定オフ)。
+        new("files.adsNotice", SettingCategories.Files, SettingKind.Bool, false) { Order = 11 },
         new(Formats.EncodedFile.GapFillKey, SettingCategories.Files, SettingKind.String, "FF") { Order = 9 },
         new("storage.tempDirectory", SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, RequiresRestart = true, Order = 10 },
 

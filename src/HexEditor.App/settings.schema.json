@@ -350,6 +350,11 @@
       "maximum": 10,
       "default": 2
     },
+    "files.adsNotice": {
+      "description": "Notify when a file has alternate data streams",
+      "type": "boolean",
+      "default": false
+    },
     "files.autoReloadUnmodified": {
       "description": "Reload unmodified files automatically",
       "type": "boolean",

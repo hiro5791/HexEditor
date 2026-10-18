@@ -88,6 +88,7 @@ public sealed partial class MainWindow
             FindPanelContent<CalculatorPanel>(CalculatorPanelId)?.ShowProgrammer();
         });
         RegisterToolsFilesCommands();
+        RegisterToolsFileOpsCommands();
     }
 
     /// <summary>パネルを開き、中身を返す(コマンドとインスペクタの右クリックから開くとき)。</summary>
@@ -253,6 +254,7 @@ public sealed partial class MainWindow
     /// <summary>ウィンドウを閉じるとき、文書のイベントの購読を外す。</summary>
     private void DetachTools()
     {
+        WriteBlockMode.Changed -= OnWriteBlockChanged;
         if (_toolDocument is not null)
         {
             _toolDocument.EditorChanged -= ToolEditorChanged;

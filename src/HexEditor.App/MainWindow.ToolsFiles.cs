@@ -43,6 +43,7 @@ public sealed partial class MainWindow
 
     private static void RegisterToolsFilesPanels()
     {
+        RegisterAdsPanel();
         if (PanelRegistry.Find(ChecksumResultsPanelId) is null)
         {
             PanelRegistry.Register(new PanelRegistration(ChecksumResultsPanelId, "Panel_ChecksumResults_Title", PanelDock.Bottom,

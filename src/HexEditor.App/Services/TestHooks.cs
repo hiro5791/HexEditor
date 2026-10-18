@@ -57,6 +57,9 @@ public static class TestHooks
     /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
     public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
 
+    /// <summary>印刷の代わりに PDF を書くファイル (物理的なプリンタには送らない)。</summary>
+    public static string? PrintToFile => Active ? Settings.PrintToFile : null;
+
     /// <summary>起動の最初 (Program.Main) に呼ぶ。設定ファイルを読む。</summary>
     public static void Initialize(IReadOnlyList<string> args, CommandLine commandLine)
     {
@@ -680,6 +683,8 @@ public static class TestHooks
     public static bool SuppressDiskImageSuggestion => false;
 
     public static TimeProvider? Time => null;
+
+    public static string? PrintToFile => null;
 
     public static void Initialize(IReadOnlyList<string> args, CommandLine commandLine)
     {

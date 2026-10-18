@@ -47,6 +47,12 @@ public static class BuiltInCommands
         new("file.export", "file") { Condition = "documentOpen" },
         new("file.exportSelection", "file") { Condition = "documentOpen" },
         new("file.saveSelection", "file") { Condition = "documentOpen" },
+
+        // ---- 印刷と PDF (11 の TOOL-01〜TOOL-03)、代替データストリーム (01 の ENG-37、11 の TOOL-21) ----
+        new("file.print", "file") { DefaultBindings = [K("Ctrl+P")], Condition = "documentOpen" },
+        new("file.printPreview", "file") { Condition = "documentOpen" },
+        new("file.exportPdf", "file") { Condition = "documentOpen" },
+        new("file.ads.open", "file") { Condition = "documentOpen" },
         new("workspace.save", "file") { Condition = "documentOpen" },
         new("workspace.open", "file"),
         new("file.reload", "file") { DefaultBindings = [K("Ctrl+R")], Condition = "documentOpen" },
@@ -580,6 +586,14 @@ public static class BuiltInCommands
         new("tools.checksum.create", "fileTools"),
         new("tools.checksum.verify", "fileTools"),
         new("tools.folderCompare", "fileTools"),
+
+        // ---- ツール: ファイルツール (11 の TOOL-13〜TOOL-17、TOOL-21)。既定のショートカットはなし ----
+        new("tools.files.split", "fileTools"),
+        new("tools.files.join", "fileTools"),
+        new("tools.files.interleave", "fileTools"),
+        new("tools.files.deinterleave", "fileTools"),
+        new("tools.files.shred", "fileTools"),
+        new("tools.ads", "fileTools"),
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

@@ -87,6 +87,7 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
             }
         };
         _list.RightTapped += List_RightTapped;
+        _list.SelectionChanged += (_, _) => SelectionChanged?.Invoke(this, EventArgs.Empty);
         AutomationProperties.SetAutomationId(_list, idPrefix + "_List");
         AutomationProperties.SetName(_list, Loc.Get("ToolTable_List"));
 
@@ -106,6 +107,12 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
 
     /// <summary>行を起動した (Enter、ダブルクリック)。</summary>
     public event EventHandler<object>? RowActivated;
+
+    /// <summary>選択している行が変わった。</summary>
+    public event EventHandler? SelectionChanged;
+
+    /// <summary>行を選ぶ (テスト・操作の続きに使う)。</summary>
+    public void SelectRow(object? row) => _list.SelectedItem = row;
 
     /// <summary>CSV / JSON の書き出しを求められた(引数は "csv" か "json")。</summary>
     public event EventHandler<string>? ExportRequested;
