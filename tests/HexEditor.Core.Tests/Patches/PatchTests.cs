@@ -185,6 +185,33 @@ public sealed class PatchTests : IDisposable
     }
 
     [Fact]
+    public void PatchIsAppliedToTheOriginalDataWhileATransformViewIsActive()
+    {
+        // パッチは元のファイルに対するもの: 変換ビュー (EDIT-45) が有効でも逆変換せずに当て、確認も元のデータで行う。
+        byte[] ips = File.ReadAllBytes(TestDataCatalog.Get("TD-EDIT-PATCH-IPS"));
+        byte[] bps = File.ReadAllBytes(TestDataCatalog.Get("TD-EDIT-PATCH-BPS"));
+        using (Document doc = Open(Src()))
+        {
+            doc.SetViewTransform(HexEditor.Core.Editing.TransformView.TransformDefinition.Xor([0x5A]).Create());
+            using LoadedPatch p = PatchFiles.Load(new MemoryStream(ips));
+            p.ApplyTo(doc);
+            Assert.Equal(Mod3(), ReadAll(doc.DataSnapshot));
+            Assert.NotNull(doc.ViewTransform);
+        }
+
+        using (Document doc = Open(Src()))
+        {
+            doc.SetViewTransform(HexEditor.Core.Editing.TransformView.TransformDefinition.Xor([0x5A]).Create());
+            using LoadedPatch p = PatchFiles.Load(new MemoryStream(bps));
+            Assert.Equal(PatchVerification.Match, p.Verify(doc.DataSnapshot));
+
+            // 長さが変わるパッチは、変換ビューの間は当てない (EDIT-45 の仕様 8)。
+            Assert.Throws<FixedLengthException>(() => p.ApplyTo(doc));
+            Assert.False(doc.IsModified);
+        }
+    }
+
+    [Fact]
     [Trait(TC, "TC-EDIT-43-02")]
     public void BpsOnOtherFileIsMismatch()
     {

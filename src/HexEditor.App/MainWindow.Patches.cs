@@ -665,7 +665,9 @@ public sealed partial class MainWindow
         bool reversed = reverse.IsChecked == true;
         if (patch.ResultLength(doc.Document.Length, reversed) != doc.Document.Length && !doc.Document.CanResize)
         {
-            ShowNotice(Loc.Get("Patch_Error_FixedLength"), InfoBarSeverity.Error, doc);
+            // 変換ビュー (EDIT-45 の仕様 8) が理由なら変換ビューの文にする。
+            ShowNotice(TransformViewNotice(Loc.Get("Notice_FixedLength"), doc) is { } t && t != Loc.Get("Notice_FixedLength") ? t : Loc.Get("Patch_Error_FixedLength"),
+                InfoBarSeverity.Error, doc);
             return;
         }
 

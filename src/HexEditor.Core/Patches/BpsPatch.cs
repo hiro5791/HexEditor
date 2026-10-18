@@ -121,7 +121,7 @@ public sealed class BpsPatch : LoadedPatch
 
     protected override void ApplyCore(Document document, bool reverse, string description, CancellationToken cancellationToken)
     {
-        PieceTree source = document.Current.Tree;
+        PieceTree source = document.DataSnapshot.Tree;
         if (source.Length != SourceSize)
         {
             throw new PatchException(PatchError.OutOfRange, "BPS: 変換前の長さが違います。");
@@ -209,7 +209,7 @@ public sealed class BpsPatch : LoadedPatch
         if (distance <= Engine.GeneratedData.MaxPatternLength)
         {
             byte[] pattern = new byte[distance];
-            new DocumentSnapshot(document.Current.Storage, output.Slice(from, distance)).Read(0, pattern);
+            new DocumentSnapshot(document.DataSnapshot.Storage, output.Slice(from, distance)).Read(0, pattern);
             return output.Concat(document.PatternTree(pattern, length));
         }
 

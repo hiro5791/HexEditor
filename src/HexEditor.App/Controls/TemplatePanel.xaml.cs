@@ -59,6 +59,13 @@ public sealed partial class TemplatePanel : UserControl
         SearchAllButton.Content = Loc.Get("Tpl_SearchAll");
         vm.SelectRequested += Vm_SelectRequested;
         vm.Layout.PropertyChanged += (_, _) => BuildHeader();
+
+        // パネルのタブを切り替えると Unloaded の後に Loaded がまた来る。購読し直さないと、表示し直した後は選択の要求 (パスへ移動・カーソルに追従) が届かない。
+        Loaded += (_, _) =>
+        {
+            vm.SelectRequested -= Vm_SelectRequested;
+            vm.SelectRequested += Vm_SelectRequested;
+        };
         Unloaded += (_, _) => vm.SelectRequested -= Vm_SelectRequested;
         Tree.ContextFlyout = CreateContextMenu();
         BuildHeader();

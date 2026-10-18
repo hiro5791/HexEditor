@@ -305,8 +305,10 @@ public sealed partial class YaraPanel : UserControl
 
         try
         {
-            foreach (string path in Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories)
-                .Where(p => p.EndsWith(".yar", StringComparison.OrdinalIgnoreCase) || p.EndsWith(".yara", StringComparison.OrdinalIgnoreCase)).Order())
+            // 大きなフォルダでも UI スレッドを止めないよう、列挙はバックグラウンドで行う。
+            List<string> found = await Task.Run(() => Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories)
+                .Where(p => p.EndsWith(".yar", StringComparison.OrdinalIgnoreCase) || p.EndsWith(".yara", StringComparison.OrdinalIgnoreCase)).Order().ToList());
+            foreach (string path in found)
             {
                 if (!_paths.Contains(path, StringComparer.OrdinalIgnoreCase))
                 {

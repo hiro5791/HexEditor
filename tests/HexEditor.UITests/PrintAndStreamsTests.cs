@@ -123,6 +123,12 @@ public sealed class PrintAndStreamsTests
             Assert.Contains("1,048,576 B (modified)", text, StringComparison.Ordinal);
             Assert.Contains($"{p} / {document.NumberOfPages}", text, StringComparison.Ordinal);
             Assert.Contains("10/7/2026 2:03 PM", text, StringComparison.Ordinal);
+
+            // 置換されずに残った記号がない (データのテキスト列には { が出うるので、記号の名前で確かめる)。
+            foreach (string symbol in new[] { "{name}", "{path}", "{range}", "{size}", "{modified}", "{page}", "{pages}", "{date}", "{time}" })
+            {
+                Assert.DoesNotContain(symbol, text, StringComparison.Ordinal);
+            }
         }
     });
 

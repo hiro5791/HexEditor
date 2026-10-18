@@ -34,7 +34,8 @@ While a transform view is active:
 - The top-left corner of the hex view shows a badge such as "Transform view: XOR 5A", and the status bar shows the same text. The editor has a dashed frame.
 - What you type, paste or fill is treated as the displayed value. It is transformed back before it is written to the data.
 - You cannot insert or delete bytes, because that would move the data against the key.
-- Search, the data inspector, hashes, statistics and structure templates work on the displayed data, and show "Transform view: ..." to say so. In the data inspector, turn on **Interpret original data** to read the bytes before the transform.
+- Search, the data inspector, hashes, statistics, structure templates, disassembly and YARA scans work on the displayed data, and show "Transform view: ..." to say so. Exported results record the transform too. Printing, decompressing and decrypting also use the displayed data. In the data inspector, turn on **Interpret original data** to read the bytes before the transform.
+- Saving, creating and applying patches, and splitting, joining and interleaving use the original data. A patch that changes the length cannot be applied while the view is active.
 - Copy puts the displayed data on the clipboard. To copy the original data instead, change **Copy in a transform view** in the editing settings.
 - The file is not changed, and turning the view on or off is not an edit in the undo history.
 

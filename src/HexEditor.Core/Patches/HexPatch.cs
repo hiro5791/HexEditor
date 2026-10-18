@@ -58,7 +58,7 @@ public sealed class HexPatch : LoadedPatch
 
     protected override void ApplyCore(Document document, bool reverse, string description, CancellationToken cancellationToken)
     {
-        PieceTree input = document.Current.Tree;
+        PieceTree input = document.DataSnapshot.Tree;
         long inputLength = reverse ? Manifest.Target.Length : Manifest.Source.Length;
         if (input.Length != inputLength)
         {

@@ -75,7 +75,7 @@ public sealed class UpsPatch : LoadedPatch
             }
 
             byte[] data = new byte[n];
-            PatchDiff.ReadPadded(document.Current, offset, data);
+            PatchDiff.ReadPadded(document.DataSnapshot, offset, data);
             for (int i = 0; i < n; i++)
             {
                 data[i] ^= xor[i];

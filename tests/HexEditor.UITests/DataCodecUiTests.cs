@@ -434,6 +434,9 @@ public sealed class DataCodecUiTests
         JsonObject rule = Assert.Single(state["rules"]!.AsArray())!.AsObject();
         Assert.Equal("mz", rule["rule"]!.GetValue<string>());
 
+        // TC-FIND-33-03 の手順 3 (画面の部分): ブロックをまたぐ一致の制限の説明がスキャンの画面に常に出ている。
+        Assert.Contains("blocks of 64 MiB", state["limitation"]!.GetValue<string>(), StringComparison.Ordinal);
+
         // 1. オフセット 0〜1 に注釈 (層 8) の強調表示があり、2 にはない。
         await app.GoToAsync(0);
         await app.IdleAsync();

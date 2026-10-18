@@ -105,12 +105,16 @@ public abstract class LoadedPatch : IDisposable
         }
 
         HistoryNode before = document.History.CurrentNode;
-        using (document.BeginGroup(description))
+        // パッチは元のファイルに対するものなので、変換ビュー (EDIT-45) が有効でも逆変換せずに元のデータへ当てる (確認も元のデータで行う)。
+        document.EditRaw(() =>
         {
-            ApplyCore(document, reverse, description, cancellationToken);
-        }
+            using (document.BeginGroup(description))
+            {
+                ApplyCore(document, reverse, description, cancellationToken);
+            }
+        });
 
-        if (verifyResult && !VerifyResult(document.Current, reverse, progress, cancellationToken))
+        if (verifyResult && !VerifyResult(document.DataSnapshot, reverse, progress, cancellationToken))
         {
             if (!ReferenceEquals(document.History.CurrentNode, before) && document.History.CanUndo)
             {

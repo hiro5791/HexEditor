@@ -68,6 +68,18 @@ public sealed partial class MainWindow
             templateVm.SelectedItem = item;
             ShowTemplateVisualizer(item.Node);
         };
+        // 結果ツリーが別のドキュメント (タブの切り替え) に移ったら、前のドキュメントのノードを表示し続けない (音声も止める)。
+        // 「表示するものがありません」に戻し、移った先でノードを選ぶとそれを表示する。
+        object? shownFor = null;
+        TemplateVisVm.ContentChanged += (_, _) => shownFor = TemplateVisVm.Node is null ? null : templateVm.Templates;
+        templateVm.ResultsChanged += (_, _) =>
+        {
+            if (TemplateVisVm.Node is not null && shownFor is not null && !ReferenceEquals(shownFor, templateVm.Templates))
+            {
+                shownFor = null;
+                _ = TemplateVisVm.ShowAsync(null);
+            }
+        };
         templateVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(TemplatePanelViewModel.SelectedItem) && IsPanelShown(TemplateVisualizerPanelId)
