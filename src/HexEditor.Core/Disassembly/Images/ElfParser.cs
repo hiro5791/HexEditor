@@ -243,6 +243,7 @@ internal static class ElfParser
 
             string name = dynNames[(int)symIndex];
             imports[offset] = name;
+            symbols.Add(new ImageSymbol(name, name, offset, ImageSymbolKind.Import));
             if (stubs is not null && header >= 0)
             {
                 ulong stub = stubs.Addr + (ulong)(header + i * stride);

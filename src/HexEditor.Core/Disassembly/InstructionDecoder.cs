@@ -77,9 +77,19 @@ public static class Disassembler
     {
         var list = new List<DisasmInstruction>();
         int at = 0;
+        DisasmArchitecture arch = decoder.Architecture;
+        int alignment = arch.VariableLength ? 1 : Math.Max(1, arch.Alignment);
         while (at < code.Length && list.Count < maxInstructions)
         {
-            DisasmInstruction i = DecodeOrData(decoder, code[at..], address + (ulong)at, format, detail);
+            // 固定長の命令のアーキテクチャでは、解釈できない語の各バイトを db にし、次の命令は語の境界から解釈する。
+            DisasmInstruction i = at % alignment != 0
+                ? DisasmInstruction.Data(address + (ulong)at, code[at], format)
+                : DecodeOrData(decoder, code[at..], address + (ulong)at, format, detail);
+            if (i.IsInvalid && alignment > 1)
+            {
+                i = i with { Length = 1 };
+            }
+
             list.Add(i);
             at += i.Length;
         }
