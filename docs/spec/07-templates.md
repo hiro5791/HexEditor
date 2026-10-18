@@ -1024,7 +1024,7 @@ struct ZlibBlock {
    | `std.section` | `create`、`copy`、`append`、`size`、`open_in_tab` (結果ツリーからの操作を促すだけで、テンプレートからタブは開かない) |
    | `std.ptr` | `relative_to(基準)`、`null_if(値)` などポインタの補助関数 |
    | `std.type` | よく使う型の定義: `magic<"…">` (指定のバイト列であることを確認する型)、`guid`、`ipv4`、`filetime` などの組み込み型の別名、`Size<T>`、`Bitmask<T>` |
-   | `std.sys` | `demangle(文字列)` (06 の ANA-30。ANA-30 はフェーズ 4 のため、それまでは引数をそのまま返す)、`file_name()` (ドキュメントのファイル名だけ。パスは返さない)、`file_extension()`、`detected_mime()` (06 の ANA-17) |
+   | `std.sys` | `demangle(文字列)` (06 の ANA-30 のデマングラ。デマングルできない名前はそのまま返す)、`file_name()` (ドキュメントのファイル名だけ。パスは返さない)、`file_extension()`、`detected_mime()` (06 の ANA-17) |
    | `std.pe` / `std.elf` / `std.macho` | 実行形式の補助関数 (`rva_to_offset`、`va_to_offset`、セクションの検索)。標準テンプレート (TPL-34) で使う |
 
 3. 標準ライブラリの関数は、データの読み込み・計算だけを行い、ファイル・ネットワーク・時刻・乱数・環境変数を使わない (TPL-37)。同じテンプレート・同じデータでは常に同じ結果になる。

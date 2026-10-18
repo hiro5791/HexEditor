@@ -609,7 +609,11 @@ internal sealed partial class Evaluator
 
             // ── std.sys (ファイル名だけ。パスは返さない)
             case "std::sys::demangle":
-                return Val.Str(StrArg(c, f, 0));
+            {
+                // 06 の ANA-30 のデマングラ。デマングルできない名前はそのまま返す。
+                string mangled = StrArg(c, f, 0);
+                return Val.Str(HexEditor.Core.Disassembly.Demangling.Demangler.Demangle(mangled).Text);
+            }
             case "std::sys::file_name":
                 return Val.Str(Path.GetFileName(_result.Data.FileName ?? string.Empty));
             case "std::sys::file_extension":

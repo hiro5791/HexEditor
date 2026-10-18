@@ -1,0 +1,26 @@
+# Microsoft Visual C++: マングル名<TAB>期待する出力 (llvm-undname の形)
+?bar@foo@@QEAAXH@Z	public: void __cdecl foo::bar(int)
+?f@@YAXXZ	void __cdecl f(void)
+?f@@YAHH@Z	int __cdecl f(int)
+?f@@YAXPEBD@Z	void __cdecl f(char const *)
+?f@@YAXAEAH@Z	void __cdecl f(int &)
+?x@@3HA	int x
+?x@foo@@2HA	public: static int foo::x
+??0foo@@QEAA@XZ	public: __cdecl foo::foo(void)
+??1foo@@QEAA@XZ	public: __cdecl foo::~foo(void)
+?get@foo@@QEBAHXZ	public: int __cdecl foo::get(void) const
+?f@foo@@UEAAXXZ	public: virtual void __cdecl foo::f(void)
+?s@foo@@SAHXZ	public: static int __cdecl foo::s(void)
+?f@@YAXHZZ	void __cdecl f(int, ...)
+?f@@YAXP6AXH@Z@Z	void __cdecl f(void (__cdecl *)(int))
+?f@@YAXVfoo@@@Z	void __cdecl f(class foo)
+?f@@YAXUbar@ns@@@Z	void __cdecl f(struct ns::bar)
+?f@@YAX_N@Z	void __cdecl f(bool)
+?f@@YAX_J@Z	void __cdecl f(__int64)
+?f@@YGXH@Z	void __stdcall f(int)
+?f@@YIXH@Z	void __fastcall f(int)
+??4foo@@QEAAAEAV0@AEBV0@@Z	public: class foo & __cdecl foo::operator=(class foo const &)
+??_7foo@@6B@	const foo::`vftable'
+?f@@YAXV?$vector@HV?$allocator@H@std@@@std@@@Z	void __cdecl f(class std::vector<int, class std::allocator<int>>)
+?g@@YAXPEAH0@Z	void __cdecl g(int *, int *)
+?h@ns@@YAXXZ	void __cdecl ns::h(void)

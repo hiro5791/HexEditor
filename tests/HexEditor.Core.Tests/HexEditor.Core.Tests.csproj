@@ -22,6 +22,7 @@
   <ItemGroup>
     <None Include="..\fixtures\hash\**\*" LinkBase="fixtures\hash" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\fixtures\templates\**\*" LinkBase="fixtures\templates" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\demangle\**\*" LinkBase="fixtures\demangle" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

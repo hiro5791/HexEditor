@@ -1,0 +1,8 @@
+# D: マングル名<TAB>期待する出力
+_D3foo3barFiZv	void foo.bar(int)
+_D3foo3bazFZi	int foo.baz()
+_D4test1fFAyaZv	void test.f(immutable(char)[])
+_D3std5stdio7writelnFiZv	void std.stdio.writeln(int)
+_D3foo1xi	foo.x
+_D3foo3barFPiZv	void foo.bar(int*)
+_D3foo3barFkmZb	bool foo.bar(uint, ulong)
