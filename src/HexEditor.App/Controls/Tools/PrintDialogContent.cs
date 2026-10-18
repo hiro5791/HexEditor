@@ -141,7 +141,8 @@ internal sealed class PrintDialogContent : UserControl
         _colText = DialogParts.Check("Print_ColText", Loc.Get("Print_ColText"), view.ShowTextColumn);
         foreach (CheckBox box in new[] { _colOffset, _colHex, _colText })
         {
-            box.Click += (_, _) => Changed();
+            box.Checked += (_, _) => Changed();
+            box.Unchecked += (_, _) => Changed();
         }
 
         // 色

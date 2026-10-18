@@ -165,7 +165,7 @@ public static class TestHooks
 
     /// <summary>空き容量を上書きしたボリュームの情報 (ENG-25)。上書きしないときは null。</summary>
     public static Core.Saving.IVolumeInfoProvider? Volumes =>
-        Active && Settings.FreeSpace is { } free ? new FixedFreeSpaceVolumes(free) : null;
+        Active && (Settings.FreeSpace is not null || Settings.NoNamedStreams) ? new FixedFreeSpaceVolumes(Settings.FreeSpace, Settings.NoNamedStreams) : null;
 
     /// <summary>
     /// 開くときの書き込みの確認 (ENG-14 の仕様 1) の差し替え: 設定 writeErrors に合うファイルでは、権限がない・共有違反・書き込み禁止の
@@ -190,10 +190,17 @@ public static class TestHooks
         return File.OpenHandle(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
     }
 
-    private sealed class FixedFreeSpaceVolumes(long free) : Core.Saving.IVolumeInfoProvider
+    private sealed class FixedFreeSpaceVolumes(long? free, bool noNamedStreams) : Core.Saving.IVolumeInfoProvider
     {
         public Core.Saving.VolumeInfo? GetVolume(string folder) =>
-            Core.Saving.SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } volume ? volume with { AvailableFreeSpace = free } : null;
+            Core.Saving.SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } volume
+                ? volume with
+                {
+                    AvailableFreeSpace = free ?? volume.AvailableFreeSpace,
+                    FileSystem = noNamedStreams ? "FAT32" : volume.FileSystem,
+                    SupportsNamedStreams = !noNamedStreams && volume.SupportsNamedStreams,
+                }
+                : null;
     }
 
     /// <summary>偽のディスク (ENG-29 の UI テスト)。直接の経路は管理者権限なしを再現し、昇格の経路は管理者権限ありを再現する。</summary>

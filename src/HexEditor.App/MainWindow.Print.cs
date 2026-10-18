@@ -307,8 +307,12 @@ public sealed partial class MainWindow
         }
         finally
         {
-            _printContent = null;
-            _printPreview = null;
+            // 次のダイアログがすでに開いていれば、そちらを残す。
+            if (ReferenceEquals(_printContent, content))
+            {
+                _printContent = null;
+                _printPreview = null;
+            }
         }
     }
 

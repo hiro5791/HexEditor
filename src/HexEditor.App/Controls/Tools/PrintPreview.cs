@@ -216,27 +216,38 @@ internal sealed class PrintPreview : UserControl
         PageChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void Scroll_KeyDown(object sender, KeyRoutedEventArgs e)
+    private void Scroll_KeyDown(object sender, KeyRoutedEventArgs e) => e.Handled = HandleKey(e.Key);
+
+    /// <summary>キー操作 (PageDown / PageUp / Home / End)。処理したら true。</summary>
+    public bool HandleKey(VirtualKey key)
     {
-        switch (e.Key)
+        switch (key)
         {
             case VirtualKey.PageDown:
                 GoTo(_page + Step);
-                break;
+                return true;
             case VirtualKey.PageUp:
                 GoTo(_page - Step);
-                break;
+                return true;
             case VirtualKey.Home:
                 GoTo(0);
-                break;
+                return true;
             case VirtualKey.End:
                 GoTo(long.MaxValue);
-                break;
+                return true;
             default:
-                return;
+                return false;
         }
+    }
 
-        e.Handled = true;
+    /// <summary>ページ番号の入力欄に文字列を入れて Enter を押したのと同じ処理 (テスト用)。</summary>
+    internal void EnterPageNumber(string text)
+    {
+        _pageBox.Text = text;
+        if (long.TryParse(text.Replace(",", string.Empty), NumberStyles.None, CultureInfo.CurrentCulture, out long number))
+        {
+            GoTo(number - 1);
+        }
     }
 
     private void UpdateInfo()

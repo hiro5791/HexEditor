@@ -44,7 +44,7 @@ public sealed partial class MainWindow
             case "tcFolder":
                 return await TestFolderAsync(request);
             default:
-                return null;
+                return await HandleToolsFileTestCommandAsync(cmd, request);
         }
     }
 

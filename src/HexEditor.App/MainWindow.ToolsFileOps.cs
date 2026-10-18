@@ -332,7 +332,8 @@ public sealed partial class MainWindow
 
         foreach (CheckBox box in new[] { bookmarks, script, checksum })
         {
-            box.Click += (_, _) => Update();
+            box.Checked += (_, _) => Update();
+            box.Unchecked += (_, _) => Update();
         }
 
         changedHook = Update;
