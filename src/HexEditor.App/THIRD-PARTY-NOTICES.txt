@@ -52,6 +52,23 @@ The license and the notices of the components that Monaco contains are in
 Assets\Monaco\LICENSE.txt and Assets\Monaco\ThirdPartyNotices.txt.
 
 -------------------------------------------------------------------------------
+SSH.NET 2026.0.0 (SSH / SFTP client for remote files)
+https://github.com/sshnet/SSH.NET
+License: MIT License. Copyright (c) Renci, Oleg Kapeljushnik, Gert Driesen,
+Rob Hague and contributors.
+
+-------------------------------------------------------------------------------
+BouncyCastle.Cryptography 2.7.0 (cryptography used by SSH.NET)
+https://github.com/bcgit/bc-csharp
+License: MIT License. Copyright (c) 2000-2025 The Legion of the Bouncy Castle
+Inc. (https://www.bouncycastle.org).
+
+-------------------------------------------------------------------------------
+Microsoft.Extensions.Logging.Abstractions (used by SSH.NET)
+https://github.com/dotnet/runtime
+License: MIT License. Copyright (c) .NET Foundation and Contributors.
+
+-------------------------------------------------------------------------------
 Microsoft Edge WebView2 (Microsoft.Web.WebView2; part of the Windows App SDK)
 https://learn.microsoft.com/microsoft-edge/webview2/
 License: Microsoft Software License Terms (BSD-style license for the SDK).

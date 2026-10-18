@@ -155,6 +155,25 @@ The name looks like **notepad.exe (PID 1234)**. Unallocated areas are not read. 
 - Changes you close without saving are not brought back.
 - A process protected by Windows cannot be opened, even as administrator.
 
+## Save a process snapshot or minidump {#process-snapshot}
+
+You can save what a process has in memory at a moment, to look at it later or to open it in a debugger.
+
+1. Open the process memory in a tab (see [Process memory](#process-memory)).
+2. Select **File > Export > Save Snapshot...** or **File > Export > Save as Minidump...**. You can also run **File: Save process snapshot** or **File: Save as minidump** from the command palette.
+3. For a snapshot, choose what to include: **All readable regions** (default), **Region or module selected in the memory map**, or **Writable regions only**. To use the second choice, first select a region or a module in the **Memory map** panel.
+4. If you want a consistent picture, turn on **Pause the process while capturing**. The process is stopped only while the data is read.
+5. Choose where to save in **Save to** (or select **Browse...**), then select **Save**.
+
+- A snapshot is a `.hexsnap` file. Open it with **File > Open**: it shows the whole address space at the same addresses, read-only, with the **Memory map** panel. You can compare snapshots (see [Comparing process memory snapshots](compare.md#process-snapshots)).
+- A minidump is a Windows `.dmp` file with all the readable memory. Open it in WinDbg or Visual Studio.
+- Saving can take a while for a large process. Progress shows in the status bar, and you can cancel. When you cancel, the partial file is deleted.
+- HexEditor checks the free space before it starts.
+- If some regions could not be read, a message tells you how many and how much. The rest is saved.
+- If the process exits while the data is read, saving stops and the partial file is deleted.
+- If the process cannot be paused, a message tells you, and it is captured while running.
+- **Save As** is not available for process memory. Use a snapshot instead.
+
 ## Administrator rights {#administrator}
 
 Opening the following needs administrator rights.

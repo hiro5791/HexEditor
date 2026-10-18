@@ -8,6 +8,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 
 - [Getting started](getting-started.md)
 - [Opening files, disks and processes](opening-files.md)
+- [Remote data sources](remote-sources.md)
 - [The hex view](hex-view.md)
 - [Editing](editing.md)
 - [Selection and clipboard](selection-clipboard.md)
