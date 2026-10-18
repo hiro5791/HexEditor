@@ -6788,4 +6788,5 @@ Type: {4}</value></data>
   <data name="Demangle_Converting" xml:space="preserve"><value>Converting...</value></data>
   <data name="Disasm_NativeCode" xml:space="preserve"><value>Show native code</value></data>
   <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>Show the ReadyToRun native code of this method</value></data>
+  <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>S</value></data>
 </root>
