@@ -110,6 +110,113 @@ public sealed class DisassemblyFeatureTests
     }
 
     [Fact]
+    [Trait(TC, "TC-ANA-30-03")]
+    public void CppSymbolsAreDemangledInTheSymbolList()
+    {
+        using Document doc = Doc(TestDataCatalog.ElfCpp());
+        ExecutableImage image = ExecutableParser.Parse(doc.Current);
+        Assert.Contains(image.Symbols, s => s.Name == "foo::bar(int)" && s.RawName == "_ZN3foo3barEi");
+        Assert.Contains(image.Symbols, s => s.Name == "foo::Baz::qux() const");
+        Assert.DoesNotContain(image.Symbols, s => s.Name.StartsWith("_Z", StringComparison.Ordinal));
+        using DisassemblyListing listing = Listing(doc);
+        ulong bar = TestDataCatalog.ElfSymbols["_ZN3foo3barEi"];
+        Assert.Equal("foo::bar(int)", listing.Lines(image.ToOffset(bar)!.Value, 1)[0].Label);
+
+        // main の call のコメントもデマングルした名前 (ANA-30 の仕様 7: ANA-23 のコメント列)。
+        IReadOnlyList<ListingLine> main = listing.Lines(image.ToOffset(TestDataCatalog.ElfSymbols["main"])!.Value, 6);
+        Assert.Contains(main, l => l.Comment == "foo::bar(int)");
+    }
+
+    /// <summary>
+    /// TC-ANA-23-01: dumpbin /disasm の命令列と比べる。dumpbin は Visual Studio のあるランナーにしかないため、見つからなければ何もしない
+    /// (CI の windows ランナーで動く)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-ANA-23-01")]
+    public void EntryPointMatchesDumpbin()
+    {
+        string? dumpbin = FindDumpbin();
+        if (dumpbin is null)
+        {
+            return;
+        }
+
+        string dir = Directory.CreateTempSubdirectory("hexed-dumpbin").FullName;
+        try
+        {
+            string exe = Path.Combine(dir, "TD-ANA-PE-ASM.exe");
+            System.IO.File.WriteAllBytes(exe, TestDataCatalog.PeAsm());
+            var start = new ProcessStartInfo(dumpbin, $"/nologo /disasm \"{exe}\"") { RedirectStandardOutput = true, UseShellExecute = false };
+            using Process p = Process.Start(start)!;
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+            var expected = new List<(ulong Address, int Length, string Text)>();
+            foreach (string line in output.Split('\n'))
+            {
+                // 例: "  0000000140001000: 48 83 EC 28        sub         rsp,28h"
+                System.Text.RegularExpressions.Match m = System.Text.RegularExpressions.Regex.Match(line,
+                    @"^\s+([0-9A-F]{16}): ((?:[0-9A-F]{2} )+)\s*(\S+)\s*(.*)$");
+                if (m.Success)
+                {
+                    expected.Add((Convert.ToUInt64(m.Groups[1].Value, 16), m.Groups[2].Value.Trim().Split(' ').Length,
+                        Normalize(m.Groups[3].Value + " " + m.Groups[4].Value)));
+                }
+            }
+
+            using Document doc = Doc(TestDataCatalog.PeAsm());
+            using DisassemblyListing listing = Listing(doc, new DisasmViewOptions { ArchitectureId = DisasmArchitectures.X86_64, Format = new DisasmFormat { HexStyle = HexStyle.Suffix, UppercaseHex = true } });
+            var actual = listing.Lines(0x400, expected.Count + 16).Where(l => l.Kind == ListingLineKind.Instruction).Take(expected.Count)
+                .Select(l => (l.Address, l.Length, Normalize(l.Instruction!.Text))).ToList();
+            Assert.True(expected.Count >= 11, output);
+            for (int i = 0; i < 21 && i < expected.Count; i++)
+            {
+                Assert.Equal(expected[i].Address, actual[i].Address);
+                Assert.Equal(expected[i].Length, actual[i].Length);
+
+                // RIP 相対のメモリ参照は dumpbin が絶対アドレスで書くので、ニーモニックだけを比べる。
+                if (expected[i].Text.Contains('[') || actual[i].Item3.Contains('['))
+                {
+                    Assert.Equal(expected[i].Text.Split('[')[0].Split(' ')[0][..4], actual[i].Item3[..4]);
+                }
+                else
+                {
+                    Assert.Equal(expected[i].Text, actual[i].Item3);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+
+        // 構文の差 (ptr の表記、空白、大文字・小文字、先頭の 0) をそろえる。
+        static string Normalize(string text)
+        {
+            string t = text.ToLowerInvariant().Replace("ptr ", string.Empty, StringComparison.Ordinal).Replace(" ", string.Empty, StringComparison.Ordinal);
+            t = System.Text.RegularExpressions.Regex.Replace(t, @"\b0*([0-9a-f]+)h\b", "$1");
+            return System.Text.RegularExpressions.Regex.Replace(t, @"\b0+([0-9a-f]+)\b", "$1");
+        }
+    }
+
+    private static string? FindDumpbin()
+    {
+        string vs = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Microsoft Visual Studio");
+        if (!Directory.Exists(vs))
+        {
+            return null;
+        }
+
+        try
+        {
+            return Directory.EnumerateFiles(vs, "dumpbin.exe", SearchOption.AllDirectories).FirstOrDefault(f => f.Contains("Hostx64\\x64", StringComparison.OrdinalIgnoreCase));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
+    [Fact]
     [Trait(TC, "TC-ANA-24-04")]
     public void MachOFatSlices()
     {

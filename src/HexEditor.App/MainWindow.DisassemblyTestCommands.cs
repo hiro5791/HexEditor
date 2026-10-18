@@ -163,6 +163,9 @@ public sealed partial class MainWindow
                 }
 
                 break;
+            case "native":
+                result["shown"] = _disasmPanel?.ShowNativeCode() ?? false;
+                break;
             case "symbols":
                 _disasmPanel?.FilterSymbols(request["filter"]?.GetValue<string>() ?? string.Empty);
                 result["symbols"] = new JsonArray([.. vm.SymbolsMatching(request["filter"]?.GetValue<string>() ?? string.Empty)

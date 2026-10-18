@@ -6786,4 +6786,6 @@
   <data name="Demangle_Copy" xml:space="preserve"><value>コピー</value></data>
   <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (デマングルできません)</value></data>
   <data name="Demangle_Converting" xml:space="preserve"><value>変換しています...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>ネイティブコードを表示</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>このメソッドの ReadyToRun のネイティブコードを表示します</value></data>
 </root>

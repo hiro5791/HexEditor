@@ -6786,4 +6786,6 @@ Type: {4}</value></data>
   <data name="Demangle_Copy" xml:space="preserve"><value>Copy</value></data>
   <data name="Demangle_Failed" xml:space="preserve"><value>{0}  (can't demangle)</value></data>
   <data name="Demangle_Converting" xml:space="preserve"><value>Converting...</value></data>
+  <data name="Disasm_NativeCode" xml:space="preserve"><value>Show native code</value></data>
+  <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>Show the ReadyToRun native code of this method</value></data>
 </root>

@@ -104,7 +104,32 @@ public sealed partial class DisassemblyPanel : UserControl, IPanelContent
 
     public bool FocusContent() => Listing.Focus(FocusState.Keyboard);
 
-    private void Vm_RowsChanged(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(UpdateBars);
+    private void Vm_RowsChanged(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(() =>
+    {
+        UpdateBars();
+        UpdateNativeButton();
+    });
+
+    /// <summary>ReadyToRun のネイティブコードがあるメソッドなら「ネイティブコードを表示」を出す (ANA-27 の仕様 6)。</summary>
+    private void UpdateNativeButton() =>
+        NativeButton.Visibility = _vm.IsMsil && _vm.CurrentMethod is { } m && _vm.Msil?.NativeCodeOf(m) is not null ? Visibility.Visible : Visibility.Collapsed;
+
+    private void NativeButton_Click(object sender, RoutedEventArgs e) => ShowNativeCode();
+
+    /// <summary>今のメソッドの ReadyToRun のネイティブコードを、そのアーキテクチャのリスティングで出す (ANA-27 の仕様 6)。</summary>
+    internal bool ShowNativeCode()
+    {
+        if (_vm.CurrentMethod is not { } method || _vm.Msil?.NativeCodeOf(method) is not { } code)
+        {
+            return false;
+        }
+
+        _vm.SetArchitecture(code.ArchitectureId);
+        UpdateToolbar();
+        UpdateLists();
+        _vm.GoToOffset(code.Offset, activate: true);
+        return true;
+    }
 
     private void Vm_ImageChanged(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(() =>
     {
@@ -127,6 +152,8 @@ public sealed partial class DisassemblyPanel : UserControl, IPanelContent
         OptionsButton.Content = Loc.Get("Disasm_Options");
         FollowToggle.Content = Loc.Get("Disasm_Follow");
         FindButton.Content = Loc.Get("Disasm_FindPattern");
+        NativeButton.Content = Loc.Get("Disasm_NativeCode");
+        SetTip(NativeButton, "Disasm_NativeCodeTip");
         PatternBox.PlaceholderText = Loc.Get("Disasm_PatternPlaceholder");
         AutomationProperties.SetName(PatternBox, Loc.Get("Disasm_FindPattern"));
         RegexCheck.Content = Loc.Get("Disasm_PatternRegex");

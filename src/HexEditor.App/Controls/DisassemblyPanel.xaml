@@ -39,6 +39,7 @@
             </DropDownButton>
             <ToggleButton x:Name="FollowToggle" Margin="0,0,6,4" AutomationProperties.AutomationId="Disasm_Follow" IsChecked="True" Click="FollowToggle_Click" />
             <Button x:Name="FindButton" Margin="0,0,6,4" AutomationProperties.AutomationId="Disasm_FindPatternButton" Click="FindButton_Click" />
+            <Button x:Name="NativeButton" Margin="0,0,6,4" AutomationProperties.AutomationId="Disasm_NativeCode" Click="NativeButton_Click" Visibility="Collapsed" />
         </local:WrapPanel>
         <StackPanel Grid.Row="1" Spacing="4">
             <InfoBar x:Name="EngineBar" AutomationProperties.AutomationId="Disasm_EngineError" IsClosable="False" Severity="Error" />

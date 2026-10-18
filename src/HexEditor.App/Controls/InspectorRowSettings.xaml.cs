@@ -72,7 +72,52 @@ public sealed partial class InspectorRowSettings : UserControl
         AutomationProperties.SetName(DateFormatChoice, Loc.Get("Inspector_DateFormatLabel/Text"));
         AutomationProperties.SetName(FixedTotal, Loc.Get("Inspector_FixedTotalName"));
         AutomationProperties.SetName(FixedFraction, Loc.Get("Inspector_FixedFractionName"));
+        InitializeDisasmArchitecture();
     }
+
+    // ---- 1 命令の逆アセンブルのアーキテクチャ (INSP-16 の仕様 1) ----
+
+    private ComboBox _disasmArch = null!;
+
+    /// <summary>「反対のエンディアンでも表示」の横に、逆アセンブルの行のアーキテクチャを選ぶ欄を置く (選んだ行が逆アセンブルの行のときだけ使える)。</summary>
+    private void InitializeDisasmArchitecture()
+    {
+        _disasmArch = new ComboBox { Header = Loc.Get("Inspector_DisasmArchitecture"), MinWidth = 180, IsEnabled = false };
+        AutomationProperties.SetAutomationId(_disasmArch, "Inspector_DisasmArchitecture");
+        foreach (Core.Disassembly.DisasmArchitecture arch in Core.Disassembly.DisasmArchitectures.All)
+        {
+            _disasmArch.Items.Add(new ComboBoxItem { Content = arch.DisplayName, Tag = arch.Id });
+        }
+
+        _disasmArch.SelectionChanged += (_, _) =>
+        {
+            if (_updating || _vm is null || SettingsList.SelectedItem is not RowSettingItem { TypeId: { } id } || !InspectorTypes.IsDisasm(id)
+                || _disasmArch.SelectedItem is not ComboBoxItem { Tag: string arch })
+            {
+                return;
+            }
+
+            Apply(_vm.Layout.WithDisasmArchitecture(id, arch));
+            if (_items.FirstOrDefault(i => i.TypeId is { } t && InspectorTypes.IsDisasm(t)) is { } row)
+            {
+                SettingsList.SelectedItem = row;
+            }
+        };
+        if (OppositeBox.Parent is Panel parent)
+        {
+            int index = parent.Children.IndexOf(OppositeBox);
+            parent.Children.RemoveAt(index);
+            var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16 };
+            Grid.SetRow(row, Grid.GetRow(OppositeBox));
+            row.Children.Add(OppositeBox);
+            row.Children.Add(_disasmArch);
+            parent.Children.Insert(index, row);
+        }
+    }
+
+    /// <summary>逆アセンブルの行のアーキテクチャを選ぶ (テスト用の命令)。</summary>
+    internal void ChooseDisasmArchitecture(string id) =>
+        _disasmArch.SelectedItem = _disasmArch.Items.OfType<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == id);
 
     public InspectorViewModel? ViewModel
     {
@@ -188,6 +233,16 @@ public sealed partial class InspectorRowSettings : UserControl
         RemoveFixedButton.IsEnabled = item?.TypeId is { } fixedId && InspectorTypes.IsFixedPoint(fixedId)
             && InspectorTypes.All.All(t => t.Id != fixedId);
         AddFixedButton.IsEnabled = _vm!.Layout.FixedRowCount < InspectorTypes.MaxFixedRows;
+        bool disasm = item?.TypeId is { } disasmId && InspectorTypes.IsDisasm(disasmId);
+        _disasmArch.IsEnabled = disasm;
+        if (disasm)
+        {
+            bool saved = _updating;
+            _updating = true;
+            string arch = InspectorTypes.Get(item!.TypeId!).DisasmArchitecture!;
+            _disasmArch.SelectedItem = _disasmArch.Items.OfType<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == arch);
+            _updating = saved;
+        }
     }
 
     // ---- 固定小数点の行 (INSP-06 の仕様 3) ----
@@ -449,7 +504,7 @@ public sealed partial class InspectorRowSettings : UserControl
     /// <summary>Tab / Shift+Tab と同じ順 (TabIndex の順) に、次 / 前の要素へフォーカスを移す。</summary>
     internal bool MoveFocus(DependencyObject focused, bool back)
     {
-        Control[] order = [SettingsList, UpButton, DownButton, OppositeBox, DateFormatChoice, PresetChoice, ResetButton, PresetName, SavePresetButton,
+        Control[] order = [SettingsList, UpButton, DownButton, OppositeBox, _disasmArch, DateFormatChoice, PresetChoice, ResetButton, PresetName, SavePresetButton,
             FixedSigned, FixedTotal, FixedFraction, AddFixedButton, RemoveFixedButton];
         int index = Array.FindIndex(order, c => c == focused || IsInside(focused, c));
         for (int step = 1; step <= order.Length; step++)
