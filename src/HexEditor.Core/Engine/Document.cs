@@ -267,9 +267,10 @@ public sealed partial class Document : IDisposable
     public void SetViewTransform(IViewTransform? transform)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        if (transform is not null && LinkedParent is not null)
+        if (transform is not null && (LinkedParent is not null || _linkedViews.Count > 0))
         {
-            throw new InvalidOperationException("連動ビューには変換ビューを設定できません。");
+            // 連動ビューは親の元のデータを指すため、親と子のどちらかだけを変換すると書き込みの値がずれる。
+            throw new InvalidOperationException("連動ビューのあるドキュメントには変換ビューを設定できません。");
         }
 
         if (ReferenceEquals(transform, _viewTransform))

@@ -37,7 +37,7 @@ public sealed partial class MainWindow
     private void RegisterTransformViewCommands()
     {
         string? Active(DocumentViewModel d) => d.Document.ViewTransform is null ? Loc.Get("TransformView_NotActive") : null;
-        string? Allowed(DocumentViewModel d) => d.Document.LinkedParent is not null ? Loc.Get("TransformView_LinkedView") : null;
+        string? Allowed(DocumentViewModel d) => d.Document.LinkedParent is not null || d.Document.LinkedViews.Count > 0 ? Loc.Get("TransformView_LinkedView") : null;
         Commands.Register("data.transformView.define", () => DefineTransformViewAsync(), () => NeedsDocument(Allowed));
         Commands.Register("data.transformView.xor", ShowXorFlyout, () => NeedsDocument(Allowed));
         Commands.Register("data.transformView.clear", () =>

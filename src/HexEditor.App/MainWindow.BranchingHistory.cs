@@ -29,7 +29,7 @@ public sealed partial class MainWindow : IHistoryPanelHost
         Commands.Register("edit.history.save", ((IHistoryPanelHost)this).SaveHistoryAsync, () => NeedsDocument(Linked));
         Commands.Register("edit.history.load", ((IHistoryPanelHost)this).LoadHistoryAsync, () => NeedsEditable(Linked));
         Commands.Register("edit.history.goToNode", GoToNamedNodeAsync,
-            () => NeedsEditable(d => d.Document.History.NamedNodes().Count == 0 ? Loc.Get("History_NoNamedNodes") : null));
+            () => NeedsEditable(d => !d.Document.History.HasNamedNodes ? Loc.Get("History_NoNamedNodes") : null));
     }
 
     // ---- 履歴の保存 (仕様 8) ----

@@ -201,6 +201,7 @@ public sealed class EditHistory
     private HistoryNode? _saved;
     private int _nextId;
     private int _nodeCount;
+    private int _namedCount;
     private int _groupDepth;
     private bool _groupStarted;
     private string _groupDescription = string.Empty;
@@ -277,6 +278,9 @@ public sealed class EditHistory
 
     /// <summary>名前の付いた節か固定した節があるか (閉じるときの確認。EDIT-21 の仕様 10)。</summary>
     public bool HasNamedOrPinnedNodes => AllNodes().Any(n => n.Name is not null || n.IsPinned);
+
+    /// <summary>名前の付いた節があるか (数を覚えておくので、節の数によらず一定時間。コマンドの状態に使う)。</summary>
+    public bool HasNamedNodes => _namedCount > 0;
 
     /// <summary>木のすべての節を、深さ優先 (子は作った順) で返す。</summary>
     public IEnumerable<HistoryNode> AllNodes() => SubtreeNodes(_root);
@@ -395,7 +399,15 @@ public sealed class EditHistory
             _saved = null;
         }
 
-        _nodeCount -= SubtreeNodes(node).Count();
+        foreach (HistoryNode n in SubtreeNodes(node))
+        {
+            _nodeCount--;
+            if (n.Name is not null)
+            {
+                _namedCount--;
+            }
+        }
+
         node.Parent?.RemoveChild(node);
     }
 
@@ -530,6 +542,7 @@ public sealed class EditHistory
     {
         _path.Clear();
         _nodeCount = 0;
+        _namedCount = 0;
         _root = NewNode(new HistoryEntry(initial, string.Empty, null), null);
         _path.Add(_root);
         _current = 0;
@@ -554,6 +567,7 @@ public sealed class EditHistory
             throw new ArgumentOutOfRangeException(nameof(name), $"名前は {MaxNameLength} 文字までです。");
         }
 
+        _namedCount += (name is null ? 0 : 1) - (node.Name is null ? 0 : 1);
         node.Name = name;
         Changed?.Invoke(this, EventArgs.Empty);
     }
@@ -655,6 +669,7 @@ public sealed class EditHistory
         _root = root;
         _saved = saved;
         _nodeCount = SubtreeNodes(root).Count();
+        _namedCount = SubtreeNodes(root).Count(n => n.Name is not null);
         _nextId = SubtreeNodes(root).Max(n => n.Id) + 1;
         _groupDepth = 0;
         _groupStarted = false;

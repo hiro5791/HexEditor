@@ -941,6 +941,13 @@ public sealed partial class MainWindow
             return null;
         }
 
+        if (!copy && (doc.LinkParent ?? doc).Document.ViewTransform is not null)
+        {
+            // 変換ビュー (EDIT-45) の間は連動ビューを作れない (親と子で書き込みの値がずれるため)。
+            ShowNotice(Loc.Get("TransformView_NoLinkedView"), InfoBarSeverity.Warning, doc);
+            return null;
+        }
+
         long started = System.Diagnostics.Stopwatch.GetTimestamp();
         LastLinkedTabOpenMs = null;
         DocumentViewModel vm = copy ? Vm.OpenAsCopy(doc, offset, length, name) : Vm.OpenLinkedView(doc, offset, length, name);

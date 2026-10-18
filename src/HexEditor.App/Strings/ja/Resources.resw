@@ -6832,4 +6832,5 @@
   <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>{0} (左) から {1} (右) へ</value></data>
   <data name="Patch_NoCompare" xml:space="preserve"><value>先に比較を開いてください。</value></data>
   <data name="Patch_NoSpace" xml:space="preserve"><value>パッチを書き出す空き容量が足りません。約 {0} 必要ですが、空きは {1} です。</value></data>
+  <data name="TransformView_NoLinkedView" xml:space="preserve"><value>変換ビューの間は連動ビューを開けません。先に変換ビューを解除するか、範囲をコピーとして開いてください。</value></data>
 </root>

@@ -6832,4 +6832,5 @@ The file was not changed.</value></data>
   <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>From {0} (left) to {1} (right)</value></data>
   <data name="Patch_NoCompare" xml:space="preserve"><value>Open a comparison first.</value></data>
   <data name="Patch_NoSpace" xml:space="preserve"><value>There is not enough free space to write the patch: it needs about {0}, but only {1} is free.</value></data>
+  <data name="TransformView_NoLinkedView" xml:space="preserve"><value>A linked view cannot be opened while a transform view is active. Clear the transform view first, or open the range as a copy.</value></data>
 </root>
