@@ -158,6 +158,12 @@ internal abstract class YaraExpr
 {
     public abstract YValue Eval(YaraContext c);
 
+    /// <summary>
+    /// 評価の再帰の前にスタックの残りを確かめる (<see cref="InsufficientExecutionStackException"/>)。左に長く連なる式 (<c>a + a + …</c>、
+    /// <c>x.y.z…</c>) は解釈では深さの上限にかからないが、評価では 1 段ごとに再帰するため、スタックオーバーフローにしない。
+    /// </summary>
+    protected static void EnsureStack() => System.Runtime.CompilerServices.RuntimeHelpers.EnsureSufficientExecutionStack();
+
     /// <summary>コンパイル時に分かる値の形 (モジュールの構造体・配列・辞書・関数。名前の確かめに使う)。</summary>
     public virtual object? Shape => null;
 }
@@ -392,6 +398,7 @@ internal sealed class YaraMember(YaraExpr target, string name, object? shape) : 
 
     public override YValue Eval(YaraContext c)
     {
+        EnsureStack();
         YValue t = target.Eval(c);
         return t.O is YStruct s ? s[name] : YValue.Undefined;
     }
@@ -403,6 +410,7 @@ internal sealed class YaraIndex(YaraExpr target, YaraExpr index, object? shape) 
 
     public override YValue Eval(YaraContext c)
     {
+        EnsureStack();
         YValue t = target.Eval(c), i = index.Eval(c);
         if (t.O is YArray array && i.Kind == YKind.Integer)
         {
@@ -422,6 +430,7 @@ internal sealed class YaraCall(YaraExpr target, YaraExpr[] args) : YaraExpr
 {
     public override YValue Eval(YaraContext c)
     {
+        EnsureStack();
         if (target.Eval(c).O is not YFunction f)
         {
             return YValue.Undefined;
@@ -441,6 +450,7 @@ internal sealed class YaraUnary(string op, YaraExpr operand) : YaraExpr
 {
     public override YValue Eval(YaraContext c)
     {
+        EnsureStack();
         YValue v = operand.Eval(c);
         switch (op)
         {
@@ -460,6 +470,7 @@ internal sealed class YaraBinary(string op, YaraExpr left, YaraExpr right) : Yar
 {
     public override YValue Eval(YaraContext c)
     {
+        EnsureStack();
         if (op == "and")
         {
             YValue l = left.Eval(c);

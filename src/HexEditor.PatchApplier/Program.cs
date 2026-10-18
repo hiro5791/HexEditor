@@ -35,7 +35,7 @@ internal static partial class Program
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or InvalidOperationException)
         {
-            Native.Message(strings.Title, string.Format(strings["Failed"], ex.Message), Native.MB_ICONERROR | Native.MB_OK);
+            Native.Message(strings.Title, strings.Format("Failed", ex.Message), Native.MB_ICONERROR | Native.MB_OK);
             return 2;
         }
     }
@@ -63,7 +63,7 @@ internal static partial class Program
         }
 
         if (!actual.Matches(manifest.Source)
-            && Native.Message(strings.Title, string.Format(strings["Mismatch"], Path.GetFileName(target)),
+            && Native.Message(strings.Title, strings.Format("Mismatch", Path.GetFileName(target)),
                 Native.MB_ICONWARNING | Native.MB_YESNO | Native.MB_DEFBUTTON2) != Native.IDYES)
         {
             return 1;
@@ -71,7 +71,7 @@ internal static partial class Program
 
         // 3. バックアップ (既定オン)。
         string backup = BackupPath(target);
-        int answer = Native.Message(strings.Title, string.Format(strings["Backup"], Path.GetFileName(backup)),
+        int answer = Native.Message(strings.Title, strings.Format("Backup", Path.GetFileName(backup)),
             Native.MB_ICONQUESTION | Native.MB_YESNOCANCEL);
         if (answer == Native.IDCANCEL)
         {
@@ -101,15 +101,15 @@ internal static partial class Program
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or HexPatchFormatException)
         {
             TryDelete(temp);
-            Native.Message(strings.Title, string.Format(strings["Failed"], ex.Message), Native.MB_ICONERROR | Native.MB_OK);
+            Native.Message(strings.Title, strings.Format("Failed", ex.Message), Native.MB_ICONERROR | Native.MB_OK);
             return 2;
         }
 
         // 5. 結果の表示。
-        string done = string.Format(strings["Success"], Path.GetFileName(target));
+        string done = strings.Format("Success", Path.GetFileName(target));
         if (makeBackup)
         {
-            done += "\n" + string.Format(strings["BackupDone"], Path.GetFileName(backup));
+            done += "\n" + strings.Format("BackupDone", Path.GetFileName(backup));
         }
 
         Native.Message(strings.Title, done, Native.MB_ICONINFORMATION | Native.MB_OK);
@@ -169,6 +169,22 @@ internal sealed class Strings(IReadOnlyDictionary<string, string> values)
 
     private string Get(string key) => values.TryGetValue(key, out string? v) ? v : key;
 
+    /// <summary>
+    /// 書式の文字列に値を入れる。文字列はパッチの中から来る (作った人が用意した) ため、書式が壊れていれば既定の英語の文を使う
+    /// (FormatException で適用プログラムが落ちないように)。
+    /// </summary>
+    public string Format(string key, string value)
+    {
+        try
+        {
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture, this[key], value);
+        }
+        catch (FormatException)
+        {
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture, Default.Get(key), value);
+        }
+    }
+
     /// <summary>パッチの中の文字列から、Windows の表示言語に合うものを選ぶ。</summary>
     public static Strings Load(ZipArchive zip)
     {
@@ -180,7 +196,12 @@ internal sealed class Strings(IReadOnlyDictionary<string, string> values)
         try
         {
             using Stream s = entry.Open();
-            using JsonDocument doc = JsonDocument.Parse(s);
+            using JsonDocument doc = JsonDocument.Parse(new LimitedReadStream(s, 16 * 1024 * 1024));
+            if (doc.RootElement.ValueKind != JsonValueKind.Object)
+            {
+                return Default;
+            }
+
             string language = DisplayLanguages.Resolve(Native.PreferredLanguages());
             foreach (string tag in new[] { language, "en" })
             {
@@ -189,14 +210,17 @@ internal sealed class Strings(IReadOnlyDictionary<string, string> values)
                     var values = new Dictionary<string, string>();
                     foreach (JsonProperty p in table.EnumerateObject())
                     {
-                        values[p.Name] = p.Value.GetString() ?? string.Empty;
+                        if (p.Value.ValueKind == JsonValueKind.String)
+                        {
+                            values[p.Name] = p.Value.GetString() ?? string.Empty;
+                        }
                     }
 
                     return new Strings(values);
                 }
             }
         }
-        catch (JsonException)
+        catch (Exception ex) when (ex is JsonException or InvalidDataException)
         {
         }
 

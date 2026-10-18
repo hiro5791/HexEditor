@@ -143,10 +143,24 @@ internal sealed class YaraHexMatcher : YaraMatcher
 
     private const int StepBudget = 1 << 16;
 
+    /// <summary>
+    /// 選択肢の入れ子の深さの上限 (解釈と照合は入れ子 1 段ごとに再帰するため、スタックオーバーフローにしない。ルールは信頼できない入力)。
+    /// </summary>
+    public const int MaxNesting = 32;
+
+    /// <summary>ジャンプと選択肢の数の上限 (照合はジャンプ・選択肢ごとに再帰するため、再帰の深さをこの数で抑える)。</summary>
+    public const int MaxBranches = 256;
+
     private readonly IReadOnlyList<HexNode> _nodes;
     private readonly byte[] _atom;
     private readonly int _atomOffset;
-    private int _steps;
+
+    // 照合の状態はスレッドごとに持つ (コンパイルしたルールを複数のスキャンで同時に使っても混ざらない)。
+    [ThreadStatic]
+    private static int t_steps;
+
+    [ThreadStatic]
+    private static YaraLimits? t_limits;
 
     public YaraHexMatcher(IReadOnlyList<HexNode> nodes)
     {
@@ -160,6 +174,7 @@ internal sealed class YaraHexMatcher : YaraMatcher
     public override void FindAll(ReadOnlySpan<byte> block, bool atDataStart, bool atDataEnd, YaraLimits limits, Func<int, int, bool> found)
     {
         int checks = 0;
+        t_limits = limits;
         if (_atom.Length > 0)
         {
             int pos = _atomOffset;
@@ -204,7 +219,7 @@ internal sealed class YaraHexMatcher : YaraMatcher
 
     private int? TryMatch(ReadOnlySpan<byte> block, int start)
     {
-        _steps = 0;
+        t_steps = 0;
         int end = Match(block, _nodes, 0, start, null);
         return end >= 0 ? end : null;
     }
@@ -214,9 +229,15 @@ internal sealed class YaraHexMatcher : YaraMatcher
     {
         while (index < nodes.Count)
         {
-            if (++_steps > StepBudget)
+            if (++t_steps > StepBudget)
             {
                 return -1;
+            }
+
+            // ジャンプが続くと 1 か所の照合でも手間がかかるため、照合の途中でも時間の上限とキャンセルを確かめる。
+            if ((t_steps & 0xFFF) == 0)
+            {
+                t_limits?.Check();
             }
 
             switch (nodes[index])
@@ -241,7 +262,7 @@ internal sealed class YaraHexMatcher : YaraMatcher
                             return r;
                         }
 
-                        if (_steps > StepBudget)
+                        if (t_steps > StepBudget)
                         {
                             return -1;
                         }
@@ -361,8 +382,8 @@ internal sealed class YaraHexMatcher : YaraMatcher
     /// <summary>16 進文字列の中身を読む。誤りは <see cref="FormatException"/> (メッセージは英語の YARA 風)。</summary>
     public static IReadOnlyList<HexNode> Parse(string body)
     {
-        int pos = 0;
-        List<HexNode> nodes = ParseSequence(body, ref pos, topLevel: true);
+        int pos = 0, branches = 0;
+        List<HexNode> nodes = ParseSequence(body, ref pos, topLevel: true, depth: 0, ref branches);
         if (nodes.Count == 0)
         {
             throw new FormatException("empty hex string");
@@ -376,8 +397,13 @@ internal sealed class YaraHexMatcher : YaraMatcher
         return nodes;
     }
 
-    private static List<HexNode> ParseSequence(string s, ref int pos, bool topLevel)
+    private static List<HexNode> ParseSequence(string s, ref int pos, bool topLevel, int depth, ref int branches)
     {
+        if (depth > MaxNesting)
+        {
+            throw new FormatException($"hex string alternatives are nested too deeply (maximum {MaxNesting})");
+        }
+
         var nodes = new List<HexNode>();
         while (true)
         {
@@ -410,10 +436,11 @@ internal sealed class YaraHexMatcher : YaraMatcher
             if (c == '(')
             {
                 pos++;
+                CountBranch(ref branches);
                 var options = new List<IReadOnlyList<HexNode>>();
                 while (true)
                 {
-                    List<HexNode> option = ParseSequence(s, ref pos, topLevel: false);
+                    List<HexNode> option = ParseSequence(s, ref pos, topLevel: false, depth + 1, ref branches);
                     if (option.Count == 0)
                     {
                         throw new FormatException("empty alternative in hex string");
@@ -470,6 +497,7 @@ internal sealed class YaraHexMatcher : YaraMatcher
                     throw new FormatException("unbounded jumps not allowed inside alternation");
                 }
 
+                CountBranch(ref branches);
                 nodes.Add(new HexJump(min, max));
                 continue;
             }
@@ -506,6 +534,14 @@ internal sealed class YaraHexMatcher : YaraMatcher
 
     private static int ParseInt(string s) =>
         int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out int n) ? n : throw new FormatException("invalid jump in hex string");
+
+    private static void CountBranch(ref int branches)
+    {
+        if (++branches > MaxBranches)
+        {
+            throw new FormatException($"too many jumps and alternatives in hex string (maximum {MaxBranches})");
+        }
+    }
 }
 
 // ---- 正規表現 ----

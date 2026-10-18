@@ -163,7 +163,7 @@ public sealed class UpsPatch : LoadedPatch
                     throw new PatchException(PatchError.Corrupt, $"UPS: レコード {index + 1} が壊れています。", index);
                 }
 
-                if (pos + xor.Count > Math.Max(sourceSize, targetSize))
+                if (pos > Math.Max(sourceSize, targetSize) - xor.Count)
                 {
                     throw new PatchException(PatchError.Corrupt, $"UPS: レコード {index + 1} が範囲外です。", index);
                 }

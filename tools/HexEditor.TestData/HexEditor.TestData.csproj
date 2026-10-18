@@ -7,9 +7,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <!-- テスト用のオンラインリポジトリ (TD-TPL-REPO) の署名に、本体と同じ Ed25519 の実装を使う (07 の TPL-36)。 -->
+  <!-- テスト用のオンラインリポジトリ (TD-TPL-REPO) の署名に、本体と同じ Ed25519 の実装 (BouncyCastle を呼ぶ) を使う (07 の TPL-36)。 -->
   <ItemGroup>
     <Compile Include="..\..\src\HexEditor.Core\Security\Ed25519.cs" Link="Shared\Ed25519.cs" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
   </ItemGroup>
 
   <!-- 圧縮のテストデータ (TD-EDIT-EXT-*) を、アプリの展開とは別の実装で作る。 -->

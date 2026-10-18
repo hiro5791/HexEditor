@@ -42,8 +42,42 @@ public static partial class ChecksumReader
     [GeneratedRegex(@"^(?<esc>\\)?(?<value>[0-9A-Fa-f]{8,})(?: (?<mode>[ *])|[ \t]+(?<mode>\*)?)(?<name>.+)$", RegexOptions.CultureInvariant)]
     private static partial Regex GnuLine();
 
-    [GeneratedRegex(@"^(?<name>.+?)\s+(?<value>[0-9A-Fa-f]{8})$", RegexOptions.CultureInvariant)]
-    private static partial Regex SfvLine();
+    /// <summary>
+    /// SFV の行 (<c>名前 空白 CRC-32 の 8 桁</c>)。正規表現 <c>^(.+?)\s+([0-9A-Fa-f]{8})$</c> と同じ結果を、行の長さに比例する時間で求める
+    /// (正規表現では空白の多い長い行で長さの 2 乗の時間がかかる。チェックサムファイルは信頼できない入力)。
+    /// </summary>
+    private static bool TrySfvLine(string line, out string name, out string value)
+    {
+        name = value = string.Empty;
+        if (line.Length < 10)
+        {
+            return false;
+        }
+
+        int hexStart = line.Length - 8;
+        for (int i = hexStart; i < line.Length; i++)
+        {
+            if (!char.IsAsciiHexDigit(line[i]))
+            {
+                return false;
+            }
+        }
+
+        int nameEnd = hexStart;
+        while (nameEnd > 0 && char.IsWhiteSpace(line[nameEnd - 1]))
+        {
+            nameEnd--;
+        }
+
+        if (nameEnd == hexStart || nameEnd == 0)
+        {
+            return false;
+        }
+
+        name = line[..nameEnd];
+        value = line[hexStart..];
+        return true;
+    }
 
     [GeneratedRegex(@"^(?<alg>md5|sha1|sha224|sha256|sha384|sha512)sums?(\.txt)?$|^checksums?\.(?<alg2>md5|sha1|sha224|sha256|sha384|sha512)$|^(?<alg3>md5|sha1|sha224|sha256|sha384|sha512)sum(\.txt)?$",
         RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
@@ -131,9 +165,9 @@ public static partial class ChecksumReader
             int number = i + 1;
             if (sfvName || format == ChecksumFormat.Sfv)
             {
-                if (SfvLine().Match(trimmedStart) is { Success: true } sfv)
+                if (TrySfvLine(trimmedStart, out string sfvFile, out string sfvCrc))
                 {
-                    entries.Add(new ChecksumLineEntry(number, sfv.Groups["name"].Value, Convert.FromHexString(sfv.Groups["value"].Value), "crc32", false));
+                    entries.Add(new ChecksumLineEntry(number, sfvFile, Convert.FromHexString(sfvCrc), "crc32", false));
                 }
                 else
                 {
@@ -168,11 +202,11 @@ public static partial class ChecksumReader
                 continue;
             }
 
-            if (format is null && SfvLine().Match(trimmedStart) is { Success: true } looksSfv && entries.Count == 0 && fileAlgorithm is null)
+            if (format is null && entries.Count == 0 && fileAlgorithm is null && TrySfvLine(trimmedStart, out string looksName, out string looksValue))
             {
                 // 拡張子が .sfv でなくても、SFV の書式だけの内容は SFV として読む。
                 format = ChecksumFormat.Sfv;
-                entries.Add(new ChecksumLineEntry(number, looksSfv.Groups["name"].Value, Convert.FromHexString(looksSfv.Groups["value"].Value), "crc32", false));
+                entries.Add(new ChecksumLineEntry(number, looksName, Convert.FromHexString(looksValue), "crc32", false));
                 continue;
             }
 

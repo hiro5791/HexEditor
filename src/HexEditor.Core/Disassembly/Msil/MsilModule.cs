@@ -54,6 +54,9 @@ public sealed class MsilModule : IDisposable
         .Select(f => (OpCode)f.GetValue(null)!)
         .ToDictionary(o => o.Value);
 
+    /// <summary>1 つのメソッドで逆アセンブルする IL の上限 (コンパイラが作る本体はこれよりずっと小さい)。</summary>
+    internal const int MaxCodeBytes = 1024 * 1024;
+
     private readonly PEReader _pe;
     private readonly MetadataReader? _md;
     private readonly DocumentSnapshot _snapshot;
@@ -101,7 +104,17 @@ public sealed class MsilModule : IDisposable
         }
 
         var issues = new List<string>();
-        var pe = new PEReader(new SnapshotStream(snapshot), PEStreamOptions.LeaveOpen | PEStreamOptions.PrefetchMetadata);
+        PEReader pe;
+        try
+        {
+            // PE のヘッダが壊れていれば (セクションの数など) ここで BadImageFormatException になる。
+            pe = new PEReader(new SnapshotStream(snapshot), PEStreamOptions.LeaveOpen | PEStreamOptions.PrefetchMetadata);
+        }
+        catch (Exception ex) when (ex is BadImageFormatException or InvalidOperationException or ArgumentException or IOException)
+        {
+            return null;
+        }
+
         try
         {
             token.ThrowIfCancellationRequested();
@@ -110,14 +123,15 @@ public sealed class MsilModule : IDisposable
             {
                 md = pe.GetMetadataReader();
             }
-            catch (BadImageFormatException ex)
+            catch (Exception ex) when (ex is BadImageFormatException or InvalidOperationException or ArgumentException)
             {
+                // メタデータがない・範囲が壊れている (「PE image does not have metadata」など)。
                 issues.Add(ex.Message);
             }
 
             return new MsilModule(snapshot, image, pe, md, issues);
         }
-        catch (BadImageFormatException)
+        catch (Exception ex) when (ex is BadImageFormatException or InvalidOperationException or ArgumentException or IOException)
         {
             pe.Dispose();
             return null;
@@ -147,7 +161,7 @@ public sealed class MsilModule : IDisposable
                         methods.Add(method);
                         _methods[method.Token] = method;
                     }
-                    catch (BadImageFormatException ex)
+                    catch (Exception ex) when (ex is BadImageFormatException or ArgumentException or InvalidOperationException)
                     {
                         issues.Add(ex.Message);
                     }
@@ -155,7 +169,7 @@ public sealed class MsilModule : IDisposable
 
                 types.Add(new MsilType(ns, name, methods));
             }
-            catch (BadImageFormatException ex)
+            catch (Exception ex) when (ex is BadImageFormatException or ArgumentException or InvalidOperationException)
             {
                 issues.Add(ex.Message);
             }
@@ -166,8 +180,9 @@ public sealed class MsilModule : IDisposable
 
     private static string NamespaceOf(MetadataReader md, TypeDefinition type)
     {
+        // 入れ子の宣言 (NestedClass の表) は検証されていないため、輪になっていても止まるよう段数を抑える。
         TypeDefinition t = type;
-        while (t.GetDeclaringType() is { IsNil: false } outer)
+        for (int depth = 0; depth < NameProvider.MaxNameDepth && t.GetDeclaringType() is { IsNil: false } outer; depth++)
         {
             t = md.GetTypeDefinition(outer);
         }
@@ -232,8 +247,14 @@ public sealed class MsilModule : IDisposable
         }
 
         codeSize = (int)Math.Clamp(codeSize, 0, Math.Max(0, _snapshot.Length - (at + headerSize)));
-        byte[] code = Read(at + headerSize, Math.Min(codeSize, 16 * 1024 * 1024));
+        byte[] code = Read(at + headerSize, Math.Min(codeSize, MaxCodeBytes));
         Instructions(code, at + headerSize, lines);
+        if (codeSize > MaxCodeBytes)
+        {
+            // 壊れたヘッダの巨大なコードの大きさで、行を際限なく作らない。
+            lines.Add(new MsilLine(MsilLineKind.Info, at + headerSize + MaxCodeBytes, 0, MaxCodeBytes,
+                $"... ({codeSize - MaxCodeBytes} more bytes of IL are not shown)", string.Empty));
+        }
         if (moreSections)
         {
             ExceptionClauses(at + headerSize + codeSize, lines);
@@ -251,13 +272,18 @@ public sealed class MsilModule : IDisposable
         }
 
         byte[] head = Read(at, 12);
-        if ((head[0] & 3) == 2)
+        if (head.Length > 0 && (head[0] & 3) == 2)
         {
             return Read(at + 1, head[0] >> 2);
         }
 
+        if (head.Length < 12)
+        {
+            return [];
+        }
+
         int headerSize = (BinaryPrimitives.ReadUInt16LittleEndian(head) >> 12) * 4;
-        return Read(at + headerSize, BinaryPrimitives.ReadInt32LittleEndian(head.AsSpan(4)));
+        return Read(at + headerSize, Math.Min(BinaryPrimitives.ReadInt32LittleEndian(head.AsSpan(4)), MaxCodeBytes));
     }
 
     private void Instructions(byte[] code, long fileOffset, List<MsilLine> lines)

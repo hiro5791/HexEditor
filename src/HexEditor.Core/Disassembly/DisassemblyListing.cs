@@ -67,6 +67,7 @@ public sealed class DisassemblyListing : IDisposable
 
     private readonly Func<DocumentSnapshot> _snapshot;
     private readonly ConcurrentDictionary<long, long> _checkpoints = new();
+    private volatile bool _pending;
     private readonly ConcurrentDictionary<ulong, bool> _targets = new();
     private readonly object _decoderLock = new();
     private IInstructionDecoder? _decoder;
@@ -91,6 +92,15 @@ public sealed class DisassemblyListing : IDisposable
     public DisasmArchitecture Architecture { get; }
 
     public DisasmFormat Format => Options.Format;
+
+    /// <summary>
+    /// 読み込みを待たない (UI スレッドで使う、リモートのデータソース。<see cref="Sources.IRemoteByteSource"/>)。キャッシュにない範囲は読み込みを
+    /// 頼んで、そこで行を作るのをやめる (<see cref="HasPendingReads"/>)。読み込みが終わったら (ドキュメントの DataLoaded) 作り直す。
+    /// </summary>
+    public bool NonBlocking { get; init; }
+
+    /// <summary>最後の <see cref="Lines"/> が、読み込み中の範囲で止まった (読み込みが終わったら作り直す)。</summary>
+    public bool HasPendingReads => _pending;
 
     /// <summary>エンジンを読み込めないときの理由 (ANA-23 の「エラー」)。読み込めれば null。</summary>
     public string? EngineError
@@ -204,9 +214,10 @@ public sealed class DisassemblyListing : IDisposable
         }
 
         int count = (int)Math.Min(buffer.Length, available);
-        int read = snapshot.Read(offset, buffer[..count]).BytesReturned;
-        if (read <= 0)
+        int read = ReadBytes(snapshot, offset, buffer[..count]);
+        if (read <= 0 || (read < count && _pending && read < Architecture.MaxLength))
         {
+            // 読み込み中 (続きが届けば長い命令になりうる): ここで止める。
             return null;
         }
 
@@ -309,6 +320,7 @@ public sealed class DisassemblyListing : IDisposable
     /// </summary>
     public IReadOnlyList<ListingLine> Lines(long offset, int count, int skip = 0)
     {
+        _pending = false;
         var lines = new List<ListingLine>(count + 4);
         DocumentSnapshot snapshot = _snapshot();
         if (snapshot.Length == 0)
@@ -379,11 +391,34 @@ public sealed class DisassemblyListing : IDisposable
         return InstructionStart(offset - 1);
     }
 
+    /// <summary>
+    /// 読む。<see cref="NonBlocking"/> なら表示用の読み込みで、キャッシュにない (読み込み中の) 最初のバイトの手前までの長さを返し、
+    /// <see cref="HasPendingReads"/> を立てる。
+    /// </summary>
+    private int ReadBytes(DocumentSnapshot snapshot, long offset, Span<byte> destination)
+    {
+        if (!NonBlocking)
+        {
+            return snapshot.Read(offset, destination).BytesReturned;
+        }
+
+        Span<ByteState> states = destination.Length <= 512 ? stackalloc ByteState[destination.Length] : new ByteState[destination.Length];
+        int n = snapshot.ReadForDisplay(offset, destination, states);
+        int loading = states[..n].IndexOf(ByteState.Loading);
+        if (loading >= 0)
+        {
+            _pending = true;
+            return loading;
+        }
+
+        return n;
+    }
+
     private ListingLine MakeLine(DocumentSnapshot snapshot, long offset, DisasmInstruction instruction)
     {
         int shown = Math.Min(instruction.Length, Format.MaxBytes);
         Span<byte> bytes = stackalloc byte[Math.Max(shown, 1)];
-        int read = snapshot.Read(offset, bytes[..shown]).BytesReturned;
+        int read = ReadBytes(snapshot, offset, bytes[..shown]);
         string hex = Convert.ToHexString(bytes[..read]);
         var sb = new StringBuilder(hex.Length * 3 / 2 + 2);
         for (int i = 0; i < hex.Length; i += 2)
@@ -466,7 +501,20 @@ public sealed class DisassemblyListing : IDisposable
             return name;
         }
 
-        return instruction.MemoryTarget is { } memory && OffsetOf(memory) is { } offset ? StringAt(snapshot, offset) ?? string.Empty : string.Empty;
+        if (instruction.MemoryTarget is not { } memory || OffsetOf(memory) is not { } offset)
+        {
+            return string.Empty;
+        }
+
+        if (NonBlocking)
+        {
+            // 参照先の文字列も読み込みを待たない (キャッシュになければ読み込みを頼んで、今回は出さない)。
+            Span<byte> b = stackalloc byte[128];
+            int n = ReadBytes(snapshot, offset, b);
+            return n == b.Length || n == (int)Math.Min(b.Length, snapshot.Length - offset) ? StringIn(b[..n]) ?? string.Empty : string.Empty;
+        }
+
+        return StringAt(snapshot, offset) ?? string.Empty;
     }
 
     /// <summary>参照先の文字列 (ASCII か UTF-16 で 4 文字以上。ANA-24 の仕様 8)。</summary>
@@ -474,6 +522,12 @@ public sealed class DisassemblyListing : IDisposable
     {
         Span<byte> b = stackalloc byte[128];
         int n = snapshot.Read(offset, b).BytesReturned;
+        return StringIn(b[..n]);
+    }
+
+    private static string? StringIn(ReadOnlySpan<byte> b)
+    {
+        int n = b.Length;
         int ascii = 0;
         while (ascii < n && b[ascii] is >= 0x20 and < 0x7F)
         {

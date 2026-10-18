@@ -275,21 +275,97 @@ public static class HexSnapshot
         }
     }
 
-    /// <summary>スナップショットのメタデータを読む。</summary>
+    /// <summary>メタデータの大きさの上限 (領域・モジュール・読めなかったページの一覧。巨大な値で大きな配列を確保しない)。</summary>
+    public const int MaxMetadataBytes = 256 * 1024 * 1024;
+
+    /// <summary>
+    /// スナップショットのメタデータを読む。ファイルは信頼できない入力として扱い、形式の誤り (途中で終わっている、JSON が壊れている、
+    /// 領域が範囲外・重なっている・負の値など) はすべて <see cref="InvalidDataException"/> にする。
+    /// </summary>
     public static SnapshotMetadata ReadMetadata(Stream stream)
     {
-        Span<byte> magic = stackalloc byte[8];
-        stream.ReadExactly(magic);
-        if (!magic.SequenceEqual(Magic))
+        try
         {
-            throw new InvalidDataException("Not a .hexsnap file.");
+            Span<byte> magic = stackalloc byte[8];
+            stream.ReadExactly(magic);
+            if (!magic.SequenceEqual(Magic))
+            {
+                throw new InvalidDataException("Not a .hexsnap file.");
+            }
+
+            Span<byte> size = stackalloc byte[4];
+            stream.ReadExactly(size);
+            int length = BinaryPrimitives.ReadInt32LittleEndian(size);
+            if (length <= 0 || length > MaxMetadataBytes || (stream.CanSeek && length > stream.Length - stream.Position))
+            {
+                throw new InvalidDataException("The snapshot metadata length is not valid.");
+            }
+
+            byte[] json = new byte[length];
+            stream.ReadExactly(json);
+            SnapshotMetadata metadata = JsonSerializer.Deserialize<SnapshotMetadata>(json, Json) ?? throw new InvalidDataException("Empty snapshot metadata.");
+            return Validate(metadata);
+        }
+        catch (EndOfStreamException ex)
+        {
+            throw new InvalidDataException("The snapshot file is truncated.", ex);
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidDataException("The snapshot metadata is not valid: " + ex.Message, ex);
+        }
+    }
+
+    /// <summary>
+    /// 読み込んだメタデータを確かめる: アドレス空間の長さが 0 以上、領域は空でなく、アドレス空間の中にあり、重ならない (アドレスの順にする)。
+    /// ファイル内の位置は 0 以上。読めなかったページも負でない。
+    /// </summary>
+    private static SnapshotMetadata Validate(SnapshotMetadata metadata)
+    {
+        if (metadata.AddressLimit < 0 || metadata.Regions is null)
+        {
+            throw new InvalidDataException("The snapshot metadata is not valid.");
         }
 
-        Span<byte> size = stackalloc byte[4];
-        stream.ReadExactly(size);
-        byte[] json = new byte[BinaryPrimitives.ReadInt32LittleEndian(size)];
-        stream.ReadExactly(json);
-        return JsonSerializer.Deserialize<SnapshotMetadata>(json, Json) ?? throw new InvalidDataException("Empty snapshot metadata.");
+        var regions = new List<SnapshotRegion>(metadata.Regions.Count);
+        foreach (SnapshotRegion? r in metadata.Regions)
+        {
+            if (r is null || r.BaseAddress < 0 || r.Size <= 0 || r.FileOffset < 0 || r.Size > metadata.AddressLimit - r.BaseAddress
+                || r.Size > long.MaxValue - r.FileOffset)
+            {
+                throw new InvalidDataException("A snapshot region is out of range.");
+            }
+
+            regions.Add(r);
+        }
+
+        regions.Sort((a, b) => a.BaseAddress.CompareTo(b.BaseAddress));
+        for (int i = 1; i < regions.Count; i++)
+        {
+            if (regions[i].BaseAddress < regions[i - 1].BaseAddress + regions[i - 1].Size)
+            {
+                throw new InvalidDataException("Snapshot regions overlap.");
+            }
+        }
+
+        var gaps = new List<SnapshotGap>();
+        foreach (SnapshotGap? g in metadata.UnreadablePages ?? [])
+        {
+            if (g is null || g.BaseAddress < 0 || g.Size <= 0 || g.Size > long.MaxValue - g.BaseAddress)
+            {
+                throw new InvalidDataException("An unreadable page range is out of range.");
+            }
+
+            gaps.Add(g);
+        }
+
+        return metadata with
+        {
+            ProcessName = metadata.ProcessName ?? string.Empty,
+            Regions = regions,
+            Modules = [.. (metadata.Modules ?? []).Where(m => m is not null)],
+            UnreadablePages = gaps,
+        };
     }
 
     private static long AlignUp(long value, long alignment) => (value + alignment - 1) / alignment * alignment;

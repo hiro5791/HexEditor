@@ -48,7 +48,7 @@ public sealed record GdbEndpoint
 /// 「切断」にし (<see cref="SourceChangeKind.Disconnected"/>)、<see cref="ReconnectAsync"/> で読み込みを再開できる (未保存の変更は
 /// ドキュメントに残る。仕様 8)。読み込みは非同期 (ブロックキャッシュのワーカーから呼ばれる)。
 /// </summary>
-public sealed class GdbByteSource : ByteSourceBase
+public sealed class GdbByteSource : ByteSourceBase, IRemoteByteSource
 {
     private readonly Func<CancellationToken, Task<GdbClient>> _connect;
     private readonly object _lock = new();

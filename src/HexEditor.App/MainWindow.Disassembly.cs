@@ -864,8 +864,8 @@ public sealed partial class MainWindow
             using IInstructionDecoder decoder = Disassembler.Create(listing.Architecture, listing.Format, listing.Options.BigEndian
                 ?? (listing.Architecture.HasEndian && listing.Image.IsExecutable ? listing.Image.BigEndian : null));
             byte[] bytes = new byte[i.Length];
-            doc.Document.Current.Read(row.Offset, bytes);
-            DisasmInstruction? detail = decoder.Decode(bytes, i.Address, detail: true);
+            int got = ViewModels.DisassemblyViewModel.ReadForUi(doc.Document, row.Offset, bytes);
+            DisasmInstruction? detail = got == bytes.Length ? decoder.Decode(bytes, i.Address, detail: true) : null;
             var sb = new StringBuilder();
             sb.AppendLine(Loc.Format("Disasm_TipLength", i.Length));
             if (detail?.Detail is { } d)

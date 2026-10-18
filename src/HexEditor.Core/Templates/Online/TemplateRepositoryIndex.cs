@@ -114,7 +114,24 @@ public sealed class TemplateRepositoryIndex
 
     public IReadOnlyList<OnlineTemplateEntry> Templates { get; init; } = [];
 
+    /// <summary>
+    /// 索引を読む。索引はネットワークから来る信頼できない入力なので、形式の誤り (重複したキー、型の違う値など) はすべて
+    /// <see cref="TemplateIndexFormatException"/> にする。
+    /// </summary>
     public static TemplateRepositoryIndex Parse(ReadOnlySpan<byte> json)
+    {
+        try
+        {
+            return ParseCore(json);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or FormatException)
+        {
+            // JsonObject は重複したキーを読んだ時点で ArgumentException にする。
+            throw new TemplateIndexFormatException(ex.Message);
+        }
+    }
+
+    private static TemplateRepositoryIndex ParseCore(ReadOnlySpan<byte> json)
     {
         JsonNode? root;
         try
@@ -182,9 +199,21 @@ public sealed class TemplateRepositoryIndex
         return new TemplateRepositoryIndex { Name = Str(o, "name") ?? string.Empty, Templates = list };
     }
 
-    /// <summary>ID に使える文字 (ファイル名にするため: 英数字、<c>-</c>、<c>_</c>、<c>.</c>。先頭は英数字)。</summary>
+    /// <summary>
+    /// ID に使える文字 (ファイル名にするため: 英数字、<c>-</c>、<c>_</c>、<c>.</c>。先頭は英数字)。Windows の予約されたデバイス名
+    /// (<c>CON</c>・<c>NUL</c>・<c>COM1</c> など。拡張子が付いていても) は使えない。
+    /// </summary>
     public static bool IsSafeId(string id) =>
-        id.Length is > 0 and <= 64 && char.IsAsciiLetterOrDigit(id[0]) && id.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.') && !id.Contains("..", StringComparison.Ordinal);
+        id.Length is > 0 and <= 64 && char.IsAsciiLetterOrDigit(id[0]) && id.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.')
+        && !id.Contains("..", StringComparison.Ordinal) && !IsReservedDeviceName(id);
+
+    private static bool IsReservedDeviceName(string id)
+    {
+        int dot = id.IndexOf('.', StringComparison.Ordinal);
+        string stem = (dot < 0 ? id : id[..dot]).ToUpperInvariant();
+        return stem is "CON" or "PRN" or "AUX" or "NUL" or "CONIN$" or "CONOUT$"
+            || (stem.Length == 4 && (stem.StartsWith("COM", StringComparison.Ordinal) || stem.StartsWith("LPT", StringComparison.Ordinal)) && stem[3] is >= '0' and <= '9');
+    }
 
     private static string? Str(JsonObject o, string key) =>
         o[key] is JsonValue v && v.TryGetValue(out string? s) && !string.IsNullOrWhiteSpace(s) ? s.Trim() : null;

@@ -58,6 +58,19 @@ public sealed class HexPatch : LoadedPatch
 
     protected override void ApplyCore(Document document, bool reverse, string description, CancellationToken cancellationToken)
     {
+        try
+        {
+            ApplyData(document, reverse, description, cancellationToken);
+        }
+        catch (InvalidDataException ex)
+        {
+            // data.bin / old.bin が壊れている (zip の圧縮方式・CRC など)。ドキュメントは変えていない。
+            throw new PatchException(PatchError.Corrupt, ex.Message, -1, ex);
+        }
+    }
+
+    private void ApplyData(Document document, bool reverse, string description, CancellationToken cancellationToken)
+    {
         PieceTree input = document.Current.Tree;
         long inputLength = reverse ? Manifest.Target.Length : Manifest.Source.Length;
         if (input.Length != inputLength)

@@ -103,15 +103,18 @@ public sealed class HexPatchManifest
         json.WriteEndObject();
     }
 
-    /// <summary>JSON を読む。形式・命令の誤りは <see cref="HexPatchFormatException"/>。</summary>
+    /// <summary>hexpatch.json の大きさの上限 (命令の数に比例する。圧縮爆弾で際限なくメモリを使わない)。</summary>
+    public const long MaxManifestBytes = 1L << 30;
+
+    /// <summary>JSON を読む。形式・命令の誤りは <see cref="HexPatchFormatException"/> (パッチは信頼できない入力として扱う)。</summary>
     public static HexPatchManifest Read(Stream input)
     {
         JsonDocument doc;
         try
         {
-            doc = JsonDocument.Parse(input);
+            doc = JsonDocument.Parse(new LimitedReadStream(input, MaxManifestBytes));
         }
-        catch (JsonException ex)
+        catch (Exception ex) when (ex is JsonException or InvalidDataException)
         {
             throw new HexPatchFormatException("hexpatch.json: " + ex.Message);
         }
@@ -119,12 +122,13 @@ public sealed class HexPatchManifest
         using (doc)
         {
             JsonElement root = doc.RootElement;
-            if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("format", out JsonElement f) || f.GetString() != FormatName)
+            if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("format", out JsonElement f) || f.ValueKind != JsonValueKind.String
+                || f.GetString() != FormatName)
             {
                 throw new HexPatchFormatException("hexpatch.json: format");
             }
 
-            if (!root.TryGetProperty("version", out JsonElement v) || v.GetInt32() > CurrentVersion)
+            if (!root.TryGetProperty("version", out JsonElement v) || !v.TryGetInt32(out int version) || version > CurrentVersion)
             {
                 throw new HexPatchFormatException("hexpatch.json: version");
             }
@@ -135,7 +139,12 @@ public sealed class HexPatchManifest
                 source = SourceIdentity.ReadFrom(root.GetProperty("source"));
                 target = SourceIdentity.ReadFrom(root.GetProperty("target"));
             }
-            catch (Exception ex) when (ex is FormatException or KeyNotFoundException)
+            catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
+            {
+                throw new HexPatchFormatException("hexpatch.json: source / target");
+            }
+
+            if (source.Length < 0 || target.Length < 0)
             {
                 throw new HexPatchFormatException("hexpatch.json: source / target");
             }
@@ -168,10 +177,12 @@ public sealed class HexPatchManifest
                         _ => op.TargetLength == 0 && op.SourceLength > 0,
                     };
 
-                    // 命令は昇順で重ならず、変換前と変換後の変わらない部分の長さが等しい。
-                    if (!shapeOk || op.SourceOffset < lastSource || op.TargetOffset < lastTarget
+                    // 命令は昇順で重ならず、変換前と変換後の変わらない部分の長さが等しい。範囲は引き算で比べる (位置と長さの和が
+                    // long をあふれても範囲内に見えないように)。
+                    if (!shapeOk || op.SourceLength < 0 || op.TargetLength < 0 || op.SourceOffset < lastSource || op.TargetOffset < lastTarget
+                        || op.SourceOffset > source.Length || op.TargetOffset > target.Length
                         || op.SourceOffset - lastSource != op.TargetOffset - lastTarget
-                        || op.SourceOffset + op.SourceLength > source.Length || op.TargetOffset + op.TargetLength > target.Length)
+                        || op.SourceLength > source.Length - op.SourceOffset || op.TargetLength > target.Length - op.TargetOffset)
                     {
                         throw new FormatException();
                     }
@@ -180,7 +191,7 @@ public sealed class HexPatchManifest
                     lastTarget = op.TargetOffset + op.TargetLength;
                     ops.Add(op);
                 }
-                catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException)
+                catch (Exception ex) when (ex is FormatException or KeyNotFoundException or InvalidOperationException or ArgumentException)
                 {
                     throw new HexPatchFormatException($"op {index + 1}", index);
                 }
@@ -196,10 +207,21 @@ public sealed class HexPatchManifest
                 Source = source,
                 Target = target,
                 Ops = ops,
-                DefaultFileName = root.TryGetProperty("defaultFileName", out JsonElement d) ? d.GetString() : null,
-                Message = root.TryGetProperty("message", out JsonElement m) ? m.GetString() : null,
+
+                // 既定の対象ファイル名はファイル名だけを使う (フォルダの部分で別の場所のファイルを勧めない)。
+                DefaultFileName = OptionalString(root, "defaultFileName") is { } d ? FileNameOnly(d) : null,
+                Message = OptionalString(root, "message"),
             };
         }
+    }
+
+    private static string? OptionalString(JsonElement root, string name) =>
+        root.TryGetProperty(name, out JsonElement e) && e.ValueKind == JsonValueKind.String ? e.GetString() : null;
+
+    private static string? FileNameOnly(string name)
+    {
+        string file = name[(name.LastIndexOfAny(['\\', '/', ':']) + 1)..];
+        return file.Length > 0 && file.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 ? file : null;
     }
 
     /// <summary>zip が独自形式のパッチか (目印の項目があるか)。</summary>
@@ -209,6 +231,11 @@ public sealed class HexPatchManifest
     public static HexPatchManifest Read(ZipArchive zip)
     {
         ZipArchiveEntry entry = zip.GetEntry(ManifestEntry) ?? throw new HexPatchFormatException("hexpatch.json");
+        if (entry.Length > MaxManifestBytes)
+        {
+            throw new HexPatchFormatException("hexpatch.json: too large");
+        }
+
         using Stream s = entry.Open();
         HexPatchManifest manifest = Read(s);
         if (zip.GetEntry(DataEntry) is not { } data || data.Length != manifest.DataLength)
@@ -342,6 +369,59 @@ public static class SelfPatchContainer
         long length = BitConverter.ToInt64(len);
         long offset = exe.Length - TrailerSize - length;
         return length <= 0 || offset < 0 ? null : (offset, length);
+    }
+}
+
+/// <summary>
+/// 読める量に上限のあるストリーム (信頼できない zip の項目を読む。宣言された長さが偽りでも、上限を超えて展開しない)。
+/// 上限を超えて読もうとすると <see cref="InvalidDataException"/>。
+/// </summary>
+public sealed class LimitedReadStream(Stream inner, long limit) : Stream
+{
+    private long _read;
+
+    public override bool CanRead => true;
+
+    public override bool CanSeek => false;
+
+    public override bool CanWrite => false;
+
+    public override long Length => throw new NotSupportedException();
+
+    public override long Position { get => _read; set => throw new NotSupportedException(); }
+
+    public override int Read(byte[] buffer, int offset, int count) => Read(buffer.AsSpan(offset, count));
+
+    public override int Read(Span<byte> buffer)
+    {
+        int n = inner.Read(buffer);
+        _read += n;
+        if (_read > limit)
+        {
+            throw new InvalidDataException($"The data is larger than {limit} bytes.");
+        }
+
+        return n;
+    }
+
+    public override void Flush()
+    {
+    }
+
+    public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+    public override void SetLength(long value) => throw new NotSupportedException();
+
+    public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            inner.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 }
 

@@ -22,10 +22,31 @@ internal sealed class JsonRpcConvert(IApp app)
 {
     private const int MaxDepth = 16;
 
+    /// <summary>1 つの接続で持てる参照 (<c>handle</c>) の数の上限 (接続が長く続いても表が際限なく大きくならない)。</summary>
+    public const int MaxHandles = 100_000;
+
     private readonly Lock _lock = new();
     private readonly Dictionary<string, object> _handles = new(StringComparer.Ordinal);
     private readonly Dictionary<object, string> _handleOf = new(ReferenceEqualityComparer.Instance);
+
+    // 参照を作った要求の対象のドキュメント (ドキュメントを閉じたら、その参照を捨てる)。
+    private readonly Dictionary<string, string> _documentOf = new(StringComparer.Ordinal);
     private int _next;
+
+    /// <summary>実行中の要求の対象のドキュメントの id (要求の実行のスレッドで設定する。参照をドキュメントに結び付ける)。</summary>
+    public string? Scope { get; set; }
+
+    /// <summary>持っている参照の数 (テスト用)。</summary>
+    public int HandleCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _handles.Count;
+            }
+        }
+    }
 
     // ───────────── 参照 ─────────────
 
@@ -35,12 +56,48 @@ internal sealed class JsonRpcConvert(IApp app)
         {
             if (!_handleOf.TryGetValue(value, out string? h))
             {
+                if (_handles.Count >= MaxHandles)
+                {
+                    throw new Sdk.LimitError($"Too many handles are held by this connection (maximum {MaxHandles}). Reconnect to release them.");
+                }
+
                 h = "h" + (++_next).ToString(CultureInfo.InvariantCulture);
                 _handleOf[value] = h;
                 _handles[h] = value;
+                if (Scope is { } document)
+                {
+                    _documentOf[h] = document;
+                }
             }
 
             return h;
+        }
+    }
+
+    /// <summary>閉じたドキュメントの参照を捨てる (テンプレートのノードなどが閉じたドキュメントを持ち続けないように)。</summary>
+    public void ForgetDocument(string documentId)
+    {
+        lock (_lock)
+        {
+            foreach (string h in _documentOf.Where(kv => kv.Value == documentId).Select(kv => kv.Key).ToList())
+            {
+                _documentOf.Remove(h);
+                if (_handles.Remove(h, out object? value))
+                {
+                    _handleOf.Remove(value);
+                }
+            }
+        }
+    }
+
+    /// <summary>すべての参照を捨てる (接続が切れた)。</summary>
+    public void Clear()
+    {
+        lock (_lock)
+        {
+            _handles.Clear();
+            _handleOf.Clear();
+            _documentOf.Clear();
         }
     }
 
@@ -57,9 +114,13 @@ internal sealed class JsonRpcConvert(IApp app)
             : throw new JsonRpcParamsException($"Unknown handle for {JsonRpcApi.ObjectName(type)}: {handle}");
     }
 
-    public IDocument ResolveDocument(string id) =>
-        app.Documents.FirstOrDefault(d => string.Equals(d.Id, id, StringComparison.Ordinal))
-        ?? throw new Sdk.ArgumentError(Msg.T($"ドキュメント {id} は開いていません。", $"The document {id} is not open."));
+    public IDocument ResolveDocument(string id)
+    {
+        IDocument doc = app.Documents.FirstOrDefault(d => string.Equals(d.Id, id, StringComparison.Ordinal))
+            ?? throw new Sdk.ArgumentError(Msg.T($"ドキュメント {id} は開いていません。", $"The document {id} is not open."));
+        Scope ??= doc.Id;
+        return doc;
+    }
 
     // ───────────── JSON → 値 ─────────────
 
