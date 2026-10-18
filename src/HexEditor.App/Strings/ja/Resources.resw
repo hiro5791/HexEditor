@@ -6789,4 +6789,39 @@
   <data name="Disasm_NativeCode" xml:space="preserve"><value>ネイティブコードを表示</value></data>
   <data name="Disasm_NativeCodeTip" xml:space="preserve"><value>このメソッドの ReadyToRun のネイティブコードを表示します</value></data>
   <data name="Menu_View_Disassembly.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Panel_TemplateVisualizer_Title" xml:space="preserve"><value>ビジュアライザ</value></data>
+  <data name="Cmd_view_panel_templateVisualizer" xml:space="preserve"><value>表示: テンプレートのビジュアライザパネル</value></data>
+  <data name="CmdAlias_view_panel_templateVisualizer" xml:space="preserve"><value>びじゅあらいざ;てんぷれーと;がぞう;おんせい</value></data>
+  <data name="Cmd_templates_visualize" xml:space="preserve"><value>テンプレート: ビジュアライザで表示</value></data>
+  <data name="CmdAlias_templates_visualize" xml:space="preserve"><value>びじゅあらいざ;ひょうじ;がぞう;おんせい</value></data>
+  <data name="Menu_View_TemplateVisualizer.Text" xml:space="preserve"><value>テンプレートのビジュアライザ(2)</value></data>
+  <data name="Menu_View_TemplateVisualizer.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="TplMenu_Visualize" xml:space="preserve"><value>ビジュアライザで表示</value></data>
+  <data name="TplVis_ShowButton" xml:space="preserve"><value>{0} をビジュアライザで表示</value></data>
+  <data name="TplVis_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="TplVis_Play" xml:space="preserve"><value>再生</value></data>
+  <data name="TplVis_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="TplVis_Seek" xml:space="preserve"><value>再生位置</value></data>
+  <data name="TplVis_Nothing" xml:space="preserve"><value>構造体の結果ツリーで、ビジュアライザ (visualize 属性) のあるノードを選んでください。</value></data>
+  <data name="TplVis_NoVisualizer" xml:space="preserve"><value>選んでいるノードにはビジュアライザがありません</value></data>
+  <data name="TplVis_Header" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="TplVis_Kind_Bitmap" xml:space="preserve"><value>画像</value></data>
+  <data name="TplVis_Kind_Image" xml:space="preserve"><value>画像</value></data>
+  <data name="TplVis_Kind_Audio" xml:space="preserve"><value>音声</value></data>
+  <data name="TplVis_Kind_Disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <data name="TplVis_Kind_Table" xml:space="preserve"><value>表</value></data>
+  <data name="TplVis_Kind_Chart" xml:space="preserve"><value>グラフ</value></data>
+  <data name="TplVis_Kind_Color" xml:space="preserve"><value>色</value></data>
+  <data name="TplVis_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="TplVis_Kind_Error" xml:space="preserve"><value>エラー</value></data>
+  <data name="TplVis_CannotShow" xml:space="preserve"><value>表示できません: {0}</value></data>
+  <data name="TplVis_CannotShowImage" xml:space="preserve"><value>この画像を表示できません: {0}</value></data>
+  <data name="TplVis_Truncated" xml:space="preserve"><value>データが上限 (64 MB、画像は 16,384 × 16,384 ピクセル) を超えるため、先頭だけを表示しています。</value></data>
+  <data name="TplVis_ImageAlt" xml:space="preserve"><value>画像、幅 {0}、高さ {1}、形式 {2}</value></data>
+  <data name="TplVis_AudioAlt" xml:space="preserve"><value>音声、長さ {0} 秒、サンプルレート {1} Hz、{2} チャンネル</value></data>
+  <data name="TplVis_TableAlt" xml:space="preserve"><value>表、{0} 行、{1} 列</value></data>
+  <data name="TplVis_ChartAlt" xml:space="preserve"><value>グラフ、{0} 個の値 ({1}〜{2})</value></data>
+  <data name="TplVis_ColorAlt" xml:space="preserve"><value>色 {0}</value></data>
+  <data name="TplVis_WavFiles" xml:space="preserve"><value>WAV 音声</value></data>
+  <data name="TplVis_CsvFiles" xml:space="preserve"><value>CSV (コンマ区切り)</value></data>
 </root>
