@@ -132,6 +132,7 @@
                             <!--  プロセスのスナップショット・ミニダンプ (ENG-35)  -->
                             <MenuFlyoutItem x:Uid="Menu_File_SaveSnapshot" cmd:CommandUi.Id="file.saveProcessSnapshot" AutomationProperties.AutomationId="Command_SaveProcessSnapshot" />
                             <MenuFlyoutItem x:Uid="Menu_File_SaveMinidump" cmd:CommandUi.Id="file.saveMinidump" AutomationProperties.AutomationId="Command_SaveMinidump" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ExportPdf" cmd:CommandUi.Id="file.exportPdf" AutomationProperties.AutomationId="Command_ExportPdf" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem x:Uid="Menu_File_Workspace" AutomationProperties.AutomationId="Command_WorkspaceMenu">
                             <MenuFlyoutItem x:Uid="Menu_File_WorkspaceSave" cmd:CommandUi.Id="workspace.save" AutomationProperties.AutomationId="Command_WorkspaceSave" />
@@ -157,6 +158,11 @@
                             <MenuFlyoutItem x:Uid="Menu_File_ImportBookmarks" cmd:CommandUi.Id="file.importBookmarks" AutomationProperties.AutomationId="Command_ImportBookmarks" />
                             <MenuFlyoutItem x:Uid="Menu_File_ExportBookmarks" cmd:CommandUi.Id="file.exportBookmarks" AutomationProperties.AutomationId="Command_ExportBookmarks" />
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <!--  印刷と印刷プレビュー (TOOL-01・TOOL-02)、代替データストリーム (ENG-37・TOOL-21)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_Print" cmd:CommandUi.Id="file.print" AutomationProperties.AutomationId="Command_Print" />
+                        <MenuFlyoutItem x:Uid="Menu_File_PrintPreview" cmd:CommandUi.Id="file.printPreview" AutomationProperties.AutomationId="Command_PrintPreview" />
+                        <MenuFlyoutItem x:Uid="Menu_File_Ads" cmd:CommandUi.Id="tools.ads" AutomationProperties.AutomationId="Command_FileAds" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Close" cmd:CommandUi.Id="file.close" AutomationProperties.AutomationId="Command_Close" />
                         <MenuFlyoutItem x:Uid="Menu_File_CloseAll" cmd:CommandUi.Id="file.closeAll" AutomationProperties.AutomationId="Command_CloseAll" />
@@ -425,6 +431,26 @@
                         <!--  プラグイン (08 の AUTO-32)。プラグインのメニューの項目 (IMenuContribution) は MainWindow.Plugins.cs が足す  -->
                         <MenuFlyoutSubItem x:Name="PluginsMenu" x:Uid="Menu_Tools_Plugins" AutomationProperties.AutomationId="Menu_Tools_Plugins">
                             <MenuFlyoutItem x:Uid="Menu_Tools_Plugins_Manage" cmd:CommandUi.Id="plugins.manage" AutomationProperties.AutomationId="Command_PluginsManage" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <!--  電卓と変換・参照ツール (11 の TOOL-22〜TOOL-28)、ファイルツール (チェックサムファイル・フォルダの比較。TOOL-18〜TOOL-20)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Calculator" cmd:CommandUi.Id="tools.calculator" AutomationProperties.AutomationId="Command_Calculator" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_Converter" cmd:CommandUi.Id="tools.converter" AutomationProperties.AutomationId="Command_Converter" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_FloatVisualizer" cmd:CommandUi.Id="tools.floatVisualizer" AutomationProperties.AutomationId="Command_FloatVisualizer" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_CharTable" cmd:CommandUi.Id="tools.charTable" AutomationProperties.AutomationId="Command_CharTable" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_ColorPicker" cmd:CommandUi.Id="tools.colorPicker" AutomationProperties.AutomationId="Command_ColorPicker" />
+                        <MenuFlyoutItem x:Uid="Menu_Tools_DateTime" cmd:CommandUi.Id="tools.dateTime" AutomationProperties.AutomationId="Command_DateTime" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Tools_FileTools" AutomationProperties.AutomationId="Menu_Tools_FileTools">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumCreate" cmd:CommandUi.Id="tools.checksum.create" AutomationProperties.AutomationId="Command_ChecksumCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_ChecksumVerify" cmd:CommandUi.Id="tools.checksum.verify" AutomationProperties.AutomationId="Command_ChecksumVerify" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_FolderCompare" cmd:CommandUi.Id="tools.folderCompare" AutomationProperties.AutomationId="Command_FolderCompare" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Split" cmd:CommandUi.Id="tools.files.split" AutomationProperties.AutomationId="Command_FileSplit" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Join" cmd:CommandUi.Id="tools.files.join" AutomationProperties.AutomationId="Command_FileJoin" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Interleave" cmd:CommandUi.Id="tools.files.interleave" AutomationProperties.AutomationId="Command_FileInterleave" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Deinterleave" cmd:CommandUi.Id="tools.files.deinterleave" AutomationProperties.AutomationId="Command_FileDeinterleave" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Shred" cmd:CommandUi.Id="tools.files.shred" AutomationProperties.AutomationId="Command_FileShred" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_FileTools_Ads" cmd:CommandUi.Id="tools.ads" AutomationProperties.AutomationId="Command_ToolsAds" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />

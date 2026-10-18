@@ -55,6 +55,12 @@ public static class BuiltInCommands
         new("file.export", "file") { Condition = "documentOpen" },
         new("file.exportSelection", "file") { Condition = "documentOpen" },
         new("file.saveSelection", "file") { Condition = "documentOpen" },
+
+        // ---- 印刷と PDF (11 の TOOL-01〜TOOL-03)、代替データストリーム (01 の ENG-37、11 の TOOL-21) ----
+        new("file.print", "file") { DefaultBindings = [K("Ctrl+P")], Condition = "documentOpen" },
+        new("file.printPreview", "file") { Condition = "documentOpen" },
+        new("file.exportPdf", "file") { Condition = "documentOpen" },
+        new("file.ads.open", "file") { Condition = "documentOpen" },
         new("workspace.save", "file") { Condition = "documentOpen" },
         new("workspace.open", "file"),
         new("file.reload", "file") { DefaultBindings = [K("Ctrl+R")], Condition = "documentOpen" },
@@ -626,6 +632,26 @@ public static class BuiltInCommands
         new("scripting.debug", "scripting") { Condition = "scriptEditor" },
         new("scripting.pause", "scripting") { Condition = "scriptEditor" },
         new("scripting.clearOutput", "scripting"),
+
+        // ---- ツール: 電卓・変換・参照ツール (11 の TOOL-22〜TOOL-28)、チェックサムファイル・フォルダの比較 (TOOL-18〜TOOL-20)。既定のショートカットはなし ----
+        new("tools.calculator", "tools"),
+        new("tools.calculator.programmer", "tools"),
+        new("tools.converter", "tools"),
+        new("tools.floatVisualizer", "tools"),
+        new("tools.charTable", "tools"),
+        new("tools.colorPicker", "tools"),
+        new("tools.dateTime", "tools"),
+        new("tools.checksum.create", "fileTools"),
+        new("tools.checksum.verify", "fileTools"),
+        new("tools.folderCompare", "fileTools"),
+
+        // ---- ツール: ファイルツール (11 の TOOL-13〜TOOL-17、TOOL-21)。既定のショートカットはなし ----
+        new("tools.files.split", "fileTools"),
+        new("tools.files.join", "fileTools"),
+        new("tools.files.interleave", "fileTools"),
+        new("tools.files.deinterleave", "fileTools"),
+        new("tools.files.shred", "fileTools"),
+        new("tools.ads", "fileTools"),
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

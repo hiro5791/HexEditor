@@ -43,8 +43,15 @@ public sealed partial class MainViewModel
             return byPath;
         }
 
+        // 代替データストリーム (ENG-37) はメインのストリームと同じファイルの識別子を持つが、別のドキュメントとして開く (パスだけで比べる)。
+        if (Core.Tools.Files.AlternateStreams.IsStreamPath(fullPath))
+        {
+            return null;
+        }
+
         string? id = FileStamp.FromPath(fullPath)?.FileId;
-        return string.IsNullOrEmpty(id) ? null : Documents.FirstOrDefault(d => !d.IsRangeDocument && d.OpenedStamp?.FileId == id);
+        return string.IsNullOrEmpty(id) ? null : Documents.FirstOrDefault(d => !d.IsRangeDocument && d.OpenedStamp?.FileId == id
+            && !(d.FilePath is { } p && Core.Tools.Files.AlternateStreams.IsStreamPath(p)));
     }
 
     /// <summary>タブを動かす (UI-10 の仕様 1)。ピン留めの規則に収める。動いたら true。</summary>

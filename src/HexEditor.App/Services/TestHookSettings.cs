@@ -177,6 +177,12 @@ public sealed record TestHookSettings
     /// <summary>「名前を付けて保存」のダイアログの代わりに返すパス (空文字列はキャンセル)。null なら本物のダイアログを出す。</summary>
     public string? SavePicker { get; init; }
 
+    /// <summary>ボリュームが代替データストリームに対応しない (FAT32 のボリュームを模擬する。ENG-37・TOOL-21 の UI テスト用)。</summary>
+    public bool NoNamedStreams { get; init; }
+
+    /// <summary>印刷の代わりに PDF を書くファイル (物理的なプリンタには送らない。TOOL-01 のテスト用)。null なら本物のプリンタ。</summary>
+    public string? PrintToFile { get; init; }
+
     /// <summary>起動時に Shift キーが押されているとみなす (セーフモード。09 の UI-30 の仕様 4)。実際のキーの状態は読まない。</summary>
     public bool? SafeModeShift { get; init; }
 
@@ -239,6 +245,8 @@ public sealed record TestHookSettings
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
+            PrintToFile = root["printToFile"]?.GetValue<string>(),
+            NoNamedStreams = root["noNamedStreams"]?.GetValue<bool>() ?? false,
             SafeModeShift = root["safeModeShift"]?.GetValue<bool>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,
             WriteErrors = root["writeErrors"]?.AsArray().Select(n => new WriteErrorSpec(

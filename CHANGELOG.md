@@ -17,3 +17,8 @@ The release workflow uses the section for the tagged version as the release note
 - Branching undo history: a tree in the history panel, named and pinned points, and saving and loading the history (`.hexhist`).
 - Patches: create IPS, IPS32, UPS, BPS and HexEditor patches (`.hexpatch`) from unsaved changes, two tabs, a comparison or two points in the history; apply them with a check of the original; self-applying patches (EXE). `hexed patch` also applies UPS, BPS and `.hexpatch`.
 - Transform view: show and edit the data through XOR and other transformations without changing the file.
+- Calculator with programmer mode, base and data type converter, floating-point visualizer, character code table, color picker and date and time converter (Tools menu).
+- Checksum files: create (GNU, BSD, per-file, SFV) and verify, with an InfoBar when you open one; folder comparison.
+- Printing with a live preview, and PDF export with searchable text and embedded font subsets (File menu).
+- File tools: split, join, interleave and deinterleave files of any size, and secure delete (Tools > File tools).
+- NTFS alternate data streams: list, open as documents, create, rename, delete, export and import.

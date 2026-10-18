@@ -7512,4 +7512,685 @@ SHA-256 のフィンガープリント: {2}
   <data name="Packets_ExportJson" xml:space="preserve"><value>JSON でエクスポート...</value></data>
   <data name="Packets_Exported" xml:space="preserve"><value>{0} にエクスポートしました。</value></data>
   <data name="Packets_NotUdp" xml:space="preserve"><value>UDP の受信のドキュメント (ファイル &gt; リモートに接続 &gt; UDP を受信) を開くと、パケットの一覧が表示されます。</value></data>
+  <data name="Panel_Calculator_Title" xml:space="preserve"><value>電卓</value></data>
+  <data name="Panel_Converter_Title" xml:space="preserve"><value>基数・データ型の変換</value></data>
+  <data name="Panel_Float_Title" xml:space="preserve"><value>浮動小数点のビジュアライザ</value></data>
+  <data name="Panel_CharTable_Title" xml:space="preserve"><value>文字コード表</value></data>
+  <data name="Panel_Color_Title" xml:space="preserve"><value>カラーピッカー</value></data>
+  <data name="Panel_DateTime_Title" xml:space="preserve"><value>日時の変換</value></data>
+  <data name="Panel_ChecksumResults_Title" xml:space="preserve"><value>チェックサムの検証結果</value></data>
+  <data name="Panel_FolderCompare_Title" xml:space="preserve"><value>フォルダの比較</value></data>
+  <data name="Menu_Tools_Calculator.Text" xml:space="preserve"><value>電卓(C)</value></data>
+  <data name="Menu_Tools_Calculator.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Converter.Text" xml:space="preserve"><value>基数・データ型の変換(V)</value></data>
+  <data name="Menu_Tools_Converter.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FloatVisualizer.Text" xml:space="preserve"><value>浮動小数点のビジュアライザ(F)</value></data>
+  <data name="Menu_Tools_FloatVisualizer.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_CharTable.Text" xml:space="preserve"><value>文字コード表(A)</value></data>
+  <data name="Menu_Tools_CharTable.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Tools_ColorPicker.Text" xml:space="preserve"><value>カラーピッカー(L)</value></data>
+  <data name="Menu_Tools_ColorPicker.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_DateTime.Text" xml:space="preserve"><value>日時の変換(D)</value></data>
+  <data name="Menu_Tools_DateTime.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools.Text" xml:space="preserve"><value>ファイルツール(I)</value></data>
+  <data name="Menu_Tools_FileTools.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.Text" xml:space="preserve"><value>チェックサムファイルの作成(C)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.Text" xml:space="preserve"><value>チェックサムファイルの検証(V)...</value></data>
+  <data name="Menu_Tools_FileTools_ChecksumVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.Text" xml:space="preserve"><value>フォルダの比較(F)...</value></data>
+  <data name="Menu_Tools_FileTools_FolderCompare.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="CmdCategory_tools" xml:space="preserve"><value>ツール</value></data>
+  <data name="CmdCategory_fileTools" xml:space="preserve"><value>ファイルツール</value></data>
+  <data name="Cmd_tools_calculator" xml:space="preserve"><value>ツール: 電卓</value></data>
+  <data name="CmdAlias_tools_calculator" xml:space="preserve"><value>でんたく けいさん しき</value></data>
+  <data name="Cmd_tools_calculator_programmer" xml:space="preserve"><value>ツール: 電卓 (プログラマモード)</value></data>
+  <data name="CmdAlias_tools_calculator_programmer" xml:space="preserve"><value>でんたく ぷろぐらま ばいなり びっと</value></data>
+  <data name="Cmd_tools_converter" xml:space="preserve"><value>ツール: 基数・データ型の変換</value></data>
+  <data name="CmdAlias_tools_converter" xml:space="preserve"><value>きすう へんかん でーたがた</value></data>
+  <data name="Cmd_tools_floatVisualizer" xml:space="preserve"><value>ツール: 浮動小数点のビジュアライザ</value></data>
+  <data name="CmdAlias_tools_floatVisualizer" xml:space="preserve"><value>ふどうしょうすうてん びじゅあらいざ</value></data>
+  <data name="Cmd_tools_charTable" xml:space="preserve"><value>ツール: 文字コード表</value></data>
+  <data name="CmdAlias_tools_charTable" xml:space="preserve"><value>もじこーどひょう こーどぺーじ</value></data>
+  <data name="Cmd_tools_colorPicker" xml:space="preserve"><value>ツール: カラーピッカー</value></data>
+  <data name="CmdAlias_tools_colorPicker" xml:space="preserve"><value>からーぴっかー いろ ぴくせる</value></data>
+  <data name="Cmd_tools_dateTime" xml:space="preserve"><value>ツール: 日時の変換</value></data>
+  <data name="CmdAlias_tools_dateTime" xml:space="preserve"><value>にちじ へんかん たいむすたんぷ</value></data>
+  <data name="Cmd_tools_checksum_create" xml:space="preserve"><value>ファイルツール: チェックサムファイルを作成</value></data>
+  <data name="CmdAlias_tools_checksum_create" xml:space="preserve"><value>ちぇっくさむ さくせい はっしゅ</value></data>
+  <data name="Cmd_tools_checksum_verify" xml:space="preserve"><value>ファイルツール: チェックサムファイルを検証</value></data>
+  <data name="CmdAlias_tools_checksum_verify" xml:space="preserve"><value>ちぇっくさむ けんしょう はっしゅ</value></data>
+  <data name="Cmd_tools_folderCompare" xml:space="preserve"><value>ファイルツール: フォルダを比較</value></data>
+  <data name="CmdAlias_tools_folderCompare" xml:space="preserve"><value>ふぉるだ ひかく さぶん</value></data>
+  <data name="Tool_CopyValue" xml:space="preserve"><value>{0} をコピー</value></data>
+  <data name="Tool_Error_End" xml:space="preserve"><value>書き込めません: カーソルから末尾まで {0} バイトしかありませんが、{1} バイト必要です。</value></data>
+  <data name="ToolTable_ExportCsv" xml:space="preserve"><value>CSV に書き出す</value></data>
+  <data name="ToolTable_ExportJson" xml:space="preserve"><value>JSON に書き出す</value></data>
+  <data name="ToolTable_Filter" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="ToolTable_List" xml:space="preserve"><value>結果一覧</value></data>
+  <data name="ToolTable_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
+  <data name="ToolTable_Exported" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="GoTo_Error_NotInteger" xml:space="preserve"><value>{0} は整数にだけ使えます。</value></data>
+  <data name="Calc_Input" xml:space="preserve"><value>式</value></data>
+  <data name="Calc_Placeholder" xml:space="preserve"><value>例: 0x1F00 + 10h * 2</value></data>
+  <data name="Calc_Overflow" xml:space="preserve"><value>桁あふれ</value></data>
+  <data name="Calc_Programmer" xml:space="preserve"><value>プログラマ</value></data>
+  <data name="Calc_Row_Hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="Calc_Row_Dec" xml:space="preserve"><value>10 進</value></data>
+  <data name="Calc_Row_DecUnsigned" xml:space="preserve"><value>10 進 (符号なし)</value></data>
+  <data name="Calc_Row_Oct" xml:space="preserve"><value>8 進</value></data>
+  <data name="Calc_Row_Bin" xml:space="preserve"><value>2 進</value></data>
+  <data name="Calc_Row_Size" xml:space="preserve"><value>ファイルサイズ</value></data>
+  <data name="Calc_Row_Float" xml:space="preserve"><value>小数</value></data>
+  <data name="Calc_WriteSize" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Calc_Bytes" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Calc_Endian" xml:space="preserve"><value>バイト順</value></data>
+  <data name="Calc_EndianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Calc_EndianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Calc_GoTo" xml:space="preserve"><value>この位置へ移動</value></data>
+  <data name="Calc_Write" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="Calc_SelectLength" xml:space="preserve"><value>選択範囲の長さにする</value></data>
+  <data name="Calc_History" xml:space="preserve"><value>履歴</value></data>
+  <data name="Calc_Error_NoOffset" xml:space="preserve"><value>結果をオフセットとして使えません。</value></data>
+  <data name="Calc_Error_NoDocument" xml:space="preserve"><value>ドキュメントが開かれていません。</value></data>
+  <data name="Calc_Error_NoLength" xml:space="preserve"><value>結果は、カーソルからの長さとして使えません。</value></data>
+  <data name="Calc_Error_TooBig" xml:space="preserve"><value>値が {0} バイトに収まりません。</value></data>
+  <data name="Calc_Error_NoData" xml:space="preserve"><value>カーソル位置のデータが足りません。</value></data>
+  <data name="Calc_Width" xml:space="preserve"><value>ビット幅</value></data>
+  <data name="Calc_Bits" xml:space="preserve"><value>{0} ビット</value></data>
+  <data name="Calc_Signed" xml:space="preserve"><value>符号付き</value></data>
+  <data name="Calc_ReadCursor" xml:space="preserve"><value>カーソル位置から読む</value></data>
+  <data name="Calc_BitTable" xml:space="preserve"><value>ビットの表</value></data>
+  <data name="Calc_BitName" xml:space="preserve"><value>ビット {0}、値 {1}</value></data>
+  <data name="Calc_BitFieldValue" xml:space="preserve"><value>ビット {0} から {1}: {2} ({3})</value></data>
+  <data name="Calc_CopyExpression" xml:space="preserve"><value>式をコピー</value></data>
+  <data name="Calc_Operand" xml:space="preserve"><value>オペランド (AND・OR・XOR・NAND・NOR 用)</value></data>
+  <data name="Calc_Op_AND" xml:space="preserve"><value>AND</value></data>
+  <data name="Calc_Op_OR" xml:space="preserve"><value>OR</value></data>
+  <data name="Calc_Op_XOR" xml:space="preserve"><value>XOR</value></data>
+  <data name="Calc_Op_NOT" xml:space="preserve"><value>NOT</value></data>
+  <data name="Calc_Op_NAND" xml:space="preserve"><value>NAND</value></data>
+  <data name="Calc_Op_NOR" xml:space="preserve"><value>NOR</value></data>
+  <data name="Calc_Op_ShiftLeft" xml:space="preserve"><value>&lt;&lt;</value></data>
+  <data name="Calc_Op_ShiftRight" xml:space="preserve"><value>&gt;&gt; (論理)</value></data>
+  <data name="Calc_Op_ShiftRightArithmetic" xml:space="preserve"><value>&gt;&gt; (算術)</value></data>
+  <data name="Calc_Op_RotateLeft" xml:space="preserve"><value>左回転</value></data>
+  <data name="Calc_Op_RotateRight" xml:space="preserve"><value>右回転</value></data>
+  <data name="Calc_Op_Negate" xml:space="preserve"><value>符号反転</value></data>
+  <data name="Calc_Op_ByteSwap" xml:space="preserve"><value>バイトスワップ</value></data>
+  <data name="Conv_Endian" xml:space="preserve"><value>バイト順</value></data>
+  <data name="Conv_EndianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Conv_EndianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Conv_CodePageChoice" xml:space="preserve"><value>コードページ</value></data>
+  <data name="Conv_Hex" xml:space="preserve"><value>バイト列 (Hex)</value></data>
+  <data name="Conv_HexInteger" xml:space="preserve"><value>16 進</value></data>
+  <data name="Conv_UDec" xml:space="preserve"><value>10 進 (符号なし)</value></data>
+  <data name="Conv_SDec" xml:space="preserve"><value>10 進 (符号付き)</value></data>
+  <data name="Conv_Oct" xml:space="preserve"><value>8 進</value></data>
+  <data name="Conv_Bin" xml:space="preserve"><value>2 進</value></data>
+  <data name="Conv_Half" xml:space="preserve"><value>half</value></data>
+  <data name="Conv_Float" xml:space="preserve"><value>float</value></data>
+  <data name="Conv_Double" xml:space="preserve"><value>double</value></data>
+  <data name="Conv_Ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Conv_Utf8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Conv_Utf16Le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Conv_Utf16Be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Conv_Utf32Le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Conv_Utf32Be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Conv_CodePage" xml:space="preserve"><value>コードページの文字列</value></data>
+  <data name="Conv_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Conv_ReadCursor" xml:space="preserve"><value>カーソル位置から読む</value></data>
+  <data name="Conv_WriteCursor" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="Conv_SendSearch" xml:space="preserve"><value>検索バーに送る</value></data>
+  <data name="Conv_Error_InvalidHex" xml:space="preserve"><value>Hex バイト列 (例: DE AD BE EF) を入力してください。桁数は偶数にします。</value></data>
+  <data name="Conv_Error_TooLong" xml:space="preserve"><value>最大 {0} バイトです。</value></data>
+  <data name="Conv_Error_InvalidNumber" xml:space="preserve"><value>数値として解釈できません。</value></data>
+  <data name="Conv_Error_OutOfRange" xml:space="preserve"><value>8 バイトに収まらない値です。</value></data>
+  <data name="Conv_Error_Unencodable" xml:space="preserve"><value>この文字コードで表せない文字があります: {0}</value></data>
+  <data name="Conv_Error_UnknownCodePage" xml:space="preserve"><value>このコードページは使えません。</value></data>
+  <data name="Conv_Error_InvalidBase64" xml:space="preserve"><value>Base64 として解釈できません。</value></data>
+  <data name="Conv_Error_NoData" xml:space="preserve"><value>カーソル位置にデータがありません。</value></data>
+  <data name="Conv_Warning_Invalid" xml:space="preserve"><value>このバイト列は、この文字コードでは不正です。置換文字で示しています。</value></data>
+  <data name="Float_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Float_Format_half" xml:space="preserve"><value>half (16 bit)</value></data>
+  <data name="Float_Format_bfloat16" xml:space="preserve"><value>bfloat16 (16 bit)</value></data>
+  <data name="Float_Format_float" xml:space="preserve"><value>float (32 bit)</value></data>
+  <data name="Float_Format_double" xml:space="preserve"><value>double (64 bit)</value></data>
+  <data name="Float_Format_x87" xml:space="preserve"><value>x87 拡張精度 (80 bit)</value></data>
+  <data name="Float_Endian" xml:space="preserve"><value>バイト順</value></data>
+  <data name="Float_EndianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Float_EndianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Float_Decimal" xml:space="preserve"><value>10 進の値</value></data>
+  <data name="Float_HexInput" xml:space="preserve"><value>バイト列 (Hex)</value></data>
+  <data name="Float_BitTable" xml:space="preserve"><value>ビットの構成</value></data>
+  <data name="Float_Section_Sign" xml:space="preserve"><value>符号</value></data>
+  <data name="Float_Section_Exponent" xml:space="preserve"><value>指数部 ({0} ビット)</value></data>
+  <data name="Float_Section_Mantissa" xml:space="preserve"><value>仮数部 ({0} ビット)</value></data>
+  <data name="Float_Name_Sign" xml:space="preserve"><value>符号 ビット {0}、値 {1}</value></data>
+  <data name="Float_Name_Exponent" xml:space="preserve"><value>指数部 ビット {0}、値 {1}</value></data>
+  <data name="Float_Name_Mantissa" xml:space="preserve"><value>仮数部 ビット {0}、値 {1}</value></data>
+  <data name="Float_Row_BitsHex" xml:space="preserve"><value>ビット列 (16 進)</value></data>
+  <data name="Float_Row_Sign" xml:space="preserve"><value>符号</value></data>
+  <data name="Float_Row_Exponent" xml:space="preserve"><value>指数部</value></data>
+  <data name="Float_Row_Mantissa" xml:space="preserve"><value>仮数部</value></data>
+  <data name="Float_Row_Class" xml:space="preserve"><value>分類</value></data>
+  <data name="Float_Row_Shortest" xml:space="preserve"><value>値 (最短の表記)</value></data>
+  <data name="Float_Row_Exact" xml:space="preserve"><value>正確な値</value></data>
+  <data name="Float_Row_HexFloat" xml:space="preserve"><value>16 進の浮動小数点表記</value></data>
+  <data name="Float_Row_NextUp" xml:space="preserve"><value>1 つ大きい値</value></data>
+  <data name="Float_Row_NextDown" xml:space="preserve"><value>1 つ小さい値</value></data>
+  <data name="Float_Row_Ulp" xml:space="preserve"><value>ULP (最小単位)</value></data>
+  <data name="Float_Row_Error" xml:space="preserve"><value>丸めの誤差</value></data>
+  <data name="Float_ExponentText" xml:space="preserve"><value>{0} (バイアス付き {1}、バイアスを引いた値 {2})</value></data>
+  <data name="Float_ExponentTextSpecial" xml:space="preserve"><value>{0} (バイアス付き {1}、特別な値)</value></data>
+  <data name="Float_Class_Normal" xml:space="preserve"><value>正規化数</value></data>
+  <data name="Float_Class_Subnormal" xml:space="preserve"><value>非正規化数</value></data>
+  <data name="Float_Class_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="Float_Class_Infinity" xml:space="preserve"><value>無限大</value></data>
+  <data name="Float_Class_NaN" xml:space="preserve"><value>NaN</value></data>
+  <data name="Float_Class_Invalid" xml:space="preserve"><value>x87 の正しくない表現</value></data>
+  <data name="Float_Class_NaNQuiet" xml:space="preserve"><value>NaN (quiet、ペイロード {0})</value></data>
+  <data name="Float_Class_NaNSignaling" xml:space="preserve"><value>NaN (signaling、ペイロード {0})</value></data>
+  <data name="Float_Error_InvalidNumber" xml:space="preserve"><value>10 進の値 (例: 0.1、inf、-inf、nan) を入力してください。</value></data>
+  <data name="Float_Error_OutOfRange" xml:space="preserve"><value>指数が大きすぎます。</value></data>
+  <data name="Float_Error_InvalidHex" xml:space="preserve"><value>この形式に収まる Hex を入力してください。</value></data>
+  <data name="Float_Error_NoData" xml:space="preserve"><value>カーソル位置のデータが足りません。</value></data>
+  <data name="Float_ReadCursor" xml:space="preserve"><value>カーソル位置から読む</value></data>
+  <data name="Float_WriteCursor" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="Chars_Encoding" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Chars_Base" xml:space="preserve"><value>見出し</value></data>
+  <data name="Chars_Base_Hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="Chars_Base_Dec" xml:space="preserve"><value>10 進</value></data>
+  <data name="Chars_Base_Oct" xml:space="preserve"><value>8 進</value></data>
+  <data name="Chars_ListMode" xml:space="preserve"><value>一覧表示</value></data>
+  <data name="Chars_Search" xml:space="preserve"><value>文字の検索</value></data>
+  <data name="Chars_SearchPlaceholder" xml:space="preserve"><value>文字・名前・コードポイント (U+3042)</value></data>
+  <data name="Chars_SearchButton" xml:space="preserve"><value>検索</value></data>
+  <data name="Chars_NotFound" xml:space="preserve"><value>この文字コードには見つかりません。</value></data>
+  <data name="Chars_TableName" xml:space="preserve"><value>文字コード表</value></data>
+  <data name="Chars_TrailTableName" xml:space="preserve"><value>2 バイト目の表</value></data>
+  <data name="Chars_TrailTitle" xml:space="preserve"><value>先行バイト {0} の 2 バイト目</value></data>
+  <data name="Chars_Row_Hex" xml:space="preserve"><value>バイト値 (16 進)</value></data>
+  <data name="Chars_Row_Dec" xml:space="preserve"><value>バイト値 (10 進)</value></data>
+  <data name="Chars_Row_Oct" xml:space="preserve"><value>バイト値 (8 進)</value></data>
+  <data name="Chars_Row_Bin" xml:space="preserve"><value>バイト値 (2 進)</value></data>
+  <data name="Chars_Row_Char" xml:space="preserve"><value>文字</value></data>
+  <data name="Chars_Row_CodePoint" xml:space="preserve"><value>コードポイント</value></data>
+  <data name="Chars_Row_Name" xml:space="preserve"><value>文字名 (英語)</value></data>
+  <data name="Chars_Row_Utf8" xml:space="preserve"><value>UTF-8 のバイト列</value></data>
+  <data name="Chars_Row_Utf16" xml:space="preserve"><value>UTF-16 のバイト列</value></data>
+  <data name="Chars_Utf16Endian" xml:space="preserve"><value>UTF-16 のバイト順 (LE / BE)</value></data>
+  <data name="Chars_Insert" xml:space="preserve"><value>カーソル位置に入力</value></data>
+  <data name="Chars_CopyChar" xml:space="preserve"><value>文字をコピー</value></data>
+  <data name="Chars_CopyBytes" xml:space="preserve"><value>バイト値をコピー</value></data>
+  <data name="Color_Picker" xml:space="preserve"><value>色</value></data>
+  <data name="Color_Swatch" xml:space="preserve"><value>色の見本</value></data>
+  <data name="Color_Hex" xml:space="preserve"><value>Hex (#RRGGBB / #AARRGGBB)</value></data>
+  <data name="Color_Error_Hex" xml:space="preserve"><value>#RRGGBB または #AARRGGBB の形で入力してください。</value></data>
+  <data name="Color_Components" xml:space="preserve"><value>R {0}、G {1}、B {2}、A {3}</value></data>
+  <data name="Color_Formats" xml:space="preserve"><value>ピクセル形式</value></data>
+  <data name="Color_Format" xml:space="preserve"><value>読み取り・書き込み・検索の形式</value></data>
+  <data name="Color_EndianOf" xml:space="preserve"><value>{0} のバイト順</value></data>
+  <data name="Color_ReadCursor" xml:space="preserve"><value>カーソル位置から読む</value></data>
+  <data name="Color_WriteCursor" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="Color_Search" xml:space="preserve"><value>この色を検索</value></data>
+  <data name="Color_Error_NoData" xml:space="preserve"><value>カーソル位置のデータが足りません。</value></data>
+  <data name="Time_Zone" xml:space="preserve"><value>タイムゾーン</value></data>
+  <data name="Time_Zone_Utc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Time_Zone_Local" xml:space="preserve"><value>ローカル時刻</value></data>
+  <data name="Time_Endian" xml:space="preserve"><value>バイト順</value></data>
+  <data name="Time_EndianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Time_EndianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Time_Date" xml:space="preserve"><value>日時 (ISO 8601)</value></data>
+  <data name="Time_Row_Iso" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Time_Row_Regional" xml:space="preserve"><value>地域設定の書式</value></data>
+  <data name="Time_Now" xml:space="preserve"><value>現在の日時</value></data>
+  <data name="Time_Decimal" xml:space="preserve"><value>10 進</value></data>
+  <data name="Time_Hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="Time_Bytes" xml:space="preserve"><value>バイト列</value></data>
+  <data name="Time_NotRepresentable" xml:space="preserve"><value>表せません</value></data>
+  <data name="Time_Format" xml:space="preserve"><value>読み取り・書き込みの形式</value></data>
+  <data name="Time_ReadCursor" xml:space="preserve"><value>カーソル位置から読む</value></data>
+  <data name="Time_WriteCursor" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="Time_Error_InvalidDate" xml:space="preserve"><value>日時 (例: 2024-02-29T12:34:56Z)、または now を入力してください。</value></data>
+  <data name="Time_Error_InvalidNumber" xml:space="preserve"><value>数値として解釈できません。</value></data>
+  <data name="Time_Error_OutOfRange" xml:space="preserve"><value>この形式で表せる範囲外の値です。</value></data>
+  <data name="Time_Error_InvalidHex" xml:space="preserve"><value>この形式のバイト数の Hex を入力してください。</value></data>
+  <data name="Time_Error_NotEnoughData" xml:space="preserve"><value>データが足りません。</value></data>
+  <data name="Time_Error_ReadFailed" xml:space="preserve"><value>カーソル位置から日時を読めません。</value></data>
+  <data name="Time_Format_unix32" xml:space="preserve"><value>Unix 時刻 (32 bit、秒)</value></data>
+  <data name="Time_Format_unix32u" xml:space="preserve"><value>Unix 時刻 (符号なし 32 bit、秒)</value></data>
+  <data name="Time_Format_unix64" xml:space="preserve"><value>Unix 時刻 (64 bit、秒)</value></data>
+  <data name="Time_Format_unixms" xml:space="preserve"><value>Unix 時刻 (64 bit、ミリ秒)</value></data>
+  <data name="Time_Format_unixus" xml:space="preserve"><value>Unix 時刻 (64 bit、マイクロ秒)</value></data>
+  <data name="Time_Format_unixns" xml:space="preserve"><value>Unix 時刻 (64 bit、ナノ秒)</value></data>
+  <data name="Time_Format_filetime" xml:space="preserve"><value>FILETIME</value></data>
+  <data name="Time_Format_dos" xml:space="preserve"><value>DOS の日付と時刻</value></data>
+  <data name="Time_Format_ole" xml:space="preserve"><value>OLE オートメーションの日付</value></data>
+  <data name="Time_Format_hfsplus" xml:space="preserve"><value>HFS+</value></data>
+  <data name="Time_Format_apfs" xml:space="preserve"><value>APFS (ナノ秒)</value></data>
+  <data name="Time_Format_java" xml:space="preserve"><value>Java (ミリ秒)</value></data>
+  <data name="Time_Format_dotnet" xml:space="preserve"><value>.NET の DateTime.Ticks</value></data>
+  <data name="Time_Format_gps" xml:space="preserve"><value>GPS 時刻 (秒)</value></data>
+  <data name="Time_Format_cocoa" xml:space="preserve"><value>Mac の絶対時刻 (Cocoa)</value></data>
+  <data name="Sums_CreateTitle" xml:space="preserve"><value>チェックサムファイルの作成</value></data>
+  <data name="Sums_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Sums_Targets" xml:space="preserve"><value>対象のファイルとフォルダ (1 行に 1 つ)</value></data>
+  <data name="Sums_AddFiles" xml:space="preserve"><value>ファイルを追加...</value></data>
+  <data name="Sums_AddFolder" xml:space="preserve"><value>フォルダを追加...</value></data>
+  <data name="Sums_Subfolders" xml:space="preserve"><value>サブフォルダを含める</value></data>
+  <data name="Sums_Algorithm" xml:space="preserve"><value>アルゴリズム</value></data>
+  <data name="Sums_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Sums_Format_Gnu" xml:space="preserve"><value>GNU (SHA256SUMS)</value></data>
+  <data name="Sums_Format_Bsd" xml:space="preserve"><value>BSD (CHECKSUM.SHA256)</value></data>
+  <data name="Sums_Format_Sidecar" xml:space="preserve"><value>ファイルごと (.sha256)</value></data>
+  <data name="Sums_Format_Sfv" xml:space="preserve"><value>SFV (CRC-32 のみ)</value></data>
+  <data name="Sums_BinaryMark" xml:space="preserve"><value>バイナリモードの印 (*) を付ける</value></data>
+  <data name="Sums_SeparatorSlash" xml:space="preserve"><value>パスの区切り /</value></data>
+  <data name="Sums_SeparatorBackslash" xml:space="preserve"><value>パスの区切り \</value></data>
+  <data name="Sums_LineLf" xml:space="preserve"><value>改行 LF</value></data>
+  <data name="Sums_LineCrLf" xml:space="preserve"><value>改行 CRLF</value></data>
+  <data name="Sums_OutputName" xml:space="preserve"><value>出力のファイル名</value></data>
+  <data name="Sums_Info" xml:space="preserve"><value>{0} 個のファイルを計算します。出力: {1}</value></data>
+  <data name="Sums_Error_NoTarget" xml:space="preserve"><value>ファイルまたはフォルダを 1 つ以上追加してください。</value></data>
+  <data name="Sums_Error_Missing" xml:space="preserve"><value>存在しないファイルまたはフォルダがあります。</value></data>
+  <data name="Sums_Error_NoFiles" xml:space="preserve"><value>計算するファイルがありません。</value></data>
+  <data name="Sums_Error_Write" xml:space="preserve"><value>チェックサムファイルを書き込めませんでした: {0}</value></data>
+  <data name="Sums_Error_Read" xml:space="preserve"><value>{0} を読めませんでした: {1}</value></data>
+  <data name="Sums_Error_NotChecksum" xml:space="preserve"><value>{0} はチェックサムファイルではなく、同じ名前のチェックサムファイルもありません。</value></data>
+  <data name="Sums_Error_Running" xml:space="preserve"><value>チェックサムの検証がすでに実行中です。</value></data>
+  <data name="Sums_OverwriteTitle" xml:space="preserve"><value>既存のファイルを置き換えますか?</value></data>
+  <data name="Sums_OverwriteBody" xml:space="preserve"><value>次の {0} 個のファイルがすでにあり、上書きされます。</value></data>
+  <data name="Sums_Overwrite" xml:space="preserve"><value>上書きする</value></data>
+  <data name="Sums_OpCreate" xml:space="preserve"><value>チェックサムファイルの作成 ({0} 個のファイル)</value></data>
+  <data name="Sums_OpVerify" xml:space="preserve"><value>{0} を検証</value></data>
+  <data name="Sums_Cancelled" xml:space="preserve"><value>チェックサムファイルの作成を取り消しました。</value></data>
+  <data name="Sums_Done" xml:space="preserve"><value>{0} 個のファイルのチェックサムファイルを作成しました: {1}</value></data>
+  <data name="Sums_WrittenMany" xml:space="preserve"><value>{0} 個のファイル</value></data>
+  <data name="Sums_SkippedTitle" xml:space="preserve"><value>読めなかったファイル</value></data>
+  <data name="Sums_SkippedBody" xml:space="preserve"><value>{0} 個のファイルを読めなかったため、チェックサムファイルには含めていません。</value></data>
+  <data name="Sums_SidecarTitle" xml:space="preserve"><value>チェックサムファイルで検証しますか?</value></data>
+  <data name="Sums_SidecarBody" xml:space="preserve"><value>{0} はチェックサムファイルではありませんが、同じ名前の {1} があります。{1} で {0} を検証しますか?</value></data>
+  <data name="Sums_SidecarUse" xml:space="preserve"><value>検証する</value></data>
+  <data name="Sums_Verify" xml:space="preserve"><value>検証する</value></data>
+  <data name="Sums_InfoBar" xml:space="preserve"><value>チェックサムファイルです。</value></data>
+  <data name="Sums_AskAlgorithmTitle" xml:space="preserve"><value>アルゴリズムを選択</value></data>
+  <data name="Sums_AskAlgorithmBody" xml:space="preserve"><value>アルゴリズムを判定できない行があります。チェックサムのアルゴリズムを選んでください。</value></data>
+  <data name="Sums_Verifying" xml:space="preserve"><value>検証中...</value></data>
+  <data name="Sums_Verifying2" xml:space="preserve"><value>検証中: {0}</value></data>
+  <data name="Sums_VerifyCancelled" xml:space="preserve"><value>取り消しました: {0}</value></data>
+  <data name="Sums_SkippedLines" xml:space="preserve"><value>書式の誤りのため {0} 行を飛ばしました。行番号: {1}</value></data>
+  <data name="Sums_Summary_Match" xml:space="preserve"><value>一致 {0}</value></data>
+  <data name="Sums_Summary_Mismatch" xml:space="preserve"><value>不一致 {0}</value></data>
+  <data name="Sums_Summary_Missing" xml:space="preserve"><value>見つからない {0}</value></data>
+  <data name="Sums_Summary_ReadError" xml:space="preserve"><value>読み取りエラー {0}</value></data>
+  <data name="Sums_Summary_None" xml:space="preserve"><value>項目なし</value></data>
+  <data name="Sums_SummarySeparator" xml:space="preserve"><value>、</value></data>
+  <data name="Sums_Status_Match" xml:space="preserve"><value>一致</value></data>
+  <data name="Sums_Status_Mismatch" xml:space="preserve"><value>不一致</value></data>
+  <data name="Sums_Status_Missing" xml:space="preserve"><value>見つからない</value></data>
+  <data name="Sums_Status_ReadError" xml:space="preserve"><value>読み取りエラー</value></data>
+  <data name="Sums_Filter_All" xml:space="preserve"><value>すべて</value></data>
+  <data name="Sums_Col_State" xml:space="preserve"><value>状態</value></data>
+  <data name="Sums_Col_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="Sums_Col_Expected" xml:space="preserve"><value>期待値</value></data>
+  <data name="Sums_Col_Actual" xml:space="preserve"><value>計算値</value></data>
+  <data name="Sums_Col_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Sums_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="FolderCmp_Title" xml:space="preserve"><value>フォルダの比較</value></data>
+  <data name="FolderCmp_Compare" xml:space="preserve"><value>比較する</value></data>
+  <data name="FolderCmp_Left" xml:space="preserve"><value>左のフォルダ</value></data>
+  <data name="FolderCmp_Right" xml:space="preserve"><value>右のフォルダ</value></data>
+  <data name="FolderCmp_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="FolderCmp_Subfolders" xml:space="preserve"><value>サブフォルダを含める</value></data>
+  <data name="FolderCmp_Pattern" xml:space="preserve"><value>対象のファイル名のパターン (例: *.bin。空欄ならすべて)</value></data>
+  <data name="FolderCmp_Hash" xml:space="preserve"><value>ハッシュ (SHA-256) で比較して値を表示する</value></data>
+  <data name="FolderCmp_Error_Missing" xml:space="preserve"><value>フォルダが存在しません。</value></data>
+  <data name="FolderCmp_Error_Running" xml:space="preserve"><value>フォルダの比較がすでに実行中です。</value></data>
+  <data name="FolderCmp_Op" xml:space="preserve"><value>フォルダの比較: {0} と {1}</value></data>
+  <data name="FolderCmp_Comparing" xml:space="preserve"><value>比較中...</value></data>
+  <data name="FolderCmp_Comparing2" xml:space="preserve"><value>比較中: {0}</value></data>
+  <data name="FolderCmp_Cancelled" xml:space="preserve"><value>取り消しました: {0}</value></data>
+  <data name="FolderCmp_Status_Same" xml:space="preserve"><value>同じ</value></data>
+  <data name="FolderCmp_Status_Different" xml:space="preserve"><value>異なる</value></data>
+  <data name="FolderCmp_Status_LeftOnly" xml:space="preserve"><value>左だけ</value></data>
+  <data name="FolderCmp_Status_RightOnly" xml:space="preserve"><value>右だけ</value></data>
+  <data name="FolderCmp_Status_ReadError" xml:space="preserve"><value>読み取りエラー</value></data>
+  <data name="FolderCmp_Filter_HideSame" xml:space="preserve"><value>同じファイルを隠す</value></data>
+  <data name="FolderCmp_Filter_All" xml:space="preserve"><value>すべて</value></data>
+  <data name="FolderCmp_Col_State" xml:space="preserve"><value>状態</value></data>
+  <data name="FolderCmp_Col_Path" xml:space="preserve"><value>相対パス</value></data>
+  <data name="FolderCmp_Col_LeftSize" xml:space="preserve"><value>左のサイズ</value></data>
+  <data name="FolderCmp_Col_RightSize" xml:space="preserve"><value>右のサイズ</value></data>
+  <data name="FolderCmp_Col_FirstDiff" xml:space="preserve"><value>最初の差分</value></data>
+  <data name="FolderCmp_Summary_Same" xml:space="preserve"><value>同じ {0}</value></data>
+  <data name="FolderCmp_Summary_Different" xml:space="preserve"><value>異なる {0}</value></data>
+  <data name="FolderCmp_Summary_LeftOnly" xml:space="preserve"><value>左だけ {0}</value></data>
+  <data name="FolderCmp_Summary_RightOnly" xml:space="preserve"><value>右だけ {0}</value></data>
+  <data name="FolderCmp_Summary_ReadError" xml:space="preserve"><value>読み取りエラー {0}</value></data>
+  <data name="FolderCmp_Summary_None" xml:space="preserve"><value>ファイルなし</value></data>
+  <data name="FolderCmp_OpenCompare" xml:space="preserve"><value>ファイルの比較で開く</value></data>
+  <data name="Inspector_MenuOpenFloat" xml:space="preserve"><value>ビジュアライザで開く</value></data>
+  <data name="Inspector_MenuOpenColor" xml:space="preserve"><value>カラーピッカーで開く</value></data>
+  <data name="Menu_File_ExportPdf.Text" xml:space="preserve"><value>PDF(P)...</value></data>
+  <data name="Menu_File_ExportPdf.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Print.Text" xml:space="preserve"><value>印刷(T)...</value></data>
+  <data name="Menu_File_Print.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_PrintPreview.Text" xml:space="preserve"><value>印刷プレビュー(Q)...</value></data>
+  <data name="Menu_File_PrintPreview.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_File_Ads.Text" xml:space="preserve"><value>代替データストリーム(H)...</value></data>
+  <data name="Menu_File_Ads.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Split.Text" xml:space="preserve"><value>分割(S)...</value></data>
+  <data name="Menu_Tools_FileTools_Split.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_FileTools_Join.Text" xml:space="preserve"><value>結合(J)...</value></data>
+  <data name="Menu_Tools_FileTools_Join.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.Text" xml:space="preserve"><value>インターリーブ(L)...</value></data>
+  <data name="Menu_Tools_FileTools_Interleave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.Text" xml:space="preserve"><value>デインターリーブ(D)...</value></data>
+  <data name="Menu_Tools_FileTools_Deinterleave.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Tools_FileTools_Shred.Text" xml:space="preserve"><value>安全な削除(H)...</value></data>
+  <data name="Menu_Tools_FileTools_Shred.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Tools_FileTools_Ads.Text" xml:space="preserve"><value>代替データストリーム(A)...</value></data>
+  <data name="Menu_Tools_FileTools_Ads.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Cmd_file_print" xml:space="preserve"><value>ファイル: 印刷</value></data>
+  <data name="CmdAlias_file_print" xml:space="preserve"><value>いんさつ ぷりんと ぺーじせってい</value></data>
+  <data name="Cmd_file_printPreview" xml:space="preserve"><value>ファイル: 印刷プレビュー</value></data>
+  <data name="CmdAlias_file_printPreview" xml:space="preserve"><value>いんさつ ぷれびゅー</value></data>
+  <data name="Cmd_file_exportPdf" xml:space="preserve"><value>ファイル: PDF としてエクスポート</value></data>
+  <data name="CmdAlias_file_exportPdf" xml:space="preserve"><value>ぴーでぃーえふ えくすぽーと いんさつ</value></data>
+  <data name="Cmd_file_ads_open" xml:space="preserve"><value>ファイル: 代替データストリームを開く</value></data>
+  <data name="CmdAlias_file_ads_open" xml:space="preserve"><value>だいたいでーたすとりーむ えぬてぃーえふえす</value></data>
+  <data name="Cmd_tools_ads" xml:space="preserve"><value>ファイルツール: 代替データストリームを管理</value></data>
+  <data name="CmdAlias_tools_ads" xml:space="preserve"><value>だいたいでーたすとりーむ かんり えぬてぃーえふえす</value></data>
+  <data name="Cmd_tools_files_split" xml:space="preserve"><value>ファイルツール: 分割</value></data>
+  <data name="CmdAlias_tools_files_split" xml:space="preserve"><value>ぶんかつ わける ふぁいる</value></data>
+  <data name="Cmd_tools_files_join" xml:space="preserve"><value>ファイルツール: 結合</value></data>
+  <data name="CmdAlias_tools_files_join" xml:space="preserve"><value>けつごう つなぐ ふぁいる</value></data>
+  <data name="Cmd_tools_files_interleave" xml:space="preserve"><value>ファイルツール: インターリーブ</value></data>
+  <data name="CmdAlias_tools_files_interleave" xml:space="preserve"><value>いんたーりーぶ ろむ</value></data>
+  <data name="Cmd_tools_files_deinterleave" xml:space="preserve"><value>ファイルツール: デインターリーブ</value></data>
+  <data name="CmdAlias_tools_files_deinterleave" xml:space="preserve"><value>でいんたーりーぶ ぐうすう ろむ</value></data>
+  <data name="Cmd_tools_files_shred" xml:space="preserve"><value>ファイルツール: 安全な削除</value></data>
+  <data name="CmdAlias_tools_files_shred" xml:space="preserve"><value>あんぜんなさくじょ しゅれっだー うわがき</value></data>
+  <data name="Tab_Ads" xml:space="preserve"><value>代替データストリーム...</value></data>
+  <data name="Panel_Ads_Title" xml:space="preserve"><value>代替データストリーム</value></data>
+  <data name="Set_files_adsNotice" xml:space="preserve"><value>代替データストリームがあるファイルを開いたときに知らせる</value></data>
+  <data name="SetDesc_files_adsNotice" xml:space="preserve"><value>NTFS のファイルを開いたとき、メイン以外のストリームがあれば「一覧を表示」ボタン付きのメッセージを出します。</value></data>
+  <data name="WriteBlock_Enabled" xml:space="preserve"><value>書き込み保護モードが有効です。</value></data>
+  <data name="FileList_List" xml:space="preserve"><value>ファイルの一覧</value></data>
+  <data name="FileList_Add" xml:space="preserve"><value>追加...</value></data>
+  <data name="FileList_AddFolder" xml:space="preserve"><value>フォルダを追加...</value></data>
+  <data name="FileList_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="FileList_Remove_Key" xml:space="preserve"><value>R</value></data>
+  <data name="FileList_Up" xml:space="preserve"><value>上へ</value></data>
+  <data name="FileList_Up_Key" xml:space="preserve"><value>U</value></data>
+  <data name="FileList_Down" xml:space="preserve"><value>下へ</value></data>
+  <data name="FileList_Down_Key" xml:space="preserve"><value>D</value></data>
+  <data name="FileList_SortName" xml:space="preserve"><value>名前順</value></data>
+  <data name="FileList_SortNatural" xml:space="preserve"><value>自然順</value></data>
+  <data name="FileOps_Input" xml:space="preserve"><value>入力</value></data>
+  <data name="FileOps_InputDocument" xml:space="preserve"><value>アクティブなドキュメント</value></data>
+  <data name="FileOps_InputDocumentNamed" xml:space="preserve"><value>アクティブなドキュメント: {0}</value></data>
+  <data name="FileOps_InputFile" xml:space="preserve"><value>ファイル</value></data>
+  <data name="FileOps_FilePath" xml:space="preserve"><value>ファイルのパス</value></data>
+  <data name="FileOps_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="FileOps_Error_NoInput" xml:space="preserve"><value>入力にするドキュメントまたは存在するファイルを選んでください。</value></data>
+  <data name="FileOps_Error_NothingToDo" xml:space="preserve"><value>処理するデータがありません。</value></data>
+  <data name="FileOps_Error_Argument" xml:space="preserve"><value>値が範囲外です。</value></data>
+  <data name="FileOps_Error_Names" xml:space="preserve"><value>ファイル名の形式から、重ならない名前を作れません。</value></data>
+  <data name="FileOps_Error_Unreadable" xml:space="preserve"><value>読めないファイルがあります。</value></data>
+  <data name="FileOps_OverwriteTitle" xml:space="preserve"><value>既存のファイルを上書きしますか?</value></data>
+  <data name="FileOps_OverwriteBody" xml:space="preserve"><value>出力先に同名のファイルが {0} 個あります。</value></data>
+  <data name="FileOps_Overwrite" xml:space="preserve"><value>上書きする</value></data>
+  <data name="FileOps_NoSpaceTitle" xml:space="preserve"><value>空き容量が足りません</value></data>
+  <data name="FileOps_NoSpaceBody" xml:space="preserve"><value>出力先のボリューム {0} の空き容量は {2} バイトですが、{1} バイト必要です。何も書き込んでいません。</value></data>
+  <data name="FileOps_KeepTitle" xml:space="preserve"><value>完成したファイルを残しますか?</value></data>
+  <data name="FileOps_KeepBody" xml:space="preserve"><value>{1} それまでに {0} 個のファイルができています。</value></data>
+  <data name="FileOps_Keep" xml:space="preserve"><value>残す</value></data>
+  <data name="FileOps_DeleteCompleted" xml:space="preserve"><value>削除する</value></data>
+  <data name="FileOps_Cancelled" xml:space="preserve"><value>処理を中止しました。</value></data>
+  <data name="FileOps_CancelledDeleted" xml:space="preserve"><value>処理を中止し、作成済みのファイルを削除しました。</value></data>
+  <data name="FileOps_ErrorTitle" xml:space="preserve"><value>ファイルツールのエラー</value></data>
+  <data name="FileOps_CreatedList" xml:space="preserve"><value>エラーまでに作ったファイル ({0} 個):</value></data>
+  <data name="Split_Title" xml:space="preserve"><value>ファイルの分割</value></data>
+  <data name="Split_Run" xml:space="preserve"><value>分割する</value></data>
+  <data name="Split_Method" xml:space="preserve"><value>分け方</value></data>
+  <data name="Split_BySize" xml:space="preserve"><value>サイズで分ける</value></data>
+  <data name="Split_Size" xml:space="preserve"><value>1 ファイルのサイズ (例: 4G、1.44M、0x10000)</value></data>
+  <data name="Split_ByCount" xml:space="preserve"><value>個数で分ける (2〜10,000)</value></data>
+  <data name="Split_Count" xml:space="preserve"><value>個数</value></data>
+  <data name="Split_Align" xml:space="preserve"><value>サイズを N バイトの倍数にそろえる</value></data>
+  <data name="Split_ByPositions" xml:space="preserve"><value>位置で分ける</value></data>
+  <data name="Split_Positions" xml:space="preserve"><value>オフセット (1 行に 1 つ)</value></data>
+  <data name="Split_UseBookmarks" xml:space="preserve"><value>ブックマークの位置を使う</value></data>
+  <data name="Split_Output" xml:space="preserve"><value>出力</value></data>
+  <data name="Split_OutputFolder" xml:space="preserve"><value>出力フォルダ (空欄は入力と同じフォルダ)</value></data>
+  <data name="Split_NameFormat" xml:space="preserve"><value>ファイル名の形式</value></data>
+  <data name="Split_JoinScript" xml:space="preserve"><value>結合用のコマンドファイルを作る (copy /b)</value></data>
+  <data name="Split_Checksum" xml:space="preserve"><value>チェックサムファイルを作る</value></data>
+  <data name="Split_Summary" xml:space="preserve"><value>{0} 個のファイル: {1} 〜 {2}、合計 {3} バイト</value></data>
+  <data name="Split_Error_Size" xml:space="preserve"><value>1 ファイルのサイズを入力してください。</value></data>
+  <data name="Split_Error_Count" xml:space="preserve"><value>個数は 2〜10,000 で入力してください。</value></data>
+  <data name="Split_Error_Positions" xml:space="preserve"><value>オフセットが正しくありません。</value></data>
+  <data name="Split_Operation" xml:space="preserve"><value>{0} を分割中</value></data>
+  <data name="Split_Done" xml:space="preserve"><value>{1} に {0} 個のファイルとして分割しました</value></data>
+  <data name="Join_Title" xml:space="preserve"><value>ファイルの結合</value></data>
+  <data name="Join_Run" xml:space="preserve"><value>結合する</value></data>
+  <data name="Join_Files" xml:space="preserve"><value>ファイル (結合する順)</value></data>
+  <data name="Join_SequenceBody" xml:space="preserve"><value>{0} 以降の連番のファイル (あと {1} 個) もまとめて追加しますか?</value></data>
+  <data name="Join_SequenceAll" xml:space="preserve"><value>連番をすべて追加</value></data>
+  <data name="Join_SequenceOne" xml:space="preserve"><value>このファイルだけ追加</value></data>
+  <data name="Join_Total" xml:space="preserve"><value>{0} 個のファイル、合計 {1} バイト</value></data>
+  <data name="Join_PadNone" xml:space="preserve"><value>ファイルの間に詰め物をしない</value></data>
+  <data name="Join_PadAlign" xml:space="preserve"><value>各ファイルの開始を N バイトの倍数にそろえる</value></data>
+  <data name="Join_Align" xml:space="preserve"><value>そろえるバイト数</value></data>
+  <data name="Join_PadValue" xml:space="preserve"><value>詰める値 (16 進 1 バイト)</value></data>
+  <data name="Join_OutNew" xml:space="preserve"><value>結果を新しいドキュメントとして開く</value></data>
+  <data name="Join_OutFile" xml:space="preserve"><value>結果をファイルに保存する</value></data>
+  <data name="Join_OutPath" xml:space="preserve"><value>出力ファイル</value></data>
+  <data name="Join_Error_Empty" xml:space="preserve"><value>ファイルを 1 つ以上追加してください。</value></data>
+  <data name="Join_Error_Missing" xml:space="preserve"><value>ファイルが見つかりません: {0}</value></data>
+  <data name="Join_Error_Align" xml:space="preserve"><value>1 バイト以上のバイト数を入力してください。</value></data>
+  <data name="Join_Error_PadValue" xml:space="preserve"><value>16 進で 1 バイト (例: 00、FF) を入力してください。</value></data>
+  <data name="Join_Error_OutPath" xml:space="preserve"><value>出力ファイルを入力してください。</value></data>
+  <data name="Join_Error_SameFile" xml:space="preserve"><value>出力ファイルが入力のファイルの 1 つです。</value></data>
+  <data name="Join_Error_Unreadable" xml:space="preserve"><value>読めないファイルがあるため、結合しませんでした:</value></data>
+  <data name="Join_Error_Write" xml:space="preserve"><value>ファイルを書けませんでした: {0}</value></data>
+  <data name="Join_DocumentName" xml:space="preserve"><value>結合 {0}</value></data>
+  <data name="Join_Operation" xml:space="preserve"><value>{0} に結合中</value></data>
+  <data name="Join_Done" xml:space="preserve"><value>{0} に結合しました</value></data>
+  <data name="Join_ChangedDuringJoin" xml:space="preserve"><value>結合中に元のファイルが変更されました: {0}</value></data>
+  <data name="Deint_Title" xml:space="preserve"><value>デインターリーブ</value></data>
+  <data name="Deint_Run" xml:space="preserve"><value>分ける</value></data>
+  <data name="Deint_Count" xml:space="preserve"><value>分ける数 (2〜16)</value></data>
+  <data name="Deint_Unit" xml:space="preserve"><value>単位</value></data>
+  <data name="Deint_Unit1" xml:space="preserve"><value>1 バイト</value></data>
+  <data name="Deint_Unit2" xml:space="preserve"><value>2 バイト</value></data>
+  <data name="Deint_Unit4" xml:space="preserve"><value>4 バイト</value></data>
+  <data name="Deint_Unit8" xml:space="preserve"><value>8 バイト</value></data>
+  <data name="Deint_UnitCustom" xml:space="preserve"><value>任意のバイト数</value></data>
+  <data name="Deint_UnitBytes" xml:space="preserve"><value>単位のバイト数</value></data>
+  <data name="Deint_Pad" xml:space="preserve"><value>最後の不足分を指定値で埋める</value></data>
+  <data name="Deint_Keep" xml:space="preserve"><value>端数を最後の出力にそのまま入れる</value></data>
+  <data name="Deint_PadValue" xml:space="preserve"><value>値 (16 進 1 バイト)</value></data>
+  <data name="Deint_Error_Count" xml:space="preserve"><value>2〜16 の数を入力してください。</value></data>
+  <data name="Deint_Error_Unit" xml:space="preserve"><value>単位は 1 バイト〜1 MiB で入力してください。</value></data>
+  <data name="Deint_Summary" xml:space="preserve"><value>出力 {0} 個: {1} バイト</value></data>
+  <data name="Deint_Operation" xml:space="preserve"><value>{0} をデインターリーブ中</value></data>
+  <data name="Deint_Done" xml:space="preserve"><value>{1} に {0} 個のファイルを書き出しました</value></data>
+  <data name="Inter_Title" xml:space="preserve"><value>インターリーブ</value></data>
+  <data name="Inter_Run" xml:space="preserve"><value>インターリーブする</value></data>
+  <data name="Inter_Inputs" xml:space="preserve"><value>入力ファイル (順番)</value></data>
+  <data name="Inter_PadShort" xml:space="preserve"><value>短いものを指定値で埋める</value></data>
+  <data name="Inter_ErrorOnMismatch" xml:space="preserve"><value>長さが違うときはエラーにする</value></data>
+  <data name="Inter_Error_Count" xml:space="preserve"><value>ファイルを 2〜16 個追加してください。</value></data>
+  <data name="Interleave_Error_Length" xml:space="preserve"><value>入力の長さが違います。</value></data>
+  <data name="Inter_Summary" xml:space="preserve"><value>入力 {0} 個: 結果は {1} バイト</value></data>
+  <data name="Inter_DocumentName" xml:space="preserve"><value>インターリーブ {0}</value></data>
+  <data name="Inter_Operation" xml:space="preserve"><value>{0} 個のファイルをインターリーブ中</value></data>
+  <data name="Inter_Done" xml:space="preserve"><value>{0} にインターリーブしました</value></data>
+  <data name="Shred_Title" xml:space="preserve"><value>安全な削除</value></data>
+  <data name="Shred_Run" xml:space="preserve"><value>削除...</value></data>
+  <data name="Shred_Targets" xml:space="preserve"><value>削除するファイルとフォルダ</value></data>
+  <data name="Shred_Method" xml:space="preserve"><value>上書きの方式</value></data>
+  <data name="Shred_Method_Zero" xml:space="preserve"><value>0 で 1 回</value></data>
+  <data name="Shred_Method_Random" xml:space="preserve"><value>乱数で 1 回</value></data>
+  <data name="Shred_Method_Dod" xml:space="preserve"><value>DoD 5220.22-M (3 回)</value></data>
+  <data name="Shred_Method_Custom" xml:space="preserve"><value>任意</value></data>
+  <data name="Shred_Method_CustomSummary" xml:space="preserve"><value>任意 ({0} 回)</value></data>
+  <data name="Shred_Passes" xml:space="preserve"><value>回数 (1〜35)</value></data>
+  <data name="Shred_Patterns" xml:space="preserve"><value>各回のパターン (1 行に 1 回分。16 進のバイト列または random)</value></data>
+  <data name="Shred_Verify" xml:space="preserve"><value>最後の上書きを読み戻して確認する</value></data>
+  <data name="Shred_Error_Passes" xml:space="preserve"><value>回数は 1〜35 で入力してください。</value></data>
+  <data name="Shred_Error_Pattern" xml:space="preserve"><value>パターンが正しくありません: {0}</value></data>
+  <data name="Shred_Reject_Open" xml:space="preserve"><value>{0} はアプリで開いています。先に閉じてください。</value></data>
+  <data name="Shred_Reject_System" xml:space="preserve"><value>システムフォルダ (Windows、Program Files など) は対象にできません。</value></data>
+  <data name="Shred_Reject_Root" xml:space="preserve"><value>ドライブのルートは対象にできません。</value></data>
+  <data name="Shred_Reject_Missing" xml:space="preserve"><value>見つかりません: {0}</value></data>
+  <data name="Shred_Confirm_Title" xml:space="preserve"><value>完全に削除しますか?</value></data>
+  <data name="Shred_Confirm_Primary" xml:space="preserve"><value>完全に削除する</value></data>
+  <data name="Shred_Confirm_Summary" xml:space="preserve"><value>対象のファイル {0} 個、合計 {1} バイト。方式: {2}。</value></data>
+  <data name="Shred_Confirm_Irreversible" xml:space="preserve"><value>この操作は取り消せません。ファイルはごみ箱に入らず、復元できません。</value></data>
+  <data name="Shred_Limit_Ssd" xml:space="preserve"><value>SSD・USB メモリ・SD カードでは、ウェアレベリングのため、上書きしても元のデータが別の場所に残ることがあります。</value></data>
+  <data name="Shred_Limit_Copies" xml:space="preserve"><value>ボリュームシャドウコピー、バックアップ、OneDrive などの同期フォルダ、圧縮・暗号化・重複除去されたファイル、ReFS などのコピーオンライトのファイルシステムでは、元のデータが残ることがあります。</value></data>
+  <data name="Shred_Limit_Free" xml:space="preserve"><value>空き領域・スラック領域の消去はこの機能では行いません。</value></data>
+  <data name="Shred_Confirm_Verify" xml:space="preserve"><value>最後の上書きを読み戻して確認します。</value></data>
+  <data name="Shred_Operation" xml:space="preserve"><value>{0} 個のファイルを安全に削除中</value></data>
+  <data name="Shred_Done" xml:space="preserve"><value>{0} 個のファイルを安全に削除しました。</value></data>
+  <data name="Shred_Cancelled" xml:space="preserve"><value>中止しました ({0} 個を削除済み)。</value></data>
+  <data name="Shred_ResultTitle" xml:space="preserve"><value>安全な削除の結果</value></data>
+  <data name="Shred_Failures" xml:space="preserve"><value>削除できなかったファイル {0} 個 (削除済み {1} 個):</value></data>
+  <data name="Shred_Failure_InUse" xml:space="preserve"><value>他のプログラムが使用中です</value></data>
+  <data name="Shred_Failure_Access" xml:space="preserve"><value>アクセスが拒否されました</value></data>
+  <data name="Shred_Failure_Missing" xml:space="preserve"><value>ファイルが見つかりません</value></data>
+  <data name="Shred_Corrupted" xml:space="preserve"><value>途中まで上書きしたファイル {0} 個を削除せずに残しました。内容は壊れています:</value></data>
+  <data name="Ads_Col_Name" xml:space="preserve"><value>ストリーム名</value></data>
+  <data name="Ads_Col_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Ads_Col_Head" xml:space="preserve"><value>先頭のバイト</value></data>
+  <data name="Ads_Col_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Ads_Filter_All" xml:space="preserve"><value>すべてのストリーム</value></data>
+  <data name="Ads_Choose" xml:space="preserve"><value>ファイルを選ぶ...</value></data>
+  <data name="Ads_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Ads_Create" xml:space="preserve"><value>作成...</value></data>
+  <data name="Ads_Rename" xml:space="preserve"><value>名前の変更...</value></data>
+  <data name="Ads_Delete" xml:space="preserve"><value>削除...</value></data>
+  <data name="Ads_Export" xml:space="preserve"><value>書き出し...</value></data>
+  <data name="Ads_Import" xml:space="preserve"><value>読み込み...</value></data>
+  <data name="Ads_NoFile" xml:space="preserve"><value>ディスク上のファイルを開いてください。</value></data>
+  <data name="Ads_Unsupported" xml:space="preserve"><value>このボリュームは代替データストリームに対応していません。</value></data>
+  <data name="Ads_Summary" xml:space="preserve"><value>{0}: ストリーム {1} 個</value></data>
+  <data name="Ads_SummaryUnsupported" xml:space="preserve"><value>{0}: このボリュームは代替データストリームに対応していません。</value></data>
+  <data name="Ads_SummaryError" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ads_Known_ZoneIdentifier" xml:space="preserve"><value>インターネットから取得したファイルの印</value></data>
+  <data name="Ads_Known_SummaryInformation" xml:space="preserve"><value>文書の概要プロパティ</value></data>
+  <data name="Ads_Known_DocumentSummaryInformation" xml:space="preserve"><value>文書の概要プロパティ (拡張)</value></data>
+  <data name="Ads_Known_Afp" xml:space="preserve"><value>Mac のファイル情報</value></data>
+  <data name="Ads_Known_Encryptable" xml:space="preserve"><value>暗号化の印</value></data>
+  <data name="Ads_Known_Favicon" xml:space="preserve"><value>サイトのアイコン</value></data>
+  <data name="Ads_Known_OutlookExpress" xml:space="preserve"><value>メールの項目</value></data>
+  <data name="Ads_Known_System" xml:space="preserve"><value>システムのストリーム</value></data>
+  <data name="Ads_CreateTitle" xml:space="preserve"><value>ストリームの作成</value></data>
+  <data name="Ads_CreateRun" xml:space="preserve"><value>作成</value></data>
+  <data name="Ads_RenameTitle" xml:space="preserve"><value>ストリームの名前の変更</value></data>
+  <data name="Ads_RenameRun" xml:space="preserve"><value>変更</value></data>
+  <data name="Ads_NameHeader" xml:space="preserve"><value>ストリーム名</value></data>
+  <data name="Ads_Error_InvalidName" xml:space="preserve"><value>名前に : \ / と制御文字は使えません。</value></data>
+  <data name="Ads_Error_Exists" xml:space="preserve"><value>同じ名前のストリームがあります。</value></data>
+  <data name="Ads_Error_NotFound" xml:space="preserve"><value>見つかりません。</value></data>
+  <data name="Ads_Error_Access" xml:space="preserve"><value>アクセスが拒否されました。</value></data>
+  <data name="Ads_Error_InUse" xml:space="preserve"><value>他のプログラムが使用中です。</value></data>
+  <data name="Ads_Error_Refs" xml:space="preserve"><value>ReFS では代替データストリームの大きさに上限があるため保存できません。</value></data>
+  <data name="Ads_Error_Default" xml:space="preserve"><value>メインのストリームは名前の変更も削除もできません。</value></data>
+  <data name="Ads_Error_Open" xml:space="preserve"><value>{0} を開けませんでした: {1}</value></data>
+  <data name="Ads_Error_OpenInTab" xml:space="preserve"><value>{0} はタブで開いています。先にタブを閉じてください。</value></data>
+  <data name="Ads_Error_Write" xml:space="preserve"><value>ファイルを書けませんでした: {0}</value></data>
+  <data name="Ads_Delete_Title" xml:space="preserve"><value>ストリームを削除しますか?</value></data>
+  <data name="Ads_Delete_Body" xml:space="preserve"><value>ストリーム {0} (サイズ {1} バイト) を削除します。</value></data>
+  <data name="Ads_Delete_Irreversible" xml:space="preserve"><value>この操作は取り消せません。</value></data>
+  <data name="Ads_Delete_Run" xml:space="preserve"><value>削除</value></data>
+  <data name="Ads_Import_Title" xml:space="preserve"><value>ストリームの内容を置き換えますか?</value></data>
+  <data name="Ads_Import_Body" xml:space="preserve"><value>{0} の内容を、次に選ぶファイルの内容で置き換えます。</value></data>
+  <data name="Ads_Import_Run" xml:space="preserve"><value>ファイルを選ぶ</value></data>
+  <data name="Ads_Operation_Rename" xml:space="preserve"><value>ストリーム {0} の名前を変更中</value></data>
+  <data name="Ads_Operation_Export" xml:space="preserve"><value>ストリーム {0} を書き出し中</value></data>
+  <data name="Ads_Operation_Import" xml:space="preserve"><value>ストリーム {0} へ読み込み中</value></data>
+  <data name="Ads_Exported" xml:space="preserve"><value>{0} に書き出しました</value></data>
+  <data name="Ads_ExportType" xml:space="preserve"><value>バイナリファイル</value></data>
+  <data name="Ads_Notice" xml:space="preserve"><value>このファイルには代替データストリームが {0} 個あります。</value></data>
+  <data name="Ads_ShowList" xml:space="preserve"><value>一覧を表示</value></data>
+  <data name="Print_Title" xml:space="preserve"><value>印刷</value></data>
+  <data name="Print_PdfTitle" xml:space="preserve"><value>PDF としてエクスポート</value></data>
+  <data name="Print_Run" xml:space="preserve"><value>印刷</value></data>
+  <data name="Print_SavePdf" xml:space="preserve"><value>PDF として保存...</value></data>
+  <data name="Print_Printer" xml:space="preserve"><value>プリンタ</value></data>
+  <data name="Print_Range" xml:space="preserve"><value>印刷範囲</value></data>
+  <data name="Print_RangeAll" xml:space="preserve"><value>すべて</value></data>
+  <data name="Print_RangeSelection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Print_RangeOffsets" xml:space="preserve"><value>オフセットの範囲</value></data>
+  <data name="Print_Offsets" xml:space="preserve"><value>オフセット (開始:長さ または 開始..終了)</value></data>
+  <data name="Print_RangePages" xml:space="preserve"><value>ページの範囲</value></data>
+  <data name="Print_PagesHint" xml:space="preserve"><value>ページ (例: 1-3, 8)</value></data>
+  <data name="Print_Paper" xml:space="preserve"><value>用紙</value></data>
+  <data name="Print_Orientation" xml:space="preserve"><value>向き</value></data>
+  <data name="Print_Portrait" xml:space="preserve"><value>縦</value></data>
+  <data name="Print_Landscape" xml:space="preserve"><value>横</value></data>
+  <data name="Print_Margins" xml:space="preserve"><value>余白</value></data>
+  <data name="Print_MarginTop" xml:space="preserve"><value>上</value></data>
+  <data name="Print_MarginBottom" xml:space="preserve"><value>下</value></data>
+  <data name="Print_MarginLeft" xml:space="preserve"><value>左</value></data>
+  <data name="Print_MarginRight" xml:space="preserve"><value>右</value></data>
+  <data name="Print_Font" xml:space="preserve"><value>フォント</value></data>
+  <data name="Print_FontSize" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Print_BytesPerRow" xml:space="preserve"><value>1 行のバイト数</value></data>
+  <data name="Print_FitToPaper" xml:space="preserve"><value>用紙に合わせる</value></data>
+  <data name="Print_Columns" xml:space="preserve"><value>列</value></data>
+  <data name="Print_ColOffset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="Print_ColHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Print_ColText" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Print_ColorMode" xml:space="preserve"><value>色</value></data>
+  <data name="Print_ColorBW" xml:space="preserve"><value>白黒 (下線と網掛け)</value></data>
+  <data name="Print_ColorColor" xml:space="preserve"><value>カラー (背景色)</value></data>
+  <data name="Print_HeaderFooter" xml:space="preserve"><value>ヘッダとフッタ (波括弧で name、path、page、pages、date、time、range、size、modified)</value></data>
+  <data name="Print_HeaderLeft" xml:space="preserve"><value>ヘッダ 左</value></data>
+  <data name="Print_HeaderCenter" xml:space="preserve"><value>ヘッダ 中央</value></data>
+  <data name="Print_HeaderRight" xml:space="preserve"><value>ヘッダ 右</value></data>
+  <data name="Print_FooterLeft" xml:space="preserve"><value>フッタ 左</value></data>
+  <data name="Print_FooterCenter" xml:space="preserve"><value>フッタ 中央</value></data>
+  <data name="Print_FooterRight" xml:space="preserve"><value>フッタ 右</value></data>
+  <data name="Print_Copies" xml:space="preserve"><value>部数 (1〜999)</value></data>
+  <data name="Print_SaveDefaults" xml:space="preserve"><value>既定として保存</value></data>
+  <data name="Print_DefaultsSaved" xml:space="preserve"><value>印刷の設定を既定として保存しました。</value></data>
+  <data name="Print_Status" xml:space="preserve"><value>{0, plural, other {# ページ}} (1 行 {1} バイト、1 ページ {2} 行)</value></data>
+  <data name="Print_Error_Margin" xml:space="preserve"><value>余白は 0〜50 mm で入力してください。</value></data>
+  <data name="Print_Error_Offsets" xml:space="preserve"><value>オフセットの範囲が正しくありません。</value></data>
+  <data name="Print_Error_PageRange" xml:space="preserve"><value>ページの範囲が正しくありません。1-3, 8 のように入力してください。</value></data>
+  <data name="Print_Error_Nothing" xml:space="preserve"><value>この範囲には印刷するものがありません。</value></data>
+  <data name="Print_Error_Limit" xml:space="preserve"><value>{0} ページは上限の {1} ページを超えています。範囲を狭めてください。</value></data>
+  <data name="Print_Error_NoFont" xml:space="preserve"><value>使える TrueType フォントが見つかりません。</value></data>
+  <data name="Print_Error_Failed" xml:space="preserve"><value>印刷できませんでした: {0}</value></data>
+  <data name="Print_Error_PdfFailed" xml:space="preserve"><value>PDF を書けませんでした: {0}</value></data>
+  <data name="Print_Confirm_Title" xml:space="preserve"><value>ページ数が多い印刷</value></data>
+  <data name="Print_Confirm_Body" xml:space="preserve"><value>{0, plural, other {# ページを印刷します。}}用紙の量を確認してください。</value></data>
+  <data name="Print_Confirm_Run" xml:space="preserve"><value>印刷する</value></data>
+  <data name="Print_Confirm_Change" xml:space="preserve"><value>範囲を変える</value></data>
+  <data name="Print_Operation" xml:space="preserve"><value>{0} を印刷中</value></data>
+  <data name="Print_Operation_Pdf" xml:space="preserve"><value>PDF {0} を書き出し中</value></data>
+  <data name="Print_Done" xml:space="preserve"><value>{0, plural, other {# ページ}}を印刷しました。</value></data>
+  <data name="Print_PdfDone" xml:space="preserve"><value>{0} を保存しました ({1, plural, other {# ページ}})。</value></data>
+  <data name="Print_Cancelled" xml:space="preserve"><value>印刷を中止しました。</value></data>
+  <data name="Print_Unreadable" xml:space="preserve"><value>読めなかった範囲があります (?? で印刷しました)。</value></data>
+  <data name="Print_Modified" xml:space="preserve"><value>(変更あり)</value></data>
+  <data name="Print_PdfFileType" xml:space="preserve"><value>PDF 文書</value></data>
+  <data name="Print_Preview_Name" xml:space="preserve"><value>印刷プレビュー</value></data>
+  <data name="Print_Preview_First" xml:space="preserve"><value>先頭のページ</value></data>
+  <data name="Print_Preview_Previous" xml:space="preserve"><value>前のページ</value></data>
+  <data name="Print_Preview_Next" xml:space="preserve"><value>次のページ</value></data>
+  <data name="Print_Preview_Last" xml:space="preserve"><value>最後のページ</value></data>
+  <data name="Print_Preview_PageNumber" xml:space="preserve"><value>ページ番号</value></data>
+  <data name="Print_Preview_Zoom" xml:space="preserve"><value>倍率</value></data>
+  <data name="Print_Preview_TwoPages" xml:space="preserve"><value>2 ページ見開き</value></data>
+  <data name="Print_Preview_Info" xml:space="preserve"><value>{0} / {1} ページ</value></data>
+  <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
+  <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
+  <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
 </root>

@@ -575,6 +575,67 @@ jobs:
           retention-days: 7
           path: TestResults/
 
+  # TC-TOOL-18-01〜03: Windows で作ったチェックサムファイル (GNU 形式と BSD 形式。日本語のファイル名を含むフォルダ) を、Linux の
+  # sha256sum -c と macOS の shasum -c で検証する (TOOL-18 の受け入れ基準)。作る側は Core のテスト (環境変数 HEXEDITOR_CHECKSUM_OUT に
+  # 出力する)。毎晩と手動の実行だけ。
+  checksum-interop-create:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      HEXEDITOR_CHECKSUM_OUT: ${{ github.workspace }}\checksum-out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Create the checksum files (TC-TOOL-18)
+        run: dotnet test tests/HexEditor.Core.Tests -c Release --filter "FullyQualifiedName~ChecksumFileTests.WritesTheCrossPlatformArtifacts"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checksum-interop
+          retention-days: 3
+          path: checksum-out/
+
+  checksum-interop-linux:
+    needs: checksum-interop-create
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: checksum-interop
+          path: out
+      - name: sha256sum -c (GNU format, TC-TOOL-18-01 and TC-TOOL-18-03)
+        working-directory: out/gnu
+        run: |
+          LC_ALL=C.UTF-8 sha256sum -c SHA256SUMS | tee ../gnu.txt
+          grep -c ': OK$' ../gnu.txt | grep -qx 5
+          grep -F '日本語/テスト ファイル①.bin: OK' ../gnu.txt
+          # BOM なしの UTF-8 で、改行が LF
+          test "$(head -c 3 SHA256SUMS | xxd -p)" != "efbbbf"
+          ! grep -q $'\r' SHA256SUMS
+
+  checksum-interop-macos:
+    needs: checksum-interop-create
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: checksum-interop
+          path: out
+      - name: shasum -c (BSD format, TC-TOOL-18-02)
+        working-directory: out/bsd
+        run: |
+          shasum -a 256 -c CHECKSUM.SHA256 | tee ../bsd.txt
+          test "$(grep -c ': OK$' ../bsd.txt)" = 5
+
   coverage:
     needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged, kaitai-reference]
     if: always()

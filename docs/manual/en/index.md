@@ -24,11 +24,19 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Statistics and analysis](statistics.md)
 - [Hashes and checksums](hashes.md)
 - [Disassembly](disassembly.md)
+- [Checksum files](checksum-files.md)
+- [Comparing folders](folder-compare.md)
+- [Split, join and interleave files](split-join.md)
+- [Secure delete](secure-delete.md)
+- [NTFS alternate data streams](alternate-streams.md)
 - [Data operations](data-operations.md)
 - [Transform view](transform-view.md)
 - [Patches](patches.md)
 - [Encryption and compression](encryption-compression.md)
 - [Import and export](import-export.md)
+- [Printing and PDF](print-pdf.md)
+- [Calculator and programmer mode](calculator.md)
+- [Converters and reference tools](reference-tools.md)
 
 ## Structures and automation {#structures-and-automation}
 
