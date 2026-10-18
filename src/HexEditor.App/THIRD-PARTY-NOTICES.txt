@@ -63,6 +63,33 @@ the application, downloaded separately when C# scripts are first used)
 https://github.com/dotnet/roslyn
 License: MIT License. Copyright (c) .NET Foundation and Contributors.
 
+-------------------------------------------------------------------------------
+ZstdSharp.Port 0.8.6 (zstd compression and decompression)
+https://github.com/oleg-st/ZstdSharp
+License: MIT License. Copyright (c) 2021-present Oleg Stepanischev.
+ZstdSharp is a port of zstd (https://github.com/facebook/zstd), BSD 3-Clause
+License, Copyright (c) Meta Platforms, Inc. and affiliates.
+
+-------------------------------------------------------------------------------
+K4os.Compression.LZ4 1.3.8, K4os.Compression.LZ4.Streams 1.3.8,
+K4os.Hash.xxHash 1.0.8 (LZ4 compression, XXH32 / XXH64)
+https://github.com/MiloszKrajewski/K4os.Compression.LZ4
+License: MIT License. Copyright (c) 2017-2024 Milosz Krajewski.
+K4os.Compression.LZ4 is a port of LZ4 (https://github.com/lz4/lz4), BSD 2-Clause
+License, Copyright (c) Yann Collet.
+
+-------------------------------------------------------------------------------
+Joveler.Compression.XZ 5.0.0, Joveler.DynLoader 2.3.1 (package of liblzma)
+https://github.com/ied206/Joveler.Compression
+License: MIT License. Copyright (c) Hajin Jang.
+
+-------------------------------------------------------------------------------
+XZ Utils 5.6.4 (liblzma.dll; XZ and LZMA compression and decompression)
+https://tukaani.org/xz/
+License: BSD Zero Clause License (0BSD). Copyright (C) The XZ Utils authors and
+contributors. Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted.
+
 ===============================================================================
 BSD 2-Clause License (Jint)
 

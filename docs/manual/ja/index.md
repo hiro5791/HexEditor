@@ -12,6 +12,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [編集](editing.md)
 - [選択とクリップボード](selection-clipboard.md)
 - [検索と置換](search-replace.md)
+- [YARA スキャン](yara.md)
 - [移動とナビゲーション](go-to.md)
 
 ## 解析 {#analysis}
@@ -24,6 +25,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [データ演算](data-operations.md)
 - [変換ビュー](transform-view.md)
 - [パッチ](patches.md)
+- [暗号化と圧縮](encryption-compression.md)
 - [インポートとエクスポート](import-export.md)
 
 ## 構造の解析と自動化 {#structures-and-automation}

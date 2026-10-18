@@ -36,8 +36,9 @@ public sealed class YaraSearch
 
     /// <summary>結果を作る。<see cref="SearchEngine.FindAll(SearchResults, Operations.LongRunningOperation?, CancellationToken)"/> でスキャンする。</summary>
     /// <param name="offset">スキャンする範囲の先頭 (ドキュメント上の位置)。</param>
+    /// <param name="headers">追加の列 (ルール名・名前空間・タグ・メタ情報・文字列の識別子) の見出しのリソースのキー。</param>
     public static (YaraSearch Search, SearchResults Results) Create(DocumentSnapshot snapshot, long offset, long length, YaraRuleSet rules,
-        YaraScanOptions scanOptions, SearchOptions searchOptions, Action<SearchMatch>? jumped = null)
+        YaraScanOptions scanOptions, SearchOptions searchOptions, IReadOnlyList<string> headers, Action<SearchMatch>? jumped = null)
     {
         var search = new YaraSearch { ScanOffset = offset };
         var results = new SearchResults(snapshot, SearchPattern.Literal([0]), searchOptions with { Scope = SearchScope.Of(offset, length) })
@@ -47,11 +48,11 @@ public sealed class YaraSearch
             IsWithoutOffset = m => !search.RowOf(m).HasOffset,
             ExtraColumns =
             [
-                new SearchResultColumn("Yara_Column_Rule", 140, m => search.RowOf(m).Rule.Name),
-                new SearchResultColumn("Yara_Column_Namespace", 90, m => search.RowOf(m).Rule.Namespace),
-                new SearchResultColumn("Yara_Column_Tags", 120, m => search.RowOf(m).Tags),
-                new SearchResultColumn("Yara_Column_Meta", 200, m => search.RowOf(m).Meta),
-                new SearchResultColumn("Yara_Column_String", 90, m => search.RowOf(m).Identifier ?? string.Empty),
+                new SearchResultColumn(headers[0], 140, m => search.RowOf(m).Rule.Name),
+                new SearchResultColumn(headers[1], 90, m => search.RowOf(m).Rule.Namespace),
+                new SearchResultColumn(headers[2], 120, m => search.RowOf(m).Tags),
+                new SearchResultColumn(headers[3], 200, m => search.RowOf(m).Meta),
+                new SearchResultColumn(headers[4], 90, m => search.RowOf(m).Identifier ?? string.Empty),
             ],
             // 「続ける」(上限の 2 倍まで続きを探す) では、スキャンし直さない (一致はスキャンの終わりにまとめて加える)。
             CustomFindAll = (r, from, operation, token) => from == long.MinValue && search.Run(r, snapshot, offset, length, rules, scanOptions, operation, token),

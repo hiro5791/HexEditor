@@ -4039,6 +4039,8 @@
 - GZ、ZLIB、ZST、LZ4、XZ、LZMA は、自動判別で正しい形式が選ばれ、結果が TD-TEXT-ASCII と一致する。
 - BR と DEFLATE は、自動判別できない旨が表示されて形式の選択を求められ、形式を指定すると結果が TD-TEXT-ASCII と一致する。
 
+**備考**: 自動テスト (`CompressionTests`) は、展開の部品 (`CompressionEngine.DecompressAuto`) で手順 1〜3 を確かめる (自動判別できない場合に形式の選択を求める画面は TC-EDIT-41-04 などと同じダイアログ)。
+
 ### TC-EDIT-41-03 zip のローカルファイルヘッダの後で圧縮データの範囲を選択する
 
 | 項目 | 内容 |
@@ -4584,4 +4586,4 @@
 | TD-EDIT-PATCH-BPS | 1 KiB 未満 | TD-EDIT-PATCH-SRC から TD-EDIT-PATCH-INS100 への BPS。形式の仕様どおりに組み立てたもの: SourceRead 0x80000、TargetRead (`AA` を 100 バイト)、SourceCopy 0x80000 (相対位置 +0x80000)、変換前・変換後・パッチの CRC-32 |
 | TD-EDIT-PATCH-OTHER | 1,048,576 バイト | 種 4202 の乱数 (TD-EDIT-PATCH-SRC と別のファイル) |
 
-TD-EDIT-PATCH-IPS・TD-EDIT-PATCH-BPS は、Flips を入れずに作れるよう、テストデータ生成ツールの参照実装で作る (Flips が作るパッチとの相互運用は TC-EDIT-42-01・TC-EDIT-42-02 と、TC-EDIT-43-01 の Flips の結合テストで確かめる)。外部のツール (gzip、Python 3、zstd、lz4、7-Zip、LZMA SDK、brotli、Flips) で作るデータは、出力がツールのバージョンで変わりうるため、テストデータ生成ツールでツールのバージョンを固定し、生成したファイルの SHA-256 を記録して照合する。
+TD-EDIT-PATCH-IPS・TD-EDIT-PATCH-BPS は、Flips を入れずに作れるよう、テストデータ生成ツールの参照実装で作る (Flips が作るパッチとの相互運用は TC-EDIT-42-01・TC-EDIT-42-02 と、TC-EDIT-43-01 の Flips の結合テストで確かめる)。外部のツール (gzip、Python 3、zstd、lz4、7-Zip、LZMA SDK、brotli、Flips) で作るデータは、出力がツールのバージョンで変わりうるため、テストデータ生成ツールでツールのバージョンを固定し、生成したファイルの SHA-256 を記録して照合する。ツールを入れていない環境 (開発者の PC、通常の CI) では、TD-EDIT-EXT-* を同じ形式・設定で、アプリの展開とは別の実装 (.NET の zlib・Brotli、ZstdSharp、K4os.Compression.LZ4、liblzma) で作る (gzip は `-9 -n` と同じヘッダ、zstd は内容の大きさとチェックサム付き、LZ4 は 4 MiB のブロックと内容のチェックサム、LZMA はヘッダに展開後の大きさを書く)。ツールそのものの出力での確認は、版とハッシュを固定した CI の結合テストとして後で加える。

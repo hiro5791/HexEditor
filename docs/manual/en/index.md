@@ -12,6 +12,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Editing](editing.md)
 - [Selection and clipboard](selection-clipboard.md)
 - [Search and replace](search-replace.md)
+- [YARA scan](yara.md)
 - [Go to and navigation](go-to.md)
 
 ## Analysis {#analysis}
@@ -24,6 +25,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Data operations](data-operations.md)
 - [Transform view](transform-view.md)
 - [Patches](patches.md)
+- [Encryption and compression](encryption-compression.md)
 - [Import and export](import-export.md)
 
 ## Structures and automation {#structures-and-automation}

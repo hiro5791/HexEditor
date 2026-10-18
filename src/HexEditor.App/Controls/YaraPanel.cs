@@ -29,6 +29,9 @@ public sealed partial class YaraPanel : UserControl
     /// <summary>名前を付けたルールセット (state.json。{ 名前: { files: [...], externals: "a=1" } })。</summary>
     public const string RuleSetsStateKey = "yara.ruleSets";
 
+    /// <summary>結果一覧の追加の列の見出し (ルール名・名前空間・タグ・メタ情報・文字列の識別子。FIND-33 の仕様 8)。</summary>
+    private static readonly string[] ColumnHeaders = ["Yara_Column_Rule", "Yara_Column_Namespace", "Yara_Column_Tags", "Yara_Column_Meta", "Yara_Column_String"];
+
     private readonly ComboBox _ruleSet = new() { MinWidth = 160 };
     private readonly ListView _files = new() { Height = 96, SelectionMode = ListViewSelectionMode.Extended };
     private readonly TextBox _externals = new() { AcceptsReturn = true, Height = 64, FontFamily = DialogParts.Mono, TextWrapping = TextWrapping.NoWrap };
@@ -503,7 +506,7 @@ public sealed partial class YaraPanel : UserControl
         int limit = Math.Clamp(App.Settings?.GetInt(FindBar.FindAllLimitKey, 1_000_000) ?? 1_000_000, 1_000, 100_000_000);
         YaraSearch? search = null;
         (search, SearchResults results) = YaraSearch.Create(editor.Document.Current, offset, length, rules, options,
-            new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting, MaxMatches = limit }, m => ShowDetails(search!.RowOf(m)));
+            new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting, MaxMatches = limit }, ColumnHeaders, m => ShowDetails(search!.RowOf(m)));
         AppLog.Info($"YARA: scan ({rules.Rules.Count} rules)");
         _lastSearch = search;
         try
