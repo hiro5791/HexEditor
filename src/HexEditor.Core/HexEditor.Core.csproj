@@ -17,6 +17,11 @@
     <PackageReference Include="Jint" Version="4.16.4" />
   </ItemGroup>
 
+  <!-- SSH / SFTP のクライアント (ENG-41)。SSH.NET (MIT)。依存の BouncyCastle.Cryptography は MIT。 -->
+  <ItemGroup>
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+  </ItemGroup>
+
   <!-- スクリプトの実行環境の前置き (JavaScript の例外の型、console、AbortController など)。 -->
   <ItemGroup>
     <EmbeddedResource Include="Scripting\Js\prelude.js" LogicalName="HexEditor.Scripting.prelude.js" />
