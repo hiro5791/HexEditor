@@ -78,6 +78,47 @@ public sealed class CompressionTests
         }
     }
 
+    [Theory]
+    [InlineData("TD-EDIT-EXT-GZ", CompressionFormat.Gzip, true)]
+    [InlineData("TD-EDIT-EXT-ZLIB", CompressionFormat.Zlib, true)]
+    [InlineData("TD-EDIT-EXT-ZST", CompressionFormat.Zstd, true)]
+    [InlineData("TD-EDIT-EXT-LZ4", CompressionFormat.Lz4Frame, true)]
+    [InlineData("TD-EDIT-EXT-XZ", CompressionFormat.Xz, true)]
+    [InlineData("TD-EDIT-EXT-LZMA", CompressionFormat.Lzma, true)]
+    [InlineData("TD-EDIT-EXT-BR", CompressionFormat.Brotli, false)]
+    [InlineData("TD-EDIT-EXT-DEFLATE", CompressionFormat.Deflate, false)]
+    [Trait(TC, "TC-EDIT-41-02")]
+    public void Data_made_by_other_tools_is_detected_or_asks_for_the_format(string id, CompressionFormat format, bool detectable)
+    {
+        byte[] expected = Inputs("TD-TEXT-ASCII");
+        using Document doc = Open(Inputs(id));
+        DecompressionResult? auto = CompressionEngine.DecompressAuto(doc.Current, 0, doc.Length, () => new CodecOutput(ContentSink.For(doc)));
+        if (detectable)
+        {
+            Assert.NotNull(auto);
+            Assert.Equal(format, auto!.Format);
+            Assert.Equal(expected, ReadContent(auto.Content!));
+            return;
+        }
+
+        // 手がかりのない形式は自動判別できず (形式の選択を求める)、形式を指定すると展開できる。
+        Assert.Null(auto);
+        Assert.Equal(expected, ReadContent(Decompress(doc, format).Content!));
+    }
+
+    [Fact]
+    public void Probe_of_the_zip_entry_finds_the_deflate_range()
+    {
+        // TC-EDIT-41-03 の Core の部分: 0x28 から展開を試み、圧縮データの長さ (ヘッダの圧縮後サイズ) と展開後の大きさを返す。
+        byte[] zip = Inputs("TD-EDIT-ZIP-1M");
+        using Document doc = Open(zip);
+        long compressedSize = BitConverter.ToUInt32(zip, 0x12);
+        DecompressionResult r = CompressionEngine.Decompress(doc.Current, 0x28, doc.Length - 0x28, CompressionFormat.Deflate, new CodecOutput(null));
+        Assert.Equal(compressedSize, r.ConsumedInput);
+        Assert.Equal(1024 * 1024, r.OutputLength);
+        Assert.Null(r.Content);
+    }
+
     [Fact]
     public void Detection_without_a_signature_returns_null()
     {
