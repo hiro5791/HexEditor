@@ -104,6 +104,8 @@ public sealed class UdpCapture : IDisposable
                 socket.DualMode = true;
             }
 
+            // 受信の取りこぼしを減らすため、OS の受信のバッファを大きくする (受信を UI の更新より先に済ませる)。
+            socket.ReceiveBufferSize = 4 * 1024 * 1024;
             socket.Bind(new IPEndPoint(settings.Address, settings.Port));
         }
         catch (SocketException ex) when (ex.SocketErrorCode is SocketError.AddressAlreadyInUse or SocketError.AccessDenied

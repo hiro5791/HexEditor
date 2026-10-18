@@ -144,6 +144,22 @@ public sealed class GdbTests : IDisposable
     }
 
     [Fact]
+    public async Task A_stopped_server_is_detected_without_a_request()
+    {
+        using GdbByteSource source = await GdbByteSource.ConnectAsync(Endpoint(), writable: false);
+        Assert.False(source.CheckConnection());
+        _server.Stop();
+        var watch = Stopwatch.StartNew();
+        while (!source.CheckConnection() && source.State != RemoteConnectionState.Disconnected)
+        {
+            Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "not detected");
+            await Task.Delay(20);
+        }
+
+        Assert.Equal(RemoteConnectionState.Disconnected, source.State);
+    }
+
+    [Fact]
     public async Task A_request_over_the_timeout_disconnects()
     {
         using GdbByteSource source = await GdbByteSource.ConnectAsync(Endpoint(TimeSpan.FromMilliseconds(300)), writable: false);

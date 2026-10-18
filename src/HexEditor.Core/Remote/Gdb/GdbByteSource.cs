@@ -136,6 +136,22 @@ public sealed class GdbByteSource : ByteSourceBase
         }
     }
 
+    /// <summary>
+    /// 接続先が接続を閉じていないかを確かめる (通信しない。UI が数秒ごとに呼び、接続先の停止を「切断」として早く示す。ENG-40 の仕様 8)。
+    /// 閉じていたら切断にして true。
+    /// </summary>
+    public bool CheckConnection()
+    {
+        GdbClient? client = ConnectedClient();
+        if (client is null || !client.PeerClosed())
+        {
+            return false;
+        }
+
+        MarkDisconnected(new GdbConnectionException("The GDB server closed the connection."));
+        return true;
+    }
+
     /// <summary>切断する (利用者の操作・閉じるとき)。</summary>
     public void Disconnect()
     {

@@ -54,6 +54,39 @@ public sealed class GdbClient : IAsyncDisposable, IDisposable
     /// <summary>接続が使えなくなった (切断・タイムアウト・不正な応答)。</summary>
     public bool IsBroken => _broken;
 
+    /// <summary>
+    /// 相手が接続を閉じたか (通信せずに確かめる。要求の合間に、接続先の停止を早く知るため)。要求の途中・確かめられないストリームでは false。
+    /// </summary>
+    public bool PeerClosed()
+    {
+        if (_broken)
+        {
+            return true;
+        }
+
+        if (_stream is not OwnedStream owned || !_gate.Wait(0))
+        {
+            return false;
+        }
+
+        try
+        {
+            Socket socket = owned.Socket;
+            bool closed = socket.Poll(0, SelectMode.SelectRead) && socket.Available == 0;
+            _broken |= closed;
+            return closed;
+        }
+        catch (Exception ex) when (ex is SocketException or ObjectDisposedException)
+        {
+            _broken = true;
+            return true;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     /// <summary>1 回の <c>m</c> で読む最大のバイト数 (応答は 16 進で 2 倍になる)。</summary>
     public int MaxReadLength => Math.Max(16, (PacketSize - 8) / 2);
 
@@ -440,6 +473,8 @@ public sealed class GdbClient : IAsyncDisposable, IDisposable
     private sealed class OwnedStream(TcpClient tcp) : Stream
     {
         private readonly NetworkStream _inner = tcp.GetStream();
+
+        public Socket Socket => tcp.Client;
 
         public override bool CanRead => true;
 

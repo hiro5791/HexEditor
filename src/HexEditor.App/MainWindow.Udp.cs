@@ -202,8 +202,10 @@ public sealed partial class MainWindow
         }
 
         UpdateUdpDocument(doc);
-        string limit = Core.View.StatusFormat.ShortSize(source.Capture.Settings.Limit, CultureInfo.CurrentCulture)
-            ?? source.Capture.Settings.Limit.ToString("N0", CultureInfo.CurrentCulture);
+        // 上限は MiB 単位で決めるので、「64 MiB」のように整数で示す。
+        long bytes = source.Capture.Settings.Limit;
+        string limit = bytes % (1024 * 1024) == 0 ? $"{(bytes / (1024 * 1024)).ToString("N0", CultureInfo.CurrentCulture)} MiB"
+            : Core.View.StatusFormat.ShortSize(bytes, CultureInfo.CurrentCulture) ?? bytes.ToString("N0", CultureInfo.CurrentCulture);
         LastUdpLimitNotice = Loc.Format("Udp_LimitReached", limit);
         ShowNotice(LastUdpLimitNotice, InfoBarSeverity.Warning, doc, actions:
         [

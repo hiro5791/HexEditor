@@ -80,6 +80,7 @@ public sealed partial class MainWindow
         AppLog.Info($"GDB connected: {endpoint.Display} ({endpoint.AddressBits} bit)");
         DocumentViewModel doc = Vm.OpenGdb(source, readOnly);
         WatchRemoteState(doc);
+        EnsureGdbProbe();
         UpdateTitle();
         QueueStatusBarLayout();
         return doc;
@@ -87,6 +88,30 @@ public sealed partial class MainWindow
 
     /// <summary>最後の接続の失敗の文 (テスト用)。</summary>
     internal string? LastGdbConnectError { get; private set; }
+
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _gdbProbe;
+
+    /// <summary>
+    /// GDB のタブがある間、2 秒ごとに接続先が接続を閉じていないかを確かめる (通信しない。接続先を止めたら、読み込みを待たずに「切断」にする)。
+    /// </summary>
+    private void EnsureGdbProbe()
+    {
+        if (_gdbProbe is not null)
+        {
+            return;
+        }
+
+        _gdbProbe = DispatcherQueue.CreateTimer();
+        _gdbProbe.Interval = TimeSpan.FromSeconds(2);
+        _gdbProbe.Tick += (_, _) =>
+        {
+            foreach (DocumentViewModel doc in Vm.Documents.Where(d => d.Gdb is not null).ToList())
+            {
+                doc.Gdb!.CheckConnection();
+            }
+        };
+        _gdbProbe.Start();
+    }
 
     /// <summary>保存 (ENG-40 の仕様 6): ENG-34 と同じく、初回だけ確認してから変更範囲を書き込む。</summary>
     private async Task<bool> SaveGdbAsync(DocumentViewModel doc)
