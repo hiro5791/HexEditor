@@ -251,6 +251,7 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>数値として読めません</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>ここではデータを読めません</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>コマンドラインでは使えません</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>整数ではありません</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu のアルゴリズムは 1 つだけです。複数のときは --format bsd か text を使ってください。</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>標準入力には --range を使えません。</value></data>

@@ -121,9 +121,10 @@ K4os.Compression.LZ4 is a port of LZ4 (https://github.com/lz4/lz4), BSD 2-Clause
 License, Copyright (c) Yann Collet.
 
 -------------------------------------------------------------------------------
-Joveler.Compression.XZ 5.0.0, Joveler.DynLoader 2.3.1 (package of liblzma)
+Joveler.Compression.XZ 5.0.0 (package of liblzma)
 https://github.com/ied206/Joveler.Compression
 License: MIT License. Copyright (c) Hajin Jang.
+Only the native liblzma.dll of the package is used.
 
 -------------------------------------------------------------------------------
 XZ Utils 5.6.4 (liblzma.dll; XZ and LZMA compression and decompression)

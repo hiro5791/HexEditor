@@ -22,3 +22,9 @@ The release workflow uses the section for the tagged version as the release note
 - Printing with a live preview, and PDF export with searchable text and embedded font subsets (File menu).
 - File tools: split, join, interleave and deinterleave files of any size, and secure delete (Tools > File tools).
 - NTFS alternate data streams: list, open as documents, create, rename, delete, export and import.
+- Disassembly panel: x86 / x64 (with an assembler), ARM, ARM64, MIPS, PowerPC, SPARC, RISC-V, 6502, BPF, WebAssembly and .NET IL; sections and symbols of PE, ELF and Mach-O files, cross references, instruction pattern search, export as assembly; C++, Rust and D name demangling.
+- Encryption and decryption (AES, ChaCha20-Poly1305, 3DES, DES and RC4) and compression and decompression (deflate, zlib, gzip, Brotli, zstd, LZ4, LZMA and XZ) of a range, with derived documents that you edit and write back to the original range.
+- YARA rule scan of a document, a selection or a folder (built-in engine).
+- Process snapshots and minidumps, GDB remote debugging targets, SFTP files and UDP capture with a packets panel.
+- Template visualizers (images, tables, colors and charts in the structure view) and an online template repository with signed indexes.
+- Automation through a JSON-RPC named pipe (off by default; current user only).
