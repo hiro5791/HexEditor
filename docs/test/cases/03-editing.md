@@ -4117,6 +4117,8 @@
 - 手順 2: レコード数は 3。
 - 手順 4: 一致する。
 
+**備考**: 自動テストは 2 つある。Core の単体テスト (`PatchTests`) は、手順 3 の別のツールの代わりに TOOL-12 の読み込みの規則で元ファイルに当てて確かめる (どの環境でも動く)。Flips での確認 (`FlipsTests`) は、環境変数 HEXEDITOR_FLIPS に Flips の実行ファイルを置いた環境 (CI の結合テスト) だけで動き、ないときはスキップする。CI に Flips を入れるジョブは、Flips の版とハッシュを固定してから加える。
+
 ### TC-EDIT-42-02 途中に 100 バイトを挿入したファイルから小さな BPS を作る
 
 | 項目 | 内容 |
@@ -4143,6 +4145,8 @@
 - 手順 3: 「この形式では挿入・削除を効率よく表せません。BPS または独自形式を使ってください」の旨の警告。
 - 手順 4: 1,024 バイト未満。
 - 手順 5: 一致する。
+
+**備考**: TC-EDIT-42-01 と同じく、Core の単体テスト (手順 5 は HexEditor の BPS の適用で確かめる) と、HEXEDITOR_FLIPS がある環境だけで動く Flips の結合テスト。
 
 ### TC-EDIT-42-03 16 MiB を超えるオフセットの変更では IPS を選べない
 
@@ -4226,6 +4230,8 @@
 - 手順 4: 形式 BPS、確認の結果「一致」、適用後の長さ 1,048,676。
 - 手順 5: 一致する。
 
+**備考**: TD-EDIT-PATCH-IPS・TD-EDIT-PATCH-BPS は参照実装で作ったもの (この文書の末尾の表)。Flips が作ったパッチ (`flips --create --ips`・`--bps-delta`) を当てる確認は、HEXEDITOR_FLIPS がある環境だけで動く (`FlipsTests`)。
+
 ### TC-EDIT-43-02 違うファイルに BPS を適用すると CRC 不一致の警告が出る
 
 | 項目 | 内容 |
@@ -4303,6 +4309,8 @@
 - 手順 1: 署名のない実行ファイルは SmartScreen の警告が出る旨が表示される。
 - 手順 4: 適用に成功した旨が表示される。
 - 手順 5: どちらも一致する。
+
+**備考**: CI のジョブ self-patch (毎晩と手動。x64 と ARM64 のランナー) が適用プログラムを NativeAOT で発行し、HEXEDITOR_PATCH_STUB_DIR に置いて動かす (`SelfPatchTests`)。適用プログラムは前面にダイアログを出すため、GitHub Actions 以外ではスキップする。作成と適用は同じランナーで行う (HexEditor をインストールも展開もしていない別の PC での適用は、リリース前の手動の確認)。適用プログラムとパッチの読み込み・適用のコードは、どの環境でも Core の単体テスト (`PatchTests` の自己適用型の入れ物) で確かめる。
 
 ### TC-EDIT-44-02 自己適用型パッチで違うファイルを選ぶと警告が出る
 
@@ -4572,8 +4580,8 @@
 | TD-EDIT-PATCH-SRC | 1,048,576 バイト | 種 4201 の乱数 |
 | TD-EDIT-PATCH-MOD3 | 1,048,576 バイト | TD-EDIT-PATCH-SRC のオフセット 0x100、0x8000、0xF0000 の 3 バイトを、それぞれ元の値と `FF` の XOR にしたもの |
 | TD-EDIT-PATCH-INS100 | 1,048,676 バイト | TD-EDIT-PATCH-SRC のオフセット 0x80000 に `AA` を 100 バイト挿入したもの |
-| TD-EDIT-PATCH-IPS | 約 30 バイト | Flips (バージョンを固定) の `flips --create --ips TD-EDIT-PATCH-SRC TD-EDIT-PATCH-MOD3` の出力 |
-| TD-EDIT-PATCH-BPS | 1 KiB 未満 | Flips の `flips --create --bps-delta TD-EDIT-PATCH-SRC TD-EDIT-PATCH-INS100` の出力 |
+| TD-EDIT-PATCH-IPS | 26 バイト | TD-EDIT-PATCH-SRC から TD-EDIT-PATCH-MOD3 への IPS。形式の仕様 (TOOL-12) どおりに組み立てたもの: `PATCH`、3 か所それぞれのレコード (3 バイトのオフセット、長さ 1、値)、`EOF` |
+| TD-EDIT-PATCH-BPS | 1 KiB 未満 | TD-EDIT-PATCH-SRC から TD-EDIT-PATCH-INS100 への BPS。形式の仕様どおりに組み立てたもの: SourceRead 0x80000、TargetRead (`AA` を 100 バイト)、SourceCopy 0x80000 (相対位置 +0x80000)、変換前・変換後・パッチの CRC-32 |
 | TD-EDIT-PATCH-OTHER | 1,048,576 バイト | 種 4202 の乱数 (TD-EDIT-PATCH-SRC と別のファイル) |
 
-外部のツール (gzip、Python 3、zstd、lz4、7-Zip、LZMA SDK、brotli、Flips) で作るデータは、出力がツールのバージョンで変わりうるため、テストデータ生成ツールでツールのバージョンを固定し、生成したファイルの SHA-256 を記録して照合する。
+TD-EDIT-PATCH-IPS・TD-EDIT-PATCH-BPS は、Flips を入れずに作れるよう、テストデータ生成ツールの参照実装で作る (Flips が作るパッチとの相互運用は TC-EDIT-42-01・TC-EDIT-42-02 と、TC-EDIT-43-01 の Flips の結合テストで確かめる)。外部のツール (gzip、Python 3、zstd、lz4、7-Zip、LZMA SDK、brotli、Flips) で作るデータは、出力がツールのバージョンで変わりうるため、テストデータ生成ツールでツールのバージョンを固定し、生成したファイルの SHA-256 を記録して照合する。

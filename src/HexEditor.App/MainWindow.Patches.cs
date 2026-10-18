@@ -374,6 +374,14 @@ public sealed partial class MainWindow
             StubPath = stubPath,
             ApplierStrings = format == PatchFormat.SelfApplying ? ApplierStrings() : null,
         };
+        // 書き出し先の容量不足は開始前に確かめる (EDIT-42 の「エラー」)。
+        long needed = estimates.GetValueOrDefault(format)?.EstimatedSize ?? 0;
+        if (FreeSpace(pathBox.Text.Trim()) is long free && free < needed)
+        {
+            ShowNotice(Loc.Format("Patch_NoSpace", Size(needed), Size(free)), InfoBarSeverity.Error, doc);
+            return;
+        }
+
         await WritePatchAsync(doc, creator, format, pathBox.Text.Trim(), options);
     }
 

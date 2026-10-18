@@ -22,6 +22,8 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Statistics and analysis](statistics.md)
 - [Hashes and checksums](hashes.md)
 - [Data operations](data-operations.md)
+- [Transform view](transform-view.md)
+- [Patches](patches.md)
 - [Import and export](import-export.md)
 
 ## Structures and automation {#structures-and-automation}

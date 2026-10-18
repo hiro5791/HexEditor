@@ -6831,4 +6831,5 @@ The file was not changed.</value></data>
   <data name="CmdAlias_compare_createPatch" xml:space="preserve"><value>ips ups bps hexpatch diff</value></data>
   <data name="PatchCreate_ComparePairText" xml:space="preserve"><value>From {0} (left) to {1} (right)</value></data>
   <data name="Patch_NoCompare" xml:space="preserve"><value>Open a comparison first.</value></data>
+  <data name="Patch_NoSpace" xml:space="preserve"><value>There is not enough free space to write the patch: it needs about {0}, but only {1} is free.</value></data>
 </root>

@@ -19,6 +19,8 @@
     "statistics",
     "hashes",
     "data-operations",
+    "transform-view",
+    "patches",
     "import-export",
     "templates",
     "template-library",
