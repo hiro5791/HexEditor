@@ -74,6 +74,11 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
         top.Children.Add(json);
 
         _list.ItemsSource = _view;
+
+        // 行は、空の Grid のテンプレートに、ContainerContentChanging でセルを作る (Content を直接差し替えると、既定の表示 (行の ToString) が
+        // 残って、セルが見えない)。
+        _list.ItemTemplate = (DataTemplate)Microsoft.UI.Xaml.Markup.XamlReader.Load(
+            "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Grid /></DataTemplate>");
         _list.SelectionMode = ListViewSelectionMode.Extended;
         _list.IsItemClickEnabled = false;
         _list.ContainerContentChanging += List_ContainerContentChanging;
@@ -275,7 +280,11 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
             return;
         }
 
-        var grid = new Grid { ColumnSpacing = 0, Padding = new Thickness(0, 2, 0, 2) };
+        Grid grid = container.ContentTemplateRoot as Grid ?? new Grid();
+        grid.Children.Clear();
+        grid.ColumnDefinitions.Clear();
+        grid.ColumnSpacing = 0;
+        grid.Padding = new Thickness(0, 2, 0, 2);
         var names = new List<string>();
         for (int i = 0; i < _columns.Count; i++)
         {
@@ -305,7 +314,11 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
             grid.Children.Add(cell);
         }
 
-        container.Content = grid;
+        if (!ReferenceEquals(container.ContentTemplateRoot, grid))
+        {
+            container.Content = grid;
+        }
+
         AutomationProperties.SetName(container, string.Join(", ", names));
     }
 
