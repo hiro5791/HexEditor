@@ -17,6 +17,9 @@ public enum ExpressionError
     InvalidNumber,
     Unreadable,
     NotAvailable,
+
+    /// <summary>整数だけを受け付ける演算に小数が渡された (電卓。TOOL-22)。</summary>
+    NotInteger,
 }
 
 public sealed class ExpressionException(ExpressionError error, int position, string detail = "")
@@ -591,7 +594,7 @@ public sealed class ExpressionEvaluator
         !_wide && (value > long.MaxValue || value < long.MinValue) ? throw new ExpressionException(ExpressionError.Overflow, at) : value;
 
     /// <summary>u8 / s8、u16le / s32be / f64le などの関数名を解釈する。</summary>
-    private static (int Size, bool Signed, bool BigEndian, bool IsFloat) ParseFunctionName(string name, int at, string original)
+    internal static (int Size, bool Signed, bool BigEndian, bool IsFloat) ParseFunctionName(string name, int at, string original)
     {
         if (name is "u8" or "s8")
         {
