@@ -254,6 +254,7 @@ Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>không đọc được dữ liệu ở đây</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>không có trên dòng lệnh</value></data>
 
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>giá trị không phải số nguyên</value></data>
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu cần đúng một thuật toán. Dùng --format bsd hoặc text cho nhiều thuật toán.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>Không dùng được --range với đầu vào chuẩn.</value></data>
   <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Thuật toán không xác định: {0}. Chạy 'hexed hash --algorithm list' để xem các ID.</value></data>
@@ -298,8 +299,7 @@ Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Hãy chỉ định -o &lt;output&gt; hoặc --in-place (để không làm đổi tệp gốc do nhầm).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>Không dùng -o và --in-place cùng lúc.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Đường dẫn đầu ra {0} là tệp đích hoặc bản vá. Dùng --in-place để thay thế tệp đích.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} không phải định dạng bản vá. Dùng auto, ips hoặc ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: phiên bản này không hỗ trợ bản vá UPS, BPS và .hexpatch. Hỗ trợ IPS và IPS32.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} không phải định dạng bản vá. Dùng auto, ips, ips32, ups, bps hoặc hexpatch.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} không phải tệp bản vá nhận dạng được.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: bản vá bị hỏng tại bản ghi {1} (độ lệch tệp {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} không phải bản vá {1}.</value></data>
@@ -308,6 +308,10 @@ Trong PowerShell, đặt các giá trị có $ trong dấu nháy đơn (ví dụ
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>{0} sau khi vá không có hàm băm như mong đợi (--verify-after). Không có gì được ghi.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>Đã áp dụng {0} bản ghi, thay đổi {1} byte, độ dài thay đổi {2}. Đã ghi {3}.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>định dạng</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: bản vá bị hỏng tại bản ghi {1}.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: bản vá bị hỏng ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} có thể dành cho một tệp khác: bản gốc ghi trong bản vá không khớp với {1}. Không có gì được ghi.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Kết quả áp dụng {0} không khớp với kết quả ghi trong bản vá. Không có gì được ghi.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} bản ghi, sẽ thay đổi {1} byte, độ dài thay đổi {2}, độ dài mới {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Hãy chỉ định đúng một trong --template và --auto.</value></data>
