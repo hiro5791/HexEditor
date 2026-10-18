@@ -298,6 +298,12 @@ public static class OnlineTemplateSection
                 info.Children.Add(unsigned);
             }
 
+            bool supported = OnlineTemplateService.SupportsAppVersion(entry);
+            if (!supported)
+            {
+                info.Children.Add(new TextBlock { Text = Loc.Format("TplOnline_NeedsNewerApp", entry.MinAppVersion ?? string.Empty), Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"], Foreground = Brush("SystemFillColorCautionBrush") });
+            }
+
             if (entry.UsesExtensions)
             {
                 info.Children.Add(new TextBlock { Text = Loc.Get("TplOnline_UsesExtensions"), Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"], Foreground = Brush("SystemFillColorCautionBrush") });
@@ -313,13 +319,17 @@ public static class OnlineTemplateSection
             var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, VerticalAlignment = VerticalAlignment.Top };
             if (installed is null)
             {
-                buttons.Children.Add(Button("TplOnline_Install_" + id, "TplOnline_Install", () => _ = InstallAsync(listing, entry)));
+                Button install = Button("TplOnline_Install_" + id, "TplOnline_Install", () => _ = InstallAsync(listing, entry));
+                install.IsEnabled = supported;
+                buttons.Children.Add(install);
             }
             else
             {
                 if (update)
                 {
-                    buttons.Children.Add(Button("TplOnline_Update_" + id, "TplOnline_Update", () => _ = InstallAsync(listing, entry)));
+                    Button updateButton = Button("TplOnline_Update_" + id, "TplOnline_Update", () => _ = InstallAsync(listing, entry));
+                    updateButton.IsEnabled = supported;
+                    buttons.Children.Add(updateButton);
                 }
 
                 buttons.Children.Add(Button("TplOnline_Remove_" + id, "TplOnline_Remove", () =>

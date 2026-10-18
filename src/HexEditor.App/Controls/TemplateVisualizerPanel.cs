@@ -522,7 +522,7 @@ public sealed partial class TemplateVisualizerPanel : UserControl, IPanelContent
 
     private static FrameworkElement ColorView(ColorVisual c)
     {
-        var color = Windows.UI.Color.FromArgb((byte)(c.Argb >> 24), (byte)(c.Argb >> 16), (byte)(c.Argb >> 8), (byte)c.Argb);
+        Windows.UI.Color color = Microsoft.UI.ColorHelper.FromArgb((byte)(c.Argb >> 24), (byte)(c.Argb >> 16), (byte)(c.Argb >> 8), (byte)c.Argb);
         // 色見本はデータの色そのもの (テーマの色ではない)。枠はテーマの色で描き、ハイコントラストでも境目が見えるようにする。
         var swatch = new Border
         {

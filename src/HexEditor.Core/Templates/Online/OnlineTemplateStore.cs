@@ -172,7 +172,7 @@ public sealed class OnlineTemplateStore
     /// <summary>
     /// 新しい版のあるもの (同じリポジトリの同じ ID で、版が大きいもの。最新の版を返す)。読み込めなかったリポジトリは除く。
     /// </summary>
-    public IReadOnlyList<OnlineTemplateUpdate> FindUpdates(IEnumerable<TemplateRepositoryListing> listings)
+    public IReadOnlyList<OnlineTemplateUpdate> FindUpdates(IEnumerable<TemplateRepositoryListing> listings, Func<OnlineTemplateEntry, bool>? supported = null)
     {
         var updates = new List<OnlineTemplateUpdate>();
         TemplateRepositoryListing[] ok = [.. listings.Where(l => l.Ok)];
@@ -181,7 +181,7 @@ public sealed class OnlineTemplateStore
             foreach (TemplateRepositoryListing listing in ok.Where(l => l.Repository.IndexUrl.AbsoluteUri == installed.Repository))
             {
                 OnlineTemplateEntry? latest = listing.Templates
-                    .Where(e => string.Equals(e.Id, installed.Id, StringComparison.OrdinalIgnoreCase))
+                    .Where(e => string.Equals(e.Id, installed.Id, StringComparison.OrdinalIgnoreCase) && (supported?.Invoke(e) ?? true))
                     .OrderByDescending(e => e.Version, Comparer<string>.Create(TemplateVersion.Compare))
                     .FirstOrDefault();
                 if (latest is not null && TemplateVersion.Compare(latest.Version, installed.Version) > 0)

@@ -63,6 +63,15 @@ public sealed partial class MainWindow
     /// <summary>結果ツリーの選択と「表示」ボタンをつなぐ (<see cref="CreateTemplateVm"/> から呼ぶ)。</summary>
     private void HookTemplateVisualizer(TemplatePanelViewModel templateVm)
     {
+        // 適用の解除・再評価で、表示していたノードの評価結果がなくなったら消す。
+        templateVm.ResultsChanged += (_, _) =>
+        {
+            if (_templateVisVm?.Node is { } shown && !templateVm.Roots.Any(r => ReferenceEquals(r.Result, shown.Result)))
+            {
+                ClearTemplateVisualizer();
+            }
+        };
+
         templateVm.Rows.VisualizerRequested += (_, item) =>
         {
             templateVm.SelectedItem = item;

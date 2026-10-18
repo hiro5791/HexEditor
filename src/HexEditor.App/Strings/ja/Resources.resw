@@ -6898,4 +6898,5 @@
   <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell モジュール: {0} (Import-Module で読み込みます)。メソッドの一覧: {1}</value></data>
   <data name="RpcClients_None" xml:space="preserve"><value>常に許可したプログラムはありません。</value></data>
   <data name="RpcClients_Allowed" xml:space="preserve"><value>許可した日時: {0}</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>HexEditor {0} 以降が必要です</value></data>
 </root>

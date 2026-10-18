@@ -113,6 +113,12 @@ public sealed partial class MainWindow
     internal async Task<bool> InstallOnlineTemplateAsync(TemplateRepositoryListing listing, OnlineTemplateEntry entry)
     {
         string name = entry.DisplayName(CultureInfo.CurrentUICulture);
+        if (!OnlineTemplateService.SupportsAppVersion(entry))
+        {
+            ShowNotice(Loc.Format("TplOnline_NeedsNewerApp", entry.MinAppVersion ?? string.Empty), InfoBarSeverity.Warning, null);
+            return false;
+        }
+
         if (entry.UsesExtensions && !await ConfirmOnlineTemplateExtensionsAsync(name))
         {
             return false;

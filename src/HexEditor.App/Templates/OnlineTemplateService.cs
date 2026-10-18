@@ -61,6 +61,16 @@ public static class OnlineTemplateService
     /// <summary>テスト用のビルドではループバックの HTTP のリポジトリ (テスト用のサーバー) を使える。</summary>
     public static bool AllowLoopbackHttp => PackagingTestHooks.TestBuild;
 
+    /// <summary>
+    /// 索引の「必要なアプリの版」(仕様 2) を満たすか。開発中のビルド (版 0.0.0) はすべて満たすものとして扱う。
+    /// </summary>
+    public static bool SupportsAppVersion(OnlineTemplateEntry entry)
+    {
+        string current = Hosting.Program.Environment.AppVersion;
+        return entry.MinAppVersion is not { Length: > 0 } required || current.StartsWith("0.0.0", StringComparison.Ordinal)
+            || TemplateVersion.Compare(current, required) >= 0;
+    }
+
     /// <summary>今の時刻 (テスト用の時刻の固定と、更新の確認の時計の進め方に従う)。</summary>
     public static DateTimeOffset Now() => (TestHooks.Time ?? TimeProvider.System).GetUtcNow() + PackagingTestHooks.UpdateClockOffset;
 
@@ -195,7 +205,7 @@ public static class OnlineTemplateService
 
         IReadOnlyList<TemplateRepositoryListing> listings = await LoadAllAsync(cancellationToken).ConfigureAwait(false);
         LastCheck = now;
-        return Store.FindUpdates(listings);
+        return Store.FindUpdates(listings, SupportsAppVersion);
     }
 }
 

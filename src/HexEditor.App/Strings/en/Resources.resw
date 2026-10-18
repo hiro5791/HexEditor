@@ -6898,4 +6898,5 @@ Type: {4}</value></data>
   <data name="RpcClients_Module" xml:space="preserve"><value>PowerShell module: {0} (Import-Module). Method list: {1}</value></data>
   <data name="RpcClients_None" xml:space="preserve"><value>No program has been allowed permanently.</value></data>
   <data name="RpcClients_Allowed" xml:space="preserve"><value>Allowed on {0}</value></data>
+  <data name="TplOnline_NeedsNewerApp" xml:space="preserve"><value>Requires HexEditor {0} or later</value></data>
 </root>
