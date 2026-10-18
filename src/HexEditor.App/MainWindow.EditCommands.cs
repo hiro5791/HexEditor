@@ -57,8 +57,12 @@ public sealed partial class MainWindow
         Commands.Register("edit.truncate", () => Truncate_Click(this, e),
             () => NeedsEditable(d => !d.Document.CanResize ? Loc.Get("Notice_FixedLength")
                 : EditCommands.CanTruncateAtCursor(d.Editor) ? null : Loc.Get("Command_NothingToTruncate")));
+        // 書き戻す先のないデータソース (スナップショットなど) は解除できないため、項目を無効にして理由を示す (EDIT-16 の仕様 4、ENG-14 の受け入れ基準 3)。
         Commands.Register("edit.readOnly", ToggleReadOnlyAsync,
-            () => Vm.Selected is { } d ? Toggle(d.Document.IsReadOnly) : NeedsDocument());
+            () => Vm.Selected is not { } d ? NeedsDocument()
+                : d.Document.IsReadOnly && d.Document.ReadOnlyRelease == ReadOnlyRelease.NotAllowed
+                    ? new CommandState(false, Loc.Get("ReadOnly_CannotRelease_" + d.Document.ReadOnlyReason), true)
+                    : Toggle(d.Document.IsReadOnly));
     }
 
     /// <summary>

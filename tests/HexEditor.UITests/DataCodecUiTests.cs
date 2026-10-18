@@ -480,4 +480,76 @@ public sealed class DataCodecUiTests
         f.Position = 0x1000;
         Assert.Equal(0, f.ReadByte());
     });
+
+    // ---- INSP-32 (YARA の一致の注釈) ----
+
+    /// <summary>層 8 (注釈) の Hex 列の強調のうち、<paramref name="at"/> を含むもの。</summary>
+    private static List<JsonObject> AnnotationsAt(JsonObject highlights, long at) =>
+        [.. highlights["segments"]!.AsArray().Select(s => s!.AsObject())
+            .Where(s => s["layer"]!.GetValue<int>() == 8 && s["column"]!.GetValue<string>() == "hex" && s["first"]!.GetValue<long>() <= at && s["last"]!.GetValue<long>() >= at)];
+
+    private static async Task<AppSession> ScanZipAsync(UiTestContext ctx)
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.CopyTestData("TD-ZIP")] });
+        JsonObject state = await ScanAsync(app, YaraRuleFiles.WriteZipLocalHeader(Path.Combine(ctx.Root, "rules")));
+        Assert.Contains(state["rules"]!.AsArray(), r => r!["rule"]!.GetValue<string>() == "zip_local_header");
+        await app.GoToAsync(0);
+        await app.IdleAsync();
+        return app;
+    }
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-32-01")]
+    public Task Yara_matches_are_bordered_annotations_with_the_rule_in_the_tooltip() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ScanZipAsync(ctx);
+
+        // 2. 0〜3 に注釈の枠線があり、背景は塗られていない (YARA の既定は枠線)。
+        JsonObject highlights = await app.SendAsync("highlights");
+        for (long at = 0; at < 4; at++)
+        {
+            List<JsonObject> segments = AnnotationsAt(highlights, at);
+            Assert.True(segments.Count > 0, highlights.ToJsonString());
+            Assert.All(segments, s =>
+            {
+                Assert.Null(s["background"]);
+                Assert.NotNull(s["border"]);
+            });
+        }
+
+        // 3. オフセット 1 のツールチップに出どころ「YARA」とルール名。
+        JsonObject render = await app.RenderAsync();
+        await ViewOps.PointerAsync(app, "move", ViewOps.CellPoint(render, 1));
+        await app.WaitUntilAsync(async () => (await app.RenderAsync())["toolTip"]!["open"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(5)), "the tooltip");
+        string text = string.Join("\n", (await app.RenderAsync())["toolTip"]!["rich"]!.AsArray().Select(r => r!["text"]!.GetValue<string>()));
+        Assert.Contains("YARA", text, StringComparison.Ordinal);
+        Assert.Contains("zip_local_header", text, StringComparison.Ordinal);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-32-03")]
+    public Task Hiding_the_yara_origin_keeps_bookmarks() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ScanZipAsync(ctx);
+        await app.GoToAsync(0x10);
+        await app.KeyAsync("F2", ctrl: true);
+        await app.GoToAsync(0);
+        await app.IdleAsync();
+        Assert.NotEmpty(AnnotationsAt(await app.SendAsync("highlights"), 0));
+
+        // 1. 表示 > 注釈 で「YARA」のチェックを外す。
+        await app.CommandAsync("Command_AnnotationsYara");
+        await app.IdleAsync();
+
+        // 2. 0〜3 の YARA の注釈が消え、0x10 のブックマーク (層 7) は表示されたまま。
+        JsonObject highlights = null!;
+        await app.WaitUntilAsync(async () => AnnotationsAt(highlights = await app.SendAsync("highlights"), 0).Count == 0,
+            UiTest.Scaled(TimeSpan.FromSeconds(5)), "the YARA annotations to be hidden");
+        for (long at = 1; at < 4; at++)
+        {
+            Assert.Empty(AnnotationsAt(highlights, at));
+        }
+
+        Assert.Contains(highlights["segments"]!.AsArray(), s => s!["layer"]!.GetValue<int>() == 7 && s["first"]!.GetValue<long>() <= 0x10 && s["last"]!.GetValue<long>() >= 0x10);
+    });
 }

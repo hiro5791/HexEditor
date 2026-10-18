@@ -70,6 +70,40 @@ public sealed class CompareAuditTests
         return state["lastPath"]!.GetValue<string>();
     }
 
+    // ---- ENG-14: スナップショットは解除できない読み取り専用 ----
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-14-03")]
+    public Task A_snapshot_opens_read_only_without_allow_editing() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = ProcessHooks(ctx) });
+        await app.SendAsync("openProcess", new JsonObject { ["pid"] = Pid });
+        string path = Path.Combine(ctx.Root, "target.hexsnap");
+        File.Copy(await SnapshotAsync(app, "S1"), path);
+
+        // 1. target.hexsnap を開く。
+        await app.OpenAsync(path);
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["header"]?.GetValue<string>().Contains("target.hexsnap", StringComparison.Ordinal) == true,
+            Wait, "the snapshot tab");
+        JsonObject doc = await app.DocumentAsync();
+        Assert.True(doc["readOnly"]!.GetValue<bool>());
+
+        // 2. 書き換えようとすると EDIT-16 の InfoBar が出るが、「編集を許可する」のボタンはない。
+        await app.GoToAsync(0x10000);
+        await app.TypeAsync("A");
+        await app.WaitForNotificationAsync(m => m.Contains("read-only", StringComparison.Ordinal), "the read-only notice");
+        Assert.DoesNotContain("Allow editing",
+            app.Window.FindAllDescendants(cf => cf.ByAutomationId("Notification_Action")).Select(AppSession.NameOf));
+
+        // 3. 編集 > 読み取り専用 は解除できない状態 (無効) で、理由は書き込めないデータソースであること。
+        JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">Read-only" });
+        JsonObject entry = palette["entries"]!.AsArray().Select(e => e!.AsObject()).First(e => e["key"]!.GetValue<string>() == "command:edit.readOnly");
+        Assert.Contains("can't be written to", entry["reason"]?.GetValue<string>() ?? string.Empty, StringComparison.Ordinal);
+        await app.SendAsync("paletteClose");
+        Assert.True((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
+        Assert.Equal(new byte[] { 0x4D, 0x5A }, await app.BytesAsync(0x10000, 2));
+    });
+
     // ---- ANA-01・ANA-09: スナップショットを比較の対象にする ----
 
     [Fact]

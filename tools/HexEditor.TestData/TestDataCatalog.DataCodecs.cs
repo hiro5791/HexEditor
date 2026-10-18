@@ -264,6 +264,18 @@ public static class YaraRuleFiles
 
     public const string Added = "rule added { strings: $s = \"ADDED-BY-EDIT\" condition: $s }";
 
+    /// <summary>TD-INSP-YARA-PK (ZIP のローカルファイルヘッダ <c>50 4B 03 04</c>)。</summary>
+    public const string ZipLocalHeader = "rule zip_local_header { strings: $pk = { 50 4B 03 04 } condition: $pk }";
+
+    /// <summary><paramref name="directory"/> に TD-INSP-YARA-PK (<c>pk.yar</c>) を作り、ファイルのパスを返す。</summary>
+    public static string WriteZipLocalHeader(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        string path = Path.Combine(directory, "pk.yar");
+        File.WriteAllText(path, ZipLocalHeader + "\n");
+        return path;
+    }
+
     /// <summary><paramref name="directory"/> に mz.yar・bad.yar・boundary.yar・added.yar を作り、フォルダを返す。</summary>
     public static string Write(string directory)
     {
