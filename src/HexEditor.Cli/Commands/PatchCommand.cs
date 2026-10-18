@@ -2,15 +2,16 @@ using System.Globalization;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Formats;
 using HexEditor.Core.Hashing;
+using HexEditor.Core.Patches;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
 
 namespace HexEditor.Cli.Commands;
 
 /// <summary>
-/// <c>hexed patch</c>: パッチの適用 (AUTO-43)。適用は GUI と同じ Core の <see cref="IpsPatch"/> と、書き出しは安全な保存
-/// (<see cref="DocumentSaver"/>: 一時ファイルに書いてから置き換える) を使う。
-/// フェーズ 3 で扱う形式は IPS / IPS32 だけ。UPS・BPS・.hexpatch はフェーズ 4 (F4-03) なので、終了コード 2 (この版では使えません)。
+/// <c>hexed patch</c>: パッチの適用 (AUTO-43)。適用は GUI と同じ Core の <see cref="PatchFiles"/> (IPS・IPS32・UPS・BPS・.hexpatch) と、
+/// 書き出しは安全な保存 (<see cref="DocumentSaver"/>: 一時ファイルに書いてから置き換える) を使う。UPS・BPS・.hexpatch は、パッチに記録された
+/// 変換前の識別情報 (CRC-32 など) を EDIT-43 と同じく確かめ、合わなければ適用せずに終了コード 1。
 /// </summary>
 internal sealed class PatchCommand : ISubcommand
 {
@@ -35,11 +36,6 @@ internal sealed class PatchCommand : ISubcommand
         if (declared is not ("auto" or "ips" or "ips32" or "ups" or "bps" or "hexpatch"))
         {
             throw CliException.Usage("Cli_Error_PatchFormat", ctx.Format);
-        }
-
-        if (declared is "ups" or "bps" or "hexpatch")
-        {
-            throw CliException.Usage("Cli_Error_PatchFormatLater", ctx.Args.Positional.Count > 1 ? ctx.Args.Positional[1] : declared);
         }
 
         if (ctx.Args.Positional.Count != 2)
@@ -76,7 +72,7 @@ internal sealed class PatchCommand : ISubcommand
             throw CliException.Io(Directory.Exists(targetPath) ? "Cli_Error_IsDirectory" : "Cli_Error_FileNotFound", ctx.Args.Positional[0]);
         }
 
-        IpsPatchData patch = ReadPatch(ctx, patchPath, declared);
+        using LoadedPatch patch = ReadPatch(ctx, patchPath, declared);
         using Document document = CliFiles.OpenDocument(targetPath);
 
         // 適用前の確認 (--verify-before): 合わなければ何も書かずに終了コード 1。
@@ -86,16 +82,35 @@ internal sealed class PatchCommand : ISubcommand
             return ExitCodes.Negative;
         }
 
+        // 変換前の確認 (UPS・BPS の CRC-32、.hexpatch の識別情報。EDIT-43 の仕様 3)。IPS には確認の手段がない。
+        if (patch.Verify(document.Current, cancellationToken: ctx.Cancellation) == PatchVerification.Mismatch)
+        {
+            ctx.Err.WriteLine(ctx.M.Format("Cli_Patch_SourceMismatch", ctx.Args.Positional[1], ctx.Args.Positional[0]));
+            return ExitCodes.Negative;
+        }
+
         long originalLength = document.Length;
-        long resultLength = IpsPatch.ResultLength(patch, originalLength);
-        long changedBytes = patch.Records.Sum(r => (long)r.Length);
+        long resultLength = patch.ResultLength(originalLength);
+        long changedBytes = patch.ChangedBytes;
         if (dryRun)
         {
             WriteSummary(ctx, patch, changedBytes, originalLength, resultLength);
             return ExitCodes.Success;
         }
 
-        IpsPatch.ApplyTo(document, patch);
+        try
+        {
+            patch.ApplyTo(document, cancellationToken: ctx.Cancellation);
+        }
+        catch (PatchException ex) when (ex.Error == PatchError.ResultMismatch)
+        {
+            ctx.Err.WriteLine(ctx.M.Format("Cli_Patch_ResultMismatch", ctx.Args.Positional[1]));
+            return ExitCodes.Negative;
+        }
+        catch (PatchException ex)
+        {
+            throw Broken(ctx, ex);
+        }
         if (after is { } a && !Matches(ctx, document.Current, a))
         {
             ctx.Err.WriteLine(ctx.M.Format("Cli_Patch_VerifyAfterFailed", ctx.Args.Positional[0]));
@@ -130,20 +145,18 @@ internal sealed class PatchCommand : ISubcommand
 
         if (!ctx.Quiet)
         {
-            ctx.Err.WriteLine(ctx.M.Format("Cli_Patch_Applied", patch.Records.Count, changedBytes, resultLength - originalLength, destination));
+            ctx.Err.WriteLine(ctx.M.Format("Cli_Patch_Applied", patch.RecordCount, changedBytes, resultLength - originalLength, destination));
         }
 
         return ExitCodes.Success;
     }
 
-    private static IpsPatchData ReadPatch(CommandContext ctx, string patchPath, string declared)
+    private static LoadedPatch ReadPatch(CommandContext ctx, string patchPath, string declared)
     {
-        byte[] head = new byte[8];
-        int count;
+        FileStream stream;
         try
         {
-            using var stream = new FileStream(patchPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            count = stream.ReadAtLeast(head, head.Length, throwOnEndOfStream: false);
+            stream = new FileStream(patchPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         }
         catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
         {
@@ -158,38 +171,64 @@ internal sealed class PatchCommand : ISubcommand
             throw CliException.Io("Cli_Error_CannotRead", ctx.Args.Positional[1], ex.Message);
         }
 
-        ReadOnlySpan<byte> span = head.AsSpan(0, count);
-        bool isIps = span.StartsWith("PATCH"u8) || span.StartsWith("IPS32"u8);
-        if (!isIps)
-        {
-            // フェーズ 4 の形式 (EDIT-42・EDIT-43 は F4-03) は、見分けて「この版では使えません」を返す。
-            if (span.StartsWith("UPS1"u8) || span.StartsWith("BPS1"u8) || span.StartsWith("PK"u8))
-            {
-                throw CliException.Usage("Cli_Error_PatchFormatLater", ctx.Args.Positional[1]);
-            }
-
-            throw new CliException(ExitCodes.Format, "Cli_Error_PatchUnknown", ctx.Args.Positional[1]);
-        }
-
-        bool isIps32 = span.StartsWith("IPS32"u8);
-        if (declared == "ips" && isIps32 || declared == "ips32" && !isIps32)
-        {
-            throw new CliException(ExitCodes.Format, "Cli_Error_PatchFormatMismatch", ctx.Args.Positional[1], declared);
-        }
-
         try
         {
-            using var stream = new FileStream(patchPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            return IpsPatch.Read(stream);
+            PatchFormat? format = PatchFiles.Detect(stream);
+            if (format is null)
+            {
+                throw new CliException(ExitCodes.Format, "Cli_Error_PatchUnknown", ctx.Args.Positional[1]);
+            }
+
+            string name = FormatName(format.Value);
+            if (declared != "auto" && declared != name)
+            {
+                throw new CliException(ExitCodes.Format, "Cli_Error_PatchFormatMismatch", ctx.Args.Positional[1], declared);
+            }
+
+            return PatchFiles.Load(stream, ownsStream: true);
         }
-        catch (IpsFormatException ex)
+        catch (PatchException ex)
         {
-            throw new CliException(ExitCodes.Format, "Cli_Error_PatchBroken", ctx.Args.Positional[1], ex.Record + 1, $"0x{ex.FileOffset:X}");
+            stream.Dispose();
+            throw Broken(ctx, ex);
         }
         catch (IOException ex)
         {
+            stream.Dispose();
             throw CliException.Io("Cli_Error_CannotRead", ctx.Args.Positional[1], ex.Message);
         }
+        catch
+        {
+            stream.Dispose();
+            throw;
+        }
+    }
+
+    private static string FormatName(PatchFormat format) => format switch
+    {
+        PatchFormat.Ips => "ips",
+        PatchFormat.Ips32 => "ips32",
+        PatchFormat.Ups => "ups",
+        PatchFormat.Bps => "bps",
+        _ => "hexpatch",
+    };
+
+    /// <summary>壊れたパッチ (終了コード 8。どのレコードかを出す。AUTO-43 の「エラー」)。</summary>
+    private static CliException Broken(CommandContext ctx, PatchException ex)
+    {
+        if (ex.Error == PatchError.UnknownFormat)
+        {
+            return new CliException(ExitCodes.Format, "Cli_Error_PatchUnknown", ctx.Args.Positional[1]);
+        }
+
+        if (ex.InnerException is IpsFormatException ips)
+        {
+            return new CliException(ExitCodes.Format, "Cli_Error_PatchBroken", ctx.Args.Positional[1], ips.Record + 1, $"0x{ips.FileOffset:X}");
+        }
+
+        return ex.Record >= 0
+            ? new CliException(ExitCodes.Format, "Cli_Error_PatchBrokenRecord", ctx.Args.Positional[1], ex.Record + 1)
+            : new CliException(ExitCodes.Format, "Cli_Error_PatchBrokenFile", ctx.Args.Positional[1], ex.Message);
     }
 
     private static (HashAlgorithmInfo Algorithm, ExpectedHash Expected)? ParseVerify(CommandContext ctx, string option)
@@ -216,10 +255,10 @@ internal sealed class PatchCommand : ISubcommand
         return verify.Expected.Compare(computation.Rows[0]) == HashMatch.Match;
     }
 
-    private static void WriteSummary(CommandContext ctx, IpsPatchData patch, long changedBytes, long originalLength, long resultLength)
+    private static void WriteSummary(CommandContext ctx, LoadedPatch patch, long changedBytes, long originalLength, long resultLength)
     {
-        string kind = patch.Ips32 ? "ips32" : "ips";
+        string kind = FormatName(patch.Format);
         ctx.Out.Write(string.Create(CultureInfo.InvariantCulture, $"{ctx.M.Get("Cli_Patch_Format")}: {kind}\n"));
-        ctx.Out.Write(ctx.M.Format("Cli_Patch_DryRun", patch.Records.Count, changedBytes, resultLength - originalLength, resultLength) + "\n");
+        ctx.Out.Write(ctx.M.Format("Cli_Patch_DryRun", patch.RecordCount, changedBytes, resultLength - originalLength, resultLength) + "\n");
     }
 }

@@ -154,4 +154,43 @@ public sealed partial class Document
             : target.Range is { } t ? (t.Offset, t.AfterLength) : null;
         AfterHistoryMove(undo ? DocumentChangeKind.Undo : DocumentChangeKind.Redo, selection);
     }
+
+    /// <summary>
+    /// 履歴の木の節 <paramref name="node"/> の状態に移る (別の枝への移動。EDIT-21 の仕様 2)。現在の節と移る先の共通の祖先まで元に戻し、
+    /// 経路を切り替えてから移る先までやり直す (変更の通知は「元に戻す」「やり直し」の順に最大 2 回。どちらもルートの差し替え)。
+    /// </summary>
+    public void MoveToHistoryNode(HistoryNode node)
+    {
+        RequireEditable();
+        HistoryNode current = History.CurrentNode;
+        if (ReferenceEquals(node, current))
+        {
+            return;
+        }
+
+        if (History.IsOnPath(node))
+        {
+            MoveToHistory(node.Depth);
+            return;
+        }
+
+        // 共通の祖先。
+        HistoryNode ancestor = current;
+        while (!ancestor.IsAncestorOrSelfOf(node))
+        {
+            ancestor = ancestor.Parent!;
+        }
+
+        if (!ReferenceEquals(ancestor, current))
+        {
+            MoveToHistory(ancestor.Depth);
+        }
+
+        History.SwitchTo(node);
+        HistoryEntry target = node.Entry;
+        (long, long)? selection = target.Range is { } t ? (t.Offset, t.AfterLength) : null;
+
+        // やり直しの通知は、共通の祖先から移る先までの経路を進めたものとして出す (ブックマークの位置の調整は経路の番号で行う)。
+        AfterHistoryMove(DocumentChangeKind.Redo, selection);
+    }
 }

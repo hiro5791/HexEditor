@@ -68,11 +68,10 @@ public sealed partial class BookmarkCollection
     private readonly TimeProvider _time;
     private long _nextId = 1;
 
-    // データの履歴との対応 (ドキュメントにつないだとき)。_records[i] は履歴の i 番目の項目を作った編集。
-    private readonly List<EditRecord?> _records = [null];
+    // データの履歴との対応 (ドキュメントにつないだとき)。履歴の節ごとに、その節を作った編集の記録を持つ (節が捨てられれば記録も消える)。
+    private readonly ConditionalWeakTable<HistoryNode, EditRecord> _records = new();
     private Document? _document;
     private int _appliedIndex;
-    private int _savedIndex;
 
     public BookmarkCollection(TimeProvider? time = null)
     {
@@ -108,11 +107,6 @@ public sealed partial class BookmarkCollection
         var collection = new BookmarkCollection(time);
         collection._document = document;
         collection._appliedIndex = document.History.CurrentIndex;
-        collection._savedIndex = document.IsModified ? -1 : document.History.CurrentIndex;
-        while (collection._records.Count <= collection._appliedIndex)
-        {
-            collection._records.Add(null);
-        }
 
         document.Changed += collection.OnDocumentChanged;
         Attached.Add(document, collection);
@@ -131,31 +125,12 @@ public sealed partial class BookmarkCollection
         {
             case DocumentChangeKind.Edit:
             {
-                EditRecord record;
-                if (index == _appliedIndex && index < _records.Count && _records[index] is { } same)
+                // 記録は履歴の節ごとに持つ (分岐する履歴 EDIT-21 で別の枝に移っても、その枝の記録を使う)。
+                HistoryNode node = doc.History.CurrentNode;
+                if (!_records.TryGetValue(node, out EditRecord? record))
                 {
-                    // 直前の項目にまとめられた入力 (連続した文字入力・編集グループ)。
-                    record = same;
-                }
-                else
-                {
-                    if (_records.Count > index)
-                    {
-                        // やり直せる履歴は捨てられた。保存した時点がその中にあれば、もう戻れない。
-                        _records.RemoveRange(index, _records.Count - index);
-                        if (_savedIndex >= index)
-                        {
-                            _savedIndex = -1;
-                        }
-                    }
-
-                    while (_records.Count < index)
-                    {
-                        _records.Add(null);
-                    }
-
                     record = new EditRecord();
-                    _records.Add(record);
+                    _records.AddOrUpdate(node, record);
                 }
 
                 _appliedIndex = index;
@@ -166,7 +141,7 @@ public sealed partial class BookmarkCollection
             case DocumentChangeKind.Undo:
                 for (int i = _appliedIndex; i > index; i--)
                 {
-                    if (i < _records.Count && _records[i] is { } undone)
+                    if (RecordAt(doc, i) is { } undone)
                     {
                         Revert(undone);
                     }
@@ -178,7 +153,7 @@ public sealed partial class BookmarkCollection
             case DocumentChangeKind.Redo:
                 for (int i = _appliedIndex + 1; i <= index; i++)
                 {
-                    if (i < _records.Count && _records[i] is { } redone)
+                    if (RecordAt(doc, i) is { } redone)
                     {
                         Reapply(redone);
                     }
@@ -187,16 +162,12 @@ public sealed partial class BookmarkCollection
                 _appliedIndex = index;
                 RaiseChanged(BookmarkChangeKind.Positions, []);
                 break;
-            case DocumentChangeKind.Saved:
-                _savedIndex = index;
-                break;
-        }
-
-        if (!doc.IsModified)
-        {
-            _savedIndex = index;
         }
     }
+
+    /// <summary>現在の経路の <paramref name="index"/> 番目の節を作った編集の記録 (なければ null)。</summary>
+    private EditRecord? RecordAt(Document doc, int index) =>
+        index >= 0 && index < doc.History.Count && _records.TryGetValue(doc.History.NodeAt(index), out EditRecord? r) ? r : null;
 
     // ---- 位置の調整 (INSP-23 の仕様 4) ----
 
@@ -761,17 +732,18 @@ public sealed partial class BookmarkCollection
             };
         }
 
-        if (_document is null || _savedIndex < 0 || _savedIndex == _appliedIndex || n == 0)
+        int savedIndex = _document?.History.SavedIndex ?? -1;
+        if (_document is not { } document || savedIndex < 0 || savedIndex == _appliedIndex || n == 0)
         {
             return n;
         }
 
         Span<BookmarkRecord> items = buffer.AsSpan(0, n);
-        if (_savedIndex < _appliedIndex)
+        if (savedIndex < _appliedIndex)
         {
-            for (int i = _appliedIndex; i > _savedIndex; i--)
+            for (int i = _appliedIndex; i > savedIndex; i--)
             {
-                if (i < _records.Count && _records[i] is { } record)
+                if (RecordAt(document, i) is { } record)
                 {
                     for (int k = record.Ops.Count - 1; k >= 0; k--)
                     {
@@ -795,9 +767,9 @@ public sealed partial class BookmarkCollection
         }
         else
         {
-            for (int i = _appliedIndex + 1; i <= _savedIndex && i < _records.Count; i++)
+            for (int i = _appliedIndex + 1; i <= savedIndex; i++)
             {
-                if (_records[i] is { } record)
+                if (RecordAt(document, i) is { } record)
                 {
                     foreach (EditOp op in record.Ops)
                     {

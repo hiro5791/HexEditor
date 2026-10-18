@@ -196,7 +196,7 @@ public static class SavePlanner
     /// <param name="targetPath">保存先。null は「元の場所に保存」(無題なら <see cref="SaveMethod.SaveAs"/>)。</param>
     public static SavePlan Plan(Document document, string? targetPath, SaveSettings settings)
     {
-        DocumentSnapshot snapshot = document.Current;
+        DocumentSnapshot snapshot = document.DataSnapshot;
         string? own = (document.Source as FileByteSource)?.Path;
         string? target = targetPath is null ? own : Path.GetFullPath(targetPath);
         var plan = new SavePlan
