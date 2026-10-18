@@ -254,6 +254,28 @@ public sealed partial class Document : IDisposable
     /// <summary>変換ビューを設定・解除した。</summary>
     public event EventHandler? ViewTransformChanged;
 
+    /// <summary>変換ビューを通さない編集の途中か (<see cref="EditRaw"/>)。</summary>
+    private bool _rawEdit;
+
+    /// <summary>
+    /// 変換ビューを通さずに元のデータへ書く編集 (パッチの適用など、元のファイルに対する操作。EDIT-43 の注記)。変換ビューが無効なら通常の編集と同じ。
+    /// 変換ビューの間は長さを変える編集はできない (<see cref="CanResize"/>)。
+    /// </summary>
+    public void EditRaw(Action edit)
+    {
+        ArgumentNullException.ThrowIfNull(edit);
+        bool previous = _rawEdit;
+        _rawEdit = true;
+        try
+        {
+            edit();
+        }
+        finally
+        {
+            _rawEdit = previous;
+        }
+    }
+
     /// <summary>変換ビューでのコピーを元のデータにするか (設定「変換ビューでのコピー: 元のデータ」。EDIT-45 の仕様 12。既定は表示どおり)。</summary>
     public bool CopyRawInTransformView { get; set; }
 
@@ -1105,7 +1127,7 @@ public sealed partial class Document : IDisposable
             return;
         }
 
-        if (_viewTransform is { } transform)
+        if (_viewTransform is { } transform && !_rawEdit)
         {
             tree = InverseThroughView(transform, tree, offset, removed, inserted);
         }

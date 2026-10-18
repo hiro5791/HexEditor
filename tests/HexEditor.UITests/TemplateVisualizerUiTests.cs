@@ -38,6 +38,28 @@ public sealed class TemplateVisualizerUiTests
     }
 
     [Fact]
+    public Task Switching_to_another_tab_does_not_keep_the_previous_documents_node() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 結果ツリーが別のドキュメントに移ったら、前のドキュメントのノードを表示し続けない (音声も止める)。
+        string wav = ctx.TestData("TD-TPL-WAV");
+        string template = ctx.TestData("TD-TPL-WAV-HXT");
+        // コマンドラインのテンプレートは最後に開いたファイル (WAV、2 番目のタブ) に当たる。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256"), wav], ExtraArgs = ["--template", template] });
+        await app.WaitForTabsAsync(2);
+        await WaitTemplatesAsync(app);
+        await VisAsync(app, "audio", new JsonObject { ["op"] = "fake" });
+        Assert.Equal("Audio", (await ShowAsync(app, "chunks[1].data"))["kind"]!.GetValue<string>());
+        await app.UiaInvokeAsync("TplVis_Play");
+        await app.WaitUntilAsync(async () => (await VisAsync(app, "state"))["playing"]!.GetValue<bool>(), Wait, "playing");
+
+        await EditingTests.SelectTabAsync(app, 0);
+        await app.WaitUntilAsync(async () => (await VisAsync(app, "state"))["node"] is null, Wait, "the visualizer to leave the previous document");
+        JsonObject state = await VisAsync(app, "state");
+        Assert.Null(state["kind"]);
+        Assert.False(state["playing"]!.GetValue<bool>());
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-TPL-16-02")]
     public Task Audio_of_a_wav_data_chunk_plays_the_same_samples() => UiTestContext.RunAsync(async ctx =>
     {

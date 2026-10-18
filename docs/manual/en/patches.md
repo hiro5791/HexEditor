@@ -48,6 +48,8 @@ To undo a patch that was already applied to a file, turn on **Reverse**. This is
 
 A patch that changes the length cannot be applied to data with a fixed length, such as a disk.
 
+If a [transform view](transform-view.md) is active, the patch is checked against and applied to the original data, not the displayed data. A patch that changes the length cannot be applied until you clear the transform view.
+
 ## Self-applying patches {#self-applying}
 
 A self-applying patch is a small program with the patch inside. People who do not have HexEditor can run it to patch their copy of the file.

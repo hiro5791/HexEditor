@@ -71,7 +71,7 @@ public sealed class HexPatch : LoadedPatch
 
     private void ApplyData(Document document, bool reverse, string description, CancellationToken cancellationToken)
     {
-        PieceTree input = document.Current.Tree;
+        PieceTree input = document.DataSnapshot.Tree;
         long inputLength = reverse ? Manifest.Target.Length : Manifest.Source.Length;
         if (input.Length != inputLength)
         {

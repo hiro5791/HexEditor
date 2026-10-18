@@ -400,13 +400,26 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
     }
 
     /// <summary>パスを入力して移動する (TPL-21 の仕様 6)。見つからなければ false (選択は変えない)。</summary>
+    /// <summary>
+    /// 行を選ぶ。結果ツリーの一覧が表示されていれば一覧に選ばせ、表示されていない (別のパネルのタブの後ろにある) ときは選択だけを変える
+    /// (ビジュアライザなど、選んだノードを使う機能が動くように)。
+    /// </summary>
+    private void Select(TemplateTreeItem item)
+    {
+        SelectRequested?.Invoke(this, item);
+        if (!ReferenceEquals(SelectedItem, item))
+        {
+            SelectedItem = item;
+        }
+    }
+
     public async Task<bool> GoToPathAsync(string path)
     {
         foreach (TemplateTreeItem root in _roots.Values.ToList())
         {
             if (await Model.RevealPathAsync(root, path) is { } item)
             {
-                SelectRequested?.Invoke(this, item);
+                Select(item);
                 return true;
             }
         }
@@ -421,7 +434,7 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
         {
             if (ReferenceEquals(root.Result, node.Result) && await Model.RevealNodeAsync(root, node) is { } item)
             {
-                SelectRequested?.Invoke(this, item);
+                Select(item);
                 return true;
             }
         }

@@ -358,8 +358,9 @@ public sealed class EditingPhase4Tests
 
         // 2. 0x10 は 41 (A)。
         Assert.Equal(0x41, (await app.BytesAsync(0x10, 1))[0]);
-        JsonObject row = await WaitForContentAsync(app, 0x10);
-        Assert.Contains("A", row.ToJsonString(), StringComparison.Ordinal);
+        JsonArray cells = Row(await WaitForContentAsync(app, 0x10), 0x10)!["cells"]!.AsArray();
+        Assert.Equal("41", cells[0]!["hex"]!.GetValue<string>());
+        Assert.Equal("A", cells[0]!["text"]!.GetValue<string>());
 
         // 3〜4. テキスト列の 0x11 に B を入力すると 42 (B)。
         await app.GoToAsync(0x11);
@@ -367,6 +368,11 @@ public sealed class EditingPhase4Tests
         await app.TypeAsync("B");
         await app.IdleAsync();
         Assert.Equal(0x42, (await app.BytesAsync(0x11, 1))[0]);
+        await app.WaitUntilAsync(async () =>
+        {
+            JsonArray c = Row(await WaitForContentAsync(app, 0x10), 0x10)!["cells"]!.AsArray();
+            return c[1]!["hex"]!.GetValue<string>() == "42" && c[1]!["text"]!.GetValue<string>() == "B";
+        }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "0x11 to show 42 (B)");
 
         // 5〜6. 変換ビューを解除すると、0x10 は 1B、0x11 は 18 (0x42 XOR 0x5A)。
         await PaletteAsync(app, "Clear transform view");
