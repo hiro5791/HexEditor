@@ -255,6 +255,7 @@ Setzen Sie in PowerShell Werte mit $ in einfache Anführungszeichen (zum Beispie
   <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>keine gültige Zahl</value></data>
   <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>Daten können hier nicht gelesen werden</value></data>
   <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>in der Befehlszeile nicht verfügbar</value></data>
+  <data name="Cli_Expression_NotInteger" xml:space="preserve"><value>der Wert ist keine ganze Zahl</value></data>
 
   <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu benötigt genau einen Algorithmus. Verwenden Sie --format bsd oder text für mehrere.</value></data>
   <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range kann nicht mit der Standardeingabe verwendet werden.</value></data>
@@ -300,8 +301,7 @@ Setzen Sie in PowerShell Werte mit $ in einfache Anführungszeichen (zum Beispie
   <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Geben Sie -o &lt;output&gt; oder --in-place an (damit die Originaldatei nicht versehentlich geändert wird).</value></data>
   <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o und --in-place können nicht zusammen verwendet werden.</value></data>
   <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Der Ausgabepfad {0} ist das Ziel oder der Patch. Verwenden Sie --in-place, um das Ziel zu ersetzen.</value></data>
-  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ist kein Patchformat. Verwenden Sie auto, ips oder ips32.</value></data>
-  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: UPS-, BPS- und .hexpatch-Patches werden in dieser Version nicht unterstützt. IPS und IPS32 schon.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} ist kein Patchformat. Verwenden Sie auto, ips, ips32, ups, bps oder hexpatch.</value></data>
   <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} ist keine erkennbare Patchdatei.</value></data>
   <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: Der Patch ist bei Datensatz {1} beschädigt (Dateioffset {2}).</value></data>
   <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} ist kein {1}-Patch.</value></data>
@@ -310,6 +310,10 @@ Setzen Sie in PowerShell Werte mit $ in einfache Anführungszeichen (zum Beispie
   <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Das gepatchte {0} hat nicht den erwarteten Hash (--verify-after). Es wurde nichts geschrieben.</value></data>
   <data name="Cli_Patch_Applied" xml:space="preserve"><value>{0} Datensatz/Datensätze angewendet, {1} Byte(s) geändert, Längenänderung {2}. {3} geschrieben.</value></data>
   <data name="Cli_Patch_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Cli_Error_PatchBrokenRecord" xml:space="preserve"><value>{0}: Der Patch ist bei Datensatz {1} beschädigt.</value></data>
+  <data name="Cli_Error_PatchBrokenFile" xml:space="preserve"><value>{0}: Der Patch ist beschädigt ({1}).</value></data>
+  <data name="Cli_Patch_SourceMismatch" xml:space="preserve"><value>{0} ist möglicherweise für eine andere Datei gedacht: Das im Patch gespeicherte Original stimmt nicht mit {1} überein. Es wurde nichts geschrieben.</value></data>
+  <data name="Cli_Patch_ResultMismatch" xml:space="preserve"><value>Das Ergebnis der Anwendung von {0} stimmt nicht mit dem im Patch gespeicherten Ergebnis überein. Es wurde nichts geschrieben.</value></data>
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} Datensatz/Datensätze, {1} Byte(s) würden sich ändern, Längenänderung {2}, neue Länge {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Geben Sie genau eine der Optionen --template und --auto an.</value></data>
