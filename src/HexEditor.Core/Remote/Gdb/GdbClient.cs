@@ -407,7 +407,8 @@ public sealed class GdbClient : IAsyncDisposable, IDisposable
                 continue;
             }
 
-            string text = Decode(raw);
+            // 連長圧縮で展開した長さにも上限を付ける (短い応答から巨大な文字列を作らない)。
+            string text = Decode(raw, MaxPacketSize * 4) ?? throw Fail(new GdbProtocolException("The reply is too long."));
 
             // コンソールへの出力 (O で始まる 16 進。OK は除く) は読み飛ばす。
             if (text.Length > 1 && text[0] == 'O' && text != "OK" && text.Skip(1).All(Uri.IsHexDigit))
@@ -420,9 +421,12 @@ public sealed class GdbClient : IAsyncDisposable, IDisposable
     }
 
     /// <summary>エスケープ (<c>}</c>) と連長圧縮 (<c>*</c>) を戻す。</summary>
-    public static string Decode(IReadOnlyList<byte> raw)
+    public static string Decode(IReadOnlyList<byte> raw) => Decode(raw, int.MaxValue)!;
+
+    /// <summary>エスケープと連長圧縮を戻す。展開した長さが <paramref name="maxLength"/> を超えたら null。</summary>
+    public static string? Decode(IReadOnlyList<byte> raw, int maxLength)
     {
-        var sb = new StringBuilder(raw.Count);
+        var sb = new StringBuilder(Math.Min(raw.Count, maxLength));
         for (int i = 0; i < raw.Count; i++)
         {
             byte b = raw[i];
@@ -433,11 +437,21 @@ public sealed class GdbClient : IAsyncDisposable, IDisposable
             else if (b == '*' && sb.Length > 0 && i + 1 < raw.Count)
             {
                 int repeat = raw[++i] - 29;
+                if (sb.Length + (long)Math.Max(0, repeat) > maxLength)
+                {
+                    return null;
+                }
+
                 sb.Append(sb[^1], Math.Max(0, repeat));
             }
             else
             {
                 sb.Append((char)b);
+            }
+
+            if (sb.Length > maxLength)
+            {
+                return null;
             }
         }
 

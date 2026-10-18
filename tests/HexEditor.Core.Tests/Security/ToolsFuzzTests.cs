@@ -239,6 +239,22 @@ public sealed class ToolsFuzzTests : IDisposable
         }, allowed: ex => ex is GdbConnectionException or GdbErrorReplyException);
     }
 
+    /// <summary>連長圧縮 (<c>*</c>) で巨大に展開される応答は、展開の上限で止まる (短い応答から巨大な文字列を作らない)。</summary>
+    [Fact]
+    public void Gdb_run_length_expansion_is_bounded()
+    {
+        var raw = new List<byte>();
+        for (int i = 0; i < 10_000; i++)
+        {
+            raw.AddRange([(byte)'0', (byte)'*', 0xFF]);
+        }
+
+        Assert.Null(GdbClient.Decode(raw, 64 * 1024));
+
+        // '*' の次の文字 - 29 回繰り返す (' ' は 3 回)。
+        Assert.Equal("0000", GdbClient.Decode("0* "u8.ToArray()));
+    }
+
     // ---- UDP ----
 
     /// <summary>長さ 0 のデータグラムを大量に受けても、記録する件数に上限がある (メモリが際限なく増えない)。</summary>
