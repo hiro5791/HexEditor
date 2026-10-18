@@ -15,6 +15,11 @@ public sealed record VolumeInfo(string Name, string? FileSystem, long? Available
     /// <summary>読み取り専用のメディア・ボリューム (<c>FILE_READ_ONLY_VOLUME</c>)。そこにあるファイルは読み取り専用で開く (ENG-14 の仕様 1)。</summary>
     public bool IsReadOnly { get; init; }
 
+    /// <summary>
+    /// 代替データストリームに対応するボリューム (<c>FILE_NAMED_STREAMS</c>。NTFS・ReFS。ENG-37・TOOL-21)。情報が取れなければ対応するものとして扱う。
+    /// </summary>
+    public bool SupportsNamedStreams { get; init; } = true;
+
     /// <summary>ファイルシステムの 1 ファイルの最大サイズ (ENG-25 の仕様 5)。上限がない (または分からない) 場合は null。</summary>
     public long? MaxFileSize => FileSystem?.ToUpperInvariant() switch
     {
@@ -57,10 +62,12 @@ public sealed class SystemVolumeInfoProvider : IVolumeInfoProvider
         var fsName = new StringBuilder(64);
         bool known = GetVolumeInformation(volume, null, 0, out _, out _, out uint flags, fsName, fsName.Capacity);
         string? fileSystem = known ? fsName.ToString() : null;
-        return new VolumeInfo(volume.TrimEnd('\\'), fileSystem, available) { IsReadOnly = known && (flags & FileReadOnlyVolume) != 0 };
+        return new VolumeInfo(volume.TrimEnd('\\'), fileSystem, available) { IsReadOnly = known && (flags & FileReadOnlyVolume) != 0, SupportsNamedStreams = !known || (flags & FileNamedStreams) != 0 };
     }
 
     private const uint FileReadOnlyVolume = 0x00080000;
+
+    private const uint FileNamedStreams = 0x00040000;
 
     private static VolumeInfo? FromDriveInfo(string folder)
     {
