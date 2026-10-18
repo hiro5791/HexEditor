@@ -398,6 +398,7 @@ public sealed partial class MainWindow
                         ["enabled"] = r.Enabled,
                         ["autoApply"] = r.AutoApply,
                         ["shadowed"] = r.Shadowed,
+                        ["version"] = r.Version,
                     })]),
                 };
             case "unsuppressAll":

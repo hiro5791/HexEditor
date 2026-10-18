@@ -64,8 +64,17 @@ public static class TemplateSettingsSection
     }
 
     /// <summary>管理画面の一覧の行 (テスト用の命令)。</summary>
-    internal static IReadOnlyList<(string Name, string Origin, bool Enabled, bool AutoApply, bool Shadowed)> Rows(FrameworkElement section) =>
+    internal static IReadOnlyList<(string Name, string Origin, bool Enabled, bool AutoApply, bool Shadowed, string? Version)> Rows(FrameworkElement section) =>
         section is Root r ? r.RowsForTest : [];
+
+    /// <summary>出所の表示 (標準 / 利用者 / オンライン。署名のないリポジトリから入手したものは「署名なし」を付ける。TPL-35 の仕様 2、TPL-36 の仕様 3)。</summary>
+    public static string OriginText(TemplateCatalogEntry entry) => entry.Origin switch
+    {
+        TemplateOrigin.Standard => Loc.Get("Tpl_OriginStandard"),
+        TemplateOrigin.Online => Loc.Get("Tpl_OriginOnline")
+            + (OnlineTemplateService.Store.FindByPath(entry.Path) is { Unsigned: true } ? " (" + Loc.Get("TplOnline_Unsigned") + ")" : string.Empty),
+        _ => Loc.Get("Tpl_OriginUser"),
+    };
 
     private static FrameworkElement Create(MainWindow window)
     {
@@ -86,7 +95,7 @@ public static class TemplateSettingsSection
         private readonly StackPanel _list = new() { Spacing = 2 };
         private readonly StackPanel _suppressed = new() { Spacing = 4 };
         private readonly StackPanel _inspector = new() { Spacing = 4 };
-        private readonly List<(string, string, bool, bool, bool)> _rows = [];
+        private readonly List<(string, string, bool, bool, bool, string?)> _rows = [];
 
         public Root(MainWindow window)
         {
@@ -119,7 +128,7 @@ public static class TemplateSettingsSection
             Refresh();
         }
 
-        internal IReadOnlyList<(string Name, string Origin, bool Enabled, bool AutoApply, bool Shadowed)> RowsForTest => _rows;
+        internal IReadOnlyList<(string Name, string Origin, bool Enabled, bool AutoApply, bool Shadowed, string? Version)> RowsForTest => _rows;
 
         public void Refresh()
         {
@@ -168,8 +177,8 @@ public static class TemplateSettingsSection
 
                 bool enabled = prefs.IsEnabled(entry);
                 bool auto = prefs.IsAutoApplyEnabled(entry);
-                string origin = Loc.Get(entry.Origin == TemplateOrigin.Standard ? "Tpl_OriginStandard" : "Tpl_OriginUser");
-                _rows.Add((name, origin, enabled, auto, shadowed));
+                string origin = OriginText(entry);
+                _rows.Add((name, origin, enabled, auto, shadowed, entry.Metadata.Version));
                 _list.Children.Add(Row(entry, name, origin, enabled, auto, shadowed));
             }
 

@@ -53,6 +53,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
 
         Views.TemplateSettingsSection.Register();
         RegisterTemplateVisualizerPanel();
+        Views.OnlineTemplateSection.Register();
 
         // コマンドラインの --template (AUTO-37)
         CommandLineActions.ApplyTemplate = (window, doc, nameOrPath) => window.ApplyTemplateFromCommandLineAsync(doc, nameOrPath);

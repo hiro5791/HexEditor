@@ -44,6 +44,12 @@ public static class TemplateService
     /// <summary>既定の利用者のテンプレートのフォルダ (設定フォルダの <c>templates/</c>。TPL-35 の仕様 1)。</summary>
     public static string DefaultUserFolder => Path.Combine(Program.Environment.Locations.Settings, "templates");
 
+    /// <summary>オンラインのリポジトリからインストールしたテンプレートのフォルダ (設定フォルダの <c>templates-online/</c>。TPL-36 の仕様 6)。</summary>
+    public static string OnlineFolder => Path.Combine(Program.Environment.Locations.Settings, "templates-online");
+
+    /// <summary>一覧が変わったことを知らせる (オンラインのテンプレートのインストール・削除の直後。監視の通知を待たずに反映する)。</summary>
+    public static void NotifyCatalogChanged() => CatalogChanged?.Invoke(null, EventArgs.Empty);
+
     /// <summary>利用者のテンプレートのフォルダ (既定のフォルダ、設定で加えたフォルダの順)。</summary>
     public static IReadOnlyList<string> UserFolders
     {
@@ -76,9 +82,10 @@ public static class TemplateService
             if (_catalog is null || signature != _foldersSignature)
             {
                 _foldersSignature = signature;
-                _catalog = new TemplateCatalog(folders, includeStandard: true, new TemplateLoadOptions { SearchPaths = folders });
+                string online = OnlineFolder;
+                _catalog = new TemplateCatalog(folders, includeStandard: true, new TemplateLoadOptions { SearchPaths = [.. folders, online] }, online);
                 Preferences.ApplyTo(_catalog);
-                Watch(folders);
+                Watch([.. folders, online]);
             }
 
             return _catalog;

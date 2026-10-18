@@ -19,7 +19,11 @@ public static partial class TestDataCatalog
             dir => Path.Combine(dir, "TD-TPL-PNG-BROKEN.png")),
         new("TD-TPL-SECRET", 4096, "HXSECRET7F3A を 1 回含む 4 KiB (ファイル名も HXSECRET7F3A-report.bin)", path => WriteAll(path, TplSecret()),
             dir => Path.Combine(dir, "TD-TPL-SECRET", TplSecretMarker + "-report.bin")),
-        new("TD-TPL-REPO", 0, "テスト用のオンラインリポジトリ (フォルダ。index.json など)", path => TplRepo.WriteAll(Path.GetDirectoryName(path)!),
+        new("TD-TPL-REPO", 0, "テスト用のオンラインリポジトリ (フォルダ。index.json など)", path =>
+            {
+                TplRepo.WriteAll(Path.GetDirectoryName(path)!);
+                File.WriteAllBytes(path, TplRepo.Index("1.0.0"));
+            },
             dir => Path.Combine(dir, "TD-TPL-REPO", "index.json")) { ComputeLength = () => TplRepo.Index("1.0.0").Length },
     ];
 

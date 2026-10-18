@@ -309,6 +309,11 @@ public static class BuiltInSettings
         new("templates.folders", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 50, ShowInPage = false },
         new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
         new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
+        // オンラインのテンプレート (07 の TPL-36)。リポジトリの一覧は管理画面の「オンライン」で編集する。通信の可否はプライバシーの
+        // network.downloads.enabled / network.offline に従う (仕様 7)。
+        new("templates.online.repositories", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 80, ShowInPage = false },
+        new("templates.online.checkUpdates", SettingCategories.Templates, SettingKind.Bool, true) { Order = 90, Group = "templatesOnline" },
+        new("templates.online.autoUpdate", SettingCategories.Templates, SettingKind.Bool, false) { Order = 100, Group = "templatesOnline" },
 
         // ---- 逆アセンブル (06 の ANA-26。キーと解釈は Disassembly.DisasmSettings) ----
         new(Disassembly.DisasmSettings.SyntaxKey, SettingCategories.Disassembly, SettingKind.Choice, "intel") { Options = ["intel", "att", "masm"], Order = 10 },
