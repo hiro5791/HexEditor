@@ -25,10 +25,13 @@ public sealed partial class MainWindow
 {
     private const string FileOpsKey = "fileops.";
 
-    /// <summary>ファイルツールの入力: 開いているドキュメント (未保存の変更を含む) またはファイル。</summary>
+    /// <summary>
+    /// ファイルツールの入力: 開いているドキュメント (未保存の変更を含む) またはファイル。ドキュメントは変換ビュー (EDIT-45) が有効でも
+    /// 元のデータ (保存と同じ <see cref="Core.Engine.Document.DataSnapshot"/>) を使う (11 の TOOL-13 の仕様 1)。
+    /// </summary>
     internal sealed record ToolInput(string Name, string DefaultDirectory, long Length, DocumentViewModel? Document, string? Path)
     {
-        public IContentReader Open() => Document is { } d ? new SnapshotContentReader(d.Document.Current) : new FileContentReader(Path!);
+        public IContentReader Open() => Document is { } d ? new SnapshotContentReader(d.Document.DataSnapshot) : new FileContentReader(Path!);
     }
 
     private void RegisterToolsFileOpsCommands()

@@ -282,4 +282,18 @@ public sealed class HistogramTests
         Assert.Equal(0x7F, StatisticsNavigator.FindNext(doc.Current, ranges, ElementSpec.Bytes, 0, v => v == 0x7F));
         Assert.Null(StatisticsNavigator.FindNext(doc.Current, ranges, ElementSpec.Bytes, 0x80, v => v == 0x7F));
     }
+
+    [Fact]
+    public void Exports_record_the_transform_view()
+    {
+        // 06 の 0.1.1: 変換ビューのデータを数えた結果は、エクスポートにその旨を記録する。
+        StatisticsResult r = Compute("AAB"u8.ToArray(), ElementSpec.Bytes);
+        string[] csv = StatisticsExport.Csv(r, "XOR 5A").Split("\r\n");
+        Assert.Equal("low,high,count,percent,cumulative,transformView", csv[0]);
+        Assert.EndsWith(",XOR 5A", csv[1], StringComparison.Ordinal);
+        System.Text.Json.Nodes.JsonNode json = System.Text.Json.Nodes.JsonNode.Parse(StatisticsExport.Json(r, "XOR 5A"))!;
+        Assert.Equal("XOR 5A", json["transformView"]!.GetValue<string>());
+        Assert.Null(System.Text.Json.Nodes.JsonNode.Parse(StatisticsExport.Json(r))!["transformView"]);
+        Assert.StartsWith("low,high,count,percent,cumulative\r\n", StatisticsExport.Csv(r), StringComparison.Ordinal);
+    }
 }

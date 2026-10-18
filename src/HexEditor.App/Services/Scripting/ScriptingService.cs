@@ -182,25 +182,21 @@ internal sealed class GitHubComponentFeed(Func<NetworkClient> network, Func<Upda
     public async Task DownloadAsync(CSharpComponentManifest manifest, Stream destination, IProgress<double>? progress, CancellationToken cancellationToken)
     {
         var uri = new Uri($"{source().Repository}/releases/download/v{manifest.Version}/{Uri.EscapeDataString(manifest.PackageName)}");
-        using HttpResponseMessage response = await network().SendAsync(NetworkFeature.Components, HttpMethod.Get, uri, manual: true,
-            timeout: TimeSpan.FromMinutes(10), cancellationToken: cancellationToken).ConfigureAwait(false);
-        await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-        long total = response.Content.Headers.ContentLength ?? manifest.PackageSize;
-        byte[] buffer = new byte[81920];
-        long done = 0;
-        // 一覧の大きさより長い応答は途中で打ち切る (ハッシュの確認の前に、際限なく書き込まないため)。
+        // 一覧の大きさより長い応答は途中で打ち切る (ハッシュの確認の前に、際限なく書き込まないため)。受信しながら上限を確かめる。
         long limit = manifest.PackageSize > 0 ? manifest.PackageSize : 512L * 1024 * 1024;
-        int n;
-        while ((n = await stream.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
+        var report = progress is null ? null : new SynchronousProgress<(long Done, long? Total)>(p =>
         {
-            if (done + n > limit)
-            {
-                throw new IOException(Loc.Format("CSharpComponent_DownloadTooLarge", limit));
-            }
-
-            await destination.WriteAsync(buffer.AsMemory(0, n), cancellationToken).ConfigureAwait(false);
-            done += n;
-            progress?.Report(total > 0 ? (double)done / total : 0);
+            long total = p.Total ?? manifest.PackageSize;
+            progress.Report(total > 0 ? (double)p.Done / total : 0);
+        });
+        try
+        {
+            await network().DownloadAsync(NetworkFeature.Components, uri, manual: true, destination, limit, report, timeout: TimeSpan.FromMinutes(10),
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        catch (NetworkResponseTooLargeException ex)
+        {
+            throw new IOException(Loc.Format("CSharpComponent_DownloadTooLarge", limit), ex);
         }
     }
 }

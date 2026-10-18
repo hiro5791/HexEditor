@@ -197,4 +197,36 @@ public sealed class ExportAndHistoryTests
         loaded.Load(reopened.Get("search.history"));
         Assert.Equal("DE AD", Assert.Single(loaded.Find).Text);
     }
+
+    [Fact]
+    public void Results_of_a_transform_view_record_the_transform()
+    {
+        // EDIT-45 の仕様 11: 変換ビューのデータを検索した結果の一覧のエクスポートに、その旨を記録する。
+        byte[] data = new byte[32];
+        data[4] = 0x1B;
+        using Document doc = Doc(data);
+        IViewTransform transform = HexEditor.Core.Editing.TransformView.TransformDefinition.Xor([0x5A]).Create();
+        doc.SetViewTransform(transform);
+        using SearchResults results = SearchEngine.FindAll(doc.Current, SearchPattern.FromHex("41"));
+        Assert.Equal(1, results.LongCount);
+
+        using var csv = new MemoryStream();
+        SearchResultsExporter.Export(new SearchResultRowFactory(results, doc.Current, Encoding.ASCII), csv, ExportFormat.Csv,
+            new ExportLabels { TransformView = "Transform view" });
+        string[] lines = Encoding.UTF8.GetString(csv.ToArray()).TrimStart('\uFEFF').Split("\r\n");
+        Assert.EndsWith(",Transform view", lines[0], StringComparison.Ordinal);
+        Assert.EndsWith("," + transform.Label, lines[1], StringComparison.Ordinal);
+
+        using var json = new MemoryStream();
+        SearchResultsExporter.Export(new SearchResultRowFactory(results, doc.Current, Encoding.ASCII), json, ExportFormat.Json);
+        JsonNode root = JsonNode.Parse(json.ToArray())!;
+        Assert.Equal(transform.Label, root["results"]![0]!["transformView"]!.GetValue<string>());
+
+        // 変換ビューを解除して検索した結果には記録しない。
+        doc.SetViewTransform(null);
+        using SearchResults plain = SearchEngine.FindAll(doc.Current, SearchPattern.FromHex("1B"));
+        using var csv2 = new MemoryStream();
+        SearchResultsExporter.Export(new SearchResultRowFactory(plain, doc.Current, Encoding.ASCII), csv2, ExportFormat.Csv);
+        Assert.DoesNotContain("Transform view", Encoding.UTF8.GetString(csv2.ToArray()), StringComparison.Ordinal);
+    }
 }

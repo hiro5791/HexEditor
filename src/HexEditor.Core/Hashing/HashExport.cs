@@ -60,9 +60,10 @@ public static class HashExport
 
     /// <summary>
     /// JSON (<c>[{"algorithm": "SHA-256", "value": "…", "parameters": {…}, "range": {"start": 0, "length": 1024}}]</c>)。
-    /// 値は行の表示形式。マルチ選択を連結した結果は <c>ranges</c> に各範囲も入れる。
+    /// 値は行の表示形式。マルチ選択を連結した結果は <c>ranges</c> に各範囲も入れる。変換ビュー (EDIT-45 の仕様 11) のデータを計算した結果は
+    /// <paramref name="transformView"/> (変換の表示。例: <c>XOR 5A</c>) を各項目の <c>transformView</c> に記録する。
     /// </summary>
-    public static string Json(IEnumerable<HashResultRow> rows, HashDisplayOptions display)
+    public static string Json(IEnumerable<HashResultRow> rows, HashDisplayOptions display, string? transformView = null)
     {
         var array = new JsonArray();
         foreach (HashResultRow row in rows)
@@ -116,21 +117,30 @@ public static class HashExport
                 item["ranges"] = new JsonArray([.. row.Ranges.Select(r => (JsonNode?)new JsonObject { ["start"] = r.Offset, ["length"] = r.Length })]);
             }
 
+            if (transformView is { Length: > 0 })
+            {
+                item["transformView"] = transformView;
+            }
+
             array.Add(item);
         }
 
         return array.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
     }
 
-    /// <summary>CSV (アルゴリズム, 値, 開始, 長さ)。1 行目は見出し。</summary>
-    public static string Csv(IEnumerable<HashResultRow> rows, HashDisplayOptions display)
+    /// <summary>
+    /// CSV (アルゴリズム, 値, 開始, 長さ)。1 行目は見出し。変換ビュー (EDIT-45 の仕様 11) のデータを計算した結果は、列 <c>transformView</c> に
+    /// <paramref name="transformView"/> を記録する。
+    /// </summary>
+    public static string Csv(IEnumerable<HashResultRow> rows, HashDisplayOptions display, string? transformView = null)
     {
-        var lines = new List<string> { "algorithm,value,start,length" };
+        bool transformed = transformView is { Length: > 0 };
+        var lines = new List<string> { transformed ? "algorithm,value,start,length,transformView" : "algorithm,value,start,length" };
         lines.AddRange(rows.Select(r => string.Join(',',
             CsvField(r.Choice.DisplayName),
             CsvField(display.Display(r)),
             r.Start.ToString(CultureInfo.InvariantCulture),
-            r.Length.ToString(CultureInfo.InvariantCulture))));
+            r.Length.ToString(CultureInfo.InvariantCulture)) + (transformed ? "," + CsvField(transformView!) : string.Empty)));
         return Lines(lines);
     }
 

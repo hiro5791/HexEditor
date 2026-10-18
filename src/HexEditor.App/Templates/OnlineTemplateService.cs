@@ -219,15 +219,13 @@ internal sealed class NetworkFeedTransport : ITemplateFeedTransport
     {
         try
         {
-            using HttpResponseMessage response = await AppUpdates.Network.SendAsync(NetworkFeature.Downloads, HttpMethod.Get, uri, manual: true,
-                timeout: Timeout, cancellationToken: cancellationToken).ConfigureAwait(false);
-            if (response.Content.Headers.ContentLength is long length && length > maxBytes)
-            {
-                throw new TemplateFeedTooLargeException(maxBytes);
-            }
-
-            byte[] body = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
-            return body.LongLength > maxBytes ? throw new TemplateFeedTooLargeException(maxBytes) : body;
+            // 上限を超えた時点で受信をやめる (応答の全体を読み込んでから調べない)。
+            return await AppUpdates.Network.GetBytesAsync(NetworkFeature.Downloads, uri, manual: true, maxBytes, timeout: Timeout,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        catch (NetworkResponseTooLargeException)
+        {
+            throw new TemplateFeedTooLargeException(maxBytes);
         }
         catch (NetworkDisabledException ex)
         {

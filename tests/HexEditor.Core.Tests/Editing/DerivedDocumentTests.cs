@@ -119,4 +119,18 @@ public sealed class DerivedDocumentTests
     [Fact]
     public void Nesting_is_limited_to_eight_levels() =>
         Assert.Throws<ArgumentOutOfRangeException>(() => new DerivedLink(new Document(new MemoryByteSource([1]), Options()), 0, 1, new DerivedTransform(), 9));
+
+    [Fact]
+    public void Setting_a_transform_view_on_the_parent_does_not_mark_the_range_changed()
+    {
+        // EDIT-46 の実装の注記: 元の範囲の変更は元のデータで判定し、変換ビュー (EDIT-45) の設定・解除は変更とみなさない。
+        using var parent = new Document(new MemoryByteSource(new byte[100]), Options());
+        using var link = new DerivedLink(parent, 40, 20, new DerivedTransform());
+        parent.SetViewTransform(HexEditor.Core.Editing.TransformView.TransformDefinition.Xor([0xFF]).Create());
+        parent.Overwrite(90, [7]);
+        parent.Undo();
+        Assert.False(link.RangeChanged());
+        parent.SetViewTransform(null);
+        Assert.False(link.RangeChanged());
+    }
 }

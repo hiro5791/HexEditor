@@ -37,22 +37,31 @@ public static class StatisticsExport
     public static string Value(double v) =>
         v == Math.Floor(v) && Math.Abs(v) < 1e18 ? ((long)v).ToString(CultureInfo.InvariantCulture) : v.ToString("G10", CultureInfo.InvariantCulture);
 
-    public static string Csv(StatisticsResult r)
+    /// <summary>
+    /// 表の CSV。変換ビュー (EDIT-45 の仕様 11、06 の 0.1.1) のデータを数えた結果は、列 <c>transformView</c> に <paramref name="transformView"/>
+    /// (変換の表示。例: <c>XOR 5A</c>) を記録する。
+    /// </summary>
+    public static string Csv(StatisticsResult r, string? transformView = null)
     {
+        bool transformed = transformView is { Length: > 0 };
+        string extra = transformed
+            ? "," + (transformView!.IndexOfAny([',', '"', '\r', '\n']) >= 0 ? "\"" + transformView.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"" : transformView)
+            : string.Empty;
         var sb = new StringBuilder();
-        sb.Append("low,high,count,percent,cumulative\r\n");
+        sb.Append(transformed ? "low,high,count,percent,cumulative,transformView\r\n" : "low,high,count,percent,cumulative\r\n");
         foreach (HistogramRow row in Rows(r.Histogram))
         {
             sb.Append(Value(row.Low)).Append(',').Append(Value(row.High)).Append(',')
                 .Append(row.Count.ToString(CultureInfo.InvariantCulture)).Append(',')
                 .Append(row.Percent.ToString("0.######", CultureInfo.InvariantCulture)).Append(',')
-                .Append(row.Cumulative.ToString("0.######", CultureInfo.InvariantCulture)).Append("\r\n");
+                .Append(row.Cumulative.ToString("0.######", CultureInfo.InvariantCulture)).Append(extra).Append("\r\n");
         }
 
         return sb.ToString();
     }
 
-    public static string Json(StatisticsResult r)
+    /// <summary>結果の JSON。変換ビューのデータを数えた結果は <c>transformView</c> に <paramref name="transformView"/> を記録する。</summary>
+    public static string Json(StatisticsResult r, string? transformView = null)
     {
         Histogram h = r.Histogram;
         var bins = new JsonArray();
@@ -85,6 +94,11 @@ public static class StatisticsExport
             ["completed"] = r.Completed,
             ["bins"] = bins,
         };
+        if (transformView is { Length: > 0 })
+        {
+            root["transformView"] = transformView;
+        }
+
         return root.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
     }
 

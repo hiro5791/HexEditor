@@ -1489,6 +1489,7 @@ public sealed partial class SearchResultsPanel : UserControl
         Status = Loc.Get("SearchResults_Column_Status"),
         Endian = Loc.Get("SearchResults_Column_Endian"),
         Value = Loc.Get("SearchResults_Column_Value"),
+        TransformView = Loc.Get("TransformView_Title"),
         StatusText = s => s switch
         {
             MatchStatus.Modified => Loc.Get("SearchResults_Status_Modified"),

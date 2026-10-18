@@ -128,7 +128,7 @@ public sealed partial class MainWindow
             return false;
         }
 
-        string suggested = SafeFileName(vm.Node?.Name ?? "visualizer") + k.extension;
+        string suggested = SafeVisualizerFileName(vm.Node?.Name ?? "visualizer") + k.extension;
         if (path is null)
         {
             if (TestHooks.TrySavePicker(suggested, out string? chosen))
@@ -192,7 +192,7 @@ public sealed partial class MainWindow
         }
     }
 
-    private static string SafeFileName(string name)
+    private static string SafeVisualizerFileName(string name)
     {
         char[] invalid = Path.GetInvalidFileNameChars();
         string safe = new([.. name.Select(c => invalid.Contains(c) || c is '[' or ']' ? '_' : c)]);

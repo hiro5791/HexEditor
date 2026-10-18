@@ -691,7 +691,9 @@ public sealed partial class StatisticsViewModel : ObservableObject
 
         try
         {
-            string content = json ? StatisticsExport.Json(r) : StatisticsExport.Csv(r);
+            // 変換ビューのデータを数えた結果はその旨を記録する (06 の 0.1.1)。
+            string? transform = _computedSnapshot?.Transform?.Label;
+            string content = json ? StatisticsExport.Json(r, transform) : StatisticsExport.Csv(r, transform);
             await File.WriteAllTextAsync(path, content);
             StatusText = Loc.Format("Stats_Saved", Path.GetFileName(path));
         }

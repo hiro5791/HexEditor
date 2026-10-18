@@ -460,6 +460,9 @@ public sealed partial class DisassemblyPanel : UserControl, IPanelContent
             ? Loc.Format("Disasm_HeaderIssue", string.Join(", ", issues.Take(3).Select(i => Loc.Get("Disasm_HeaderIssue_" + i.Code) + (i.Detail.Length > 0 ? " (" + i.Detail + ")" : string.Empty))))
             : string.Empty;
         DotNetBar.IsOpen = _vm.Image.IsDotNet && !_vm.IsMsil;
+        string note = _vm.Document?.Document.ViewTransform is { } transform ? HexView.TransformViewLabel(transform) : string.Empty;
+        TransformNote.Text = note;
+        TransformNote.Visibility = note.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void DotNetAction_Click(object sender, RoutedEventArgs e) => _ = SwitchToMsilAsync();

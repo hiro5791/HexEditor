@@ -7344,7 +7344,7 @@ The file was not changed.</value></data>
   <data name="Yara_Column_String" xml:space="preserve"><value>String</value></data>
   <data name="Codec_Error_Failed" xml:space="preserve"><value>The operation failed: {0}</value></data>
   <data name="Menu_File_Remote.Text" xml:space="preserve"><value>Connect to Remote</value></data>
-  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>1</value></data>
   <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB Server...</value></data>
   <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP...</value></data>
@@ -7356,7 +7356,7 @@ The file was not changed.</value></data>
   <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>Save as Minidump...</value></data>
   <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
   <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>Packets</value></data>
-  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
   <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>Save process snapshot...</value></data>
   <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>snapshot hexsnap dump memory</value></data>
   <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>Save as minidump...</value></data>

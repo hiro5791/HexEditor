@@ -514,6 +514,12 @@ public sealed partial class YaraPanel : UserControl
             await Results.RunAsync([new SearchTarget(editor, string.Empty, results)], Loc.Get("Yara_KindName"),
                 string.Join(", ", _paths.Select(Path.GetFileName)), Encoding.ASCII, cts);
             ShowScanStatus(search.Result, search.Rows.Select(r => r.Rule).Distinct().Count());
+            if (results.Snapshot.Transform is { } transform)
+            {
+                // 変換ビュー (EDIT-45 の仕様 11) のデータを照合したことを示す。
+                _status.Text = HexView.TransformViewLabel(transform) + " · " + _status.Text;
+            }
+
             Scanned?.Invoke(this, (editor, search, offset));
         }
         catch (Exception e) when (e is not OperationCanceledException)

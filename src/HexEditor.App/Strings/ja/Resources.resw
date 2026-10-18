@@ -7343,8 +7343,8 @@
   <data name="Yara_Column_Meta" xml:space="preserve"><value>メタ情報</value></data>
   <data name="Yara_Column_String" xml:space="preserve"><value>文字列</value></data>
   <data name="Codec_Error_Failed" xml:space="preserve"><value>処理に失敗しました: {0}</value></data>
-  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>リモートに接続(T)</value></data>
-  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_Remote.Text" xml:space="preserve"><value>リモートに接続(1)</value></data>
+  <data name="Menu_File_Remote.AccessKey" xml:space="preserve"><value>1</value></data>
   <data name="Menu_File_ConnectGdb.Text" xml:space="preserve"><value>GDB サーバー(G)...</value></data>
   <data name="Menu_File_ConnectGdb.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_File_OpenSftp.Text" xml:space="preserve"><value>SFTP(F)...</value></data>
@@ -7355,8 +7355,8 @@
   <data name="Menu_File_SaveSnapshot.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_File_SaveMinidump.Text" xml:space="preserve"><value>ミニダンプとして保存(M)...</value></data>
   <data name="Menu_File_SaveMinidump.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>パケット(E)</value></data>
-  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_PacketsPanel.Text" xml:space="preserve"><value>パケット(3)</value></data>
+  <data name="Menu_View_PacketsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
   <data name="Cmd_file_saveProcessSnapshot" xml:space="preserve"><value>プロセスのスナップショットを保存...</value></data>
   <data name="CmdAlias_file_saveProcessSnapshot" xml:space="preserve"><value>すなっぷしょっとをほぞん ぷろせす</value></data>
   <data name="Cmd_file_saveMinidump" xml:space="preserve"><value>ミニダンプとして保存...</value></data>

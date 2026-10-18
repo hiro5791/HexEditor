@@ -64,7 +64,7 @@ public sealed class DerivedLink : IDisposable
         Length = length;
         Transform = transform;
         Depth = depth;
-        _expected = parent.Current;
+        _expected = parent.DataSnapshot;
         _expectedOffset = offset;
         parent.Changed += OnParentChanged;
     }
@@ -93,7 +93,10 @@ public sealed class DerivedLink : IDisposable
         Parent.Changed -= OnParentChanged;
     }
 
-    /// <summary>派生ドキュメントを開いた (または最後に書き戻した) 後に、元の範囲が別の編集で変わったか (仕様 5)。</summary>
+    /// <summary>
+    /// 派生ドキュメントを開いた (または最後に書き戻した) 後に、元の範囲が別の編集で変わったか (仕様 5)。元のデータ (<see cref="Document.DataSnapshot"/>)
+    /// で比べる (変換ビュー (EDIT-45) の設定・解除は内容の変更ではない)。
+    /// </summary>
     public bool RangeChanged()
     {
         if (_changed)
@@ -107,7 +110,7 @@ public sealed class DerivedLink : IDisposable
         }
 
         // 元に戻す・やり直す・読み直しの後は、内容を比べる。
-        DocumentSnapshot current = Parent.Current;
+        DocumentSnapshot current = Parent.DataSnapshot;
         if (Offset + Length > current.Length || !SameBytes(_expected, _expectedOffset, current, Offset, Length))
         {
             _changed = true;
@@ -161,7 +164,7 @@ public sealed class DerivedLink : IDisposable
             // 範囲より前の挿入・削除は範囲をずらす (範囲の先頭への挿入を含む)。
             Offset += e.InsertedLength - e.RemovedLength;
             _expectedOffset = Offset;
-            _expected = Parent.Current;
+            _expected = Parent.DataSnapshot;
             return;
         }
 
@@ -224,7 +227,7 @@ public sealed class DerivedLink : IDisposable
         Length = newLength;
         _changed = false;
         _maybeChanged = false;
-        _expected = Parent.Current;
+        _expected = Parent.DataSnapshot;
         _expectedOffset = Offset;
     }
 

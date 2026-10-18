@@ -42,6 +42,9 @@
             <Button x:Name="NativeButton" Margin="0,0,6,4" AutomationProperties.AutomationId="Disasm_NativeCode" Click="NativeButton_Click" Visibility="Collapsed" />
         </local:WrapPanel>
         <StackPanel Grid.Row="1" Spacing="4">
+            <!--  変換ビュー (EDIT-45) が有効なら、変換後のデータを逆アセンブルしていることを示す (06 の 0.1.1)  -->
+            <TextBlock x:Name="TransformNote" AutomationProperties.AutomationId="Disasm_TransformNote" Style="{ThemeResource CaptionTextBlockStyle}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Visibility="Collapsed" />
             <InfoBar x:Name="EngineBar" AutomationProperties.AutomationId="Disasm_EngineError" IsClosable="False" Severity="Error" />
             <InfoBar x:Name="DataBar" AutomationProperties.AutomationId="Disasm_MostlyData" IsClosable="True" Severity="Warning" />
             <InfoBar x:Name="HeaderBar" AutomationProperties.AutomationId="Disasm_HeaderIssues" IsClosable="True" Severity="Warning" />

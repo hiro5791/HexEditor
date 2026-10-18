@@ -838,9 +838,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     public void CopyChecksumLine(HashRowViewModel? row) => SetClipboardText?.Invoke(HashExport.ChecksumLines(RowsOrAll(row), DocumentFileName));
 
-    public void CopyJson() => SetClipboardText?.Invoke(HashExport.Json(Rows.Select(r => r.Row), Display));
+    public void CopyJson() => SetClipboardText?.Invoke(HashExport.Json(Rows.Select(r => r.Row), Display, _computedSnapshot?.Transform?.Label));
 
-    public void CopyCsv() => SetClipboardText?.Invoke(HashExport.Csv(Rows.Select(r => r.Row), Display));
+    public void CopyCsv() => SetClipboardText?.Invoke(HashExport.Csv(Rows.Select(r => r.Row), Display, _computedSnapshot?.Transform?.Label));
 
     /// <summary>「チェックサムファイルとして保存...」(ANA-22 の仕様 2)。</summary>
     public async Task SaveChecksumFileAsync(HashRowViewModel row)

@@ -765,7 +765,9 @@ public sealed partial class MainWindow
             return;
         }
 
-        await Task.Run(() => WriteListing(listing, start, end, path));
+        // 変換ビューのデータを逆アセンブルしたリスティングは、先頭のコメントにその旨を記録する (06 の 0.1.1)。
+        string? note = doc.Document.ViewTransform is { } transform ? HexView.TransformViewLabel(transform) : null;
+        await Task.Run(() => WriteListing(listing, start, end, path, note));
         ShowStatusMessage(Loc.Format("Disasm_Exported", Path.GetFileName(path)));
     }
 
@@ -788,9 +790,14 @@ public sealed partial class MainWindow
         return rows.Count == 0 ? (0, 0) : (rows[0].Offset, rows[^1].Offset + rows[^1].Length);
     }
 
-    private static void WriteListing(DisassemblyListing listing, long start, long end, string path)
+    private static void WriteListing(DisassemblyListing listing, long start, long end, string path, string? note = null)
     {
         using var writer = new StreamWriter(path, false, new UTF8Encoding(false));
+        if (note is not null)
+        {
+            writer.WriteLine("; " + note);
+        }
+
         long at = start;
         int skip = 0;
         while (at < end)
