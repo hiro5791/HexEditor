@@ -49,12 +49,9 @@ public sealed class CatalogDiskLocator(Func<DeviceCatalog> catalog) : IDiskLocat
 {
     public IReadOnlyList<int>? DisksOfPath(string path)
     {
-        string full;
-        try
-        {
-            full = Path.GetFullPath(path);
-        }
-        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        // ジャンクション・シンボリックリンクをたどった本当のパスで調べる (C:\out が調査対象のボリュームへのジャンクションのとき、
+        // ドライブ文字だけで判定すると C: のディスクと誤る)。
+        if (!Files.CanonicalPath.TryNormalize(path, out string full))
         {
             return null;
         }
@@ -65,9 +62,30 @@ public sealed class CatalogDiskLocator(Func<DeviceCatalog> catalog) : IDiskLocat
             return null;
         }
 
-        char letter = char.ToUpperInvariant(root[0]);
-        VolumeDeviceInfo? volume = catalog().Volumes.FirstOrDefault(v => v.DriveLetter is { Length: > 0 } d && char.ToUpperInvariant(d[0]) == letter);
-        return volume?.DiskNumber is { } n ? [n] : null;
+        // フォルダのマウントポイント (C:\mnt\evidence\ に別のボリューム) は、いちばん長く一致するものを選ぶ。
+        string withSlash = full.EndsWith('\\') ? full : full + "\\";
+        VolumeDeviceInfo? best = null;
+        int bestLength = -1;
+        foreach (VolumeDeviceInfo v in catalog().Volumes)
+        {
+            IEnumerable<string> roots = v.MountPoints;
+            if (v.DriveLetter is { Length: > 0 } d)
+            {
+                roots = roots.Append(char.ToUpperInvariant(d[0]) + @":\");
+            }
+
+            foreach (string mount in roots)
+            {
+                string m = mount.EndsWith('\\') ? mount : mount + "\\";
+                if (m.Length > bestLength && withSlash.StartsWith(m, StringComparison.OrdinalIgnoreCase))
+                {
+                    best = v;
+                    bestLength = m.Length;
+                }
+            }
+        }
+
+        return best?.DiskNumber is { } n ? [n] : null;
     }
 
     public IReadOnlyList<int>? DisksOfDevice(string devicePath)
@@ -77,7 +95,7 @@ public sealed class CatalogDiskLocator(Func<DeviceCatalog> catalog) : IDiskLocat
             return [disk];
         }
 
-        VolumeDeviceInfo? volume = catalog().FindVolume(devicePath);
+        VolumeDeviceInfo? volume = EvidenceOverlap.FindVolume(catalog(), devicePath);
         return volume?.DiskNumber is { } n ? [n] : null;
     }
 

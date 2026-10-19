@@ -40,7 +40,25 @@ public static class NtfsLogFile
     public static string OperationName(ushort op) => op < Operations.Length ? Operations[op] : $"0x{op:X2}";
 
     /// <summary>$LogFile の内容 (MFT レコード 2 の名前なしの $DATA)。</summary>
-    public static IVolumeReader? Open(NtfsFileSystem fs) => fs.FindById("mft:2") is { } entry ? fs.OpenContent(entry) : null;
+    public static IVolumeReader? Open(NtfsFileSystem fs)
+    {
+        if (fs.FindById("mft:2") is not { } entry)
+        {
+            return null;
+        }
+
+        IVolumeReader content = fs.OpenContent(entry);
+
+        // 壊れたレコードの大きさ (実サイズ) がランの範囲を大きく超えると、ログのページの走査がランのない (0 の) 範囲を延々と読む。
+        // ログはランのある範囲 (割り当てた大きさ) までに限る。
+        // ランの長さそのものが壊れていても、ボリュームより大きなログはない。
+        if (content is NtfsStreamReader stream && stream.BoundedLength(fs.Volume.Length) is var bounded && bounded < content.Length)
+        {
+            return new SubVolumeReader(content, 0, bounded);
+        }
+
+        return content;
+    }
 
     /// <summary>リスタート領域 (ページ 0 と 1)。</summary>
     public static IReadOnlyList<NtfsRestartArea> ReadRestartAreas(IVolumeReader log, int sectorSize = 512)

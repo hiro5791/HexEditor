@@ -303,6 +303,7 @@ public static partial class AcquisitionLog
     /// <summary>取得ログを書く (UTF-8、BOM 付き。メモ帳でも文字化けしないように)。一時ファイルに書いてから置き換える。</summary>
     public static void Write(string path, AcquisitionLogData data, AcquisitionLogText text)
     {
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
         string temp = path + ".tmp";
         File.WriteAllText(temp, Build(data, text), new UTF8Encoding(true));
         File.Move(temp, path, overwrite: true);

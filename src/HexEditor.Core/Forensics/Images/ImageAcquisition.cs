@@ -737,6 +737,8 @@ public static class ImageAcquisition
         public RawSink(string path, long length, bool sparse)
         {
             _path = Path.GetFullPath(path);
+            // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(_path);
             _length = length;
             Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
             _handle = File.OpenHandle(_path, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
@@ -833,6 +835,7 @@ public static class ImageAcquisition
             }
 
             string path = SplitRawNaming.SegmentPath(_base, index + 1);
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             // 初めて開くときは作り直し (古いファイルを切り詰める)、閉じた後に開き直すときは内容を残す。
             bool created = _created.Add(index);

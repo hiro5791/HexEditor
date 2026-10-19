@@ -249,7 +249,8 @@ public sealed record CarvingSignature
                 folder = folder.Replace("--", "-", StringComparison.Ordinal);
             }
 
-            return folder.Length == 0 ? "unknown" : folder;
+            // 予約されたデバイス名 (con、nul など) はフォルダ名にできないので直す。
+            return folder.Length == 0 ? "unknown" : FileSystems.FileExporter.SafeName(folder);
         }
     }
 

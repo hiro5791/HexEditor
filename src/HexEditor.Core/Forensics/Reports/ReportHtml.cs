@@ -42,6 +42,7 @@ internal sealed class TableAttachment : IDisposable
             }
 
             Path = System.IO.Path.Combine(_folder, _prefix + _table.AttachmentName);
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(Path);
             _writer = new StreamWriter(new FileStream(Path, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false));
             WriteRow(_table.Columns);
             foreach (IReadOnlyList<string> r in _head)

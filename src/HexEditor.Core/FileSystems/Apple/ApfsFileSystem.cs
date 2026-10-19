@@ -272,12 +272,16 @@ public sealed class ApfsFileSystem : FileSystemBase
 
         int keyAt = n.KeyStart + k;
         int valueAt = n.ValueEnd - v;
-        if (keyAt < n.KeyStart || keyAt + kl > n.ValueEnd || valueAt < n.KeyStart || valueAt + vl > n.ValueEnd || v == 0xFFFF)
+        // キーは必ず 8 バイトの見出し (oid と種類) で始まる。それより短いキーは壊れたエントリとして読まない。
+        if (kl < 8 || keyAt < n.KeyStart || keyAt + kl > n.ValueEnd || valueAt < n.KeyStart || valueAt + vl > n.ValueEnd || v == 0xFFFF)
         {
             return null;
         }
 
-        return (n.Data.AsSpan(keyAt, kl).ToArray(), n.Data.AsSpan(valueAt, vl).ToArray());
+        // キーの続きの欄 (xid・名前の長さ・論理位置) を読む側が範囲外を読まないよう、短いキーは 0 で 16 バイトまで埋める。
+        byte[] key = new byte[Math.Max(kl, 16)];
+        n.Data.AsSpan(keyAt, kl).CopyTo(key);
+        return (key, n.Data.AsSpan(valueAt, vl).ToArray());
     }
 
     /// <summary>

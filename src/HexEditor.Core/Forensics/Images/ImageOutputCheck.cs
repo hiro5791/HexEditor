@@ -128,6 +128,7 @@ public static class RangesCsv
 
     public static void Write(string path, IEnumerable<SectorRange> ranges)
     {
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
         var s = new StringBuilder(Header).Append("\r\n");
         foreach (SectorRange r in ranges)
         {

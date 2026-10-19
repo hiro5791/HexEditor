@@ -250,6 +250,8 @@ public sealed class EwfWriter : IDisposable
         }
 
         string path = EwfFormat.SegmentPath(_first, _segment);
+        // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
         _stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.Read, 1 << 20);
         _files.Add(path);
         _stream.Write(EwfFormat.FileHeader(_segment));

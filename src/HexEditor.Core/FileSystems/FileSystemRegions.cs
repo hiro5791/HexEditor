@@ -359,6 +359,13 @@ public static class FileSystemExtraction
     {
         long written = 0;
         byte[] buffer = new byte[1 << 20];
+        // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(outputPath);
+        if (writeMap)
+        {
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(outputPath + ".map.csv");
+        }
+
         using var output = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None, 1 << 16);
         using StreamWriter? map = writeMap ? new StreamWriter(outputPath + ".map.csv", false, new UTF8Encoding(false)) : null;
         map?.Write("ExportOffset,DiskOffset,Length,Path\r\n");
@@ -425,8 +432,8 @@ public static class FileSystemExtraction
         return null;
     }
 
-    internal static string Csv(string value) =>
-        value.IndexOfAny([',', '"', '\r', '\n']) >= 0 ? "\"" + value.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"" : value;
+    /// <summary>CSV の 1 つの欄。名前はイメージの中の信頼できない値なので、式として解釈される先頭の文字 (= + - @) も無害にする。</summary>
+    internal static string Csv(string value) => Forensics.Audit.AuditExporter.CsvEscape(value);
 }
 
 /// <summary>
@@ -564,7 +571,14 @@ public static class FileExporter
             Collect(fs, e, string.Empty, options, files, 0, cancellationToken);
         }
 
-        long required = files.Sum(f => f.Entry.Size + (options.IncludeSlack ? fs.ClusterSize : 0));
+        // 大きさはイメージの中の信頼できない値: 合計はあふれないように頭打ちにする (Sum は OverflowException になる)。
+        long required = 0;
+        foreach ((FsEntry entry, _) in files)
+        {
+            long add = Math.Max(0, entry.Size) + (options.IncludeSlack ? Math.Max(0, fs.ClusterSize) : 0);
+            required = add > long.MaxValue - required ? long.MaxValue : required + add;
+        }
+
         long available = (freeSpace ?? DefaultFreeSpace)(outputFolder);
         if (available >= 0 && required > available)
         {
@@ -578,6 +592,14 @@ public static class FileExporter
         {
             cancellationToken.ThrowIfCancellationRequested();
             string destination = Unique(Path.Combine(outputFolder, relative), used);
+
+            // 名前は SafeName で直してあるが、念のため書き出し先のフォルダの外に出ないことを確かめる (多重の防御)。
+            if (!IsInside(outputFolder, destination))
+            {
+                throw new IOException("The export path leaves the output folder: " + relative);
+            }
+
+            Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(destination);
             Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
             IVolumeReader content = fs.OpenContent(entry);
             (string md5, string sha, List<(long, long)> bad) = Copy(content, Math.Min(entry.Size, content.Length), destination, n => progress?.Invoke(done + n),
@@ -661,7 +683,8 @@ public static class FileExporter
     private static readonly HashSet<string> Reserved = new(StringComparer.OrdinalIgnoreCase)
     {
         "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
-        "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+        "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "COM0", "LPT0", "CONIN$", "CONOUT$",
+        "COM¹", "COM²", "COM³", "LPT¹", "LPT²", "LPT³",
     };
 
     /// <summary>ファイルシステムの名前を、書き出し先のフォルダの外に出ない安全な名前にする (区切り・予約名・末尾の点を直す)。</summary>
@@ -679,13 +702,21 @@ public static class FileExporter
             result = "_";
         }
 
-        string stem = result.Split('.')[0];
+        string stem = result.Split('.')[0].TrimEnd(' ');
         if (Reserved.Contains(stem))
         {
             result = "_" + result;
         }
 
         return result.Length > 200 ? result[..200] : result;
+    }
+
+    /// <summary><paramref name="path"/> が <paramref name="folder"/> の中か (完全パスで比べる)。</summary>
+    internal static bool IsInside(string folder, string path)
+    {
+        string root = Path.GetFullPath(folder);
+        root = root.EndsWith(Path.DirectorySeparatorChar) ? root : root + Path.DirectorySeparatorChar;
+        return Path.GetFullPath(path).StartsWith(root, StringComparison.OrdinalIgnoreCase);
     }
 
     private static string Unique(string path, HashSet<string> used)
@@ -757,6 +788,7 @@ public static class FileExporter
 
     public static void WriteManifest(string path, IReadOnlyList<FileExportRow> rows)
     {
+        Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
         var s = new StringBuilder("SourcePath,FileId,Size,CreatedUtc,ModifiedUtc,AccessedUtc,MD5,SHA256,Destination,Status,UnreadableRanges\r\n");
         foreach (FileExportRow r in rows)
         {

@@ -29,6 +29,30 @@ public sealed class NtfsStreamReader : IVolumeReader
 
     public long Length { get; }
 
+    /// <summary>ランのある範囲の大きさ (割り当てた大きさ。あふれる値のランは数えない)。</summary>
+    public long AllocatedLength
+    {
+        get
+        {
+            long allocated = 0;
+            foreach (NtfsRun run in _runs)
+            {
+                if (run.Vcn >= 0 && run.Length > 0 && _clusterSize > 0 && run.Vcn <= long.MaxValue / _clusterSize - run.Length)
+                {
+                    allocated = Math.Max(allocated, (run.Vcn + run.Length) * _clusterSize);
+                }
+            }
+
+            return allocated;
+        }
+    }
+
+    /// <summary>
+    /// 壊れたレコードの実サイズがランの範囲・ボリュームを大きく超えるとき、走査 (MFT のレコード、$LogFile のページ) をランのある範囲までに
+    /// 限るための長さ: min(実サイズ, 割り当てた大きさ, <paramref name="volumeLength"/>)。
+    /// </summary>
+    public long BoundedLength(long volumeLength) => Math.Min(Length, Math.Min(AllocatedLength, Math.Max(0, volumeLength)));
+
     public IReadOnlyList<NtfsRun> Runs => _runs;
 
     public bool IsCompressed => _unitClusters > 0;
