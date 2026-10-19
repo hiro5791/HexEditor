@@ -9,7 +9,7 @@ HexEditor only reads the file system. It never creates, deletes, renames or unde
 1. Open a volume, a partition tab, or an image of a volume. On a disk, put the cursor in the partition first, or use **Show file system** in the **Partitions** panel.
 2. Select **Forensics > File system > Show browser**.
 
-HexEditor detects the type from the first sectors. If it cannot, it asks you to choose the type. An encrypted (BitLocker) volume is not opened.
+HexEditor detects the type from the first sectors. If it cannot, it asks you to choose the type. An encrypted volume (BitLocker, LUKS and others) is not opened; HexEditor says which encryption it found. In an APFS container, only the encrypted volumes are hidden.
 
 The **File system** panel has:
 
@@ -18,7 +18,7 @@ The **File system** panel has:
 - the file list, with a filter box (part of the name, or wildcards `*` and `?`) and a **Find files** box that searches the whole volume,
 - the details of the selected item, with its fragments.
 
-Folders are read when you open them, and the list fills in while it is read, so even a folder with a million files does not freeze the window. Select **Columns** to show or hide columns. Times are shown in UTC. FAT times have no time zone, so they are shown with `~`.
+Folders are read when you open them, and the list fills in while it is read, so even a folder with a million files does not freeze the window. Select **Columns** to show or hide columns. Times are shown in two columns, UTC and local time. Local time uses the time zone of the open case, or the Windows time zone when no case is open. To show only one of them, change **Tools > Settings > Forensics > Date and time display**. FAT times have no time zone: they are read as local time in that time zone and shown with `~`.
 
 Select the root (no file selected) to see the summary: type, label, serial number, cluster size, total and free clusters, and all the boot sector fields.
 

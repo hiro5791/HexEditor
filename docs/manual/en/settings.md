@@ -21,6 +21,7 @@ Categories are on the left and settings on the right.
 | **Accessibility** | Screen reader announcements |
 | **Automation** | Scripts and plug-ins |
 | **Disassembly** | Syntax, number format and columns of the [disassembly](disassembly.md#display-options) |
+| **Forensics** | Cases, write protection, audit log, date and time display, carving, reports, partitions and file systems |
 | **Updates** | Automatic updates and channel |
 | **Privacy** | Features that use the network |
 | **Explorer integration** | Right-click menu and file associations |

@@ -26,25 +26,6 @@ public sealed class ReportTests : IDisposable
 
     public void Dispose() => Directory.Delete(_dir, recursive: true);
 
-    private sealed class DiagramContributor : IReportContributor
-    {
-        public string SectionId => ReportSections.Partitions;
-
-        public ReportSection? Build(ReportContext context) => new(ReportSections.Partitions, context.T("Section_partitions"),
-        [
-            new ReportDiagram("Layout", 64 * 1024 * 1024, [new DiagramSegment("EFI", 1024 * 1024, 2 * 1024 * 1024, 0), new DiagramSegment("Data", 3 * 1024 * 1024, 16 * 1024 * 1024, 1)]),
-            new ReportTable(["Name", "Start", "Length"], [["EFI", "2048", "2048"], ["Data", "4096", "32768"]]),
-        ]);
-    }
-
-    private sealed class FileSystemContributor : IReportContributor
-    {
-        public string SectionId => ReportSections.FileSystem;
-
-        public ReportSection? Build(ReportContext context) =>
-            new(ReportSections.FileSystem, context.T("Section_filesystem"), [new ReportKeyValues([new("Type", "NTFS"), new("Label", "NTFSPART")])]);
-    }
-
     private (CaseManager Manager, ForensicCase Case, string AuditPath) NewCase(out ForensicAudit audit)
     {
         var identity = new AuditIdentity("tester", "PC", "1.0");
@@ -100,9 +81,14 @@ public sealed class ReportTests : IDisposable
         // カービングのマニフェストと、他の領域の節 (パーティションの配置図、ファイルシステムの概要) も入れる。
         string manifest = Path.Combine(_dir, "carving-manifest.csv");
         File.WriteAllLines(manifest, ["Number,Type,Offset,LBA,Length,LengthMethod,MD5,SHA256,OutputPath", "1,JPEG,1048576,2048,415,Structure,aa,bb,jpeg/0000000000100000.jpg"]);
+        // パーティション (FOR-06) とファイルシステム (FOR-09) の節は、アプリと同じ部品 (PartitionReportContributor・FileSystemReportContributor) が
+        // TD-FOR-GPT の解析と TD-FOR-NTFS のファイルシステムから作る。
+        var gpt = new HexEditor.Core.Tests.FileSystems.SparseImageReader(HexEditor.TestData.FileSystemImages.FileSystemImageSet.Image("TD-FOR-GPT"));
+        HexEditor.Core.FileSystems.Partitions.PartitionAnalysis partitions = HexEditor.Core.FileSystems.Partitions.PartitionAnalyzer.Analyze(gpt, 512);
+        HexEditor.Core.FileSystems.IFileSystem ntfs = HexEditor.Core.Tests.FileSystems.FsTestImages.Open("TD-FOR-NTFS");
         var registry = new ReportRegistry();
-        registry.Register(new DiagramContributor());
-        registry.Register(new FileSystemContributor());
+        registry.Register(new PartitionReportContributor(() => [("TD-FOR-GPT", partitions)]));
+        registry.Register(new FileSystemReportContributor(() => [("TD-FOR-NTFS", 0L, ntfs)], () => []));
         ReportInput input = InputOf(c, bookmarks, manifest) with { Registry = registry };
         ReportResult result = ReportBuilder.Create(input, OptionsOf(c, ReportFormat.Html, audit));
 

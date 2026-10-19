@@ -9449,7 +9449,6 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Encrypted with EFS (raw data only).</value></data>
   <data name="Fs_AssumedContiguous" xml:space="preserve"><value>The cluster chain is gone; the data is read as contiguous clusters from the first cluster.</value></data>
   <data name="Fs_IndexSlack" xml:space="preserve"><value>index slack entry</value></data>
-  <data name="Fs_InvalidTime" xml:space="preserve"><value>invalid time</value></data>
   <data name="Fs_Counting" xml:space="preserve"><value>counting…</value></data>
   <data name="Fs_Fragment" xml:space="preserve"><value>Logical {0}  cluster {1} ×{2}  disk {3}  {4} bytes</value></data>
   <data name="Fs_FragmentResident" xml:space="preserve"><value>Logical {0}  in metadata  disk {3}  {4} bytes</value></data>

@@ -71,6 +71,22 @@ public sealed class ForensicsIntegrationTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-FOR-01-06")]
+    public Task Creating_partition_entries_is_refused_while_write_protection_is_on() => UiTestContext.RunAsync(async ctx =>
+    {
+        // パーティション表のエントリの作成 (FOR-08 の仕様 4) は、書き込み保護モードの間は断る (FOR-01 の仕様 2: パーティションの書き込み)。
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = ForensicsCaseTests.En });
+        await app.SendAsync("fsOpenImage", new JsonObject { ["path"] = ctx.CopyTestData("TD-FOR-LOST-PART"), ["sectorSize"] = 512, ["readOnly"] = false });
+        JsonObject scan = await app.SendAsync("fsScan", null, UiTest.Scaled(TimeSpan.FromSeconds(120)));
+        Assert.NotEmpty(scan["rows"]!.AsArray());
+        await app.SendAsync("tcWriteBlock", ToolsCalcTests.Args("enable"));
+
+        JsonObject refused = await app.SendAsync("fsResults", new JsonObject { ["select"] = new JsonArray(0), ["action"] = "createMbr" });
+        Assert.False(refused["created"]!.GetValue<bool>());
+        Assert.False(refused["modified"]!.GetValue<bool>());
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-FOR-04-01")]
     public Task Creating_an_image_writes_start_and_end_lines_with_the_hashes_to_the_case_audit_log() => UiTestContext.RunAsync(async ctx =>
     {

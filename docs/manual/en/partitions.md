@@ -9,7 +9,7 @@ When you open a disk or a disk image, HexEditor reads the partition tables and s
 1. Open a disk, or select **File > Open as disk image** and choose an image file.
 2. The **Partitions** panel shows a bar with the layout of the disk, a list of the partitions, and details of the selected row.
 
-The list shows the number, format (MBR, logical, GPT, APM, BSD), type, name, start and end LBA, sector count, size, start offset, flags, the file system found at the start, and the state. Gaps of 1 MiB or more appear as **Unallocated** rows.
+The list shows the number, format (MBR, logical, GPT, APM, BSD), type, name, start and end LBA, sector count, size, start offset, flags, the file system found at the start, and the state. Gaps of 1 MiB or more appear as **Unallocated** rows. When a partition is encrypted (BitLocker, LUKS, FileVault, Core Storage, or data that looks encrypted), the details show the type of encryption.
 
 HexEditor reads MBR tables with extended partitions, GPT (primary and backup headers), Apple partition maps and BSD disklabels. It only reads a few sectors, so this is fast for disks of any size.
 

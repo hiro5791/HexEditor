@@ -943,6 +943,9 @@ jobs:
   # ENG-14、ENG-28、ENG-32、PKG-04、PKG-14、UI-34)。ランナーのテストのプロセスは管理者として動く。TD-VHDX-MBR を作って接続し
   # (Mount-TestVhd.ps1。UAC は「確認なしで昇格」)、配布形態ごとにテスト用のビルドを入れて実行する。テストは HEXEDITOR_CI_PRIVILEGED=1 の
   # ときだけ動き (開発者の PC ではスキップ)、配布形態 (HEXEDITOR_APP_DISTRO) ごとに担当のケースだけを実行する。毎晩と手動の実行だけ。
+  # フェーズ 5 (12 のフォレンジック) の特権のテスト: PrivilegedTests.WriteBlock、ForensicImagePrivilegedTests (クローン・復元)、
+  # PrivilegedWipeTests (空き領域・スラックの消去。自分で作る VHD)、PrivilegedFileSystemTests (Windows でフォーマットした VHD との突き合わせ)、
+  # カービングの出力先の検査 (TC-FOR-19-04) と証拠のディスクの追加 (TC-FOR-03-02)。
   ui-privileged:
     needs: build-test
     runs-on: windows-latest

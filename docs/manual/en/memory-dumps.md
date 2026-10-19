@@ -4,7 +4,7 @@ Open memory dumps that other tools have taken, and read them by physical or virt
 
 ## Open a memory dump {#open}
 
-1. Run **File: Open memory dump** from the command palette, or select **File > Open with options...** and choose the format **Memory dump**.
+1. Select **Forensics > Open memory dump**, run **File: Open memory dump** from the command palette, or select **File > Open with options...** and choose the format **Memory dump**.
 2. Choose the dump file.
 
 HexEditor recognizes the format from the start of the file:

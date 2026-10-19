@@ -9449,7 +9449,6 @@ SHA-256 のフィンガープリント: {2}
   <data name="Fs_EfsEncrypted" xml:space="preserve"><value>EFS で暗号化されています (生データだけを扱います)。</value></data>
   <data name="Fs_AssumedContiguous" xml:space="preserve"><value>クラスタのチェーンが消えているため、先頭クラスタから連続したクラスタと仮定して読みます。</value></data>
   <data name="Fs_IndexSlack" xml:space="preserve"><value>インデックススラックのエントリ</value></data>
-  <data name="Fs_InvalidTime" xml:space="preserve"><value>不正な日時</value></data>
   <data name="Fs_Counting" xml:space="preserve"><value>計算中…</value></data>
   <data name="Fs_Fragment" xml:space="preserve"><value>論理 {0}  クラスタ {1} ×{2}  ディスク上 {3}  {4} バイト</value></data>
   <data name="Fs_FragmentResident" xml:space="preserve"><value>論理 {0}  メタデータ内  ディスク上 {3}  {4} バイト</value></data>
