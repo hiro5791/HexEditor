@@ -12,6 +12,15 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class ForensicsCaseTests
 {
+
+    /// <summary>監査ログはアプリが追記している最中でも読む (共有して開く。File.ReadAllText は書き込み中に共有違反になる)。</summary>
+    private static string ReadShared(string path)
+    {
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
+    }
+
     private static readonly TimeSpan ExitTimeout = TimeSpan.FromSeconds(30);
 
     internal static JsonObject En => new() { ["culture"] = "en-US", ["timeZone"] = "UTC" };
@@ -301,23 +310,23 @@ public sealed class ForensicsCaseTests
         // 閲覧操作は既定では記録しない。
         await app.CommandAsync("Command_GoEnd");
         await app.IdleAsync();
-        Assert.DoesNotContain("browse.jump", File.ReadAllText(log), StringComparison.Ordinal);
+        Assert.DoesNotContain("browse.jump", ReadShared(log), StringComparison.Ordinal);
 
         // 設定を変えると記録され (settings.change)、ジャンプとブックマークの追加が記録される。
         await app.SendAsync("settingSet", new JsonObject { ["key"] = "forensics.audit.logBrowsing", ["value"] = true });
-        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log).Contains("forensics.audit.logBrowsing", StringComparison.Ordinal)),
+        await app.WaitUntilAsync(() => Task.FromResult(ReadShared(log).Contains("forensics.audit.logBrowsing", StringComparison.Ordinal)),
             UiTest.Scaled(TimeSpan.FromSeconds(10)), "the setting change record");
         await app.CommandAsync("Command_GoStart");
         await app.CommandAsync("Command_ToggleBookmark");
-        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log) is var text && text.Contains("browse.jump", StringComparison.Ordinal)
+        await app.WaitUntilAsync(() => Task.FromResult(ReadShared(log) is var text && text.Contains("browse.jump", StringComparison.Ordinal)
             && text.Contains("browse.bookmark", StringComparison.Ordinal)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the browsing records");
 
         // 保存は結果とともに記録される。
         await app.TypeAsync("AA");
         await app.CommandAsync("Command_Save");
-        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log).Contains("write.save", StringComparison.Ordinal)),
+        await app.WaitUntilAsync(() => Task.FromResult(ReadShared(log).Contains("write.save", StringComparison.Ordinal)),
             UiTest.Scaled(TimeSpan.FromSeconds(20)), "the save record");
-        string save = File.ReadAllLines(log).Last(l => l.Contains("write.save", StringComparison.Ordinal));
+        string save = ReadShared(log).Split('\n', StringSplitOptions.RemoveEmptyEntries).Last(l => l.Contains("write.save", StringComparison.Ordinal));
         Assert.Contains("memo.bin", save, StringComparison.Ordinal);
         Assert.Contains("success", save, StringComparison.OrdinalIgnoreCase);
     });

@@ -698,6 +698,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
         _timer?.Stop();
         CancelComputation();
+        // 世代: 取り消した前の計算が、取り消しより先に終わっていると、あとから結果を表に足してしまう (行が二重になる)。
+        int generation = ++_computeGeneration;
         IReadOnlyList<HashRange>? ranges = ResolveRanges();
         HashAlgorithmChoice[] selected = [.. Algorithms.Where(a => a.IsChecked && a.IsAvailable).Select(a => a.Choice)];
 
@@ -744,7 +746,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
                 op.ProgressChanged += (_, _) => _queue?.TryEnqueue(() => ShowProgress(op));
                 return Task.FromResult(HashEngine.Compute(snapshot, request, op));
             });
-            if (!ReferenceEquals(_target, doc))
+            if (!ReferenceEquals(_target, doc) || generation != _computeGeneration)
             {
                 return;
             }
@@ -1122,6 +1124,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
         Progress = op.Fraction ?? 0;
         SpeedText = Loc.Format("Hash_Speed", (op.BytesPerSecond / (1024 * 1024)).ToString("N0", CultureInfo.CurrentCulture));
     }
+
+    private int _computeGeneration;
 
     private void CancelComputation()
     {
