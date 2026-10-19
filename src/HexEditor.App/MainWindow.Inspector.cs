@@ -538,6 +538,7 @@ public sealed partial class MainWindow
             ExtendHexViewScriptMenu(menu);
             ExtendHexViewPluginMenu(menu);
             ExtendHexViewForensicsMenu(menu);
+            ExtendHexViewWipeMenu(menu);
         });
     }
 

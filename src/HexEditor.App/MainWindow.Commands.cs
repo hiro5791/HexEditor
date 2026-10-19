@@ -158,6 +158,7 @@ public sealed partial class MainWindow
         RegisterTabCommands();
         RegisterDeviceCommands();
         RegisterFileSystemCommands();
+        RegisterWipeCommands();
         HookForensicStatus();
 
         // ---- 編集 ----

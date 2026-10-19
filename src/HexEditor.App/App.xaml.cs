@@ -148,6 +148,7 @@ public partial class App : Application
         MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
         MainWindow.RegisterFileSystemPanels();
+        Core.Wiping.WipeForensics.Hooks = Services.AppWipeForensicHooks.Instance;
         MainWindow.RegisterDisassemblyPanel();
         MainWindow.RegisterPacketsPanel();
 
