@@ -28,6 +28,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Comparing folders](folder-compare.md)
 - [Split, join and interleave files](split-join.md)
 - [Secure delete](secure-delete.md)
+- [Disk images and clones](disk-images.md)
 - [NTFS alternate data streams](alternate-streams.md)
 - [Data operations](data-operations.md)
 - [Transform view](transform-view.md)
