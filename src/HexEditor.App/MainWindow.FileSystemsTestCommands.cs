@@ -316,7 +316,8 @@ public sealed partial class MainWindow
             case "fsCommandNames":
                 return new JsonObject
                 {
-                    ["names"] = new JsonArray([.. Core.Commands.BuiltInCommands.All.Where(c => c.Category == "forensics")
+                    ["names"] = new JsonArray([.. Core.Commands.BuiltInCommands.All
+                        .Where(c => c.Id.StartsWith("forensics.fs.", StringComparison.Ordinal) || c.Id.StartsWith("forensics.partitions.", StringComparison.Ordinal))
                         .Select(c => (JsonNode?)(Loc.Get(c.CategoryKey) + ": " + Loc.Get(c.NameKey)))]),
                 };
 

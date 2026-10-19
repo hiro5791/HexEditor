@@ -187,7 +187,20 @@ public sealed class WipeUiTests
         {
             await app.CommandAsync("Command_WipeDisk");
             await app.WaitForAsync("WipeDiskDialog");
-            await app.SendAsync("dialogButton", new JsonObject { ["name"] = "PrimaryButton" });
+
+            // 前のダイアログが閉じた直後はボタンがまだ並んでいないことがあるので、押せるまで待つ。
+            await app.WaitUntilAsync(async () =>
+            {
+                try
+                {
+                    await app.SendAsync("dialogButton", new JsonObject { ["name"] = "PrimaryButton" });
+                    return true;
+                }
+                catch (InvalidOperationException)
+                {
+                    return false;
+                }
+            }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the Next button of the wipe dialog");
             await WaitConfirmAsync(app);
         }
 

@@ -57,6 +57,9 @@ internal sealed class AppWipeForensicHooks : IWipeForensicHooks
 
     public void Audit(string operation, string target, WipeAuditOutcome outcome, IReadOnlyDictionary<string, string> details)
     {
+        // アプリのログにも残す (ケースを開いていないときの診断用)。
+        AppLog.Info(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+            $"Audit {operation} {outcome} target={target} {string.Join(' ', details.Select(d => d.Key + "=" + d.Value))}"));
         var parameters = new List<KeyValuePair<string, string>>(details) { new("outcome", outcome.ToString()) };
         ForensicsService.Audit.Record(new AuditRecord(operation)
         {

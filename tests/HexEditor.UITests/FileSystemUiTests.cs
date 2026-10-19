@@ -335,7 +335,8 @@ public sealed class FileSystemUiTests
         foreach (string text in menu.Concat(names["names"]!.AsArray().Select(n => n!.GetValue<string>())))
         {
             string lower = text.ToLowerInvariant();
-            Assert.DoesNotContain(forbidden, w => lower.Contains(w, StringComparison.Ordinal));
+            // 単語として探す (「Encryption information」の「format」などは対象外)。
+            Assert.DoesNotContain(forbidden, w => System.Text.RegularExpressions.Regex.IsMatch(lower, @"\b" + System.Text.RegularExpressions.Regex.Escape(w) + @"\b"));
         }
     });
 }

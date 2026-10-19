@@ -620,7 +620,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         }
     }
 
-    private static readonly int[] Widths = [40, 6, 14, 14, 26, 26, 26, 26, 8, 12, 12, 6, 10, 40, 40, 16];
+    private static readonly int[] Widths = [40, 6, 14, 14, 34, 34, 34, 34, 8, 12, 12, 6, 10, 40, 40, 16];
 
     private static bool IsTimeColumn(FsColumn column) => column is FsColumn.Created or FsColumn.Modified or FsColumn.Accessed or FsColumn.Changed;
 
