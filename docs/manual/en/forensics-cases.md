@@ -14,7 +14,7 @@ Only one case can be open at a time. To open an existing case, select **Forensic
 
 While a case is open, its name is shown in the window title and in the status bar.
 
-When you open a case, HexEditor turns on write-protect mode, or asks you whether to turn it on. You can choose which in **Settings > Forensics**.
+When you open a case, HexEditor turns on [write-protect mode](write-protection.md), or asks you whether to turn it on. You can choose which in **Settings > Forensics**.
 
 ## Add evidence {#evidence}
 
