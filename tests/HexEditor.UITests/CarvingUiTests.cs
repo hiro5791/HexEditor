@@ -177,7 +177,19 @@ public sealed class CarvingUiTests
 
         // 3. 処理センターでキャンセルする。
         await app.UiaInvokeAsync("Status_Operations");
-        (await app.WaitForAsync("Operations_Cancel")).Patterns.Invoke.Pattern.Invoke();
+        // 要素ができても、Invoke の実装はポップアップの配置が済むまで使えないことがある。使えるまで試す。
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                (await app.WaitForAsync("Operations_Cancel")).Patterns.Invoke.Pattern.Invoke();
+                return true;
+            }
+            catch (FlaUI.Core.Exceptions.PatternNotSupportedException)
+            {
+                return false;
+            }
+        }, UiTest.Scaled(TimeSpan.FromSeconds(15)), "the cancel button of the operations flyout");
         await app.WaitUntilAsync(async () => !(await ForensicsCaseTests.Carve(app, "state"))["running"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the carving to stop");
 
         // 4. マニフェストが残っていて、ヘッダー行がある。
