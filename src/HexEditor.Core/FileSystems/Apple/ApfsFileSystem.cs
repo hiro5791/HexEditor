@@ -289,10 +289,16 @@ public sealed class ApfsFileSystem : FileSystemBase
         var stack = new Stack<(long Block, int Depth)>();
         stack.Push((rootBlock, 0));
         int visited = 0;
-        var results = new List<(byte[], byte[])>();
+        var seen = new HashSet<long>();
         while (stack.Count > 0 && visited++ < MaxNodes)
         {
             (long block, int depth) = stack.Pop();
+            if (!seen.Add(block))
+            {
+                // 同じノードを 2 回たどらない (壊れた木の循環・共有への備え)。
+                continue;
+            }
+
             if (depth > MaxTreeDepth || ReadNode(block) is not { } node)
             {
                 bad?.Add(block);
@@ -343,7 +349,6 @@ public sealed class ApfsFileSystem : FileSystemBase
             }
         }
 
-        _ = results;
     }
 
     private static long? Physical(ulong oid) => (long)oid;
