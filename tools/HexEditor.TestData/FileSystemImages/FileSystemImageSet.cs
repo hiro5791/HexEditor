@@ -329,6 +329,19 @@ public static class FileSystemImageSet
         return (b.Build(), b);
     });
 
+    /// <summary>TD-FOR-LDM-STRIPE-VOL (2 台のストライプのボリューム。60 MiB)。</summary>
+    public static SparseImage LdmStripeVolume() => Cached("ldm-vol", LogicalVolumeImages.LdmStripeVolume);
+
+    /// <summary>TD-FOR-LVM-LINEAR-LV の内容 (56 MiB)。</summary>
+    public static byte[] LvmLinearVolume() => Cached("lvm-lv", LogicalVolumeImages.LvmLinearVolume);
+
+    private static SparseImage FromBytes(byte[] data)
+    {
+        var image = new SparseImage(data.Length);
+        image.Write(0, data);
+        return image;
+    }
+
     /// <summary>ID からメモリ上のイメージを作る。</summary>
     public static SparseImage Image(string id) => id switch
     {
@@ -356,6 +369,12 @@ public static class FileSystemImageSet
         "TD-FOR-HFSPLUS" => HfsPlus().Image,
         "TD-FOR-APFS" => Apfs().Image,
         "TD-FOR-APFS-ENC" => ApfsEncrypted().Image,
+        "TD-FOR-LDM-STRIPE-A" => Cached(id, () => LogicalVolumeImages.LdmStripeDisk(0, LdmStripeVolume())),
+        "TD-FOR-LDM-STRIPE-B" => Cached(id, () => LogicalVolumeImages.LdmStripeDisk(1, LdmStripeVolume())),
+        "TD-FOR-LDM-STRIPE-VOL" => LdmStripeVolume(),
+        "TD-FOR-LVM-LINEAR-A" => Cached(id, () => LogicalVolumeImages.LvmLinearPv(0, LvmLinearVolume())),
+        "TD-FOR-LVM-LINEAR-B" => Cached(id, () => LogicalVolumeImages.LvmLinearPv(1, LvmLinearVolume())),
+        "TD-FOR-LVM-LINEAR-LV" => Cached(id, () => FromBytes(LvmLinearVolume())),
         _ => throw new ArgumentException(id),
     };
 
@@ -370,6 +389,10 @@ public static class FileSystemImageSet
         "TD-FOR-FAT32" or "TD-FOR-FAT32-FATDIFF" or "TD-FOR-FAT32-LOOP" => 512 * MiB,
         "TD-FOR-NTFS-1M" => 4096 * MiB,
         "TD-FOR-EXT2" or "TD-FOR-EXT3" or "TD-FOR-EXT4" or "TD-FOR-UDF250" or "TD-FOR-APFS" or "TD-FOR-APFS-ENC" => 64 * MiB,
+        "TD-FOR-LDM-STRIPE-A" or "TD-FOR-LDM-STRIPE-B" => 64 * MiB,
+        "TD-FOR-LDM-STRIPE-VOL" => 2 * LogicalVolumeImages.LdmPartitionSectors * 512,
+        "TD-FOR-LVM-LINEAR-A" or "TD-FOR-LVM-LINEAR-B" => 32 * MiB,
+        "TD-FOR-LVM-LINEAR-LV" => 2 * LogicalVolumeImages.LvmExtentsPerPv * LogicalVolumeImages.LvmExtentSectors * 512,
         "TD-FOR-ISO-JRR" => 512 * 2048,
         "TD-FOR-HFSPLUS" => 32 * MiB,
         _ => throw new ArgumentException(id),
@@ -381,5 +404,6 @@ public static class FileSystemImageSet
         "TD-FOR-NTFS", "TD-FOR-NTFS-BADFIXUP", "TD-FOR-NTFS-BADTIME", "TD-FOR-NTFS-OVERWRITE", "TD-FOR-NTFS-FAT32", "TD-FOR-LOST-PART",
         "TD-FOR-FAT12", "TD-FOR-FAT16", "TD-FOR-FAT32", "TD-FOR-FAT32-FATDIFF", "TD-FOR-FAT32-LOOP", "TD-FOR-EXFAT",
         "TD-FOR-EXT2", "TD-FOR-EXT3", "TD-FOR-EXT4", "TD-FOR-ISO-JRR", "TD-FOR-UDF250", "TD-FOR-HFSPLUS", "TD-FOR-APFS", "TD-FOR-APFS-ENC",
+        "TD-FOR-LDM-STRIPE-A", "TD-FOR-LDM-STRIPE-B", "TD-FOR-LDM-STRIPE-VOL", "TD-FOR-LVM-LINEAR-A", "TD-FOR-LVM-LINEAR-B", "TD-FOR-LVM-LINEAR-LV",
     ];
 }
