@@ -94,7 +94,8 @@ public sealed class EditorExpressionContext(EditorState editor) : IExpressionCon
     /// <summary>ディスクは論理セクタサイズ、ファイルは表示設定の値 (既定 512)。</summary>
     public int SectorSize => editor.SectorSize;
 
-    public long? ClusterSize => null;
+    /// <summary>ファイルシステムを解析しているドキュメントのクラスタサイズ (FOR-15、00 の 6.2)。</summary>
+    public long? ClusterSize => FileSystems.FileSystemSession.ClusterSizeFor(editor.Document);
 
     /// <summary>レコード長 (VIEW-18 の仕様 8。レコード表示がオフでも最後に設定した値を使う)。</summary>
     public long? RecordLength => editor.View.RecordLength;
