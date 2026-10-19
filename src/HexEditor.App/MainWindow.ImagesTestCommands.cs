@@ -152,6 +152,48 @@ public sealed partial class MainWindow
                 return new JsonObject { ["started"] = true };
             }
 
+            case "imgRaid":
+            {
+                // 表示中の RAID のダイアログの種類・ストライプサイズ・順番を変え、判定結果の表示を返す。
+                if (ImgRaidControls is not { } c)
+                {
+                    return new JsonObject { ["error"] = "no RAID dialog" };
+                }
+
+                if (request["level"] is { } level)
+                {
+                    c.Level.SelectedIndex = level.GetValue<int>();
+                }
+
+                if (request["stripe"] is { } stripe)
+                {
+                    c.Stripe.SelectedIndex = Array.IndexOf(ImgStripeSizes, stripe.GetValue<long>());
+                }
+
+                if (request["keep"] is JsonArray keep)
+                {
+                    var names = keep.Select(n => n!.GetValue<string>()).ToList();
+                    foreach (ImgRaidMemberRow row in c.Members.Where(m => !names.Contains(m.Label)).ToList())
+                    {
+                        c.Members.Remove(row);
+                    }
+
+                    c.Refresh();
+                }
+
+                if (request["move"] is JsonArray move)
+                {
+                    c.Move(move[0]!.GetValue<int>(), move[1]!.GetValue<int>());
+                }
+
+                return new JsonObject
+                {
+                    ["detection"] = c.Detection.Text,
+                    ["members"] = new JsonArray([.. c.Members.Select(m => (JsonNode?)m.Label)]),
+                    ["canOpen"] = c.Dialog.IsPrimaryButtonEnabled,
+                };
+            }
+
             case "imgState":
                 return ImageTestState();
         }

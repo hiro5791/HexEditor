@@ -39,6 +39,9 @@ public sealed partial class MainWindow
     /// <summary>テスト用: RAID のダイアログを開いた状態で操作する (並べ替え・種類の変更・判定の確認)。</summary>
     internal Func<ImgRaidDialogControls, Task>? ImgRaidInteraction { get; set; }
 
+    /// <summary>表示中の RAID のダイアログの部品 (テスト用)。</summary>
+    internal ImgRaidDialogControls? ImgRaidControls { get; private set; }
+
     /// <summary>テスト用に公開する RAID のダイアログの部品。</summary>
     internal sealed record ImgRaidDialogControls(ContentDialog Dialog, ObservableCollection<ImgRaidMemberRow> Members, ComboBox Level, ComboBox Stripe, ComboBox Layout,
         ComboBox UseMember, TextBlock Detection, Action Refresh, Action<int, int> Move);
@@ -62,8 +65,8 @@ public sealed partial class MainWindow
     /// <summary>RAID 再構成のダイアログ (FOR-26 の「画面」)。開くを押したら、構成から論理ディスクを作って返す (データは走査しない)。</summary>
     internal async Task<RaidByteSource?> ShowRaidDialogAsync(RaidConfig? initial = null)
     {
+        // 開いているドキュメントをメンバーの候補として並べる (使わないものは「外す」)。
         var members = new ObservableCollection<ImgRaidMemberRow>(Vm.Documents
-            .Where(d => d.Document.Source.LogicalSectorSize > 1 || d.Document.Source is IImageSource)
             .Select(d => new ImgRaidMemberRow(d.FilePath ?? (d.Document.Source is ImageSourceBase img ? img.PrimaryPath : d.Device?.Path ?? d.DisplayName), d.DisplayName, d)));
         if (initial is not null)
         {
@@ -262,12 +265,22 @@ public sealed partial class MainWindow
 
         Refresh();
         Task<ContentDialogResult> shown = dialog.ShowQueuedAsync();
+        ImgRaidControls = new ImgRaidDialogControls(dialog, members, level, stripe, layout, useMember, detection, Refresh, Move);
         if (ImgRaidInteraction is { } interact)
         {
-            await interact(new ImgRaidDialogControls(dialog, members, level, stripe, layout, useMember, detection, Refresh, Move));
+            await interact(ImgRaidControls);
         }
 
-        ContentDialogResult result = await shown;
+        ContentDialogResult result;
+        try
+        {
+            result = await shown;
+        }
+        finally
+        {
+            ImgRaidControls = null;
+        }
+
         if (result != ContentDialogResult.Primary)
         {
             return null;

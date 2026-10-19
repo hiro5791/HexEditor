@@ -925,7 +925,7 @@ jobs:
           HEXEDITOR_CI_PRIVILEGED: "1"
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
           HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests.|FullyQualifiedName~HexEditor.UITests.ForensicImagePrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
       - name: Detach TD-VHDX-MBR
         if: always()
         shell: powershell
