@@ -382,7 +382,7 @@ public sealed partial class MainWindow
         {
             T? content = FindPanelContent<T>(id);
             throw new TimeoutException($"Panel {id} was not loaded: shown={IsPanelShown(id)}, content={(content is null ? "none" : "present")}, "
-                + $"loaded={content?.IsLoaded}, window={Root.ActualWidth:0}x{Root.ActualHeight:0}, document={Vm.Selected?.Name}");
+                + $"loaded={content?.IsLoaded}, window={Root.ActualWidth:0}x{Root.ActualHeight:0}, document={Vm.Selected?.DisplayName}");
         }
 
         return FindPanelContent<T>(id)!;
