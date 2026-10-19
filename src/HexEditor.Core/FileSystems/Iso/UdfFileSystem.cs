@@ -391,7 +391,9 @@ public sealed class UdfFileSystem : FileSystemBase, IFsChoices
         FsCorruptionKind problem = FsCorruptionKind.None;
         if (adStart + lad > d.Length || info < 0)
         {
+            // 拡張属性の長さ (L_EA) が大きすぎると記述子の開始位置がブロックの外になる。外なら記述子は 0 バイトとして読む。
             problem = FsCorruptionKind.BadAttribute;
+            adStart = Math.Min(adStart, d.Length);
             lad = Math.Max(0, Math.Min(lad, d.Length - adStart));
             info = Math.Max(0, info);
         }

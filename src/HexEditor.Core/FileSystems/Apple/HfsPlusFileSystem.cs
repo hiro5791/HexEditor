@@ -18,6 +18,14 @@ public sealed record HfsFork(long LogicalSize, uint TotalBlocks, IReadOnlyList<(
 {
     public static HfsFork Parse(ReadOnlySpan<byte> b)
     {
+        // 短いレコード (壊れたエクステントのオーバーフローのレコードなど) は 0 で埋めた 80 バイトとして読む。
+        if (b.Length < 80)
+        {
+            byte[] padded = new byte[80];
+            b.CopyTo(padded);
+            b = padded;
+        }
+
         var extents = new List<(uint, uint)>(8);
         for (int i = 0; i < 8; i++)
         {
@@ -459,7 +467,7 @@ public sealed class HfsPlusFileSystem : FileSystemBase
             short type = BinaryPrimitives.ReadInt16BigEndian(data);
             if (type is 1 or 2)
             {
-                yield return new CatalogRecord(KeyName(key).Normalize(NormalizationForm.FormC), type, data,
+                yield return new CatalogRecord(FsText.NormalizeC(KeyName(key)), type, data,
                     (long)node.Number * _catalog.NodeSize + node.Records[index].Offset);
             }
         }
@@ -708,7 +716,7 @@ public sealed class HfsPlusFileSystem : FileSystemBase
                 return null;
             }
 
-            parts.Add(t.Name.Normalize(NormalizationForm.FormC));
+            parts.Add(FsText.NormalizeC(t.Name));
             current = t.Parent;
         }
 

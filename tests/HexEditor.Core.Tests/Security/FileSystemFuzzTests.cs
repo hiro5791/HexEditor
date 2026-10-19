@@ -62,7 +62,7 @@ public sealed class FileSystemFuzzTests
     private static bool Allowed(Exception ex) => ex is FileSystemOpenException or OperationCanceledException;
 
     /// <summary>ファイルシステムを開き、ブラウザが行う操作を一通り行う (件数・深さに上限)。</summary>
-    private static void Exercise(IVolumeReader reader)
+    internal static void Exercise(IVolumeReader reader)
     {
         IFileSystem fs = FileSystemRegistry.Open(reader);
         _ = fs.Summary;

@@ -22,8 +22,40 @@ internal sealed class AppWipeForensicHooks : IWipeForensicHooks
 
     public bool IsWriteBlockEnabled => WriteBlockGate.Current.IsEnabled || ForensicsService.IsWriteBlockEnabled();
 
-    public bool IsEvidence(string identity, string? path) =>
-        ForensicsService.Cases.ActiveEvidence.Any(e => Same(e.Path, identity) || (path is not null && Same(e.Path, path)));
+    /// <summary>
+    /// 対象が証拠に当たるか。証拠のボリュームを含むディスク・証拠のディスクの中のボリューム・別の書き方のパスも証拠とみなす
+    /// (<see cref="EvidenceOverlap"/>)。
+    /// </summary>
+    public bool IsEvidence(string identity, string? path)
+    {
+        IReadOnlyList<Core.Forensics.Cases.EvidenceItem> evidence = [.. ForensicsService.Cases.ActiveEvidence];
+        if (evidence.Count == 0)
+        {
+            return false;
+        }
+
+        Core.Devices.DeviceCatalog? catalog = null;
+        bool enumerated = false;
+        Core.Devices.DeviceCatalog? Catalog()
+        {
+            if (!enumerated)
+            {
+                enumerated = true;
+                try
+                {
+                    catalog = App.Devices?.EnumerateDevices();
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+                {
+                    catalog = null;
+                }
+            }
+
+            return catalog;
+        }
+
+        return evidence.Any(e => EvidenceOverlap.Overlaps(e.Path, identity, Catalog) || (path is not null && EvidenceOverlap.Overlaps(e.Path, path, Catalog)));
+    }
 
     public string? EnsureCanWrite(string operation, string target)
     {

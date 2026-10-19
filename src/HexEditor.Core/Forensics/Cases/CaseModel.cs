@@ -393,13 +393,8 @@ public sealed class ForensicCase
         string p = path.Trim();
         if (kind is EvidenceKind.ImageFile or EvidenceKind.File)
         {
-            try
-            {
-                p = System.IO.Path.GetFullPath(p);
-            }
-            catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
-            {
-            }
+            // 別名のパス (\\?\、ジャンクション、短い名前) でも同じ証拠と分かるようにそろえる。
+            p = Files.CanonicalPath.Normalize(p);
         }
         else
         {

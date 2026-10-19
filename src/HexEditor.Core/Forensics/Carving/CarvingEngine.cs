@@ -519,6 +519,8 @@ public static class CarvingEngine
             Folder = folder;
             _manifestFolder = folder;
             string path = Path.Combine(folder, ManifestFileName);
+            // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(path);
             _manifest = new StreamWriter(new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false));
             _manifest.Write(string.Join(',', ManifestHeader) + "\r\n");
             _manifest.Flush();
@@ -642,6 +644,7 @@ public static class CarvingEngine
         {
             using var md5 = IncrementalHash.CreateHash(HashAlgorithmName.MD5);
             using var sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(target);
             using var stream = new FileStream(target, FileMode.Create, FileAccess.Write, FileShare.Read, 1, FileOptions.SequentialScan);
             long done = 0;
             while (done < file.Length)

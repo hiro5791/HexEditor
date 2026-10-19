@@ -306,18 +306,11 @@ public sealed class WriteBlockPolicy
 
     private static bool Same(string a, string b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>比較用の完全パス。</summary>
-    public static string Normalize(string path)
-    {
-        try
-        {
-            return Path.GetFullPath(path.Trim());
-        }
-        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
-        {
-            return path.Trim();
-        }
-    }
+    /// <summary>
+    /// 比較用の完全パス。<c>\\?\</c> の接頭辞・ジャンクション・シンボリックリンク・短い名前を通した別の書き方でも同じ形になる
+    /// (<see cref="Files.CanonicalPath"/>。別名のパスで保護を抜けないため)。
+    /// </summary>
+    public static string Normalize(string path) => Files.CanonicalPath.Normalize(path);
 }
 
 /// <summary>

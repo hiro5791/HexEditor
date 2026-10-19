@@ -150,8 +150,11 @@ public sealed class NtfsFileSystem : FileSystemBase
     public int IndexRecordSize { get; }
     public ulong Serial { get; }
 
-    /// <summary>MFT レコードの数 ($MFT のデータのサイズ ÷ レコードサイズ)。</summary>
-    public long RecordCount => _mft.Length / RecordSize;
+    /// <summary>
+    /// MFT レコードの数 ($MFT のデータのサイズ ÷ レコードサイズ)。壊れた $MFT のサイズがランの範囲・ボリュームを超えるときは、ランのある範囲までに限る
+    /// (全レコードの走査がランのない範囲を延々と読まないため)。
+    /// </summary>
+    public long RecordCount => _mft.BoundedLength(Volume.Length) / RecordSize;
 
     public override FileSystemKind Kind => FileSystemKind.Ntfs;
     public override long ClusterSize => _clusterSize;
@@ -641,6 +644,12 @@ public sealed class NtfsFileSystem : FileSystemBase
 
     private static IEnumerable<IndexEntry> ParseIndexEntries(byte[] buffer, int start, int end, long volumeBase)
     {
+        // 開始位置 (エントリのオフセット) は信頼できない値: 負や buffer の外なら読まない。
+        if (start < 0 || end > buffer.Length)
+        {
+            yield break;
+        }
+
         int at = start;
         for (int n = 0; n < 65536 && at + 16 <= end; n++)
         {
@@ -670,6 +679,8 @@ public sealed class NtfsFileSystem : FileSystemBase
     /// <summary>インデックススラックに残ったエントリを探す (仕様 6)。親の参照がこのディレクトリのものだけを候補にする。</summary>
     private static IEnumerable<IndexEntry> ScanSlack(byte[] buffer, int start, int end, long directory, long volumeBase)
     {
+        start = Math.Max(0, start);
+        end = Math.Min(end, buffer.Length);
         for (int at = (start + 7) & ~7; at + 16 + 66 <= end; at += 8)
         {
             int length = BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(at + 8));
@@ -717,7 +728,8 @@ public sealed class NtfsFileSystem : FileSystemBase
             byte[] bitmap = dir.Stream(NtfsAttributeType.Bitmap, "$I30").FirstOrDefault() is { } bm
                 ? bm.NonResident ? ReadAll(new NtfsStreamReader(_cached, bm.Runs, _clusterSize, bm.RealSize, bm.InitializedSize, 0), 1 << 24) : bm.Value
                 : [];
-            long blocks = reader.Length / IndexRecordSize;
+            // 壊れた実サイズでランのない範囲を延々と走査しないよう、ランのある範囲までに限る。
+            long blocks = reader.BoundedLength(Volume.Length) / IndexRecordSize;
             for (long b = 0; b < blocks; b++)
             {
                 if ((b & 0x3F) == 0)

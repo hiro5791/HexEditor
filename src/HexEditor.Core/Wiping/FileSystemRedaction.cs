@@ -351,8 +351,8 @@ public static class FileSystemRedaction
         File.AppendAllText(path, s.ToString(), new UTF8Encoding(encoderShouldEmitUTF8Identifier: !exists));
     }
 
-    private static string Csv(string value) =>
-        value.IndexOfAny([',', '"', '\r', '\n']) >= 0 ? "\"" + value.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"" : value;
+    // 名前はイメージの中の信頼できない値なので、CSV インジェクションの対策をした書き方にする。
+    private static string Csv(string value) => Forensics.Audit.AuditExporter.CsvEscape(value);
 
     // ---- NTFS ----
 
@@ -475,7 +475,7 @@ public static class FileSystemRedaction
             {
                 var reader = new NtfsStreamReader(ntfs.Volume, [.. allocation.SelectMany(a => a.Runs)], ntfs.ClusterSize, allocation[0].RealSize,
                     allocation[0].InitializedSize, 0);
-                long blocks = Math.Min(reader.Length / ntfs.IndexRecordSize, 1 << 20);
+                long blocks = Math.Min(reader.BoundedLength(ntfs.Volume.Length) / ntfs.IndexRecordSize, 1 << 20);
                 for (long b = 0; b < blocks; b++)
                 {
                     // INDX レコードがディスク上で続いている場合だけ書き換える (クラスタがインデックスのレコードより小さく、途中で離れていることがある)。

@@ -123,6 +123,9 @@ public static class SectorRangeArchive
 
         time ??= TimeProvider.System;
         operation?.SetTotal(length);
+        // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(binPath);
+        HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(SidecarPath(binPath));
         string temp = binPath + ".tmp";
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(binPath))!);
         using var sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
@@ -224,7 +227,9 @@ public static class SectorRangeArchive
             || sidecar.Capacity != targetInfo.Capacity || sidecar.SectorSize != sector);
         long? start = startLba ?? sidecar?.StartLba;
         long count = fileLength / sector;
-        bool outOfRange = start is long st && (st < 0 || (st + count) * sector > target.Length);
+        // 付随ファイルの開始 LBA は信頼できない値: 掛け算のあふれで範囲の検査を抜けないよう、割り算で比べる。
+        long targetSectors = sector > 0 ? target.Length / sector : 0;
+        bool outOfRange = start is long st && (st < 0 || count > targetSectors || st > targetSectors - count);
         bool whole = false;
         if (start is long first && !outOfRange)
         {
@@ -297,12 +302,21 @@ public static class SectorRangeArchive
             operation?.Report(length);
         }
 
+        // データファイルは書き込みと検証が終わるまで他から書き換えられないように開いたままにし (FileShare.Read)、計画の後に変わっていないことを
+        // ハッシュで確かめ直す (計画の確認と書き込みの間にファイルが変わっても、確かめていない内容を書かない)。
+        using FileStream data = new(binPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        if (data.Length < length || (plan.Sidecar is { } sidecar
+            && !string.Equals(Convert.ToHexStringLower(SHA256.HashData(data)), sidecar.Sha256, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOperationException("The data file changed after the restore plan was made.");
+        }
+
         Audit("sectors.restore", plan.Target.Path, plan.Target.Identity, binPath, plan.StartLba, plan.SectorCount, ImageAuditResult.Started, null, null);
         IDisposable? locks = lockDevice is null || plan.VolumesToLock.Count == 0 ? null : DiskWrite.LockVolumes(lockDevice, plan.VolumesToLock, confirmDismount);
         long written = 0;
         try
         {
-            using FileStream data = File.OpenRead(binPath);
+            data.Position = 0;
             byte[] buffer = new byte[1 << 20];
             for (; written < length;)
             {
@@ -330,7 +344,7 @@ public static class SectorRangeArchive
 
         // 書き込み後に読み直してデータファイルと比べる (仕様 5)。
         bool verified;
-        using (FileStream data = File.OpenRead(binPath))
+        data.Position = 0;
         {
             byte[] a = new byte[1 << 20];
             byte[] b = new byte[1 << 20];

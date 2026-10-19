@@ -112,6 +112,12 @@ public sealed class RegistryUsbWriteProtectStore : IUsbWriteProtectStore
             throw new UsbWriteProtectException(Win32Errors.NotSupported, "The registry is not available.");
         }
 
+        // 書く値は 0 と 1 だけ (補助プロセスの許可リストと同じ。どの経路から呼ばれても他の値は OS の設定に書かない)。
+        if (value is not (0 or 1))
+        {
+            throw new UsbWriteProtectException(Win32Errors.InvalidParameter, "Only 0 and 1 can be written.");
+        }
+
         try
         {
             using Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(UsbWriteProtect.KeyPath, writable: true);

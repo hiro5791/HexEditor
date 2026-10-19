@@ -50,7 +50,7 @@ public sealed class WipeFuzzTests
 
     private static bool Allowed(Exception ex) => ex is FileSystemOpenException or OperationCanceledException;
 
-    private static void Exercise(IVolumeReader reader)
+    internal static void Exercise(IVolumeReader reader)
     {
         IFileSystem fs = FileSystemRegistry.Open(reader);
         _ = FileSystemWipe.CheckConsistency(fs);

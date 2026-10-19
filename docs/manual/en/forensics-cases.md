@@ -39,7 +39,7 @@ Each line has the time (always UTC), the user, the computer, the operation, the 
 
 Open **Forensics > Case > Show audit log** to see the log. The list stays fast even with millions of lines. Select **Export CSV** or **Export JSON** to save it.
 
-To check the log, select **Forensics > Case > Verify audit log**, or **Verify** in the panel. If a line was changed, deleted or inserted, the first line that does not match is shown with a red border and a sentence. That result is recorded in the log too.
+To check the log, select **Forensics > Case > Verify audit log**, or **Verify** in the panel. If a line was changed, deleted or inserted, the first line that does not match is shown with a red border and a sentence. Lines removed from the end of the log are found too: the app keeps the number and hash of the last line it wrote in `audit.log.head`, next to `audit.log`. That result is recorded in the log too.
 
 If the log cannot be written, for example because the disk is full, an error bar that cannot be closed stays at the top. Operations that write data, such as saving, secure delete and carving, are turned off until you fix the problem and select **Try again**. Records made in the meantime are kept and written afterwards.
 

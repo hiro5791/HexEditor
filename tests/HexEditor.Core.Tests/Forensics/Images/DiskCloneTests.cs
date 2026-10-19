@@ -299,4 +299,38 @@ public sealed class DiskCloneTests : IDisposable
             Assert.True(result.FailedLba >= p.Offset / 512);
         }
     }
+
+    /// <summary>
+    /// セキュリティ監査 (フェーズ 5): 付随ファイルの開始 LBA は信頼できない値で、掛け算があふれる値でも範囲外として拒否する。計画の後にデータファイルが
+    /// 変わったら (ハッシュの確認と書き込みの間の差し替え)、何も書かずに拒否する。
+    /// </summary>
+    [Fact]
+    public void Restore_refuses_an_overflowing_sidecar_start_and_a_data_file_changed_after_the_plan()
+    {
+        (FakeDeviceAccess access, DeviceByteSource disk) = GptDisk();
+        using (access)
+        using (disk)
+        {
+            string bin = _dir.File("lba0.bin");
+            SectorRangeArchive.Save(disk, new AcquisitionSourceInfo { Path = disk.Path, SerialNumber = "TARGET3", Capacity = disk.Length, SectorSize = 512 }, 0, 1, bin);
+            string json = File.ReadAllText(bin + ".json");
+            string overflowing = System.Text.RegularExpressions.Regex.Replace(json, "\"startLba\":\\s*\\d+",
+                "\"startLba\": " + (long.MaxValue / 512 + 2).ToString(System.Globalization.CultureInfo.InvariantCulture));
+            Assert.NotEqual(json, overflowing);
+            File.WriteAllText(bin + ".json", overflowing);
+            SectorRestorePlan overflow = SectorRangeArchive.PlanRestore(bin, disk, TargetInfo(disk));
+            Assert.True(overflow.OutOfRange);
+            Assert.False(overflow.CanRun);
+
+            File.WriteAllText(bin + ".json", json);
+            SectorRestorePlan plan = SectorRangeArchive.PlanRestore(bin, disk, TargetInfo(disk));
+            Assert.True(plan.CanRun);
+            byte[] data = File.ReadAllBytes(bin);
+            data[0] ^= 0xFF;
+            File.WriteAllBytes(bin, data);
+            access.ClearCalls();
+            Assert.Throws<InvalidOperationException>(() => SectorRangeArchive.Restore(plan, bin, disk, backup: false));
+            Assert.Equal(0, access.WriteCount);
+        }
+    }
 }

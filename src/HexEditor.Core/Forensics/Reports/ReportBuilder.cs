@@ -47,6 +47,8 @@ public static class ReportBuilder
             bool truncated = false;
             int pages = 0;
             ReportFormat actual = options.Format;
+            // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+            HexEditor.Core.Forensics.WriteBlock.WriteBlockGate.Current.EnsureFileWrite(finalPath);
             string temp = finalPath + ".tmp";
             if (options.Format == ReportFormat.Pdf)
             {

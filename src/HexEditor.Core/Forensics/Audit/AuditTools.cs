@@ -20,6 +20,9 @@ public enum AuditBreakKind
 
     /// <summary>連番が続かない。</summary>
     SequenceGap,
+
+    /// <summary>末尾の行がない (末尾の印 <c>audit.log.head</c> の行まで続いていない、またはその行が違う。ログの切り詰め)。</summary>
+    Truncated,
 }
 
 /// <summary>連鎖の切れた行。<see cref="Line"/> は 1 から数えた行番号。</summary>
@@ -47,6 +50,8 @@ public static class AuditVerifier
         string? previousHash = AuditLog.GenesisHash;
         long expectedSeq = 1;
         bool truncated = false;
+        (long Seq, string Hash)? head = FileAuditStorage.ReadHead(path);
+        bool headSeen = false;
 
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         using var reader = new StreamReader(stream, new UTF8Encoding(false), detectEncodingFromByteOrderMarks: false, 64 * 1024);
@@ -59,7 +64,7 @@ public static class AuditVerifier
                 progress?.Report(line);
             }
 
-            AuditBreak? broken = Check(text, line, ref previousHash, ref expectedSeq);
+            AuditBreak? broken = Check(text, line, ref previousHash, ref expectedSeq, head, ref headSeen);
             if (broken is not null)
             {
                 if (breaks.Count >= MaxBreaks)
@@ -73,11 +78,26 @@ public static class AuditVerifier
             }
         }
 
+        // 末尾の印: 最後に書いたはずの行がない・違うなら、末尾が消された (切り詰め)。印より後の行があるのは正常 (印が古いだけ)。
+        if (head is { } last && !headSeen)
+        {
+            var cut = new AuditBreak(line + 1, AuditBreakKind.Truncated,
+                $"The log does not contain sequence {last.Seq.ToString(CultureInfo.InvariantCulture)}, the last line that was written.");
+            if (breaks.Count < MaxBreaks)
+            {
+                breaks.Add(cut);
+            }
+            else
+            {
+                truncated = true;
+            }
+        }
+
         progress?.Report(line);
         return new AuditVerifyResult(line, breaks, truncated);
     }
 
-    private static AuditBreak? Check(string text, long line, ref string? previousHash, ref long expectedSeq)
+    private static AuditBreak? Check(string text, long line, ref string? previousHash, ref long expectedSeq, (long Seq, string Hash)? head, ref bool headSeen)
     {
         (string Computed, string Recorded)? hashes = AuditLog.HashOf(text);
         if (hashes is null || !AuditLog.TryParse(text, out AuditEntry? entry) || entry is null)
@@ -103,6 +123,11 @@ public static class AuditVerifier
 
         previousHash = hashes.Value.Recorded;
         expectedSeq = entry.Seq + 1;
+        if (head is { } h && entry.Seq == h.Seq && string.Equals(hashes.Value.Recorded, h.Hash, StringComparison.Ordinal))
+        {
+            headSeen = true;
+        }
+
         return result;
     }
 }
@@ -250,8 +275,10 @@ public static class AuditExporter
 
     public static string CsvEscape(string value)
     {
-        // CSV インジェクション対策: 式として解釈される先頭の文字の前に ' を付ける。
-        if (value.Length > 0 && value[0] is '=' or '+' or '@' or '\t' or '\r')
+        // CSV インジェクション対策: 式として解釈される先頭の文字の前に ' を付ける。'-' は数 (-1 など) のときだけそのまま
+        // (「-2+3+cmd|…」のような式は数として読めないので ' を付ける)。
+        if (value.Length > 0 && (value[0] is '=' or '+' or '@' or '\t' or '\r'
+            || (value[0] == '-' && !double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out _))))
         {
             value = "'" + value;
         }

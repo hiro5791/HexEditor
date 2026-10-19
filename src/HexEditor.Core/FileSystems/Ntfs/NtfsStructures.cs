@@ -245,7 +245,8 @@ public static class NtfsFormat
             }
 
             int length = (int)BinaryPrimitives.ReadUInt32LittleEndian(d.AsSpan(at + 4));
-            if (length < 24 || at + length > limit || (length & 7) != 0 && length < 16)
+            // length > limit - at: at + length はあふれうる (長さは信頼できない 32 bit の値)。
+            if (length < 24 || length > limit - at || (length & 7) != 0 && length < 16)
             {
                 return false;
             }

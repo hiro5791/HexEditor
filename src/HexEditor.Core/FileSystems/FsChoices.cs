@@ -23,6 +23,22 @@ public interface IFsChoices
 /// <summary>表示用の文字列の補助。</summary>
 public static class FsText
 {
+    /// <summary>
+    /// NFC に正規化する。名前はイメージの中の信頼できない値で、対になっていないサロゲートを含むと <see cref="string.Normalize(NormalizationForm)"/> が
+    /// <see cref="ArgumentException"/> になるため、その場合は正規化しないで返す (名前の文字はそのまま見せる)。
+    /// </summary>
+    public static string NormalizeC(string name)
+    {
+        try
+        {
+            return name.Normalize(NormalizationForm.FormC);
+        }
+        catch (ArgumentException)
+        {
+            return name;
+        }
+    }
+
     /// <summary>POSIX のモードの文字列 (<c>-rw-r--r--</c>)。</summary>
     public static string PosixMode(int mode)
     {

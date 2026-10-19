@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using HexEditor.Core.Forensics;
 using HexEditor.Core.Forensics.Audit;
 using HexEditor.Core.Forensics.Cases;
 using HexEditor.Core.Forensics.Images;
@@ -31,8 +32,34 @@ internal sealed class AppImageForensicHooks : IImageForensicHooks
         }
         : null;
 
-    public IReadOnlyList<int> EvidenceDiskNumbers =>
-        [.. ForensicsService.Cases.ActiveEvidence.Where(e => e.Kind == EvidenceKind.PhysicalDisk).Select(e => DiskNumberOf(e.Path)).OfType<int>().Distinct()];
+    /// <summary>
+    /// 証拠のディスクの番号。証拠のボリュームがあるディスクも含める (証拠のボリューム E: のあるディスクへのクローン・出力を拒否するため)。
+    /// </summary>
+    public IReadOnlyList<int> EvidenceDiskNumbers
+    {
+        get
+        {
+            IReadOnlyList<EvidenceItem> evidence = ForensicsService.Cases.ActiveEvidence;
+            var disks = new HashSet<int>(evidence.Where(e => e.Kind == EvidenceKind.PhysicalDisk).Select(e => DiskNumberOf(e.Path)).OfType<int>());
+            string[] volumes = [.. evidence.Where(e => e.Kind == EvidenceKind.Volume).Select(e => e.Path)];
+            if (volumes.Length > 0)
+            {
+                var locator = new CatalogDiskLocator(() => App.Devices.EnumerateDevices());
+                foreach (string v in volumes)
+                {
+                    try
+                    {
+                        disks.UnionWith(locator.DisksOfDevice(v) ?? []);
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+                    {
+                    }
+                }
+            }
+
+            return [.. disks];
+        }
+    }
 
     public string? EvidenceNumberOf(string pathOrIdentity) => FindEvidence(pathOrIdentity)?.Id;
 

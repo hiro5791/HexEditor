@@ -45,7 +45,7 @@ public sealed class FileSystemFuzzMoreTests
     private static bool Allowed(Exception ex) => ex is FileSystemOpenException or OperationCanceledException;
 
     /// <summary>ファイルシステムを開き、ブラウザが行う操作を一通り行う (件数・深さに上限)。</summary>
-    private static void Exercise(IVolumeReader reader, FileSystemKind? kind = null)
+    internal static void Exercise(IVolumeReader reader, FileSystemKind? kind = null)
     {
         IFileSystem fs = FileSystemRegistry.Open(reader, kind is null ? null : new FileSystemOpenOptions { Kind = kind });
         _ = fs.Summary;
@@ -224,7 +224,7 @@ public sealed class FileSystemFuzzMoreTests
     }
 
     /// <summary>変えたブロックの APFS のチェックサムを付け直して読む (チェックサムの先の構造の検査を通すため)。</summary>
-    private sealed class ResealedReader(IVolumeReader inner, IReadOnlyDictionary<long, byte> patches) : IVolumeReader
+    internal sealed class ResealedReader(IVolumeReader inner, IReadOnlyDictionary<long, byte> patches) : IVolumeReader
     {
         private readonly Dictionary<long, byte[]> _blocks = Build(inner, patches);
 

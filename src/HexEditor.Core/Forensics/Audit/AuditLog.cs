@@ -123,6 +123,14 @@ public interface IAuditStorage
 
     /// <summary>書き込めるか (操作を始める前の確認。仕様のエラー欄)。書けなければ例外。</summary>
     void Probe(string path);
+
+    /// <summary>
+    /// 最後に書いた行の連番とハッシュ (末尾の印) を残す。末尾の行を消した (切り詰めた) ログを検証で見つけるため。残せなくても追記は成功とする
+    /// (印が古いだけなら検証は誤って報告しない)。既定は何もしない (テスト用の保存先)。
+    /// </summary>
+    void WriteHead(string path, long seq, string hash)
+    {
+    }
 }
 
 /// <summary>ファイルへの保存。</summary>
@@ -183,6 +191,43 @@ public sealed class FileAuditStorage : IAuditStorage
         }
 
         return null;
+    }
+
+    /// <summary>末尾の印のファイル (<c>audit.log.head</c>)。</summary>
+    public static string HeadPath(string path) => path + ".head";
+
+    public void WriteHead(string path, long seq, string hash)
+    {
+        try
+        {
+            File.WriteAllText(HeadPath(path), seq.ToString(CultureInfo.InvariantCulture) + " " + hash + "\n", new UTF8Encoding(false));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // 印を残せなくても追記は成功している (印が古いだけでは検証は誤って報告しない)。
+        }
+    }
+
+    /// <summary>末尾の印を読む。なければ・読めなければ null。</summary>
+    public static (long Seq, string Hash)? ReadHead(string path)
+    {
+        try
+        {
+            string head = HeadPath(path);
+            if (!File.Exists(head) || new FileInfo(head).Length > 256)
+            {
+                return null;
+            }
+
+            string[] parts = File.ReadAllText(head).Trim().Split(' ');
+            return parts.Length == 2 && long.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out long seq) && seq > 0 && parts[1].Length == 64
+                ? (seq, parts[1])
+                : null;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
     }
 
     public void Probe(string path)
@@ -342,6 +387,7 @@ public sealed class AuditLog
             }
 
             _needsLeadingNewline = false;
+            _storage.WriteHead(Path, seq, hash);
             var entry = new AuditEntry(seq, time, Identity.User, Identity.Computer, Identity.AppVersion, record.Operation, record.EvidenceId, record.Path,
                 parameters, record.Result, message, _lastHash, hash);
             _lastSeq = seq;
