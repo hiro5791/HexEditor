@@ -102,11 +102,11 @@ public sealed partial class MainWindow
             {
                 problem = Loc.Get("ImgClone_StartInvalid");
             }
-            else if (disks[list.SelectedIndex] is { } d && (d.LogicalSectorSize ?? 512) != info.SectorSize)
+            else if ((disks[list.SelectedIndex].LogicalSectorSize ?? 512) != info.SectorSize)
             {
                 problem = Loc.Get("ImgClone_SectorSizeMismatch");
             }
-            else if (d.Size is long size && lba * (d.LogicalSectorSize ?? 512) >= size)
+            else if (disks[list.SelectedIndex].Size is long size && lba * (disks[list.SelectedIndex].LogicalSectorSize ?? 512) >= size)
             {
                 problem = Loc.Get("ImgClone_StartInvalid");
             }

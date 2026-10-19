@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Reflection;
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
@@ -37,7 +38,7 @@ public sealed partial class MainWindow
         Commands.Register("forensics.image.verify", VerifyImageCommandAsync);
         Commands.Register("forensics.image.info", ShowImageInfoAsync,
             () => NeedsDocument(d => d.Document.Source is IImageSource ? null : Loc.Get("Img_NotImage")));
-        Commands.Register("forensics.disk.clone", CloneDiskAsync, NotWhenWriteBlocked);
+        Commands.Register("forensics.disk.clone", CloneDiskAsync, ImgNotWhenWriteBlocked);
         Commands.Register("forensics.sectors.save", SaveSectorsAsync, () => NeedsDocument(d => d.Document.Source.LogicalSectorSize > 1 ? null : Loc.Get("Img_NeedsDisk")));
         Commands.Register("forensics.sectors.restore", RestoreSectorsAsync, () =>
             ImageForensics.Hooks.IsWriteBlocked ? CommandState.Unavailable(Loc.Get("WriteBlock_Enabled"))

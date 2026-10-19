@@ -8193,4 +8193,302 @@ SHA-256 のフィンガープリント: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>フォレンジック(R)</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>イメージ(I)</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>イメージを作成(C)...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>スケルトンイメージを作成(S)...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>イメージを開く(O)...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>イメージを検証(V)...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>イメージの情報(N)</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>ディスクをクローン(L)...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>セクタ範囲を保存(A)...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>セクタ範囲を復元(T)...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>RAID を再構成(D)...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="CmdCategory_forensicImages" xml:space="preserve"><value>フォレンジック</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>イメージを作成</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>いめーじ しゅとく ほぜん でぃすく</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>スケルトンイメージを作成</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>すけるとん すぱーす いめーじ</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>イメージをディスクとして開く</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>いめーじ ひらく でぃすく</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>イメージを検証</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>けんしょう はっしゅ いめーじ</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>イメージの情報</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>いめーじ じょうほう</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>ディスクをクローン</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>くろーん でぃすく ふくせい</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>セクタ範囲を保存</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>せくた ほぞん たいひ</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>セクタ範囲を復元</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>せくた ふくげん かきもどし</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>RAID を再構成</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>れいど さいこうせい</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>このドキュメントはディスクイメージではありません。</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>ディスク・ボリューム・ディスクイメージのドキュメントが必要です。</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>入力元にするディスク・イメージ・ファイルを先に開いてください。</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>足りないセグメント ({0}) を除いて開きました。その範囲は読み込みエラーになります。</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>{0} のイメージを読み込めません (失敗した部分: {1})。{2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>差分ディスクの親が見つかりません: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>セグメントが足りません</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>次のセグメントが足りません: {0}。ある分だけ開きますか。足りない範囲は読み込みエラーになります。</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>ある分だけ開く</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>分割 raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>{0} のチャンク ({1} バイト) の検査値が一致しません。その範囲は読み込みエラーとして表示します。</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>イメージの情報</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} バイト ({1} セクタ)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>セクタサイズ</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>取得日時</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>取得ツール</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>デバイス</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>チャンク数</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} (1 チャンク {1} セクタ)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>圧縮あり</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>圧縮なし</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>格納された {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>取得時に読めなかったセクタ</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>親ディスク</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>足りないセグメント</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} から {1} セクタ</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>ケース番号</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>証拠番号</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>調査者名</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>メモ</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>一致</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>不一致</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>比べる値なし</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>読み込みエラーのため検証できません</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>イメージに格納された値</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>取得ログ</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>証拠一覧</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>入力した値</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>取得中に計算した値</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>入力元のディスク</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>イメージを作成</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>スケルトンイメージを作成</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>書き込み保護モードが無効です。証拠を取得する前に有効にすることを勧めます。</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>書き込み保護モードを有効にする</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>入力元: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>選択範囲だけ (セクタ境界に広げる)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>取得する範囲</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>全体</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>スパース (未割り当て領域を含めない)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>スケルトン (パーティション表とファイルシステムのメタデータだけ)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>ブックマークとマルチ選択の範囲も含める</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>出力先</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>出力</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>分割サイズ (例: 100M、2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>読み込みエラー時の再試行回数</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>読めなかったセクタを埋める値 (16 進)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>読み込み単位</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>完了後に検証する</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>読み込みエラー</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>E01 の情報</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>なし</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>速度優先 (zlib レベル 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>容量優先 (zlib レベル 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>出力先を入力してください。</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>分割サイズは 1 MiB 以上にしてください (例: 100M)。</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>再試行回数は 0〜100 の数で入力してください。</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>埋める値は 2 桁の 16 進で入力してください (例: 00)。</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>ハッシュを 1 つ以上選んでください。</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>出力先が入力元と同じ物理ディスク上にあります。別のディスクを選んでください。</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>出力先が証拠一覧のディスク上にあります。別のディスクを選んでください。</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>出力先のファイルシステム ({0}) の 1 ファイルの上限は {1} バイトです。分割 raw か、セグメントサイズを小さくした E01 にしてください。</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>出力には約 {0} バイト必要ですが、空き容量は {1} バイトです。</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} は既にあります。上書きしますか。</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>上書きする</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>出力先のファイルシステムが NTFS ではなく {0} のため、含めない領域にも 0 を書きます (容量は減りません)。</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>イメージを作成: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>含める範囲を計算しています</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>解析できないパーティション {0} 個は全体を含めます。</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>イメージを作成できませんでした。{0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>読めなかったセクタ: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>イメージを作成しました。{0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>検証: {0}。</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>読めなかったセクタが {0} 個あり、指定の値で埋めました。</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>取得を中断しました。出力済みのファイルは残しました。</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>取得を中断しました。出力済みのファイルは削除しました。</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>入力元が失われたため、取得を中止しました。</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>取得ログを開く</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>出力先に書き込めません: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>中止</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>取得をキャンセルしました。出力済みのファイルを残しますか。</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>残す</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>削除する</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>イメージを検証</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>対象: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>比べる値 (16 進。省略可)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>MD5・SHA-1・SHA-256 の値</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>32・40・64 桁の 16 進で入力してください。</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>入力元のディスクも読み直す</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>検証する</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>イメージを検証: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>検証の結果: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>読み込みエラーのため検証できません: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>計算した値: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>ディスクイメージの取得ログ</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>ディスクのクローンのログ</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>状態</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>完了</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>中断</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>入力元が失われました</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>入力元</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>モデル名</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>シリアル番号</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>容量</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>セクタサイズ</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>範囲</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>出力</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>出力形式</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>出力先</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>開始日時</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>終了日時</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>読み込んだセクタ数</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>読めなかったセクタ</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>なし</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>含めた範囲</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>検証結果</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>検証していない</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>アプリのバージョン</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>ケース情報</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>取得した範囲</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>全体</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>スパースイメージ (未割り当て領域を含めない)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>スケルトンイメージ (パーティション表とファイルシステムのメタデータだけ)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>含めなかった領域は 0 として格納しているため、このイメージのハッシュは入力元のディスク全体のハッシュとは一致しません。</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>含めた範囲の一覧</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>メッセージ</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>ディスクをクローン</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>出力先のディスク</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>ディスク {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>ディスク {0}: {1}、シリアル {2}、{3} バイト、セクタ {4} バイト。ボリューム: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}、{2}、{3} バイト)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>なし</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>出力先の開始 LBA</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>出力先の残りの領域を 0 で埋める</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>検証のハッシュ</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>ログの出力先フォルダ (省略可)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>次へ</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>出力先のディスクを選んでください。</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>開始 LBA が出力先のディスクの外です。</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>セクタサイズが異なるディスクにはクローンできません。</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>出力先のディスクは証拠一覧に登録されています。上書きできません。</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>対象: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>書き込む範囲: LBA {0} から {1} セクタ ({2} バイト)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>書き込む内容: {0} のデータ</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>これらのボリュームの内容はすべて失われます:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>出力先が入力元より小さいため、入力元の先頭 {0} バイトだけを書き込みます。</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>この操作は取り消せません。</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>{0} へクローンする</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>確認のため「{0}」と入力してください</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>{0} へクローン</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>いま止めると、出力先のディスクは途中まで書かれた状態になります。</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>中止する</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>続ける</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>ボリューム {0} をロックできないため、書き込みませんでした。開いているファイルを閉じてからやり直してください。</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>クローンに失敗しました。{0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>{0} バイトをクローンしました。検証: {1}。</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>クローンを中止しました。出力先のディスクは途中まで書かれた状態です。</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>出力先が入力元と同じディスクです。</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>セクタサイズが異なるディスクにはクローンできません。</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>書き込み保護モードが有効です。</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>出力先のディスクは証拠一覧に登録されています。上書きできません。</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>出力先のディスクのボリュームを Windows が使用中です。</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>開始 LBA が出力先のディスクの外です。</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>出力先のディスクを書き込みのアクセス権で開けませんでした。</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>セクタ範囲を保存</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>セクタ範囲を復元</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>開始 LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>セクタ数</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>保存する</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>セクタのデータ</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>範囲がディスクの外です。</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>セクタ範囲を保存: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} セクタを {1} に保存しました。</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>範囲に読めないセクタがあるため、保存しませんでした。</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>セクタ範囲を保存できませんでした。{0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>データファイルまたは付随ファイルを読み込めません。{0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>データファイル: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>保存元: {0}、シリアル {1}、{2} バイト、セクタ {3} バイト。開始 LBA {4}、{5} セクタ。保存日時 {6}。</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>書き込み先: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>書き込む前に今の内容を退避する</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>次へ</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>データファイルの SHA-256 が付随ファイルの値と一致しないため、復元できません。</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>付随ファイルがありません。書き込み先の開始 LBA を入力してください。</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>書き込み先のシリアル番号または容量が、保存元のディスクと違います。</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>対象: {0}。範囲に重なるボリューム: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>書き込む内容: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>{0} セクタを書き込む</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>セクタ範囲を復元: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>セクタ範囲を復元できませんでした。{0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>{0} セクタを書き込み、読み直して一致を確かめました。</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>書き込みに失敗しました。{0} セクタを書き込み、LBA {1} で失敗しました。退避ファイル {2} から書き戻せます。</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>読み直した内容がデータファイルと一致しません。</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>RAID を再構成</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>メンバー (順番)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>上へ</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>下へ</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>ファイルを追加...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>外す</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>このメンバーは欠けている</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[欠落]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>メンバーのデータ開始オフセット</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>種類</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>ストライプサイズ</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>パリティの配置</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>左対称</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>左非対称</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>右対称</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>右非対称</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>使うメンバー (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>判定結果 (先頭 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} を検出 (パーティション {1} 個)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>パーティション表なし</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>ファイルシステムの署名: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>ファイルシステムの署名なし</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>論理ディスクのサイズ: {0} バイト</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>この構成では判定できません。</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>メンバーのサイズが違うため、最小のサイズに合わせます。</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>構成を保存...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>構成を読み込む...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>RAID の構成</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>RAID の構成を {0} に保存しました。</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>RAID の構成を保存できませんでした。{0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>RAID の構成を読み込めません。{0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>論理ディスクを開けませんでした。</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} (メンバー {1} 台)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>パラメーターが正しくありません。</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>ストライプサイズは 512 B〜16 MiB の 2 の累乗にしてください。</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>この種類にはメンバーが足りません。</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>この種類では欠けているメンバーを使えません。</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>2 台以上欠けているため、RAID 5 を開けません。</value></data>
 </root>
