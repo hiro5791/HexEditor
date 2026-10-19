@@ -586,7 +586,7 @@ public static class StructureValidators
                 continue;
             }
 
-            if (size > 0 && !w.Matches(start + (long)offset, [0x50, 0x4B, 0x01, 0x02]))
+            if (size == 0 || !w.Matches(start + (long)offset, [0x50, 0x4B, 0x01, 0x02]))
             {
                 continue;
             }

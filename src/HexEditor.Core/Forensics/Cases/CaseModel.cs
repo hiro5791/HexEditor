@@ -354,7 +354,17 @@ public sealed class ForensicCase
 
     // ---- 保存 ----
 
-    private void Save(CaseFile file) => JsonFile.WriteText(CaseFilePath, JsonSerializer.Serialize(file, JsonFile.Options));
+    private void Save(CaseFile file)
+    {
+        try
+        {
+            JsonFile.WriteText(CaseFilePath, JsonSerializer.Serialize(file, JsonFile.Options));
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            throw new IOException(ex.Message, ex);
+        }
+    }
 
     private void Commit(CaseFile updated)
     {

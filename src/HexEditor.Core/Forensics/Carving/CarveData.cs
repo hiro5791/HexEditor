@@ -81,9 +81,15 @@ public sealed class ByteWindow
     public bool TryU8(long offset, out byte value)
     {
         value = 0;
-        if (Failed || offset < 0 || offset >= Limit || --_budget < 0)
+        if (Failed || --_budget < 0)
         {
             return Fail();
+        }
+
+        // 範囲の外 (ファイルの終わりを越えた読み取り) は失敗ではなく「読めない」だけ。検証が終わりの先を調べて、なければそれまでを使えるようにする。
+        if (offset < 0 || offset >= Limit)
+        {
+            return false;
         }
 
         if (!InBlock(offset) && !Fill(offset))
