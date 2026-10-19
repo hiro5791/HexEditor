@@ -465,7 +465,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
                     <!--  フォレンジック (12)。パーティションとファイルシステム (FOR-06〜FOR-17)  -->
-                    <MenuBarItem x:Name="ForensicsMenu" x:Uid="Menu_Forensics" AutomationProperties.AutomationId="Menu_Forensics">
+                    <MenuBarItem x:Uid="Menu_Forensics" x:Name="ForensicsMenu" AutomationProperties.AutomationId="Menu_Forensics">
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_Partitions" AutomationProperties.AutomationId="Menu_Forensics_Partitions">
                             <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsShow" cmd:CommandUi.Id="forensics.partitions.show" AutomationProperties.AutomationId="Command_PartitionsShow" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsOpen" cmd:CommandUi.Id="forensics.partitions.openInNewTab" AutomationProperties.AutomationId="Command_PartitionsOpen" />
