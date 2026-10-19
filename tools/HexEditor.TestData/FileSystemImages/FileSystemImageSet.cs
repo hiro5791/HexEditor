@@ -269,6 +269,66 @@ public static class FileSystemImageSet
         return (b.Build(), b);
     });
 
+    /// <summary>秒より細かい部分を落とした日時 (HFS+ は秒単位)。</summary>
+    public static DateTime WholeSeconds(DateTime t) => t.AddTicks(-(t.Ticks % TimeSpan.TicksPerSecond));
+
+    public static readonly byte[] HfsDataFork = Encoding.ASCII.GetBytes("DATA-FORK\n");
+    public static readonly byte[] HfsResourceFork = Encoding.ASCII.GetBytes("RSRC-FORK\n");
+    public static readonly byte[] HfsLinkTarget = Encoding.ASCII.GetBytes("HARDLINK-TARGET\n");
+
+    /// <summary>manyfrag.bin (10 個の断片。9 個目以降はエクステントオーバーフロー B 木)。</summary>
+    public static byte[] HfsManyFrag
+    {
+        get
+        {
+            byte[] b = new byte[10 * 4096];
+            TestDataCatalog.Random(0x4F, 0, b);
+            return b;
+        }
+    }
+
+    /// <summary>TD-FOR-HFSPLUS (32 MiB、ブロック 4 KiB、ラベル HFSTEST)。</summary>
+    public static (SparseImage Image, HfsPlusImageBuilder Builder) HfsPlus() => Cached("hfsplus", () =>
+    {
+        var b = new HfsPlusImageBuilder(32 * MiB, "HFSTEST", FileSet.ReadmeModifiedUtc);
+        b.AddFile(b.Root, "forked.txt", HfsDataFork, FileSet.TimeOf(0), HfsResourceFork);
+        foreach (FileSetItem item in FileSet.Common.Where(i => i.Name != "deleted.txt"))
+        {
+            b.AddFile(b.Root, item.Name, item.Content, item.ModifiedUtc, fragments: item.Name == "frag.bin" ? 3 : 1);
+        }
+
+        b.AddFile(b.Root, "manyfrag.bin", HfsManyFrag, FileSet.TimeOf(8), fragments: 10);
+        b.AddFile(b.Root, "compressed.txt", [], FileSet.TimeOf(9), resource: Encoding.ASCII.GetBytes("fpmc-not-really-compressed"), compressed: true);
+        b.AddHardLink(b.Root, HfsLinkTarget, FileSet.TimeOf(10), "link1.txt", "link2.txt");
+        HfsPlusImageBuilder.Node dir1 = b.AddFolder(b.Root, "dir1", FileSet.TimeOf(12));
+        for (int i = 1; i <= 40; i++)
+        {
+            b.AddFile(dir1, $"f{i:D3}.txt", FileSet.Dir1File(i), FileSet.TimeOf(12).AddSeconds(i));
+        }
+
+        return (b.Build(), b);
+    });
+
+    /// <summary>TD-FOR-APFS (ボリューム Data に TD-FOR-FILESET (削除するものを除く)。64 MiB)。</summary>
+    public static (SparseImage Image, ApfsImageBuilder Builder) Apfs(bool torn = false) => Cached("apfs:" + torn, () =>
+    {
+        var b = new ApfsImageBuilder(64 * MiB, "Data", FileSet.ReadmeModifiedUtc) { TornNewestCheckpoint = torn };
+        foreach (FileSetItem item in FileSet.Common.Where(i => i.Name != "deleted.txt"))
+        {
+            b.AddFile(item.Name, item.Content, item.ModifiedUtc, item.Name == "frag.bin" ? 3 : 1);
+        }
+
+        return (b.Build(), b);
+    });
+
+    /// <summary>TD-FOR-APFS-ENC (暗号化されたボリューム Secret。readme.txt)。</summary>
+    public static (SparseImage Image, ApfsImageBuilder Builder) ApfsEncrypted() => Cached("apfs-enc", () =>
+    {
+        var b = new ApfsImageBuilder(64 * MiB, "Secret", FileSet.ReadmeModifiedUtc, encrypted: true);
+        b.AddFile("readme.txt", FileSet.Readme, FileSet.ReadmeModifiedUtc);
+        return (b.Build(), b);
+    });
+
     /// <summary>ID からメモリ上のイメージを作る。</summary>
     public static SparseImage Image(string id) => id switch
     {
@@ -293,6 +353,9 @@ public static class FileSystemImageSet
         "TD-FOR-EXT4" => Ext(ExtVariant.Ext4).Image,
         "TD-FOR-ISO-JRR" => IsoJrr().Image,
         "TD-FOR-UDF250" => Udf250().Image,
+        "TD-FOR-HFSPLUS" => HfsPlus().Image,
+        "TD-FOR-APFS" => Apfs().Image,
+        "TD-FOR-APFS-ENC" => ApfsEncrypted().Image,
         _ => throw new ArgumentException(id),
     };
 
@@ -306,8 +369,9 @@ public static class FileSystemImageSet
         "TD-FOR-FAT12" => 4 * MiB,
         "TD-FOR-FAT32" or "TD-FOR-FAT32-FATDIFF" or "TD-FOR-FAT32-LOOP" => 512 * MiB,
         "TD-FOR-NTFS-1M" => 4096 * MiB,
-        "TD-FOR-EXT2" or "TD-FOR-EXT3" or "TD-FOR-EXT4" or "TD-FOR-UDF250" => 64 * MiB,
+        "TD-FOR-EXT2" or "TD-FOR-EXT3" or "TD-FOR-EXT4" or "TD-FOR-UDF250" or "TD-FOR-APFS" or "TD-FOR-APFS-ENC" => 64 * MiB,
         "TD-FOR-ISO-JRR" => 512 * 2048,
+        "TD-FOR-HFSPLUS" => 32 * MiB,
         _ => throw new ArgumentException(id),
     };
 
@@ -316,6 +380,6 @@ public static class FileSystemImageSet
         "TD-FOR-MBR-EXT", "TD-FOR-MBR-EBRLOOP", "TD-FOR-GPT", "TD-FOR-GPT-BADCRC", "TD-FOR-GPT-BADBACKUP", "TD-FOR-GPT-4K", "TD-FOR-APM", "TD-FOR-BSD",
         "TD-FOR-NTFS", "TD-FOR-NTFS-BADFIXUP", "TD-FOR-NTFS-BADTIME", "TD-FOR-NTFS-OVERWRITE", "TD-FOR-NTFS-FAT32", "TD-FOR-LOST-PART",
         "TD-FOR-FAT12", "TD-FOR-FAT16", "TD-FOR-FAT32", "TD-FOR-FAT32-FATDIFF", "TD-FOR-FAT32-LOOP", "TD-FOR-EXFAT",
-        "TD-FOR-EXT2", "TD-FOR-EXT3", "TD-FOR-EXT4", "TD-FOR-ISO-JRR", "TD-FOR-UDF250",
+        "TD-FOR-EXT2", "TD-FOR-EXT3", "TD-FOR-EXT4", "TD-FOR-ISO-JRR", "TD-FOR-UDF250", "TD-FOR-HFSPLUS", "TD-FOR-APFS", "TD-FOR-APFS-ENC",
     ];
 }

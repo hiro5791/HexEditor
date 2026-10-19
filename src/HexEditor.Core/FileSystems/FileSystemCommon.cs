@@ -44,6 +44,9 @@ public sealed record FileSystemOpenOptions
 public sealed class FileSystemOpenException(string message, FileSystemKind kind = FileSystemKind.Unknown) : Exception(message)
 {
     public FileSystemKind Kind { get; } = kind;
+
+    /// <summary>表示の言語の文のリソースのキー (あれば <see cref="Exception.Message"/> の代わりに出す。「APFS のチェックポイントが見つかりません」など)。</summary>
+    public string? MessageKey { get; init; }
 }
 
 /// <summary>形式ごとの開く処理の一覧。</summary>
@@ -51,7 +54,7 @@ public static class FileSystemRegistry
 {
     private static readonly List<IFileSystemProvider> Providers =
     [
-        new Fat.FatFileSystemProvider(), new Ntfs.NtfsFileSystemProvider(), new Ext.ExtFileSystemProvider(), new Iso.OpticalFileSystemProvider(),
+        new Fat.FatFileSystemProvider(), new Ntfs.NtfsFileSystemProvider(), new Ext.ExtFileSystemProvider(), new Iso.OpticalFileSystemProvider(), new Apple.AppleFileSystemProvider(),
     ];
     private static readonly object Gate = new();
 
