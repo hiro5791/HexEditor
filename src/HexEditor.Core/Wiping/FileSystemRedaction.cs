@@ -477,7 +477,9 @@ public static class FileSystemRedaction
                 long blocks = Math.Min(reader.Length / ntfs.IndexRecordSize, 1 << 20);
                 for (long b = 0; b < blocks; b++)
                 {
-                    if (reader.VolumeOffsetOf(b * ntfs.IndexRecordSize) is not long blockOffset)
+                    // INDX レコードがディスク上で続いている場合だけ書き換える (クラスタがインデックスのレコードより小さく、途中で離れていることがある)。
+                    if (reader.VolumeOffsetOf(b * ntfs.IndexRecordSize) is not long blockOffset
+                        || reader.VolumeOffsetOf((b + 1) * ntfs.IndexRecordSize - 1) != blockOffset + ntfs.IndexRecordSize - 1)
                     {
                         continue;
                     }

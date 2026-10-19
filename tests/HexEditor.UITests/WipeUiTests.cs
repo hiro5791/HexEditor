@@ -111,7 +111,7 @@ public sealed class WipeUiTests
         Assert.Contains("Pattern Disk", text, StringComparison.Ordinal);
         Assert.Contains("PATTERN1", text, StringComparison.Ordinal);
         Assert.Contains("start LBA 2,048, 16,384 sectors, 8,388,608 bytes", text, StringComparison.Ordinal);
-        Assert.Contains("(1 passes)", text, StringComparison.Ordinal);
+        Assert.Contains("(1 pass)", text, StringComparison.Ordinal);
         Assert.Contains("Estimated time", text, StringComparison.Ordinal);
         Assert.Contains("cannot be undone", text, StringComparison.Ordinal);
         Assert.Equal("Erase 8,388,608 bytes", confirm["primary"]!.GetValue<string>());

@@ -8686,7 +8686,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Redact file contents</value></data>
   <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>redact sanitize blank black out</value></data>
   <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Wipe</value></data>
-  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Erase selection...</value></data>
   <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Erase disk...</value></data>
@@ -8718,7 +8718,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Range: start LBA {0}, {1} sectors, {2} bytes</value></data>
   <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Range: offset {0}, {1} bytes</value></data>
   <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>The range was widened to sector boundaries.</value></data>
-  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Method: {0} ({1} passes)</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Method: {0} ({1, plural, one {# pass} other {# passes}})</value></data>
   <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>The last pass is read back and verified.</value></data>
   <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Estimated time: about {0}</value></data>
   <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>This cannot be undone. The original data cannot be recovered.</value></data>
@@ -8749,8 +8749,8 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Wipe_Result_Title" xml:space="preserve"><value>Erase result</value></data>
   <data name="Wipe_Result_Done" xml:space="preserve"><value>Erased {0} bytes in {1}.</value></data>
   <data name="Wipe_Result_Verified" xml:space="preserve"><value>Verification succeeded.</value></data>
-  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>Verification found {0} ranges that do not match:</value></data>
-  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0} ranges could not be written:</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Verification found # range that does not match:} other {Verification found # ranges that do not match:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# range could not be written:} other {# ranges could not be written:}}</value></data>
   <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Erasing was stopped. The data up to offset {0} was overwritten in pass {1}; the rest keeps its earlier contents.</value></data>
   <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Verification was stopped. All passes had been written.</value></data>
   <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Erasing was stopped after a write error at offset {0}.</value></data>
@@ -8793,10 +8793,10 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Redact_Note" xml:space="preserve"><value>The contents change as an edit. Nothing is written until you save; use Save As to save a new image.</value></data>
   <data name="Redact_Run" xml:space="preserve"><value>Redact</value></data>
   <data name="Redact_Planning" xml:space="preserve"><value>Finding the data to redact</value></data>
-  <data name="Redact_Done" xml:space="preserve"><value>Redacted {0} files ({1} bytes). Use Save As to save a new image.</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {Redacted # file} other {Redacted # files}} ({1} bytes). Use Save As to save a new image.</value></data>
   <data name="Redact_Nothing" xml:space="preserve"><value>There was nothing to redact.</value></data>
   <data name="Redact_Excluded_Title" xml:space="preserve"><value>Files not redacted</value></data>
-  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0} items were not redacted:</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# item was not redacted:} other {# items were not redacted:}}</value></data>
   <data name="Redact_Reason_Directory" xml:space="preserve"><value>folder</value></data>
   <data name="Redact_Reason_Deleted" xml:space="preserve"><value>deleted item</value></data>
   <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>the metadata is damaged</value></data>

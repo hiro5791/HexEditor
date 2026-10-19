@@ -85,6 +85,42 @@ public sealed partial class MainWindow
                 return RedactionJson(plan);
             }
 
+            case "wipeDirect":
+            {
+                // 直接書き込みの空き領域・スラックの消去 (確認ダイアログは UI で押す。結果は wipeState)。
+                DocumentViewModel d = Vm.Selected ?? throw new InvalidOperationException("No document.");
+                if (StateOf(d)?.Session is not { } session || ResolveWipeTarget(d) is not { } target)
+                {
+                    return new JsonObject { ["error"] = "no file system" };
+                }
+
+                LastWipeResult = null;
+                ShredMethod method = TestMethod(request);
+                _ = WipeFileSystemDirectAsync(d, target, session, method, request["slack"]?.GetValue<bool>() == true);
+                return new JsonObject { ["started"] = true };
+            }
+
+            case "wipeFreeSpaceOsCi":
+            {
+                // OS 経由の空き領域の消去 (CI の管理者のテストだけ: build/tests/New-WipeTestVhd.ps1 が作ったラベル HEXWIPE のボリュームに限る。
+                // この PC のボリュームには書かない)。確認ダイアログは UI で押す。
+                string root = request["root"]!.GetValue<string>();
+                var drive = new DriveInfo(root);
+                if (!drive.IsReady || drive.VolumeLabel != "HEXWIPE" || drive.DriveType != DriveType.Fixed
+                    || string.Equals(Path.GetPathRoot(Environment.SystemDirectory), drive.RootDirectory.FullName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new JsonObject { ["error"] = "only the HEXWIPE test volume can be used" };
+                }
+
+                LastWipeResult = null;
+                _ = WipeFreeSpaceOsAsync(new WindowsFreeSpaceVolume(drive.RootDirectory.FullName), drive, TestMethod(request));
+                return new JsonObject { ["started"] = true };
+            }
+
+            case "wipeCancel":
+                LastWipeOperation?.Cancel();
+                return new JsonObject { ["cancelled"] = LastWipeOperation is not null };
+
             case "wipeDocSha":
             {
                 DocumentViewModel d = Vm.Selected ?? throw new InvalidOperationException("No document.");
@@ -117,6 +153,13 @@ public sealed partial class MainWindow
         }
     }
 
+    private static ShredMethod TestMethod(JsonObject request) => request["method"]?.GetValue<string>() switch
+    {
+        "random" => ShredMethod.RandomOnce,
+        "dod" => ShredMethod.Dod,
+        _ => ShredMethod.ZeroOnce,
+    };
+
     private static JsonObject RedactionJson(RedactionPlan? plan) => plan is null
         ? new JsonObject { ["done"] = false }
         : new JsonObject
@@ -147,6 +190,15 @@ public sealed partial class MainWindow
                 ["total"] = op.TotalBytes,
                 ["remainingMs"] = op.EstimatedRemaining?.TotalMilliseconds,
                 ["shouldShow"] = op.ShouldShow,
+            };
+        }
+
+        if (LastSlackSkipped is { } skipped)
+        {
+            result["slackSkipped"] = new JsonObject
+            {
+                ["total"] = skipped.Total, ["resident"] = skipped.Resident, ["compressed"] = skipped.Compressed, ["sparse"] = skipped.Sparse,
+                ["inconsistent"] = skipped.Inconsistent,
             };
         }
 

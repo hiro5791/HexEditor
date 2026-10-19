@@ -37,6 +37,9 @@ public sealed partial class MainWindow
     /// <summary>テスト用: 最後の消去の処理 (処理センターの進捗)。</summary>
     internal LongRunningOperation? LastWipeOperation { get; private set; }
 
+    /// <summary>テスト用: 最後のスラックの消去で対象外にしたファイルの数。</summary>
+    internal SlackSkipCounts? LastSlackSkipped { get; private set; }
+
     /// <summary>テスト用: 最後に開いた消去の確認ダイアログ。</summary>
     internal ContentDialog? LastWipeConfirmDialog { get; private set; }
 
@@ -432,7 +435,7 @@ public sealed partial class MainWindow
             {
                 ["offset"] = widened.Offset.ToString(CultureInfo.InvariantCulture),
                 ["length"] = widened.Length.ToString(CultureInfo.InvariantCulture),
-                ["startLba"] = target.Device is not null ? (widened.Offset / target.SectorSize).ToString(CultureInfo.InvariantCulture) : string.Empty,
+                ["startLba"] = target.Device is not null ? ((target.Device!.Info.RangeStart + widened.Offset) / target.SectorSize).ToString(CultureInfo.InvariantCulture) : string.Empty,
                 ["volumes"] = string.Join(";", volumes.Select(v => v.Name)),
             },
         };
@@ -506,7 +509,7 @@ public sealed partial class MainWindow
 
         if (target.Device is not null)
         {
-            Line(body, "WipeConfirm_Range", Loc.Format("Wipe_Confirm_Range", WipeNumber(range.Offset / target.SectorSize),
+            Line(body, "WipeConfirm_Range", Loc.Format("Wipe_Confirm_Range", WipeNumber((target.Device.Info.RangeStart + range.Offset) / target.SectorSize),
                 WipeNumber(range.Length / target.SectorSize), WipeNumber(range.Length)));
             if (range != requested)
             {
@@ -732,6 +735,58 @@ public sealed partial class MainWindow
         public void Read(long offset, Span<byte> buffer) => inner.Read(offset, buffer);
         public void Flush() => inner.Flush();
         public void Dispose() => inner.Dispose();
+    }
+
+    /// <summary>テスト用: OS 経由の消去の書き込みのたびに待つ (キャンセルのテスト)。</summary>
+    private sealed class DelayedFreeSpaceVolume(IFreeSpaceVolume inner, TimeSpan delay) : IFreeSpaceVolume
+    {
+        public string Root => inner.Root;
+        public string FileSystem => inner.FileSystem;
+        public long MaxFileSize => inner.MaxFileSize;
+        public long FreeBytes() => inner.FreeBytes();
+        public void CreateDirectory(string path) => inner.CreateDirectory(path);
+        public Stream CreateFile(string path) => new DelayedStream(inner.CreateFile(path), delay);
+        public Stream OpenFile(string path) => new DelayedStream(inner.OpenFile(path), delay);
+        public void DeleteFile(string path) => inner.DeleteFile(path);
+        public void DeleteDirectory(string path) => inner.DeleteDirectory(path);
+        public bool FileExists(string path) => inner.FileExists(path);
+        public bool DirectoryExists(string path) => inner.DirectoryExists(path);
+        public bool IsDiskFull(IOException exception) => inner.IsDiskFull(exception);
+
+        private sealed class DelayedStream(Stream stream, TimeSpan delay) : Stream
+        {
+            public override bool CanRead => stream.CanRead;
+            public override bool CanSeek => stream.CanSeek;
+            public override bool CanWrite => stream.CanWrite;
+            public override long Length => stream.Length;
+
+            public override long Position
+            {
+                get => stream.Position;
+                set => stream.Position = value;
+            }
+
+            public override void Flush() => stream.Flush();
+            public override int Read(byte[] buffer, int offset, int count) => stream.Read(buffer, offset, count);
+            public override long Seek(long offset, SeekOrigin origin) => stream.Seek(offset, origin);
+            public override void SetLength(long value) => stream.SetLength(value);
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                Thread.Sleep(delay);
+                stream.Write(buffer, offset, count);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    stream.Dispose();
+                }
+
+                base.Dispose(disposing);
+            }
+        }
     }
 
     /// <summary>
@@ -962,6 +1017,11 @@ public sealed partial class MainWindow
         }
 
         int lastPass = -1;
+        if (WipeTestWriteDelay > TimeSpan.Zero)
+        {
+            volume = new DelayedFreeSpaceVolume(volume, WipeTestWriteDelay);
+        }
+
         try
         {
             OsFreeSpaceWipeResult result = await Vm.Operations.RunAsync(Loc.Format("Wipe_Operation", name), OperationKind.WritesExternal, null, free * method.Passes.Count,
@@ -1100,6 +1160,7 @@ public sealed partial class MainWindow
                 plan = await Vm.Operations.RunAsync(Loc.Get("WipeSlack_Planning"), OperationKind.ReadOnly, d.Document, null,
                     op => Task.FromResult(FileSystemWipe.PlanSlack(fs, volumeOffset, OperationProgress(op), op.CancellationToken)));
                 bytes = plan.TotalBytes;
+                LastSlackSkipped = plan.Skipped;
             }
             else
             {

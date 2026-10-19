@@ -2784,7 +2784,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0x100000, 0x900000) を選択する。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0x100000, 0x900000) を選択する。自動テストは、TD-FOR-VHDX-PATTERN と同じ内容 (生のディスク) のイメージファイルを中身にした偽のディスク (fakeDevices) をディスク 1 として開く (UI のテスト: 確認ダイアログ・データ・監査ログ)。偽のディスクでのロックの順序は単体テストが確かめる。
 
 **手順**:
 
@@ -2811,7 +2811,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0, 32 MiB) を選択する。「遅いデータソース」で書き込みが 5 秒以上かかるようにする。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0, 32 MiB) を選択する。「遅いデータソース」で書き込みが 5 秒以上かかるようにする。自動テストは TC-FOR-30-01 と同じ偽のディスク (48 MiB) を使い、テスト用の命令で書き込みごとに 60 ms 待たせる。
 
 **手順**:
 
@@ -2835,7 +2835,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開く (ディスク番号 N)。ディスク全体の SHA-256 を記録する。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開く (ディスク番号 N)。ディスク全体の SHA-256 を記録する。自動テストは TC-FOR-30-01 と同じ偽のディスク (N = 1) を使う。手順 3 の Enter は既定のボタン (キャンセル) を押すことと同じで、ダイアログが閉じるため、手順 4 は確認ダイアログを開き直して行う。
 
 **手順**:
 
@@ -2886,7 +2886,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を 2 つ用意し、それぞれ接続してドライブ文字を割り当てる (A、B)。テストコードが、ボリュームの未割り当て領域に ASCII の `WIPE-ME-0123456789` が残っていることを確認する。
+**前提**: TD-FOR-VHDX-DELETED を 2 つ用意し、それぞれ接続してドライブ文字を割り当てる (A、B)。テストコードが、ボリュームの未割り当て領域に ASCII の `WIPE-ME-0123456789` が残っていることを確認する。CI の管理者のテストは build/tests/New-WipeTestVhd.ps1 で Windows がフォーマットした固定サイズの VHD を作り、A は接続したボリュームに OS 経由で、B は切り離した VHD のファイルをディスクイメージとして開いて直接書き込みで消去する。単体テストは、同じ内容をテストデータの生成ツールが書いたディスクのイメージで、直接書き込みはイメージに、OS 経由はイメージの空き領域にファイルを割り当てる偽のボリュームに書いて確かめる。
 
 **手順**:
 
@@ -2912,7 +2912,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続し、全ファイルの SHA-256 と、`slack.txt` (100 バイト、スラックに `SLACK-REMNANT` が残っている) の末尾クラスタの位置を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続し、全ファイルの SHA-256 と、`slack.txt` (100 バイト、スラックに `SLACK-REMNANT` が残っている) の末尾クラスタの位置を記録する。直接書き込みのため、テストは VHD のファイルをディスクイメージとして開いて消去する (CI の管理者のテスト)。単体テストは TC-FOR-31-01 と同じイメージを使う。
 
 **手順**:
 
@@ -2938,7 +2938,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続してドライブ文字 `X:` を割り当て、ルートのファイルとフォルダの一覧を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続してドライブ文字 `X:` を割り当て、ルートのファイルとフォルダの一覧を記録する。CI の管理者のテストは書き込みごとに少し待たせて 30% を超えたところでキャンセルする。単体テストは TC-FOR-31-01 の偽のボリュームで確かめる。
 
 **手順**:
 
@@ -2962,7 +2962,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続し、`fsutil dirty set X:` で dirty フラグを立てる。ボリューム全体の SHA-256 を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続し、`fsutil dirty set X:` で dirty フラグを立てる。ボリューム全体の SHA-256 を記録する。CI の管理者のテストは dirty フラグを立ててから切り離し、VHD のファイルをディスクイメージとして開いて実行する。単体テストは、$Volume の dirty フラグを立てて生成したイメージを使う。
 
 **手順**:
 
@@ -3002,7 +3002,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 - 手順 3 で、`photo.png` の名前・サイズ・日時が元のままで、内容がすべて `00`。
 - 手順 4 の SHA-256 がすべて記録と同じ。
-- `redaction-log.csv` に `photo.png` のパス・ファイル ID・上書きした範囲 (データの断片とスラック) が記録され、監査ログにも記録される。
+- `redaction-log.csv` に `photo.png` のパス・ファイル ID・上書きした範囲 (データの断片とスラック) が記録され、監査ログにも記録される。TD-FOR-NTFS の `photo.png` は小さいため MFT レコードに常駐し、上書きした範囲は MFT レコードの中の値 (常駐データ) になる。データの断片とスラックの記録は、常駐しない `small100.bin` を墨塗りして確かめる。
 
 ### TC-FOR-32-02 墨塗りの直後の Undo
 
@@ -3183,5 +3183,5 @@ TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・パーティション表のイメー�
 | TD-FOR-LUKS2 | 32 MiB | `cryptsetup luksFormat --type luks2 --uuid 12345678-1234-1234-1234-123456789abc --pbkdf pbkdf2` (キー `HexEditor-Test-01`、キースロット 1 つ) で作ったイメージ |
 | TD-FOR-BITLOCKER | 64 MiB | 保管。Windows 11 Pro で作った VHDX。GPT で NTFS のパーティション 1 つを持ち、`inside.txt` (ASCII の `INSIDE`) を入れてから、BitLocker (AES-XTS 128、パスワード `HexEditor-Test-01` と回復パスワードの 2 つの保護機能) で全体を暗号化したもの |
 | TD-FOR-BITLOCKER-RAW | 64 MiB | TD-FOR-BITLOCKER のディスクの内容を raw で書き出したもの (保管した VHDX から生成ツールが作る) |
-| TD-FOR-VHDX-PATTERN | 64 MiB | 動的 VHDX。パーティション表なし。全セクタを ASCII の `ORIGDATA` の繰り返しで埋める |
-| TD-FOR-VHDX-DELETED | 256 MiB | 動的 VHDX。GPT で NTFS のパーティション 1 つ (クラスタ 4 KiB)。ファイル: `keep.txt` (TD-TEXT-ASCII)、`slack.txt` (ASCII の `SLACK-REMNANT` の繰り返し 4 KiB を書いてから 100 バイトに切り詰めたもの。スラックに `SLACK-REMNANT` が残る)、`tiny.txt` (10 バイト、常駐)。さらに `wipe.bin` (ASCII の `WIPE-ME-0123456789` の繰り返し 1 MiB) を作って削除し、内容を未割り当て領域に残す |
+| TD-FOR-VHDX-PATTERN | 64 MiB | 動的 VHDX。パーティション表なし。全セクタを ASCII の `ORIGDATA` の繰り返しで埋める。生のディスクの内容は生成ツール (tools/HexEditor.TestData の WipeImages) が書く |
+| TD-FOR-VHDX-DELETED | 256 MiB | 動的 VHDX。GPT で NTFS のパーティション 1 つ (クラスタ 4 KiB)。ファイル: `keep.txt` (TD-TEXT-ASCII)、`slack.txt` (ASCII の `SLACK-REMNANT` の繰り返し 4 KiB を書いてから 100 バイトに切り詰めたもの。スラックに `SLACK-REMNANT` が残る)、`tiny.txt` (10 バイト、常駐)。さらに `wipe.bin` (ASCII の `WIPE-ME-0123456789` の繰り返し 1 MiB) を作って削除し、内容を未割り当て領域に残す。CI の管理者のテストは build/tests/New-WipeTestVhd.ps1 で Windows がフォーマットした固定サイズの VHD (ラベル `HEXWIPE`) として作る。単体テストは、同じファイルを生成ツール (WipeImages) が書いた生のディスク (NTFS のボリュームは 250 MiB) を使う |

@@ -55,6 +55,8 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 
 - [Partitions](partitions.md)
 - [File systems](file-systems.md)
+- [Secure wipe](secure-wipe.md)
+- [Redaction](redaction.md)
 
 ## Settings and help {#settings-and-help}
 

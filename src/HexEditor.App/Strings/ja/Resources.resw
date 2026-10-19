@@ -8686,7 +8686,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>ファイルの内容を墨塗り</value></data>
   <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>ふぁいるのないようをすみぬり すみぬり redact</value></data>
   <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>消去</value></data>
-  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>選択範囲を消去...</value></data>
   <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>ディスクを消去...</value></data>

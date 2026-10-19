@@ -178,7 +178,10 @@ public sealed class FileSystemWipeTests
     [InlineData("TD-FOR-EXFAT")]
     public void Free_space_direct_wipe_works_on_fat_and_exfat(string id)
     {
-        SparseImage image = id == "TD-FOR-EXFAT" ? FileSystemImageSet.ExFat().Image : FileSystemImageSet.Fat(id).Image;
+        // 共有のイメージ (ほかのテストも使う) は変えないので、写しに書く。
+        SparseImage shared = id == "TD-FOR-EXFAT" ? FileSystemImageSet.ExFat().Image : FileSystemImageSet.Fat(id).Image;
+        var image = new SparseImage(shared.Length);
+        image.Place(0, shared);
         IFileSystem fs = FileSystemRegistry.Open(new SparseImageReader(image), new FileSystemOpenOptions());
         Assert.Equal(FsInconsistency.None, FileSystemWipe.CheckConsistency(fs));
         Dictionary<string, string> before = Hashes(fs);
