@@ -95,6 +95,32 @@ public sealed partial class MainWindow
 
     // ---- イメージをディスクとして開く (FOR-21) ----
 
+    /// <summary>
+    /// ファイルのタブの右クリックメニュー「ディスクイメージとして開き直す」(FOR-21 の仕様 2)。ファイルとして開いたものを閉じて、
+    /// E01・分割 raw・仮想ディスクの拡張子ならイメージとして (FOR-21)、それ以外はセクタサイズを選んでディスクイメージとして (ENG-31) 開き直す。
+    /// 未保存の編集があるときは使えない (編集を失わないため)。
+    /// </summary>
+    private IEnumerable<TabMenuEntry?> ImageTabMenuEntries(DocumentViewModel doc)
+    {
+        if (doc.FilePath is not { } path || doc.Device is not null || doc.LinkParent is not null || doc.Encoded is not null || doc.IsPending || doc.IsMissing
+            || doc.Document.Source is IImageSource || doc.Document.Source.LogicalSectorSize > 1)
+        {
+            yield break;
+        }
+
+        yield return null;
+        yield return new TabMenuEntry("TabMenu_ReopenAsDiskImage", Loc.Get("Tab_ReopenAsDiskImage"), !doc.Document.IsModified, () =>
+        {
+            if (!Vm.Documents.Contains(doc) || doc.Document.IsModified)
+            {
+                return;
+            }
+
+            Vm.Close(doc);
+            _ = ImageOpener.OpensAsImageAutomatically(path) ? OpenForensicImageAsync(path) : OpenDiskImageAsync(path);
+        });
+    }
+
     private async Task OpenImageCommandAsync()
     {
         IReadOnlyList<string>? paths = TestHooks.OpenPickerResult("HexEditor.OpenForensicImage");

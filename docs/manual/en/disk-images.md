@@ -41,7 +41,7 @@ When you open the image, the ranges that were not acquired are shown with a hatc
 
 ## Open an image as a disk {#open-image}
 
-Select **Forensics > Image > Open image**, or open the file with **File > Open**. Files ending in `.E01`, `.001`, `.vhd`, `.vhdx`, `.avhdx`, and `.vmdk` open as disk images automatically.
+Select **Forensics > Image > Open image**, or open the file with **File > Open**. Files ending in `.E01`, `.001`, `.vhd`, `.vhdx`, `.avhdx`, and `.vmdk` open as disk images automatically. If you opened an image as an ordinary file, right-click its tab and select **Reopen as disk image** (available when the file has no unsaved changes).
 
 - Split raw: open `name.001`. The following files are joined automatically.
 - E01: open `name.E01`. The other segments are found automatically.

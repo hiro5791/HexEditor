@@ -92,7 +92,11 @@ internal static class ForensicsService
         ApplySettings();
         if (App.Settings is { } settings)
         {
-            settings.Changed += _ => ApplySettings();
+            settings.Changed += keys =>
+            {
+                ApplySettings();
+                RecordForensicSettings(settings, keys);
+            };
         }
     }
 
@@ -120,7 +124,63 @@ internal static class ForensicsService
                 .Where(x => x.LogicalVolumes is not null).Select(x => (x.Name, x.LogicalVolumes!)),
             localize));
         Core.Forensics.Reports.ReportRegistry.Shared.Register(AcquisitionReports = new Core.Forensics.Reports.AcquisitionReportContributor(localize));
+
+        // 監査ログ (FOR-04 の仕様 3・4): すべての保存と、設定「閲覧操作も記録する」のときの検索。ジャンプとブックマークの追加は各ウィンドウが記録する。
+        ViewModels.MainViewModel.SaveCompleted += RecordSave;
+        Controls.FindBar.SearchExecuted += RecordSearch;
     }
+
+    /// <summary>ドキュメントの保存を記録する (ケースを開いているときだけ記録される)。</summary>
+    private static void RecordSave(ViewModels.DocumentViewModel doc, string path, bool? saved, string? error)
+    {
+        Audit.Record(new AuditRecord(AuditOperations.Save)
+        {
+            EvidenceId = EvidenceIdOf(path),
+            Path = path,
+            Parameters = AuditRecord.Args(("document", doc.DisplayName)),
+            Result = saved switch { true => AuditResult.Success, false => AuditResult.Failure, null => AuditResult.Cancelled },
+            Message = error ?? string.Empty,
+        });
+    }
+
+    /// <summary>検索バーの検索を閲覧操作として記録する (設定がオフなら <see cref="ForensicAudit"/> が捨てる)。</summary>
+    private static void RecordSearch(Core.View.EditorState? editor, string query)
+    {
+        if (Cases.CurrentCase is null || !Audit.LogBrowsing)
+        {
+            return;
+        }
+
+        ViewModels.DocumentViewModel? doc = editor is null ? null
+            : WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray()).FirstOrDefault(d => ReferenceEquals(d.Editor, editor));
+        RecordBrowsing(AuditOperations.Search, doc, ("query", query));
+    }
+
+    /// <summary>閲覧操作 (ジャンプ・検索・ブックマークの追加) を記録する (FOR-04 の仕様 4)。対象はドキュメントのデータソースとカーソル位置。</summary>
+    public static void RecordBrowsing(string operation, ViewModels.DocumentViewModel? doc, params (string Key, string Value)[] extra)
+    {
+        if (Cases.CurrentCase is null || !Audit.LogBrowsing)
+        {
+            return;
+        }
+
+        string? path = doc is null ? null : doc.Device?.Path ?? doc.FilePath;
+        var parameters = new List<(string Key, string Value)>(extra);
+        if (doc is not null)
+        {
+            parameters.Add(("offset", "0x" + doc.Editor.Cursor.ToString("X", System.Globalization.CultureInfo.InvariantCulture)));
+        }
+
+        Audit.Record(new AuditRecord(operation)
+        {
+            EvidenceId = path is null ? null : EvidenceIdOf(path),
+            Path = path,
+            Parameters = AuditRecord.Args([.. parameters]),
+        });
+    }
+
+    private static string? EvidenceIdOf(string path) =>
+        Cases.ActiveEvidence.FirstOrDefault(x => string.Equals(x.Path, path, StringComparison.OrdinalIgnoreCase))?.Id;
 
     /// <summary>レポートの「取得記録」の節 (イメージの取得のたびに加える)。</summary>
     public static Core.Forensics.Reports.AcquisitionReportContributor AcquisitionReports { get; private set; } = new();
@@ -152,6 +212,18 @@ internal static class ForensicsService
             Path = e.Source,
             Parameters = parameters,
         });
+    }
+
+    /// <summary>フォレンジックに関わる設定 (<c>forensics.*</c>) の変更を監査ログに記録する (FOR-04 の仕様 3。ケースを開いているときだけ記録される)。</summary>
+    private static void RecordForensicSettings(Core.Settings.SettingsStore settings, IReadOnlyCollection<string> keys)
+    {
+        foreach (string key in keys.Where(k => k.StartsWith("forensics.", StringComparison.Ordinal)))
+        {
+            Audit.Record(new AuditRecord(AuditOperations.SettingChange)
+            {
+                Parameters = AuditRecord.Args(("key", key), ("value", settings.GetNode(key)?.ToJsonString() ?? string.Empty)),
+            });
+        }
     }
 
     /// <summary>設定の反映 (閲覧操作の記録、日時の表示)。</summary>

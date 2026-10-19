@@ -33,7 +33,7 @@ Reopening the case shows the same list.
 
 ## The audit log {#audit}
 
-The audit log records what you do while a case is open: creating and opening the case, adding and removing evidence, opening and closing documents, hash results, exporting files, carving, saving, creating reports, and changes of write-protect mode. Browsing actions such as jumping and searching are recorded only if you turn on **Also record browsing actions in the audit log** in **Settings > Forensics**.
+The audit log records what you do while a case is open: creating and opening the case, adding and removing evidence, opening and closing documents, hash results, exporting files, carving, saving (with its result), creating reports, changes of forensic settings, and changes of write-protect mode. Browsing actions (jumping, searching and adding bookmarks) are recorded only if you turn on **Also record browsing actions in the audit log** in **Settings > Forensics**.
 
 Each line has the time (always UTC), the user, the computer, the operation, the evidence, the result and a message. Passwords, keys and recovery keys are never written to it. Each line also contains the hash of the line before it, so a change anywhere in the log can be found.
 

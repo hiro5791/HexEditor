@@ -2136,6 +2136,7 @@ Details were written to:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Window {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(no tabs)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Reopen as disk image</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Show in Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Read-only</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Size: {0}</value></data>

@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>ウィンドウ {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(タブなし)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>ディスクイメージとして開き直す</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>サイズ: {0}</value></data>
