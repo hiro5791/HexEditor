@@ -72,6 +72,7 @@ public sealed partial class MainWindow
         ForensicsService.TimeDisplayChanged += caseChanged;
         ForensicsService.Audit.FaultChanged += faultChanged;
         Vm.Documents.CollectionChanged += ForensicsDocumentsChanged;
+        Commands.Executed += RecordBrowsingCommand;
         Closed += (_, _) =>
         {
             ForensicsService.CaseChanged -= caseChanged;
@@ -86,6 +87,48 @@ public sealed partial class MainWindow
         AuditFaultBar.ActionButton = new Button { Content = Loc.Get("Audit_Fault_Retry") };
         AuditFaultBar.ActionButton.Click += (_, _) => RetryAuditLog();
         OnCaseStateChanged();
+    }
+
+    // ---- 閲覧操作の記録 (FOR-04 の仕様 4: 設定「閲覧操作も記録する」のとき、ジャンプ・検索・ブックマークの追加) ----
+
+    private static readonly HashSet<string> JumpCommands = new(StringComparer.Ordinal)
+    {
+        "go.goTo", "go.back", "go.forward", "go.history", "go.start", "go.end", "go.toSector", "go.bookmark.next", "go.bookmark.previous",
+        "go.nextRecord", "go.previousRecord", "forensics.fs.goToCluster", "forensics.fs.goToMftRecord", "forensics.fs.goToInode",
+        "forensics.partitions.goToStart", "forensics.fs.nextFragment", "forensics.fs.previousFragment",
+    };
+
+    private static readonly HashSet<string> SearchCommands = new(StringComparer.Ordinal)
+    {
+        "search.findAll", "search.multiFile", "search.strings", "search.yara", "search.multiTerm", "search.mismatch",
+    };
+
+    private void RecordBrowsingCommand(string id)
+    {
+        if (ForensicsService.Cases.CurrentCase is null || !ForensicsService.Audit.LogBrowsing)
+        {
+            return;
+        }
+
+        DocumentViewModel? doc = Vm.Selected;
+        if (JumpCommands.Contains(id))
+        {
+            ForensicsService.RecordBrowsing(AuditOperations.Jump, doc, ("command", id));
+        }
+        else if (SearchCommands.Contains(id))
+        {
+            ForensicsService.RecordBrowsing(AuditOperations.Search, doc, ("command", id));
+        }
+        else if (id == "go.bookmark.toggle" && doc is not null
+            && Core.Bookmarks.BookmarkCollection.For(doc.Document)?.All.Any(b => b.Start == doc.Editor.Cursor) == true)
+        {
+            // 切り替えで付けたときだけ (外したときは「追加」ではない)。
+            ForensicsService.RecordBrowsing(AuditOperations.BookmarkAdd, doc, ("command", id));
+        }
+        else if (id == "search.results.toBookmarks")
+        {
+            ForensicsService.RecordBrowsing(AuditOperations.BookmarkAdd, doc, ("command", id));
+        }
     }
 
     private CommandState NoCaseOpen() =>

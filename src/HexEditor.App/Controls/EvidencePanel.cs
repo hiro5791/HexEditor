@@ -1,3 +1,4 @@
+using HexEditor.App.Commands;
 using HexEditor.App.Panels;
 using HexEditor.App.Services;
 using HexEditor.Core.Forensics.Cases;
@@ -138,8 +139,30 @@ public sealed class EvidencePanel : UserControl, IPanelContent
         copyHash.Click += (_, _) => Tools.ToolParts.Copy(string.Join(Environment.NewLine, e.Hashes.Select(h => $"{h.Algorithm}: {h.Value}")));
         var copyPath = new MenuFlyoutItem { Text = Loc.Get("Evidence_Menu_CopyPath") };
         copyPath.Click += (_, _) => Tools.ToolParts.Copy(e.Path);
+
+        // イメージの作成 (FOR-20) と検証 (FOR-22) の「呼び出し」: 証拠パネルの右クリックメニュー。作成は証拠を開いてから、そのタブを入力元にする。
+        var createImage = new MenuFlyoutItem { Text = Loc.Get("Evidence_Menu_CreateImage") };
+        AutomationProperties.SetAutomationId(createImage, "Evidence_Menu_CreateImage");
+        createImage.Click += async (_, _) =>
+        {
+            await OpenAsync(index);
+            await _window.CreateImageAsync(Core.Forensics.Images.AcquisitionScope.Full);
+        };
+        var verify = new MenuFlyoutItem { Text = Loc.Get("Evidence_Menu_Verify") };
+        AutomationProperties.SetAutomationId(verify, "Evidence_Menu_Verify");
+        verify.Click += async (_, _) => await _window.VerifyEvidenceAsync(e);
+        foreach (MenuFlyoutItem item in new[] { createImage, verify })
+        {
+            CommandState state = _window.Commands.StateOf(item == createImage ? "forensics.image.create" : "forensics.image.verify");
+            item.IsEnabled = state.Enabled;
+            ToolTipService.SetToolTip(item, state.Enabled ? null : state.Reason);
+        }
+
         menu.Items.Add(open);
         menu.Items.Add(remove);
+        menu.Items.Add(new MenuFlyoutSeparator());
+        menu.Items.Add(createImage);
+        menu.Items.Add(verify);
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(copyHash);
         menu.Items.Add(copyPath);

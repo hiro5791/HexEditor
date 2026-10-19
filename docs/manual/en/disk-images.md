@@ -7,7 +7,7 @@ This page explains how to acquire disk images, open them as disks, verify them, 
 You can copy a disk, a volume, a partition, or any open document into an image file. The source is only read.
 
 1. Open the source. For a disk, select **File > Open disk**.
-2. Select **Forensics > Image > Create image**.
+2. Select **Forensics > Image > Create image**. You can also right-click an item in the evidence list, or a partition in the partitions panel, and select **Create image...** or **Create image of this range...**. For a partition, only its range is acquired.
 3. Choose the format:
    - **Raw (dd)**: one file such as `disk.dd`.
    - **Split raw**: files `name.001`, `name.002`, and so on. Type the size of each file, for example `2G` or `100M`.
@@ -41,7 +41,7 @@ When you open the image, the ranges that were not acquired are shown with a hatc
 
 ## Open an image as a disk {#open-image}
 
-Select **Forensics > Image > Open image**, or open the file with **File > Open**. Files ending in `.E01`, `.001`, `.vhd`, `.vhdx`, `.avhdx`, and `.vmdk` open as disk images automatically.
+Select **Forensics > Image > Open image**, or open the file with **File > Open**. Files ending in `.E01`, `.001`, `.vhd`, `.vhdx`, `.avhdx`, and `.vmdk` open as disk images automatically. If you opened an image as an ordinary file, right-click its tab and select **Reopen as disk image** (available when the file has no unsaved changes).
 
 - Split raw: open `name.001`. The following files are joined automatically.
 - E01: open `name.E01`. The other segments are found automatically.
@@ -55,7 +55,7 @@ If an E01 chunk is damaged, its range is shown as a read error and a message tel
 
 ## Verify an image {#verify-image}
 
-1. Open the image, or select **Forensics > Image > Verify image** and choose the file.
+1. Open the image, or select **Forensics > Image > Verify image** and choose the file. To verify a disk in the evidence list, open the disk and select the same command, or right-click the evidence and select **Verify...**. A disk is compared with the hashes in the evidence list and the value that you type.
 2. Choose the hashes.
 3. To compare with a value that you have, type it in **Value to compare**.
 4. Select **Verify**.

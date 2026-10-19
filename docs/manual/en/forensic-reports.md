@@ -8,7 +8,7 @@ Make an HTML or PDF report of a case: the case information, the evidence with it
 2. Select **Forensics > Create report...**.
 3. Tick what to include. Items with no data are left out.
 4. Choose **HTML** or **PDF**. For PDF, choose A4 or Letter paper (portrait).
-5. To limit the audit log, untick **All audit log entries** and type the start and end in UTC. Set how many bytes of Hex dump to show for each bookmark (0 to 4096; 64 by default).
+5. To limit the audit log, untick **All audit log entries** and type the start and end in UTC. Set how many bytes of Hex dump to show for each bookmark (0 to 4096; 64 by default). The dump is added to the first 1,000 bookmarks; every bookmark is listed.
 6. Check the folder (the `reports` folder of the case by default) and select **Create**.
 
 The report can contain: the cover (case number, name, investigator, organization, creation time and time zone, application and version), the evidence list with hashes and verification results, acquisition records, device information, partitions, file systems, bookmarks with a Hex dump at each position, carving results, and the audit log.

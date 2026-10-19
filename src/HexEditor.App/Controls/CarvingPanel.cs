@@ -173,7 +173,7 @@ public sealed class CarvingPanel : UserControl, IPanelContent
         int version = ++_thumbnailVersion;
         _thumbnail.Visibility = Visibility.Collapsed;
         if (App.Settings.GetBool("forensics.carving.thumbnails", true) && f.Signature.Extension is "jpg" or "png" or "gif" or "bmp" && f.Length <= MaxThumbnailBytes
-            && _window.ReadCarvedBytes(f) is { } bytes)
+            && await _window.ReadCarvedBytesAsync(f) is { } bytes && version == _thumbnailVersion)
         {
             try
             {

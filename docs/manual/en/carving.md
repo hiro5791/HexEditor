@@ -5,7 +5,7 @@ Find files in raw data by their headers, even when no file system lists them, an
 ## Carve files {#run}
 
 1. Open the disk, image or file. To limit the search, select a range.
-2. Select **Forensics > Carving > Carve files...**.
+2. Select **Forensics > Carving > Carve files...**. With a selection, you can also right-click it and select **Carve files from selection...**: the scope then starts as the selection.
 3. Choose the scope: the whole document, the selection, unallocated space only, or slack space only. The last two are available when the file system has been analyzed.
 4. Tick the file types to look for. Tick **Do not look for headers inside a file that was found** if you do not want files inside files.
 5. Leave **Write the carved files to a folder** ticked and choose the output folder. In a case, the default is `exports/carved`. Untick it to only make the list.

@@ -521,6 +521,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         menu.Items.Add(Item("Part_Menu_ShowStructure", ShowStructure));
         menu.Items.Add(Item("Part_Menu_ShowFileSystem", () => _ = ShowFileSystemAsync()));
         menu.Items.Add(Item("Part_Menu_LogicalVolumes", () => _ = Window?.ShowLogicalVolumesAsync()));
+        menu.Items.Add(Item("Part_Menu_CreateImage", () => _ = CreateImageAsync()));
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(Item("Part_Menu_Scan", () => _ = Window?.ShowLostPartitionScanAsync(SelectedRow is { IsUnallocated: true } gap ? gap : null)));
         menu.Opening += (_, _) =>
@@ -535,6 +536,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
                     "Part_Menu_ShowStructure" => row?.Template is not null,
                     "Part_Menu_ShowFileSystem" or "Part_Menu_OpenInNewTab" => row is { IsUnallocated: false, IsContainer: false },
                     "Part_Menu_LogicalVolumes" => row?.FileSystem is FileSystemKind.Ldm or FileSystemKind.Lvm2,
+                    "Part_Menu_CreateImage" => row is { IsContainer: false, SectorCount: > 0 } && Window?.Commands.StateOf("forensics.image.create").Enabled == true,
                     _ => row is not null,
                 };
             }
@@ -548,6 +550,27 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         AutomationProperties.SetAutomationId(item, key);
         item.Click += (_, _) => action();
         return item;
+    }
+
+    /// <summary>
+    /// 「イメージを作成」(FOR-20 の「呼び出し」: パーティションパネルの右クリックメニュー): 行の範囲 (パーティションまたは未割り当て領域) を選択し、
+    /// 選択範囲を入力元にしてイメージ作成のダイアログを開く。
+    /// </summary>
+    private async Task CreateImageAsync()
+    {
+        if (SelectedRow is not { } r || _document is not { } d || Window is not { } w)
+        {
+            return;
+        }
+
+        long start = Math.Clamp(r.StartOffset, 0, d.Document.Length);
+        d.Editor.Select(start, Math.Clamp(r.Size, 0, d.Document.Length - start));
+        if (w.Vm.Selected != d)
+        {
+            w.Vm.Selected = d;
+        }
+
+        await w.CreateImageAsync(Core.Forensics.Images.AcquisitionScope.Full, selectionOnly: true);
     }
 
     internal void GoToStart()

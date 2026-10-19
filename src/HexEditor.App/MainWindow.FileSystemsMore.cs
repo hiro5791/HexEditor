@@ -133,11 +133,11 @@ public sealed partial class MainWindow
         state.LogicalVolumesRunning = true;
         state.RaiseChanged();
         var sources = Vm.Documents.OrderBy(doc => IsDiskDocument(doc) ? 0 : 1)
-            .Select(doc => (Doc: doc, Reader: ReaderOf(doc), Partitions: StateOf(doc)?.Partitions, Sector: SectorSizeOf(doc))).ToList();
+            .Select(doc => (Name: doc.DisplayName, Reader: ReaderOf(doc), Partitions: StateOf(doc)?.Partitions, Sector: SectorSizeOf(doc))).ToList();
         try
         {
             state.LogicalVolumes = await Task.Run(() => LogicalVolumeAnalyzer.Analyze(sources.SelectMany(s =>
-                LogicalVolumeAnalyzer.Discover(s.Reader, s.Doc.DisplayName, s.Partitions ?? PartitionAnalyzer.Analyze(s.Reader, s.Sector)))));
+                LogicalVolumeAnalyzer.Discover(s.Reader, s.Name, s.Partitions ?? PartitionAnalyzer.Analyze(s.Reader, s.Sector)))));
             state.LogicalVolumesMessage = state.LogicalVolumes.Volumes.Count == 0 ? Loc.Get("Lv_NoneFound") : null;
         }
         finally

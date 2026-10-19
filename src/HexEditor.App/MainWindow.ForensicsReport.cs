@@ -139,27 +139,44 @@ public sealed partial class MainWindow
         Audit = ForensicsService.Audit,
     };
 
-    /// <summary>ブックマーク (開いているすべてのドキュメント)。名前、オフセット、LBA、コメント、その位置の Hex ダンプ。</summary>
-    private static IReadOnlyList<ReportBookmark> CollectBookmarks(int dumpBytes)
+    /// <summary>レポートのブックマークの元 (UI のスレッドで写したもの): 表示名、データの写し、セクタサイズ、ブックマーク。</summary>
+    private sealed record BookmarkSource(string Document, Core.Engine.DocumentSnapshot Data, int SectorSize, IReadOnlyList<Bookmark> Bookmarks);
+
+    /// <summary>開いているすべてのドキュメントのブックマークを写す (UI のスレッドで呼ぶ。データは読まない)。</summary>
+    private static List<BookmarkSource> CaptureBookmarks()
     {
-        var list = new List<ReportBookmark>();
+        var list = new List<BookmarkSource>();
         foreach (DocumentViewModel doc in WindowManager.Windows.SelectMany(w => w.Vm.Documents).Distinct())
         {
-            if (BookmarkCollection.For(doc.Document) is not { } bookmarks)
+            if (BookmarkCollection.For(doc.Document) is { } bookmarks)
             {
-                continue;
+                list.Add(new BookmarkSource(doc.DisplayName, doc.Document.DataSnapshot, SectorSizeOf(doc), [.. bookmarks.All]));
             }
+        }
 
-            int sector = SectorSizeOf(doc);
-            foreach (Bookmark b in bookmarks.All)
+        return list;
+    }
+
+    /// <summary>
+    /// ブックマーク (名前、オフセット、LBA、コメント、その位置の Hex ダンプ)。バックグラウンドで作る。Hex ダンプは先頭の
+    /// <see cref="ReportTable.DefaultMaxRows"/> 件だけに付ける (ブックマークが多くてもメモリと時間を件数に比例させすぎない。FOR-33 の実装の注記)。
+    /// </summary>
+    private static List<ReportBookmark> CollectBookmarks(IReadOnlyList<BookmarkSource> sources, int dumpBytes, CancellationToken cancellationToken)
+    {
+        var list = new List<ReportBookmark>();
+        foreach (BookmarkSource source in sources)
+        {
+            foreach (Bookmark b in source.Bookmarks)
             {
-                byte[] bytes = new byte[Math.Clamp((long)dumpBytes, 0, Math.Max(0, Math.Min(4096, doc.Document.Length - b.Start)))];
+                cancellationToken.ThrowIfCancellationRequested();
+                long available = Math.Max(0, Math.Min(4096, source.Data.Length - b.Start));
+                byte[] bytes = list.Count < ReportTable.DefaultMaxRows ? new byte[Math.Clamp((long)dumpBytes, 0, available)] : [];
                 if (bytes.Length > 0)
                 {
-                    doc.Document.DataSnapshot.Read(b.Start, bytes);
+                    source.Data.Read(b.Start, bytes);
                 }
 
-                list.Add(new ReportBookmark(doc.DisplayName, b.Name, b.Start, b.Start / sector, b.Comment, bytes));
+                list.Add(new ReportBookmark(source.Document, b.Name, b.Start, b.Start / source.SectorSize, b.Comment, bytes));
             }
         }
 
@@ -176,11 +193,14 @@ public sealed partial class MainWindow
 
         string? manifest = ForensicsService.LastCarving?.ManifestPath;
         manifest ??= Path.Combine(current.CarvedFolder, Core.Forensics.Carving.CarvingEngine.ManifestFileName);
-        var input = new ReportInput
+        List<BookmarkSource> bookmarkSources = options.Sections.Contains(ReportSections.Bookmarks) ? CaptureBookmarks() : [];
+        CaseInfo info = current.Info;
+        List<EvidenceItem> evidence = [.. current.Evidence];
+        ReportInput InputFor(CancellationToken token) => new()
         {
-            Case = current.Info,
-            Evidence = current.Evidence,
-            Bookmarks = options.Sections.Contains(ReportSections.Bookmarks) ? CollectBookmarks(options.DumpBytes) : [],
+            Case = info,
+            Evidence = evidence,
+            Bookmarks = CollectBookmarks(bookmarkSources, options.DumpBytes, token),
             CarvingManifests = File.Exists(manifest) ? [manifest] : [],
             AuditLogPath = current.AuditPath,
             AppName = "HexEditor",
@@ -189,10 +209,12 @@ public sealed partial class MainWindow
             Registry = ReportRegistry.Shared,
         };
 
+        // 節の寄稿者 (パーティション・ファイルシステム) が読むドキュメントの一覧は、UI のスレッドで写してからバックグラウンドで作る。
+        ForensicsService.CaptureReportDocuments();
         try
         {
             ReportResult result = await Vm.Operations.RunAsync(Loc.Get("Report_Operation"), OperationKind.WritesExternal, null, null,
-                op => Task.Run(() => ReportBuilder.Create(input, options, op.CancellationToken)));
+                op => Task.Run(() => ReportBuilder.Create(InputFor(op.CancellationToken), options, op.CancellationToken)));
             ForensicsService.LastReport = result;
             ShowReportDone(result);
             return result;
@@ -205,6 +227,10 @@ public sealed partial class MainWindow
         {
             ShowNotice(Loc.Format("Report_Failed", ex.Message), InfoBarSeverity.Error);
             return null;
+        }
+        finally
+        {
+            ForensicsService.ReleaseReportDocuments();
         }
     }
 

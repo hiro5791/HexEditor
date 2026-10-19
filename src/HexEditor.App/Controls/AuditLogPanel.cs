@@ -24,6 +24,8 @@ public sealed class AuditLogPanel : UserControl, IPanelContent
     private AuditLogReader? _reader;
     private string? _readerPath;
     private bool _refreshQueued;
+    private bool _indexing;
+    private bool _indexAgain;
 
     public AuditLogPanel(MainWindow window)
     {
@@ -136,7 +138,7 @@ public sealed class AuditLogPanel : UserControl, IPanelContent
             {
                 try
                 {
-                    _reader = new AuditLogReader(path);
+                    _reader = new AuditLogReader(path, index: false);
                 }
                 catch (IOException)
                 {
@@ -165,7 +167,7 @@ public sealed class AuditLogPanel : UserControl, IPanelContent
         {
             try
             {
-                _reader = new AuditLogReader(c.AuditPath);
+                _reader = new AuditLogReader(c.AuditPath, index: false);
                 _readerPath = c.AuditPath;
             }
             catch (IOException)
@@ -173,7 +175,50 @@ public sealed class AuditLogPanel : UserControl, IPanelContent
             }
         }
 
-        _reader?.Refresh();
+        UpdateRows();
+
+        // 追記された行の索引はバックグラウンドで作る (100 万行を超えるログでも UI を止めない。FOR-04 の「巨大ファイル・長時間処理」)。
+        if (_reader is not { } reader)
+        {
+            return;
+        }
+
+        if (_indexing)
+        {
+            _indexAgain = true;
+            return;
+        }
+
+        _indexing = true;
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                reader.Refresh();
+            }
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException or UnauthorizedAccessException)
+            {
+                // 読めない間は、索引済みの行だけを出す。
+            }
+        }).ContinueWith(_ => DispatcherQueue.TryEnqueue(() =>
+        {
+            _indexing = false;
+            if (ReferenceEquals(reader, _reader))
+            {
+                UpdateRows();
+            }
+
+            if (_indexAgain)
+            {
+                _indexAgain = false;
+                Refresh();
+            }
+        }), TaskScheduler.Default);
+    }
+
+    /// <summary>索引済みの行数で一覧・件数・空の表示を更新する。</summary>
+    private void UpdateRows()
+    {
         long count = _reader?.Count ?? 0;
         bool follow = _table.Count == 0 || _table.TopIndex + _table.VisibleRows >= _table.Count;
         _table.Refresh(count);

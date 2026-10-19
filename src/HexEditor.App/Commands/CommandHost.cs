@@ -107,8 +107,12 @@ public sealed class CommandHost
         using IDisposable? recording = Services.Scripting.MacroHooks.BeginCommand(id);
         await _handlers[id].Execute(argument);
         StatesChanged?.Invoke();
+        Executed?.Invoke(id);
         return true;
     }
+
+    /// <summary>コマンドを実行し終えた (監査ログの閲覧操作の記録などに使う)。引数は正規化したコマンド ID。</summary>
+    public event Action<string>? Executed;
 
     /// <summary>メニューなどの状態を作り直す。</summary>
     public void NotifyStatesChanged() => StatesChanged?.Invoke();

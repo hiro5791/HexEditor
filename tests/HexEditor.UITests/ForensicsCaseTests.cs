@@ -283,4 +283,42 @@ public sealed class ForensicsCaseTests
         Assert.Equal("UTC", utc["timeZoneId"]!.GetValue<string>());
         Assert.Contains("timezone", File.ReadAllText(Path.Combine(folder, "audit.log")), StringComparison.Ordinal);
     });
+    /// <summary>
+    /// FOR-04 の仕様 3・4: 保存とフォレンジックの設定の変更は常に、ジャンプ・ブックマークの追加は設定「閲覧操作も記録する」のときだけ記録される。
+    /// </summary>
+    [Fact]
+    public Task Saves_settings_and_browsing_are_recorded_in_the_audit_log() => UiTestContext.RunAsync(async ctx =>
+    {
+        string folder = Directory.CreateDirectory(Path.Combine(ctx.Root, "case")).FullName;
+        string memo = ctx.CopyTestData("TD-BYTES-256", "memo.bin");
+        AppSession app = await StartAsync(ctx, memo);
+
+        // メモのファイルに保存するため、ケースを開いても書き込み保護モードを自動で有効にしない。
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "forensics.case.autoWriteBlock", ["value"] = false });
+        await CreateCaseAsync(app, folder);
+        string log = Path.Combine(folder, "audit.log");
+
+        // 閲覧操作は既定では記録しない。
+        await app.CommandAsync("Command_GoEnd");
+        await app.IdleAsync();
+        Assert.DoesNotContain("browse.jump", File.ReadAllText(log), StringComparison.Ordinal);
+
+        // 設定を変えると記録され (settings.change)、ジャンプとブックマークの追加が記録される。
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "forensics.audit.logBrowsing", ["value"] = true });
+        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log).Contains("forensics.audit.logBrowsing", StringComparison.Ordinal)),
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the setting change record");
+        await app.CommandAsync("Command_GoStart");
+        await app.CommandAsync("Command_ToggleBookmark");
+        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log) is var text && text.Contains("browse.jump", StringComparison.Ordinal)
+            && text.Contains("browse.bookmark", StringComparison.Ordinal)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the browsing records");
+
+        // 保存は結果とともに記録される。
+        await app.TypeAsync("AA");
+        await app.CommandAsync("Command_Save");
+        await app.WaitUntilAsync(() => Task.FromResult(File.ReadAllText(log).Contains("write.save", StringComparison.Ordinal)),
+            UiTest.Scaled(TimeSpan.FromSeconds(20)), "the save record");
+        string save = File.ReadAllLines(log).Last(l => l.Contains("write.save", StringComparison.Ordinal));
+        Assert.Contains("memo.bin", save, StringComparison.Ordinal);
+        Assert.Contains("success", save, StringComparison.OrdinalIgnoreCase);
+    });
 }

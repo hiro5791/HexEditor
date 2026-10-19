@@ -92,7 +92,11 @@ internal static class ForensicsService
         ApplySettings();
         if (App.Settings is { } settings)
         {
-            settings.Changed += _ => ApplySettings();
+            settings.Changed += keys =>
+            {
+                ApplySettings();
+                RecordForensicSettings(settings, keys);
+            };
         }
     }
 
@@ -111,23 +115,91 @@ internal static class ForensicsService
         // デバイス情報 (FOR-27・28) の節は MainWindow.DeviceReports が登録する。
         Func<string, string?> localize = key => Loc.TryGet("Report_" + key);
         Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.PartitionReportContributor(
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Partitions))
-                .Where(x => x.Partitions is not null).Select(x => (x.DisplayName, x.Partitions!)), localize));
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.Partitions))
+                .Where(x => x.Partitions is not null).Select(x => (x.Name, x.Partitions!)), localize));
         Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.FileSystemReportContributor(
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Session))
-                .Where(x => x.Session is not null).Select(x => (x.DisplayName, x.Session!.VolumeOffset, x.Session.FileSystem)),
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.LogicalVolumes))
-                .Where(x => x.LogicalVolumes is not null).Select(x => (x.DisplayName, x.LogicalVolumes!)),
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.Session))
+                .Where(x => x.Session is not null).Select(x => (x.Name, x.Session!.VolumeOffset, x.Session.FileSystem)),
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.LogicalVolumes))
+                .Where(x => x.LogicalVolumes is not null).Select(x => (x.Name, x.LogicalVolumes!)),
             localize));
         Core.Forensics.Reports.ReportRegistry.Shared.Register(AcquisitionReports = new Core.Forensics.Reports.AcquisitionReportContributor(localize));
+
+        // 監査ログ (FOR-04 の仕様 3・4): すべての保存と、設定「閲覧操作も記録する」のときの検索。ジャンプとブックマークの追加は各ウィンドウが記録する。
+        ViewModels.MainViewModel.SaveCompleted += RecordSave;
+        Controls.FindBar.SearchExecuted += RecordSearch;
     }
+
+    /// <summary>ドキュメントの保存を記録する (ケースを開いているときだけ記録される)。</summary>
+    private static void RecordSave(ViewModels.DocumentViewModel doc, string path, bool? saved, string? error)
+    {
+        Audit.Record(new AuditRecord(AuditOperations.Save)
+        {
+            EvidenceId = EvidenceIdOf(path),
+            Path = path,
+            Parameters = AuditRecord.Args(("document", doc.DisplayName)),
+            Result = saved switch { true => AuditResult.Success, false => AuditResult.Failure, null => AuditResult.Cancelled },
+            Message = error ?? string.Empty,
+        });
+    }
+
+    /// <summary>検索バーの検索を閲覧操作として記録する (設定がオフなら <see cref="ForensicAudit"/> が捨てる)。</summary>
+    private static void RecordSearch(Core.View.EditorState? editor, string query)
+    {
+        if (Cases.CurrentCase is null || !Audit.LogBrowsing)
+        {
+            return;
+        }
+
+        ViewModels.DocumentViewModel? doc = editor is null ? null
+            : WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray()).FirstOrDefault(d => ReferenceEquals(d.Editor, editor));
+        RecordBrowsing(AuditOperations.Search, doc, ("query", query));
+    }
+
+    /// <summary>閲覧操作 (ジャンプ・検索・ブックマークの追加) を記録する (FOR-04 の仕様 4)。対象はドキュメントのデータソースとカーソル位置。</summary>
+    public static void RecordBrowsing(string operation, ViewModels.DocumentViewModel? doc, params (string Key, string Value)[] extra)
+    {
+        if (Cases.CurrentCase is null || !Audit.LogBrowsing)
+        {
+            return;
+        }
+
+        string? path = doc is null ? null : doc.Device?.Path ?? doc.FilePath;
+        var parameters = new List<(string Key, string Value)>(extra);
+        if (doc is not null)
+        {
+            parameters.Add(("offset", "0x" + doc.Editor.Cursor.ToString("X", System.Globalization.CultureInfo.InvariantCulture)));
+        }
+
+        Audit.Record(new AuditRecord(operation)
+        {
+            EvidenceId = path is null ? null : EvidenceIdOf(path),
+            Path = path,
+            Parameters = AuditRecord.Args([.. parameters]),
+        });
+    }
+
+    private static string? EvidenceIdOf(string path) =>
+        Cases.ActiveEvidence.FirstOrDefault(x => string.Equals(x.Path, path, StringComparison.OrdinalIgnoreCase))?.Id;
 
     /// <summary>レポートの「取得記録」の節 (イメージの取得のたびに加える)。</summary>
     public static Core.Forensics.Reports.AcquisitionReportContributor AcquisitionReports { get; private set; } = new();
 
-    /// <summary>すべてのウィンドウの開いているドキュメント (レポートの節が読む)。</summary>
-    private static List<ViewModels.DocumentViewModel> OpenDocuments() =>
-        [.. WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray())];
+    private static volatile IReadOnlyList<(string Name, Core.Engine.Document Document)>? s_reportDocuments;
+
+    /// <summary>
+    /// レポートの節が読む、すべてのウィンドウの開いているドキュメント (表示名とドキュメント)。レポートはバックグラウンドで作るため、
+    /// ドキュメントの一覧 (UI のスレッドが変更するコレクション) は <see cref="CaptureReportDocuments"/> が UI のスレッドで写したものを使う。
+    /// </summary>
+    private static IReadOnlyList<(string Name, Core.Engine.Document Document)> ReportDocuments() => s_reportDocuments ?? CaptureOpenDocuments();
+
+    private static List<(string Name, Core.Engine.Document Document)> CaptureOpenDocuments() =>
+        [.. WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray()).Distinct().Select(d => (d.DisplayName, d.Document))];
+
+    /// <summary>レポートを作る前に UI のスレッドで呼ぶ: 開いているドキュメントの一覧を写す (作り終えたら <see cref="ReleaseReportDocuments"/>)。</summary>
+    public static void CaptureReportDocuments() => s_reportDocuments = CaptureOpenDocuments();
+
+    public static void ReleaseReportDocuments() => s_reportDocuments = null;
 
     /// <summary>ファイルシステムの機能の操作を監査ログに記録する (FOR-09 の受け入れ基準 4、FOR-16 の仕様 5・6、FOR-08 の仕様 4)。</summary>
     internal static void RecordFileSystemEvent(Core.FileSystems.FileSystemAuditEvent e)
@@ -140,6 +212,18 @@ internal static class ForensicsService
             Path = e.Source,
             Parameters = parameters,
         });
+    }
+
+    /// <summary>フォレンジックに関わる設定 (<c>forensics.*</c>) の変更を監査ログに記録する (FOR-04 の仕様 3。ケースを開いているときだけ記録される)。</summary>
+    private static void RecordForensicSettings(Core.Settings.SettingsStore settings, IReadOnlyCollection<string> keys)
+    {
+        foreach (string key in keys.Where(k => k.StartsWith("forensics.", StringComparison.Ordinal)))
+        {
+            Audit.Record(new AuditRecord(AuditOperations.SettingChange)
+            {
+                Parameters = AuditRecord.Args(("key", key), ("value", settings.GetNode(key)?.ToJsonString() ?? string.Empty)),
+            });
+        }
     }
 
     /// <summary>設定の反映 (閲覧操作の記録、日時の表示)。</summary>

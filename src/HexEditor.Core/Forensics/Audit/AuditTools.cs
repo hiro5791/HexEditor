@@ -139,15 +139,20 @@ public static class AuditVerifier
 public sealed class AuditLogReader : IDisposable
 {
     private readonly object _gate = new();
+    private readonly object _refreshGate = new();
     private readonly FileStream _stream;
     private readonly List<long> _starts = [];
     private long _indexedUntil;
 
-    public AuditLogReader(string path)
+    /// <param name="index">すぐに全体を索引するか。false にすると <see cref="Refresh"/> を呼ぶまで 0 行 (大きなログをバックグラウンドで索引するため)。</param>
+    public AuditLogReader(string path, bool index = true)
     {
         Path = path;
         _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 1, FileOptions.RandomAccess);
-        Refresh();
+        if (index)
+        {
+            Refresh();
+        }
     }
 
     public string Path { get; }
@@ -164,35 +169,49 @@ public sealed class AuditLogReader : IDisposable
         }
     }
 
-    /// <summary>追記された行を索引に加える。加えた行数を返す。</summary>
+    /// <summary>
+    /// 追記された行を索引に加える。加えた行数を返す。走査は別のハンドルで行い、索引に加えるときだけ行の読み出しを止めるので、
+    /// 大きなログをバックグラウンドで索引している間も、索引済みの行は読める。
+    /// </summary>
     public int Refresh(CancellationToken cancellationToken = default)
     {
-        lock (_gate)
+        lock (_refreshGate)
         {
-            int before = _starts.Count;
-            long length = _stream.Length;
-            byte[] buffer = new byte[256 * 1024];
-            long position = _indexedUntil;
+            long position;
+            long? reopenedLine = null;
+            lock (_gate)
+            {
+                position = _indexedUntil;
+                if (position > 0 && _starts.Count > 0)
+                {
+                    reopenedLine = _starts[^1];
+                }
+            }
+
+            using var scan = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 1, FileOptions.SequentialScan);
+            long length = scan.Length;
             bool atLineStart = true;
+            bool dropLast = false;
             if (position > 0)
             {
                 // 最後の行が改行で終わっていなかった場合は、その行の続きとして扱い直す (索引の最後の行を取り直す)。
-                _stream.Seek(position - 1, SeekOrigin.Begin);
-                atLineStart = _stream.ReadByte() == '\n';
-                if (!atLineStart && _starts.Count > 0)
+                scan.Seek(position - 1, SeekOrigin.Begin);
+                atLineStart = scan.ReadByte() == '\n';
+                if (!atLineStart && reopenedLine is long last)
                 {
-                    position = _starts[^1];
-                    _starts.RemoveAt(_starts.Count - 1);
-                    before--;
+                    position = last;
+                    dropLast = true;
                     atLineStart = true;
                 }
             }
 
-            _stream.Seek(position, SeekOrigin.Begin);
+            var found = new List<long>();
+            byte[] buffer = new byte[256 * 1024];
+            scan.Seek(position, SeekOrigin.Begin);
             while (position < length)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                int read = _stream.Read(buffer, 0, (int)Math.Min(buffer.Length, length - position));
+                int read = scan.Read(buffer, 0, (int)Math.Min(buffer.Length, length - position));
                 if (read <= 0)
                 {
                     break;
@@ -202,7 +221,7 @@ public sealed class AuditLogReader : IDisposable
                 {
                     if (atLineStart)
                     {
-                        _starts.Add(position + i);
+                        found.Add(position + i);
                         atLineStart = false;
                     }
 
@@ -215,9 +234,21 @@ public sealed class AuditLogReader : IDisposable
                 position += read;
             }
 
-            // 最後の「行の始まり」だけで中身のない位置 (ファイルの末尾が改行) は行にしない。
-            _indexedUntil = position;
-            return _starts.Count - before;
+            lock (_gate)
+            {
+                int before = _starts.Count;
+                if (dropLast)
+                {
+                    _starts.RemoveAt(_starts.Count - 1);
+                    before--;
+                }
+
+                _starts.AddRange(found);
+
+                // 最後の「行の始まり」だけで中身のない位置 (ファイルの末尾が改行) は行にしない。
+                _indexedUntil = position;
+                return _starts.Count - before;
+            }
         }
     }
 

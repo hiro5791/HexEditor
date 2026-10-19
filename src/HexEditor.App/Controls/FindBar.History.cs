@@ -67,12 +67,20 @@ public sealed partial class FindBar
         ToleranceValue.Text = c.ToleranceText;
     }
 
+    /// <summary>検索バーで検索を実行した (どのウィンドウのものも。監査ログの閲覧操作の記録に使う。12 の FOR-04 の仕様 4)。引数は対象のエディタと検索語。</summary>
+    public static event Action<Core.View.EditorState?, string>? SearchExecuted;
+
     /// <summary>検索を実行したときに、検索語と条件を履歴の先頭に加える (FIND-28 の仕様 1)。</summary>
     private void AddToHistory()
     {
         if (History is not null && _pattern is not null && Query.Text.Length > 0)
         {
             History.Add(HistoryList.Find, new SearchHistoryEntry(Query.Text, CurrentConditions()));
+        }
+
+        if (_pattern is not null && Query.Text.Length > 0)
+        {
+            SearchExecuted?.Invoke(Editor, Query.Text);
         }
 
         _historyCursor.Reset();
