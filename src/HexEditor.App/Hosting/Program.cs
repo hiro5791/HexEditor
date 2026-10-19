@@ -63,8 +63,7 @@ public static class Program
             step = "safe-mode";
             CommandLine = SafeModeStartup.Apply(CommandLine);
 
-            // 書き込み保護モード (12 の FOR-01) の起動時の状態。フェーズ 4 では状態だけを持つ (WriteBlockMode)。
-            WriteBlockMode.Initialize(CommandLine.WriteBlock);
+            // 書き込み保護モード (12 の FOR-01) の起動時の状態は、設定と監査ログを読んだ後、最初のドキュメントを開く前に決める (App の WriteBlockMode.Start)。
         }
         catch (Exception ex)
         {

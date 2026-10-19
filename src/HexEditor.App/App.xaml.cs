@@ -109,6 +109,11 @@ public partial class App : Application
         // コマンド・キー割り当て・状態 (UI-16〜UI-21、UI-23 の state.json)。
         Commands.CommandService.Initialize(env.Locations.Settings);
         Devices = new Services.DeviceService(env);
+        // フォレンジック (12): ケース・監査ログ・カービングの定義。
+        Services.ForensicsService.Initialize(env);
+
+        // 書き込み保護モード (12 の FOR-01): セッションの復元とコマンドラインのファイルを開く前に有効にする (--write-block、設定、前回の状態)。
+        Services.WriteBlockMode.Start(Program.CommandLine.WriteBlock);
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
 
         // 設定「ファイルのロック」(ENG-15 の仕様 3)。変えたら、その後に開くファイルから使う。
@@ -149,6 +154,8 @@ public partial class App : Application
         MainWindow.RegisterMemoryMapPanel();
         MainWindow.RegisterDisassemblyPanel();
         MainWindow.RegisterPacketsPanel();
+        MainWindow.RegisterForensicsPanels();
+        MainWindow.RegisterDeviceInfoPanel();
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
         Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());

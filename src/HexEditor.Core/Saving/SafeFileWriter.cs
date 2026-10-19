@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Saving;
 
@@ -15,6 +16,9 @@ public static class SafeFileWriter
     {
         string target = DocumentSaver.ResolveTarget(Path.GetFullPath(path));
         string folder = Path.GetDirectoryName(target)!;
+
+        // 書き込み保護モード (FOR-01): 保護の対象 (開いているデータソース・証拠) には書かない。
+        WriteBlockGate.Current.EnsureFileWrite(target);
 
         // バックアップを作れるかを先に確かめる。作れなければ書き始めない (ENG-26 の「エラー」)。
         string? backupPath = null;

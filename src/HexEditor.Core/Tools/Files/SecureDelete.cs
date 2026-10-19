@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using HexEditor.Core.Operations;
 using Microsoft.Win32.SafeHandles;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Tools.Files;
 
@@ -304,6 +305,8 @@ public static class SecureDelete
     public static ShredResult Execute(IReadOnlyList<string> files, ShredMethod method, bool verifyLastPass, IShredFileSystem fileSystem,
         LongRunningOperation? operation = null, CancellationToken cancellationToken = default, IEnumerable<string>? foldersToRemove = null)
     {
+        // 書き込み保護モード (FOR-01 の仕様 2): 安全な削除は実行しない。
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.SecureDelete);
         var failures = new List<ShredFailure>();
         var corrupted = new List<string>();
         int deleted = 0;

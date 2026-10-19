@@ -144,6 +144,12 @@ public static partial class WindowManager
             return;
         }
 
+        // --write-block を既存のインスタンスに渡した: そのインスタンスの書き込み保護を有効にする (コマンドラインから無効にはできない。08 の AUTO-37)。
+        if (commandLine.WriteBlock)
+        {
+            WriteBlockMode.Enable("commandLine");
+        }
+
         bool hasFiles = commandLine.Files.Count > 0 || commandLine.NewDocument;
         bool newWindow = commandLine.NewWindow
             || (hasFiles && WindowSettings.OpenExternalInNewWindow(App.Settings))
@@ -245,7 +251,8 @@ public static partial class WindowManager
         s_confirmingExit = true;
         try
         {
-            if (!await from.ConfirmExitAsync())
+            // OS の USB 書き込み保護が有効のままなら、終了の前に選ばせる (12 の FOR-02 の仕様 4)。
+            if (!await from.ConfirmUsbWriteProtectAtExitAsync() || !await from.ConfirmExitAsync())
             {
                 return false;
             }

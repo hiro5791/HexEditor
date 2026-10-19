@@ -1,5 +1,6 @@
 using HexEditor.Core.Devices;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Processes;
 
@@ -318,6 +319,13 @@ public sealed class ProcessMemoryByteSource : ByteSourceBase, IRegionMapSource
     public int TryWrite(long offset, ReadOnlySpan<byte> data, out int written)
     {
         written = 0;
+
+        // 書き込み保護モード (FOR-01): 即時書き込みを含め、プロセスへの書き込みはすべて拒否する。
+        if (WriteBlockGate.Current.IsEnabled)
+        {
+            return Win32Errors.WriteProtect;
+        }
+
         if (_exited)
         {
             return Win32Errors.ProcessAborted;

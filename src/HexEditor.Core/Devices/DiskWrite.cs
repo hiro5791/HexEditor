@@ -3,6 +3,7 @@ using System.Text.Json;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Devices;
 
@@ -133,6 +134,8 @@ public static class DiskWrite
     public static IReadOnlyList<Saving.SavedRange> Execute(DiskWritePlan plan, DocumentSnapshot snapshot, string journalDirectory,
         Func<VolumeDeviceInfo, bool>? confirmDismount = null, LongRunningOperation? operation = null, bool journal = true)
     {
+        // 書き込み保護モード (FOR-01): ロックの前に拒否する (ボリュームのロック・ディスマウントもしない)。
+        WriteBlockGate.Current.EnsureDeviceWrite(plan.Source.Path);
         if (plan.IsBlocked)
         {
             throw new DiskWriteBlockedException(plan.BlockedVolumes[0].Name);

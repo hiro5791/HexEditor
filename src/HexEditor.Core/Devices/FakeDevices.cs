@@ -58,6 +58,12 @@ public sealed record FakeDiskSpec
 
     /// <summary>メモリ上の初期内容の種。0 なら 8 バイトごとにディスク上の位置を書いた値。</summary>
     public ulong Seed { get; init; }
+
+    /// <summary>ATA の応答 (FOR-27・FOR-28)。null なら接続が SATA / ATA のときだけ既定の値で応答する。</summary>
+    public Info.FakeAtaSpec? Ata { get; init; }
+
+    /// <summary>NVMe の応答。null なら接続が NVMe のときだけ既定の値で応答する。</summary>
+    public Info.FakeNvmeSpec? Nvme { get; init; }
 }
 
 /// <summary>偽のボリュームの定義。</summary>
@@ -408,8 +414,21 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
     }
 
     private sealed class Handle(FakeDeviceAccess owner, string path, FakeDisk disk, long start, long length, bool writable, FakeVolumeSpec? volume)
-        : IDeviceHandle
+        : IDeviceHandle, Info.IDeviceInfoSource
     {
+        /// <summary>読み取り専用のデバイス情報 (FOR-27、FOR-28)。呼び出しを記録する。</summary>
+        public int QueryDeviceInfo(Elevation.DeviceInfoKind kind, out byte[] data)
+        {
+            owner.Log($"QueryDeviceInfo {Path} {kind}");
+            data = [];
+            if (_closed)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+
+            return disk.Removed ? Win32Errors.DeviceNotConnected : Info.FakeDeviceInfo.Query(disk.Spec, volume is not null, kind, out data);
+        }
+
         private bool _locked;
         private bool _closed;
 

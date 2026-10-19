@@ -30,7 +30,12 @@ public enum HelperCommand : ushort
     Ping = 22,
 }
 
-/// <summary><c>QueryDeviceInfo</c> で受け付ける情報の種類 (読み取り専用のものだけ。FOR-27、FOR-28)。</summary>
+/// <summary>
+/// <c>QueryDeviceInfo</c> で受け付ける情報の種類 (読み取り専用のものだけ。FOR-27、FOR-28)。1〜5 は ATA パススルー
+/// (<see cref="Devices.Info.AtaCommands"/> の許可リストのコマンドだけ)、6〜8 は NVMe の読み取り (<c>IOCTL_STORAGE_QUERY_PROPERTY</c> の
+/// プロトコル固有のデータ)、9〜11 はストレージの記述子 (<c>IOCTL_STORAGE_QUERY_PROPERTY</c>)。応答の本体の形は
+/// <see cref="Devices.Info.DeviceInfoPayloads"/>。
+/// </summary>
 public enum DeviceInfoKind : ushort
 {
     IdentifyDevice = 1,
@@ -39,6 +44,11 @@ public enum DeviceInfoKind : ushort
     SmartReadData = 4,
     SmartReadThresholds = 5,
     NvmeSmartHealth = 6,
+    NvmeIdentifyController = 7,
+    NvmeIdentifyNamespace = 8,
+    StorageDescriptor = 9,
+    TrimSupport = 10,
+    SeekPenalty = 11,
 }
 
 /// <summary>

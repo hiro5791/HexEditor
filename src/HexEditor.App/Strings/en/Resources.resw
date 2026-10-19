@@ -6634,6 +6634,392 @@ Type: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Comment column</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Show symbol names, branch target names and referenced strings.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Disassembly</value></data>
+  <!-- ===== Phase 5: forensics case, audit log, time, carving, report (FOR-03/04/05/18/19/33) ===== -->
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Forensics</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Forensics</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Date and time display</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>How times are shown in forensic lists and details: UTC and local time, UTC only, or local time only. Times are always recorded in UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC and local time</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>UTC only</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Local time only</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Turn on write-block mode when a case is opened</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>When off, you are asked whether to turn it on.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Also record browsing actions in the audit log</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Record jumps, searches and bookmark additions. Changes to data and evidence are always recorded.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Show thumbnails of carved images</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Show a small preview of JPEG, PNG, GIF and BMP files in the carving results.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Report logo image</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Path of a PNG, JPEG or SVG image shown at the top of HTML reports.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Report header text</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>A line of text shown under the title of reports, such as the name of your laboratory.</value></data>
+
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>New case</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Open case</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Close case</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Case properties</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Show the audit log</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Verify the audit log</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Manage carving signatures</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Carve files</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Create report</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Show or hide the evidence list</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Show or hide the audit log</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Show or hide the carving results</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Audit log</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Carving results</value></data>
+
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Forensics</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Case</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>New case...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Open case...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Close case</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Add evidence...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Case properties...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Evidence list</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Show audit log</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Verify audit log</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Carve files...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Manage signatures...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Results</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Create report...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Case: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>invalid time</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>A case is already open. Close it first.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>No case is open.</value></data>
+
+  <data name="Case_New_Title" xml:space="preserve"><value>New case</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Case properties</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Case number (required)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Case name (required)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Investigator</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organization</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Case folder</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Used to read times that have no time zone, such as FAT file times.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Created the case "{0}".</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Opened the case "{0}".</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>The case could not be created: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>The case number and the case name are required.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>The case file cannot be read (line {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>The case could not be opened: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>The case could not be saved: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Turn on write-block mode for this case?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Turn on</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Write-block mode was turned on for this case.</value></data>
+
+  <data name="Evidence_Add" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} will be added to the case. The data source is not changed.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Compute hashes now</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>This data source is already registered as {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Only disks, volumes, image files and files can be added as evidence.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Hashing evidence {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>The hashes of {0} were recorded.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>The hash of {0} was not computed. The evidence stays in the list.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>The data at offset 0x{1} cannot be read, so the hash of {0} was not recorded.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Not computed</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>Removed {0} from the list. The data source was not touched.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} is not available.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>The evidence could not be opened: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} items</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>No case is open. Create or open a case from the Forensics menu.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>No evidence has been added yet.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Added (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Added (local)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Image</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memory</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Passed</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Not verified</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Open (read-only)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Remove from the list</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Copy hashes</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} entries</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>No case is open. The audit log belongs to a case.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Nothing has been recorded yet.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(This line is not a valid entry. The log may have been altered.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Verify</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Export CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Export JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>The audit log is intact ({0} lines checked).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>The chain of the audit log is broken at line {0}. The log may have been altered.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Time (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Time (local)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>User</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operation</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Result</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Details</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Success</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Failure</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Cannot write to the audit log</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Operations that write data are turned off until the log can be written again. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>The audit log still cannot be written.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>The audit log cannot be written, so the operation was not performed.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>The audit log cannot be written, so operations that write data are turned off.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Verifying the audit log</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>The audit log could not be verified: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Exporting the audit log</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Exported the audit log to {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>The audit log could not be exported: {0}</value></data>
+
+  <data name="Sig_Title" xml:space="preserve"><value>Carving signatures</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definitions</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>built-in</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>disabled</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Extension (without a dot)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Headers (Hex bytes, one per line; ?? is any byte, ? is any digit)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Header offset from the start of the file</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Footer (Hex bytes, optional)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Bytes to include from the footer (empty = the footer itself)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Maximum size</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Minimum size</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Take the size from a value in the header</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Size value: offset from the start of the file</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Size value: width (bits)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Size value: byte order</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Size value: number to add</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Structure check (built-in name or structure template)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Built-in checks: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Look for the header only at the start of a sector</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Use this definition when scanning</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>New</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Try this definition</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Select a range in the document first.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Trying...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Trying a carving definition</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>{0} found in the selection. First positions:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Imported {0} definitions.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} definitions were not imported:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exported to {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>The definitions could not be imported: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>The definitions could not be saved: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>The trial failed: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: enter a number or a size such as 4096, 0x1000 or 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Enter a name.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>This name is already used.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Enter an extension.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>The extension has characters that cannot be used in a file name.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Enter at least one header.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>The header is not a valid Hex byte sequence (odd number of digits or invalid characters).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>The header needs at least one fixed byte.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>The header offset cannot be negative.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>The footer is not a valid Hex byte sequence.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>The number of bytes to include cannot be negative.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>The maximum size must be at least 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>The minimum size cannot be negative.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>The maximum size is smaller than the minimum size.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>The size value is not valid.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>A value has the wrong type.</value></data>
+
+  <data name="Carve_Title" xml:space="preserve"><value>Carve files</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Scope</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Unallocated space only</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Slack space only</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>File types</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Do not look for headers inside a file that was found</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Write the carved files to a folder</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Output folder</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Carving files</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving finished: {0} files found.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving was cancelled. {0} files were found; the results and the manifest are kept.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving stopped because the output folder could not be written. {0} files were found.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving failed: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>The output folder is on a disk that is under investigation. Choose a folder on another disk.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>There is not enough free space in the output folder. Needed: {0} bytes. Free: {1} bytes.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>The file system of the output folder limits a file to {0} bytes. Choose another folder.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>The output folder cannot be used.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>No allocation information is available for this document.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Cannot write the carved files</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>The output folder ({0}) is out of space. The next file needs {1} bytes but {2} bytes are free. Free some space, choose another folder, or stop.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Cannot write to {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Choose another folder...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving is already running.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Carve files...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving has not been run. Choose Forensics, then Carving, then Carve files.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>No files were found.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} files</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Preview of the carved image</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Length decided by</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Output file</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Structure</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Size value</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Footer</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Maximum size</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Type: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Offset: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Length: {0} bytes</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Length decided by: {0}</value></data>
+
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Create report</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Contents</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (one file, opens offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>All audit log entries</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Audit log from (UTC, optional)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Audit log to (UTC, optional)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Hex dump bytes for each bookmark (0 to 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Save to</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>The period is not a valid date and time.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>The Hex dump length must be between 0 and 4096 bytes.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Creating the report</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>The report could not be created: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Created {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>The PDF could not be created ({0}). {1} was created instead.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>Only the first rows of long lists are in the PDF. Use the HTML report or the CSV files for the full lists.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Forensic Report</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Case number</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Case name</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Investigator</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organization</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Case created</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Report created</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Created by</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Page</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>of</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Case</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Cover</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Acquisition records</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Device information</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partitions</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>File systems</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Bookmarks</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Carving results</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Audit log</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Serial number</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sectors</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Sector size</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Added (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Added (local)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Added by</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Passed</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Not verified</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Not computed</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Image</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memory</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Comment</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Length decided by</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Output file</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Files found</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Time (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Time (local)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>User</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Computer</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operation</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Result</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Details</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>success</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>failure</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>cancelled</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Showing the first {0} of {1} rows. The full list is in the attached CSV file or the HTML report.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Showing the first {0} rows. The full list is in the HTML report or the CSV file.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Full list</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>No data.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>invalid time</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Toggle disassembly panel</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Disassemble</value></data>
@@ -8193,4 +8579,266 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Whole page</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Fit width</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Choose folder...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Write-protected]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Write protection</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Write protection mode is on. Click to turn it off.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Write protection mode only stops this app from writing. It cannot stop Windows or other apps from writing (for example, the writes a file system makes when a volume is mounted). Use a hardware write blocker or the OS USB write protection as well.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>OS USB write protection...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Turn off write protection mode?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Evidence documents open: {0}. After you turn off the mode, these documents can be written to:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>No evidence documents are open. After you turn off the mode, the open documents can be written to again.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Turn off write protection</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>The data source could not be reopened read-only. Only the data already read is shown.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Allow writing to this document</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Writing allowed (exception to write protection mode)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Write protection mode is off.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Only file documents can be excepted from write protection mode.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>This data source is registered as evidence, so writing cannot be allowed.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Writing is already allowed for this document.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Allow writing to this document?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Write protection mode stays on, but {0} ({1}) can be edited and saved until you close it. This is recorded in the audit log and cannot be undone for the open document.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Type {0} to confirm</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Allow writing to {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Writing is allowed for {0} until it is closed.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Write protection mode</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>OS USB write protection</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Device</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Check HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART information</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Device information panel</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Encryption information...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Toggle write protection mode</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Allow writing to this document</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Toggle OS USB write protection</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Check HPA and DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Show SMART information</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Show encryption information</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Toggle device information</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Open memory dump</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Device information</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Always turn on write protection mode at startup</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>When off, the app starts with the mode as it was when it was last closed.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Check for HPA / DCO when a disk is opened</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Sends read-only ATA commands to the disk and shows a notice if hidden areas are found.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Turn on OS USB write protection?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows will block writing to USB storage devices that are connected from now on (the StorageDevicePolicies WriteProtect setting). Devices that are already connected are not affected until you reconnect them. Internal SATA and NVMe disks are not protected. Administrator rights are required.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Turn off OS USB write protection?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>The setting returns to the state it had before you turned it on. USB storage devices that are already connected stay write-protected until you reconnect them. Administrator rights are required.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Change the setting</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Administrator rights are required. The setting was not changed.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>The setting could not be changed (access denied; it may be managed by Group Policy): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>The setting could not be changed: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>OS USB write protection is on. Reconnect USB storage devices for it to take effect.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>OS USB write protection is off.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>OS USB write protection is still on</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows keeps blocking writes to USB storage after this app closes. Turn it off before exiting?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Turn off and exit</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Exit and keep it on</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Changing the OS USB write protection requires Windows administrator rights.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Device</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Check HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Read SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Export JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Export text...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Open a physical disk and choose Check HPA / DCO or SMART information.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — captured {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO have not been checked.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe disks have no HPA or DCO; HPA / DCO do not apply.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Namespace size: {0} blocks ({1} bytes per block)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Namespace capacity: {0} blocks</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>This cannot be checked on this device (the commands do not pass through, for example on USB adapters or virtual disks).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Administrator rights are required.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>The command {0} failed (ATA status {1}, error {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Max LBA (IDENTIFY DEVICE, 28-bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Max LBA (IDENTIFY DEVICE, 48-bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Native max LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>Max LBA set by DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>not supported by the device</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>not supported by the device</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: present, {0} sectors ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: none</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: could not be determined</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: present, {0} sectors ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: none</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: could not be determined</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>SMART information has not been read.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>SMART information cannot be read on this device (for example, through a USB adapter that does not support it).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART is disabled on this device.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>The checksum of the SMART data does not match; the values may be wrong.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Serial number: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Capacity: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Sector size: {0} bytes logical, {1} bytes physical</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Connection: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Rotation rate: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>non-rotating (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>supported</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>not supported</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Open a physical disk to use this command.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>The device information could not be read: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} has hidden areas: HPA {1} sectors, DCO {2} sectors. The capacity Windows sees is smaller than the disk's real capacity.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Show details</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>The device information was exported to {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>The device information could not be exported: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Current</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Worst</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Threshold</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Raw (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Raw (decimal)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Temperature</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Critical warning bits: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Temperature: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Available spare: {0}% (threshold {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Percentage used: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Data read: {0} bytes</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Data written: {0} bytes</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Power cycles: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Power-on hours: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Unsafe shutdowns: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Media and data integrity errors: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Captured</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Device</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Serial number</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Sector size (logical / physical)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Connection</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Max LBA (28-bit / 48-bit / native / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Cannot be checked on this device</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>None</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Present ({0} sectors)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Not applicable (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Name</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Current</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Worst</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Threshold</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Raw</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Encryption information</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>No encrypted volumes were found.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Range {0}: offset {1}, {2} bytes</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Type: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Encrypted APFS volume (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (possibly encrypted)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Possibly encrypted or compressed data (for example VeraCrypt or TrueCrypt; there is no signature to identify them)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Metadata version: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Encryption method: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>Volume GUID: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Created: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Description: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Encryption state: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>unknown</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>decrypted</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>in progress</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>completed</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>paused</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Encrypted so far: {0} bytes</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Key protectors: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, created {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Clear key</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Startup key</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM and PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Recovery password</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Password</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Unknown (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Key slots: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volume {0}: encrypted</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volume {0}: not encrypted</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropy of the first 64 KiB: {0} bits per byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Warning: the three metadata blocks do not match.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Warning: some metadata blocks are damaged; only the items that could be read are shown.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>The file system browser does not open encrypted volumes.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows has unlocked this BitLocker volume ({0}). If you open it as a logical volume, you can read the contents that Windows decrypts.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Open as logical volume</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Memory dump</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>The memory dump format of {0} could not be read. Open it as raw?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Open as raw</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>The memory dump could not be opened: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Memory dump: {0}, captured {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Memory dump: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>physical memory image (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>complete memory dump</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>kernel memory dump</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>complete memory dump (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Memory dump</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>The data cannot be written because write protection mode is on.</value></data>
 </root>

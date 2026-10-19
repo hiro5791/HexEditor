@@ -6634,6 +6634,392 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>コメント列</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>シンボル名、分岐先の名前、参照している文字列を表示します。</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>逆アセンブル</value></data>
+  <!-- ===== フェーズ 5: フォレンジックのケース・監査ログ・日時・カービング・レポート (FOR-03/04/05/18/19/33) ===== -->
+  <data name="SetCategory_forensics" xml:space="preserve"><value>フォレンジック</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>フォレンジック</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>日時の表示</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>フォレンジックの一覧と詳細での日時の表示を、UTC とローカル時刻の両方、UTC のみ、ローカル時刻のみから選びます。記録は常に UTC です。</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC とローカル時刻</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>UTC のみ</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>ローカル時刻のみ</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>ケースを開いたら書き込み保護モードを有効にする</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>オフのときは、有効にするかどうかを尋ねます。</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>閲覧操作も監査ログに記録する</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>ジャンプ、検索、ブックマークの追加を記録します。データや証拠の変更は常に記録します。</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>切り出した画像を縮小表示する</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>カービングの結果で、JPEG・PNG・GIF・BMP のファイルを小さく表示します。</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>レポートのロゴ画像</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>HTML レポートの先頭に表示する PNG・JPEG・SVG 画像のパスです。</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>レポートのヘッダーの文言</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>レポートのタイトルの下に表示する 1 行の文です (研究室の名前など)。</value></data>
+
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>新しいケース</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>しんしきけーす ちょうさ しょうこ さくせい</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>ケースを開く</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>けーすをひらく ちょうさ しょうこ</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>ケースを閉じる</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>けーすをとじる しゅうりょう</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>証拠を追加</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>しょうこをついか とうろく ほぞん はっしゅ</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>ケースのプロパティ</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>たいむぞーん ちょうさしゃ そしき</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>監査ログを表示</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>かんさろぐ りれき きろく</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>監査ログを検証</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>かんさろぐをけんしょう かいざん ちぇーん</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>カービングのシグネチャを管理</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>かーびんぐ しぐねちゃ ふぁいるけいしき へっだー</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>ファイルを切り出す</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>ふぁいるをきりだす かーびんぐ ふっかつ さくじょ</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>レポートを作成</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>れぽーとをさくせい ほうこくしょ</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>証拠一覧の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>しょうこいちらん ぱねる</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>監査ログの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>かんさろぐ ぱねる</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>カービングの結果の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>かーびんぐのけっか ぱねる</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>証拠</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>監査ログ</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>カービングの結果</value></data>
+
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>フォレンジック(N)</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>ケース(C)</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>新しいケース(N)...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>ケースを開く(O)...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>ケースを閉じる(L)</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>証拠を追加(A)...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>ケースのプロパティ(P)...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>証拠一覧(E)</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>監査ログを表示(U)</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>監査ログを検証(V)</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>カービング(R)</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>ファイルを切り出す(C)...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>シグネチャの管理(S)...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>結果(E)</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>レポートを作成(P)...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>ケース: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>不正な日時</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>ケースを開いています。先に閉じてください。</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>ケースを開いていません。</value></data>
+
+  <data name="Case_New_Title" xml:space="preserve"><value>新しいケース</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>ケースのプロパティ</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>ケース番号 (必須)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>ケース名 (必須)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>調査者名</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>組織名</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>ケースのフォルダ</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>タイムゾーン</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>FAT の日時のように、タイムゾーンを持たない日時を読むときに使います。</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>ケース「{0}」を作成しました。</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>ケース「{0}」を開きました。</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>ケースを作成できませんでした: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>ケース番号とケース名は必須です。</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>ケースファイルを読み込めません (行 {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>ケースを開けませんでした: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>ケースを保存できませんでした: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>このケースで書き込み保護モードを有効にしますか。</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>有効にする</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>このケースのために書き込み保護モードを有効にしました。</value></data>
+
+  <data name="Evidence_Add" xml:space="preserve"><value>証拠を追加</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>証拠を追加</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} をケースに追加します。データソースは変更しません。</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>今すぐハッシュを計算する</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>このデータソースは証拠 {0} として登録済みです。</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>ディスク、ボリューム、イメージファイル、ファイルだけを証拠に追加できます。</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>証拠 {0} のハッシュを計算中</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>{0} のハッシュを記録しました。</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>{0} のハッシュは計算していません。証拠は一覧に残っています。</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>オフセット 0x{1} のデータを読めないため、{0} のハッシュは記録していません。</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>未計算</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} を一覧から外しました。データソースには何もしていません。</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} は使えません。</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>証拠を開けませんでした: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} 件</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>ケースを開いていません。フォレンジックメニューからケースを作成するか開いてください。</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>まだ証拠を追加していません。</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>証拠番号</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>容量 (バイト)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>検証結果</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>登録日時 (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>登録日時 (ローカル)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>ディスク</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>ボリューム</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>イメージ</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>メモリ</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>一致</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>不一致</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>未検証</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>開く (読み取り専用)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>一覧から外す</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>ハッシュをコピー</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>ケースを開いていません。監査ログはケースに属します。</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>まだ何も記録していません。</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(この行は正しい記録ではありません。ログが改ざんされた可能性があります。)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>検証</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>CSV に書き出す</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>JSON に書き出す</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>監査ログは正しい状態です (全 {0} 行を確認)。</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>監査ログの連鎖が {0} 行目で切れています。ログが改ざんされた可能性があります。</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>連番</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>日時 (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>日時 (ローカル)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>操作者</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>操作</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>証拠</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>結果</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>内容</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>成功</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>失敗</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>監査ログに記録できません</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>ログに書けるようになるまで、データを書き込む操作は無効です。{0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>監査ログにまだ書き込めません。</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>監査ログに書き込めないため、操作を実行しませんでした。</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>監査ログに書き込めないため、データを書き込む操作は無効です。</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>監査ログを検証中</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>監査ログを検証できませんでした: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>監査ログを書き出し中</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>監査ログを {0} に書き出しました。</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>監査ログを書き出せませんでした: {0}</value></data>
+
+  <data name="Sig_Title" xml:space="preserve"><value>カービングのシグネチャ</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>定義</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>組み込み</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>無効</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>拡張子 (ドットなし)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>ヘッダー (Hex バイト列。1 行に 1 つ。?? は任意の 1 バイト、? は任意の 1 桁)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>ファイル先頭からヘッダーまでのオフセット</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>フッター (Hex バイト列。省略可)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>フッターの先頭から含めるバイト数 (空欄 = フッター自身)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>最小サイズ</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>ヘッダー内の値からサイズを求める</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>サイズの値: ファイル先頭からのオフセット</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>サイズの値: 幅 (ビット)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>サイズの値: バイト順</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>サイズの値: 加える値</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>構造の検証 (組み込みの名前または構造体テンプレート)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>組み込みの検証: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>ヘッダーをセクタの先頭でだけ探す</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>スキャンでこの定義を使う</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>新規</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>複製</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>読み込み...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>書き出し...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>この定義で試す</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>先にドキュメントの範囲を選択してください。</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>試しています...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>カービングの定義を試し中</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>選択範囲に {0} 件見つかりました。先頭の位置:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>{0} 件の定義を読み込みました。</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} 件の定義は読み込みませんでした:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>{0} に書き出しました。</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>定義を読み込めませんでした: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>定義を保存できませんでした: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>試すことができませんでした: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: 数値か、4096、0x1000、1M のようなサイズを入力してください。</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>名前を入力してください。</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>この名前は既に使われています。</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>拡張子を入力してください。</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>拡張子にファイル名に使えない文字があります。</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>ヘッダーを 1 つ以上入力してください。</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>ヘッダーが正しい Hex バイト列ではありません (桁数が奇数、または使えない文字)。</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>ヘッダーには固定のバイトが 1 つ以上必要です。</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>ヘッダーのオフセットは負にできません。</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>フッターが正しい Hex バイト列ではありません。</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>含めるバイト数は負にできません。</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>最大サイズは 1 以上にしてください。</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>最小サイズは負にできません。</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>最大サイズが最小サイズより小さくなっています。</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>サイズの値の指定が正しくありません。</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>値の型が正しくありません。</value></data>
+
+  <data name="Carve_Title" xml:space="preserve"><value>ファイルを切り出す</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>対象範囲</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>未割り当て領域のみ</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>スラックのみ</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>ファイルの種類</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>見つけたファイルの内側ではヘッダーを探さない</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>切り出したファイルをフォルダに書き出す</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>書き出し先のフォルダ</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>ファイルを切り出し中</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>切り出しが終わりました: {0} 件のファイルが見つかりました。</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>切り出しをキャンセルしました。{0} 件のファイルが見つかっています。結果とマニフェストは残してあります。</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>書き出し先に書き込めないため、切り出しを中止しました。{0} 件のファイルが見つかっています。</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>切り出しに失敗しました: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>書き出し先が調査対象のディスク上にあります。別のディスクのフォルダを指定してください。</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>書き出し先の空き容量が不足しています。必要: {0} バイト、空き: {1} バイト。</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>書き出し先のファイルシステムは 1 ファイルを {0} バイトまでに制限しています。別のフォルダを指定してください。</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>書き出し先のフォルダを使えません。</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>このドキュメントには割り当ての情報がありません。</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>切り出したファイルを書き出せません</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>書き出し先 ({0}) の空き容量が不足しています。次のファイルに {1} バイト必要ですが、空きは {2} バイトです。空き容量を作るか、別のフォルダを選ぶか、中止してください。</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>{0} に書き込めません: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>別のフォルダを選ぶ...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>中止</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>カービングを実行中です。</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>ファイルを切り出す...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>フォルダを開く</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>カービングはまだ実行していません。フォレンジック、カービング、ファイルを切り出す、の順に選んでください。</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>ファイルは見つかりませんでした。</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>切り出した画像の縮小表示</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>開始オフセット</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>開始 LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>長さの決め方</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>書き出し先</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>構造</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>サイズの値</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>フッター</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>種類: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>開始オフセット: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>長さ: {0} バイト</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>長さの決め方: {0}</value></data>
+
+  <data name="Report_DialogTitle" xml:space="preserve"><value>レポートを作成</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>含める項目</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (1 つのファイル。オフラインで開けます)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>レター</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>監査ログの全件</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>監査ログの開始 (UTC。省略可)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>監査ログの終了 (UTC。省略可)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>ブックマークごとの Hex ダンプのバイト数 (0〜4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>保存先</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>期間が正しい日時ではありません。</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Hex ダンプの長さは 0〜4096 バイトにしてください。</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>レポートを作成中</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>レポートを作成できませんでした: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>{0} を作成しました。SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>PDF を作成できませんでした ({0})。代わりに {1} を作成しました。</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>PDF には長い一覧の先頭だけを入れました。全件は HTML のレポートか CSV を使ってください。</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>フォルダを開く</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>フォレンジックレポート</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>ケース番号</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>ケース名</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>調査者名</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>組織名</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>ケースの作成日時</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>レポートの作成日時</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>タイムゾーン</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>作成したアプリ</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>ページ</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>/</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>ケース</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>表紙</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>証拠一覧</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>取得の記録</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>デバイス情報</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>パーティション</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>ファイルシステムの概要</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>ブックマーク</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>カービングの結果</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>監査ログ</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>証拠番号</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>説明</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>モデル名</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>シリアル番号</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>容量 (バイト)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>セクタ数</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>セクタサイズ</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>検証結果</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>登録日時 (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>登録日時 (ローカル)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>登録者</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>一致</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>不一致</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>未検証</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>未計算</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>ディスク</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>ボリューム</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>イメージ</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>メモリ</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>コメント</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex ダンプ</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>開始オフセット</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>開始 LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>長さの決め方</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>書き出し先</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>見つかったファイル</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>連番</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>日時 (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>日時 (ローカル)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>操作者</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>コンピューター</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>操作</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>証拠</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>結果</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>内容</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>成功</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>失敗</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>全 {1} 行のうち先頭の {0} 行を表示しています。全件は添付の CSV か HTML のレポートにあります。</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>先頭の {0} 行を表示しています。全件は HTML のレポートか CSV にあります。</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>全件の一覧</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>データはありません。</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>不正な日時</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>逆アセンブルパネルの表示切り替え</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>ぎゃくあせんぶるぱねる</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>逆アセンブル</value></data>
@@ -8193,4 +8579,266 @@ SHA-256 のフィンガープリント: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[書き込み保護]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>書き込み保護</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>書き込み保護モードが有効です。クリックすると解除します。</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>書き込み保護モードは、このアプリからの書き込みだけを防ぎます。Windows や他のアプリによる書き込み (ボリュームのマウント時にファイルシステムが行う書き込みなど) は防げません。ハードウェアの書き込み防止装置か、OS の USB 書き込み保護も併せて使ってください。</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>OS の USB 書き込み保護...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>書き込み保護モードを解除しますか?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>開いている証拠のドキュメント: {0} 個。解除すると、次のドキュメントに書き込めるようになります:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>開いている証拠のドキュメントはありません。解除すると、開いているドキュメントに再び書き込めるようになります。</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>書き込み保護を解除する</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>読み取り専用で開き直せませんでした。読み込み済みの範囲だけを表示します。</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>このドキュメントへの書き込みを許可</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>書き込みを許可 (書き込み保護モードの例外)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>書き込み保護モードが無効です。</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>書き込みを許可できるのはファイルのドキュメントだけです。</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>証拠に登録されたデータソースには、書き込みを許可できません。</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>このドキュメントへの書き込みはすでに許可されています。</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>このドキュメントへの書き込みを許可しますか?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>書き込み保護モードは有効のままですが、{0} ({1}) は閉じるまで編集・保存できるようになります。この操作は監査ログに記録され、開いている間は取り消せません。</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>確認のため {0} と入力してください</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>{0} への書き込みを許可する</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>{0} は閉じるまで書き込みができます。</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>書き込み保護モード(W)</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>OS の USB 書き込み保護(U)</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>デバイス(D)</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>HPA / DCO の確認(H)</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART 情報(S)</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>デバイス情報パネル(P)</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>暗号化の情報(Y)...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>書き込み保護モードの切り替え</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>かきこみほごもーど らいとぶろっく よみとりせんよう</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>このドキュメントへの書き込みを許可</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>かきこみをきょか れいがい</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>OS の USB 書き込み保護の切り替え</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>ゆーえすびー かきこみほご すとれーじ</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>HPA と DCO を確認</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>かくしりょういき えいちぴーえー でぃーしーおー</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>SMART 情報を表示</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>すまーと けんこうじょうたい でぃすく</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>暗号化の情報を表示</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>あんごうか びっとろっかー</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>デバイス情報の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>でばいすじょうほう ぱねる</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>メモリダンプを開く</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>めもりだんぷ くらっしゅだんぷ ぶつりめもり</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>デバイス情報</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>起動時に常に書き込み保護モードを有効にする</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>オフのときは、前回終了したときの状態で起動します。</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>ディスクを開いたときに HPA / DCO を確認する</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>読み取りだけの ATA のコマンドを送り、隠し領域があれば知らせます。</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>OS の USB 書き込み保護を有効にしますか?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>これから接続する USB ストレージへの書き込みを Windows が禁止します (StorageDevicePolicies の WriteProtect の設定)。すでに接続されているデバイスには、接続し直すまで効きません。内蔵の SATA・NVMe のディスクは保護しません。管理者権限が必要です。</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>OS の USB 書き込み保護を無効にしますか?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>設定を有効にする前の状態に戻します。すでに接続されている USB ストレージは、接続し直すまで書き込みが禁止されたままです。管理者権限が必要です。</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>設定を変更する</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>管理者権限が必要です。設定は変更していません。</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>設定を変更できませんでした (アクセスが拒否されました。グループポリシーで管理されている可能性があります): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>設定を変更できませんでした: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>OS の USB 書き込み保護を有効にしました。USB ストレージは接続し直すと保護されます。</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>OS の USB 書き込み保護を無効にしました。</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>OS の USB 書き込み保護が有効のままです</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>このアプリを終了した後も、Windows は USB ストレージへの書き込みを禁止し続けます。無効にしてから終了しますか?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>無効にして終了</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>有効のまま終了</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>OS の USB 書き込み保護を変えるには、Windows の管理者権限が必要です。</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>デバイス情報</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>HPA / DCO を確認</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>SMART を取得</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>JSON に書き出す...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>テキストに書き出す...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>物理ディスクを開いて、「HPA / DCO の確認」か「SMART 情報」を選んでください。</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — 取得日時 {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO はまだ確認していません。</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe のディスクには HPA・DCO がありません。HPA / DCO は該当しません。</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>名前空間のサイズ: {0} ブロック (1 ブロック {1} バイト)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>名前空間の容量: {0} ブロック</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>このデバイスでは確認できません (USB 変換や仮想ディスクなどでコマンドが通りません)。</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>管理者権限が必要です。</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>コマンド {0} が失敗しました (ATA のステータス {1}、エラー {2})。</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>最大 LBA (IDENTIFY DEVICE、28 bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>最大 LBA (IDENTIFY DEVICE、48 bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>本来の最大 LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>DCO で設定された最大 LBA (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>デバイスが対応していません</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>デバイスが対応していません</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: あり、{0} セクタ ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: なし</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: 判定できません</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: あり、{0} セクタ ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: なし</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: 判定できません</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>SMART 情報はまだ取得していません。</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>このデバイスでは SMART 情報を取得できません (対応していない USB 変換など)。</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>このデバイスでは SMART が無効にされています。</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>SMART のデータのチェックサムが合いません。値が正しくない可能性があります。</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>モデル名: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>シリアル番号: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>ファームウェア: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>容量: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>セクタサイズ: 論理 {0} バイト、物理 {1} バイト</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>接続の種類: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>回転数: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>回転しない (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>対応</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>非対応</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>物理ディスクを開いているときに使えます。</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>デバイス情報を取得できませんでした: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} に隠し領域があります: HPA {1} セクタ、DCO {2} セクタ。Windows から見える容量は、ディスクの本来の容量より小さくなっています。</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>詳細を表示</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>デバイス情報を {0} に書き出しました。</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>デバイス情報を書き出せませんでした: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>現在値</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>最悪値</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>閾値</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>生の値 (16 進)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>生の値 (10 進)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>状態</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>注意</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>読み取りエラー率</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>スループット性能</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>スピンアップ時間</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>開始・停止の回数</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>代替処理済みのセクタ数</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>シークエラー率</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>シーク時間の性能</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>電源投入時間</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>スピンアップの再試行回数</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>キャリブレーションの再試行回数</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>電源投入回数</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>利用できる予備領域</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>書き込みの失敗回数</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>消去の失敗回数</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>ウェアレベリングの回数</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>予期しない電源断の回数</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>消耗の偏り</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>使用済みの予備ブロック数</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>書き込みの失敗回数の合計</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>消去の失敗回数の合計</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>実行時の不良ブロック</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>エンドツーエンドのエラー</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>報告された訂正できないエラー</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>コマンドのタイムアウト</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>ヘッドの浮上量の異常な書き込み</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>吸気温度</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>衝撃によるエラー率</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>電源断時のヘッド退避の回数</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>ロード・アンロードの回数</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>温度</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>ハードウェア ECC で回復したエラー</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>代替処理の発生回数</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>代替処理を保留中のセクタ数</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>オフラインで訂正できないセクタ数</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA の CRC エラー数</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>書き込みエラー率</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD の残り寿命</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>残りの耐久性</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>媒体の消耗度</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>正常なブロック数</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>書き込んだ LBA の合計</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>読み取った LBA の合計</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>警告ビット: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>温度: {0} ℃</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>残りの予備領域: {0}% (閾値 {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>使用率: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>読み取ったデータ量: {0} バイト</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>書き込んだデータ量: {0} バイト</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>電源投入回数: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>電源投入時間: {0} 時間</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>異常終了の回数: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>メディアのエラー数: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>取得日時</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>デバイス</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>モデル名</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>シリアル番号</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>ファームウェア</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>容量 (バイト)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>セクタサイズ (論理 / 物理)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>接続の種類</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>最大 LBA (28 bit / 48 bit / 本来 / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>このデバイスでは確認できません</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>なし</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>あり ({0} セクタ)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>該当しません (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>名前</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>現在値</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>最悪値</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>閾値</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>生の値</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>状態</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>注意</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>暗号化の情報</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>暗号化されたボリュームは見つかりませんでした。</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>範囲 {0}: オフセット {1}、{2} バイト</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>種類: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>暗号化された APFS のボリューム (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (暗号化の可能性)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>暗号化または圧縮されたデータの可能性 (VeraCrypt・TrueCrypt など。判定できる署名はありません)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>メタデータの版: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>暗号化方式: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>ボリュームの GUID: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>作成日時: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>説明: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>暗号化の状態: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>復号済み</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>進行中</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>完了</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>一時停止</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>暗号化済み: {0} バイト</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>キー保護機能: {0} 個</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}、{1}、作成日時 {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>クリアキー (保護なし)</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>スタートアップキー</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM と PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>回復パスワード</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>パスワード</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>不明 (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>キースロット: {0} 個</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• ボリューム {0}: 暗号化あり</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• ボリューム {0}: 暗号化なし</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>先頭 64 KiB のエントロピー: {0} ビット / バイト</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>警告: 3 つのメタデータブロックの内容が食い違っています。</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>警告: 壊れたメタデータブロックがあります。読めた項目だけを表示しています。</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>暗号化されたボリュームは、ファイルシステムブラウザで開きません。</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>この BitLocker のボリューム ({0}) は Windows がロックを解除しています。論理ボリュームとして開けば、OS が復号した内容を読めます。</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>論理ボリュームとして開く</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>メモリダンプ</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>{0} のメモリダンプの形式を読めませんでした。raw として開きますか?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>raw として開く</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>メモリダンプを開けませんでした: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>メモリダンプ: {0}、取得日時 {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>メモリダンプ: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>物理メモリのイメージ (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>完全メモリダンプ</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>カーネルメモリダンプ</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>完全メモリダンプ (ビットマップ形式)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>ミニダンプ</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>メモリダンプ</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>書き込み保護モードのため書き込めません。</value></data>
 </root>

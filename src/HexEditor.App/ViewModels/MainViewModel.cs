@@ -489,6 +489,8 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
+        // 開く処理の順序をログで確かめられるようにする (12 の FOR-01: 書き込み保護モードの有効化が最初のドキュメントを開く前。TC-FOR-01-10)。
+        AppLog.Info($"Document opened ({(Services.WriteBlockMode.IsEnabled ? "write protection mode" : "writable")})");
         return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recoveryData, Notifications = Notifications }, insertAt);
     }
 

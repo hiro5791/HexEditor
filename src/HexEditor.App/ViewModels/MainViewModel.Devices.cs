@@ -100,6 +100,31 @@ public sealed partial class MainViewModel
         return vm;
     }
 
+    /// <summary>
+    /// メモリダンプを開いたドキュメント (01 の ENG-36): 物理アドレス空間 (クラッシュダンプ) は書き戻す先のない読み取り専用、物理メモリのイメージ
+    /// (raw) はファイルを読み取り専用で開く。
+    /// </summary>
+    public DocumentViewModel OpenMemoryDumpSource(IByteSource source, string path)
+    {
+        if (source is FileByteSource)
+        {
+            source.Dispose();
+            return Open(path, readOnly: true);
+        }
+
+        if (FindSameSource(source.Identity) is { } existing)
+        {
+            source.Dispose();
+            Selected = existing;
+            return existing;
+        }
+
+        var doc = new Document(source, CurrentOptions);
+        DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
+        doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
+        return vm;
+    }
+
     /// <summary>復旧したディスク・ボリュームのドキュメント (ENG-27 の仕様 6) を、切断の監視の対象にする。書き込みは改めて許可させる。</summary>
     public void WatchRestoredDevice(DocumentViewModel vm)
     {

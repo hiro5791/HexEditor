@@ -171,6 +171,14 @@ public sealed record TestHookSettings
     /// <summary>偽のプロセスの定義ファイル (JSON。ENG-32 の UI テスト用)。null なら本物のプロセス。</summary>
     public string? FakeProcesses { get; init; }
 
+    /// <summary>OS の USB 書き込み保護 (FOR-02) の値を置く JSON ファイル。null ならメモリ上の偽物 (どちらでも実機のレジストリには触れない)。</summary>
+    public string? UsbWriteProtect { get; init; }
+
+    /// <summary>
+    /// 実機のレジストリの経路を使う (FOR-02 の TC-FOR-02-02。CI の管理者のランナーでだけ効く。<see cref="TestHooks.IsCiPrivilegedRunner"/>)。
+    /// </summary>
+    public bool RealUsbWriteProtect { get; init; }
+
     /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
     public IReadOnlyList<string>? OpenPicker { get; init; }
 
@@ -243,6 +251,8 @@ public sealed record TestHookSettings
             TimeZone = root["timeZone"]?.GetValue<string>(),
             FakeDevices = root["fakeDevices"]?.GetValue<string>(),
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
+            UsbWriteProtect = root["usbWriteProtect"]?.GetValue<string>(),
+            RealUsbWriteProtect = root["realUsbWriteProtect"]?.GetValue<bool>() ?? false,
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             PrintToFile = root["printToFile"]?.GetValue<string>(),

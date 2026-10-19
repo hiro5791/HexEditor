@@ -2,6 +2,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Processes;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Remote.Gdb;
 
@@ -14,6 +15,7 @@ public static class GdbWrite
 {
     public static async Task<ProcessWriteResult> ExecuteAsync(Document document, GdbByteSource target, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureRemoteWrite(target.Identity);
         DocumentSnapshot snapshot = document.DataSnapshot;
         AddBuffer addBuffer = document.AddBuffer;
         var written = new List<SavedRange>();

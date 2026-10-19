@@ -61,8 +61,12 @@ public sealed class HelperDeviceAccess(HelperClient client) : IDeviceAccess
         }
     }
 
-    private sealed class Handle(HelperClient client, uint id, string path, bool writable, DeviceGeometry geometry) : IDeviceHandle
+    private sealed class Handle(HelperClient client, uint id, string path, bool writable, DeviceGeometry geometry) : IDeviceHandle, Devices.Info.IDeviceInfoSource
     {
+        /// <summary>読み取り専用のデバイス情報 (FOR-27、FOR-28) を補助プロセスで取る (<c>QueryDeviceInfo</c>)。</summary>
+        public int QueryDeviceInfo(DeviceInfoKind kind, out byte[] data) =>
+            Call(HelperCommand.QueryDeviceInfo, new BodyWriter().U32(id).U16((ushort)kind).ToArray(), out data);
+
         private int _closed;
 
         public string Path { get; } = path;

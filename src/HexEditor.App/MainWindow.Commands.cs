@@ -154,6 +154,7 @@ public sealed partial class MainWindow
         }, NeedsDocument);
         Commands.Register("file.exit", () => Exit_Click(this, e));
         RegisterFilesCommands();
+        InitializeForensics();
         RegisterFormatCommands();
         RegisterTabCommands();
         RegisterDeviceCommands();

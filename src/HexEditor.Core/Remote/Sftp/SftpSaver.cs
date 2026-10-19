@@ -2,6 +2,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Remote.Sftp;
 
@@ -49,6 +50,7 @@ public static class SftpSaver
     public static async Task<IReadOnlyList<SavedRange>> WriteChangedRangesAsync(Document document, SftpByteSource source, SftpSavePlan plan,
         LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureRemoteWrite(source.Identity);
         DocumentSnapshot snapshot = document.DataSnapshot;
         AddBuffer addBuffer = document.AddBuffer;
         var written = new List<SavedRange>();
@@ -105,6 +107,7 @@ public static class SftpSaver
     public static async Task<SftpByteSource> ReplaceAsync(Document document, SftpByteSource source, LongRunningOperation? operation = null,
         CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureRemoteWrite(source.Identity);
         DocumentSnapshot snapshot = document.DataSnapshot;
         ISftpSession session = source.Connection.Session;
         string path = source.RemotePath;
