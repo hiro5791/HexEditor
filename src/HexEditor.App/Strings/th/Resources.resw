@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>หน้าต่าง {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(ไม่มีแท็บ)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>คัดลอกเส้นทาง</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>เปิดใหม่เป็นอิมเมจดิสก์</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>แสดงใน Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>อ่านอย่างเดียว</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>ขนาด: {0}</value></data>
@@ -6634,6 +6635,418 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>คอลัมน์ความคิดเห็น</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>แสดงชื่อสัญลักษณ์ ชื่อเป้าหมายของแบรนช์ และสตริงที่ถูกอ้างอิง</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>ดิสแอสเซมบลี</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>นิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>นิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>การแสดงวันที่และเวลา</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>วิธีแสดงเวลาในรายการและรายละเอียดด้านนิติวิทยาศาสตร์ดิจิทัล: UTC และเวลาท้องถิ่น, UTC อย่างเดียว หรือเวลาท้องถิ่นอย่างเดียว เวลาจะถูกบันทึกเป็น UTC เสมอ</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC และเวลาท้องถิ่น</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>UTC อย่างเดียว</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>เวลาท้องถิ่นอย่างเดียว</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียนเมื่อเปิดคดี</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>เมื่อปิด ระบบจะถามว่าต้องการเปิดหรือไม่</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>บันทึกการเรียกดูลงในบันทึกการตรวจสอบด้วย</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>บันทึกการข้ามไปยังตำแหน่ง การค้นหา และการเพิ่มบุ๊กมาร์ก การเปลี่ยนแปลงข้อมูลและหลักฐานจะถูกบันทึกเสมอ</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>แสดงภาพขนาดย่อของรูปภาพที่คาร์วิงได้</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>แสดงตัวอย่างขนาดเล็กของไฟล์ JPEG, PNG, GIF และ BMP ในผลลัพธ์การคาร์วิง</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>รูปโลโก้ของรายงาน</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>พาธของรูป PNG, JPEG หรือ SVG ที่แสดงที่ด้านบนของรายงาน HTML</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>ข้อความส่วนหัวของรายงาน</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>ข้อความหนึ่งบรรทัดที่แสดงใต้ชื่อเรื่องของรายงาน เช่น ชื่อห้องปฏิบัติการของคุณ</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>คดีใหม่</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>สืบสวน หลักฐาน สร้าง คดี โฟลเดอร์ investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>เปิดคดี</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>สืบสวน หลักฐาน โหลด คดี โฟลเดอร์ investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>ปิดคดี</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>สืบสวน สิ้นสุด investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>เพิ่มหลักฐาน</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>ลงทะเบียน อิมเมจดิสก์ แฮช การเก็บข้อมูล register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>คุณสมบัติของคดี</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>โซนเวลา ผู้สืบสวน หน่วยงาน time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>แสดงบันทึกการตรวจสอบ</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>ห่วงโซ่การควบคุมพยานหลักฐาน ประวัติ บันทึก chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>ตรวจสอบบันทึกการตรวจสอบ</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>ดัดแปลง โซ่แฮช ความสมบูรณ์ ตรวจสอบ tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>จัดการซิกเนเจอร์สำหรับการคาร์วิง</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>ชนิดไฟล์ ส่วนหัว ส่วนท้าย เมจิก คำจำกัดความ file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>คาร์วิงไฟล์</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>กู้คืน แยก ไฟล์ที่ถูกลบ สแกน recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>สร้างรายงาน</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf ส่งออก เอกสาร export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>แสดงหรือซ่อนรายการหลักฐาน</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>คดี หลักฐาน แผง case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>แสดงหรือซ่อนบันทึกการตรวจสอบ</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>คดี ตรวจสอบ บันทึก แผง case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>แสดงหรือซ่อนผลลัพธ์การคาร์วิง</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>ไฟล์ที่คาร์วิง แผง ผลลัพธ์ carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>บันทึกการตรวจสอบ</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>ผลลัพธ์การคาร์วิง</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>นิติวิทยาศาสตร์ดิจิทัล(N)</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>คดี(C)</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>คดีใหม่(N)...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>เปิดคดี(O)...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>ปิดคดี(L)</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>เพิ่มหลักฐาน(A)...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>คุณสมบัติของคดี(P)...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>รายการหลักฐาน(E)</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>แสดงบันทึกการตรวจสอบ(U)</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>ตรวจสอบบันทึกการตรวจสอบ(V)</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>คาร์วิง(R)</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>คาร์วิงไฟล์(C)...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>จัดการซิกเนเจอร์(S)...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>ผลลัพธ์(E)</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>สร้างรายงาน(P)...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>คดี: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>เวลาไม่ถูกต้อง</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>มีคดีที่เปิดอยู่แล้ว โปรดปิดคดีนั้นก่อน</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>ไม่มีคดีที่เปิดอยู่</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>คดีใหม่</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>คุณสมบัติของคดี</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>หมายเลขคดี (จำเป็น)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>ชื่อคดี (จำเป็น)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>ผู้สืบสวน</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>หน่วยงาน</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>โฟลเดอร์คดี</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>โซนเวลา</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>ใช้อ่านเวลาที่ไม่มีโซนเวลา เช่น เวลาของไฟล์ FAT</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>สร้างคดี "{0}" แล้ว</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>เปิดคดี "{0}" แล้ว</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>ไม่สามารถสร้างคดีได้: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>จำเป็นต้องระบุหมายเลขคดีและชื่อคดี</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>ไม่สามารถอ่านไฟล์คดีได้ (บรรทัดที่ {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>ไม่สามารถเปิดคดีได้: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>ไม่สามารถบันทึกคดีได้: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียนสำหรับคดีนี้หรือไม่</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียนสำหรับคดีนี้แล้ว</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>เพิ่มหลักฐาน</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>เพิ่มหลักฐาน</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} จะถูกเพิ่มลงในคดี แหล่งข้อมูลจะไม่ถูกเปลี่ยนแปลง</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>คำนวณแฮชทันที</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>แหล่งข้อมูลนี้ลงทะเบียนเป็น {0} แล้ว</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>เพิ่มได้เฉพาะดิสก์ วอลุม ไฟล์อิมเมจ และไฟล์เป็นหลักฐานเท่านั้น</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>กำลังคำนวณแฮชของหลักฐาน {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>บันทึกแฮชของ {0} แล้ว</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>ไม่ได้คำนวณแฮชของ {0} หลักฐานยังคงอยู่ในรายการ</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>ไม่สามารถอ่านข้อมูลที่ออฟเซ็ต 0x{1} ได้ จึงไม่ได้บันทึกแฮชของ {0}</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>ยังไม่ได้คำนวณ</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>นำ {0} ออกจากรายการแล้ว แหล่งข้อมูลไม่ได้รับผลกระทบ</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>ไม่สามารถใช้ {0} ได้</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>ไม่สามารถเปิดหลักฐานได้: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} รายการ</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>ไม่มีคดีที่เปิดอยู่ สร้างหรือเปิดคดีจากเมนูนิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>ยังไม่ได้เพิ่มหลักฐาน</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>พาธ</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>ความจุ (ไบต์)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>แฮช</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>การตรวจสอบ</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>เวลาที่เพิ่ม (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>เวลาที่เพิ่ม (ท้องถิ่น)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>ดิสก์</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>วอลุม</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>อิมเมจ</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>หน่วยความจำ</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>ผ่าน</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>ไม่ผ่าน</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>ยังไม่ได้ตรวจสอบ</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>เปิด (อ่านอย่างเดียว)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>นำออกจากรายการ</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>คัดลอกแฮช</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>คัดลอกพาธ</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>สร้างอิมเมจ...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>ตรวจสอบ...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} รายการ</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>ไม่มีคดีที่เปิดอยู่ บันทึกการตรวจสอบเป็นของคดีหนึ่ง ๆ</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>ยังไม่มีการบันทึกใด ๆ</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(บรรทัดนี้ไม่ใช่รายการที่ถูกต้อง บันทึกอาจถูกดัดแปลง)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>ตรวจสอบ</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>ส่งออก CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>ส่งออก JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>บันทึกการตรวจสอบสมบูรณ์ (ตรวจสอบแล้ว {0} บรรทัด)</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>ห่วงโซ่ของบันทึกการตรวจสอบขาดที่บรรทัด {0} บันทึกอาจถูกดัดแปลง</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>ลำดับ</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>เวลา (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>เวลา (ท้องถิ่น)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>ผู้ใช้</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>การดำเนินการ</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>ผลลัพธ์</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>รายละเอียด</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>สำเร็จ</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>ล้มเหลว</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>ยกเลิกแล้ว</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>ไม่สามารถเขียนบันทึกการตรวจสอบได้</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>การดำเนินการที่เขียนข้อมูลจะถูกปิดจนกว่าจะเขียนบันทึกได้อีกครั้ง {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>ลองอีกครั้ง</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>ยังคงเขียนบันทึกการตรวจสอบไม่ได้</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>ไม่สามารถเขียนบันทึกการตรวจสอบได้ จึงไม่ได้ดำเนินการ</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>ไม่สามารถเขียนบันทึกการตรวจสอบได้ การดำเนินการที่เขียนข้อมูลจึงถูกปิด</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>กำลังตรวจสอบบันทึกการตรวจสอบ</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>ไม่สามารถตรวจสอบบันทึกการตรวจสอบได้: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>กำลังส่งออกบันทึกการตรวจสอบ</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>ส่งออกบันทึกการตรวจสอบไปยัง {0} แล้ว</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>ไม่สามารถส่งออกบันทึกการตรวจสอบได้: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>ซิกเนเจอร์สำหรับการคาร์วิง</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>คำจำกัดความ</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>ในตัว</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>ปิดใช้งาน</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>นามสกุล (ไม่มีจุด)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>ส่วนหัว (ไบต์ Hex บรรทัดละหนึ่งรายการ; ?? คือไบต์ใดก็ได้ ? คือตัวเลขใดก็ได้)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>ออฟเซ็ตของส่วนหัวจากจุดเริ่มต้นของไฟล์</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>ส่วนท้าย (ไบต์ Hex ไม่บังคับ)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>จำนวนไบต์ที่จะรวมจากส่วนท้าย (เว้นว่าง = ส่วนท้ายเอง)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>ขนาดสูงสุด</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>ขนาดต่ำสุด</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>ใช้ขนาดจากค่าในส่วนหัว</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>ค่าขนาด: ออฟเซ็ตจากจุดเริ่มต้นของไฟล์</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>ค่าขนาด: ความกว้าง (บิต)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>ค่าขนาด: ลำดับไบต์</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>ค่าขนาด: ตัวเลขที่จะบวก</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>การตรวจสอบโครงสร้าง (ชื่อในตัวหรือเทมเพลตโครงสร้าง)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>การตรวจสอบในตัว: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>ค้นหาส่วนหัวเฉพาะที่จุดเริ่มต้นของเซกเตอร์</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>ใช้คำจำกัดความนี้เมื่อสแกน</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>ใหม่</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>ทำสำเนา</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>นำเข้า...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>ส่งออก...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>ทดลองใช้คำจำกัดความนี้</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>เลือกช่วงในเอกสารก่อน</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>กำลังทดลอง...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>กำลังทดลองคำจำกัดความการคาร์วิง</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>พบ {0} รายการในส่วนที่เลือก ตำแหน่งแรก ๆ:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>นำเข้าคำจำกัดความ {0} รายการแล้ว</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>ไม่ได้นำเข้าคำจำกัดความ {0} รายการ:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>ส่งออกไปยัง {0} แล้ว</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>ไม่สามารถนำเข้าคำจำกัดความได้: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>ไม่สามารถบันทึกคำจำกัดความได้: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>การทดลองล้มเหลว: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: ป้อนตัวเลขหรือขนาด เช่น 4096, 0x1000 หรือ 1M</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>ป้อนชื่อ</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>ชื่อนี้ถูกใช้แล้ว</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>ป้อนนามสกุล</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>นามสกุลมีอักขระที่ใช้ในชื่อไฟล์ไม่ได้</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>ป้อนส่วนหัวอย่างน้อยหนึ่งรายการ</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>ส่วนหัวไม่ใช่ลำดับไบต์ Hex ที่ถูกต้อง (จำนวนหลักเป็นเลขคี่หรือมีอักขระที่ไม่ถูกต้อง)</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>ส่วนหัวต้องมีไบต์ตายตัวอย่างน้อยหนึ่งไบต์</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>ออฟเซ็ตของส่วนหัวต้องไม่เป็นค่าลบ</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>ส่วนท้ายไม่ใช่ลำดับไบต์ Hex ที่ถูกต้อง</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>จำนวนไบต์ที่จะรวมต้องไม่เป็นค่าลบ</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>ขนาดสูงสุดต้องมีค่าอย่างน้อย 1</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>ขนาดต่ำสุดต้องไม่เป็นค่าลบ</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>ขนาดสูงสุดน้อยกว่าขนาดต่ำสุด</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>ค่าขนาดไม่ถูกต้อง</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>ค่าบางค่ามีชนิดไม่ถูกต้อง</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>คาร์วิงไฟล์</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>เริ่ม</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>ขอบเขต</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>ทั้งเอกสาร</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>ส่วนที่เลือก</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>เฉพาะพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>เฉพาะพื้นที่สแลค</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>ชนิดไฟล์</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>ไม่ค้นหาส่วนหัวภายในไฟล์ที่พบแล้ว</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>เขียนไฟล์ที่คาร์วิงได้ลงในโฟลเดอร์</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>โฟลเดอร์ปลายทาง</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>กำลังคาร์วิงไฟล์</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>คาร์วิงเสร็จสิ้น: พบ {0} ไฟล์</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>ยกเลิกการคาร์วิงแล้ว พบ {0} ไฟล์ ผลลัพธ์และไฟล์รายการ (manifest) จะถูกเก็บไว้</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>หยุดการคาร์วิงเพราะเขียนลงโฟลเดอร์ปลายทางไม่ได้ พบ {0} ไฟล์</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>การคาร์วิงล้มเหลว: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>โฟลเดอร์ปลายทางอยู่บนดิสก์ที่กำลังสืบสวน เลือกโฟลเดอร์บนดิสก์อื่น</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>พื้นที่ว่างในโฟลเดอร์ปลายทางไม่เพียงพอ ต้องการ: {0} ไบต์ ว่างอยู่: {1} ไบต์</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>ระบบไฟล์ของโฟลเดอร์ปลายทางจำกัดขนาดไฟล์ไว้ที่ {0} ไบต์ เลือกโฟลเดอร์อื่น</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>ไม่สามารถใช้โฟลเดอร์ปลายทางนี้ได้</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>ไม่มีข้อมูลการจัดสรรสำหรับเอกสารนี้</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>ไม่สามารถเขียนไฟล์ที่คาร์วิงได้</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>โฟลเดอร์ปลายทาง ({0}) พื้นที่เต็ม ไฟล์ถัดไปต้องการ {1} ไบต์ แต่เหลือ {2} ไบต์ เพิ่มพื้นที่ว่าง เลือกโฟลเดอร์อื่น หรือหยุด</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>ไม่สามารถเขียนลง {0} ได้: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>ลองอีกครั้ง</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>เลือกโฟลเดอร์อื่น...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>กำลังคาร์วิงอยู่แล้ว</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>คาร์วิงไฟล์...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>เปิดโฟลเดอร์</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>ยังไม่ได้คาร์วิง เลือก นิติวิทยาศาสตร์ดิจิทัล จากนั้น คาร์วิง แล้วเลือก คาร์วิงไฟล์</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>ไม่พบไฟล์</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} ไฟล์</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>ตัวอย่างรูปภาพที่คาร์วิงได้</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>ลำดับ</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>วิธีกำหนดความยาว</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>ไฟล์ผลลัพธ์</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>โครงสร้าง</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>ค่าขนาด</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>ส่วนท้าย</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>ขนาดสูงสุด</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>ประเภท: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>ออฟเซ็ต: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>ความยาว: {0} ไบต์</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>วิธีกำหนดความยาว: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>สร้างรายงาน</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>เนื้อหา</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>ดิสก์: {0} (ขนาดเซกเตอร์ {1} ไบต์)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>ลำดับ</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA เริ่มต้น</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>จำนวนเซกเตอร์</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>ขนาด (ไบต์)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>ระบบไฟล์</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>การเข้ารหัส</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>ไม่ได้จัดสรร</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>เลย์เอาต์</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>เอกสาร</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>ออฟเซ็ตของวอลุม</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>ป้ายชื่อ</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>หมายเลขซีเรียล</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>ขนาดคลัสเตอร์ (ไบต์)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>จำนวนคลัสเตอร์</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>จำนวนคลัสเตอร์ว่าง</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>ปัญหา</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>โลจิคัลวอลุม: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>กลุ่ม</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>ขนาด (ไบต์)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>เลย์เอาต์</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>สมาชิก</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>อิมเมจ</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>ต้นทาง</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>เวลาที่เก็บข้อมูล</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>แฮช</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>บันทึกการเก็บข้อมูล</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (ไฟล์เดียว เปิดแบบออฟไลน์ได้)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>รายการทั้งหมดในบันทึกการตรวจสอบ</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>บันทึกการตรวจสอบตั้งแต่ (UTC ไม่บังคับ)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>บันทึกการตรวจสอบถึง (UTC ไม่บังคับ)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>จำนวนไบต์ของ Hex dump สำหรับแต่ละบุ๊กมาร์ก (0 ถึง 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>บันทึกไปที่</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>ช่วงเวลาไม่ใช่วันที่และเวลาที่ถูกต้อง</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>ความยาวของ Hex dump ต้องอยู่ระหว่าง 0 ถึง 4096 ไบต์</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>กำลังสร้างรายงาน</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>ไม่สามารถสร้างรายงานได้: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>สร้าง {0} แล้ว SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>ไม่สามารถสร้าง PDF ได้ ({0}) จึงสร้าง {1} แทน</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>PDF มีเฉพาะแถวแรก ๆ ของรายการที่ยาว ใช้รายงาน HTML หรือไฟล์ CSV เพื่อดูรายการทั้งหมด</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>เปิดโฟลเดอร์</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>รายงานนิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>หมายเลขคดี</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>ชื่อคดี</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>ผู้สืบสวน</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>หน่วยงาน</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>เวลาที่สร้างคดี</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>เวลาที่สร้างรายงาน</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>โซนเวลา</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>สร้างโดย</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>หน้า</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>จาก</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>คดี</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>หน้าปก</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>บันทึกการเก็บข้อมูล</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>ข้อมูลอุปกรณ์</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>พาร์ติชัน</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>ระบบไฟล์</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>บุ๊กมาร์ก</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>ผลลัพธ์การคาร์วิง</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>บันทึกการตรวจสอบ</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>พาธ</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>รุ่น</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>หมายเลขซีเรียล</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>ความจุ (ไบต์)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>จำนวนเซกเตอร์</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>ขนาดเซกเตอร์</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>แฮช</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>การตรวจสอบ</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>เวลาที่เพิ่ม (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>เวลาที่เพิ่ม (ท้องถิ่น)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>เพิ่มโดย</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>ผ่าน</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>ไม่ผ่าน</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>ยังไม่ได้ตรวจสอบ</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>ยังไม่ได้คำนวณ</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>ดิสก์</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>วอลุม</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>อิมเมจ</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>หน่วยความจำ</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>เอกสาร</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>ความคิดเห็น</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>ลำดับ</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>วิธีกำหนดความยาว</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>ไฟล์ผลลัพธ์</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>ไฟล์ที่พบ</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>ลำดับ</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>เวลา (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>เวลา (ท้องถิ่น)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>ผู้ใช้</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>คอมพิวเตอร์</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>การดำเนินการ</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>หลักฐาน</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>ผลลัพธ์</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>รายละเอียด</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>สำเร็จ</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>ล้มเหลว</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>ยกเลิกแล้ว</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>แสดง {0} แถวแรกจากทั้งหมด {1} แถว รายการทั้งหมดอยู่ในไฟล์ CSV ที่แนบมาหรือรายงาน HTML</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>แสดงเฉพาะ {0} แถวแรก รายการทั้งหมดอยู่ในรายงาน HTML หรือไฟล์ CSV</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>รายการทั้งหมด</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>ไม่ได้จัดสรร</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>ไม่มีข้อมูล</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>เวลาไม่ถูกต้อง</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>สลับแผงดิสแอสเซมบลี</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>ดิสแอสเซมเบลอร์ แอสเซมบลี โค้ด disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>ดิสแอสเซมเบิล</value></data>
@@ -8193,4 +8606,1265 @@
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ทั้งหน้า</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>พอดีความกว้าง</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>เลือกโฟลเดอร์...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[ป้องกันการเขียน]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>ป้องกันการเขียน</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>โหมดป้องกันการเขียนเปิดอยู่ คลิกเพื่อปิด</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>โหมดป้องกันการเขียนหยุดได้เฉพาะการเขียนจากแอปนี้เท่านั้น ไม่สามารถหยุด Windows หรือแอปอื่นไม่ให้เขียนได้ (เช่น การเขียนที่ระบบไฟล์ทำเมื่อเมานต์วอลุม) ควรใช้ตัวป้องกันการเขียนฮาร์ดแวร์หรือการป้องกันการเขียน USB ของระบบปฏิบัติการร่วมด้วย</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>การป้องกันการเขียน USB ของระบบปฏิบัติการ...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>ปิดโหมดป้องกันการเขียนหรือไม่</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>เอกสารหลักฐานที่เปิดอยู่: {0} หลังจากปิดโหมด เอกสารเหล่านี้จะเขียนได้:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>ไม่มีเอกสารหลักฐานที่เปิดอยู่ หลังจากปิดโหมด เอกสารที่เปิดอยู่จะเขียนได้อีกครั้ง</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>ปิดการป้องกันการเขียน</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>ไม่สามารถเปิดแหล่งข้อมูลใหม่แบบอ่านอย่างเดียวได้ แสดงเฉพาะข้อมูลที่อ่านไปแล้ว</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>อนุญาตให้เขียนลงในเอกสารนี้</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>อนุญาตให้เขียน (ข้อยกเว้นของโหมดป้องกันการเขียน)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>โหมดป้องกันการเขียนปิดอยู่</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>เฉพาะเอกสารที่เป็นไฟล์เท่านั้นที่ยกเว้นจากโหมดป้องกันการเขียนได้</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>แหล่งข้อมูลนี้ลงทะเบียนเป็นหลักฐานแล้ว จึงอนุญาตให้เขียนไม่ได้</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>เอกสารนี้อนุญาตให้เขียนอยู่แล้ว</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>อนุญาตให้เขียนลงในเอกสารนี้หรือไม่</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>โหมดป้องกันการเขียนยังคงเปิดอยู่ แต่สามารถแก้ไขและบันทึก {0} ({1}) ได้จนกว่าจะปิด การดำเนินการนี้จะถูกบันทึกในบันทึกการตรวจสอบ และไม่สามารถเลิกทำได้สำหรับเอกสารที่เปิดอยู่</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>พิมพ์ {0} เพื่อยืนยัน</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>อนุญาตให้เขียนลง {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>อนุญาตให้เขียนลง {0} จนกว่าจะปิด</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>โหมดป้องกันการเขียน(W)</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>การป้องกันการเขียน USB ของระบบปฏิบัติการ(U)</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>อุปกรณ์(D)</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>ตรวจสอบ HPA / DCO(H)</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>ข้อมูล SMART(S)</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>แผงข้อมูลอุปกรณ์(P)</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>ข้อมูลการเข้ารหัส(Y)...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>เปิดเมมโมรีดัมพ์(M)...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>สลับโหมดป้องกันการเขียน</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>ป้องกันการเขียน บล็อก อ่านอย่างเดียว หลักฐาน write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>อนุญาตให้เขียนลงในเอกสารนี้</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>ป้องกันการเขียน ข้อยกเว้น write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>สลับการป้องกันการเขียน USB ของระบบปฏิบัติการ</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>USB ที่เก็บข้อมูล นโยบาย ป้องกันการเขียน รีจิสทรี usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>ตรวจสอบ HPA และ DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>พื้นที่ซ่อน โฮสต์โพรเทกต์ การกำหนดค่าอุปกรณ์ซ้อนทับ hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>แสดงข้อมูล SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>สุขภาพ ดิสก์ ตรวจสอบตัวเอง nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>แสดงข้อมูลการเข้ารหัส</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt วอลุมที่เข้ารหัส encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>สลับข้อมูลอุปกรณ์</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>แผง hpa smart อุปกรณ์ panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>เปิดเมมโมรีดัมพ์</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>ครแรชดัมพ์ มินิดัมพ์ หน่วยความจำกายภาพ ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>ข้อมูลอุปกรณ์</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียนทุกครั้งเมื่อเริ่มต้น</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>เมื่อปิด แอปจะเริ่มต้นด้วยสถานะของโหมดตามที่เป็นอยู่เมื่อปิดครั้งล่าสุด</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>ตรวจสอบ HPA / DCO เมื่อเปิดดิสก์</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>ส่งคำสั่ง ATA แบบอ่านอย่างเดียวไปยังดิสก์ และแสดงการแจ้งเตือนหากพบพื้นที่ซ่อน</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>เปิดการป้องกันการเขียน USB ของระบบปฏิบัติการหรือไม่</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows จะบล็อกการเขียนไปยังอุปกรณ์จัดเก็บข้อมูล USB ที่เชื่อมต่อนับจากนี้ (การตั้งค่า WriteProtect ของ StorageDevicePolicies) อุปกรณ์ที่เชื่อมต่ออยู่แล้วจะไม่ได้รับผลกระทบจนกว่าจะเชื่อมต่อใหม่ ดิสก์ SATA และ NVMe ภายในไม่ได้รับการป้องกัน ต้องใช้สิทธิ์ผู้ดูแลระบบ</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>ปิดการป้องกันการเขียน USB ของระบบปฏิบัติการหรือไม่</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>การตั้งค่าจะกลับสู่สถานะก่อนที่คุณจะเปิด อุปกรณ์จัดเก็บข้อมูล USB ที่เชื่อมต่ออยู่แล้วจะยังคงป้องกันการเขียนจนกว่าจะเชื่อมต่อใหม่ ต้องใช้สิทธิ์ผู้ดูแลระบบ</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>เปลี่ยนการตั้งค่า</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>ต้องใช้สิทธิ์ผู้ดูแลระบบ ไม่ได้เปลี่ยนการตั้งค่า</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>ไม่สามารถเปลี่ยนการตั้งค่าได้ (ปฏิเสธการเข้าถึง อาจถูกจัดการโดยนโยบายกลุ่ม): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>ไม่สามารถเปลี่ยนการตั้งค่าได้: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>เปิดการป้องกันการเขียน USB ของระบบปฏิบัติการแล้ว เชื่อมต่ออุปกรณ์จัดเก็บข้อมูล USB ใหม่เพื่อให้มีผล</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>ปิดการป้องกันการเขียน USB ของระบบปฏิบัติการแล้ว</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>การป้องกันการเขียน USB ของระบบปฏิบัติการยังเปิดอยู่</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows จะยังคงบล็อกการเขียนไปยังอุปกรณ์จัดเก็บข้อมูล USB หลังจากปิดแอปนี้ ปิดการป้องกันก่อนออกหรือไม่</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>ปิดแล้วออก</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>ออกและคงการป้องกันไว้</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>การเปลี่ยนการป้องกันการเขียน USB ของระบบปฏิบัติการต้องใช้สิทธิ์ผู้ดูแลระบบของ Windows</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>อุปกรณ์</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>ตรวจสอบ HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>อ่าน SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>ส่งออก JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>ส่งออกข้อความ...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>เปิดดิสก์จริง แล้วเลือก ตรวจสอบ HPA / DCO หรือ ข้อมูล SMART</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — บันทึกเมื่อ {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>ยังไม่ได้ตรวจสอบ HPA / DCO</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>ดิสก์ NVMe ไม่มี HPA หรือ DCO จึงไม่เกี่ยวข้องกับ HPA / DCO</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>ขนาดเนมสเปซ: {0} บล็อก (บล็อกละ {1} ไบต์)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>ความจุเนมสเปซ: {0} บล็อก</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>ไม่สามารถตรวจสอบบนอุปกรณ์นี้ได้ (คำสั่งส่งผ่านไม่ได้ เช่น บนอะแดปเตอร์ USB หรือดิสก์เสมือน)</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>ต้องใช้สิทธิ์ผู้ดูแลระบบ</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>คำสั่ง {0} ล้มเหลว (สถานะ ATA {1} ข้อผิดพลาด {2})</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>LBA สูงสุด (IDENTIFY DEVICE, 28 บิต): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>LBA สูงสุด (IDENTIFY DEVICE, 48 บิต): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>LBA สูงสุดดั้งเดิม (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>LBA สูงสุดที่ DCO ตั้งไว้ (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>อุปกรณ์ไม่รองรับ</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>อุปกรณ์ไม่รองรับ</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: มี {0} เซกเตอร์ ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: ไม่มี</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: ไม่สามารถระบุได้</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: มี {0} เซกเตอร์ ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: ไม่มี</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: ไม่สามารถระบุได้</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>ยังไม่ได้อ่านข้อมูล SMART</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>ไม่สามารถอ่านข้อมูล SMART บนอุปกรณ์นี้ได้ (เช่น ผ่านอะแดปเตอร์ USB ที่ไม่รองรับ)</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART ถูกปิดใช้งานบนอุปกรณ์นี้</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของข้อมูล SMART ไม่ตรงกัน ค่าอาจไม่ถูกต้อง</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>รุ่น: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>หมายเลขซีเรียล: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>เฟิร์มแวร์: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>ความจุ: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>ขนาดเซกเตอร์: ลอจิคัล {0} ไบต์ ฟิสิคัล {1} ไบต์</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>การเชื่อมต่อ: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>ความเร็วรอบ: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>ไม่หมุน (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>รองรับ</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>ไม่รองรับ</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>เปิดดิสก์จริงเพื่อใช้คำสั่งนี้</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>ไม่สามารถอ่านข้อมูลอุปกรณ์ได้: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} มีพื้นที่ซ่อน: HPA {1} เซกเตอร์ DCO {2} เซกเตอร์ ความจุที่ Windows มองเห็นน้อยกว่าความจุจริงของดิสก์</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>แสดงรายละเอียด</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>ส่งออกข้อมูลอุปกรณ์ไปยัง {0} แล้ว</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>ไม่สามารถส่งออกข้อมูลอุปกรณ์ได้: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>ค่าปัจจุบัน</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>ค่าแย่สุด</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>เกณฑ์</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>ค่าดิบ (Hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>ค่าดิบ (ฐานสิบ)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>ไม่ทราบ</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>อุณหภูมิ</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>บิตคำเตือนร้ายแรง: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>อุณหภูมิ: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>พื้นที่สำรองที่ใช้ได้: {0}% (เกณฑ์ {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>เปอร์เซ็นต์ที่ใช้ไป: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>ข้อมูลที่อ่าน: {0} ไบต์</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>ข้อมูลที่เขียน: {0} ไบต์</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>จำนวนรอบการเปิดปิดเครื่อง: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>ชั่วโมงที่เปิดเครื่อง: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>จำนวนครั้งที่ปิดเครื่องไม่ปลอดภัย: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>ข้อผิดพลาดของสื่อและความสมบูรณ์ของข้อมูล: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>เวลาที่บันทึก</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>อุปกรณ์</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>รุ่น</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>หมายเลขซีเรียล</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>เฟิร์มแวร์</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>ความจุ (ไบต์)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>ขนาดเซกเตอร์ (ลอจิคัล / ฟิสิคัล)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>การเชื่อมต่อ</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>LBA สูงสุด (28 บิต / 48 บิต / ดั้งเดิม / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>ไม่สามารถตรวจสอบบนอุปกรณ์นี้ได้</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>มี ({0} เซกเตอร์)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>ไม่เกี่ยวข้อง (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>ค่าปัจจุบัน</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>ค่าแย่สุด</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>เกณฑ์</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>ค่าดิบ</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>ข้อมูลการเข้ารหัส</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>ไม่พบวอลุมที่เข้ารหัส</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>ช่วง {0}: ออฟเซ็ต {1} {2} ไบต์</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>ประเภท: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>วอลุม APFS ที่เข้ารหัส (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (อาจเข้ารหัสอยู่)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>อาจเป็นข้อมูลที่เข้ารหัสหรือบีบอัด (เช่น VeraCrypt หรือ TrueCrypt ไม่มีซิกเนเจอร์ที่ใช้ระบุได้)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>เวอร์ชันของเมทาดาทา: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>วิธีการเข้ารหัส: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID ของวอลุม: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>สร้างเมื่อ: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>คำอธิบาย: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>สถานะการเข้ารหัส: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>ไม่ทราบ</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>ถอดรหัสแล้ว</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>กำลังดำเนินการ</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>เสร็จสิ้น</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>หยุดชั่วคราว</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>เข้ารหัสไปแล้ว: {0} ไบต์</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>ตัวป้องกันคีย์: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, สร้างเมื่อ {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>คีย์แบบไม่เข้ารหัส</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>คีย์เริ่มต้นระบบ</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM และ PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>รหัสผ่านสำหรับกู้คืน</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>รหัสผ่าน</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>ไม่ทราบ (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>สล็อตคีย์: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• วอลุม {0}: เข้ารหัสแล้ว</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• วอลุม {0}: ไม่ได้เข้ารหัส</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>เอนโทรปีของ 64 KiB แรก: {0} บิตต่อไบต์</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>คำเตือน: บล็อกเมทาดาทาทั้งสามบล็อกไม่ตรงกัน</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>คำเตือน: บล็อกเมทาดาทาบางส่วนเสียหาย แสดงเฉพาะรายการที่อ่านได้</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>ตัวเรียกดูระบบไฟล์ไม่เปิดวอลุมที่เข้ารหัส</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows ปลดล็อกวอลุม BitLocker นี้แล้ว ({0}) หากเปิดเป็นโลจิคัลวอลุม คุณจะอ่านเนื้อหาที่ Windows ถอดรหัสให้ได้</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>เปิดเป็นโลจิคัลวอลุม</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>เมมโมรีดัมพ์</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>ไม่สามารถอ่านรูปแบบเมมโมรีดัมพ์ของ {0} ได้ เปิดเป็นข้อมูลดิบหรือไม่</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>เปิดเป็นข้อมูลดิบ</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>ไม่สามารถเปิดเมมโมรีดัมพ์ได้: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>เมมโมรีดัมพ์: {0} บันทึกเมื่อ {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>เมมโมรีดัมพ์: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>อิมเมจหน่วยความจำกายภาพ (ดิบ)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>เมมโมรีดัมพ์แบบสมบูรณ์</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>เมมโมรีดัมพ์ของเคอร์เนล</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>เมมโมรีดัมพ์แบบสมบูรณ์ (บิตแมป)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>มินิดัมพ์</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>เมมโมรีดัมพ์</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>ไม่สามารถเขียนข้อมูลได้เพราะโหมดป้องกันการเขียนเปิดอยู่</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>อิมเมจ(I)</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>สร้างอิมเมจ(C)...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>สร้างอิมเมจโครงกระดูก(S)...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>เปิดอิมเมจ(O)...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>ตรวจสอบอิมเมจ(V)...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>ข้อมูลอิมเมจ(N)</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>โคลนดิสก์(L)...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>บันทึกช่วงเซกเตอร์(A)...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>คืนค่าช่วงเซกเตอร์(T)...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>สร้าง RAID ขึ้นใหม่(D)...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>สร้างอิมเมจ</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>เก็บข้อมูล อิมเมจดิสก์ dd ดิบ e01 หลักฐาน acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>สร้างอิมเมจโครงกระดูก</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>โครงกระดูก สปาร์ส อิมเมจ เมทาดาทา skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>เปิดอิมเมจเป็นดิสก์</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk แบ่งส่วน ดิบ 001 e01 vhd vhdx vmdk split raw 001</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>ตรวจสอบอิมเมจ</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>ตรวจสอบ แฮช md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>ข้อมูลอิมเมจ</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 ส่วนหัว ข้อมูลคดี e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>โคลนดิสก์</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>โคลน คัดลอก ดิสก์ เซกเตอร์ clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>บันทึกช่วงเซกเตอร์</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>สำรองข้อมูล mbr gpt เซกเตอร์ backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>คืนค่าช่วงเซกเตอร์</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>คืนค่า กู้คืน mbr gpt เซกเตอร์ restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>สร้าง RAID ขึ้นใหม่</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod สไตรป์ พาริตี raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>เอกสารปัจจุบันไม่ใช่อิมเมจดิสก์</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>ต้องใช้เอกสารดิสก์ วอลุม หรืออิมเมจดิสก์</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>เปิดดิสก์ อิมเมจ หรือไฟล์ที่จะใช้เป็นต้นทางก่อน</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>เปิดโดยไม่มีเซกเมนต์ที่ขาดหายไป ({0}) ช่วงเหล่านั้นจะอ่านเป็นข้อผิดพลาด</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>ไม่สามารถอ่านอิมเมจ {0} ได้ (ส่วน: {1}) {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>ไม่พบดิสก์แม่ของดิสก์ส่วนต่าง: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>เซกเมนต์ขาดหายไป</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>เซกเมนต์เหล่านี้ขาดหายไป: {0} เปิดอิมเมจด้วยเซกเมนต์ที่มีอยู่หรือไม่ ช่วงที่ขาดหายไปจะอ่านเป็นข้อผิดพลาด</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>เปิดเซกเมนต์ที่มีอยู่</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw แบบแบ่งส่วน</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>ผลรวมตรวจสอบของชังก์ที่ {0} ({1} ไบต์) ไม่ตรงกัน ช่วงนี้จะแสดงเป็นข้อผิดพลาดในการอ่าน</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>ข้อมูลอิมเมจ</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} ไบต์ ({1} เซกเตอร์)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>ขนาดเซกเตอร์</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>เวลาที่เก็บข้อมูล</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>เครื่องมือเก็บข้อมูล</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>อุปกรณ์</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>ชังก์</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} (ชังก์ละ {1} เซกเตอร์)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>การบีบอัด</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>บีบอัดแล้ว</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>ไม่ได้บีบอัด</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} ที่จัดเก็บไว้</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>เซกเตอร์ที่อ่านไม่ได้ระหว่างการเก็บข้อมูล</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>ดิสก์แม่</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>เซกเมนต์ที่ขาดหายไป</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>หมายเลขคดี</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>หมายเลขหลักฐาน</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>ผู้ตรวจสอบ</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>คำอธิบาย</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>หมายเหตุ</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>ตรงกัน</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>ไม่ตรงกัน</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>ไม่มีค่าอ้างอิง</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>ไม่สามารถตรวจสอบได้เนื่องจากข้อผิดพลาดในการอ่าน</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>จัดเก็บอยู่ในอิมเมจ</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>บันทึกการเก็บข้อมูล</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>รายการหลักฐาน</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>ค่าที่ป้อน</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>คำนวณระหว่างการเก็บข้อมูล</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>ดิสก์ต้นทาง</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>สร้างอิมเมจ</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>สร้างอิมเมจโครงกระดูก</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>โหมดป้องกันการเขียนปิดอยู่ แนะนำให้เปิดก่อนเก็บหลักฐาน</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>เปิดโหมดป้องกันการเขียน</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>ต้นทาง: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>เฉพาะส่วนที่เลือก (ขยายไปถึงขอบเขตเซกเตอร์)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>ช่วงที่จะเก็บข้อมูล</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>สปาร์ส (ไม่รวมพื้นที่ที่ไม่ได้จัดสรร)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>โครงกระดูก (เฉพาะตารางพาร์ติชันและเมทาดาทาของระบบไฟล์)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>รวมบุ๊กมาร์กและช่วงที่เลือกหลายช่วงด้วย</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>ปลายทาง</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>ปลายทาง</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>เรียกดู...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>ขนาดการแบ่ง/เซกเมนต์ (เช่น 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>แฮช</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>จำนวนครั้งที่ลองใหม่เมื่อเกิดข้อผิดพลาดในการอ่าน</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>ค่าที่ใช้เติมเซกเตอร์ที่อ่านไม่ได้ (Hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>หน่วยการอ่าน</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>ตรวจสอบหลังเสร็จสิ้น</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>ข้อผิดพลาดในการอ่าน</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>ข้อมูล E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>การบีบอัด</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>เร็ว (zlib ระดับ 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>ดีที่สุด (zlib ระดับ 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>เริ่ม</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>ป้อนปลายทาง</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>ขนาดการแบ่งต้องมีอย่างน้อย 1 MiB (เช่น 100M)</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>ป้อนจำนวนครั้งที่ลองใหม่ตั้งแต่ 0 ถึง 100</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>ป้อนค่าเติมเป็นเลข Hex สองหลัก (เช่น 00)</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>เลือกแฮชอย่างน้อยหนึ่งแบบ</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>ปลายทางอยู่บนดิสก์จริงเดียวกับต้นทาง เลือกดิสก์อื่น</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>ปลายทางอยู่บนดิสก์ที่อยู่ในรายการหลักฐาน เลือกดิสก์อื่น</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>ระบบไฟล์ปลายทาง ({0}) รองรับไฟล์ขนาดไม่เกิน {1} ไบต์ ใช้ Raw แบบแบ่งส่วน หรือ E01 ที่มีขนาดเซกเมนต์เล็กลง</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>ปลายทางต้องการประมาณ {0} ไบต์ แต่เหลือเพียง {1} ไบต์</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} มีอยู่แล้ว เขียนทับหรือไม่</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>ระบบไฟล์ปลายทางคือ {0} ไม่ใช่ NTFS พื้นที่ที่ยกเว้นจึงถูกเขียนเป็นศูนย์ และอิมเมจจะไม่เล็กลง</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>สร้างอิมเมจ: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>กำลังคำนวณช่วงที่จะรวม</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>วิเคราะห์พาร์ติชัน {0} รายการไม่ได้ จึงรวมทั้งหมด</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>ไม่สามารถสร้างอิมเมจได้ {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>เซกเตอร์ที่อ่านไม่ได้: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>สร้างอิมเมจแล้ว {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>การตรวจสอบ: {0}</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>อ่านเซกเตอร์ {0} รายการไม่ได้ และถูกเติมด้วยค่าที่กำหนดแล้ว</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>การเก็บข้อมูลถูกขัดจังหวะ ไฟล์ที่เขียนไปแล้วจะถูกเก็บไว้</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>การเก็บข้อมูลถูกขัดจังหวะ ไฟล์ที่เขียนไปแล้วถูกลบแล้ว</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>ต้นทางหายไป หยุดการเก็บข้อมูลแล้ว</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>เปิดบันทึกการเก็บข้อมูล</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>ไม่สามารถเขียนไปยังปลายทางได้: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>ลองอีกครั้ง</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>ยกเลิกการทำงาน</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>ยกเลิกการเก็บข้อมูลแล้ว เก็บไฟล์ที่เขียนไปแล้วไว้หรือไม่</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>เก็บไว้</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>ตรวจสอบอิมเมจ</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>อิมเมจ: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>ค่าที่จะเปรียบเทียบ (Hex ไม่บังคับ)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>ค่า MD5, SHA-1 หรือ SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>ป้อนค่า Hex 32, 40 หรือ 64 หลัก</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>อ่านดิสก์ต้นทางซ้ำด้วย</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>ตรวจสอบ</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>ตรวจสอบอิมเมจ: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>ผลการตรวจสอบ: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>ไม่สามารถตรวจสอบได้เนื่องจากข้อผิดพลาดในการอ่าน: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>ค่าที่คำนวณ: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>บันทึกการเก็บข้อมูลอิมเมจดิสก์</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>บันทึกการโคลนดิสก์</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>เสร็จสิ้น</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>ถูกขัดจังหวะ</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>ต้นทางหายไป</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>ล้มเหลว</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>ต้นทาง</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>พาธ</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>รุ่น</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>หมายเลขซีเรียล</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>ความจุ</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>ขนาดเซกเตอร์</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>ช่วง</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>ปลายทาง</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>เป้าหมาย</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>เริ่มเมื่อ</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>สิ้นสุดเมื่อ</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>เซกเตอร์ที่อ่านแล้ว</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>เซกเตอร์ที่อ่านไม่ได้</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>แฮช</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>ช่วงที่รวมไว้</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>การตรวจสอบ</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>ยังไม่ได้ตรวจสอบ</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>เวอร์ชันของแอปพลิเคชัน</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>คดี</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>ช่วงที่เก็บข้อมูล</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>ทั้งหมด</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>อิมเมจแบบสปาร์ส (ไม่รวมพื้นที่ที่ไม่ได้จัดสรร)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>อิมเมจโครงกระดูก (เฉพาะตารางพาร์ติชันและเมทาดาทาของระบบไฟล์)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>พื้นที่ที่ยกเว้นถูกเก็บเป็นศูนย์ ดังนั้นแฮชของอิมเมจนี้จึงไม่ตรงกับแฮชของดิสก์ต้นทางทั้งหมด</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>ช่วงที่รวมไว้</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>โคลนดิสก์</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>ดิสก์เป้าหมาย</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>ดิสก์ {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>ดิสก์ {0}: {1} หมายเลขซีเรียล {2} {3} ไบต์ เซกเตอร์ {4} ไบต์ วอลุม: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} ไบต์)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA เริ่มต้นบนเป้าหมาย</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>เติมส่วนที่เหลือของเป้าหมายด้วยศูนย์</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>แฮชสำหรับการตรวจสอบ</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>โฟลเดอร์บันทึก (ไม่บังคับ)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>ถัดไป</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>เลือกดิสก์เป้าหมาย</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>LBA เริ่มต้นอยู่นอกดิสก์เป้าหมาย</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>ดิสก์ที่มีขนาดเซกเตอร์ต่างกันใช้เป็นเป้าหมายการโคลนไม่ได้</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>ดิสก์เป้าหมายอยู่ในรายการหลักฐาน จึงเขียนทับไม่ได้</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>เป้าหมาย: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>ช่วงที่จะเขียน: เริ่มจาก LBA {0} จำนวน {1} เซกเตอร์ ({2} ไบต์)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>เนื้อหา: ข้อมูลของ {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>เนื้อหาทั้งหมดของวอลุมเหล่านี้จะสูญหาย:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>เป้าหมายเล็กกว่าต้นทาง จะเขียนเฉพาะ {0} ไบต์แรกของต้นทาง</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>ไม่สามารถเลิกทำได้</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>โคลนไปยัง {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>พิมพ์ "{0}" เพื่อยืนยัน</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>โคลนไปยัง {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>หากหยุดตอนนี้ ดิสก์เป้าหมายจะถูกเขียนเพียงบางส่วน</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>หยุด</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>ทำต่อ</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>ไม่สามารถล็อกวอลุม {0} ได้ จึงไม่ได้เขียนอะไร ปิดไฟล์ที่เปิดอยู่บนวอลุมนั้นแล้วลองอีกครั้ง</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>การโคลนล้มเหลว {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>โคลนแล้ว {0} ไบต์ การตรวจสอบ: {1}</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>หยุดการโคลนแล้ว ดิสก์เป้าหมายถูกเขียนเพียงบางส่วน</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>เป้าหมายเป็นดิสก์เดียวกับต้นทาง</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>ดิสก์ที่มีขนาดเซกเตอร์ต่างกันใช้เป็นเป้าหมายการโคลนไม่ได้</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>โหมดป้องกันการเขียนเปิดอยู่</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>ดิสก์เป้าหมายอยู่ในรายการหลักฐาน จึงเขียนทับไม่ได้</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows กำลังใช้วอลุมบนดิสก์เป้าหมาย</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>LBA เริ่มต้นอยู่นอกดิสก์เป้าหมาย</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>ไม่สามารถเปิดดิสก์เป้าหมายเพื่อเขียนได้</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>บันทึกช่วงเซกเตอร์</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>คืนค่าช่วงเซกเตอร์</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA เริ่มต้น</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>จำนวนเซกเตอร์</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>ข้อมูลเซกเตอร์</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>ช่วงอยู่นอกดิสก์</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>บันทึกเซกเตอร์: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>บันทึก {0} เซกเตอร์ไปยัง {1} แล้ว</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>อ่านบางเซกเตอร์ในช่วงนี้ไม่ได้ จึงไม่ได้บันทึกอะไร</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>ไม่สามารถบันทึกช่วงเซกเตอร์ได้ {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>ไม่สามารถอ่านไฟล์ข้อมูลหรือไฟล์ sidecar ได้ {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>ไฟล์ข้อมูล: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>บันทึกจาก: {0} หมายเลขซีเรียล {1} {2} ไบต์ เซกเตอร์ {3} ไบต์ LBA เริ่มต้น {4} จำนวน {5} เซกเตอร์ บันทึกเมื่อ {6}</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>เขียนไปที่: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>สำรองเนื้อหาปัจจุบันก่อนเขียน</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>ถัดไป</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 ของไฟล์ข้อมูลไม่ตรงกับไฟล์ sidecar จึงคืนค่าไม่ได้</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>ไม่มีไฟล์ sidecar ป้อน LBA เริ่มต้นที่จะเขียน</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>หมายเลขซีเรียลหรือความจุของเป้าหมายต่างจากดิสก์ที่บันทึกข้อมูลไว้</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>เป้าหมาย: {0} วอลุมในช่วง: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>เนื้อหา: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>เขียน {0} เซกเตอร์</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>คืนค่าเซกเตอร์: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>ไม่สามารถคืนค่าช่วงเซกเตอร์ได้ {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>เขียน {0} เซกเตอร์และยืนยันด้วยการอ่านกลับแล้ว</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>การเขียนล้มเหลว เขียนไปแล้ว {0} เซกเตอร์ และล้มเหลวที่ LBA {1} คุณสามารถเขียนไฟล์สำรอง {2} กลับได้</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>เนื้อหาที่อ่านกลับไม่ตรงกับไฟล์ข้อมูล</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>สร้าง RAID ขึ้นใหม่</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>สมาชิก (ตามลำดับ)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>ขึ้น</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>ลง</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>เพิ่มไฟล์...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>นำออก</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>ไม่มีสมาชิกนี้</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[ขาดหาย]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>ออฟเซ็ตเริ่มต้นของข้อมูลในสมาชิก</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>ขนาดสไตรป์</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>เลย์เอาต์พาริตี</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>สมมาตรซ้าย</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>ไม่สมมาตรซ้าย</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>สมมาตรขวา</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>ไม่สมมาตรขวา</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>สมาชิกที่จะใช้ (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>การตรวจหา (1 MiB แรก)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>ตรวจพบ {0} ({1} พาร์ติชัน)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>ไม่มีตารางพาร์ติชัน</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>ซิกเนเจอร์ของระบบไฟล์: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>ไม่มีซิกเนเจอร์ของระบบไฟล์</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>ขนาดดิสก์ลอจิคัล: {0} ไบต์</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>ตรวจหาด้วยการกำหนดค่านี้ไม่ได้</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>สมาชิกมีขนาดต่างกัน จะใช้ขนาดที่เล็กที่สุด</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>บันทึกการกำหนดค่า...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>โหลดการกำหนดค่า...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>การกำหนดค่า RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>บันทึกการกำหนดค่า RAID ไปยัง {0} แล้ว</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>ไม่สามารถบันทึกการกำหนดค่า RAID ได้ {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>ไม่สามารถอ่านการกำหนดค่า RAID ได้ {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>ไม่สามารถเปิดดิสก์ลอจิคัลได้</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} (สมาชิก {1} รายการ)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>พารามิเตอร์ไม่ถูกต้อง</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>ขนาดสไตรป์ต้องเป็นเลขยกกำลังของสองตั้งแต่ 512 B ถึง 16 MiB</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>สมาชิกน้อยเกินไปสำหรับประเภทนี้</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>ประเภทนี้ไม่อนุญาตให้ขาดสมาชิก</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>ขาดสมาชิกตั้งแต่สองรายการขึ้นไป เปิด RAID 5 ไม่ได้</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>แสดงพาร์ติชัน</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>พาร์ติชัน ดิสก์ mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>เปิดพาร์ติชันในแท็บใหม่</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>พาร์ติชัน แท็บ partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>ไปที่จุดเริ่มต้นของพาร์ติชัน</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>พาร์ติชัน ข้าม partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>เปิดจากตรงนี้โดยถือเป็นจุดเริ่มต้นของพาร์ติชัน</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>พาร์ติชัน ตรงนี้ partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>สแกนหาพาร์ติชันที่สูญหาย</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>สูญหาย พาร์ติชัน กู้คืน สแกน lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>แสดงระบบไฟล์</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>ระบบไฟล์ ตัวเรียกดู ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>เปิดไฟล์ในแท็บใหม่</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>ไฟล์ เปิด แท็บ file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>ส่งออกไฟล์</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>ส่งออก แยก ไฟล์ export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>ค้นหาไฟล์ที่ถูกลบ</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>ถูกลบ กู้คืน เลิกลบ deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>ไปที่ระเบียน MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft ระเบียน ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>ไปที่คลัสเตอร์</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>คลัสเตอร์ บล็อก ข้าม cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>ไฟล์ที่ใช้ตำแหน่งนี้</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>คลัสเตอร์ เจ้าของ ย้อนกลับ cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>แสดงคลัสเตอร์ของไฟล์</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>แฟรกเมนต์ คลัสเตอร์ ไฮไลต์ fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>แฟรกเมนต์ถัดไป</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>แฟรกเมนต์ ถัดไป fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>แฟรกเมนต์ก่อนหน้า</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>แฟรกเมนต์ ก่อนหน้า fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>สลับการไฮไลต์พื้นที่ว่างและพื้นที่สแลค</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>สแลค ไม่ได้จัดสรร ไฮไลต์ slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>ส่งออกพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>ไม่ได้จัดสรร ว่าง ส่งออก unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>ส่งออกพื้นที่สแลค</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>สแลค ส่งออก slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>เปิดพื้นที่ที่ไม่ได้จัดสรรในแท็บใหม่</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>ไม่ได้จัดสรร แท็บ unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>แผงพาร์ติชัน</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>แผง พาร์ติชัน panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>แผงระบบไฟล์</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>แผง ระบบไฟล์ panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>แผงแฟรกเมนต์</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>แผง แฟรกเมนต์ panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>แผงผลลัพธ์ด้านนิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>แผง ผลลัพธ์ นิติวิทยาศาสตร์ panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>หมายเลขระเบียน MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>พาร์ติชันและระบบไฟล์</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>แสดงช่องว่างเล็ก ๆ ระหว่างพาร์ติชัน</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>แสดงช่องว่างที่ไม่ได้จัดสรรซึ่งเล็กกว่า 1 MiB ในแผงพาร์ติชัน</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>แสดงออฟเซ็ตของดิสก์ในแท็บพาร์ติชัน</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>เมื่อปิด แท็บพาร์ติชันจะเริ่มแอดเดรสที่ 0</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>แสดงรายการสตรีมข้อมูลสำรองของ NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>สตรีมที่มีชื่อจะแสดงเป็น file.txt:stream ในตัวเรียกดูระบบไฟล์</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>แสดงคำอธิบายสัญลักษณ์ของการไฮไลต์ด้านนิติวิทยาศาสตร์</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>แสดงคำอธิบายสัญลักษณ์ที่มุมขวาบนของมุมมอง Hex ขณะเปิดการไฮไลต์</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>สีของการไฮไลต์ด้านนิติวิทยาศาสตร์</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>ตัวอย่าง: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0 เว้นว่างไว้เพื่อใช้สีเริ่มต้น</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>พาร์ติชัน(T)</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>ระบบไฟล์(F)</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>แสดงพาร์ติชัน(S)</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>เปิดพาร์ติชันในแท็บใหม่(O)</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>ไปที่จุดเริ่มต้นของพาร์ติชัน(G)</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>สแกนหาพาร์ติชันที่สูญหาย(L)...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>แสดงตัวเรียกดู(B)</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>เปิดไฟล์ในแท็บใหม่(O)</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>ส่งออกไฟล์(E)...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>ค้นหาไฟล์ที่ถูกลบ(D)</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>ไปที่คลัสเตอร์(C)...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>ไฟล์ที่ใช้ตำแหน่งนี้(W)</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>แสดงคลัสเตอร์ของไฟล์(L)</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>ไปที่ระเบียน MFT(M)...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>ส่งออกพื้นที่ที่ไม่ได้จัดสรร(U)...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>ส่งออกพื้นที่สแลค(K)...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>เปิดพื้นที่ที่ไม่ได้จัดสรรในแท็บใหม่(N)</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>แฟรกเมนต์ถัดไป(N)</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>แฟรกเมนต์ก่อนหน้า(P)</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>ไฮไลต์ด้านนิติวิทยาศาสตร์(H)</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>พาร์ติชัน</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>ระบบไฟล์</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>แฟรกเมนต์</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>ผลลัพธ์ด้านนิติวิทยาศาสตร์ดิจิทัล(7)</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>ตำแหน่งบนดิสก์และเจ้าของคลัสเตอร์</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>พาร์ติชัน</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>ระบบไฟล์</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>แฟรกเมนต์</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>ผลลัพธ์ด้านนิติวิทยาศาสตร์ดิจิทัล</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>กำลังวิเคราะห์พาร์ติชัน…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>ยังไม่ได้วิเคราะห์ เลือก นิติวิทยาศาสตร์ดิจิทัล &gt; พาร์ติชัน &gt; แสดงพาร์ติชัน</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>ไม่พบตารางพาร์ติชัน</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} พาร์ติชัน ขนาดเซกเตอร์ {1} รหัสดิสก์ {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>เซกเตอร์ที่อ่านไม่ได้ (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> ลำดับ รูปแบบ     ประเภท                       ชื่อ             LBA เริ่ม      LBA สิ้นสุด  เซกเตอร์      ขนาด  ออฟเซ็ตเริ่ม แฟล็ก       FS        สถานะ</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>เลย์เอาต์พาร์ติชัน</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID ของประเภท: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID เฉพาะ: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>บล็อกเริ่มต้น {0} จำนวน {1} บล็อก</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>รายการในตารางที่ {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>ไปที่จุดเริ่มต้นของพาร์ติชัน</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>เลือกพาร์ติชัน</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>เปิดพาร์ติชันในแท็บใหม่</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>แสดงโครงสร้างของรายการ</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>แสดงระบบไฟล์</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>สแกนหาพาร์ติชันที่สูญหาย...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>เคอร์เซอร์ไม่ได้อยู่ในพาร์ติชันใด ๆ</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>ไม่พบ GPT ที่ใช้เซกเตอร์ขนาด {1} ไบต์ แต่พบ GPT ที่ใช้เซกเตอร์ขนาด {0} ไบต์ เปิดใหม่ด้วยเซกเตอร์ขนาด {0} ไบต์หรือไม่</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>เปิดใหม่ด้วยเซกเตอร์ขนาด {0} ไบต์</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - พาร์ติชัน {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>ลอจิคัล</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>ห่วงโซ่ EBR วนกลับมาที่ LBA {1} (หลังพาร์ติชัน {0}) หยุดห่วงโซ่แล้ว</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>มีพาร์ติชันลอจิคัลเกิน 256 รายการ ส่วนที่เหลือไม่ได้อ่าน</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 ของส่วนหัว GPT ไม่ตรงกัน (LBA {1})</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 ของอาร์เรย์รายการพาร์ติชัน GPT ไม่ตรงกัน (LBA {1})</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>ส่วนหัว GPT หลักและส่วนหัวสำรอง (LBA {1}) ไม่ตรงกัน</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>ส่วนหัว GPT หลักเสียหาย รายการนี้สร้างจากส่วนหัวสำรอง</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>พาร์ติชัน {0} และ {2} ซ้อนทับกัน</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>พาร์ติชัน {0} ชี้ไปนอกดิสก์ (LBA {1})</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR แบบไฮบริด: MBR ป้องกันมีรายการอื่นอยู่ด้วย</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>อ่านบางเซกเตอร์ไม่ได้ (รายการแรก: LBA {1}) รายการนี้ใช้เซกเตอร์ที่อ่านได้</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>แผนที่พาร์ติชันของ Apple มีรายการเกิน 256 รายการ</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>ระบบ EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft สงวนไว้</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>ข้อมูลพื้นฐานของ Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>การกู้คืนของ Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>เมทาดาทา LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>ข้อมูล LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>ระบบไฟล์ Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux swap</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple boot</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS boot</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Extended</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Extended (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 ที่ซ่อน</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>การกู้คืน</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 ที่ซ่อน</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS ที่ซ่อน</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 ที่ซ่อน</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (ไดนามิกดิสก์)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux extended</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT ป้องกัน</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>ไม่ได้จัดสรร</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>ฟิสิคัลวอลุม LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>สแกนหาพาร์ติชันที่สูญหาย</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA เริ่มต้น</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA สิ้นสุด (ไม่รวม)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>ตำแหน่งที่สแกน</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>ขอบเขตทุก 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>ขอบเขตของไซลินเดอร์ (63 เซกเตอร์)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>ทุกเซกเตอร์</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>การสแกนทุกเซกเตอร์ใช้เวลาประมาณ {0} (ที่ 200 MB/s)</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} ชั่วโมง</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>ค้นหา</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>ส่วนหัว GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>สแกน</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>กำลังสแกนหาพาร์ติชันที่สูญหาย</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>พาร์ติชันที่สูญหาย</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     LBA เริ่ม        เซกเตอร์        ขนาด  ประเภท      ความเชื่อมั่น   ซ้อนทับ</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>ต่ำ</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>ปานกลาง</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>สูง</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>ซ้อนทับกับพาร์ติชัน {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>ยกเลิกแล้ว ผลลัพธ์ที่ได้จนถึงตอนนี้จะถูกเก็บไว้</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, other {พบรายการที่เป็นไปได้ # รายการ}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>อ่านไม่ได้: LBA {0} จำนวน {1} เซกเตอร์</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>ไม่พบพาร์ติชันที่เป็นไปได้</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>สแกนทุกเซกเตอร์</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>เปิดเป็นพาร์ติชัน</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>แสดงระบบไฟล์</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>สร้างรายการในตารางพาร์ติชัน (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>สร้างรายการในตารางพาร์ติชัน (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>สร้างรายการในตารางพาร์ติชัน</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR ไม่มีรายการว่างพอสำหรับรายการที่เป็นไปได้ทั้งหมด</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>ไม่สามารถเขียนพาร์ติชันนี้ลง MBR ได้ (เกิน 2 TiB) ให้ใช้ GPT</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT ไม่มีรายการว่าง</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>ดิสก์เล็กเกินไปสำหรับ GPT</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>เอกสารนี้ไม่มีระบบไฟล์ที่เปิดอยู่</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>เลือกไฟล์ในตัวเรียกดูระบบไฟล์</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>ไม่มีคลัสเตอร์ของไฟล์ที่ถูกไฮไลต์</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>ใช้ได้เฉพาะ NTFS</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>อ่านข้อมูลการจัดสรรไม่ได้ จึงใช้การไฮไลต์ไม่ได้</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>วอลุมถูกเข้ารหัส (BitLocker) ตัวเรียกดูระบบไฟล์จะไม่เปิดวอลุมนี้</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>วอลุมถูกเข้ารหัส ({0}) ตัวเรียกดูระบบไฟล์จะไม่เปิดวอลุมนี้</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>ไม่สามารถเปิดเป็น {0} ได้: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>เลือกระบบไฟล์</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>ตรวจหาประเภทจากซิกเนเจอร์ไม่ได้ เลือกประเภทที่จะลอง</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>ประเภท</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>ไม่ได้จัดสรร ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>ไม่มีระเบียน MFT {0}</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>ไปที่บล็อก</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>ไม่มีระบบไฟล์ เลือก นิติวิทยาศาสตร์ดิจิทัล &gt; ระบบไฟล์ &gt; แสดงตัวเรียกดู</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  หมายเลขซีเรียล {2}  คลัสเตอร์ {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>รูท</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>โฟลเดอร์</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>แฟรกเมนต์</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>กรอง (* และ ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>ค้นหาไฟล์ (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>คอลัมน์</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT ที่จะใช้</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, other {FAT แตกต่างกัน # รายการ}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>เซกเตอร์ต่อคลัสเตอร์</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>วิเคราะห์อีกครั้ง</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>กำลังอ่าน…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>กำลังอ่าน… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} รายการ</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>ไม่สามารถอ่านได้: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(เสียหาย)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(เวลาไม่สอดคล้องกัน)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>เวลาไม่สอดคล้องกัน: เวลาของ $STANDARD_INFORMATION เร็วกว่าเวลาของ $FILE_NAME หรือไม่มีเศษส่วน</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>เข้ารหัสด้วย EFS (เฉพาะข้อมูลดิบ)</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>ห่วงโซ่คลัสเตอร์หายไป ข้อมูลจึงถูกอ่านเป็นคลัสเตอร์ต่อเนื่องจากคลัสเตอร์แรก</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>รายการสแลคของดัชนี</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>กำลังนับ…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>ลอจิคัล {0}  คลัสเตอร์ {1} ×{2}  บนดิสก์ {3}  {4} ไบต์</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>ลอจิคัล {0}  อยู่ในเมทาดาทา  บนดิสก์ {3}  {4} ไบต์</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(บีบอัด)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>กำลังคำนวณตำแหน่งสแลค</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>กำลังสร้างแผนที่คลัสเตอร์</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>ข้ามรายการที่เมทาดาทาเสียหาย {0} รายการ</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>ตำแหน่งนี้ไม่อยู่ในพื้นที่คลัสเตอร์</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>เจ้าของคลัสเตอร์ {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>ชนิด                      พาธ</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>เมทาดาทา</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>ไฟล์ที่ถูกลบ (ยกเลิกการจัดสรรแล้ว)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>ห่วงโซ่คลัสเตอร์ของ {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   ลำดับ        คลัสเตอร์</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>ไฟล์ที่ชื่อ {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>          ขนาด  พาธ</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>กำลังค้นหาไฟล์: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, other {พบ # ไฟล์}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>กำลังค้นหาไฟล์ที่ถูกลบ</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>กำลังค้นหาไฟล์กำพร้า</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>เปิดไฟล์ในแท็บใหม่</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>ส่งออกไฟล์...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>ไปที่เมทาดาทา</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>แสดงคลัสเตอร์ของไฟล์</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>แสดงระเบียน MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>แสดง INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>แสดง $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>แสดงรายการไดเรกทอรี</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>แสดงห่วงโซ่คลัสเตอร์</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>คัดลอกพาธ</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>ส่งออกรายการเป็น CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>นามสกุล</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>จัดสรรแล้ว</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>เวลาที่สร้าง (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>เวลาที่สร้าง (ท้องถิ่น)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>เวลาที่แก้ไข (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>เวลาที่แก้ไข (ท้องถิ่น)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>เวลาที่เข้าถึง (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>เวลาที่เข้าถึง (ท้องถิ่น)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>เวลาที่เมทาดาทาเปลี่ยน (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>เวลาที่เมทาดาทาเปลี่ยน (ท้องถิ่น)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>แอตทริบิวต์</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID ไฟล์</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>คลัสเตอร์แรก</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>จำนวนแฟรกเมนต์</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>สถานะ</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>พาธ</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>พาธเดิม</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>การกู้คืน</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>ถูกลบ</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>กำพร้า</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>ดี</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>ถูกเขียนทับบางส่วน</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>ถูกเขียนทับ</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>ไม่ทราบตำแหน่ง</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>เรสซิเดนต์</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>ระเบียน MFT ที่ไม่ได้ใช้งาน</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>สแลคของดัชนี</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>รายการไดเรกทอรีที่ถูกลบ</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>inode ที่ถูกลบ</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>สแลคของรายการไดเรกทอรี</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>ค่า fixup ไม่ตรงกัน (ลำดับการอัปเดต)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>ซิกเนเจอร์ไม่ถูกต้อง</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>หมายเลขคลัสเตอร์อยู่นอกช่วง</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>ห่วงโซ่คลัสเตอร์วนเป็นลูป</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>ห่วงโซ่คลัสเตอร์ไปถึงคลัสเตอร์ว่าง</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>ห่วงโซ่คลัสเตอร์ไม่ตรงกับขนาดไฟล์</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>รายการ data run ไม่ถูกต้อง</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>แอตทริบิวต์ไม่ถูกต้อง</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>ผลรวมตรวจสอบของชุดรายการไม่ตรงกัน</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>ข้อผิดพลาดในการอ่าน</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>ลึกเกินไป</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>บูตเซกเตอร์สำรองไม่ตรงกัน ({0})</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr ต่างจาก $MFT ({0})</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>ค่า BPB ไม่สอดคล้องกัน ({0})</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>FAT ต่างกัน ({0})</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo ไม่ตรงกัน ({0})</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของบูตรีเจียน exFAT ไม่ตรงกัน ({0})</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของชื่อยาวไม่ตรงกัน ({0})</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>อ่านข้อมูลการจัดสรรไม่ได้ ({0})</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>วอลุมถูกเข้ารหัส ({0})</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>ไฟล์ที่ถูกลบ</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>ไฟล์กำพร้า</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>พื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>สแลคของวอลุม</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>เมทาดาทา</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>ข้อมูลไฟล์</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>สแลค RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>สแลคของไดรฟ์</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>ไม่ได้จัดสรร</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>สแลคของวอลุม</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>ช่องว่างระหว่างพาร์ติชัน</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>คำอธิบายสัญลักษณ์ของการไฮไลต์ด้านนิติวิทยาศาสตร์</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>ขนาด {0} ไบต์ จัดสรรแล้ว {1} ไบต์</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>สร้างเมื่อ {0} แก้ไขเมื่อ {1} เข้าถึงเมื่อ {2} เมทาดาทาเปลี่ยนเมื่อ {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID ไฟล์ {0} แอตทริบิวต์ {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>การกู้คืน: {0} ({1}) พาธเดิม: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>ประเภท: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>ชื่อวอลุม: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>หมายเลขซีเรียล: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>ขนาดคลัสเตอร์: {0} ไบต์</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>จำนวนคลัสเตอร์ทั้งหมด: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>คลัสเตอร์ว่าง: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>สร้างเมื่อ: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>วอลุมเริ่มที่ {0} {1} ไบต์</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>ระเบียน MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>ออฟเซ็ตของระเบียน</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>หมายเลขลำดับ</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>จำนวนฮาร์ดลิงก์</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>แฟล็ก</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>ไบต์ที่ใช้งาน</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>ระเบียนฐาน</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI สร้างเมื่อ</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI แก้ไขเมื่อ</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT เปลี่ยนเมื่อ</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI เข้าถึงเมื่อ</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>พาเรนต์</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN สร้างเมื่อ</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN แก้ไขเมื่อ</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT เปลี่ยนเมื่อ</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN เข้าถึงเมื่อ</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN ขนาด</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>เวลาไม่สอดคล้องกัน</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>เนื้อหา</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>ออฟเซ็ตของรายการ</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>คลัสเตอร์แรก</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>ชื่อสั้น</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>จำนวนคลัสเตอร์ในห่วงโซ่</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>ความยาวข้อมูล</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>ความยาวข้อมูลที่ถูกต้อง</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>พาร์ติชัน {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>คลัสเตอร์ {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>บล็อก {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>ถูกลบ: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>ไม่ได้จัดสรร</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>สแลค</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>ค้นหาเจ้าของ</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>ดิสก์ {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>ดิสก์: - (บีบอัด / สปาร์ส / เรสซิเดนต์)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>หมายเลขคลัสเตอร์ ({0}–{1}; cluster = คลัสเตอร์ปัจจุบัน)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>คลัสเตอร์ {0} อยู่นอกช่วง</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>ไปที่</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>คงโครงสร้างโฟลเดอร์</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>ส่งออกสตรีมข้อมูลสำรองด้วย (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>ส่งออกพื้นที่สแลคเป็นไฟล์แยกด้วย</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>รวมไฟล์ที่ถูกลบ</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, other {เลือกแล้ว # รายการ}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>เลือกโฟลเดอร์...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>กำลังส่งออกไฟล์</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>ส่งออก {0} ไฟล์ไปยัง {1} แล้ว (export-manifest.csv)</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>พื้นที่ว่างไม่พอ: ต้องการ {0} ว่างอยู่ {1}</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>ไม่สามารถเขียนได้: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>ส่งออกไฟล์ที่ถูกเขียนทับหรือไม่</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>ขณะนี้คลัสเตอร์ของไฟล์ที่ถูกลบนี้ถูกใช้โดยไฟล์อื่น เนื้อหาที่ส่งออกอาจเป็นของไฟล์อื่น</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>ไฟล์ไบนารี</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>สร้างไฟล์แผนที่ (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>กำลังส่งออกพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>กำลังส่งออกพื้นที่สแลค</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>เขียน {0} ไปยัง {1} แล้ว</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>ระเบียน $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      LSN ก่อน  Undo ถัดไป LSN  ชนิด     รหัสธุรกรรม Redo                            Undo                            ระเบียน MFT  ความยาว</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>หน้ารีสตาร์ต {0}: LSN ปัจจุบัน {1} ไคลเอนต์: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>กำลังอ่าน $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>รายการ</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>ไม่มีผลลัพธ์</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>ส่งออกรายการเป็น CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>ไม่มีไฟล์ที่ถูกไฮไลต์ เลือก แสดงคลัสเตอร์ของไฟล์</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} แฟรกเมนต์)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  ลอจิคัล {1}  บนดิสก์ {2}  {3} ไบต์  คลัสเตอร์ {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>ล้างไฮไลต์</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>เลือกพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>ไม่ได้จัดสรร เลือก ค้นหา คาร์วิง unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>เลือกพื้นที่สแลค</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>สแลค เลือก ค้นหา คาร์วิง slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>เลือกพื้นที่ที่ไม่ได้จัดสรร(A)</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>เลือกพื้นที่สแลค(S)</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>กำลังเลือกพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>กำลังค้นหาพื้นที่ที่ไม่ได้จัดสรร</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>กำลังเลือกพื้นที่สแลค</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>ไม่มีสิ่งที่จะเลือก</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>เลือกเฉพาะ 1,000,000 ช่วงแรก</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>แสดงโลจิคัลวอลุม</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>โลจิคัลวอลุม ldm ไดนามิกดิสก์ lvm lvm2 สไตรป์ สแปน logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>ไปที่ inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>หมายเลข inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>แสดงโลจิคัลวอลุม(V)</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>ไปที่ inode(I)...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>ผลรวมตรวจสอบไม่ตรงกัน</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>รูปแบบที่ไม่รองรับ</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของซูเปอร์บล็อก ext ไม่ตรงกัน ({0})</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของ group descriptor ไม่ตรงกัน (กลุ่ม {0})</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>ไม่รองรับคุณลักษณะ ext นี้อย่างสมบูรณ์: {0}</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>ส่วนหัววอลุมสำรองต่างจากส่วนหัวหลัก ({0})</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของออบเจ็กต์ APFS ไม่ตรงกัน (บล็อก {0}) ข้ามไปแล้ว</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>เช็กพอยต์ APFS ล่าสุดเสียหาย จึงใช้เช็กพอยต์ที่เก่ากว่า (xid {0})</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>ผลรวมตรวจสอบของแท็กตัวอธิบาย UDF ไม่ตรงกัน (เซกเตอร์ {0})</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC ของตัวอธิบาย UDF ไม่ตรงกัน (เซกเตอร์ {0})</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>ไม่รองรับประเภทพาร์ติชัน UDF นี้: {0}</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>แผ่นนี้มี {0} เซสชัน กำลังแสดงเซสชันสุดท้าย เลือกเซสชันอื่นได้จาก เซสชัน</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>ใช้ได้เฉพาะ ext2, ext3 และ ext4</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>ไม่มี inode {0}</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>วอลุมนี้ถูกเข้ารหัส จึงไม่แสดงรายการไฟล์</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>ไม่พบเช็กพอยต์ APFS</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>แสดง inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>แสดงเจอร์นัล</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (พื้นฐาน)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>เซสชัน</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>ระบบไฟล์นี้ไม่มีเจอร์นัล</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>เจอร์นัล ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     บล็อก         ออฟเซ็ตบนดิสก์  ชนิด          ลำดับ</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>ขนาดบล็อก {0} จำนวน {1} บล็อก ลำดับ {2} เริ่มที่ {3} (0 = สะอาด) เจอร์นัลจะไม่ถูกเล่นซ้ำ</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>กำลังอ่านเจอร์นัล ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>ตัวอธิบาย</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>คอมมิต</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>ซูเปอร์บล็อก v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>ซูเปอร์บล็อก v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>เพิกถอน</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>แสดงโลจิคัลวอลุม</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>สร้างอิมเมจของช่วงนี้...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>โลจิคัลวอลุม</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>ชื่อ                  ชนิด          ขนาด        เลย์เอาต์                     สถานะ</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>กำลังอ่านเมทาดาทาของวอลุม...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>ไม่พบโลจิคัลวอลุม LDM หรือ LVM2 ในดิสก์และอิมเมจที่เปิดอยู่</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>เปิดโลจิคัลวอลุม</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>กำหนดสมาชิก...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>อ่านอีกครั้ง</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>ไม่รองรับวอลุมประเภทนี้: {0}</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้ สมาชิกที่ขาดหายไป: {1} เปิดดิสก์หรืออิมเมจเหล่านั้น หรือกำหนดสมาชิกให้</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) เป็นวอลุมแบบมิเรอร์หรือ RAID-5 เปิดด้วยการสร้าง RAID ขึ้นใหม่</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>กำหนดสมาชิก</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>เลือกดิสก์หรืออิมเมจสำหรับสมาชิกที่ขาดหายไปแต่ละรายการของ {0}</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(ไม่มี)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>เปิดไฟล์...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, other {ขาดสมาชิก # รายการ}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>ไม่รองรับ</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>การสร้าง RAID ขึ้นใหม่</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>ซิมเปิล</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>สแปน</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>สไตรป์</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>มิเรอร์</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>เชิงเส้น</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>ไม่รองรับ ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} กลุ่ม {1} วอลุม {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>สมาชิก {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>ไม่พบ</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>ออฟเซ็ต {0} ({1}): {2} ที่ {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>ออฟเซ็ต {0} ({1}): สไตรป์ {2} ข้าม {3} สมาชิก</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>ลบส่วนที่เลือกอย่างปลอดภัย</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>ล้างข้อมูล ลบ ทำลาย เขียนทับ ลบอย่างปลอดภัย ช่วง wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>ลบดิสก์อย่างปลอดภัย</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>ล้างข้อมูล ลบ ดิสก์ ไดรฟ์ เขียนทับ ปลอดภัย wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>ล้างพื้นที่ว่าง</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>พื้นที่ว่าง ไม่ได้จัดสรร ล้างข้อมูล ลบ cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>ล้างพื้นที่สแลคของไฟล์</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>สแลค ram ไดรฟ์ ล้างข้อมูล ลบ slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>ปกปิดเนื้อหาไฟล์</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>ปกปิด ลบข้อมูลสำคัญ ล้างค่า ทึบ redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>ล้างข้อมูล(E)</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>ลบส่วนที่เลือก(S)...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>ลบดิสก์(D)...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>ล้างพื้นที่ว่าง(F)...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>ล้างพื้นที่สแลค(K)...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>ปกปิดเนื้อหาไฟล์(R)...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>ปกปิดเนื้อหาไฟล์...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>ลบส่วนที่เลือกอย่างปลอดภัย...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>คาร์วิงไฟล์จากส่วนที่เลือก...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>การปกปิด</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>ลบอย่างปลอดภัย</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>เป้าหมาย: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>จุดเริ่มต้น</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>อ่านกลับและตรวจสอบเมื่อเสร็จ</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>ลบ...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>ช่วงอยู่นอกเอกสาร</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>มีการแก้ไขที่ยังไม่ได้บันทึก</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>ข้อมูลที่จะลบมีการแก้ไขที่ยังไม่ได้บันทึก บันทึกหรือทิ้งการแก้ไขก่อนลบ</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>ทิ้ง</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>ลบข้อมูล</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>เป้าหมาย: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>ดิสก์ {0}: {1} หมายเลขซีเรียล {2} {3} ไบต์</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>วอลุม: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>ช่วง: LBA เริ่มต้น {0} จำนวน {1} เซกเตอร์ {2} ไบต์</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>ช่วง: ออฟเซ็ต {0} {1} ไบต์</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>ขยายช่วงไปถึงขอบเขตเซกเตอร์แล้ว</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>วิธีการ: {0} ({1, plural, other {# รอบ}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>รอบสุดท้ายจะถูกอ่านกลับและตรวจสอบ</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>เวลาโดยประมาณ: ราว {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>ไม่สามารถเลิกทำได้ และไม่สามารถกู้คืนข้อมูลเดิมได้</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>บน SSD และสื่อแฟลช แม้เขียนทับแล้ว การกระจายการสึกหรอ (wear leveling) อาจเก็บข้อมูลเดิมไว้ที่อื่น</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>วอลุมเหล่านี้จะถูกล็อกระหว่างการลบ: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>ข้อมูลถูกเขียนลงไฟล์โดยตรง ไม่ใช่เป็นการแก้ไข ไม่สามารถเลิกทำได้ด้วยการเลิกทำ</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>ลบ {0} ไบต์</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>ลบ {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>ดิสก์ {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>หากต้องการดำเนินการต่อ ให้พิมพ์ “{0}”</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>การยืนยัน</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>เลือกช่วงที่จะลบ</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>ไม่สามารถลบเอกสารนี้โดยตรงได้</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>เปิดดิสก์จริงทั้งดิสก์ในแท็บเพื่อลบ</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>แหล่งข้อมูลนี้อยู่ในรายการหลักฐาน จึงเขียนไม่ได้</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows กำลังใช้ดิสก์นี้ (ระบบ บูต หรือไฟล์เพจ) จึงลบไม่ได้</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>ไม่สามารถล็อกวอลุม {0} ได้ จึงไม่ได้ลบอะไร</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>ปฏิเสธการเขียน: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>การลบล้มเหลว: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>กำลังลบ {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>รอบที่ {0} จาก {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>กำลังตรวจสอบ</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>หยุดการลบหรือไม่ ส่วนที่เขียนทับไปแล้วจะยังคงถูกเขียนทับ ส่วนที่เหลือจะคงข้อมูลเดิมไว้</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>ข้อผิดพลาดในการเขียน</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>ไม่สามารถเขียนที่ออฟเซ็ต {0} ได้: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>ข้ามและทำต่อ</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>หยุด</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>ผลการลบ</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>ลบ {0} ไบต์ใน {1} แล้ว</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>ตรวจสอบสำเร็จ</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, other {การตรวจสอบพบ # ช่วงที่ไม่ตรงกัน:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, other {เขียน # ช่วงไม่ได้:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>หยุดการลบแล้ว ข้อมูลจนถึงออฟเซ็ต {0} ถูกเขียนทับในรอบที่ {1} ส่วนที่เหลือคงเนื้อหาเดิม</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>หยุดการตรวจสอบแล้ว เขียนครบทุกรอบแล้ว</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>หยุดการลบหลังเกิดข้อผิดพลาดในการเขียนที่ออฟเซ็ต {0}</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>ไฟล์ที่ข้าม: {0} (บีบอัด {1} สปาร์ส {2} เรสซิเดนต์ {3} ไม่สอดคล้อง {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>ล้างพื้นที่ว่าง</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>วิธีการ</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>ผ่าน Windows (วอลุมที่เมานต์แล้ว)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>เขียนโดยตรง (ระบบไฟล์ในแท็บนี้)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>วอลุม</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>ไม่มีวอลุมที่เมานต์ไว้ที่ใช้ได้</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>หากต้องการเขียนโดยตรง ให้แสดงระบบไฟล์ของแท็บนี้ก่อน</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>วอลุม: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>พื้นที่ว่างที่จะเขียนทับ: {0} ไบต์</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>วิธีการ: ผ่าน Windows (ไฟล์ชั่วคราวเติมพื้นที่ว่างและถูกลบเมื่อเสร็จ)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>วิธีการ: เขียนโดยตรงไปยังคลัสเตอร์ที่ไม่ได้จัดสรร</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>ระหว่างทำงาน วอลุมจะไม่มีพื้นที่ว่าง แอปอื่นยังทำงานได้แต่บันทึกข้อมูลใหม่ไม่ได้</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>หากข้อมูลการจัดสรรของระบบไฟล์ไม่ถูกต้อง ไฟล์อาจเสียหาย</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>ล้างพื้นที่ว่าง</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>ระบบไฟล์ไม่สอดคล้องกัน ({0}) ซ่อมแซมด้วย chkdsk แล้วลองอีกครั้ง</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>การเขียนโดยตรงรองรับเฉพาะ NTFS, FAT12/16/32 และ exFAT</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>บันทึกหรือทิ้งการแก้ไขในแท็บนี้ก่อน</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>ลบไฟล์ชั่วคราวเหล่านี้ไม่ได้ ลบด้วยตนเอง:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>เขียนทับพื้นที่ว่าง {0} ไบต์ใน {1} แล้ว</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>กำลังคำนวณพื้นที่ว่าง</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>หยุดการล้างพื้นที่ว่างแล้ว ลบไฟล์ชั่วคราวแล้ว</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>ล้างพื้นที่สแลค</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>ไฟล์: {0} สแลคที่จะเขียนทับ: {1} ไบต์</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>ล้างพื้นที่สแลค</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>กำลังค้นหาพื้นที่สแลคของไฟล์</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>เขียนทับพื้นที่สแลค {0} ไบต์ใน {1} แล้ว</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>ปกปิดเนื้อหาไฟล์</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>ไฟล์ ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (ค่าเริ่มต้น)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>สุ่ม</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>ไบต์ Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>ไบต์ Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>เปลี่ยนชื่อเป็น “_” ที่มีความยาวเท่ากันด้วย</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>บันทึกการปกปิด (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>เนื้อหาจะเปลี่ยนเป็นการแก้ไข จะไม่มีการเขียนจนกว่าคุณจะบันทึก ใช้ บันทึกเป็น เพื่อบันทึกอิมเมจใหม่</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>ปกปิด</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>กำลังค้นหาข้อมูลที่จะปกปิด</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, other {ปกปิด # ไฟล์แล้ว}} ({1} ไบต์) ใช้ บันทึกเป็น เพื่อบันทึกอิมเมจใหม่</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>ไม่มีสิ่งที่ต้องปกปิด</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>ไฟล์ที่ไม่ได้ปกปิด</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, other {# รายการไม่ได้ถูกปกปิด:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>โฟลเดอร์</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>รายการที่ถูกลบ</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>เมทาดาทาเสียหาย</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>ข้อมูลแฟรกเมนต์เสียหาย</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>ไม่พบข้อมูลเรสซิเดนต์</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>เมทาดาทาของระบบไฟล์</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>ไม่สามารถเปลี่ยนชื่อของ: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>เอกสารเป็นแบบอ่านอย่างเดียว</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>เขียนทับอิมเมจต้นฉบับหรือไม่</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>เอกสารนี้มีส่วนที่ปกปิด การบันทึกจะเขียนส่วนเหล่านั้นลงใน {0} ต้นฉบับ และไม่สามารถเลิกทำได้ หากต้องการเก็บต้นฉบับไว้ ให้ใช้ บันทึกเป็น</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>เขียนทับ {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>ไม่สามารถเขียนบันทึกการปกปิดได้: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>ป้อนรูปแบบเป็นไบต์ Hex (เช่น 00 หรือ A5 5A)</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} วินาที</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} ชั่วโมง</value></data>
 </root>
