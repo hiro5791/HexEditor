@@ -2,6 +2,7 @@ using System.Globalization;
 using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
+using HexEditor.App.ViewModels;
 using HexEditor.Core.Forensics.Audit;
 using HexEditor.Core.Forensics.Carving;
 using HexEditor.Core.Operations;
@@ -9,6 +10,7 @@ using HexEditor.Core.Search;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.Windows.Storage.Pickers;
 
 namespace HexEditor.App;

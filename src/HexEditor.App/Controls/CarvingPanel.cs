@@ -1,5 +1,7 @@
 using System.Globalization;
 using HexEditor.App.Panels;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using HexEditor.App.Services;
 using HexEditor.Core.Forensics.Carving;
 using Microsoft.UI.Xaml;

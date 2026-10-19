@@ -31,7 +31,7 @@ public sealed class AuditLogPanel : UserControl, IPanelContent
         AutomationProperties.SetAutomationId(_summary, "AuditLog_Summary");
         AutomationProperties.SetAutomationId(_empty, "AuditLog_Empty");
         AutomationProperties.SetAutomationId(_verifyBox, "AuditLog_VerifyResult");
-        AutomationProperties.SetLiveSetting(_verifyText, AutomationLiveSetting.Polite);
+        AutomationProperties.SetLiveSetting(_verifyText, Microsoft.UI.Xaml.Automation.Peers.AutomationLiveSetting.Polite);
         _verifyBox.Child = _verifyText;
 
         Button Make(string id, string key, string command)

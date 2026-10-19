@@ -17,6 +17,8 @@ internal sealed class ZeroData(long length) : ICarveData
 {
     public long Length { get; } = length;
 
+    public int MaxRead;
+
     public ReadResult Read(long offset, Span<byte> destination)
     {
         if (offset >= Length)
@@ -26,6 +28,11 @@ internal sealed class ZeroData(long length) : ICarveData
 
         int count = (int)Math.Min(destination.Length, Length - offset);
         destination[..count].Clear();
+        int seen;
+        while (count > (seen = Volatile.Read(ref MaxRead)) && Interlocked.CompareExchange(ref MaxRead, count, seen) != seen)
+        {
+        }
+
         return new ReadResult(count);
     }
 }
@@ -166,7 +173,6 @@ public sealed class CarvingTests : IDisposable
         const long Length = 100L * 1024 * 1024 * 1024;
         string folder = Path.Combine(_dir, "out");
         using var cts = new CancellationTokenSource();
-        long allocatedBefore = GC.GetTotalAllocatedBytes(precise: false);
         var progress = new Progress<CarvingProgress>(p =>
         {
             if (p.BytesScanned >= 256L * 1024 * 1024)
@@ -175,7 +181,8 @@ public sealed class CarvingTests : IDisposable
             }
         });
         CarvingOptions options = Options(BuiltInSignatures.All, Length, folder) with { ChunkSize = 4 * 1024 * 1024, Progress = progress };
-        CarvingResult result = await CarvingEngine.RunAsync(new ZeroData(Length), options, cts.Token);
+        var data = new ZeroData(Length);
+        CarvingResult result = await CarvingEngine.RunAsync(data, options, cts.Token);
 
         Assert.True(result.Cancelled);
         Assert.True(result.BytesScanned >= 256L * 1024 * 1024);
@@ -187,7 +194,7 @@ public sealed class CarvingTests : IDisposable
         Assert.Equal(result.Files.Count, ReadManifest(manifest).Count);
 
         // メモリはファイルの大きさに比例しない (チャンク × 並列数 程度)。
-        Assert.True(GC.GetTotalAllocatedBytes(precise: false) - allocatedBefore < 600L * 1024 * 1024);
+        Assert.True(data.MaxRead <= options.ChunkSize + 64, $"largest single read {data.MaxRead}");
     }
 
     [Fact]

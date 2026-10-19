@@ -6634,6 +6634,392 @@ Type: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Comment column</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Show symbol names, branch target names and referenced strings.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Disassembly</value></data>
+  <!-- ===== Phase 5: forensics case, audit log, time, carving, report (FOR-03/04/05/18/19/33) ===== -->
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Forensics</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Forensics</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Date and time display</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>How times are shown in forensic lists and details: UTC and local time, UTC only, or local time only. Times are always recorded in UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC and local time</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>UTC only</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Local time only</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Turn on write-block mode when a case is opened</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>When off, you are asked whether to turn it on.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Also record browsing actions in the audit log</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Record jumps, searches and bookmark additions. Changes to data and evidence are always recorded.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Show thumbnails of carved images</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Show a small preview of JPEG, PNG, GIF and BMP files in the carving results.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Report logo image</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Path of a PNG, JPEG or SVG image shown at the top of HTML reports.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Report header text</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>A line of text shown under the title of reports, such as the name of your laboratory.</value></data>
+
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>New case</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Open case</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Close case</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Case properties</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Show the audit log</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Verify the audit log</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Manage carving signatures</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Carve files</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Create report</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Show or hide the evidence list</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Show or hide the audit log</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Show or hide the carving results</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Audit log</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Carving results</value></data>
+
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Forensics</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Case</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>New case...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Open case...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Close case</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Add evidence...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Case properties...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Evidence list</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Show audit log</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Verify audit log</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Carve files...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Manage signatures...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Results</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Create report...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Case: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>invalid time</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>A case is already open. Close it first.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>No case is open.</value></data>
+
+  <data name="Case_New_Title" xml:space="preserve"><value>New case</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Case properties</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Case number (required)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Case name (required)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Investigator</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organization</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Case folder</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Used to read times that have no time zone, such as FAT file times.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Created the case "{0}".</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Opened the case "{0}".</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>The case could not be created: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>The case number and the case name are required.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>The case file cannot be read (line {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>The case could not be opened: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>The case could not be saved: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Turn on write-block mode for this case?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Turn on</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Write-block mode was turned on for this case.</value></data>
+
+  <data name="Evidence_Add" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Add evidence</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} will be added to the case. The data source is not changed.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Compute hashes now</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>This data source is already registered as {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Only disks, volumes, image files and files can be added as evidence.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Hashing evidence {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>The hashes of {0} were recorded.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>The hash of {0} was not computed. The evidence stays in the list.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>The data at offset 0x{1} cannot be read, so the hash of {0} was not recorded.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Not computed</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>Removed {0} from the list. The data source was not touched.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} is not available.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>The evidence could not be opened: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} items</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>No case is open. Create or open a case from the Forensics menu.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>No evidence has been added yet.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Added (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Added (local)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Image</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memory</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Passed</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Not verified</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Open (read-only)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Remove from the list</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Copy hashes</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} entries</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>No case is open. The audit log belongs to a case.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Nothing has been recorded yet.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(This line is not a valid entry. The log may have been altered.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Verify</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Export CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Export JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>The audit log is intact ({0} lines checked).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>The chain of the audit log is broken at line {0}. The log may have been altered.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Time (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Time (local)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>User</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operation</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Result</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Details</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Success</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Failure</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Cannot write to the audit log</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Operations that write data are turned off until the log can be written again. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>The audit log still cannot be written.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>The audit log cannot be written, so the operation was not performed.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>The audit log cannot be written, so operations that write data are turned off.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Verifying the audit log</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>The audit log could not be verified: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Exporting the audit log</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Exported the audit log to {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>The audit log could not be exported: {0}</value></data>
+
+  <data name="Sig_Title" xml:space="preserve"><value>Carving signatures</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definitions</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>built-in</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>disabled</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Extension (without a dot)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Headers (Hex bytes, one per line; ?? is any byte, ? is any digit)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Header offset from the start of the file</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Footer (Hex bytes, optional)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Bytes to include from the footer (empty = the footer itself)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Maximum size</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Minimum size</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Take the size from a value in the header</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Size value: offset from the start of the file</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Size value: width (bits)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Size value: byte order</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Size value: number to add</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Structure check (built-in name or structure template)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Built-in checks: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Look for the header only at the start of a sector</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Use this definition when scanning</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>New</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Try this definition</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Select a range in the document first.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Trying...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Trying a carving definition</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>{0} found in the selection. First positions:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Imported {0} definitions.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} definitions were not imported:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exported to {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>The definitions could not be imported: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>The definitions could not be saved: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>The trial failed: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: enter a number or a size such as 4096, 0x1000 or 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Enter a name.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>This name is already used.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Enter an extension.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>The extension has characters that cannot be used in a file name.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Enter at least one header.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>The header is not a valid Hex byte sequence (odd number of digits or invalid characters).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>The header needs at least one fixed byte.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>The header offset cannot be negative.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>The footer is not a valid Hex byte sequence.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>The number of bytes to include cannot be negative.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>The maximum size must be at least 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>The minimum size cannot be negative.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>The maximum size is smaller than the minimum size.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>The size value is not valid.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>A value has the wrong type.</value></data>
+
+  <data name="Carve_Title" xml:space="preserve"><value>Carve files</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Scope</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Unallocated space only</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Slack space only</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>File types</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Do not look for headers inside a file that was found</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Write the carved files to a folder</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Output folder</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Carving files</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving finished: {0} files found.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving was cancelled. {0} files were found; the results and the manifest are kept.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving stopped because the output folder could not be written. {0} files were found.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving failed: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>The output folder is on a disk that is under investigation. Choose a folder on another disk.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>There is not enough free space in the output folder. Needed: {0} bytes. Free: {1} bytes.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>The file system of the output folder limits a file to {0} bytes. Choose another folder.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>The output folder cannot be used.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>No allocation information is available for this document.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Cannot write the carved files</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>The output folder ({0}) is out of space. The next file needs {1} bytes but {2} bytes are free. Free some space, choose another folder, or stop.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Cannot write to {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Choose another folder...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving is already running.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Carve files...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving has not been run. Choose Forensics, then Carving, then Carve files.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>No files were found.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} files</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Preview of the carved image</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Length decided by</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Output file</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Structure</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Size value</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Footer</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Maximum size</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Type: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Offset: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Length: {0} bytes</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Length decided by: {0}</value></data>
+
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Create report</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Contents</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (one file, opens offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>All audit log entries</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Audit log from (UTC, optional)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Audit log to (UTC, optional)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Hex dump bytes for each bookmark (0 to 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Save to</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>The period is not a valid date and time.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>The Hex dump length must be between 0 and 4096 bytes.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Creating the report</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>The report could not be created: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Created {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>The PDF could not be created ({0}). {1} was created instead.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>Only the first rows of long lists are in the PDF. Use the HTML report or the CSV files for the full lists.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Forensic Report</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Case number</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Case name</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Investigator</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organization</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Case created</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Report created</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Created by</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Page</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>of</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Case</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Cover</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Acquisition records</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Device information</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partitions</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>File systems</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Bookmarks</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Carving results</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Audit log</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Serial number</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sectors</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Sector size</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Added (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Added (local)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Added by</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Passed</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Not verified</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Not computed</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Image</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memory</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Comment</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Length decided by</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Output file</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Files found</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Time (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Time (local)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>User</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Computer</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operation</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Evidence</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Result</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Details</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>success</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>failure</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>cancelled</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Showing the first {0} of {1} rows. The full list is in the attached CSV file or the HTML report.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Showing the first {0} rows. The full list is in the HTML report or the CSV file.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Full list</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>No data.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>invalid time</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Toggle disassembly panel</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Disassemble</value></data>

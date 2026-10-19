@@ -1,6 +1,7 @@
 using System.Globalization;
 using HexEditor.App.Commands;
 using HexEditor.App.Controls;
+using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Bookmarks;
@@ -73,7 +74,7 @@ public sealed partial class MainWindow
         auditAll.Unchecked += (_, _) => auditFrom.IsEnabled = auditTo.IsEnabled = true;
         auditFrom.IsEnabled = auditTo.IsEnabled = false;
 
-        ContentDialog dialog = DialogParts.Dialog(Root, "ReportDialog", Loc.Get("Report_Title"), new ScrollViewer { Content = body, MaxHeight = 640 }, Loc.Get("Report_Create"));
+        ContentDialog dialog = DialogParts.Dialog(Root, "ReportDialog", Loc.Get("Report_DialogTitle"), new ScrollViewer { Content = body, MaxHeight = 640 }, Loc.Get("Report_Create"));
         void Update() => dialog.IsPrimaryButtonEnabled = sectionChecks.Values.Any(c => c.IsChecked == true) && folder.Text.Trim().Length > 0;
         foreach (CheckBox c in sectionChecks.Values)
         {

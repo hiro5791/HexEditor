@@ -467,6 +467,41 @@
       ],
       "default": "whileModified"
     },
+    "forensics.audit.logBrowsing": {
+      "description": "Also record browsing actions in the audit log",
+      "type": "boolean",
+      "default": false
+    },
+    "forensics.carving.thumbnails": {
+      "description": "Show thumbnails of carved images",
+      "type": "boolean",
+      "default": true
+    },
+    "forensics.case.autoWriteBlock": {
+      "description": "Turn on write-block mode when a case is opened",
+      "type": "boolean",
+      "default": true
+    },
+    "forensics.report.header": {
+      "description": "Report header text",
+      "type": "string",
+      "default": ""
+    },
+    "forensics.report.logo": {
+      "description": "Report logo image",
+      "type": "string",
+      "default": ""
+    },
+    "forensics.time.display": {
+      "description": "Date and time display",
+      "type": "string",
+      "enum": [
+        "both",
+        "utc",
+        "local"
+      ],
+      "default": "both"
+    },
     "formats.gapFill": {
       "description": "Fill value for gaps in Intel HEX and S-record files",
       "type": "string",

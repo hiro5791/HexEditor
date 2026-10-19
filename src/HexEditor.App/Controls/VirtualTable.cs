@@ -21,7 +21,7 @@ public sealed class VirtualTable : UserControl
     private const double RowHeight = 28;
 
     private readonly Grid _header = new() { Height = RowHeight, ColumnSpacing = 0 };
-    private readonly Canvas _body = new() { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent) };
+    private readonly Canvas _body = new() { Background = new SolidColorBrush() };
     private readonly ScrollBar _scroll = new() { Orientation = Orientation.Vertical, SmallChange = 1, LargeChange = 10, IndicatorMode = ScrollingIndicatorMode.MouseIndicator };
     private readonly List<Grid> _rows = [];
     private readonly string _automationId;
@@ -302,7 +302,7 @@ public sealed class VirtualTable : UserControl
 
             bool selected = index == _selected;
             row.Background = selected ? (Brush)Application.Current.Resources[focused ? "ListViewItemBackgroundSelected" : "ListViewItemBackgroundSelectedPressed"]
-                : (Brush)(index % 2 == 0 ? new SolidColorBrush(Microsoft.UI.Colors.Transparent) : Application.Current.Resources["SubtleFillColorSecondaryBrush"]);
+                : (Brush)(index % 2 == 0 ? new SolidColorBrush() : Application.Current.Resources["SubtleFillColorSecondaryBrush"]);
             Brush foreground = selected ? (Brush)Application.Current.Resources["ListViewItemForegroundSelected"] : (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             foreach (TextBlock text in row.Children.OfType<TextBlock>())
             {

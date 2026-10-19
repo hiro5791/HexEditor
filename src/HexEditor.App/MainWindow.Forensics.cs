@@ -78,6 +78,7 @@ public sealed partial class MainWindow
         };
         ForensicsService.RegisterWriteCommands("file.save", "file.saveAs", "file.saveAll", "tools.files.shred", "tools.ads", "forensics.carving.run", "forensics.report.create");
         CommandHost.WriteGate = ForensicsService.WriteGateReason;
+        AuditFaultBar.Title = Loc.Get("Audit_Fault_Title");
         AuditFaultBar.ActionButton = new Button { Content = Loc.Get("Audit_Fault_Retry") };
         AuditFaultBar.ActionButton.Click += (_, _) => RetryAuditLog();
         OnCaseStateChanged();
@@ -326,7 +327,7 @@ public sealed partial class MainWindow
             body.Children.Add(element);
         }
 
-        ContentDialog dialog = DialogParts.Dialog(Root, "CasePropertiesDialog", Loc.Get("Case_Properties_Title"), new ScrollViewer { Content = body, MaxHeight = 560 }, Loc.Get("Common_Save"));
+        ContentDialog dialog = DialogParts.Dialog(Root, "CasePropertiesDialog", Loc.Get("Case_Properties_Title"), new ScrollViewer { Content = body, MaxHeight = 560 }, Loc.Get("Case_Save"));
         void Update() => dialog.IsPrimaryButtonEnabled = number.Text.Trim().Length > 0 && name.Text.Trim().Length > 0;
         number.TextChanged += (_, _) => Update();
         name.TextChanged += (_, _) => Update();
