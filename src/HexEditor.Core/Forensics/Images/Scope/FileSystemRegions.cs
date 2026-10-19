@@ -64,7 +64,8 @@ public static class FileSystemRegionProviders
             {
                 if (p.Analyze(volume, cancellationToken) is { } regions)
                 {
-                    return regions;
+                    // メタデータの値がボリュームより大きい範囲を指していても、ボリュームの中に切り詰める。
+                    return regions with { Allocated = Clip(regions.Allocated, volume.Length), Metadata = Clip(regions.Metadata, volume.Length) };
                 }
             }
             catch (Exception ex) when (ex is InvalidDataException or IOException or ArgumentException or OverflowException or IndexOutOfRangeException)
@@ -75,6 +76,9 @@ public static class FileSystemRegionProviders
 
         return null;
     }
+
+    private static List<(long Offset, long Length)> Clip(IEnumerable<(long Offset, long Length)> ranges, long length) =>
+        Merge(ranges.Where(r => r.Offset >= 0 && r.Offset < length && r.Length > 0).Select(r => (r.Offset, Math.Min(r.Length, length - r.Offset))));
 
     /// <summary>範囲を昇順に並べ、重なり・隣接をまとめる。</summary>
     public static List<(long Offset, long Length)> Merge(IEnumerable<(long Offset, long Length)> ranges)
