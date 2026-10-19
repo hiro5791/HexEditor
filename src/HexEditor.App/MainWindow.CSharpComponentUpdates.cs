@@ -62,7 +62,7 @@ public sealed partial class MainWindow
         {
             await Vm.Operations.RunAsync(Loc.Get("CSharpComponent_Operation"), Core.Operations.OperationKind.ReadOnly, null, 1000, async op =>
             {
-                var progress = new Progress<double>(f => op.Report((long)(Math.Clamp(f, 0, 1) * 1000)));
+                var progress = new Progress<double>(f => op.ReportQuietly((long)(Math.Clamp(f, 0, 1) * 1000)));
                 await components.InstallAsync(progress, op.CancellationToken);
             });
             AppLog.Info("C# component: updated");

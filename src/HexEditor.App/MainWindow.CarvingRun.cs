@@ -210,7 +210,7 @@ public sealed partial class MainWindow
                     SourcePath = source,
                     Progress = new Progress<CarvingProgress>(p =>
                     {
-                        op.Report(Math.Min(op.TotalBytes ?? p.BytesScanned, p.BytesScanned));
+                        op.ReportQuietly(Math.Min(op.TotalBytes ?? p.BytesScanned, p.BytesScanned));
                         op.ReportMatches(p.FilesFound);
                         op.ReportDetail(string.Join(", ", p.CountsByType.OrderBy(c => c.Key).Select(c => $"{c.Key} {c.Value:N0}")));
                     }),

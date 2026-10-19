@@ -697,7 +697,7 @@ public sealed partial class MainWindow
 
     /// <summary>長時間処理の進捗 (0〜1) を処理センターの値にする。</summary>
     private static IProgress<double> OperationProgress(LongRunningOperation op, long scale = 1_000_000) =>
-        new Progress<double>(p => op.Report((long)(Math.Clamp(p, 0, 1) * scale)));
+        new Progress<double>(p => op.ReportQuietly((long)(Math.Clamp(p, 0, 1) * scale)));
 
     private static string Number(long value) => value.ToString("N0", CultureInfo.CurrentCulture);
 }

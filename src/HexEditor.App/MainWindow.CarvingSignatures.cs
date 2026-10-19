@@ -461,7 +461,7 @@ public sealed partial class MainWindow
                     Export = false,
                     SectorSize = SectorSizeOf(doc),
                     Resolver = StructureResolver(),
-                    Progress = new Progress<CarvingProgress>(p => op.Report(Math.Min(range.Length, p.BytesScanned))),
+                    Progress = new Progress<CarvingProgress>(p => op.ReportQuietly(Math.Min(range.Length, p.BytesScanned))),
                 },
                 op.CancellationToken));
             if (result.Cancelled)

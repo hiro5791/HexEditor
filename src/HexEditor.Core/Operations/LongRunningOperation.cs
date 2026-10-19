@@ -166,6 +166,21 @@ public sealed class LongRunningOperation
         CancellationToken.ThrowIfCancellationRequested();
     }
 
+    /// <summary>
+    /// 進捗を報告するが、キャンセルされていても例外を投げない。<see cref="Progress{T}"/> のコールバックなど、処理の流れの外 (スレッドプール) で
+    /// 呼ばれる場所で使う: そこで投げると未処理の例外でアプリが落ちる。キャンセルは処理本体が <see cref="CancellationToken"/> で止まる。
+    /// </summary>
+    public void ReportQuietly(long processedBytes)
+    {
+        try
+        {
+            Report(processedBytes);
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
     public void SetTotal(long? totalBytes) => TotalBytes = totalBytes;
 
     /// <summary>検索の処理で、これまでに見つかった一致の数 (FIND-02 の仕様 2)。一致を数えない処理では null。</summary>

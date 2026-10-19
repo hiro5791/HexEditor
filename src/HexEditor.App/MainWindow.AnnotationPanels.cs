@@ -213,7 +213,7 @@ public sealed partial class MainWindow
                     {
                         int index = i;
                         result[i] = ColoringEngine.CountAll(snapshot, rules[i].Rule!,
-                            new Progress<double>(p => op.Report((long)((index + p) * snapshot.Length))), op.CancellationToken);
+                            new Progress<double>(p => op.ReportQuietly((long)((index + p) * snapshot.Length))), op.CancellationToken);
                     }
 
                     return Task.FromResult(result);
