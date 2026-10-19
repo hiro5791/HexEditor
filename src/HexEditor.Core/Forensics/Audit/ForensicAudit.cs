@@ -80,6 +80,9 @@ public sealed class ForensicAudit
 
     public event EventHandler<AuditFaultEventArgs>? FaultChanged;
 
+    /// <summary>1 行を記録した (監査ログのパネルが表示を更新する)。書き込みのスレッドから呼ばれる。</summary>
+    public event EventHandler<AuditEntry>? Recorded;
+
     /// <summary>ケースの監査ログを使い始める。</summary>
     public void AttachCase(AuditLog log)
     {
@@ -176,6 +179,11 @@ public sealed class ForensicAudit
         if (args is not null)
         {
             FaultChanged?.Invoke(this, args);
+        }
+
+        if (entry is not null)
+        {
+            Recorded?.Invoke(this, entry);
         }
 
         return entry;

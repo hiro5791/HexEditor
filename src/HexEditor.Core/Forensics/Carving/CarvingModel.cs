@@ -197,6 +197,9 @@ public sealed record CarvingOptions
 
     public IProgress<CarvingProgress>? Progress { get; init; }
 
+    /// <summary>結果を入れる一覧 (画面が走査中から読めるよう、呼び出し側が先に作って渡せる)。null なら実行が作る。</summary>
+    public CarvedFileStore? Store { get; init; }
+
     /// <summary>監査ログ (開始・終了、件数、マニフェストのハッシュを記録する。FOR-19 の仕様 7)。</summary>
     public ForensicAudit? Audit { get; init; }
 

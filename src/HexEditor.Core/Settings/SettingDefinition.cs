@@ -139,11 +139,12 @@ public static class SettingCategories
     public const string Automation = "automation";
     public const string Templates = "templates";
     public const string Disassembly = "disassembly";
+    public const string Forensics = "forensics";
     public const string Update = "update";
     public const string Privacy = "privacy";
     public const string Explorer = "explorer";
     public const string Advanced = "advanced";
 
     public static readonly string[] All =
-        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Templates, Disassembly, Update, Privacy, Explorer, Advanced];
+        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Templates, Disassembly, Forensics, Update, Privacy, Explorer, Advanced];
 }

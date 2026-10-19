@@ -228,6 +228,9 @@ public sealed partial class MainWindow
             ["modified"] = doc is not null && doc.Document.IsModified,
             ["compare"] = ActiveCompare is not null,
 
+            // 開いているケースの名前 (FOR-03 の仕様 3): 隠せない項目。
+            ["case"] = ForensicsService.Cases.CurrentCase is not null,
+
             // マクロの記録中 (AUTO-27 の仕様 4): 隠せない項目。
             ["recording"] = ScriptWorkspace.Macros.IsRecording,
 
@@ -255,13 +258,14 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" or "remote" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" or "remote" or "case" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusTransform.Content = doc?.Document.ViewTransform is { } transform ? Controls.HexView.TransformViewLabel(transform) : string.Empty;
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
         StatusSync.Content = SyncStatusText();
+        StatusCase.Content = ForensicsService.Cases.CurrentCase is { } openCase ? Loc.Format("Status_Case", openCase.Info.Name) : string.Empty;
         _statusOverflow.Clear();
         StatusMore.Visibility = Visibility.Collapsed;
         double available = StatusBar.ActualWidth - StatusBar.Padding.Left - StatusBar.Padding.Right;
@@ -337,6 +341,9 @@ public sealed partial class MainWindow
     private void StatusFormat_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewCellFormat", StatusCellFormat);
 
     /// <summary>同期のクリック: 同期のモードのメニュー (UI-06 の仕様 1)。</summary>
+    /// <summary>ケース名のクリック: 証拠パネルを開く (FOR-03)。</summary>
+    private void StatusCase_Click(object sender, RoutedEventArgs e) => ShowPanel(EvidencePanelId);
+
     private void StatusSync_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewSyncMenu", StatusSync);
 
     /// <summary>表示メニューのサブメニューの項目を、ステータスバーの項目の上にメニューとして出す (選ぶとコマンドを実行する)。</summary>

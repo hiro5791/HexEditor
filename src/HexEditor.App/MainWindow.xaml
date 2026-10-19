@@ -455,6 +455,27 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
+                    <MenuBarItem x:Uid="Menu_Forensics">
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Case" AutomationProperties.AutomationId="Menu_Forensics_Case">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_New" cmd:CommandUi.Id="forensics.case.new" AutomationProperties.AutomationId="Command_CaseNew" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Open" cmd:CommandUi.Id="forensics.case.open" AutomationProperties.AutomationId="Command_CaseOpen" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Close" cmd:CommandUi.Id="forensics.case.close" AutomationProperties.AutomationId="Command_CaseClose" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AddEvidence" cmd:CommandUi.Id="forensics.case.addEvidence" AutomationProperties.AutomationId="Command_CaseAddEvidence" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Properties" cmd:CommandUi.Id="forensics.case.properties" AutomationProperties.AutomationId="Command_CaseProperties" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Evidence" cmd:CommandUi.Id="view.panel.evidence" AutomationProperties.AutomationId="Command_PanelEvidence" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditShow" cmd:CommandUi.Id="forensics.audit.show" AutomationProperties.AutomationId="Command_AuditShow" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditVerify" cmd:CommandUi.Id="forensics.audit.verify" AutomationProperties.AutomationId="Command_AuditVerify" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Carving" AutomationProperties.AutomationId="Menu_Forensics_Carving">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Run" cmd:CommandUi.Id="forensics.carving.run" AutomationProperties.AutomationId="Command_CarvingRun" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Signatures" cmd:CommandUi.Id="forensics.carving.signatures" AutomationProperties.AutomationId="Command_CarvingSignatures" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Results" cmd:CommandUi.Id="view.panel.carving" AutomationProperties.AutomationId="Command_PanelCarving" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_Report" cmd:CommandUi.Id="forensics.report.create" AutomationProperties.AutomationId="Command_ReportCreate" />
+                    </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">
                         <MenuFlyoutItem x:Uid="Menu_Help_CommandPalette" cmd:CommandUi.Id="help.commandPalette" AutomationProperties.AutomationId="Command_CommandPalette" />
                         <MenuFlyoutItem x:Uid="Menu_Help_Shortcuts" cmd:CommandUi.Id="help.shortcuts" AutomationProperties.AutomationId="Command_Shortcuts" />
@@ -500,6 +521,8 @@
         <!--  更新の InfoBar (PKG-22) とアプリ全体の通知。更新の通知はボタンが 3 つまであるため通知の一覧とは別に置く。  -->
         <StackPanel Grid.Row="2">
             <controls:UpdateBar x:Name="UpdateBar" />
+            <!--  監査ログに書けない (12 の FOR-04 の「エラー」): 閉じられない InfoBar を出し続け、書き込みを伴う操作を無効にする。  -->
+            <InfoBar x:Name="AuditFaultBar" AutomationProperties.AutomationId="AuditFaultBar" IsClosable="False" IsOpen="False" Severity="Error" />
             <controls:NotificationHost
                 x:Name="WindowNotifications"
                 AutomationProperties.AutomationId="WindowNotifications"
@@ -755,6 +778,8 @@
                 Orientation="Horizontal"
                 TabFocusNavigation="Once"
                 XYFocusKeyboardNavigation="Enabled">
+                <!--  開いているケースの名前 (12 の FOR-03 の仕様 3)。ケースを開いている間は必ず出す (隠せない項目)。  -->
+                <Button x:Name="StatusCase" AutomationProperties.AutomationId="Status_Case" Click="StatusCase_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="case" Visibility="Collapsed" />
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.StatusDocument.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.StatusDocument.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
                 <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.StatusDocument.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.StatusDocument.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />

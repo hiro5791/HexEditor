@@ -369,6 +369,14 @@ public static class BuiltInSettings
         new(Disassembly.DisasmSettings.BranchLinesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 100 },
         new(Disassembly.DisasmSettings.CommentsKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 110 },
 
+        // ---- フォレンジック: 日時の表示 (12 の FOR-05)、ケース (FOR-03)、監査ログ (FOR-04)、カービング (FOR-19)、レポート (FOR-33) ----
+        new(Forensics.Time.ForensicTimeContext.SettingKey, SettingCategories.Forensics, SettingKind.Choice, "both") { Options = ["both", "utc", "local"], Order = 10 },
+        new("forensics.case.autoWriteBlock", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 20 },
+        new("forensics.audit.logBrowsing", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 30 },
+        new("forensics.carving.thumbnails", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 40 },
+        new("forensics.report.logo", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 50 },
+        new("forensics.report.header", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 60 },
+
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
         // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。

@@ -653,6 +653,21 @@ public static class BuiltInCommands
         new("tools.files.shred", "fileTools"),
         new("tools.ads", "fileTools"),
 
+        // ---- フォレンジック: ケース・監査ログ・カービング・レポート (12 の FOR-03、FOR-04、FOR-18、FOR-19、FOR-33)。既定のショートカットはなし ----
+        new("forensics.case.new", "forensics"),
+        new("forensics.case.open", "forensics"),
+        new("forensics.case.close", "forensics"),
+        new("forensics.case.addEvidence", "forensics") { Condition = "documentOpen" },
+        new("forensics.case.properties", "forensics"),
+        new("forensics.audit.show", "forensics"),
+        new("forensics.audit.verify", "forensics"),
+        new("forensics.carving.signatures", "forensics"),
+        new("forensics.carving.run", "forensics") { Condition = "documentOpen" },
+        new("forensics.report.create", "forensics"),
+        new("view.panel.evidence", "view"),
+        new("view.panel.auditLog", "view"),
+        new("view.panel.carving", "view"),
+
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
         new("macro.playLast", "macro"),

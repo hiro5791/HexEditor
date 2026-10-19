@@ -56,12 +56,23 @@ public sealed class CommandHost
     /// <summary>登録済みの処理 (引数を受け取る処理で包み直すときに使う)。なければ null。</summary>
     public CommandHandler? HandlerOf(string id) => _handlers.GetValueOrDefault(CommandService.Catalog.Canonical(id));
 
+    /// <summary>
+    /// アプリ全体の制限 (コマンド ID → 使えない理由。使えるなら null)。フォレンジック (12) が、監査ログに書けない間に書き込みを伴うコマンドを
+    /// 無効にするために使う (FOR-04 の「エラー」)。ウィンドウごとの有効条件より先に調べる。
+    /// </summary>
+    public static Func<string, string?>? WriteGate { get; set; }
+
     /// <summary>今の状態。処理が登録されていないコマンドは使えない。</summary>
     public CommandState StateOf(string id)
     {
         if (!_handlers.TryGetValue(CommandService.Catalog.Canonical(id), out CommandHandler? handler))
         {
             return CommandState.Unavailable(Loc.Get("Command_NotAvailableHere"));
+        }
+
+        if (WriteGate?.Invoke(CommandService.Catalog.Canonical(id)) is { } blocked)
+        {
+            return CommandState.Unavailable(blocked);
         }
 
         try

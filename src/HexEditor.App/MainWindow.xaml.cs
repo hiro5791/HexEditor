@@ -189,6 +189,12 @@ public sealed partial class MainWindow : Window
             title += " " + Loc.Get("Title_SafeMode");
         }
 
+        // 開いているケースの名前 (12 の FOR-03 の仕様 3)。
+        if (ForensicsService.Cases.CurrentCase is { } openCase)
+        {
+            title += $" [{openCase.Info.Name}]";
+        }
+
         Title = title;
         WindowTitle.Text = title;
     }

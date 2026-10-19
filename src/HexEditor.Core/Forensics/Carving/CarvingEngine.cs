@@ -108,7 +108,7 @@ public static class CarvingEngine
     {
         var started = Stopwatch.StartNew();
         Plan plan = new(options.Signatures);
-        var store = new CarvedFileStore(options.Signatures, options.SectorSize);
+        CarvedFileStore store = options.Store ?? new CarvedFileStore(options.Signatures, options.SectorSize);
         var counts = new Dictionary<string, long>(StringComparer.Ordinal);
         var unreadable = new List<UnreadableRange>();
         SearchRange[] ranges = [.. options.Ranges.Where(r => r.Length > 0).Select(r => new SearchRange(r.Offset, Math.Min(r.End, data.Length) - r.Offset)).Where(r => r.Length > 0)];
