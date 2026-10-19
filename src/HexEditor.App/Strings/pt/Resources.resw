@@ -8195,4 +8195,1678 @@ A conexão não é feita a menos que você escolha substituir a chave.</value></
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Página inteira</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Ajustar à largura</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Escolher pasta...</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Reabrir como imagem de disco</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Perícia forense</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Perícia forense</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Exibição de data e hora</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Como os horários são exibidos nas listas e nos detalhes forenses: UTC e hora local, somente UTC ou somente hora local. Os horários são sempre registrados em UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC e hora local</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Somente UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Somente hora local</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Ativar o modo de proteção contra gravação ao abrir um caso</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Se desativado, será perguntado se deseja ativá-lo.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Registrar também as ações de navegação no registro de auditoria</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Registra saltos, pesquisas e marcadores adicionados. Alterações nos dados e nas evidências são sempre registradas.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Mostrar miniaturas das imagens recuperadas por carving</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Mostra uma pequena visualização dos arquivos JPEG, PNG, GIF e BMP nos resultados do carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Imagem do logotipo do relatório</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Caminho de uma imagem PNG, JPEG ou SVG exibida na parte superior dos relatórios HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Texto do cabeçalho do relatório</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Uma linha de texto exibida abaixo do título dos relatórios, como o nome do seu laboratório.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Novo caso</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>investigação evidência criar caso pasta investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Abrir caso</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>investigação evidência carregar caso pasta investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Fechar caso</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>investigação terminar concluir investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Adicionar evidência</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>registrar imagem disco hash aquisição register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Propriedades do caso</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>fuso horário investigador organização time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Mostrar o registro de auditoria</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>cadeia de custódia histórico registro chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Verificar o registro de auditoria</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>adulteração cadeia de hashes integridade verificação tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Gerenciar assinaturas de carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>tipos de arquivo cabeçalho rodapé magic definições file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Recuperar arquivos por carving</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>recuperar extrair arquivos excluídos análise recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Criar relatório</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf exportar documentação export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Mostrar ou ocultar a lista de evidências</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>caso evidência painel case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Mostrar ou ocultar o registro de auditoria</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>caso auditoria registro painel case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Mostrar ou ocultar os resultados do carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>arquivos recuperados resultados painel carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Evidências</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Registro de auditoria</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Resultados do carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Perícia forense</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Caso</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Novo caso...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Abrir caso...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Fechar caso</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Adicionar evidência...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Propriedades do caso...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Lista de evidências</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Mostrar registro de auditoria</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Verificar registro de auditoria</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Recuperar arquivos...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Gerenciar assinaturas...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Resultados</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Criar relatório...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Caso: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>hora inválida</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Já existe um caso aberto. Feche-o primeiro.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Nenhum caso está aberto.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Novo caso</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Propriedades do caso</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Número do caso (obrigatório)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Nome do caso (obrigatório)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Investigador</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organização</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Pasta do caso</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Procurar...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Fuso horário</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Usado para interpretar horários sem fuso horário, como os horários de arquivo do FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Criar</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Salvar</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>O caso “{0}” foi criado.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>O caso “{0}” foi aberto.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Não foi possível criar o caso: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>O número e o nome do caso são obrigatórios.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Não foi possível ler o arquivo do caso (linha {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Não foi possível abrir o caso: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Não foi possível salvar o caso: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Ativar o modo de proteção contra gravação para este caso?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Ativar</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>O modo de proteção contra gravação foi ativado para este caso.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Adicionar evidência</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Adicionar evidência</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} será adicionado ao caso. A fonte de dados não é alterada.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Calcular os hashes agora</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Esta fonte de dados já está registrada como {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Somente discos, volumes, arquivos de imagem e arquivos podem ser adicionados como evidência.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Calculando hashes da evidência {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Os hashes de {0} foram registrados.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>O hash de {0} não foi calculado. A evidência permanece na lista.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Não foi possível ler os dados no deslocamento 0x{1}, portanto o hash de {0} não foi registrado.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Não calculado</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} foi removido da lista. A fonte de dados não foi alterada.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} não está disponível.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Não foi possível abrir a evidência: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} – {1}: {2} itens</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Nenhum caso está aberto. Crie ou abra um caso no menu Perícia forense.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Nenhuma evidência foi adicionada ainda.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Evidência</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Capacidade (bytes)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Verificação</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Adicionado (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Adicionado (local)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disco</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Imagem</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Arquivo</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memória</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Aprovada</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Falhou</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Não verificada</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Abrir (somente leitura)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Remover da lista</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Copiar hashes</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Copiar caminho</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Criar imagem...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Verificar...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} entradas</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Nenhum caso está aberto. O registro de auditoria pertence a um caso.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Nada foi registrado ainda.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Esta linha não é uma entrada válida. O registro pode ter sido alterado.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Verificar</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Exportar CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Exportar JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>O registro de auditoria está íntegro ({0} linhas verificadas).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>A cadeia do registro de auditoria está quebrada na linha {0}. O registro pode ter sido alterado.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>N.º</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Hora (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Hora (local)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Usuário</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operação</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Evidência</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Resultado</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Detalhes</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Sucesso</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Falha</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Cancelada</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Não é possível gravar no registro de auditoria</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>As operações que gravam dados ficam desativadas até que o registro possa ser gravado novamente. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Tentar novamente</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Ainda não é possível gravar no registro de auditoria.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Não é possível gravar no registro de auditoria, portanto a operação não foi realizada.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Não é possível gravar no registro de auditoria, portanto as operações que gravam dados estão desativadas.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Verificando o registro de auditoria</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Não foi possível verificar o registro de auditoria: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Exportando o registro de auditoria</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>O registro de auditoria foi exportado para {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Não foi possível exportar o registro de auditoria: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Assinaturas de carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definições</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>integrada</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>desativada</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Extensão (sem ponto)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Cabeçalhos (bytes Hex, um por linha; ?? é qualquer byte, ? é qualquer dígito)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Deslocamento do cabeçalho desde o início do arquivo</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Rodapé (bytes Hex, opcional)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Bytes do rodapé a incluir (vazio = o próprio rodapé)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Tamanho máximo</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Tamanho mínimo</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Obter o tamanho de um valor no cabeçalho</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Valor de tamanho: deslocamento desde o início do arquivo</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Valor de tamanho: largura (bits)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Valor de tamanho: ordem dos bytes</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Valor de tamanho: número a somar</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Verificação de estrutura (nome integrado ou modelo de estrutura)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Verificações integradas: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Procurar o cabeçalho somente no início de um setor</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Usar esta definição ao examinar</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Nova</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplicar</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Excluir</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Salvar</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Importar...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Exportar...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Testar esta definição</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Selecione primeiro um intervalo no documento.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Testando...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Testando uma definição de carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>{0} encontrados na seleção. Primeiras posições:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>{0} definições foram importadas.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} definições não foram importadas:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exportado para {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Não foi possível importar as definições: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Não foi possível salvar as definições: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>O teste falhou: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: insira um número ou um tamanho como 4096, 0x1000 ou 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Insira um nome.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Este nome já está em uso.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Insira uma extensão.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>A extensão contém caracteres que não podem ser usados em um nome de arquivo.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Insira pelo menos um cabeçalho.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>O cabeçalho não é uma sequência de bytes Hex válida (número ímpar de dígitos ou caracteres inválidos).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>O cabeçalho precisa de pelo menos um byte fixo.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>O deslocamento do cabeçalho não pode ser negativo.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>O rodapé não é uma sequência de bytes Hex válida.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>O número de bytes a incluir não pode ser negativo.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>O tamanho máximo deve ser pelo menos 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>O tamanho mínimo não pode ser negativo.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>O tamanho máximo é menor que o tamanho mínimo.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>O valor de tamanho não é válido.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Um valor tem o tipo errado.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Recuperar arquivos por carving</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Iniciar</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Escopo</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Documento inteiro</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Seleção</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Somente espaço não alocado</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Somente espaço de folga (slack)</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Tipos de arquivo</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Não procurar cabeçalhos dentro de um arquivo encontrado</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Gravar os arquivos recuperados em uma pasta</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Pasta de saída</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Recuperando arquivos por carving</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving concluído: {0} arquivos encontrados.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>O carving foi cancelado. {0} arquivos foram encontrados; os resultados e o manifesto foram mantidos.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>O carving foi interrompido porque não foi possível gravar na pasta de saída. {0} arquivos foram encontrados.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>O carving falhou: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>A pasta de saída está em um disco que está sendo investigado. Escolha uma pasta em outro disco.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Não há espaço livre suficiente na pasta de saída. Necessário: {0} bytes. Livre: {1} bytes.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>O sistema de arquivos da pasta de saída limita um arquivo a {0} bytes. Escolha outra pasta.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>A pasta de saída não pode ser usada.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Não há informações de alocação disponíveis para este documento.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Não é possível gravar os arquivos recuperados</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>A pasta de saída ({0}) ficou sem espaço. O próximo arquivo precisa de {1} bytes, mas há {2} bytes livres. Libere espaço, escolha outra pasta ou pare.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Não é possível gravar em {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Tentar novamente</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Escolher outra pasta...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Parar</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>O carving já está em execução.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Recuperar arquivos...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Abrir pasta</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>O carving não foi executado. Escolha Perícia forense, depois Carving e depois Recuperar arquivos.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Nenhum arquivo encontrado.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} arquivos</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Visualização da imagem recuperada</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>N.º</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Deslocamento</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Comprimento</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Comprimento determinado por</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Arquivo de saída</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Estrutura</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Valor de tamanho</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Rodapé</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Tamanho máximo</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Tipo: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Deslocamento: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Comprimento: {0} bytes</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Comprimento determinado por: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Criar relatório</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Criar</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Conteúdo</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Disco: {0} (tamanho do setor {1} bytes)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>N.º</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Esquema</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA inicial</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Setores</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Tamanho (bytes)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Sistema de arquivos</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Criptografia</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Não alocado</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Layout</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Documento</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Deslocamento do volume</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Rótulo</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Número de série</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Tamanho do cluster (bytes)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Clusters</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Clusters livres</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Problemas</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Volumes lógicos: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Grupo</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Tamanho (bytes)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Layout</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Membros</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Imagem</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Origem</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Adquirida</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Registro de aquisição</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (um arquivo, abre offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Carta</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Todas as entradas do registro de auditoria</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Registro de auditoria a partir de (UTC, opcional)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Registro de auditoria até (UTC, opcional)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Bytes do despejo Hex para cada marcador (0 a 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Salvar em</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>O período não é uma data e hora válidas.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>O comprimento do despejo Hex deve estar entre 0 e 4096 bytes.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Criando o relatório</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Não foi possível criar o relatório: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>{0} foi criado. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>Não foi possível criar o PDF ({0}). {1} foi criado no lugar.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>O PDF inclui apenas as primeiras linhas das listas longas. Use o relatório HTML ou os arquivos CSV para ver as listas completas.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Abrir</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Abrir pasta</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Relatório forense</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Número do caso</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Nome do caso</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Investigador</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organização</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Caso criado</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Relatório criado</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Fuso horário</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Criado por</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Página</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>de</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Caso</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Capa</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Evidências</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Registros de aquisição</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Informações do dispositivo</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partições</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Sistemas de arquivos</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Marcadores</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Resultados do carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Registro de auditoria</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Evidência</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Modelo</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Número de série</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Capacidade (bytes)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Setores</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Tamanho do setor</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Verificação</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Adicionado (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Adicionado (local)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Adicionado por</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Aprovada</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Falhou</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Não verificada</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Não calculado</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disco</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Imagem</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Arquivo</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memória</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Documento</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Deslocamento</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Comentário</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Despejo Hex</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>N.º</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Deslocamento</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Comprimento</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Comprimento determinado por</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Arquivo de saída</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Arquivos encontrados</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>N.º</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Hora (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Hora (local)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Usuário</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Computador</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operação</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Evidência</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Resultado</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Detalhes</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>sucesso</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>falha</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>cancelada</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Mostrando as primeiras {0} de {1} linhas. A lista completa está no arquivo CSV anexado ou no relatório HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Mostrando as primeiras {0} linhas. A lista completa está no relatório HTML ou no arquivo CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Lista completa</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Não alocado</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Sem dados.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>hora inválida</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Protegido contra gravação]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Proteção contra gravação</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>O modo de proteção contra gravação está ativado. Clique para desativá-lo.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>O modo de proteção contra gravação impede apenas que este aplicativo grave. Ele não impede que o Windows ou outros aplicativos gravem (por exemplo, as gravações que um sistema de arquivos faz ao montar um volume). Use também um bloqueador de gravação de hardware ou a proteção contra gravação USB do sistema operacional.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Proteção contra gravação USB do sistema operacional...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Desativar o modo de proteção contra gravação?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Documentos de evidência abertos: {0}. Depois de desativar o modo, será possível gravar nestes documentos:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Nenhum documento de evidência está aberto. Depois de desativar o modo, será possível gravar novamente nos documentos abertos.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Desativar proteção contra gravação</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Não foi possível reabrir a fonte de dados como somente leitura. Apenas os dados já lidos são exibidos.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Permitir gravação neste documento</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Gravação permitida (exceção ao modo de proteção contra gravação)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>O modo de proteção contra gravação está desativado.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Somente documentos de arquivo podem ser excluídos do modo de proteção contra gravação.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Esta fonte de dados está registrada como evidência, portanto a gravação não pode ser permitida.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>A gravação neste documento já é permitida.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Permitir gravação neste documento?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>O modo de proteção contra gravação continua ativado, mas {0} ({1}) poderá ser editado e salvo até que você o feche. Isso é registrado no registro de auditoria e não pode ser desfeito para o documento aberto.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Digite {0} para confirmar</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Permitir gravação em {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>A gravação em {0} é permitida até que ele seja fechado.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Modo de proteção contra gravação</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Proteção contra gravação USB do sistema operacional</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Dispositivo</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Verificar HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Informações SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Painel de informações do dispositivo</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Informações de criptografia...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Abrir despejo de memória...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Alternar o modo de proteção contra gravação</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>proteção gravação bloquear somente leitura evidência write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Permitir gravação neste documento</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>proteção gravação exceção write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Alternar a proteção contra gravação USB do sistema operacional</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb armazenamento política proteção gravação registro usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Verificar HPA e DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>área oculta host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Mostrar informações SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>integridade disco automonitoramento nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Mostrar informações de criptografia</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt volume criptografado encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Alternar informações do dispositivo</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>painel hpa smart dispositivo panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Abrir despejo de memória</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>despejo de falha minidump memória física ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Informações do dispositivo</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Sempre ativar o modo de proteção contra gravação ao iniciar</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Se desativado, o aplicativo inicia com o modo como estava ao ser fechado pela última vez.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Verificar HPA / DCO ao abrir um disco</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Envia comandos ATA somente leitura ao disco e exibe um aviso se forem encontradas áreas ocultas.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Ativar a proteção contra gravação USB do sistema operacional?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>O Windows bloqueará a gravação nos dispositivos de armazenamento USB conectados a partir de agora (a configuração StorageDevicePolicies WriteProtect). Os dispositivos já conectados não são afetados até que você os reconecte. Os discos SATA e NVMe internos não são protegidos. São necessários direitos de administrador.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Desativar a proteção contra gravação USB do sistema operacional?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>A configuração volta ao estado anterior à ativação. Os dispositivos de armazenamento USB já conectados continuam protegidos contra gravação até que você os reconecte. São necessários direitos de administrador.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Alterar a configuração</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>São necessários direitos de administrador. A configuração não foi alterada.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Não foi possível alterar a configuração (acesso negado; ela pode ser gerenciada por Política de Grupo): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Não foi possível alterar a configuração: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>A proteção contra gravação USB do sistema operacional está ativada. Reconecte os dispositivos de armazenamento USB para que ela tenha efeito.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>A proteção contra gravação USB do sistema operacional está desativada.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>A proteção contra gravação USB do sistema operacional ainda está ativada</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>O Windows continuará bloqueando gravações no armazenamento USB depois que este aplicativo for fechado. Desativar antes de sair?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Desativar e sair</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Sair e deixar ativada</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Alterar a proteção contra gravação USB do sistema operacional requer direitos de administrador do Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Dispositivo</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Verificar HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Ler SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Exportar JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Exportar texto...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Abra um disco físico e escolha Verificar HPA / DCO ou Informações SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — capturado {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO não foram verificados.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Os discos NVMe não têm HPA nem DCO; HPA / DCO não se aplicam.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Tamanho do namespace: {0} blocos ({1} bytes por bloco)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Capacidade do namespace: {0} blocos</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Isto não pode ser verificado neste dispositivo (os comandos não são repassados, por exemplo em adaptadores USB ou discos virtuais).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>São necessários direitos de administrador.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>O comando {0} falhou (status ATA {1}, erro {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>LBA máx. (IDENTIFY DEVICE, 28 bits): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>LBA máx. (IDENTIFY DEVICE, 48 bits): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>LBA máx. nativo (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>LBA máx. definido pelo DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>não compatível com o dispositivo</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>não compatível com o dispositivo</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: presente, {0} setores ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: nenhuma</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: não foi possível determinar</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: presente, {0} setores ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: nenhuma</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: não foi possível determinar</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>As informações SMART não foram lidas.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Não é possível ler as informações SMART neste dispositivo (por exemplo, por meio de um adaptador USB que não oferece suporte).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>O SMART está desativado neste dispositivo.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>A soma de verificação dos dados SMART não confere; os valores podem estar incorretos.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Modelo: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Número de série: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Capacidade: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Tamanho do setor: {0} bytes lógicos, {1} bytes físicos</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Conexão: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Velocidade de rotação: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>sem rotação (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>compatível</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>não compatível</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Abra um disco físico para usar este comando.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Não foi possível ler as informações do dispositivo: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} tem áreas ocultas: HPA {1} setores, DCO {2} setores. A capacidade vista pelo Windows é menor que a capacidade real do disco.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Mostrar detalhes</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>As informações do dispositivo foram exportadas para {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Não foi possível exportar as informações do dispositivo: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Atual</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Pior</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Limite</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Bruto (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Bruto (decimal)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Aviso</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Desconhecido</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Temperatura</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Bits de aviso crítico: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Temperatura: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Reserva disponível: {0}% (limite {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Porcentagem usada: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Dados lidos: {0} bytes</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Dados gravados: {0} bytes</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Ciclos de energia: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Horas ligado: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Desligamentos inseguros: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Erros de mídia e de integridade de dados: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Capturado</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Dispositivo</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Modelo</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Número de série</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Capacidade (bytes)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Tamanho do setor (lógico / físico)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Conexão</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>LBA máx. (28 bits / 48 bits / nativo / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Não pode ser verificado neste dispositivo</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Nenhuma</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Presente ({0} setores)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Não aplicável (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Nome</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Atual</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Pior</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Limite</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Bruto</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Aviso</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Informações de criptografia</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Nenhum volume criptografado foi encontrado.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Intervalo {0}: deslocamento {1}, {2} bytes</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Tipo: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Volume APFS criptografado (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (possivelmente criptografado)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Dados possivelmente criptografados ou compactados (por exemplo VeraCrypt ou TrueCrypt; não há assinatura que os identifique)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Versão dos metadados: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Método de criptografia: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID do volume: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Criado: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Descrição: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Estado da criptografia: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>desconhecido</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>descriptografado</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>em andamento</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>concluído</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>em pausa</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Criptografado até agora: {0} bytes</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Protetores de chave: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, criado {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Chave não protegida</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Chave de inicialização</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM e PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Senha de recuperação</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Senha</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Desconhecido (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Slots de chave: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volume {0}: criptografado</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volume {0}: não criptografado</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropia dos primeiros 64 KiB: {0} bits por byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Aviso: os três blocos de metadados não correspondem.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Aviso: alguns blocos de metadados estão danificados; somente os itens que puderam ser lidos são exibidos.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>O navegador do sistema de arquivos não abre volumes criptografados.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>O Windows desbloqueou este volume do BitLocker ({0}). Se você o abrir como volume lógico, poderá ler o conteúdo que o Windows descriptografa.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Abrir como volume lógico</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Despejo de memória</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Não foi possível ler o formato do despejo de memória de {0}. Abrir como bruto?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Abrir como bruto</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Não foi possível abrir o despejo de memória: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Despejo de memória: {0}, capturado {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Despejo de memória: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>imagem da memória física (bruta)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>despejo de memória completo</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>despejo de memória do kernel</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>despejo de memória completo (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Despejo de memória</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Não é possível gravar os dados porque o modo de proteção contra gravação está ativado.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Imagem</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Criar imagem...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Criar imagem esqueleto...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Abrir imagem...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Verificar imagem...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Informações da imagem</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Clonar disco...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Salvar intervalo de setores...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Restaurar intervalo de setores...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Reconstruir RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Criar imagem</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>adquirir imagem de disco dd raw e01 evidência acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Criar imagem esqueleto</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>esqueleto esparso imagem metadados skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Abrir imagem como disco</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk raw dividido 001 split raw</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Verificar imagem</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>verificar hash md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Informações da imagem</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 cabeçalho informações do caso e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Clonar disco</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>clonar copiar disco setor clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Salvar intervalo de setores</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>backup mbr gpt setores backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Restaurar intervalo de setores</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>restaurar mbr gpt setores restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Reconstruir RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod distribuição paridade raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>O documento atual não é uma imagem de disco.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Isto requer um documento de disco, volume ou imagem de disco.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Abra primeiro o disco, a imagem ou o arquivo a ser usado como origem.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Aberta sem os segmentos ausentes ({0}). Os intervalos deles são lidos como erros.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Não foi possível ler a imagem {0} (parte: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>O disco pai do disco de diferenciação não foi encontrado: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Segmentos ausentes</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Estes segmentos estão ausentes: {0}. Abrir a imagem com os segmentos disponíveis? Os intervalos ausentes são lidos como erros.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Abrir os segmentos disponíveis</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw dividido</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>A soma de verificação de um bloco não confere em {0} ({1} bytes). O intervalo é exibido como erro de leitura.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Informações da imagem</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Arquivos</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Tamanho</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} bytes ({1} setores)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Tamanho do setor</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Adquirida</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Ferramenta de aquisição</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Dispositivo</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Blocos</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} setores por bloco)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Compactação</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Compactada</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Não compactada</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} armazenado</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Setores ilegíveis durante a aquisição</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Disco pai</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Segmentos ausentes</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Número do caso</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Número da evidência</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Examinador</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Descrição</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Notas</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Correspondência</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Divergência</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Sem valor de referência</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Não é possível verificar devido a erros de leitura</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>armazenado na imagem</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>registro de aquisição</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>lista de evidências</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>valor inserido</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>calculado durante a aquisição</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>disco de origem</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Criar imagem</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Criar imagem esqueleto</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>O modo de proteção contra gravação está desativado. É recomendável ativá-lo antes de adquirir evidências.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Ativar o modo de proteção contra gravação</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Origem: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Somente a seleção (ampliada para os limites de setor)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Intervalos a adquirir</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Completa</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Esparsa (omitir as áreas não alocadas)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Esqueleto (somente tabelas de partição e metadados do sistema de arquivos)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Incluir também marcadores e intervalos da seleção múltipla</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Saída</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Saída</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Procurar...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Tamanho de divisão / segmento (por exemplo 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Novas tentativas em erros de leitura</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Valor de preenchimento para setores ilegíveis (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Unidade de leitura</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Verificar após a conclusão</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Erros de leitura</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Informações E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Compactação</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Nenhuma</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Rápida (zlib nível 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Máxima (zlib nível 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Iniciar</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Informe a saída.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>O tamanho de divisão deve ser de pelo menos 1 MiB (por exemplo 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Insira um número de novas tentativas de 0 a 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Insira o valor de preenchimento como dois dígitos hex (por exemplo 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Escolha pelo menos um hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>A saída está no mesmo disco físico que a origem. Escolha outro disco.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>A saída está em um disco da lista de evidências. Escolha outro disco.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>O sistema de arquivos de saída ({0}) permite arquivos de até {1} bytes. Use raw dividido ou E01 com um tamanho de segmento menor.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>A saída precisa de cerca de {0} bytes, mas há apenas {1} bytes livres.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} já existe. Substituí-lo?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Substituir</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>O sistema de arquivos de saída é {0}, não NTFS, portanto as áreas excluídas são gravadas como zeros e a imagem não fica menor.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Criar imagem: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Calculando os intervalos a incluir</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} partição(ões) não puderam ser analisadas e foram incluídas inteiras.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Não foi possível criar a imagem. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Setores ilegíveis: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>A imagem foi criada. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Verificação: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} setor(es) não puderam ser lidos e foram preenchidos.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>A aquisição foi interrompida. Os arquivos gravados até então foram mantidos.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>A aquisição foi interrompida. Os arquivos gravados até então foram excluídos.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>A origem foi perdida. A aquisição foi interrompida.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Abrir o registro de aquisição</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Não foi possível gravar a saída: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Tentar novamente</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>A aquisição foi cancelada. Manter os arquivos gravados até agora?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Manter</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Excluir</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Verificar imagem</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Imagem: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Valor a comparar (hex, opcional)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Valor MD5, SHA-1 ou SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Insira um valor hex de 32, 40 ou 64 dígitos.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Reler também o disco de origem</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Verificar</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Verificar imagem: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Resultado da verificação: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Não é possível verificar devido a erros de leitura: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>calculado: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Registro de aquisição da imagem de disco</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Registro de clonagem do disco</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Concluída</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Interrompida</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>A origem foi perdida</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Falhou</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Origem</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Modelo</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Número de série</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Capacidade</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Tamanho do setor</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Intervalo</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Saída</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Arquivos</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Destino</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Início</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Fim</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Setores lidos</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Setores ilegíveis</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>nenhum</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>intervalos incluídos</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Verificação</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>não verificada</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Versão do aplicativo</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Caso</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Intervalos adquiridos</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>completa</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>imagem esparsa (as áreas não alocadas não são incluídas)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>imagem esqueleto (somente tabelas de partição e metadados do sistema de arquivos)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>As áreas excluídas são armazenadas como zeros, portanto os hashes desta imagem não correspondem aos do disco de origem inteiro.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Intervalos incluídos</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Mensagem</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Clonar disco</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Disco de destino</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disco {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disco {0}: {1}, n.º de série {2}, {3} bytes, setores de {4} bytes. Volumes: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} bytes)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>nenhum</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA inicial no destino</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Preencher o restante do destino com zeros</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash para a verificação</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Pasta do registro (opcional)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Avançar</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Escolha o disco de destino.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>O LBA inicial está fora do disco de destino.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Um disco com tamanho de setor diferente não pode ser o destino da clonagem.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>O disco de destino está na lista de evidências. Ele não pode ser sobrescrito.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Destino: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Intervalo a gravar: a partir do LBA {0}, {1} setores ({2} bytes)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Conteúdo: os dados de {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Todo o conteúdo destes volumes será perdido:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>O destino é menor que a origem. Somente os primeiros {0} bytes da origem serão gravados.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Isto não pode ser desfeito.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Clonar para {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Digite “{0}” para confirmar</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Clonando para {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Se você parar agora, o disco de destino ficará parcialmente gravado.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Parar</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Continuar</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Não foi possível bloquear o volume {0}, portanto nada foi gravado. Feche os arquivos abertos nele e tente novamente.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>A clonagem falhou. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>{0} bytes clonados. Verificação: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>A clonagem foi interrompida. O disco de destino está parcialmente gravado.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>O destino é o mesmo disco que a origem.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Um disco com tamanho de setor diferente não pode ser o destino da clonagem.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>O modo de proteção contra gravação está ativado.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>O disco de destino está na lista de evidências. Ele não pode ser sobrescrito.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>O Windows está usando um volume do disco de destino.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>O LBA inicial está fora do disco de destino.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Não foi possível abrir o disco de destino para gravação.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Salvar intervalo de setores</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Restaurar intervalo de setores</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA inicial</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Número de setores</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Salvar</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Dados de setores</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>O intervalo está fora do disco.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Salvar setores: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} setores foram salvos em {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Alguns setores do intervalo não puderam ser lidos, portanto nada foi salvo.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Não foi possível salvar o intervalo de setores. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Não foi possível ler o arquivo de dados ou o arquivo sidecar. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Arquivo de dados: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Salvo de: {0}, n.º de série {1}, {2} bytes, setores de {3} bytes. LBA inicial {4}, {5} setores. Salvo em {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Gravar em: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Fazer backup do conteúdo atual antes de gravar</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Avançar</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>O SHA-256 do arquivo de dados não confere com o arquivo sidecar. Não é possível restaurar.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Não há arquivo sidecar. Insira o LBA inicial onde gravar.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>O número de série ou a capacidade do destino difere do disco do qual os dados foram salvos.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Destino: {0}. Volumes no intervalo: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Conteúdo: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Gravar {0} setores</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Restaurar setores: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Não foi possível restaurar o intervalo de setores. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>{0} setores foram gravados e confirmados por releitura.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>A gravação falhou. {0} setores foram gravados; a falha ocorreu no LBA {1}. Você pode regravar o arquivo de backup {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>O conteúdo relido não confere com o arquivo de dados.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Reconstruir RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Membros (em ordem)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Subir</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Descer</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Adicionar arquivo...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Remover</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Este membro está ausente</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[ausente]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Deslocamento de início dos dados do membro</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Tipo</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Tamanho da faixa (stripe)</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Layout de paridade</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Simétrico à esquerda</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Assimétrico à esquerda</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Simétrico à direita</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Assimétrico à direita</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Membro a usar (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Detecção (primeiro 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} detectado ({1} partições)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Sem tabela de partições</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Assinatura de sistema de arquivos: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Sem assinatura de sistema de arquivos</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Tamanho do disco lógico: {0} bytes</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Não pode ser detectado com esta configuração.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Os membros têm tamanhos diferentes. O menor tamanho é usado.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Salvar configuração...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Carregar configuração...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Configuração RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>A configuração RAID foi salva em {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Não foi possível salvar a configuração RAID. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Não foi possível ler a configuração RAID. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Não foi possível abrir o disco lógico.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} membros)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Os parâmetros não são válidos.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>O tamanho da faixa deve ser uma potência de dois, de 512 B a 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Há poucos membros para este tipo.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Este tipo não pode ter um membro ausente.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Dois ou mais membros estão ausentes. O RAID 5 não pode ser aberto.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Mostrar partições</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>partições disco mbr gpt partitions disk</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Abrir partição em uma nova guia</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>partição guia tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Ir para o início da partição</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>partição saltar jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Abrir aqui como início da partição</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>partição aqui here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Procurar partições perdidas</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>partição perdida recuperar análise lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Mostrar sistema de arquivos</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>sistema de arquivos navegador ntfs fat exfat file system browser</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Abrir arquivo em uma nova guia</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>arquivo abrir guia file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Exportar arquivos</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>exportar extrair arquivos export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Procurar arquivos excluídos</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>excluído restaurar recuperar deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Ir para o registro MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft registro ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Ir para o cluster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>cluster bloco saltar cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Arquivos que usam esta posição</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>cluster proprietário inverso cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Mostrar clusters do arquivo</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>fragmentos clusters realçar fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Próximo fragmento</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>fragmento próximo fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Fragmento anterior</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>fragmento anterior fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Alternar o realce de espaço livre e slack</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack não alocado realçar slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Exportar espaço não alocado</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>não alocado livre exportar unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Exportar slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack exportar slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Abrir espaço não alocado em uma nova guia</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>não alocado guia unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Painel de partições</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>painel partições panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Painel de sistema de arquivos</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>painel sistema de arquivos panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Painel de fragmentos</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>painel fragmentos panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Painel de resultados forenses</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>painel resultados forense panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Número do registro MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Partições e sistemas de arquivos</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Mostrar pequenas lacunas entre partições</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Lista no painel de partições as lacunas não alocadas menores que 1 MiB.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Mostrar os deslocamentos do disco nas guias de partição</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Se desativado, os endereços de uma guia de partição começam em 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Listar os fluxos de dados alternativos do NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Os fluxos nomeados aparecem como arquivo.txt:fluxo no navegador do sistema de arquivos.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Mostrar a legenda do realce forense</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Mostra a legenda no canto superior direito da exibição Hex enquanto o realce estiver ativado.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Cores do realce forense</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Por exemplo: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Deixe vazio para usar as cores padrão.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Partições</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Sistema de arquivos</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Mostrar partições</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Abrir partição em uma nova guia</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Ir para o início da partição</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Procurar partições perdidas...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Mostrar navegador</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Abrir arquivo em uma nova guia</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Exportar arquivos...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Procurar arquivos excluídos</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Ir para o cluster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Arquivos que usam esta posição</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Mostrar clusters do arquivo</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Ir para o registro MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Exportar espaço não alocado...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Exportar slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Abrir espaço não alocado em uma nova guia</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Próximo fragmento</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>0</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Fragmento anterior</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Realce forense</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>0</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Partições</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Sistema de arquivos</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Fragmentos</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Resultados forenses</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Posição no disco e proprietário do cluster</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Partições</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Sistema de arquivos</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Fragmentos</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Resultados forenses</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Analisando partições…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Não analisado. Escolha Perícia forense &gt; Partições &gt; Mostrar partições.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Nenhuma tabela de partições foi encontrada.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} partições, tamanho do setor {1}, ID do disco {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Setores ilegíveis (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value>N.º|Formato|Tipo|Nome|LBA inicial|LBA final|Setores|Tamanho|Desl. inicial|Flags|SA|Status</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Layout de partições</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Aviso</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID do tipo: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID exclusivo: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Bloco inicial {0}, {1} blocos</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Entrada de tabela em {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Ir para o início da partição</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Selecionar partição</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Abrir partição em uma nova guia</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Mostrar estrutura da entrada</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Mostrar sistema de arquivos</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Procurar partições perdidas...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>O cursor não está em nenhuma partição.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>Nenhuma GPT foi encontrada com setores de {1} bytes, mas uma foi encontrada com setores de {0} bytes. Reabrir com setores de {0} bytes?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Reabrir com setores de {0} bytes</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} – Partição {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} – LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Lógica</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>A cadeia EBR entra em loop no LBA {1} (após a partição {0}). A cadeia foi interrompida.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Mais de 256 partições lógicas. As restantes não foram lidas.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>O CRC32 do cabeçalho GPT não confere (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>O CRC32 da matriz de entradas de partição GPT não confere (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>O cabeçalho GPT primário e o de backup (LBA {1}) são diferentes.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>O cabeçalho GPT primário está danificado. A lista foi criada a partir do cabeçalho de backup.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>As partições {0} e {2} se sobrepõem.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>A partição {0} aponta para fora do disco (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR híbrido: o MBR de proteção também tem outras entradas.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Alguns setores não puderam ser lidos (o primeiro: LBA {1}). A lista usa os setores legíveis.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>O mapa de partições da Apple tem mais de 256 entradas.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Sistema EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Reservada da Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Dados básicos do Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Recuperação do Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Metadados LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Dados LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Sistema de arquivos Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Swap do Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Inicialização da Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Inicialização BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Estendida</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Estendida (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 oculta</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Recuperação</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 oculta</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS oculta</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 oculta</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (disco dinâmico)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux estendida</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>Proteção GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Não alocado</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Volume físico LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Procurar partições perdidas</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA inicial</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA final (não incluído)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Posições de busca</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Limites de 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Limites de cilindro (63 setores)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Cada setor</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Cada setor leva cerca de {0} (a 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} horas</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Procurar</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Cabeçalho GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Procurar</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Procurando partições perdidas</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Partições perdidas</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>LBA inicial|Setores|Tamanho|Tipo|Conf.|Sobrepõe</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Baixa</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Média</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Alta</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>sobrepõe a partição {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Cancelado. Os resultados obtidos até agora foram mantidos.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {# candidato encontrado.} other {# candidatos encontrados.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Ilegível: LBA {0}, {1} setores</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Nenhum candidato a partição foi encontrado.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Procurar em cada setor</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Abrir como partição</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Mostrar sistema de arquivos</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Criar entradas da tabela de partições (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Criar entradas da tabela de partições (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Criar entradas da tabela de partições</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>O MBR não tem uma entrada livre para todos os candidatos.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>A partição não pode ser gravada em um MBR (mais de 2 TiB). Use GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>A GPT não tem entrada livre.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>O disco é pequeno demais para uma GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Nenhum sistema de arquivos está aberto para este documento.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Selecione um arquivo no navegador do sistema de arquivos.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Nenhum cluster de arquivo está realçado.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Somente para NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Não é possível ler as informações de alocação, portanto o realce não está disponível.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>O volume está criptografado (BitLocker). O navegador do sistema de arquivos não o abre.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>O volume está criptografado ({0}). O navegador do sistema de arquivos não o abre.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Não é possível abrir como {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Escolher o sistema de arquivos</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Não foi possível detectar o tipo pela assinatura. Escolha o tipo a ser tentado.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Abrir</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Não alocado ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Não existe o registro MFT {0}.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Ir para o bloco</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Nenhum sistema de arquivos. Escolha Perícia forense &gt; Sistema de arquivos &gt; Mostrar navegador.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  n.º de série {2}  cluster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Raiz</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Arquivos</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Pastas</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Fragmentos</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filtro (* e ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Procurar arquivos (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Colunas</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT a usar</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {As FATs diferem em # entrada.} other {As FATs diferem em # entradas.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Setores por cluster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Analisar novamente</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Lendo…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Lendo… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} itens</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Não foi possível ler: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(corrompido)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(divergência de hora)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Divergência de hora: os horários de $STANDARD_INFORMATION são anteriores aos de $FILE_NAME ou não têm fração de segundo.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Criptografado com EFS (somente dados brutos).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>A cadeia de clusters não existe mais; os dados são lidos como clusters contíguos a partir do primeiro cluster.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>entrada de slack do índice</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>contando…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Lógico {0}  cluster {1} ×{2}  disco {3}  {4} bytes</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Lógico {0}  nos metadados  disco {3}  {4} bytes</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(compactado)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Calculando as posições de slack</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Criando o mapa de clusters</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>{0} entradas com metadados corrompidos foram ignoradas.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>A posição não está na área de clusters.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Proprietários dos clusters {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Tipo|Caminho</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Arquivo</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metadados</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Arquivo excluído (desalocado)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Cadeia de clusters de {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>Índice|Cluster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Arquivos chamados {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>Tamanho|Caminho</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Procurando arquivos: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {# arquivo encontrado.} other {# arquivos encontrados.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Procurando arquivos excluídos</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Procurando arquivos órfãos</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Abrir arquivo em uma nova guia</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Exportar arquivos...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Ir para os metadados</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Mostrar clusters do arquivo</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Mostrar registro MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Mostrar INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Mostrar $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Mostrar entrada de diretório</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Mostrar cadeia de clusters</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Copiar caminho</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Exportar lista como CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Ext.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Tamanho</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Alocado</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Criado (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Criado (local)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Modificado (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Modificado (local)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Acessado (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Acessado (local)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metadados alterados (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Metadados alterados (local)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Atrib.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID do arquivo</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Primeiro cluster</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Frag.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Estado</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Caminho original</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Recuperação</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Excluído</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Órfão</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Boa</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Parcialmente sobrescrito</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Sobrescrito</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Local desconhecido</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Residente</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Registro MFT não utilizado</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack de índice</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Entrada de diretório excluída</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Inode excluído</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack de entrada de diretório</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup divergente (sequência de atualização)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Assinatura inválida</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Número de cluster fora do intervalo</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>A cadeia de clusters forma um loop</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>A cadeia de clusters chega a um cluster livre</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>A cadeia de clusters não corresponde ao tamanho do arquivo</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Lista de data runs inválida</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Atributo inválido</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>A soma de verificação do conjunto de entradas não confere</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Erro de leitura</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Profundo demais</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>O setor de inicialização de backup é diferente ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr difere de $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Os valores do BPB são inconsistentes ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>As FATs são diferentes ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo não confere ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>A soma de verificação da região de inicialização do exFAT não confere ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>A soma de verificação de um nome longo não confere ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Não é possível ler as informações de alocação ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>O volume está criptografado ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Arquivos excluídos</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Arquivos órfãos</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Espaço não alocado</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack do volume</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metadados</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Dados do arquivo</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>A</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>Slack de RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Slack da unidade</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Não alocado</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>N</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack do volume</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Lacuna entre partições</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>L</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Legenda do realce forense</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Tamanho {0} bytes, alocado {1} bytes</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Criado {0}, modificado {1}, acessado {2}, metadados alterados {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID do arquivo {0}, atributos {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Recuperação: {0} ({1}). Caminho original: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Tipo: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Nome do volume: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Número de série: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Tamanho do cluster: {0} bytes</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Total de clusters: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Clusters livres: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Criado: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Início do volume {0}, {1} bytes</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Registro MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Deslocamento do registro</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Número de sequência</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Links físicos</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Flags</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Bytes em uso</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Registro base</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI criado</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI modificado</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT alterado</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI acessado</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Nome</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Pai</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN criado</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN modificado</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT alterado</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN acessado</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN tamanho</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Divergência de hora</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Conteúdo</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Deslocamento da entrada</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Primeiro cluster</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Nome curto</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Clusters na cadeia</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Comprimento dos dados</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Comprimento de dados válido</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Partição {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Cluster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Bloco {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Excluído: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Não alocado</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Localizar proprietário</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disco {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disco: - (compactado / esparso / residente)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Número do cluster ({0}–{1}; cluster = cluster atual)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>O cluster {0} está fora do intervalo.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Ir</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Manter a estrutura de pastas</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Exportar também os fluxos de dados alternativos (nome_fluxo)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Exportar também o slack como arquivos separados</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Incluir arquivos excluídos</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {# item selecionado.} other {# itens selecionados.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Escolher pasta...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Exportando arquivos</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} arquivos exportados para {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Espaço livre insuficiente: são necessários {0}, há {1} livres.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Não foi possível gravar: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Exportar um arquivo sobrescrito?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Os clusters deste arquivo excluído agora são usados por outros arquivos. O conteúdo exportado pode pertencer a outro arquivo.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Exportar</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Arquivo binário</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Criar o arquivo de mapa (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Exportando o espaço não alocado</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Exportando o slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} foi gravado em {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Registros do $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>LSN|LSN anterior|UndoNext LSN|Tipo|ID trans.|Redo|Undo|Reg. MFT|Compr.</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Página de reinício {0}: LSN atual {1}, clientes: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Lendo o $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Lista</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Sem resultados.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Exportar lista como CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Nenhum arquivo está realçado. Escolha Mostrar clusters do arquivo.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} fragmentos)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  lógico {1}  disco {2}  {3} bytes  clusters {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Limpar o realce</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Selecionar espaço não alocado</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>não alocado selecionar pesquisa carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Selecionar slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack selecionar pesquisa carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Selecionar espaço não alocado</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Selecionar slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Selecionando o espaço não alocado</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Procurando o espaço não alocado</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Selecionando o slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Não há nada para selecionar.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Somente os primeiros 1.000.000 de intervalos foram selecionados.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Mostrar volumes lógicos</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>volume lógico ldm disco dinâmico lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Ir para o inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Número do inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Mostrar volumes lógicos</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Ir para o inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>A soma de verificação não confere</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Formato não compatível</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>A soma de verificação do superbloco ext não confere ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>As somas de verificação dos descritores de grupo não conferem (grupos {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Este recurso do ext não é totalmente compatível: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>O cabeçalho de volume alternativo difere do primário ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>A soma de verificação de um objeto APFS não confere (bloco {0}). Ele foi ignorado.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>O ponto de verificação APFS mais recente está danificado; um anterior é usado (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>A soma de verificação de uma marca de descritor UDF não confere (setor {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>O CRC de um descritor UDF não confere (setor {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Este tipo de partição UDF não é compatível: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>O disco tem {0} sessões. A última sessão é exibida; escolha outra em Sessão.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Disponível somente para ext2, ext3 e ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Não existe o inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Este volume está criptografado. A lista de arquivos não é exibida.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Nenhum ponto de verificação APFS foi encontrado.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Mostrar inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Mostrar journal</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Nomes</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (básico)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Sessão</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Este sistema de arquivos não tem journal.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>Journal do ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>Bloco|Desloc. disco|Tipo|Sequência</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Tamanho do bloco {0}, {1} blocos, sequência {2}, início {3} (0 = limpo). O journal não é reproduzido.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Lendo o journal do ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Descritor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superbloco v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superbloco v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revogação</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Mostrar volumes lógicos</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Criar imagem deste intervalo...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Volumes lógicos</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Nome|Tipo|Tamanho|Layout|Status</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Lendo os metadados do volume...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>Nenhum volume lógico LDM ou LVM2 foi encontrado nos discos e imagens abertos.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Abrir volume lógico</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Atribuir membros...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Ler novamente</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Este tipo de volume não é compatível: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>Não é possível abrir {0}. Membros ausentes: {1}. Abra os discos ou as imagens, ou atribua-os.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) é um volume espelhado ou RAID 5. Abra-o com a reconstrução de RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Atribuir membros</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Escolha o disco ou a imagem para cada membro ausente de {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(nenhum)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Abrir arquivo...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {# membro ausente} other {# membros ausentes}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Não compatível</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Reconstrução de RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Simples</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Estendido</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Distribuído</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Espelhado</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Linear</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Não compatível ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} grupo {1}, volume {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Membro {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>não encontrado</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Deslocamento {0} ({1}): {2} em {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Deslocamento {0} ({1}): faixa {2} em {3} membros</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Apagar a seleção com segurança</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>apagar sobrescrever triturar seguro intervalo wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Apagar o disco com segurança</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>apagar sobrescrever disco unidade seguro wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Apagar o espaço livre</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>espaço livre não alocado apagar sobrescrever cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Apagar o slack dos arquivos</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram unidade apagar sobrescrever slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Ocultar o conteúdo dos arquivos</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>ocultar censurar higienizar limpar redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Apagamento seguro</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Apagar a seleção...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Apagar o disco...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Apagar o espaço livre...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Apagar o slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Ocultar o conteúdo dos arquivos...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Ocultar o conteúdo dos arquivos...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Apagar a seleção com segurança...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Recuperar arquivos da seleção por carving...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Ocultação</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Apagamento seguro</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Destino: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Início</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Comprimento</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Reler e verificar no final</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Apagar...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>O intervalo está fora do documento.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Alterações não salvas</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Os dados a apagar têm alterações não salvas. Salve-as ou descarte-as antes de apagar.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Salvar</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Descartar</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Apagar dados</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Destino: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disco {0}: {1}, número de série {2}, {3} bytes</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Volumes: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Intervalo: LBA inicial {0}, {1} setores, {2} bytes</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Intervalo: deslocamento {0}, {1} bytes</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>O intervalo foi ampliado para os limites de setor.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Método: {0} ({1, plural, one {# passagem} other {# passagens}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>A última passagem é relida e verificada.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Tempo estimado: cerca de {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Isto não pode ser desfeito. Os dados originais não podem ser recuperados.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>Em SSDs e mídias flash, o nivelamento de desgaste (wear leveling) pode manter os dados originais em outro local mesmo depois de sobrescritos.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Estes volumes ficam bloqueados durante o apagamento: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Os dados são gravados diretamente no arquivo, não como uma edição. Isto não pode ser desfeito com Desfazer.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Apagar {0} bytes</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Apagar {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disco {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Para continuar, digite “{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Confirmação</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Selecione o intervalo a apagar.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Este documento não pode ser apagado diretamente.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Abra um disco físico inteiro em uma guia para apagá-lo.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Esta fonte de dados está na lista de evidências e não pode ser gravada.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>O Windows está usando este disco (sistema, inicialização ou arquivo de paginação), portanto ele não pode ser apagado.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Não foi possível bloquear o volume {0}, portanto nada foi apagado.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>A gravação foi recusada: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>O apagamento falhou: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Apagando {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Passagem {0} de {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Verificando</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Parar o apagamento? A parte já sobrescrita continua sobrescrita; o restante mantém seus dados originais.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Erro de gravação</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Não foi possível gravar no deslocamento {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Ignorar e continuar</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Parar</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Resultado do apagamento</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>{0} bytes apagados em {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>A verificação foi bem-sucedida.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {A verificação encontrou # intervalo que não confere:} other {A verificação encontrou # intervalos que não conferem:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# intervalo não pôde ser gravado:} other {# intervalos não puderam ser gravados:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>O apagamento foi interrompido. Os dados até o deslocamento {0} foram sobrescritos na passagem {1}; o restante mantém o conteúdo anterior.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>A verificação foi interrompida. Todas as passagens já tinham sido gravadas.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>O apagamento foi interrompido após um erro de gravação no deslocamento {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Arquivos ignorados: {0} (compactados {1}, esparsos {2}, residentes {3}, inconsistentes {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Apagar o espaço livre</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Método</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Pelo Windows (um volume montado)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Gravação direta (o sistema de arquivos desta guia)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Nenhum volume montado pode ser usado.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Para gravar diretamente, mostre primeiro o sistema de arquivos desta guia.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Espaço livre a sobrescrever: {0} bytes</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Método: pelo Windows (arquivos temporários preenchem o espaço livre e são excluídos no final)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Método: gravação direta nos clusters não alocados</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Enquanto isto é executado, o volume não tem espaço livre. Os outros aplicativos continuam funcionando, mas não podem salvar novos dados.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Se as informações de alocação do sistema de arquivos estiverem erradas, os arquivos podem ser danificados.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Apagar o espaço livre</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>O sistema de arquivos não está consistente ({0}). Repare-o com o chkdsk e tente novamente.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>A gravação direta é compatível apenas com NTFS, FAT12/16/32 e exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Salve ou descarte primeiro as alterações desta guia.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Estes arquivos temporários não puderam ser excluídos. Exclua-os manualmente:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>{0} bytes de espaço livre sobrescritos em {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Calculando o espaço livre</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>O apagamento do espaço livre foi interrompido. Os arquivos temporários foram excluídos.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Apagar o slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Arquivos: {0}, slack a sobrescrever: {1} bytes</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Apagar o slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Procurando o slack dos arquivos</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>{0} bytes de slack sobrescritos em {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Ocultar o conteúdo dos arquivos</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Arquivos ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Padrão</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (padrão)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Aleatório</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Bytes Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Bytes Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Substituir também os nomes por “_” do mesmo comprimento</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Registro de ocultação (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>O conteúdo muda como uma edição. Nada é gravado até que você salve; use Salvar como para salvar uma nova imagem.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Ocultar</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Procurando os dados a ocultar</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {# arquivo ocultado} other {# arquivos ocultados}} ({1} bytes). Use Salvar como para salvar uma nova imagem.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Não havia nada a ocultar.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Arquivos não ocultados</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# item não foi ocultado:} other {# itens não foram ocultados:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>pasta</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>item excluído</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>os metadados estão danificados</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>as informações de fragmentos estão incorretas</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>os dados residentes não foram encontrados</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>metadados do sistema de arquivos</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Não foi possível substituir os nomes de: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>O documento é somente leitura.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Sobrescrever a imagem original?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Este documento tem ocultações. Ao salvar, elas são gravadas no original {0} e isso não pode ser desfeito. Para manter o original, use Salvar como.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Sobrescrever {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Não foi possível gravar o registro de ocultação: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Insira o padrão como bytes hex (por exemplo 00 ou A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
 </root>
