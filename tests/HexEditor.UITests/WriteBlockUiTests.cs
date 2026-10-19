@@ -214,6 +214,19 @@ public sealed class WriteBlockUiTests
         // 3. 「セクタ範囲を保存」(読み取り) は使える。
         JsonObject save = await WriteBlock(app, "commandState", ("id", "forensics.sectors.save"));
         Assert.True(save["enabled"]!.GetValue<bool>(), save["reason"]?.GetValue<string>());
+
+        // 代替データストリーム (TOOL-21) の作成・名前の変更・削除・読み込みも無効 (一覧と書き出しは使える)。
+        string adsFile = Path.Combine(ctx.Root, "ads-target.bin");
+        File.WriteAllBytes(adsFile, [1, 2, 3]);
+        JsonObject ads = await app.SendAsync("tcAds", ToolsCalcTests.Args("load", ("path", adsFile)));
+        if (ads["supported"]?.GetValue<bool>() == true)
+        {
+            JsonObject buttons = ads["buttons"]!.AsObject();
+            foreach (string button in new[] { "Create", "Rename", "Delete", "Import" })
+            {
+                Assert.False(buttons[button]!.GetValue<bool>(), button);
+            }
+        }
     });
 
     [Fact]

@@ -205,14 +205,14 @@ public sealed partial class TabTests
     [Fact]
     public Task Tab_context_menu_has_the_specified_items() => UiTestContext.RunAsync(async ctx =>
     {
-        // UI-09 の仕様 9 の項目と順序。
+        // UI-09 の仕様 9 の項目と順序 (ファイルのタブには FOR-21 の仕様 2 の「ディスクイメージとして開き直す」も出る)。
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
         JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
         Assert.Equal(
             ["TabMenu_Close", "TabMenu_CloseOthers", "TabMenu_CloseRight", "TabMenu_CloseSaved", "TabMenu_CloseAll", "TabMenu_Pin",
                 "TabMenu_NewView", "TabMenu_ShowToRight",
                 "TabMenu_MoveToNewWindow", "TabMenu_MoveToWindow", "TabMenu_CopyPath", "TabMenu_RevealInExplorer", "TabMenu_ReadOnly",
-                "TabMenu_CompareSelectLeft", "TabMenu_CompareWithLeft", "TabMenu_CompareSaved", "TabMenu_Ads"],
+                "TabMenu_CompareSelectLeft", "TabMenu_CompareWithLeft", "TabMenu_CompareSaved", "TabMenu_ReopenAsDiskImage", "TabMenu_Ads"],
             items.Select(i => i!["id"]!.GetValue<string>()));
 
         // パスをコピー (アプリ内のクリップボードの代わりに入る)。

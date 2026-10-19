@@ -314,17 +314,21 @@ public sealed partial class MainWindow
         }
     }
 
-    /// <summary>見つけたファイルの内容 (縮小表示用。大きすぎれば null)。</summary>
-    internal byte[]? ReadCarvedBytes(CarvedFile file)
+    /// <summary>見つけたファイルの内容 (縮小表示用。大きすぎれば null)。読み込みは UI のスレッドの外で行う (ディスクの読み込みで UI を止めない)。</summary>
+    internal async Task<byte[]?> ReadCarvedBytesAsync(CarvedFile file)
     {
         if (ForensicsService.CarvingTarget is not DocumentViewModel target || !Vm.Documents.Contains(target) || file.Length > int.MaxValue / 2)
         {
             return null;
         }
 
-        byte[] bytes = new byte[file.Length];
-        Core.Sources.ReadResult r = target.Document.DataSnapshot.Read(file.Offset, bytes);
-        return r.Unreadable.Count == 0 && r.BytesReturned == bytes.Length ? bytes : null;
+        Core.Engine.DocumentSnapshot snapshot = target.Document.DataSnapshot;
+        return await Task.Run(() =>
+        {
+            byte[] bytes = new byte[file.Length];
+            Core.Sources.ReadResult r = snapshot.Read(file.Offset, bytes);
+            return r.Unreadable.Count == 0 && r.BytesReturned == bytes.Length ? bytes : null;
+        });
     }
 
     internal void OpenCarvingFolder()
