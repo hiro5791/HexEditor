@@ -482,6 +482,11 @@
       "type": "boolean",
       "default": true
     },
+    "forensics.device.autoHpaCheck": {
+      "description": "Check for HPA / DCO when a disk is opened",
+      "type": "boolean",
+      "default": true
+    },
     "forensics.report.header": {
       "description": "Report header text",
       "type": "string",
@@ -501,6 +506,11 @@
         "local"
       ],
       "default": "both"
+    },
+    "forensics.writeBlock.alwaysOnStartup": {
+      "description": "Always turn on write protection mode at startup",
+      "type": "boolean",
+      "default": false
     },
     "formats.gapFill": {
       "description": "Fill value for gaps in Intel HEX and S-record files",

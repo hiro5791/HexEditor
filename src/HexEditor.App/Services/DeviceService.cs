@@ -304,7 +304,7 @@ public sealed class DeviceService : IAsyncDisposable
     /// OS の USB 書き込み保護 (FOR-02) の今の値を読む保存先。レジストリの読み取りは管理者権限なしでできるため、UI のプロセスで読む。
     /// テスト用のビルドでは偽物 (実機のレジストリに触れない)。
     /// </summary>
-    public IUsbWriteProtectStore UsbWriteProtectReader => TestHooks.Active ? TestHooks.UsbWriteProtect! : RegistryUsbWriteProtectStore.Instance;
+    public IUsbWriteProtectStore UsbWriteProtectReader => TestHooks.UsbWriteProtect ?? RegistryUsbWriteProtectStore.Instance;
 
     /// <summary>
     /// 値を書き換える経路 (FOR-02 の仕様 2): アプリ全体を管理者として実行していれば同じプロセス、そうでなければ補助プロセス (UAC の確認が出る)。
@@ -312,14 +312,14 @@ public sealed class DeviceService : IAsyncDisposable
     /// </summary>
     public async Task<IUsbWriteProtectStore?> UsbWriteProtectWriterAsync(CancellationToken cancellationToken = default)
     {
-        if (TestHooks.Active)
+        if (TestHooks.UsbWriteProtect is { } fake)
         {
             if (!IsElevated)
             {
                 MarkFakeHelperRunning();
             }
 
-            return TestHooks.UsbWriteProtect;
+            return fake;
         }
 
         if (IsElevated)

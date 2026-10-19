@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using HexEditor.Core.Devices;
 using HexEditor.Core.Elevation;
 using HexEditor.Core.Processes;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Elevated;
 
@@ -121,7 +122,7 @@ internal static class Program
                 return ExitHandshake;
             }
 
-            if (Backend(options) is not ({ } devices, { } processes))
+            if (Backend(options) is not ({ } devices, { } processes, { } usb))
             {
                 await pipe.DisposeAsync();
                 return ExitBadArguments;
@@ -129,7 +130,7 @@ internal static class Program
 
             Log($"Connected to {parentPid}");
             string version = options.TryGetValue("--app-version", out string? v) ? v : AppVersion();
-            var operations = new PrivilegedOperations(devices, processes, Log, version);
+            var operations = new PrivilegedOperations(devices, processes, Log, version, usb);
             var server = new HelperServer(pipe, operations, Log) { IdleTimeout = idleMinutes <= 0 ? null : TimeSpan.FromMinutes(idleMinutes) };
             HelperServerExit exit = await server.RunAsync(stop.Token);
             (devices as IDisposable)?.Dispose();
@@ -137,17 +138,18 @@ internal static class Program
         }
     }
 
-    private static (IDeviceAccess Devices, IProcessAccess Processes)? Backend(Dictionary<string, string> options)
+    private static (IDeviceAccess Devices, IProcessAccess Processes, IUsbWriteProtectStore Usb)? Backend(Dictionary<string, string> options)
     {
 #if HEX_TEST_HOOKS
-        // テスト用のビルドだけ: 偽のデバイス・プロセスで動かす (補助プロセスの通信を、実際のディスクに触れずに確かめる)。
+        // テスト用のビルドだけ: 偽のデバイス・プロセスで動かす (補助プロセスの通信を、実際のディスクに触れずに確かめる)。OS の USB 書き込み保護
+        // (FOR-02) もメモリ上の偽物にし、レジストリには触れない。
         if (options.TryGetValue("--test-fake-devices", out string? deviceSpec))
         {
             FakeDeviceSpec spec = FakeDeviceSpec.Parse(File.ReadAllText(deviceSpec));
             FakeProcessListSpec processSpec = options.TryGetValue("--test-fake-processes", out string? p)
                 ? FakeProcessListSpec.Parse(File.ReadAllText(p)) : new FakeProcessListSpec();
             Log("Using fake devices (test hooks)");
-            return (new FakeDeviceAccess(spec, elevated: true), new FakeProcessAccess(processSpec, elevated: true));
+            return (new FakeDeviceAccess(spec, elevated: true), new FakeProcessAccess(processSpec, elevated: true), new FakeUsbWriteProtectStore());
         }
 #else
         // 製品版のビルドは偽のデバイスを持たない。テスト用の引数を渡されたら、実際のディスク・プロセスに触れずに止める
@@ -159,7 +161,7 @@ internal static class Program
         }
 #endif
         Win32ProcessAccess.EnableDebugPrivilege();
-        return (Win32DeviceAccess.Instance, Win32ProcessAccess.Instance);
+        return (Win32DeviceAccess.Instance, Win32ProcessAccess.Instance, RegistryUsbWriteProtectStore.Instance);
     }
 
     /// <summary>

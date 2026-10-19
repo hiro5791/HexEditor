@@ -14,7 +14,7 @@ namespace HexEditor.UITests;
 /// プロセスは管理者として動く (UAC は「確認なしで昇格」)。「一般ユーザー (CI)」のケースはアプリを昇格していないトークンで起動する。
 /// </summary>
 [Trait(UiTest.Category, UiTest.UI)]
-public sealed class PrivilegedTests
+public sealed partial class PrivilegedTests
 {
     private static readonly Lazy<Dictionary<string, string>> En = new(() => UiHelpers.LoadResw("en"));
 

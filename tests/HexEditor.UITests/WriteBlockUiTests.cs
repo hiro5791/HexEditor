@@ -147,6 +147,7 @@ public sealed class WriteBlockUiTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FOR-01-04")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Saving_an_edited_file_is_refused_but_save_as_elsewhere_works() => UiTestContext.RunAsync(async ctx =>
     {
         string evidence = ctx.CopyTestData("TD-SEQ-1M", "evidence.bin");

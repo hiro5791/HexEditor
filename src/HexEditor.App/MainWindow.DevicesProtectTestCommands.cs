@@ -67,9 +67,66 @@ public sealed partial class MainWindow
 
             case "tcMemDump":
                 return await TestMemoryDumpAsync(action, request);
+            case "tcHelperProbe":
+                return await TestHelperWriteBlockProbeAsync(request);
             default:
                 return null;
         }
+    }
+
+    /// <summary>
+    /// TC-FOR-01-05 (CI の管理者のランナーだけ): 本物の補助プロセスを管理者のアプリから直接起動し (UAC は出ない)、<c>SetWriteBlock</c> の後に
+    /// 読み取り・書き込みの要求を直接送って、それぞれの状態を返す。CI の管理者のランナー (環境変数) でなければ何もせずに例外にする
+    /// (開発者の PC の実機のディスクに触れない)。
+    /// </summary>
+    private async Task<JsonObject> TestHelperWriteBlockProbeAsync(JsonObject request)
+    {
+        if (!TestHooks.IsCiPrivilegedRunner || !App.Devices.IsElevated)
+        {
+            throw new InvalidOperationException("tcHelperProbe runs only on the elevated CI runner.");
+        }
+
+        string disk = request["disk"]!.GetValue<string>();
+        string volume = request["volume"]!.GetValue<string>();
+        await using var session = new Core.Elevation.HelperSession(new Core.Elevation.HelperSessionOptions
+        {
+            HelperPath = Path.Combine(AppContext.BaseDirectory, "HexEditor.Elevated.exe"),
+            Launcher = new Core.Elevation.DirectHelperLauncher(),
+            AppVersion = Hosting.Program.Environment.AppVersion,
+            ExtraArguments = ["--app-version", Hosting.Program.Environment.AppVersion],
+            IdleMinutes = 0,
+            RequestTimeout = TimeSpan.FromSeconds(30),
+            ConnectTimeout = TimeSpan.FromSeconds(60),
+        });
+        Core.Elevation.HelperClient client = await session.ConnectAsync();
+        uint Status((uint Status, byte[] Body) r) => r.Status;
+        var result = new JsonObject
+        {
+            ["setWriteBlock"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.SetWriteBlock, 0, new byte[] { 1 })),
+        };
+
+        // 1. 読み取りのみの OpenDevice と ReadSectors (LBA 0)。
+        (uint openStatus, byte[] openBody) = await client.SendAsync(Core.Elevation.HelperCommand.OpenDevice, 0, new Core.Elevation.BodyWriter().Text(disk).ToArray());
+        result["openRead"] = openStatus;
+        uint handle = openStatus == 0 ? new Core.Elevation.BodyReader(openBody).U32() : 0;
+        result["readSectors"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.ReadSectors, 0, new Core.Elevation.BodyWriter().U32(handle).I64(0).U32(512).ToArray()));
+
+        // 2. 読み書きの OpenDevice。3. WriteSectors (LBA 100、FF × 512)。
+        result["openWrite"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.OpenDevice, Core.Elevation.HelperProtocol.FlagWritable,
+            new Core.Elevation.BodyWriter().Text(disk).ToArray()));
+        result["writeSectors"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.WriteSectors, 0,
+            new Core.Elevation.BodyWriter().U32(handle).I64(100 * 512).Bytes(Enumerable.Repeat((byte)0xFF, 512).ToArray()).ToArray()));
+
+        // 4. ボリュームの LockVolume・DismountVolume。
+        (uint volumeStatus, byte[] volumeBody) = await client.SendAsync(Core.Elevation.HelperCommand.OpenDevice, 0, new Core.Elevation.BodyWriter().Text(volume).ToArray());
+        result["openVolume"] = volumeStatus;
+        uint volumeHandle = volumeStatus == 0 ? new Core.Elevation.BodyReader(volumeBody).U32() : 0;
+        result["lock"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.LockVolume, 0, new Core.Elevation.BodyWriter().U32(volumeHandle).ToArray()));
+        result["dismount"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.DismountVolume, 0, new Core.Elevation.BodyWriter().U32(volumeHandle).ToArray()));
+
+        // 5. GetUsbWriteProtect (読み取り。値は変えない)。
+        result["getUsb"] = Status(await client.SendAsync(Core.Elevation.HelperCommand.GetUsbWriteProtect, 0, ReadOnlyMemory<byte>.Empty));
+        return result;
     }
 
     private JsonObject TestWriteBlock(string action, JsonObject request)

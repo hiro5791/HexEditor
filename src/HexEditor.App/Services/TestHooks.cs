@@ -217,7 +217,9 @@ public static class TestHooks
     {
         get
         {
-            if (!Active)
+            // CI の管理者のランナー (使い捨て) の TC-FOR-02-02 だけは、フック realUsbWriteProtect で実機のレジストリの経路を使う
+            // (環境変数 HEXEDITOR_CI_PRIVILEGED=1 と GITHUB_ACTIONS=true の両方がなければ、フックがあっても偽物のまま)。
+            if (!Active || (Settings.RealUsbWriteProtect && IsCiPrivilegedRunner))
             {
                 return null;
             }
@@ -228,6 +230,10 @@ public static class TestHooks
             }
         }
     }
+
+    /// <summary>CI の管理者のランナーで動いている (実機の補助プロセス・レジストリを使ってよいテストの条件)。</summary>
+    public static bool IsCiPrivilegedRunner =>
+        Environment.GetEnvironmentVariable("HEXEDITOR_CI_PRIVILEGED") == "1" && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
 
     /// <summary>偽のプロセス (ENG-32 の UI テスト)。</summary>
     public static FakeProcessAccessPair? FakeProcesses =>
