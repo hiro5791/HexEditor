@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>پنجرهٔ {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(بدون زبانه)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>رونوشت مسیر</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>بازکردن دوباره به‌عنوان تصویر دیسک</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>نمایش در Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>فقط خواندنی</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>اندازه: {0}</value></data>
@@ -6634,6 +6635,418 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>ستون توضیحات</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>نمایش نام نمادها، نام مقصد انشعاب‌ها و رشته‌های ارجاع‌شده.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>دیس‌اسمبل</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>جرم‌یابی دیجیتال</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>جرم‌یابی دیجیتال</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>نمایش تاریخ و زمان</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>نحوهٔ نمایش زمان‌ها در فهرست‌ها و جزئیات جرم‌یابی: UTC و زمان محلی، فقط UTC، یا فقط زمان محلی. زمان‌ها همیشه با UTC ثبت می‌شوند.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC و زمان محلی</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>فقط UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>فقط زمان محلی</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>روشن کردن حالت مسدودسازی نوشتن هنگام بازکردن کیس</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>در حالت خاموش، پرسیده می‌شود که روشن شود یا نه.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>ثبت اقدامات پیمایش در گزارش ممیزی</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>ثبت پرش‌ها، جست‌وجوها و افزودن نشانک‌ها. تغییرات داده و شواهد همیشه ثبت می‌شوند.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>نمایش بندانگشتی تصاویر استخراج‌شده با carving</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>نمایش پیش‌نمایش کوچک فایل‌های JPEG، PNG، GIF و BMP در نتایج carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>تصویر نشان گزارش</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>مسیر تصویر PNG، JPEG یا SVG که در بالای گزارش‌های HTML نمایش داده می‌شود.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>متن سرصفحهٔ گزارش</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>یک خط متن زیر عنوان گزارش‌ها، مانند نام آزمایشگاه شما.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>کیس جدید</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>تحقیق شواهد ایجاد کیس پوشه new case investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>بازکردن کیس</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>تحقیق شواهد بارگذاری کیس پوشه open case investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>بستن کیس</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>تحقیق پایان بستن کیس close case investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>افزودن شاهد</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>ثبت تصویر دیسک هش اکتساب register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>ویژگی‌های کیس</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>منطقهٔ زمانی بازرس سازمان time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>نمایش گزارش ممیزی</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>زنجیرهٔ نگهداری تاریخچه گزارش chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>راستی‌آزمایی گزارش ممیزی</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>دست‌کاری زنجیرهٔ هش یکپارچگی بررسی tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>مدیریت امضاهای carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>انواع فایل سرصفحه پاصفحه جادویی تعریف file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>carving فایل‌ها</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>بازیابی استخراج فایل‌های حذف‌شده پویش recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>ایجاد گزارش</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf خروجی مستندسازی html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>نمایش یا پنهان‌کردن فهرست شواهد</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>کیس شواهد پنل case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>نمایش یا پنهان‌کردن گزارش ممیزی</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>کیس گزارش ممیزی پنل case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>نمایش یا پنهان‌کردن نتایج carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>فایل‌های استخراج‌شده پنل نتایج carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>شواهد</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>گزارش ممیزی</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>نتایج carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>جرم‌یابی دیجیتال</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>ی</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>کیس</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>ک</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>کیس جدید...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>ک</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>بازکردن کیس...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>بستن کیس</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>افزودن شاهد...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>ویژگی‌های کیس...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>و</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>فهرست شواهد</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>نمایش گزارش ممیزی</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>راستی‌آزمایی گزارش ممیزی</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>carving فایل‌ها...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>مدیریت امضاها...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>نتایج</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>ایجاد گزارش...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>گ</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>کیس: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>زمان نامعتبر</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>یک کیس از قبل باز است. ابتدا آن را ببندید.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>هیچ کیسی باز نیست.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>کیس جدید</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>ویژگی‌های کیس</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>شمارهٔ کیس (الزامی)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>نام کیس (الزامی)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>بازرس</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>سازمان</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>پوشهٔ کیس</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>مرور...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>منطقهٔ زمانی</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>برای خواندن زمان‌های بدون منطقهٔ زمانی، مانند زمان فایل‌های FAT، استفاده می‌شود.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>ایجاد</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>کیس «{0}» ایجاد شد.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>کیس «{0}» باز شد.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>ایجاد کیس ممکن نشد: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>شمارهٔ کیس و نام کیس الزامی هستند.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>خواندن فایل کیس ممکن نیست (خط {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>بازکردن کیس ممکن نشد: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>ذخیرهٔ کیس ممکن نشد: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>حالت مسدودسازی نوشتن برای این کیس روشن شود؟</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>روشن کردن</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>حالت مسدودسازی نوشتن برای این کیس روشن شد.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>افزودن شاهد</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>افزودن شاهد</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} به کیس افزوده می‌شود. منبع داده تغییر نمی‌کند.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>هش‌ها اکنون محاسبه شوند</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>این منبع داده از قبل با نام {0} ثبت شده است.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>فقط دیسک‌ها، حجم‌ها، فایل‌های تصویر و فایل‌ها را می‌توان به‌عنوان شاهد افزود.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>در حال هش‌گیری از شاهد {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>هش‌های {0} ثبت شد.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>هش {0} محاسبه نشد. شاهد در فهرست می‌ماند.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>داده در آفست 0x{1} خوانده نمی‌شود، بنابراین هش {0} ثبت نشد.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>محاسبه نشده</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} از فهرست حذف شد. به منبع داده دست زده نشد.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} در دسترس نیست.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>بازکردن شاهد ممکن نشد: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} مورد</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>هیچ کیسی باز نیست. از منوی جرم‌یابی دیجیتال یک کیس ایجاد کنید یا باز کنید.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>هنوز شاهدی افزوده نشده است.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>شاهد</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>مسیر</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>ظرفیت (بایت)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>هش‌ها</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>راستی‌آزمایی</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>زمان افزودن (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>زمان افزودن (محلی)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>دیسک</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>حجم</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>تصویر</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>فایل</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>حافظه</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>موفق</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>ناموفق</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>راستی‌آزمایی نشده</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>بازکردن (فقط‌خواندنی)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>حذف از فهرست</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>کپی هش‌ها</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>کپی مسیر</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>ایجاد تصویر...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>راستی‌آزمایی...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} ورودی</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>هیچ کیسی باز نیست. گزارش ممیزی متعلق به یک کیس است.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>هنوز چیزی ثبت نشده است.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(این خط ورودی معتبری نیست. ممکن است گزارش تغییر داده شده باشد.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>راستی‌آزمایی</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>خروجی CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>خروجی JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>گزارش ممیزی سالم است ({0} خط بررسی شد).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>زنجیرهٔ گزارش ممیزی در خط {0} شکسته است. ممکن است گزارش تغییر داده شده باشد.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>ردیف</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>زمان (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>زمان (محلی)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>کاربر</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>عملیات</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>شاهد</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>نتیجه</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>جزئیات</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>موفق</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>ناموفق</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>لغو شد</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>نوشتن در گزارش ممیزی ممکن نیست</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>تا زمانی که نوشتن در گزارش دوباره ممکن شود، عملیات نوشتن داده خاموش است. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>تلاش دوباره</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>هنوز نوشتن در گزارش ممیزی ممکن نیست.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>نوشتن در گزارش ممیزی ممکن نبود، بنابراین عملیات انجام نشد.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>نوشتن در گزارش ممیزی ممکن نیست، بنابراین عملیات نوشتن داده خاموش شد.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>در حال راستی‌آزمایی گزارش ممیزی</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>راستی‌آزمایی گزارش ممیزی ممکن نشد: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>در حال خروجی گرفتن از گزارش ممیزی</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>گزارش ممیزی در {0} ذخیره شد.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>خروجی گرفتن از گزارش ممیزی ممکن نشد: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>امضاهای carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>تعریف‌ها</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>داخلی</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>غیرفعال</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>پسوند (بدون نقطه)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>سرصفحه‌ها (بایت‌های Hex، هر خط یکی؛ ?? هر بایتی، ? هر رقمی)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>آفست سرصفحه از ابتدای فایل</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>پاصفحه (بایت‌های Hex، اختیاری)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>تعداد بایت‌های شمول‌شده از پاصفحه (خالی = خود پاصفحه)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>بیشینهٔ اندازه</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>کمینهٔ اندازه</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>گرفتن اندازه از یک مقدار در سرصفحه</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>مقدار اندازه: آفست از ابتدای فایل</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>مقدار اندازه: پهنا (بیت)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>مقدار اندازه: ترتیب بایت</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>مقدار اندازه: عددی که افزوده می‌شود</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>بررسی ساختار (نام داخلی یا الگوی ساختار)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>بررسی‌های داخلی: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>جست‌وجوی سرصفحه فقط در ابتدای سکتور</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>استفاده از این تعریف هنگام پویش</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>جدید</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>تکثیر</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>درون‌ریزی...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>برون‌بری...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>آزمایش این تعریف</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>ابتدا یک محدوده در سند انتخاب کنید.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>در حال آزمایش...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>در حال آزمایش تعریف carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>{0} مورد در انتخاب یافت شد. نخستین موقعیت‌ها:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>{0} تعریف درون‌ریزی شد.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} تعریف درون‌ریزی نشد:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>در {0} ذخیره شد.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>درون‌ریزی تعریف‌ها ممکن نشد: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>ذخیرهٔ تعریف‌ها ممکن نشد: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>آزمایش ناموفق بود: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: یک عدد یا اندازه‌ای مانند 4096، 0x1000 یا 1M وارد کنید.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>یک نام وارد کنید.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>این نام قبلاً استفاده شده است.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>یک پسوند وارد کنید.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>پسوند نویسه‌هایی دارد که در نام فایل مجاز نیستند.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>حداقل یک سرصفحه وارد کنید.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>سرصفحه دنبالهٔ بایت Hex معتبری نیست (تعداد ارقام فرد یا نویسه‌های نامعتبر).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>سرصفحه حداقل به یک بایت ثابت نیاز دارد.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>آفست سرصفحه نمی‌تواند منفی باشد.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>پاصفحه دنبالهٔ بایت Hex معتبری نیست.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>تعداد بایت‌های شمول‌شده نمی‌تواند منفی باشد.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>بیشینهٔ اندازه باید حداقل 1 باشد.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>کمینهٔ اندازه نمی‌تواند منفی باشد.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>بیشینهٔ اندازه از کمینهٔ اندازه کوچک‌تر است.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>مقدار اندازه معتبر نیست.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>نوع یک مقدار نادرست است.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>carving فایل‌ها</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>شروع</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>محدوده</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>کل سند</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>انتخاب</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>فقط فضای تخصیص‌نیافته</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>فقط فضای اسلک</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>انواع فایل</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>جست‌وجوی سرصفحه درون فایلِ یافت‌شده انجام نشود</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>نوشتن فایل‌های استخراج‌شده در یک پوشه</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>پوشهٔ خروجی</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>در حال carving فایل‌ها</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>carving پایان یافت: {0} فایل یافت شد.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>carving لغو شد. {0} فایل یافت شد؛ نتایج و مانیفست نگه داشته شدند.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>carving متوقف شد زیرا نوشتن در پوشهٔ خروجی ممکن نبود. {0} فایل یافت شد.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>carving ناموفق بود: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>پوشهٔ خروجی روی دیسکی است که در حال بررسی است. پوشه‌ای روی دیسک دیگر انتخاب کنید.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>فضای خالی پوشهٔ خروجی کافی نیست. موردنیاز: {0} بایت. آزاد: {1} بایت.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>سیستم فایل پوشهٔ خروجی هر فایل را به {0} بایت محدود می‌کند. پوشهٔ دیگری انتخاب کنید.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>پوشهٔ خروجی قابل استفاده نیست.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>اطلاعات تخصیص برای این سند در دسترس نیست.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>نوشتن فایل‌های استخراج‌شده ممکن نیست</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>فضای پوشهٔ خروجی ({0}) تمام شده است. فایل بعدی به {1} بایت نیاز دارد اما {2} بایت آزاد است. فضا آزاد کنید، پوشهٔ دیگری انتخاب کنید یا متوقف کنید.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>نوشتن در {0} ممکن نیست: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>تلاش دوباره</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>انتخاب پوشهٔ دیگر...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>توقف</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>carving از قبل در حال اجراست.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>carving فایل‌ها...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>بازکردن پوشه</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>carving اجرا نشده است. جرم‌یابی دیجیتال، سپس Carving و سپس carving فایل‌ها را انتخاب کنید.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>هیچ فایلی یافت نشد.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} فایل</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>پیش‌نمایش تصویر استخراج‌شده</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>ردیف</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>آفست</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>تعیین‌کنندهٔ طول</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>فایل خروجی</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>ساختار</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>مقدار اندازه</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>پاصفحه</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>بیشینهٔ اندازه</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>نوع: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>آفست: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>طول: {0} بایت</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>تعیین‌کنندهٔ طول: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>ایجاد گزارش</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>ایجاد</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>محتویات</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>دیسک: {0} (اندازهٔ سکتور {1} بایت)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>ردیف</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>طرح‌بندی</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA شروع</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>سکتورها</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>اندازه (بایت)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>سیستم فایل</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>رمزگذاری</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>تخصیص‌نیافته</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>چیدمان</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>سند</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>آفست حجم</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>برچسب</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>شمارهٔ سریال</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>اندازهٔ خوشه (بایت)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>خوشه‌ها</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>خوشه‌های آزاد</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>مشکلات</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>حجم‌های منطقی: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>گروه</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>نوع</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>اندازه (بایت)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>چیدمان</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>اعضا</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>تصویر</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>منبع</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>زمان اکتساب</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>هش‌ها</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>گزارش اکتساب</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (یک فایل، بدون اینترنت باز می‌شود)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>همهٔ ورودی‌های گزارش ممیزی</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>گزارش ممیزی از (UTC، اختیاری)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>گزارش ممیزی تا (UTC، اختیاری)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>بایت‌های Hex dump برای هر نشانک (0 تا 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>ذخیره در</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>بازه تاریخ و زمان معتبری نیست.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>طول Hex dump باید بین 0 تا 4096 بایت باشد.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>در حال ایجاد گزارش</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>ایجاد گزارش ممکن نشد: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>{0} ایجاد شد. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>ایجاد PDF ممکن نشد ({0}). به‌جای آن {1} ایجاد شد.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>در PDF فقط ردیف‌های ابتدایی فهرست‌های طولانی آمده است. برای فهرست کامل از گزارش HTML یا فایل‌های CSV استفاده کنید.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>بازکردن</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>بازکردن پوشه</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>گزارش جرم‌یابی دیجیتال</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>شمارهٔ کیس</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>نام کیس</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>بازرس</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>سازمان</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>زمان ایجاد کیس</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>زمان ایجاد گزارش</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>منطقهٔ زمانی</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>ایجادکننده</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>صفحه</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>از</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>کیس</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>جلد</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>شواهد</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>سوابق اکتساب</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>اطلاعات دستگاه</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>پارتیشن‌ها</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>سیستم‌های فایل</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>نشانک‌ها</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>نتایج carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>گزارش ممیزی</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>شاهد</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>مسیر</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>مدل</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>شمارهٔ سریال</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>ظرفیت (بایت)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>سکتورها</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>اندازهٔ سکتور</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>هش‌ها</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>راستی‌آزمایی</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>زمان افزودن (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>زمان افزودن (محلی)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>افزوده‌شده توسط</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>موفق</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>ناموفق</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>راستی‌آزمایی نشده</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>محاسبه نشده</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>دیسک</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>حجم</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>تصویر</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>فایل</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>حافظه</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>سند</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>آفست</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>توضیح</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>ردیف</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>آفست</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>تعیین‌کنندهٔ طول</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>فایل خروجی</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>فایل‌های یافت‌شده</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>ردیف</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>زمان (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>زمان (محلی)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>کاربر</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>رایانه</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>عملیات</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>شاهد</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>نتیجه</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>جزئیات</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>موفق</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>ناموفق</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>لغو شد</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>نمایش {0} ردیف نخست از {1} ردیف. فهرست کامل در فایل CSV پیوست یا گزارش HTML است.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>نمایش {0} ردیف نخست. فهرست کامل در گزارش HTML یا فایل CSV است.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>فهرست کامل</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>تخصیص‌نیافته</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>داده‌ای وجود ندارد.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>زمان نامعتبر</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>تغییر وضعیت پانل دیس‌اسمبل</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler disassembly assembly code دیس‌اسمبل کد اسمبلی</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>دیس‌اسمبل</value></data>
@@ -8195,4 +8608,1265 @@
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>کل صفحه</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>جا دادن در عرض</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>انتخاب پوشه...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[محافظت‌شده در برابر نوشتن]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>محافظت نوشتن</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>حالت محافظت نوشتن روشن است. برای خاموش کردن کلیک کنید.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>حالت محافظت نوشتن فقط جلوی نوشتن همین برنامه را می‌گیرد. نمی‌تواند جلوی نوشتن Windows یا برنامه‌های دیگر را بگیرد (مثلاً نوشتن‌هایی که سیستم فایل هنگام سوار کردن یک حجم انجام می‌دهد). از یک مسدودکنندهٔ نوشتن سخت‌افزاری یا محافظت نوشتن USB سیستم‌عامل هم استفاده کنید.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>حالت محافظت نوشتن خاموش شود؟</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>سندهای شاهدِ باز: {0}. پس از خاموش کردن این حالت، نوشتن در این سندها ممکن می‌شود:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>هیچ سند شاهدی باز نیست. پس از خاموش کردن این حالت، نوشتن در سندهای باز دوباره ممکن می‌شود.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>خاموش کردن محافظت نوشتن</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>منبع داده به‌صورت فقط‌خواندنی دوباره باز نشد. فقط داده‌هایی که پیش‌تر خوانده شده‌اند نمایش داده می‌شوند.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>اجازهٔ نوشتن در این سند</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>نوشتن مجاز است (استثنا از حالت محافظت نوشتن)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>حالت محافظت نوشتن خاموش است.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>فقط سندهای فایل را می‌توان از حالت محافظت نوشتن مستثنا کرد.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>این منبع داده به‌عنوان شاهد ثبت شده است، بنابراین نوشتن مجاز نمی‌شود.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>نوشتن برای این سند از قبل مجاز است.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>نوشتن در این سند مجاز شود؟</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>حالت محافظت نوشتن روشن می‌ماند، اما {0} ({1}) تا زمانی که آن را ببندید قابل ویرایش و ذخیره است. این کار در گزارش ممیزی ثبت می‌شود و برای سند باز قابل بازگردانی نیست.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>برای تأیید {0} را تایپ کنید</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>اجازهٔ نوشتن در {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>نوشتن در {0} تا زمان بسته شدن مجاز است.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>حالت محافظت نوشتن</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>دستگاه</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>د</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>بررسی HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>اطلاعات SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>پنل اطلاعات دستگاه</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>پ</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>اطلاعات رمزگذاری...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>بازکردن تخلیهٔ حافظه...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>تغییر حالت محافظت نوشتن</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>مسدودسازی نوشتن محافظت فقط‌خواندنی شواهد write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>اجازهٔ نوشتن در این سند</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>مسدودسازی نوشتن استثنا write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>تغییر محافظت نوشتن USB سیستم‌عامل</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>سیاست ذخیره‌ساز usb محافظت نوشتن رجیستری usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>بررسی HPA و DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>ناحیهٔ پنهان host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>نمایش اطلاعات SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>سلامت دیسک پایش خودکار nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>نمایش اطلاعات رمزگذاری</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt حجم رمزگذاری‌شده encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>تغییر نمایش اطلاعات دستگاه</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>پنل hpa smart دستگاه panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>بازکردن تخلیهٔ حافظه</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>تخلیهٔ خرابی minidump حافظهٔ فیزیکی ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>اطلاعات دستگاه</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>همیشه هنگام راه‌اندازی حالت محافظت نوشتن را روشن کن</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>در حالت خاموش، برنامه با حالتی که هنگام آخرین بستن داشت شروع می‌شود.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>هنگام بازکردن دیسک، HPA / DCO بررسی شود</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>دستورهای ATA فقط‌خواندنی را به دیسک می‌فرستد و در صورت یافتن ناحیه‌های پنهان اعلان نشان می‌دهد.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل روشن شود؟</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows از این پس نوشتن روی حافظه‌های USB که وصل می‌شوند را مسدود می‌کند (تنظیم StorageDevicePolicies WriteProtect). دستگاه‌هایی که از قبل وصل‌اند تا زمانی که دوباره وصل نکنید تأثیر نمی‌پذیرند. دیسک‌های داخلی SATA و NVMe محافظت نمی‌شوند. دسترسی مدیر لازم است.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل خاموش شود؟</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>تنظیم به حالت پیش از روشن کردن بازمی‌گردد. دستگاه‌های USB که از قبل وصل‌اند تا زمانی که دوباره وصل نکنید در برابر نوشتن محافظت‌شده می‌مانند. دسترسی مدیر لازم است.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>تغییر تنظیم</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>دسترسی مدیر لازم است. تنظیم تغییر نکرد.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>تنظیم تغییر نکرد (دسترسی رد شد؛ ممکن است با Group Policy مدیریت شود): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>تغییر تنظیم ممکن نشد: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل روشن است. برای اعمال، حافظه‌های USB را دوباره وصل کنید.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل خاموش است.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>محافظت نوشتن USB سیستم‌عامل هنوز روشن است</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows پس از بسته شدن این برنامه هم نوشتن روی حافظهٔ USB را مسدود نگه می‌دارد. پیش از خروج خاموش شود؟</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>خاموش کردن و خروج</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>خروج و روشن نگه داشتن</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>تغییر محافظت نوشتن USB سیستم‌عامل به دسترسی مدیر Windows نیاز دارد.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>دستگاه</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>بررسی HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>خواندن SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>خروجی JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>خروجی متن...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>یک دیسک فیزیکی باز کنید و بررسی HPA / DCO یا اطلاعات SMART را انتخاب کنید.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — ثبت‌شده در {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO بررسی نشده است.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>دیسک‌های NVMe HPA یا DCO ندارند؛ HPA / DCO کاربرد ندارد.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>اندازهٔ namespace: {0} بلوک ({1} بایت در هر بلوک)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>ظرفیت namespace: {0} بلوک</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>بررسی این مورد روی این دستگاه ممکن نیست (دستورها عبور نمی‌کنند، مثلاً در مبدل‌های USB یا دیسک‌های مجازی).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>دسترسی مدیر لازم است.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>دستور {0} ناموفق بود (وضعیت ATA {1}، خطا {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>بیشینهٔ LBA (IDENTIFY DEVICE، 28 بیتی): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>بیشینهٔ LBA (IDENTIFY DEVICE، 48 بیتی): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>بیشینهٔ LBA اصلی (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>بیشینهٔ LBA تعیین‌شده با DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>توسط دستگاه پشتیبانی نمی‌شود</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>توسط دستگاه پشتیبانی نمی‌شود</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: وجود دارد، {0} سکتور ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: وجود ندارد</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: تعیین نشد</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: وجود دارد، {0} سکتور ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: وجود ندارد</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: تعیین نشد</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>اطلاعات SMART خوانده نشده است.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>اطلاعات SMART روی این دستگاه خوانده نمی‌شود (مثلاً از طریق مبدل USB که از آن پشتیبانی نمی‌کند).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART روی این دستگاه غیرفعال است.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>جمع کنترلی داده‌های SMART مطابقت ندارد؛ مقادیر ممکن است نادرست باشند.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>مدل: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>شمارهٔ سریال: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>میان‌افزار: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>ظرفیت: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>اندازهٔ سکتور: {0} بایت منطقی، {1} بایت فیزیکی</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>اتصال: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>سرعت چرخش: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>بدون چرخش (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>پشتیبانی می‌شود</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>پشتیبانی نمی‌شود</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>برای استفاده از این دستور یک دیسک فیزیکی باز کنید.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>خواندن اطلاعات دستگاه ممکن نشد: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} ناحیه‌های پنهان دارد: HPA {1} سکتور، DCO {2} سکتور. ظرفیتی که Windows می‌بیند از ظرفیت واقعی دیسک کمتر است.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>نمایش جزئیات</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>اطلاعات دستگاه در {0} ذخیره شد.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>خروجی گرفتن از اطلاعات دستگاه ممکن نشد: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>شناسه</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>فعلی</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>بدترین</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>آستانه</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>خام (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>خام (دهدهی)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>وضعیت</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>سالم</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>هشدار</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>ناشناخته</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>دما</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>بیت‌های هشدار بحرانی: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>دما: {0} درجهٔ سانتی‌گراد</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>ذخیرهٔ در دسترس: {0}% (آستانه {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>درصد مصرف‌شده: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>داده‌های خوانده‌شده: {0} بایت</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>داده‌های نوشته‌شده: {0} بایت</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>دفعات روشن‌شدن: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>ساعت‌های روشن بودن: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>خاموشی‌های ناایمن: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>خطاهای رسانه و یکپارچگی داده: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>ثبت‌شده</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>دستگاه</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>مدل</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>شمارهٔ سریال</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>میان‌افزار</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>ظرفیت (بایت)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>اندازهٔ سکتور (منطقی / فیزیکی)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>اتصال</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>بیشینهٔ LBA (28 بیتی / 48 بیتی / اصلی / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>بررسی روی این دستگاه ممکن نیست</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>ندارد</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>دارد ({0} سکتور)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>کاربرد ندارد (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>شناسه</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>نام</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>فعلی</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>بدترین</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>آستانه</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>خام</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>وضعیت</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>هشدار</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>سالم</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>اطلاعات رمزگذاری</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>هیچ حجم رمزگذاری‌شده‌ای یافت نشد.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>محدودهٔ {0}: آفست {1}، {2} بایت</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>نوع: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>حجم APFS رمزگذاری‌شده (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (احتمالاً رمزگذاری‌شده)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>داده‌ای که احتمالاً رمزگذاری یا فشرده شده است (مثلاً VeraCrypt یا TrueCrypt؛ امضایی برای شناسایی آن‌ها وجود ندارد)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>نسخهٔ فراداده: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>روش رمزگذاری: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID حجم: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>ایجاد: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>توضیحات: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>وضعیت رمزگذاری: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>نامشخص</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>رمزگشایی‌شده</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>در حال انجام</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>کامل</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>متوقف‌شده</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>تاکنون رمزگذاری‌شده: {0} بایت</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>محافظ‌های کلید: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}، {1}، ایجاد در {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>کلید آشکار</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>کلید راه‌اندازی</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM و PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>گذرواژهٔ بازیابی</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>گذرواژه</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>ناشناخته (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>اسلات‌های کلید: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• حجم {0}: رمزگذاری‌شده</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• حجم {0}: رمزگذاری‌نشده</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>آنتروپی 64 KiB نخست: {0} بیت در هر بایت</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>هشدار: سه بلوک فراداده با هم مطابقت ندارند.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>هشدار: برخی بلوک‌های فراداده آسیب دیده‌اند؛ فقط مواردی که خوانده شدند نمایش داده می‌شوند.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>مرورگر سیستم فایل حجم‌های رمزگذاری‌شده را باز نمی‌کند.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows قفل این حجم BitLocker را باز کرده است ({0}). اگر آن را به‌عنوان حجم منطقی باز کنید، می‌توانید محتوایی را که Windows رمزگشایی می‌کند بخوانید.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>بازکردن به‌عنوان حجم منطقی</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>تخلیهٔ حافظه</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>قالب تخلیهٔ حافظهٔ {0} خوانده نشد. به‌صورت raw باز شود؟</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>بازکردن به‌صورت raw</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>بازکردن تخلیهٔ حافظه ممکن نشد: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>تخلیهٔ حافظه: {0}، ثبت‌شده در {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>تخلیهٔ حافظه: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>تصویر حافظهٔ فیزیکی (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>تخلیهٔ کامل حافظه</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>تخلیهٔ حافظهٔ هسته</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>تخلیهٔ کامل حافظه (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>تخلیهٔ حافظه</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>نوشتن داده ممکن نیست زیرا حالت محافظت نوشتن روشن است.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>تصویر</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>ایجاد تصویر...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>ایجاد تصویر اسکلتی...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>بازکردن تصویر...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>راستی‌آزمایی تصویر...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>اطلاعات تصویر</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>ط</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>همسان‌سازی دیسک...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>ه</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>ذخیرهٔ محدودهٔ سکتورها...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>ذ</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>بازگردانی محدودهٔ سکتورها...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>بازسازی RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>ز</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>ایجاد تصویر</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>اکتساب تصویر دیسک dd raw e01 شواهد acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>ایجاد تصویر اسکلتی</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>اسکلت خلوت تصویر فراداده skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>بازکردن تصویر به‌عنوان دیسک</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk split raw 001 تصویر دیسک</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>راستی‌آزمایی تصویر</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>راستی‌آزمایی هش md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>اطلاعات تصویر</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 سرصفحه اطلاعات کیس e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>همسان‌سازی دیسک</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>همسان‌سازی کپی دیسک سکتور clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>ذخیرهٔ محدودهٔ سکتورها</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>پشتیبان mbr gpt سکتورها backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>بازگردانی محدودهٔ سکتورها</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>بازگردانی mbr gpt سکتورها restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>بازسازی RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod stripe توازن raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>سند فعلی تصویر دیسک نیست.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>این کار به سند دیسک، حجم یا تصویر دیسک نیاز دارد.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>ابتدا دیسک، تصویر یا فایلی را که به‌عنوان منبع استفاده می‌شود باز کنید.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>بدون بخش‌های گم‌شده باز شد ({0}). محدودهٔ آن‌ها به‌صورت خطا خوانده می‌شود.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>خواندن تصویر {0} ممکن نشد (بخش: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>دیسک والد دیسک تفاضلی یافت نشد: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>بخش‌ها گم شده‌اند</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>این بخش‌ها گم شده‌اند: {0}. تصویر با بخش‌های موجود باز شود؟ محدودهٔ گم‌شده به‌صورت خطا خوانده می‌شود.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>بازکردن بخش‌های موجود</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw تقسیم‌شده</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>جمع کنترلی یک تکه (chunk) در {0} ({1} بایت) مطابقت ندارد. محدوده به‌صورت خطای خواندن نشان داده می‌شود.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>اطلاعات تصویر</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>فایل‌ها</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>اندازه</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} بایت ({1} سکتور)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>اندازهٔ سکتور</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>زمان اکتساب</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>ابزار اکتساب</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>دستگاه</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>تکه‌ها (chunk)</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} سکتور در هر chunk)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>فشرده‌سازی</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>فشرده</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>فشرده‌نشده</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} ذخیره‌شده</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>سکتورهای ناخوانا هنگام اکتساب</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>دیسک والد</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>بخش‌های گم‌شده</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>شمارهٔ کیس</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>شمارهٔ شاهد</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>بازرس</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>توضیحات</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>یادداشت‌ها</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>مطابق</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>نامطابق</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>مقدار مرجع وجود ندارد</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>به‌دلیل خطاهای خواندن راستی‌آزمایی ممکن نیست</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>ذخیره‌شده در تصویر</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>گزارش اکتساب</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>فهرست شواهد</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>مقدار واردشده</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>هنگام اکتساب محاسبه شد</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>دیسک مبدأ</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>ایجاد تصویر</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>ایجاد تصویر اسکلتی</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>حالت محافظت نوشتن خاموش است. توصیه می‌شود پیش از اکتساب شواهد آن را روشن کنید.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>روشن کردن حالت محافظت نوشتن</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>منبع: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>فقط انتخاب (تا مرز سکتورها گسترش می‌یابد)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>محدوده‌های موردِ اکتساب</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>کامل</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>خلوت (حذف ناحیه‌های تخصیص‌نیافته)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>اسکلتی (فقط جدول پارتیشن‌ها و فراداده سیستم فایل)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>نشانک‌ها و محدوده‌های چندانتخابی هم شامل شوند</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>خروجی</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>خروجی</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>مرور...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>اندازهٔ تقسیم / بخش (مثلاً 100M، 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>هش‌ها</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>تلاش مجدد هنگام خطای خواندن</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>مقدار پرکننده برای سکتورهای ناخوانا (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>واحد خواندن</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>راستی‌آزمایی پس از پایان</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>خطاهای خواندن</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>اطلاعات E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>فشرده‌سازی</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>هیچ</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>سریع (zlib سطح 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>بهترین (zlib سطح 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>شروع</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>خروجی را وارد کنید.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>اندازهٔ تقسیم باید حداقل 1 MiB باشد (مثلاً 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>تعداد تلاش مجدد را از 0 تا 100 وارد کنید.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>مقدار پرکننده را به‌صورت دو رقم hex وارد کنید (مثلاً 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>حداقل یک هش انتخاب کنید.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>خروجی روی همان دیسک فیزیکی منبع است. دیسک دیگری انتخاب کنید.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>خروجی روی دیسکی است که در فهرست شواهد است. دیسک دیگری انتخاب کنید.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>سیستم فایل خروجی ({0}) فایل‌هایی تا {1} بایت را مجاز می‌داند. از raw تقسیم‌شده یا E01 با اندازهٔ بخش کوچک‌تر استفاده کنید.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>خروجی به حدود {0} بایت نیاز دارد اما فقط {1} بایت آزاد است.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} از قبل وجود دارد. جایگزین شود؟</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>جایگزینی</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>سیستم فایل خروجی {0} است، نه NTFS، بنابراین ناحیه‌های مستثنا به‌صورت صفر نوشته می‌شوند و تصویر کوچک‌تر نمی‌شود.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>ایجاد تصویر: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>در حال محاسبهٔ محدوده‌های شمول‌شده</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>تحلیل {0} پارتیشن ممکن نشد و به‌صورت کامل شامل شد.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>ایجاد تصویر ممکن نشد. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>سکتورهای ناخوانا: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>تصویر ایجاد شد. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>راستی‌آزمایی: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} سکتور خوانده نشد و پر شد.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>اکتساب قطع شد. فایل‌هایی که تا اینجا نوشته شده بودند نگه داشته شدند.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>اکتساب قطع شد. فایل‌هایی که تا اینجا نوشته شده بودند حذف شدند.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>منبع از دست رفت. اکتساب متوقف شد.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>بازکردن گزارش اکتساب</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>نوشتن خروجی ممکن نشد: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>تلاش دوباره</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>قطع</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>اکتساب لغو شد. فایل‌هایی که تا اینجا نوشته شده‌اند نگه داشته شوند؟</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>نگه داشتن</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>راستی‌آزمایی تصویر</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>تصویر: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>مقدار برای مقایسه (hex، اختیاری)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>مقدار MD5، SHA-1 یا SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>یک مقدار hex با 32، 40 یا 64 رقم وارد کنید.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>دیسک مبدأ هم دوباره خوانده شود</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>راستی‌آزمایی</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>راستی‌آزمایی تصویر: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>نتیجهٔ راستی‌آزمایی: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>به‌دلیل خطاهای خواندن راستی‌آزمایی ممکن نیست: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>محاسبه‌شده: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>گزارش اکتساب تصویر دیسک</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>گزارش همسان‌سازی دیسک</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>وضعیت</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>کامل شد</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>قطع شد</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>منبع از دست رفت</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>ناموفق</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>منبع</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>مسیر</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>مدل</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>شمارهٔ سریال</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>ظرفیت</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>اندازهٔ سکتور</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>محدوده</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>خروجی</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>فایل‌ها</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>مقصد</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>شروع</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>پایان</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>سکتورهای خوانده‌شده</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>سکتورهای ناخوانا</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>هیچ</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>هش‌ها</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>محدوده‌های شمول‌شده</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>راستی‌آزمایی</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>راستی‌آزمایی نشده</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>نسخهٔ برنامه</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>کیس</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>محدوده‌های اکتساب‌شده</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>کامل</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>تصویر خلوت (ناحیه‌های تخصیص‌نیافته شامل نیستند)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>تصویر اسکلتی (فقط جدول پارتیشن‌ها و فراداده سیستم فایل)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>ناحیه‌های مستثنا به‌صورت صفر ذخیره می‌شوند، بنابراین هش‌های این تصویر با هش‌های کل دیسک مبدأ یکی نیستند.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>محدوده‌های شمول‌شده</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>پیام</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>همسان‌سازی دیسک</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>دیسک مقصد</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>دیسک {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>دیسک {0}: {1}، سریال {2}، {3} بایت، سکتورهای {4} بایتی. حجم‌ها: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}، {2}، {3} بایت)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>هیچ</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA شروع روی مقصد</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>بقیهٔ مقصد با صفر پر شود</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>هش برای راستی‌آزمایی</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>پوشهٔ گزارش (اختیاری)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>بعدی</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>دیسک مقصد را انتخاب کنید.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>LBA شروع خارج از دیسک مقصد است.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>دیسکی با اندازهٔ سکتور متفاوت نمی‌تواند مقصد همسان‌سازی باشد.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>دیسک مقصد در فهرست شواهد است. نمی‌توان روی آن نوشت.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>مقصد: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>محدودهٔ نوشتن: از LBA {0}، {1} سکتور ({2} بایت)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>محتوا: داده‌های {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>تمام محتوای این حجم‌ها از بین خواهد رفت:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>مقصد از منبع کوچک‌تر است. فقط {0} بایت نخست منبع نوشته می‌شود.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>این کار قابل بازگردانی نیست.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>همسان‌سازی در {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>برای تأیید «{0}» را تایپ کنید</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>همسان‌سازی در {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>اگر اکنون متوقف کنید، دیسک مقصد به‌صورت ناقص نوشته می‌ماند.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>توقف</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>ادامه</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>قفل کردن حجم {0} ممکن نشد، بنابراین چیزی نوشته نشد. فایل‌های بازِ روی آن را ببندید و دوباره تلاش کنید.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>همسان‌سازی ناموفق بود. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>{0} بایت همسان‌سازی شد. راستی‌آزمایی: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>همسان‌سازی متوقف شد. دیسک مقصد به‌صورت ناقص نوشته شده است.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>مقصد همان دیسک مبدأ است.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>دیسکی با اندازهٔ سکتور متفاوت نمی‌تواند مقصد همسان‌سازی باشد.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>حالت محافظت نوشتن روشن است.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>دیسک مقصد در فهرست شواهد است. نمی‌توان روی آن نوشت.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows از یکی از حجم‌های دیسک مقصد استفاده می‌کند.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>LBA شروع خارج از دیسک مقصد است.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>دیسک مقصد برای نوشتن باز نشد.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>ذخیرهٔ محدودهٔ سکتورها</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>بازگردانی محدودهٔ سکتورها</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA شروع</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>تعداد سکتورها</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>داده‌های سکتور</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>محدوده خارج از دیسک است.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>ذخیرهٔ سکتورها: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} سکتور در {1} ذخیره شد.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>برخی سکتورهای محدوده خوانده نشدند، بنابراین چیزی ذخیره نشد.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>ذخیرهٔ محدودهٔ سکتورها ممکن نشد. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>خواندن فایل داده یا فایل همراه (sidecar) آن ممکن نشد. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>فایل داده: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>ذخیره‌شده از: {0}، سریال {1}، {2} بایت، سکتورهای {3} بایتی. LBA شروع {4}، {5} سکتور. زمان ذخیره {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>نوشتن در: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>پیش از نوشتن از محتوای فعلی پشتیبان بگیر</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>بعدی</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 فایل داده با فایل همراه مطابقت ندارد. بازگردانی ممکن نیست.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>فایل همراهی وجود ندارد. LBA شروع برای نوشتن را وارد کنید.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>شمارهٔ سریال یا ظرفیت مقصد با دیسکی که داده از آن ذخیره شده تفاوت دارد.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>مقصد: {0}. حجم‌های داخل محدوده: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>محتوا: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>نوشتن {0} سکتور</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>بازگردانی سکتورها: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>بازگردانی محدودهٔ سکتورها ممکن نشد. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>{0} سکتور نوشته شد و با خواندن دوباره تأیید شد.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>نوشتن ناموفق بود. {0} سکتور نوشته شد؛ نوشتن در LBA {1} ناموفق بود. می‌توانید فایل پشتیبان {2} را بازنویسی کنید.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>محتوای خوانده‌شده دوباره با فایل داده مطابقت ندارد.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>بازسازی RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>اعضا (به ترتیب)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>بالا</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>پایین</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>افزودن فایل...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>حذف</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>این عضو گم شده است</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[گم‌شده]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>آفست شروع داده عضو</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>نوع</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>اندازهٔ stripe</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>چیدمان توازن</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>متقارن چپ</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>نامتقارن چپ</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>متقارن راست</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>نامتقارن راست</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>عضو مورد استفاده (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>تشخیص (1 MiB نخست)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} تشخیص داده شد ({1} پارتیشن)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>جدول پارتیشنی وجود ندارد</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>امضای سیستم فایل: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>امضای سیستم فایل وجود ندارد</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>اندازهٔ دیسک منطقی: {0} بایت</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>با این پیکربندی قابل تشخیص نیست.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>اعضا اندازه‌های متفاوتی دارند. کوچک‌ترین اندازه استفاده می‌شود.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>ذخیرهٔ پیکربندی...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>بارگذاری پیکربندی...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>پیکربندی RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>پیکربندی RAID در {0} ذخیره شد.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>ذخیرهٔ پیکربندی RAID ممکن نشد. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>خواندن پیکربندی RAID ممکن نشد. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>بازکردن دیسک منطقی ممکن نشد.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} عضو)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>پارامترها معتبر نیستند.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>اندازهٔ stripe باید توانی از دو بین 512 B تا 16 MiB باشد.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>تعداد اعضا برای این نوع بسیار کم است.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>این نوع نمی‌تواند عضو گم‌شده داشته باشد.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>دو عضو یا بیشتر گم شده‌اند. RAID 5 باز نمی‌شود.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>نمایش پارتیشن‌ها</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>پارتیشن‌ها دیسک mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>بازکردن پارتیشن در زبانهٔ جدید</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>پارتیشن زبانه partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>رفتن به ابتدای پارتیشن</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>پارتیشن پرش partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>بازکردن از اینجا به‌عنوان ابتدای پارتیشن</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>پارتیشن اینجا partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>پویش پارتیشن‌های گم‌شده</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>پارتیشن گم‌شده بازیابی پویش lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>نمایش سیستم فایل</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>مرورگر سیستم فایل ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>بازکردن فایل در زبانهٔ جدید</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>فایل بازکردن زبانه file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>خروجی گرفتن از فایل‌ها</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>خروجی استخراج فایل‌ها export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>یافتن فایل‌های حذف‌شده</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>حذف‌شده بازیابی حذف deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>رفتن به رکورد MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>رکورد mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>رفتن به خوشه</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>خوشه بلوک پرش cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>فایل‌هایی که از این موقعیت استفاده می‌کنند</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>مالک خوشه معکوس cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>نمایش خوشه‌های فایل</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>قطعه‌ها خوشه‌ها برجسته‌سازی fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>قطعهٔ بعدی</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>قطعه بعدی fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>قطعهٔ قبلی</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>قطعه قبلی fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>تغییر برجسته‌سازی فضای آزاد و اسلک</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>اسلک تخصیص‌نیافته برجسته‌سازی slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>خروجی گرفتن از فضای تخصیص‌نیافته</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>تخصیص‌نیافته آزاد خروجی unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>خروجی گرفتن از اسلک</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>اسلک خروجی slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>بازکردن فضای تخصیص‌نیافته در زبانهٔ جدید</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>تخصیص‌نیافته زبانه unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>پنل پارتیشن‌ها</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>پنل پارتیشن‌ها panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>پنل سیستم فایل</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>پنل سیستم فایل panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>پنل قطعه‌ها</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>پنل قطعه‌ها panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>پنل نتایج جرم‌یابی</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>پنل نتایج جرم‌یابی panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>شمارهٔ رکورد MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>پارتیشن‌ها و سیستم‌های فایل</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>نمایش شکاف‌های کوچک بین پارتیشن‌ها</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>شکاف‌های تخصیص‌نیافتهٔ کوچک‌تر از 1 MiB را در پنل پارتیشن‌ها فهرست می‌کند.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>نمایش آفست‌های دیسک در زبانه‌های پارتیشن</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>در حالت خاموش، نشانی‌های زبانهٔ پارتیشن از 0 شروع می‌شوند.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>فهرست کردن جریان‌های داده جایگزین NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>جریان‌های نام‌دار در مرورگر سیستم فایل به‌صورت file.txt:stream نمایش داده می‌شوند.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>نمایش راهنمای برجسته‌سازی جرم‌یابی</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>تا زمانی که برجسته‌سازی روشن است، راهنما را در بالا و سمت راست نمای Hex نشان می‌دهد.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>رنگ‌های برجسته‌سازی جرم‌یابی</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>مثال: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. برای رنگ‌های پیش‌فرض خالی بگذارید.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>پارتیشن‌ها</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>پ</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>سیستم فایل</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>نمایش پارتیشن‌ها</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>بازکردن پارتیشن در زبانهٔ جدید</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>رفتن به ابتدای پارتیشن</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>پویش پارتیشن‌های گم‌شده...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>پ</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>نمایش مرورگر</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>بازکردن فایل در زبانهٔ جدید</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>خروجی گرفتن از فایل‌ها...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>خ</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>یافتن فایل‌های حذف‌شده</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>ی</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>رفتن به خوشه...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>فایل‌هایی که از این موقعیت استفاده می‌کنند</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>نمایش خوشه‌های فایل</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>ه</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>رفتن به رکورد MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>خروجی گرفتن از فضای تخصیص‌نیافته...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>گ</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>خروجی گرفتن از اسلک...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>بازکردن فضای تخصیص‌نیافته در زبانهٔ جدید</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>د</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>قطعهٔ بعدی</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>ط</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>قطعهٔ قبلی</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>ه</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>برجسته‌سازی جرم‌یابی</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>ذ</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>پارتیشن‌ها</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>سیستم فایل</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>قطعه‌ها</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>نتایج جرم‌یابی</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>موقعیت دیسک و مالک خوشه</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>پارتیشن‌ها</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>سیستم فایل</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>قطعه‌ها</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>نتایج جرم‌یابی</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>در حال تحلیل پارتیشن‌ها…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>تحلیل نشده است. جرم‌یابی دیجیتال &gt; پارتیشن‌ها &gt; نمایش پارتیشن‌ها را انتخاب کنید.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>جدول پارتیشنی یافت نشد.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} پارتیشن، اندازهٔ سکتور {1}، شناسهٔ دیسک {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>سکتورهای ناخوانا (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> ردیف  قالب      نوع                          نام              LBA شروع       LBA پایان    سکتورها       اندازه  آفست شروع     پرچم‌ها      FS        وضعیت</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>چیدمان پارتیشن‌ها</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>سالم</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>هشدار</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID نوع: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID یکتا: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>بلوک شروع {0}، {1} بلوک</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>ورودی جدول در {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>رفتن به ابتدای پارتیشن</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>انتخاب پارتیشن</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>بازکردن پارتیشن در زبانهٔ جدید</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>نمایش ساختار ورودی</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>نمایش سیستم فایل</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>پویش پارتیشن‌های گم‌شده...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>نشانگر داخل پارتیشنی نیست.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>GPT با سکتورهای {1} بایتی یافت نشد، اما با سکتورهای {0} بایتی یافت شد. با سکتورهای {0} بایتی دوباره باز شود؟</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>بازکردن دوباره با سکتورهای {0} بایتی</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - پارتیشن {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>منطقی</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>زنجیرهٔ EBR به LBA {1} برمی‌گردد (پس از پارتیشن {0}). زنجیره متوقف شد.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>بیش از 256 پارتیشن منطقی. بقیه خوانده نشدند.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 سرصفحهٔ GPT مطابقت ندارد (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 آرایهٔ ورودی‌های پارتیشن GPT مطابقت ندارد (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>سرصفحهٔ اصلی GPT و سرصفحهٔ پشتیبان (LBA {1}) متفاوت‌اند.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>سرصفحهٔ اصلی GPT خراب است. فهرست از سرصفحهٔ پشتیبان ساخته شد.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>پارتیشن‌های {0} و {2} هم‌پوشانی دارند.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>پارتیشن {0} به بیرون از دیسک اشاره می‌کند (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR ترکیبی: MBR محافظ ورودی‌های دیگری هم دارد.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>برخی سکتورها خوانده نشدند (نخستین: LBA {1}). فهرست از سکتورهای خوانا ساخته شده است.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>نقشهٔ پارتیشن Apple بیش از 256 ورودی دارد.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>سیستم EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>رزرو Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>داده‌های پایهٔ Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>بازیابی Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>فراداده LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>داده LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>سیستم فایل Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux swap</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>بوت Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>بوت BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>توسعه‌یافته</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>توسعه‌یافته (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 پنهان</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>بازیابی</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 پنهان</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS پنهان</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 پنهان</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (دیسک پویا)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux توسعه‌یافته</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>محافظ GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>تخصیص‌نیافته</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>حجم فیزیکی LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>پویش پارتیشن‌های گم‌شده</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA شروع</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA پایان (شامل نمی‌شود)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>موقعیت‌های پویش</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>مرزهای 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>مرزهای سیلندر (63 سکتور)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>هر سکتور</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>هر سکتور حدود {0} طول می‌کشد (با 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} ساعت</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} دقیقه</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>جست‌وجوی</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>سرصفحهٔ GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>پویش</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>در حال پویش پارتیشن‌های گم‌شده</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>پارتیشن‌های گم‌شده</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     LBA شروع          سکتورها         اندازه  نوع         اطمینان همپوشانی</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>کم</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>متوسط</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>زیاد</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>با پارتیشن {0} هم‌پوشانی دارد</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>لغو شد. نتایج تا این لحظه نگه داشته شد.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {# نامزد یافت شد.} other {# نامزد یافت شد.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>ناخوانا: LBA {0}، {1} سکتور</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>هیچ نامزد پارتیشنی یافت نشد.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>پویش هر سکتور</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>بازکردن به‌عنوان پارتیشن</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>نمایش سیستم فایل</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>ایجاد ورودی‌های جدول پارتیشن (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>ایجاد ورودی‌های جدول پارتیشن (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>ایجاد ورودی‌های جدول پارتیشن</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR برای همهٔ نامزدها ورودی آزاد ندارد.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>پارتیشن را نمی‌توان در MBR نوشت (بیش از 2 TiB). از GPT استفاده کنید.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT ورودی آزاد ندارد.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>دیسک برای GPT بسیار کوچک است.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>برای این سند هیچ سیستم فایلی باز نیست.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>یک فایل را در مرورگر سیستم فایل انتخاب کنید.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>هیچ خوشهٔ فایلی برجسته نشده است.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>فقط برای NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>اطلاعات تخصیص خوانده نمی‌شود، بنابراین برجسته‌سازی در دسترس نیست.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>حجم رمزگذاری شده است (BitLocker). مرورگر سیستم فایل آن را باز نمی‌کند.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>حجم رمزگذاری شده است ({0}). مرورگر سیستم فایل آن را باز نمی‌کند.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>بازکردن به‌عنوان {0} ممکن نیست: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>انتخاب سیستم فایل</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>نوع از روی امضا تشخیص داده نشد. نوعی را که می‌خواهید امتحان شود انتخاب کنید.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>نوع</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>بازکردن</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>تخصیص‌نیافته ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>رکورد MFT {0} وجود ندارد.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>رفتن به بلوک</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>سیستم فایلی وجود ندارد. جرم‌یابی دیجیتال &gt; سیستم فایل &gt; نمایش مرورگر را انتخاب کنید.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  سریال {2}  خوشه {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>ریشه</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>فایل‌ها</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>پوشه‌ها</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>قطعه‌ها</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>فیلتر (* و ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>یافتن فایل‌ها (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>ستون‌ها</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT مورد استفاده</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {FATها در # ورودی تفاوت دارند.} other {FATها در # ورودی تفاوت دارند.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>سکتور در هر خوشه</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>تحلیل دوباره</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>در حال خواندن…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>در حال خواندن… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} مورد</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>خوانده نشد: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(خراب)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(ناهماهنگی زمان)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>ناهماهنگی زمان: زمان‌های $STANDARD_INFORMATION زودتر از زمان‌های $FILE_NAME هستند یا بخش کسری ندارند.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>رمزگذاری‌شده با EFS (فقط داده‌های خام).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>زنجیرهٔ خوشه‌ها از بین رفته است؛ داده به‌صورت خوشه‌های پیوسته از خوشهٔ نخست خوانده می‌شود.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>ورودی اسلک فهرست</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>در حال شمارش…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>منطقی {0}  خوشه {1} ×{2}  دیسک {3}  {4} بایت</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>منطقی {0}  در فراداده  دیسک {3}  {4} بایت</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(فشرده)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>در حال محاسبهٔ موقعیت‌های اسلک</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>در حال ساخت نقشهٔ خوشه‌ها</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>{0} ورودی با فراداده خراب نادیده گرفته شد.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>موقعیت در ناحیهٔ خوشه‌ها نیست.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>مالکان خوشه‌های {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>نوع                       مسیر</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>فایل</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>فراداده</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>فایل حذف‌شده (آزادشده)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>زنجیرهٔ خوشه‌های {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   شاخص           خوشه</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>فایل‌هایی با نام {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        اندازه  مسیر</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>در حال یافتن فایل‌ها: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {# فایل یافت شد.} other {# فایل یافت شد.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>در حال یافتن فایل‌های حذف‌شده</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>در حال یافتن فایل‌های یتیم</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>بازکردن فایل در زبانهٔ جدید</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>خروجی گرفتن از فایل‌ها...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>رفتن به فراداده</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>نمایش خوشه‌های فایل</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>نمایش رکورد MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>نمایش INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>نمایش $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>نمایش ورودی پوشه</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>نمایش زنجیرهٔ خوشه‌ها</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>کپی مسیر</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>خروجی گرفتن از فهرست به‌صورت CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>پسوند</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>اندازه</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>تخصیص‌یافته</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>ایجاد (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>ایجاد (محلی)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>تغییر (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>تغییر (محلی)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>دسترسی (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>دسترسی (محلی)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>تغییر فراداده (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>تغییر فراداده (محلی)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>ویژگی</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>شناسهٔ فایل</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>خوشهٔ نخست</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>قطعه‌ها</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>وضعیت</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>مسیر</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>مسیر اصلی</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>بازیابی</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>عادی</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>حذف‌شده</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>یتیم</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>خوب</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>بخشی بازنویسی‌شده</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>بازنویسی‌شده</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>مکان نامشخص</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>مقیم (resident)</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>رکورد MFT استفاده نمی‌شود</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>اسلک فهرست</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>ورودی پوشهٔ حذف‌شده</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>inode حذف‌شده</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>اسلک ورودی پوشه</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>ناهماهنگی fixup (توالی به‌روزرسانی)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>امضای نادرست</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>شمارهٔ خوشه خارج از محدوده</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>زنجیرهٔ خوشه‌ها حلقه می‌زند</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>زنجیرهٔ خوشه‌ها به یک خوشهٔ آزاد می‌رسد</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>زنجیرهٔ خوشه‌ها با اندازهٔ فایل مطابقت ندارد</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>فهرست data run نامعتبر</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>ویژگی نامعتبر</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>جمع کنترلی مجموعهٔ ورودی‌ها مطابقت ندارد</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>خطای خواندن</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>بیش از حد عمیق</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>سکتور بوت پشتیبان متفاوت است ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr با $MFT متفاوت است ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>مقادیر BPB ناسازگارند ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>FATها متفاوت‌اند ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo مطابقت ندارد ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>جمع کنترلی ناحیهٔ بوت exFAT مطابقت ندارد ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>جمع کنترلی یک نام بلند مطابقت ندارد ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>اطلاعات تخصیص خوانده نمی‌شود ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>حجم رمزگذاری شده است ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>فایل‌های حذف‌شده</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>فایل‌های یتیم</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>فضای تخصیص‌نیافته</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>اسلک حجم</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>فراداده</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>داده‌های فایل</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>اسلک RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>اسلک درایو</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>تخصیص‌نیافته</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>اسلک حجم</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>شکاف پارتیشن</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>راهنمای برجسته‌سازی جرم‌یابی</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>اندازه {0} بایت، تخصیص‌یافته {1} بایت</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>ایجاد {0}، تغییر {1}، دسترسی {2}، تغییر فراداده {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>شناسهٔ فایل {0}، ویژگی‌ها {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>بازیابی: {0} ({1}). مسیر اصلی: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>نوع: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>نام حجم: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>شمارهٔ سریال: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>اندازهٔ خوشه: {0} بایت</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>کل خوشه‌ها: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>خوشه‌های آزاد: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>ایجاد: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>شروع حجم {0}، {1} بایت</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>رکورد MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>آفست رکورد</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>شمارهٔ ترتیب</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>پیوندهای سخت</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>پرچم‌ها</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>بایت‌های مصرفی</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>رکورد پایه</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI ایجاد</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI تغییر</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI تغییر MFT</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI دسترسی</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>نام</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>والد</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN ایجاد</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN تغییر</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN تغییر MFT</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN دسترسی</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>اندازهٔ $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>ناهماهنگی زمان</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>محتوا</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>آفست ورودی</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>خوشهٔ نخست</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>نام کوتاه</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>خوشه‌ها در زنجیره</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>طول داده</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>طول داده معتبر</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>پارتیشن {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>خوشه {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>بلوک {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>حذف‌شده: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>تخصیص‌نیافته</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>اسلک</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>یافتن مالک</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>دیسک {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>دیسک: - (فشرده / خلوت / مقیم)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>شمارهٔ خوشه ({0}–{1}؛ cluster = خوشهٔ فعلی)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>خوشهٔ {0} خارج از محدوده است.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>برو</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>حفظ ساختار پوشه‌ها</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>خروجی گرفتن از جریان‌های داده جایگزین هم (نام_جریان)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>اسلک هم به‌صورت فایل‌های جدا خروجی گرفته شود</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>فایل‌های حذف‌شده هم شامل شوند</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {# مورد انتخاب شد.} other {# مورد انتخاب شد.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>انتخاب پوشه...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>در حال خروجی گرفتن از فایل‌ها</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} فایل در {1} ذخیره شد (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>فضای خالی کافی نیست: {0} لازم است، {1} آزاد است.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>نوشتن ممکن نشد: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>از فایل بازنویسی‌شده خروجی گرفته شود؟</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>خوشه‌های این فایل حذف‌شده اکنون توسط فایل‌های دیگر استفاده می‌شوند. محتوای خروجی ممکن است متعلق به فایل دیگری باشد.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>خروجی گرفتن</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>فایل دودویی</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>ایجاد فایل نقشه (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>در حال خروجی گرفتن از فضای تخصیص‌نیافته</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>در حال خروجی گرفتن از اسلک</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} در {1} نوشته شد.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>رکوردهای $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      LSN قبلی     UndoNext LSN  نوع      شناسهٔ تراکنش Redo                          Undo                            رکورد MFT طول</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>صفحهٔ راه‌اندازی مجدد {0}: LSN فعلی {1}، کلاینت‌ها: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>در حال خواندن $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>فهرست</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>نتیجه‌ای وجود ندارد.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>خروجی گرفتن از فهرست به‌صورت CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>هیچ فایلی برجسته نشده است. نمایش خوشه‌های فایل را انتخاب کنید.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} قطعه)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  منطقی {1}  دیسک {2}  {3} بایت  خوشه‌ها {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>پاک کردن برجسته‌سازی</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>انتخاب فضای تخصیص‌نیافته</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>تخصیص‌نیافته انتخاب جست‌وجو carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>انتخاب اسلک</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>اسلک انتخاب جست‌وجو carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>انتخاب فضای تخصیص‌نیافته</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>ض</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>انتخاب اسلک</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>در حال انتخاب فضای تخصیص‌نیافته</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>در حال یافتن فضای تخصیص‌نیافته</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>در حال انتخاب اسلک</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>چیزی برای انتخاب وجود ندارد.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>فقط 1,000,000 محدودهٔ نخست انتخاب شد.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>نمایش حجم‌های منطقی</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>حجم منطقی ldm دیسک پویا lvm lvm2 stripe span logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>رفتن به inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>شمارهٔ inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>نمایش حجم‌های منطقی</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>رفتن به inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>پ</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>جمع کنترلی مطابقت ندارد</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>قالب پشتیبانی‌نشده</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>جمع کنترلی superblock ext مطابقت ندارد ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>جمع‌های کنترلی توصیف‌گرهای گروه مطابقت ندارند (گروه‌های {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>این ویژگی ext به‌طور کامل پشتیبانی نمی‌شود: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>سرصفحهٔ حجم جایگزین با سرصفحهٔ اصلی متفاوت است ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>جمع کنترلی یک شیء APFS مطابقت ندارد (بلوک {0}). نادیده گرفته شد.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>جدیدترین checkpoint در APFS آسیب دیده است؛ از یک checkpoint قدیمی‌تر استفاده می‌شود (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>جمع کنترلی برچسب توصیف‌گر UDF مطابقت ندارد (سکتور {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC یک توصیف‌گر UDF مطابقت ندارد (سکتور {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>این نوع پارتیشن UDF پشتیبانی نمی‌شود: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>دیسک {0} جلسه دارد. آخرین جلسه نمایش داده می‌شود؛ جلسهٔ دیگری را با «جلسه» انتخاب کنید.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>فقط برای ext2، ext3 و ext4 در دسترس است.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>inode {0} وجود ندارد.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>این حجم رمزگذاری شده است. فهرست فایل‌ها نمایش داده نمی‌شود.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>checkpoint APFS یافت نشد.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>نمایش inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>نمایش ژورنال</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>نام‌ها</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (پایه)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>جلسه</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>این سیستم فایل ژورنال ندارد.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ژورنال ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     بلوک      آفست دیسک    نوع              توالی</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>اندازهٔ بلوک {0}، {1} بلوک، توالی {2}، شروع {3} (0 = تمیز). ژورنال بازپخش نمی‌شود.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>در حال خواندن ژورنال ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>توصیف‌گر</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblock v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblock v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>نمایش حجم‌های منطقی</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>ایجاد تصویر از این محدوده...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>حجم‌های منطقی</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>نام                   نوع           اندازه      چیدمان                        وضعیت</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>در حال خواندن فرادادهٔ حجم...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>هیچ حجم منطقی LDM یا LVM2 در دیسک‌ها و تصاویر باز یافت نشد.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>بازکردن حجم منطقی</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>تخصیص اعضا...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>خواندن دوباره</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>این نوع حجم پشتیبانی نمی‌شود: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} باز نمی‌شود. اعضای گم‌شده: {1}. دیسک‌ها یا تصاویر را باز کنید یا تخصیص دهید.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) یک حجم mirror یا RAID-5 است. آن را با بازسازی RAID باز کنید.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>تخصیص اعضا</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>برای هر عضو گم‌شدهٔ {0} دیسک یا تصویر را انتخاب کنید.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(هیچ)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>بازکردن فایل...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>سالم</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {# عضو گم‌شده} other {# عضو گم‌شده}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>پشتیبانی نمی‌شود</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>بازسازی RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>ساده</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>گسترده (spanned)</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>نواری (striped)</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>آینه‌ای (mirror)</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>خطی</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>پشتیبانی نمی‌شود ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} گروه {1}، حجم {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>عضو {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>یافت نشد</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>آفست {0} ({1}): {2} در {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>آفست {0} ({1}): نوار {2} روی {3} عضو</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>پاک‌سازی امن انتخاب</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>پاک‌سازی امن نابودسازی بازنویسی محدوده wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>پاک‌سازی امن دیسک</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>پاک‌سازی امن دیسک درایو بازنویسی wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>پاک‌سازی فضای آزاد</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>فضای آزاد تخصیص‌نیافته پاک‌سازی cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>پاک‌سازی اسلک فایل</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>اسلک ram درایو پاک‌سازی slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>سانسور محتوای فایل</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>سانسور پاک‌سازی خالی‌کردن redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>پاک‌سازی امن</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>ز</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>پاک‌سازی امن انتخاب...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>پ</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>پاک‌سازی امن دیسک...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>پاک‌سازی فضای آزاد...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>پاک‌سازی اسلک...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>سانسور محتوای فایل...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>سانسور محتوای فایل...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>پاک‌سازی امن انتخاب...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>carving فایل‌ها از انتخاب...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>سانسور</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>پاک‌سازی امن</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>مقصد: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>شروع</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>در پایان دوباره بخوان و راستی‌آزمایی کن</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>پاک‌سازی...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>محدوده خارج از سند است.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>ویرایش‌های ذخیره‌نشده</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>داده‌ای که باید پاک‌سازی شود ویرایش‌های ذخیره‌نشده دارد. پیش از پاک‌سازی آن‌ها را ذخیره یا دور بیندازید.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>دور انداختن</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>پاک‌سازی داده</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>مقصد: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>دیسک {0}: {1}، شمارهٔ سریال {2}، {3} بایت</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>حجم‌ها: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>محدوده: LBA شروع {0}، {1} سکتور، {2} بایت</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>محدوده: آفست {0}، {1} بایت</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>محدوده تا مرز سکتورها گسترش یافت.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>روش: {0} ({1, plural, one {# گذر} other {# گذر}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>آخرین گذر دوباره خوانده و راستی‌آزمایی می‌شود.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>زمان تخمینی: حدود {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>این کار قابل بازگردانی نیست. داده‌های اصلی قابل بازیابی نخواهند بود.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>در SSD و حافظه‌های فلش، wear leveling ممکن است داده‌های اصلی را حتی پس از بازنویسی در جای دیگری نگه دارد.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>این حجم‌ها هنگام پاک‌سازی قفل می‌شوند: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>داده مستقیماً در فایل نوشته می‌شود، نه به‌عنوان ویرایش. با «واگرد» قابل بازگردانی نیست.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>پاک‌سازی {0} بایت</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>پاک‌سازی {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>دیسک {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>برای ادامه «{0}» را تایپ کنید.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>تأیید</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>محدودهٔ موردِ پاک‌سازی را انتخاب کنید.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>این سند را نمی‌توان مستقیماً پاک‌سازی کرد.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>برای پاک‌سازی، کل دیسک فیزیکی را در یک زبانه باز کنید.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>این منبع داده در فهرست شواهد است و نمی‌توان در آن نوشت.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows از این دیسک استفاده می‌کند (سیستم، بوت یا فایل صفحه)، بنابراین پاک‌سازی آن ممکن نیست.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>قفل کردن حجم {0} ممکن نشد، بنابراین چیزی پاک‌سازی نشد.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>نوشتن رد شد: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>پاک‌سازی ناموفق بود: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>در حال پاک‌سازی {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>گذر {0} از {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>در حال راستی‌آزمایی</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>پاک‌سازی متوقف شود؟ بخشی که بازنویسی شده همان‌طور می‌ماند؛ بقیه داده‌های اصلی خود را حفظ می‌کند.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>خطای نوشتن</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>نوشتن در آفست {0} ممکن نشد: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>رد شدن و ادامه</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>توقف</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>نتیجهٔ پاک‌سازی</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>{0} بایت در {1} پاک‌سازی شد.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>راستی‌آزمایی موفق بود.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {راستی‌آزمایی # محدودهٔ نامطابق یافت:} other {راستی‌آزمایی # محدودهٔ نامطابق یافت:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {نوشتن # محدوده ممکن نشد:} other {نوشتن # محدوده ممکن نشد:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>پاک‌سازی متوقف شد. داده تا آفست {0} در گذر {1} بازنویسی شد؛ بقیه محتوای قبلی خود را حفظ می‌کند.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>راستی‌آزمایی متوقف شد. همهٔ گذرها نوشته شده بودند.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>پاک‌سازی پس از خطای نوشتن در آفست {0} متوقف شد.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>فایل‌های ردشده: {0} (فشرده {1}، خلوت {2}، مقیم {3}، ناسازگار {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>پاک‌سازی فضای آزاد</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>روش</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>از طریق Windows (حجم سوار‌شده)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>نوشتن مستقیم (سیستم فایل در این زبانه)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>حجم</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>هیچ حجم سوار‌شده‌ای قابل استفاده نیست.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>برای نوشتن مستقیم، ابتدا سیستم فایل این زبانه را نمایش دهید.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>حجم: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>فضای آزاد برای بازنویسی: {0} بایت</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>روش: از طریق Windows (فایل‌های موقت فضای آزاد را پر می‌کنند و در پایان حذف می‌شوند)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>روش: نوشتن مستقیم در خوشه‌های تخصیص‌نیافته</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>در حین اجرا، حجم فضای آزاد ندارد. برنامه‌های دیگر به کار ادامه می‌دهند اما نمی‌توانند داده جدید ذخیره کنند.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>اگر اطلاعات تخصیص سیستم فایل نادرست باشد، فایل‌ها ممکن است آسیب ببینند.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>پاک‌سازی فضای آزاد</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>سیستم فایل سازگار نیست ({0}). آن را با chkdsk تعمیر کنید و دوباره تلاش کنید.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>نوشتن مستقیم فقط از NTFS، FAT12/16/32 و exFAT پشتیبانی می‌کند.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>ابتدا ویرایش‌های این زبانه را ذخیره یا دور بیندازید.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>این فایل‌های موقت حذف نشدند. آن‌ها را دستی حذف کنید:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>{0} بایت از فضای آزاد در {1} بازنویسی شد.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>در حال محاسبهٔ فضای آزاد</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>پاک‌سازی فضای آزاد متوقف شد. فایل‌های موقت حذف شدند.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>پاک‌سازی اسلک</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>فایل‌ها: {0}، اسلک برای بازنویسی: {1} بایت</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>پاک‌سازی اسلک</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>در حال یافتن اسلک فایل‌ها</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>{0} بایت اسلک در {1} بازنویسی شد.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>سانسور محتوای فایل</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>فایل‌ها ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>الگو</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (پیش‌فرض)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>تصادفی</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>بایت‌های Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>بایت‌های Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>نام‌ها هم با «_» هم‌طول جایگزین شوند</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>گزارش سانسور (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>محتوا به‌صورت ویرایش تغییر می‌کند. تا ذخیره نکنید چیزی نوشته نمی‌شود؛ برای ذخیرهٔ تصویر جدید از «ذخیره به‌عنوان» استفاده کنید.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>سانسور</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>در حال یافتن داده‌های موردِ سانسور</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {# فایل سانسور شد} other {# فایل سانسور شد}} ({1} بایت). برای ذخیرهٔ تصویر جدید از «ذخیره به‌عنوان» استفاده کنید.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>چیزی برای سانسور وجود نداشت.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>فایل‌های سانسورنشده</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# مورد سانسور نشد:} other {# مورد سانسور نشد:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>پوشه</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>مورد حذف‌شده</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>فراداده آسیب دیده است</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>اطلاعات قطعه‌ها خراب است</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>داده‌های مقیم (resident) یافت نشد</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>فراداده سیستم فایل</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>نام‌ها برای این موارد جایگزین نشدند: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>سند فقط‌خواندنی است.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>روی تصویر اصلی بازنویسی شود؟</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>این سند سانسورهایی دارد. ذخیره‌کردن آن‌ها را در {0} اصلی می‌نویسد و قابل بازگردانی نیست. برای حفظ نسخهٔ اصلی از «ذخیره به‌عنوان» استفاده کنید.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>بازنویسی {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>نوشتن گزارش سانسور ممکن نشد: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>الگو را به‌صورت بایت‌های hex وارد کنید (مثلاً 00 یا A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} ث</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} دقیقه</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} ساعت</value></data>
 </root>

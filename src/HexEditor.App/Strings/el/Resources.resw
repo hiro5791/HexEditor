@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>Παράθυρο {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(χωρίς καρτέλες)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Αντιγραφή διαδρομής</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Επανάνοιγμα ως εικόνα δίσκου</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Εμφάνιση στην Εξερεύνηση</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Μόνο για ανάγνωση</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Μέγεθος: {0}</value></data>
@@ -6634,6 +6635,418 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Στήλη σχολίων</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Εμφάνιση ονομάτων συμβόλων, ονομάτων στόχων διακλάδωσης και συμβολοσειρών που αναφέρονται.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Αποσυναρμολόγηση</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Εγκληματολογική ανάλυση</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Εγκληματολογική ανάλυση</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Εμφάνιση ημερομηνίας και ώρας</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Τρόπος εμφάνισης των ωρών στις λίστες και τις λεπτομέρειες της εγκληματολογικής ανάλυσης: UTC και τοπική ώρα, μόνο UTC ή μόνο τοπική ώρα. Οι ώρες καταγράφονται πάντα σε UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC και τοπική ώρα</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Μόνο UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Μόνο τοπική ώρα</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Ενεργοποίηση της λειτουργίας αποκλεισμού εγγραφής κατά το άνοιγμα υπόθεσης</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Όταν είναι ανενεργό, ερωτάστε αν θέλετε να ενεργοποιηθεί.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Καταγραφή και των ενεργειών περιήγησης στο αρχείο καταγραφής ελέγχου</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Καταγραφή μεταβάσεων, αναζητήσεων και προσθηκών σελιδοδεικτών. Οι αλλαγές στα δεδομένα και στα τεκμήρια καταγράφονται πάντα.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Εμφάνιση μικρογραφιών των εικόνων που ανακτήθηκαν με carving</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Εμφάνιση μικρής προεπισκόπησης αρχείων JPEG, PNG, GIF και BMP στα αποτελέσματα του carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Εικόνα λογοτύπου της αναφοράς</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Διαδρομή εικόνας PNG, JPEG ή SVG που εμφανίζεται στην κορυφή των αναφορών HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Κείμενο κεφαλίδας αναφοράς</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Μια γραμμή κειμένου κάτω από τον τίτλο των αναφορών, όπως το όνομα του εργαστηρίου σας.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Νέα υπόθεση</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>έρευνα τεκμήρια δημιουργία υπόθεσης φάκελος new case investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Άνοιγμα υπόθεσης</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>έρευνα τεκμήρια φόρτωση υπόθεσης φάκελος open case investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Κλείσιμο υπόθεσης</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>έρευνα τέλος κλείσιμο υπόθεσης close case investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Προσθήκη τεκμηρίου</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>καταχώριση εικόνα δίσκου κατακερματισμός απόκτηση register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Ιδιότητες υπόθεσης</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>ζώνη ώρας ερευνητής οργανισμός time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Εμφάνιση αρχείου καταγραφής ελέγχου</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>αλυσίδα επιμέλειας ιστορικό καταγραφή chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Επαλήθευση αρχείου καταγραφής ελέγχου</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>παραποίηση αλυσίδα κατακερματισμού ακεραιότητα έλεγχος tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Διαχείριση υπογραφών carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>τύποι αρχείων κεφαλίδα υποσέλιδο μαγικός ορισμοί file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Carving αρχείων</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>ανάκτηση εξαγωγή διαγραμμένα αρχεία σάρωση recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Δημιουργία αναφοράς</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf εξαγωγή τεκμηρίωση html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Εμφάνιση ή απόκρυψη της λίστας τεκμηρίων</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>υπόθεση τεκμήρια πίνακας case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Εμφάνιση ή απόκρυψη του αρχείου καταγραφής ελέγχου</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>υπόθεση αρχείο καταγραφής ελέγχου πίνακας case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Εμφάνιση ή απόκρυψη των αποτελεσμάτων carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>αρχεία carving πίνακας αποτελέσματα carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Τεκμήρια</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Αρχείο καταγραφής ελέγχου</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Αποτελέσματα carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Εγκληματολογική ανάλυση</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Υπόθεση</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>Υ</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Νέα υπόθεση...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Άνοιγμα υπόθεσης...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Κλείσιμο υπόθεσης</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Προσθήκη τεκμηρίου...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Ιδιότητες υπόθεσης...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>Ι</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Λίστα τεκμηρίων</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Εμφάνιση αρχείου καταγραφής ελέγχου</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Επαλήθευση αρχείου καταγραφής ελέγχου</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>Η</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Carving αρχείων...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Διαχείριση υπογραφών...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Αποτελέσματα</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Δημιουργία αναφοράς...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Υπόθεση: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>μη έγκυρη ώρα</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Υπάρχει ήδη ανοιχτή υπόθεση. Κλείστε την πρώτα.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Δεν υπάρχει ανοιχτή υπόθεση.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Νέα υπόθεση</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Ιδιότητες υπόθεσης</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Αριθμός υπόθεσης (υποχρεωτικό)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Όνομα υπόθεσης (υποχρεωτικό)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Ερευνητής</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Οργανισμός</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Φάκελος υπόθεσης</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Αναζήτηση...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Ζώνη ώρας</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Χρησιμοποιείται για την ανάγνωση ωρών χωρίς ζώνη ώρας, όπως οι ώρες αρχείων FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Δημιουργία</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Δημιουργήθηκε η υπόθεση «{0}».</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Άνοιξε η υπόθεση «{0}».</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Δεν ήταν δυνατή η δημιουργία της υπόθεσης: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Ο αριθμός και το όνομα της υπόθεσης είναι υποχρεωτικά.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση του αρχείου υπόθεσης (γραμμή {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα της υπόθεσης: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση της υπόθεσης: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Να ενεργοποιηθεί η λειτουργία αποκλεισμού εγγραφής για αυτήν την υπόθεση;</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Ενεργοποίηση</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Η λειτουργία αποκλεισμού εγγραφής ενεργοποιήθηκε για αυτήν την υπόθεση.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Προσθήκη τεκμηρίου</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Προσθήκη τεκμηρίου</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>Το {0} θα προστεθεί στην υπόθεση. Η πηγή δεδομένων δεν αλλάζει.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Υπολογισμός κατακερματισμών τώρα</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Αυτή η πηγή δεδομένων έχει ήδη καταχωριστεί ως {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Ως τεκμήρια μπορούν να προστεθούν μόνο δίσκοι, τόμοι, αρχεία εικόνας και αρχεία.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Κατακερματισμός του τεκμηρίου {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Οι κατακερματισμοί του {0} καταγράφηκαν.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Ο κατακερματισμός του {0} δεν υπολογίστηκε. Το τεκμήριο παραμένει στη λίστα.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση των δεδομένων στη μετατόπιση 0x{1}, επομένως ο κατακερματισμός του {0} δεν καταγράφηκε.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Δεν υπολογίστηκε</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>Το {0} αφαιρέθηκε από τη λίστα. Η πηγή δεδομένων δεν αγγίχθηκε.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>Το {0} δεν είναι διαθέσιμο.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του τεκμηρίου: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} στοιχεία</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Δεν υπάρχει ανοιχτή υπόθεση. Δημιουργήστε ή ανοίξτε μια υπόθεση από το μενού Εγκληματολογική ανάλυση.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Δεν έχει προστεθεί ακόμη κανένα τεκμήριο.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Τεκμήριο</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Διαδρομή</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Χωρητικότητα (byte)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Κατακερματισμοί</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Προσθήκη (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Προσθήκη (τοπική)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Δίσκος</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Τόμος</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Εικόνα</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Αρχείο</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Μνήμη</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Επιτυχία</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Αποτυχία</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Δεν επαληθεύτηκε</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Άνοιγμα (μόνο για ανάγνωση)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Αφαίρεση από τη λίστα</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Αντιγραφή κατακερματισμών</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Αντιγραφή διαδρομής</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Δημιουργία εικόνας...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Επαλήθευση...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} καταχωρίσεις</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Δεν υπάρχει ανοιχτή υπόθεση. Το αρχείο καταγραφής ελέγχου ανήκει σε μια υπόθεση.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Δεν έχει καταγραφεί ακόμη τίποτα.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Αυτή η γραμμή δεν είναι έγκυρη καταχώριση. Το αρχείο καταγραφής ενδέχεται να έχει τροποποιηθεί.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Εξαγωγή CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Εξαγωγή JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Το αρχείο καταγραφής ελέγχου είναι άθικτο (ελέγχθηκαν {0} γραμμές).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Η αλυσίδα του αρχείου καταγραφής ελέγχου έχει σπάσει στη γραμμή {0}. Το αρχείο ενδέχεται να έχει τροποποιηθεί.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>Αρ.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Ώρα (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Ώρα (τοπική)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Χρήστης</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Λειτουργία</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Τεκμήριο</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Αποτέλεσμα</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Λεπτομέρειες</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Επιτυχία</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Αποτυχία</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Ακυρώθηκε</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή στο αρχείο καταγραφής ελέγχου</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Οι λειτουργίες που γράφουν δεδομένα απενεργοποιούνται μέχρι να είναι ξανά δυνατή η εγγραφή στο αρχείο καταγραφής. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Δοκιμή ξανά</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Το αρχείο καταγραφής ελέγχου εξακολουθεί να μην είναι εγγράψιμο.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή στο αρχείο καταγραφής ελέγχου, επομένως η λειτουργία δεν εκτελέστηκε.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή στο αρχείο καταγραφής ελέγχου, επομένως οι λειτουργίες που γράφουν δεδομένα απενεργοποιήθηκαν.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Επαλήθευση του αρχείου καταγραφής ελέγχου</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η επαλήθευση του αρχείου καταγραφής ελέγχου: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Εξαγωγή του αρχείου καταγραφής ελέγχου</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Το αρχείο καταγραφής ελέγχου εξήχθη στο {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η εξαγωγή του αρχείου καταγραφής ελέγχου: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Υπογραφές carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Ορισμοί</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>ενσωματωμένο</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>ανενεργό</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Επέκταση (χωρίς τελεία)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Κεφαλίδες (byte Hex, ένα ανά γραμμή· το ?? είναι οποιοδήποτε byte, το ? οποιοδήποτε ψηφίο)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Μετατόπιση κεφαλίδας από την αρχή του αρχείου</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Υποσέλιδο (byte Hex, προαιρετικό)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Byte του υποσέλιδου προς συμπερίληψη (κενό = το ίδιο το υποσέλιδο)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Μέγιστο μέγεθος</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Ελάχιστο μέγεθος</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Λήψη του μεγέθους από τιμή στην κεφαλίδα</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Τιμή μεγέθους: μετατόπιση από την αρχή του αρχείου</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Τιμή μεγέθους: πλάτος (bit)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Τιμή μεγέθους: σειρά byte</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Τιμή μεγέθους: αριθμός προς πρόσθεση</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Έλεγχος δομής (ενσωματωμένο όνομα ή πρότυπο δομής)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Ενσωματωμένοι έλεγχοι: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Αναζήτηση της κεφαλίδας μόνο στην αρχή τομέα</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Χρήση αυτού του ορισμού κατά τη σάρωση</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Νέο</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Διπλασιασμός</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Διαγραφή</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Εισαγωγή...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Εξαγωγή...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Δοκιμή αυτού του ορισμού</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Επιλέξτε πρώτα μια περιοχή στο έγγραφο.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Δοκιμή...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Δοκιμή ορισμού carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Βρέθηκαν {0} στην επιλογή. Πρώτες θέσεις:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Εισήχθησαν {0} ορισμοί.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Δεν εισήχθησαν {0} ορισμοί:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Εξαγωγή στο {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Δεν ήταν δυνατή η εισαγωγή των ορισμών: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση των ορισμών: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Η δοκιμή απέτυχε: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: εισαγάγετε έναν αριθμό ή ένα μέγεθος όπως 4096, 0x1000 ή 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Εισαγάγετε ένα όνομα.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Αυτό το όνομα χρησιμοποιείται ήδη.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Εισαγάγετε μια επέκταση.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Η επέκταση περιέχει χαρακτήρες που δεν επιτρέπονται σε όνομα αρχείου.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Εισαγάγετε τουλάχιστον μία κεφαλίδα.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Η κεφαλίδα δεν είναι έγκυρη ακολουθία byte Hex (περιττός αριθμός ψηφίων ή μη έγκυροι χαρακτήρες).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Η κεφαλίδα χρειάζεται τουλάχιστον ένα σταθερό byte.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Η μετατόπιση της κεφαλίδας δεν μπορεί να είναι αρνητική.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Το υποσέλιδο δεν είναι έγκυρη ακολουθία byte Hex.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Ο αριθμός των byte προς συμπερίληψη δεν μπορεί να είναι αρνητικός.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Το μέγιστο μέγεθος πρέπει να είναι τουλάχιστον 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Το ελάχιστο μέγεθος δεν μπορεί να είναι αρνητικό.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Το μέγιστο μέγεθος είναι μικρότερο από το ελάχιστο.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Η τιμή μεγέθους δεν είναι έγκυρη.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Μια τιμή έχει λάθος τύπο.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Carving αρχείων</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Έναρξη</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Εύρος</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Ολόκληρο το έγγραφο</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Επιλογή</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Μόνο μη εκχωρημένος χώρος</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Μόνο χώρος slack</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Τύποι αρχείων</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Να μη γίνεται αναζήτηση κεφαλίδων μέσα σε αρχείο που έχει ήδη βρεθεί</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Εγγραφή των αρχείων carving σε φάκελο</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Φάκελος εξόδου</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Carving αρχείων</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Το carving ολοκληρώθηκε: βρέθηκαν {0} αρχεία.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Το carving ακυρώθηκε. Βρέθηκαν {0} αρχεία· τα αποτελέσματα και το μανιφέστο διατηρούνται.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Το carving σταμάτησε επειδή δεν ήταν δυνατή η εγγραφή στον φάκελο εξόδου. Βρέθηκαν {0} αρχεία.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Το carving απέτυχε: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Ο φάκελος εξόδου βρίσκεται σε δίσκο που βρίσκεται υπό διερεύνηση. Επιλέξτε φάκελο σε άλλον δίσκο.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος στον φάκελο εξόδου. Απαιτούνται: {0} byte. Διαθέσιμα: {1} byte.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Το σύστημα αρχείων του φακέλου εξόδου περιορίζει κάθε αρχείο σε {0} byte. Επιλέξτε άλλον φάκελο.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Ο φάκελος εξόδου δεν μπορεί να χρησιμοποιηθεί.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Δεν υπάρχουν πληροφορίες εκχώρησης για αυτό το έγγραφο.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή των αρχείων carving</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>Ο φάκελος εξόδου ({0}) δεν έχει άλλο χώρο. Το επόμενο αρχείο χρειάζεται {1} byte αλλά είναι ελεύθερα {2} byte. Ελευθερώστε χώρο, επιλέξτε άλλον φάκελο ή διακόψτε.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή στο {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Δοκιμή ξανά</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Επιλογή άλλου φακέλου...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Το carving εκτελείται ήδη.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Carving αρχείων...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Άνοιγμα φακέλου</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Το carving δεν έχει εκτελεστεί. Επιλέξτε Εγκληματολογική ανάλυση, μετά Carving και μετά Carving αρχείων.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Δεν βρέθηκαν αρχεία.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} αρχεία</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Προεπισκόπηση της εικόνας carving</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>Αρ.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Μετατόπιση</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Μήκος</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Το μήκος καθορίστηκε από</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Αρχείο εξόδου</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Δομή</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Τιμή μεγέθους</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Υποσέλιδο</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Μέγιστο μέγεθος</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Τύπος: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Μετατόπιση: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Μήκος: {0} byte</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Το μήκος καθορίστηκε από: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Δημιουργία αναφοράς</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Δημιουργία</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Περιεχόμενα</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Δίσκος: {0} (μέγεθος τομέα {1} byte)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>Αρ.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Σχήμα</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA έναρξης</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Τομείς</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Μέγεθος (byte)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Σύστημα αρχείων</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Κρυπτογράφηση</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Μη εκχωρημένο</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Διάταξη</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Έγγραφο</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Μετατόπιση τόμου</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Ετικέτα</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Σειριακός αριθμός</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Μέγεθος συμπλέγματος (byte)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Συμπλέγματα</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Ελεύθερα συμπλέγματα</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Προβλήματα</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Λογικοί τόμοι: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Ομάδα</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Μέγεθος (byte)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Διάταξη</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Μέλη</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Εικόνα</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Πηγή</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Απόκτηση</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Κατακερματισμοί</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Αρχείο καταγραφής απόκτησης</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (ένα αρχείο, ανοίγει χωρίς σύνδεση)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Όλες οι καταχωρίσεις του αρχείου καταγραφής ελέγχου</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Αρχείο καταγραφής ελέγχου από (UTC, προαιρετικό)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Αρχείο καταγραφής ελέγχου έως (UTC, προαιρετικό)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Byte Hex dump για κάθε σελιδοδείκτη (0 έως 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Αποθήκευση σε</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Η περίοδος δεν είναι έγκυρη ημερομηνία και ώρα.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Το μήκος του Hex dump πρέπει να είναι από 0 έως 4096 byte.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Δημιουργία της αναφοράς</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η δημιουργία της αναφοράς: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Δημιουργήθηκε το {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η δημιουργία του PDF ({0}). Δημιουργήθηκε το {1} στη θέση του.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>Στο PDF περιλαμβάνονται μόνο οι πρώτες γραμμές των μεγάλων λιστών. Για τις πλήρεις λίστες χρησιμοποιήστε την αναφορά HTML ή τα αρχεία CSV.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Άνοιγμα</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Άνοιγμα φακέλου</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Εγκληματολογική αναφορά</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Αριθμός υπόθεσης</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Όνομα υπόθεσης</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Ερευνητής</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Οργανισμός</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Δημιουργία υπόθεσης</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Δημιουργία αναφοράς</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Ζώνη ώρας</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Δημιουργήθηκε από</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Σελίδα</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>από</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Υπόθεση</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Εξώφυλλο</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Τεκμήρια</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Εγγραφές απόκτησης</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Πληροφορίες συσκευής</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Διαμερίσματα</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Συστήματα αρχείων</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Σελιδοδείκτες</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Αποτελέσματα carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Αρχείο καταγραφής ελέγχου</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Τεκμήριο</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Διαδρομή</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Μοντέλο</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Σειριακός αριθμός</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Χωρητικότητα (byte)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Τομείς</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Μέγεθος τομέα</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Κατακερματισμοί</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Προσθήκη (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Προσθήκη (τοπική)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Προστέθηκε από</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Επιτυχία</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Αποτυχία</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Δεν επαληθεύτηκε</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Δεν υπολογίστηκε</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Δίσκος</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Τόμος</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Εικόνα</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Αρχείο</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Μνήμη</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Έγγραφο</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Μετατόπιση</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Σχόλιο</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>Αρ.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Μετατόπιση</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Μήκος</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Το μήκος καθορίστηκε από</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Αρχείο εξόδου</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Αρχεία που βρέθηκαν</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>Αρ.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Ώρα (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Ώρα (τοπική)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Χρήστης</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Υπολογιστής</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Λειτουργία</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Τεκμήριο</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Αποτέλεσμα</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Λεπτομέρειες</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>επιτυχία</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>αποτυχία</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>ακυρώθηκε</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Εμφάνιση των πρώτων {0} από {1} γραμμές. Η πλήρης λίστα βρίσκεται στο συνημμένο αρχείο CSV ή στην αναφορά HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Εμφάνιση των πρώτων {0} γραμμών. Η πλήρης λίστα βρίσκεται στην αναφορά HTML ή στο αρχείο CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Πλήρης λίστα</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Μη εκχωρημένο</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Δεν υπάρχουν δεδομένα.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>μη έγκυρη ώρα</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Εναλλαγή πλαισίου αποσυναρμολόγησης</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler disassembly assembly code αποσυναρμολόγηση κώδικας</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Αποσυναρμολόγηση</value></data>
@@ -8195,4 +8608,1265 @@ Byte προς αλλαγή: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Ολόκληρη η σελίδα</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Προσαρμογή στο πλάτος</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Επιλογή φακέλου...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Προστατευμένο από εγγραφή]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Προστασία εγγραφής</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής είναι ενεργή. Κάντε κλικ για απενεργοποίηση.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής εμποδίζει μόνο αυτήν την εφαρμογή να γράφει. Δεν μπορεί να εμποδίσει τα Windows ή άλλες εφαρμογές να γράφουν (για παράδειγμα τις εγγραφές που κάνει ένα σύστημα αρχείων κατά την προσάρτηση ενός τόμου). Χρησιμοποιήστε επίσης έναν υλικό αποκλειστή εγγραφής ή την προστασία εγγραφής USB του λειτουργικού συστήματος.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Προστασία εγγραφής USB του λειτουργικού...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Να απενεργοποιηθεί η λειτουργία προστασίας εγγραφής;</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Ανοιχτά έγγραφα τεκμηρίων: {0}. Μετά την απενεργοποίηση της λειτουργίας, θα είναι δυνατή η εγγραφή σε αυτά τα έγγραφα:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Δεν υπάρχουν ανοιχτά έγγραφα τεκμηρίων. Μετά την απενεργοποίηση της λειτουργίας, θα είναι ξανά δυνατή η εγγραφή στα ανοιχτά έγγραφα.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Απενεργοποίηση προστασίας εγγραφής</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Δεν ήταν δυνατό το εκ νέου άνοιγμα της πηγής δεδομένων μόνο για ανάγνωση. Εμφανίζονται μόνο τα δεδομένα που έχουν ήδη διαβαστεί.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Να επιτρέπεται η εγγραφή σε αυτό το έγγραφο</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Η εγγραφή επιτρέπεται (εξαίρεση από τη λειτουργία προστασίας εγγραφής)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής είναι ανενεργή.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Μόνο έγγραφα αρχείων μπορούν να εξαιρεθούν από τη λειτουργία προστασίας εγγραφής.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Αυτή η πηγή δεδομένων είναι καταχωρισμένη ως τεκμήριο, επομένως δεν μπορεί να επιτραπεί η εγγραφή.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Η εγγραφή επιτρέπεται ήδη για αυτό το έγγραφο.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Να επιτραπεί η εγγραφή σε αυτό το έγγραφο;</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής παραμένει ενεργή, αλλά το {0} ({1}) μπορεί να επεξεργαστεί και να αποθηκευτεί μέχρι να το κλείσετε. Αυτό καταγράφεται στο αρχείο καταγραφής ελέγχου και δεν μπορεί να αναιρεθεί για το ανοιχτό έγγραφο.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Πληκτρολογήστε {0} για επιβεβαίωση</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Να επιτραπεί η εγγραφή στο {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Η εγγραφή επιτρέπεται για το {0} μέχρι να κλείσει.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Λειτουργία προστασίας εγγραφής</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Προστασία εγγραφής USB του λειτουργικού</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Συσκευή</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Έλεγχος HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Πληροφορίες SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Πίνακας πληροφοριών συσκευής</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Πληροφορίες κρυπτογράφησης...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Άνοιγμα απορρίμματος μνήμης...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Εναλλαγή λειτουργίας προστασίας εγγραφής</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>αποκλεισμός εγγραφής προστασία μόνο ανάγνωση τεκμήρια write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Να επιτρέπεται η εγγραφή σε αυτό το έγγραφο</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>αποκλεισμός εγγραφής εξαίρεση write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Εναλλαγή προστασίας εγγραφής USB του λειτουργικού</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>πολιτική αποθήκευσης usb προστασία εγγραφής μητρώο usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Έλεγχος HPA και DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>κρυφή περιοχή host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Εμφάνιση πληροφοριών SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>υγεία δίσκος αυτοπαρακολούθηση nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Εμφάνιση πληροφοριών κρυπτογράφησης</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt κρυπτογραφημένος τόμος encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Εναλλαγή εμφάνισης πληροφοριών συσκευής</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>πίνακας hpa smart συσκευή panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Άνοιγμα απορρίμματος μνήμης</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>crash dump minidump φυσική μνήμη ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Πληροφορίες συσκευής</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Πάντα ενεργοποίηση της λειτουργίας προστασίας εγγραφής κατά την εκκίνηση</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Όταν είναι ανενεργό, η εφαρμογή ξεκινά με τη λειτουργία στην κατάσταση που είχε κατά το τελευταίο κλείσιμο.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Έλεγχος HPA / DCO κατά το άνοιγμα δίσκου</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Στέλνει εντολές ATA μόνο για ανάγνωση στον δίσκο και εμφανίζει ειδοποίηση αν βρεθούν κρυφές περιοχές.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Να ενεργοποιηθεί η προστασία εγγραφής USB του λειτουργικού;</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Τα Windows θα εμποδίζουν την εγγραφή σε συσκευές αποθήκευσης USB που συνδέονται από τώρα και στο εξής (ρύθμιση StorageDevicePolicies WriteProtect). Οι συσκευές που είναι ήδη συνδεδεμένες δεν επηρεάζονται μέχρι να τις επανασυνδέσετε. Οι εσωτερικοί δίσκοι SATA και NVMe δεν προστατεύονται. Απαιτούνται δικαιώματα διαχειριστή.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Να απενεργοποιηθεί η προστασία εγγραφής USB του λειτουργικού;</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Η ρύθμιση επιστρέφει στην κατάσταση που είχε πριν την ενεργοποιήσετε. Οι συσκευές αποθήκευσης USB που είναι ήδη συνδεδεμένες παραμένουν προστατευμένες από εγγραφή μέχρι να τις επανασυνδέσετε. Απαιτούνται δικαιώματα διαχειριστή.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Αλλαγή ρύθμισης</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Απαιτούνται δικαιώματα διαχειριστή. Η ρύθμιση δεν άλλαξε.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Δεν ήταν δυνατή η αλλαγή της ρύθμισης (άρνηση πρόσβασης· ενδέχεται να διαχειρίζεται από την Πολιτική ομάδας): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η αλλαγή της ρύθμισης: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Η προστασία εγγραφής USB του λειτουργικού είναι ενεργή. Επανασυνδέστε τις συσκευές αποθήκευσης USB για να τεθεί σε ισχύ.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Η προστασία εγγραφής USB του λειτουργικού είναι ανενεργή.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Η προστασία εγγραφής USB του λειτουργικού είναι ακόμη ενεργή</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Τα Windows συνεχίζουν να εμποδίζουν την εγγραφή σε αποθήκευση USB μετά το κλείσιμο αυτής της εφαρμογής. Να απενεργοποιηθεί πριν την έξοδο;</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Απενεργοποίηση και έξοδος</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Έξοδος και διατήρηση ενεργού</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Η αλλαγή της προστασίας εγγραφής USB του λειτουργικού απαιτεί δικαιώματα διαχειριστή των Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Συσκευή</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Έλεγχος HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Ανάγνωση SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Εξαγωγή JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Εξαγωγή κειμένου...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Ανοίξτε έναν φυσικό δίσκο και επιλέξτε Έλεγχος HPA / DCO ή Πληροφορίες SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — καταγραφή: {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>Δεν έχει γίνει έλεγχος HPA / DCO.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Οι δίσκοι NVMe δεν έχουν HPA ή DCO· τα HPA / DCO δεν ισχύουν.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Μέγεθος namespace: {0} μπλοκ ({1} byte ανά μπλοκ)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Χωρητικότητα namespace: {0} μπλοκ</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Δεν είναι δυνατός ο έλεγχος σε αυτήν τη συσκευή (οι εντολές δεν περνούν, για παράδειγμα σε προσαρμογείς USB ή εικονικούς δίσκους).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Απαιτούνται δικαιώματα διαχειριστή.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Η εντολή {0} απέτυχε (κατάσταση ATA {1}, σφάλμα {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Μέγιστο LBA (IDENTIFY DEVICE, 28-bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Μέγιστο LBA (IDENTIFY DEVICE, 48-bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Εγγενές μέγιστο LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>Μέγιστο LBA που ορίζεται από το DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>δεν υποστηρίζεται από τη συσκευή</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>δεν υποστηρίζεται από τη συσκευή</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: υπάρχει, {0} τομείς ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: δεν υπάρχει</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: δεν ήταν δυνατός ο προσδιορισμός</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: υπάρχει, {0} τομείς ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: δεν υπάρχει</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: δεν ήταν δυνατός ο προσδιορισμός</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Οι πληροφορίες SMART δεν έχουν διαβαστεί.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Οι πληροφορίες SMART δεν μπορούν να διαβαστούν σε αυτήν τη συσκευή (για παράδειγμα μέσω προσαρμογέα USB που δεν τις υποστηρίζει).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>Το SMART είναι απενεργοποιημένο σε αυτήν τη συσκευή.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου των δεδομένων SMART δεν ταιριάζει· οι τιμές ενδέχεται να είναι λανθασμένες.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Μοντέλο: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Σειριακός αριθμός: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Υλικολογισμικό: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Χωρητικότητα: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Μέγεθος τομέα: {0} byte λογικό, {1} byte φυσικό</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Σύνδεση: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Ταχύτητα περιστροφής: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>δεν περιστρέφεται (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>υποστηρίζεται</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>δεν υποστηρίζεται</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Ανοίξτε έναν φυσικό δίσκο για να χρησιμοποιήσετε αυτήν την εντολή.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση των πληροφοριών συσκευής: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>Το {0} έχει κρυφές περιοχές: HPA {1} τομείς, DCO {2} τομείς. Η χωρητικότητα που βλέπουν τα Windows είναι μικρότερη από την πραγματική χωρητικότητα του δίσκου.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Εμφάνιση λεπτομερειών</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Οι πληροφορίες συσκευής εξήχθησαν στο {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η εξαγωγή των πληροφοριών συσκευής: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Τρέχον</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Χειρότερο</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Όριο</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Ακατέργαστο (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Ακατέργαστο (δεκαδικό)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Κατάσταση</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Προειδοποίηση</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Άγνωστο</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Θερμοκρασία</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Bit κρίσιμης προειδοποίησης: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Θερμοκρασία: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Διαθέσιμο εφεδρικό: {0}% (όριο {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Ποσοστό χρήσης: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Δεδομένα που διαβάστηκαν: {0} byte</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Δεδομένα που γράφτηκαν: {0} byte</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Κύκλοι τροφοδοσίας: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Ώρες λειτουργίας: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Μη ασφαλείς τερματισμοί: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Σφάλματα μέσου και ακεραιότητας δεδομένων: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Καταγράφηκε</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Συσκευή</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Μοντέλο</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Σειριακός αριθμός</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Υλικολογισμικό</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Χωρητικότητα (byte)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Μέγεθος τομέα (λογικό / φυσικό)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Σύνδεση</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Μέγιστο LBA (28-bit / 48-bit / εγγενές / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Δεν είναι δυνατός ο έλεγχος σε αυτήν τη συσκευή</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Κανένα</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Υπάρχει ({0} τομείς)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Δεν ισχύει (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Τρέχον</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Χειρότερο</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Όριο</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Ακατέργαστο</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Κατάσταση</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Προειδοποίηση</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Πληροφορίες κρυπτογράφησης</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Δεν βρέθηκαν κρυπτογραφημένοι τόμοι.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Περιοχή {0}: μετατόπιση {1}, {2} byte</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Τύπος: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Κρυπτογραφημένος τόμος APFS (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (πιθανώς κρυπτογραφημένο)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Πιθανώς κρυπτογραφημένα ή συμπιεσμένα δεδομένα (για παράδειγμα VeraCrypt ή TrueCrypt· δεν υπάρχει υπογραφή για την αναγνώρισή τους)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Έκδοση μεταδεδομένων: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Μέθοδος κρυπτογράφησης: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID τόμου: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Δημιουργήθηκε: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Περιγραφή: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Κατάσταση κρυπτογράφησης: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>άγνωστη</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>αποκρυπτογραφημένο</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>σε εξέλιξη</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>ολοκληρώθηκε</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>σε παύση</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Κρυπτογραφημένα μέχρι τώρα: {0} byte</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Προστάτες κλειδιού: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, δημιουργήθηκε {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Καθαρό κλειδί</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Κλειδί εκκίνησης</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM και PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Κωδικός ανάκτησης</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Κωδικός πρόσβασης</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Άγνωστο (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Υποδοχές κλειδιών: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Τόμος {0}: κρυπτογραφημένος</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Τόμος {0}: μη κρυπτογραφημένος</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Εντροπία των πρώτων 64 KiB: {0} bit ανά byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Προειδοποίηση: τα τρία μπλοκ μεταδεδομένων δεν ταιριάζουν.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Προειδοποίηση: ορισμένα μπλοκ μεταδεδομένων είναι κατεστραμμένα· εμφανίζονται μόνο τα στοιχεία που διαβάστηκαν.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Ο εξερευνητής συστήματος αρχείων δεν ανοίγει κρυπτογραφημένους τόμους.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Τα Windows έχουν ξεκλειδώσει αυτόν τον τόμο BitLocker ({0}). Αν τον ανοίξετε ως λογικό τόμο, μπορείτε να διαβάσετε το περιεχόμενο που αποκρυπτογραφούν τα Windows.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Άνοιγμα ως λογικού τόμου</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Απόρριμμα μνήμης</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση της μορφής απορρίμματος μνήμης του {0}. Να ανοιχτεί ως ακατέργαστο (raw);</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Άνοιγμα ως raw</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του απορρίμματος μνήμης: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Απόρριμμα μνήμης: {0}, καταγραφή: {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Απόρριμμα μνήμης: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>εικόνα φυσικής μνήμης (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>πλήρες απόρριμμα μνήμης</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>απόρριμμα μνήμης πυρήνα</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>πλήρες απόρριμμα μνήμης (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Απόρριμμα μνήμης</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή των δεδομένων επειδή η λειτουργία προστασίας εγγραφής είναι ενεργή.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Εικόνα</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Δημιουργία εικόνας...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Δημιουργία εικόνας-σκελετού...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Άνοιγμα εικόνας...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Επαλήθευση εικόνας...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Πληροφορίες εικόνας</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Κλωνοποίηση δίσκου...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Αποθήκευση περιοχής τομέων...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Επαναφορά περιοχής τομέων...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Ανακατασκευή RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Δημιουργία εικόνας</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>απόκτηση εικόνα δίσκου dd raw e01 τεκμήρια acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Δημιουργία εικόνας-σκελετού</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>σκελετός αραιή εικόνα μεταδεδομένα skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Άνοιγμα εικόνας ως δίσκου</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk split raw 001 εικόνα δίσκος</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Επαλήθευση εικόνας</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>επαλήθευση κατακερματισμός md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Πληροφορίες εικόνας</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 κεφαλίδα πληροφορίες υπόθεσης e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Κλωνοποίηση δίσκου</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>κλωνοποίηση αντίγραφο δίσκος τομέας clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Αποθήκευση περιοχής τομέων</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>αντίγραφο ασφαλείας mbr gpt τομείς backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Επαναφορά περιοχής τομέων</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>επαναφορά mbr gpt τομείς restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Ανακατασκευή RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod stripe ισοτιμία raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Το τρέχον έγγραφο δεν είναι εικόνα δίσκου.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Απαιτείται έγγραφο δίσκου, τόμου ή εικόνας δίσκου.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Ανοίξτε πρώτα τον δίσκο, την εικόνα ή το αρχείο που θα χρησιμοποιηθεί ως πηγή.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Άνοιξε χωρίς τα τμήματα που λείπουν ({0}). Οι περιοχές τους διαβάζονται ως σφάλματα.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση της εικόνας {0} (τμήμα: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Δεν βρέθηκε ο γονικός δίσκος του διαφορικού δίσκου: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Λείπουν τμήματα</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Λείπουν αυτά τα τμήματα: {0}. Να ανοιχτεί η εικόνα με τα διαθέσιμα τμήματα; Οι περιοχές που λείπουν διαβάζονται ως σφάλματα.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Άνοιγμα διαθέσιμων τμημάτων</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Split raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Το άθροισμα ελέγχου ενός τμήματος (chunk) δεν ταιριάζει στο {0} ({1} byte). Η περιοχή εμφανίζεται ως σφάλμα ανάγνωσης.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Πληροφορίες εικόνας</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Αρχεία</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Μέγεθος</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} byte ({1} τομείς)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Μέγεθος τομέα</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Απόκτηση</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Εργαλείο απόκτησης</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Συσκευή</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Τμήματα (chunk)</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} τομείς ανά chunk)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Συμπίεση</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Συμπιεσμένο</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Μη συμπιεσμένο</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Αποθηκευμένο {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Τομείς που δεν διαβάστηκαν κατά την απόκτηση</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Γονικός δίσκος</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Τμήματα που λείπουν</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Αριθμός υπόθεσης</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Αριθμός τεκμηρίου</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Εξεταστής</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Περιγραφή</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Σημειώσεις</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Ταιριάζει</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Δεν ταιριάζει</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Δεν υπάρχει τιμή αναφοράς</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Δεν είναι δυνατή η επαλήθευση λόγω σφαλμάτων ανάγνωσης</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>αποθηκευμένο στην εικόνα</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>αρχείο καταγραφής απόκτησης</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>λίστα τεκμηρίων</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>τιμή που εισήχθη</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>υπολογίστηκε κατά την απόκτηση</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>δίσκος-πηγή</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Δημιουργία εικόνας</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Δημιουργία εικόνας-σκελετού</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής είναι ανενεργή. Συνιστάται να την ενεργοποιήσετε πριν την απόκτηση τεκμηρίων.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Ενεργοποίηση λειτουργίας προστασίας εγγραφής</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Πηγή: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Μόνο η επιλογή (επεκτείνεται στα όρια τομέων)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Περιοχές προς απόκτηση</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Ολόκληρο</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Αραιό (παράλειψη μη εκχωρημένων περιοχών)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Σκελετός (μόνο πίνακες διαμερισμάτων και μεταδεδομένα συστήματος αρχείων)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Συμπερίληψη και σελιδοδεικτών και περιοχών πολλαπλής επιλογής</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Αναζήτηση...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Μέγεθος διαίρεσης / τμήματος (για παράδειγμα 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Κατακερματισμοί</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Επαναλήψεις σε σφάλματα ανάγνωσης</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Τιμή πλήρωσης για τομείς που δεν διαβάζονται (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Μονάδα ανάγνωσης</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Επαλήθευση μετά την ολοκλήρωση</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Σφάλματα ανάγνωσης</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Πληροφορίες E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Συμπίεση</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Καμία</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Γρήγορη (zlib επίπεδο 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Βέλτιστη (zlib επίπεδο 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Έναρξη</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Εισαγάγετε την έξοδο.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Το μέγεθος διαίρεσης πρέπει να είναι τουλάχιστον 1 MiB (για παράδειγμα 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Εισαγάγετε αριθμό επαναλήψεων από 0 έως 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Εισαγάγετε την τιμή πλήρωσης ως δύο ψηφία hex (για παράδειγμα 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Επιλέξτε τουλάχιστον έναν κατακερματισμό.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Η έξοδος βρίσκεται στον ίδιο φυσικό δίσκο με την πηγή. Επιλέξτε άλλον δίσκο.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Η έξοδος βρίσκεται σε δίσκο της λίστας τεκμηρίων. Επιλέξτε άλλον δίσκο.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Το σύστημα αρχείων εξόδου ({0}) επιτρέπει αρχεία έως {1} byte. Χρησιμοποιήστε split raw ή E01 με μικρότερο μέγεθος τμήματος.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Η έξοδος χρειάζεται περίπου {0} byte, αλλά είναι ελεύθερα μόνο {1} byte.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>Το {0} υπάρχει ήδη. Να αντικατασταθεί;</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Αντικατάσταση</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Το σύστημα αρχείων εξόδου είναι {0}, όχι NTFS, επομένως οι εξαιρούμενες περιοχές γράφονται ως μηδενικά και η εικόνα δεν γίνεται μικρότερη.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Δημιουργία εικόνας: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Υπολογισμός των περιοχών που θα συμπεριληφθούν</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} διαμερίσματα δεν ήταν δυνατό να αναλυθούν και συμπεριλήφθηκαν ολόκληρα.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η δημιουργία της εικόνας. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Τομείς που δεν διαβάστηκαν: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Η εικόνα δημιουργήθηκε. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Επαλήθευση: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} τομείς δεν ήταν δυνατό να διαβαστούν και συμπληρώθηκαν.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Η απόκτηση διακόπηκε. Τα αρχεία που είχαν γραφτεί διατηρήθηκαν.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Η απόκτηση διακόπηκε. Τα αρχεία που είχαν γραφτεί διαγράφηκαν.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Η πηγή χάθηκε. Η απόκτηση διακόπηκε.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Άνοιγμα αρχείου καταγραφής απόκτησης</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή της εξόδου: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Επανάληψη</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Ματαίωση</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Η απόκτηση ακυρώθηκε. Να διατηρηθούν τα αρχεία που έχουν γραφτεί;</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Διατήρηση</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Διαγραφή</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Επαλήθευση εικόνας</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Εικόνα: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Τιμή για σύγκριση (hex, προαιρετικό)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Τιμή MD5, SHA-1 ή SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Εισαγάγετε τιμή hex 32, 40 ή 64 ψηφίων.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Επανανάγνωση και του δίσκου-πηγής</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Επαλήθευση εικόνας: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Αποτέλεσμα επαλήθευσης: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Δεν είναι δυνατή η επαλήθευση λόγω σφαλμάτων ανάγνωσης: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>υπολογισμένο: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Αρχείο καταγραφής απόκτησης εικόνας δίσκου</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Αρχείο καταγραφής κλωνοποίησης δίσκου</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Κατάσταση</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Ολοκληρώθηκε</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Διακόπηκε</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Η πηγή χάθηκε</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Απέτυχε</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Πηγή</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Διαδρομή</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Μοντέλο</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Σειριακός αριθμός</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Χωρητικότητα</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Μέγεθος τομέα</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Περιοχή</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Αρχεία</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Προορισμός</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Έναρξη</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Λήξη</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Τομείς που διαβάστηκαν</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Τομείς που δεν διαβάστηκαν</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>κανένας</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Κατακερματισμοί</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>περιοχές που συμπεριλήφθηκαν</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>δεν επαληθεύτηκε</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Έκδοση εφαρμογής</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Υπόθεση</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Περιοχές που αποκτήθηκαν</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>ολόκληρο</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>αραιή εικόνα (δεν περιλαμβάνονται μη εκχωρημένες περιοχές)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>εικόνα-σκελετός (μόνο πίνακες διαμερισμάτων και μεταδεδομένα συστήματος αρχείων)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Οι εξαιρούμενες περιοχές αποθηκεύονται ως μηδενικά, επομένως οι κατακερματισμοί αυτής της εικόνας δεν ταιριάζουν με εκείνους ολόκληρου του δίσκου-πηγής.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Περιοχές που συμπεριλήφθηκαν</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Μήνυμα</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Κλωνοποίηση δίσκου</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Δίσκος προορισμού</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Δίσκος {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Δίσκος {0}: {1}, σειριακός {2}, {3} byte, τομείς {4} byte. Τόμοι: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} byte)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>κανένας</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA έναρξης στον προορισμό</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Συμπλήρωση του υπόλοιπου προορισμού με μηδενικά</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Κατακερματισμός για επαλήθευση</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Φάκελος αρχείου καταγραφής (προαιρετικό)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Επόμενο</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Επιλέξτε τον δίσκο προορισμού.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>Το LBA έναρξης βρίσκεται εκτός του δίσκου προορισμού.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Δίσκος με διαφορετικό μέγεθος τομέα δεν μπορεί να είναι προορισμός κλωνοποίησης.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Ο δίσκος προορισμού βρίσκεται στη λίστα τεκμηρίων. Δεν μπορεί να αντικατασταθεί.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Προορισμός: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Περιοχή εγγραφής: από το LBA {0}, {1} τομείς ({2} byte)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Περιεχόμενο: τα δεδομένα του {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Όλο το περιεχόμενο αυτών των τόμων θα χαθεί:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Ο προορισμός είναι μικρότερος από την πηγή. Θα γραφτούν μόνο τα πρώτα {0} byte της πηγής.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Κλωνοποίηση στο {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Πληκτρολογήστε «{0}» για επιβεβαίωση</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Κλωνοποίηση στο {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Αν σταματήσετε τώρα, ο δίσκος προορισμού θα μείνει μερικώς γραμμένος.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Συνέχεια</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Δεν ήταν δυνατό το κλείδωμα του τόμου {0}, επομένως δεν γράφτηκε τίποτα. Κλείστε τα αρχεία που είναι ανοιχτά σε αυτόν και δοκιμάστε ξανά.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Η κλωνοποίηση απέτυχε. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Κλωνοποιήθηκαν {0} byte. Επαλήθευση: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Η κλωνοποίηση σταμάτησε. Ο δίσκος προορισμού είναι μερικώς γραμμένος.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Ο προορισμός είναι ο ίδιος δίσκος με την πηγή.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Δίσκος με διαφορετικό μέγεθος τομέα δεν μπορεί να είναι προορισμός κλωνοποίησης.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Η λειτουργία προστασίας εγγραφής είναι ενεργή.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Ο δίσκος προορισμού βρίσκεται στη λίστα τεκμηρίων. Δεν μπορεί να αντικατασταθεί.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Τα Windows χρησιμοποιούν έναν τόμο στον δίσκο προορισμού.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>Το LBA έναρξης βρίσκεται εκτός του δίσκου προορισμού.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του δίσκου προορισμού για εγγραφή.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Αποθήκευση περιοχής τομέων</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Επαναφορά περιοχής τομέων</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA έναρξης</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Αριθμός τομέων</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Δεδομένα τομέων</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Η περιοχή βρίσκεται εκτός του δίσκου.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Αποθήκευση τομέων: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Αποθηκεύτηκαν {0} τομείς στο {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Ορισμένοι τομείς της περιοχής δεν ήταν δυνατό να διαβαστούν, επομένως δεν αποθηκεύτηκε τίποτα.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση της περιοχής τομέων. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση του αρχείου δεδομένων ή του συνοδευτικού του αρχείου (sidecar). {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Αρχείο δεδομένων: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Αποθηκεύτηκε από: {0}, σειριακός {1}, {2} byte, τομείς {3} byte. LBA έναρξης {4}, {5} τομείς. Αποθηκεύτηκε στις {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Εγγραφή σε: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Δημιουργία αντιγράφου ασφαλείας του τρέχοντος περιεχομένου πριν την εγγραφή</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Επόμενο</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>Το SHA-256 του αρχείου δεδομένων δεν ταιριάζει με το συνοδευτικό αρχείο. Δεν είναι δυνατή η επαναφορά.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Δεν υπάρχει συνοδευτικό αρχείο. Εισαγάγετε το LBA έναρξης για την εγγραφή.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Ο σειριακός αριθμός ή η χωρητικότητα του προορισμού διαφέρει από εκείνη του δίσκου από τον οποίο αποθηκεύτηκαν τα δεδομένα.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Προορισμός: {0}. Τόμοι στην περιοχή: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Περιεχόμενο: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Εγγραφή {0} τομέων</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Επαναφορά τομέων: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η επαναφορά της περιοχής τομέων. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Γράφτηκαν {0} τομείς και επιβεβαιώθηκαν με ανάγνωση.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Η εγγραφή απέτυχε. Γράφτηκαν {0} τομείς· η εγγραφή απέτυχε στο LBA {1}. Μπορείτε να γράψετε πίσω το αρχείο αντιγράφου ασφαλείας {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Το περιεχόμενο που διαβάστηκε ξανά δεν ταιριάζει με το αρχείο δεδομένων.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Ανακατασκευή RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Μέλη (με σειρά)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Πάνω</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Κάτω</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Προσθήκη αρχείου...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Αυτό το μέλος λείπει</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[λείπει]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Μετατόπιση έναρξης δεδομένων του μέλους</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Μέγεθος stripe</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Διάταξη ισοτιμίας</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Αριστερή συμμετρική</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Αριστερή ασύμμετρη</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Δεξιά συμμετρική</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Δεξιά ασύμμετρη</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Μέλος προς χρήση (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Ανίχνευση (πρώτο 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Εντοπίστηκε {0} ({1} διαμερίσματα)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Δεν υπάρχει πίνακας διαμερισμάτων</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Υπογραφή συστήματος αρχείων: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Δεν υπάρχει υπογραφή συστήματος αρχείων</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Μέγεθος λογικού δίσκου: {0} byte</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Δεν είναι δυνατή η ανίχνευση με αυτήν τη διαμόρφωση.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Τα μέλη έχουν διαφορετικά μεγέθη. Χρησιμοποιείται το μικρότερο μέγεθος.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Αποθήκευση διαμόρφωσης...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Φόρτωση διαμόρφωσης...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Διαμόρφωση RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Η διαμόρφωση RAID αποθηκεύτηκε στο {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση της διαμόρφωσης RAID. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση της διαμόρφωσης RAID. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του λογικού δίσκου.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} μέλη)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Οι παράμετροι δεν είναι έγκυρες.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Το μέγεθος stripe πρέπει να είναι δύναμη του δύο από 512 B έως 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Υπάρχουν πολύ λίγα μέλη για αυτόν τον τύπο.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Αυτός ο τύπος δεν μπορεί να έχει μέλος που λείπει.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Λείπουν δύο ή περισσότερα μέλη. Το RAID 5 δεν μπορεί να ανοιχτεί.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Εμφάνιση διαμερισμάτων</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>διαμερίσματα δίσκος mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Άνοιγμα διαμερίσματος σε νέα καρτέλα</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>διαμέρισμα καρτέλα partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Μετάβαση στην αρχή του διαμερίσματος</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>διαμέρισμα μετάβαση partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Άνοιγμα εδώ ως αρχή διαμερίσματος</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>διαμέρισμα εδώ partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Σάρωση για χαμένα διαμερίσματα</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>χαμένο διαμέρισμα ανάκτηση σάρωση lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Εμφάνιση συστήματος αρχείων</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>εξερευνητής συστήματος αρχείων ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Άνοιγμα αρχείου σε νέα καρτέλα</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>αρχείο άνοιγμα καρτέλα file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Εξαγωγή αρχείων</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>εξαγωγή αρχεία export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Εύρεση διαγραμμένων αρχείων</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>διαγραμμένα επαναφορά διαγραφής ανάκτηση deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Μετάβαση σε εγγραφή MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>εγγραφή mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Μετάβαση σε σύμπλεγμα</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>σύμπλεγμα μπλοκ μετάβαση cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Αρχεία που χρησιμοποιούν αυτήν τη θέση</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>κάτοχος συμπλέγματος αντίστροφη cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Εμφάνιση συμπλεγμάτων αρχείου</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>τμήματα συμπλέγματα επισήμανση fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Επόμενο τμήμα</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>τμήμα επόμενο fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Προηγούμενο τμήμα</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>τμήμα προηγούμενο fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Εναλλαγή επισήμανσης ελεύθερου χώρου και slack</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack μη εκχωρημένο επισήμανση slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Εξαγωγή μη εκχωρημένου χώρου</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>μη εκχωρημένο ελεύθερο εξαγωγή unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Εξαγωγή slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack εξαγωγή slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Άνοιγμα μη εκχωρημένου χώρου σε νέα καρτέλα</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>μη εκχωρημένο καρτέλα unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Πίνακας διαμερισμάτων</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>πίνακας διαμερίσματα panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Πίνακας συστήματος αρχείων</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>πίνακας σύστημα αρχείων panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Πίνακας τμημάτων</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>πίνακας τμήματα panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Πίνακας εγκληματολογικών αποτελεσμάτων</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>πίνακας αποτελέσματα εγκληματολογική panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Αριθμός εγγραφής MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Διαμερίσματα και συστήματα αρχείων</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Εμφάνιση μικρών κενών μεταξύ διαμερισμάτων</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Εμφανίζει στον πίνακα διαμερισμάτων τα μη εκχωρημένα κενά μικρότερα από 1 MiB.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Εμφάνιση μετατοπίσεων δίσκου στις καρτέλες διαμερισμάτων</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Όταν είναι ανενεργό, οι διευθύνσεις μιας καρτέλας διαμερίσματος ξεκινούν από το 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Εμφάνιση εναλλακτικών ροών δεδομένων NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Οι επώνυμες ροές εμφανίζονται ως file.txt:stream στον εξερευνητή συστήματος αρχείων.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Εμφάνιση υπομνήματος της εγκληματολογικής επισήμανσης</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Εμφανίζει το υπόμνημα πάνω δεξιά στην προβολή Hex όσο η επισήμανση είναι ενεργή.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Χρώματα της εγκληματολογικής επισήμανσης</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Για παράδειγμα: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Αφήστε κενό για τα προεπιλεγμένα χρώματα.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Διαμερίσματα</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>Ι</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Σύστημα αρχείων</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Εμφάνιση διαμερισμάτων</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Άνοιγμα διαμερίσματος σε νέα καρτέλα</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Μετάβαση στην αρχή του διαμερίσματος</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Σάρωση για χαμένα διαμερίσματα...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Εμφάνιση εξερευνητή</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Άνοιγμα αρχείου σε νέα καρτέλα</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Εξαγωγή αρχείων...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>Ξ</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Εύρεση διαγραμμένων αρχείων</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Μετάβαση σε σύμπλεγμα...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Αρχεία που χρησιμοποιούν αυτήν τη θέση</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Εμφάνιση συμπλεγμάτων αρχείου</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Μετάβαση σε εγγραφή MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Εξαγωγή μη εκχωρημένου χώρου...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>Χ</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Εξαγωγή slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Άνοιγμα μη εκχωρημένου χώρου σε νέα καρτέλα</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Επόμενο τμήμα</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>Η</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Προηγούμενο τμήμα</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Εγκληματολογική επισήμανση</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Διαμερίσματα</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Σύστημα αρχείων</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Τμήματα</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Εγκληματολογικά αποτελέσματα</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Θέση δίσκου και κάτοχος συμπλέγματος</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Διαμερίσματα</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Σύστημα αρχείων</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Τμήματα</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Εγκληματολογικά αποτελέσματα</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Ανάλυση διαμερισμάτων…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Δεν έγινε ανάλυση. Επιλέξτε Εγκληματολογική ανάλυση &gt; Διαμερίσματα &gt; Εμφάνιση διαμερισμάτων.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Δεν βρέθηκε πίνακας διαμερισμάτων.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} διαμερίσματα, μέγεθος τομέα {1}, αναγνωριστικό δίσκου {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Τομείς που δεν διαβάστηκαν (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> Αρ.  Μορφή     Τύπος                        Όνομα            LBA έναρξης    LBA λήξης    Τομείς        Μέγεθος Μετ. έναρξης  Σημαίες      ΣΑ        Κατάσταση</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Διάταξη διαμερισμάτων</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Προειδοποίηση</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID τύπου: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Μοναδικό GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Μπλοκ έναρξης {0}, {1} μπλοκ</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Καταχώριση πίνακα στο {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Μετάβαση στην αρχή του διαμερίσματος</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Επιλογή διαμερίσματος</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Άνοιγμα διαμερίσματος σε νέα καρτέλα</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Εμφάνιση δομής καταχώρισης</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Εμφάνιση συστήματος αρχείων</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Σάρωση για χαμένα διαμερίσματα...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Ο δρομέας δεν βρίσκεται σε διαμέρισμα.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>Δεν βρέθηκε GPT με τομείς {1} byte, αλλά βρέθηκε με τομείς {0} byte. Να ανοιχτεί ξανά με τομείς {0} byte;</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Επανάνοιγμα με τομείς {0} byte</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - Διαμέρισμα {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Λογικό</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Η αλυσίδα EBR επιστρέφει κυκλικά στο LBA {1} (μετά το διαμέρισμα {0}). Η αλυσίδα διακόπηκε.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Περισσότερα από 256 λογικά διαμερίσματα. Τα υπόλοιπα δεν διαβάστηκαν.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>Το CRC32 της κεφαλίδας GPT δεν ταιριάζει (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>Το CRC32 του πίνακα καταχωρίσεων διαμερισμάτων GPT δεν ταιριάζει (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Η κύρια κεφαλίδα GPT και η εφεδρική κεφαλίδα (LBA {1}) διαφέρουν.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Η κύρια κεφαλίδα GPT είναι κατεστραμμένη. Η λίστα δημιουργήθηκε από την εφεδρική κεφαλίδα.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Τα διαμερίσματα {0} και {2} επικαλύπτονται.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Το διαμέρισμα {0} δείχνει εκτός του δίσκου (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Υβριδικό MBR: το προστατευτικό MBR έχει και άλλες καταχωρίσεις.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Ορισμένοι τομείς δεν ήταν δυνατό να διαβαστούν (πρώτος: LBA {1}). Η λίστα χρησιμοποιεί τους τομείς που διαβάστηκαν.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Ο χάρτης διαμερισμάτων Apple έχει περισσότερες από 256 καταχωρίσεις.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Σύστημα EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Δεσμευμένο Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Βασικά δεδομένα Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Ανάκτηση Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Μεταδεδομένα LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Δεδομένα LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Σύστημα αρχείων Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Swap Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Home Linux</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Εκκίνηση Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Εκκίνηση BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Εκτεταμένο</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Εκτεταμένο (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Κρυφό FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Ανάκτηση</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Κρυφό FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Κρυφό NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Κρυφό FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (δυναμικός δίσκος)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux εκτεταμένο</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>Προστατευτικό GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Μη εκχωρημένο</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Φυσικός τόμος LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Σάρωση για χαμένα διαμερίσματα</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA έναρξης</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA λήξης (δεν περιλαμβάνεται)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Θέσεις σάρωσης</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Όρια 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Όρια κυλίνδρων (63 τομείς)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Κάθε τομέας</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Κάθε τομέας απαιτεί περίπου {0} (στα 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} ώρες</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} λεπτά</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Αναζήτηση για</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Κεφαλίδα GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Σάρωση</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Σάρωση για χαμένα διαμερίσματα</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Χαμένα διαμερίσματα</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     LBA έναρξης       Τομείς          Μέγεθος  Τύπος       Βεβ.    Επικαλύψεις</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Χαμηλή</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Μέση</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Υψηλή</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>επικαλύπτεται με το διαμέρισμα {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Ακυρώθηκε. Τα αποτελέσματα μέχρι τώρα διατηρούνται.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {Βρέθηκε # υποψήφιο.} other {Βρέθηκαν # υποψήφια.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Δεν διαβάστηκε: LBA {0}, {1} τομείς</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Δεν βρέθηκαν υποψήφια διαμερίσματα.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Σάρωση κάθε τομέα</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Άνοιγμα ως διαμέρισμα</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Εμφάνιση συστήματος αρχείων</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Δημιουργία καταχωρίσεων πίνακα διαμερισμάτων (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Δημιουργία καταχωρίσεων πίνακα διαμερισμάτων (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Δημιουργία καταχωρίσεων πίνακα διαμερισμάτων</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>Το MBR δεν έχει ελεύθερη καταχώριση για όλους τους υποψηφίους.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Το διαμέρισμα δεν μπορεί να γραφτεί σε MBR (άνω των 2 TiB). Χρησιμοποιήστε GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>Το GPT δεν έχει ελεύθερη καταχώριση.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Ο δίσκος είναι πολύ μικρός για GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Δεν υπάρχει ανοιχτό σύστημα αρχείων για αυτό το έγγραφο.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Επιλέξτε ένα αρχείο στον εξερευνητή συστήματος αρχείων.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Δεν υπάρχουν επισημασμένα συμπλέγματα αρχείου.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Μόνο για NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Οι πληροφορίες εκχώρησης δεν μπορούν να διαβαστούν, επομένως η επισήμανση δεν είναι διαθέσιμη.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Ο τόμος είναι κρυπτογραφημένος (BitLocker). Ο εξερευνητής συστήματος αρχείων δεν τον ανοίγει.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Ο τόμος είναι κρυπτογραφημένος ({0}). Ο εξερευνητής συστήματος αρχείων δεν τον ανοίγει.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα ως {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Επιλογή συστήματος αρχείων</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Ο τύπος δεν μπόρεσε να εντοπιστεί από την υπογραφή. Επιλέξτε τον τύπο που θα δοκιμάσετε.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Άνοιγμα</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Μη εκχωρημένο ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Δεν υπάρχει εγγραφή MFT {0}.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Μετάβαση σε μπλοκ</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Δεν υπάρχει σύστημα αρχείων. Επιλέξτε Εγκληματολογική ανάλυση &gt; Σύστημα αρχείων &gt; Εμφάνιση εξερευνητή.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  σειριακός {2}  σύμπλεγμα {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Ρίζα</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Αρχεία</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Φάκελοι</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Τμήματα</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Φίλτρο (* και ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Εύρεση αρχείων (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Στήλες</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT προς χρήση</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {Τα FAT διαφέρουν σε # καταχώριση.} other {Τα FAT διαφέρουν σε # καταχωρίσεις.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Τομείς ανά σύμπλεγμα</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Νέα ανάλυση</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Ανάγνωση…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Ανάγνωση… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} στοιχεία</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(κατεστραμμένο)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(ασυμφωνία ώρας)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Ασυμφωνία ώρας: οι ώρες $STANDARD_INFORMATION είναι προγενέστερες των ωρών $FILE_NAME ή δεν έχουν κλασματικό μέρος.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Κρυπτογραφημένο με EFS (μόνο ακατέργαστα δεδομένα).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Η αλυσίδα συμπλεγμάτων λείπει· τα δεδομένα διαβάζονται ως συνεχόμενα συμπλέγματα από το πρώτο σύμπλεγμα.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>καταχώριση slack ευρετηρίου</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>μέτρηση…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Λογικό {0}  σύμπλεγμα {1} ×{2}  δίσκος {3}  {4} byte</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Λογικό {0}  στα μεταδεδομένα  δίσκος {3}  {4} byte</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(συμπιεσμένο)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Υπολογισμός θέσεων slack</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Δημιουργία χάρτη συμπλεγμάτων</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Παραλείφθηκαν {0} καταχωρίσεις με κατεστραμμένα μεταδεδομένα.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Η θέση δεν βρίσκεται στην περιοχή συμπλεγμάτων.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Κάτοχοι των συμπλεγμάτων {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Είδος                     Διαδρομή</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Αρχείο</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Μεταδεδομένα</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Διαγραμμένο αρχείο (αποδεσμευμένο)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Αλυσίδα συμπλεγμάτων του {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Δείκτης        Σύμπλεγμα</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Αρχεία με όνομα {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        Μέγεθος Διαδρομή</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Εύρεση αρχείων: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {Βρέθηκε # αρχείο.} other {Βρέθηκαν # αρχεία.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Εύρεση διαγραμμένων αρχείων</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Εύρεση ορφανών αρχείων</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Άνοιγμα αρχείου σε νέα καρτέλα</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Εξαγωγή αρχείων...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Μετάβαση στα μεταδεδομένα</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Εμφάνιση συμπλεγμάτων αρχείου</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Εμφάνιση εγγραφής MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Εμφάνιση INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Εμφάνιση $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Εμφάνιση καταχώρισης καταλόγου</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Εμφάνιση αλυσίδας συμπλεγμάτων</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Αντιγραφή διαδρομής</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Εξαγωγή λίστας ως CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Επέκτ.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Μέγεθος</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Εκχωρημένο</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Δημιουργία (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Δημιουργία (τοπική)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Τροποποίηση (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Τροποποίηση (τοπική)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Πρόσβαση (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Πρόσβαση (τοπική)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Αλλαγή μεταδεδομένων (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Αλλαγή μεταδεδομένων (τοπική)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Ιδιότ.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>Αναγνωριστικό αρχείου</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Πρώτο σύμπλεγμα</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Τμήμ.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Κατάσταση</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Διαδρομή</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Αρχική διαδρομή</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Ανάκτηση</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Κανονικό</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Διαγραμμένο</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Ορφανό</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Καλή</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Μερικώς αντικατεστημένο</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Αντικατεστημένο</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Άγνωστη θέση</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Resident</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Εγγραφή MFT εκτός χρήσης</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack ευρετηρίου</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Διαγραμμένη καταχώριση καταλόγου</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Διαγραμμένο inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack καταχώρισης καταλόγου</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Ασυμφωνία fixup (ακολουθία ενημέρωσης)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Κακή υπογραφή</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Αριθμός συμπλέγματος εκτός εύρους</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Η αλυσίδα συμπλεγμάτων σχηματίζει βρόχο</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Η αλυσίδα συμπλεγμάτων φτάνει σε ελεύθερο σύμπλεγμα</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Η αλυσίδα συμπλεγμάτων δεν ταιριάζει με το μέγεθος του αρχείου</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Μη έγκυρη λίστα data run</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Μη έγκυρο χαρακτηριστικό</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Το άθροισμα ελέγχου του συνόλου καταχωρίσεων δεν ταιριάζει</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Σφάλμα ανάγνωσης</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Πολύ βαθύ</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Ο εφεδρικός τομέας εκκίνησης διαφέρει ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>Το $MFTMirr διαφέρει από το $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Οι τιμές BPB είναι ασυνεπείς ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>Τα FAT διαφέρουν ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>Το FSInfo δεν ταιριάζει ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου της περιοχής εκκίνησης exFAT δεν ταιριάζει ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου ενός μεγάλου ονόματος δεν ταιριάζει ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Οι πληροφορίες εκχώρησης δεν μπορούν να διαβαστούν ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Ο τόμος είναι κρυπτογραφημένος ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Διαγραμμένα αρχεία</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Ορφανά αρχεία</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Μη εκχωρημένος χώρος</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack τόμου</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Μεταδεδομένα</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Δεδομένα αρχείου</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>Slack RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Slack μονάδας</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Μη εκχωρημένο</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack τόμου</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Κενό διαμερίσματος</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Υπόμνημα εγκληματολογικής επισήμανσης</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Μέγεθος {0} byte, εκχωρημένο {1} byte</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Δημιουργία {0}, τροποποίηση {1}, πρόσβαση {2}, αλλαγή μεταδεδομένων {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>Αναγνωριστικό αρχείου {0}, χαρακτηριστικά {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Ανάκτηση: {0} ({1}). Αρχική διαδρομή: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Τύπος: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Όνομα τόμου: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Σειριακός αριθμός: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Μέγεθος συμπλέγματος: {0} byte</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Συνολικά συμπλέγματα: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Ελεύθερα συμπλέγματα: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Δημιουργήθηκε: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Έναρξη τόμου {0}, {1} byte</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Εγγραφή MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Μετατόπιση εγγραφής</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Αριθμός ακολουθίας</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Σκληροί σύνδεσμοι</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Σημαίες</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Byte σε χρήση</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Βασική εγγραφή</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI δημιουργία</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI τροποποίηση</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI αλλαγή MFT</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI πρόσβαση</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Γονέας</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN δημιουργία</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN τροποποίηση</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN αλλαγή MFT</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN πρόσβαση</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>Μέγεθος $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Ασυμφωνία ώρας</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Περιεχόμενο</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Μετατόπιση καταχώρισης</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Πρώτο σύμπλεγμα</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Σύντομο όνομα</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Συμπλέγματα στην αλυσίδα</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Μήκος δεδομένων</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Μήκος έγκυρων δεδομένων</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Διαμέρισμα {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Σύμπλεγμα {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Μπλοκ {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Διαγραμμένο: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Μη εκχωρημένο</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Εύρεση κατόχου</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Δίσκος {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Δίσκος: - (συμπιεσμένο / αραιό / resident)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Αριθμός συμπλέγματος ({0}–{1}· σύμπλεγμα = τρέχον σύμπλεγμα)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Το σύμπλεγμα {0} είναι εκτός εύρους.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Μετάβαση</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Διατήρηση της δομής φακέλων</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Εξαγωγή και εναλλακτικών ροών δεδομένων (όνομα_ροή)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Εξαγωγή και του slack ως ξεχωριστά αρχεία</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Συμπερίληψη διαγραμμένων αρχείων</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {Επιλέχθηκε # στοιχείο.} other {Επιλέχθηκαν # στοιχεία.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Επιλογή φακέλου...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Εξαγωγή αρχείων</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Εξήχθησαν {0} αρχεία στο {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος: απαιτούνται {0}, ελεύθερα {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Να εξαχθεί αρχείο που έχει αντικατασταθεί;</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Τα συμπλέγματα αυτού του διαγραμμένου αρχείου χρησιμοποιούνται πλέον από άλλα αρχεία. Το περιεχόμενο που θα εξαχθεί ενδέχεται να ανήκει σε άλλο αρχείο.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Εξαγωγή</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Δυαδικό αρχείο</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Δημιουργία αρχείου χάρτη (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Εξαγωγή μη εκχωρημένου χώρου</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Εξαγωγή slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>Το {0} γράφτηκε στο {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Εγγραφές $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Προηγ. LSN   UndoNext LSN  Τύπος    ID συναλλ. Redo                            Undo                            Εγγρ MFT Μήκος</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Σελίδα επανεκκίνησης {0}: τρέχον LSN {1}, πελάτες: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Ανάγνωση του $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Λίστα</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Δεν υπάρχουν αποτελέσματα.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Εξαγωγή λίστας ως CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Δεν υπάρχει επισημασμένο αρχείο. Επιλέξτε Εμφάνιση συμπλεγμάτων αρχείου.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} τμήματα)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  λογικό {1}  δίσκος {2}  {3} byte  συμπλέγματα {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Απαλοιφή επισήμανσης</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Επιλογή μη εκχωρημένου χώρου</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>μη εκχωρημένο επιλογή αναζήτηση carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Επιλογή slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack επιλογή αναζήτηση carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Επιλογή μη εκχωρημένου χώρου</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>Ι</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Επιλογή slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Επιλογή μη εκχωρημένου χώρου</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Εύρεση μη εκχωρημένου χώρου</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Επιλογή slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Δεν υπάρχει τίποτα προς επιλογή.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Επιλέχθηκαν μόνο οι πρώτες 1.000.000 περιοχές.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Εμφάνιση λογικών τόμων</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>λογικός τόμος ldm δυναμικός δίσκος lvm lvm2 stripe span logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Μετάβαση σε inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Αριθμός inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Εμφάνιση λογικών τόμων</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Μετάβαση σε inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>Β</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Το άθροισμα ελέγχου δεν ταιριάζει</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Μη υποστηριζόμενη μορφή</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου του superblock ext δεν ταιριάζει ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Τα αθροίσματα ελέγχου των περιγραφέων ομάδων δεν ταιριάζουν (ομάδες {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Αυτό το χαρακτηριστικό ext δεν υποστηρίζεται πλήρως: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Η εναλλακτική κεφαλίδα τόμου διαφέρει από την κύρια ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου ενός αντικειμένου APFS δεν ταιριάζει (μπλοκ {0}). Παραλείφθηκε.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Το πιο πρόσφατο σημείο ελέγχου APFS είναι κατεστραμμένο· χρησιμοποιείται παλαιότερο (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Το άθροισμα ελέγχου της ετικέτας περιγραφέα UDF δεν ταιριάζει (τομέας {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>Το CRC ενός περιγραφέα UDF δεν ταιριάζει (τομέας {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Αυτός ο τύπος διαμερίσματος UDF δεν υποστηρίζεται: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Ο δίσκος έχει {0} συνεδρίες. Εμφανίζεται η τελευταία συνεδρία· επιλέξτε άλλη με το Συνεδρία.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Διαθέσιμο μόνο για ext2, ext3 και ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Δεν υπάρχει inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Αυτός ο τόμος είναι κρυπτογραφημένος. Η λίστα αρχείων δεν εμφανίζεται.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Δεν βρέθηκε σημείο ελέγχου APFS.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Εμφάνιση inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Εμφάνιση ημερολογίου (journal)</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Ονόματα</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (βασικό)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Συνεδρία</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Αυτό το σύστημα αρχείων δεν έχει ημερολόγιο (journal).</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ημερολόγιο ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Μπλοκ     Μετατ. δίσκου Τύπος           Ακολουθία</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Μέγεθος μπλοκ {0}, {1} μπλοκ, ακολουθία {2}, έναρξη {3} (0 = καθαρό). Το ημερολόγιο δεν επαναλαμβάνεται.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Ανάγνωση του ημερολογίου ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Περιγραφέας</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblock v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblock v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Εμφάνιση λογικών τόμων</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Δημιουργία εικόνας αυτής της περιοχής...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Λογικοί τόμοι</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Όνομα                 Τύπος         Μέγεθος     Διάταξη                       Κατάσταση</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Ανάγνωση των μεταδεδομένων τόμου...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>Δεν βρέθηκε λογικός τόμος LDM ή LVM2 στους ανοιχτούς δίσκους και εικόνες.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Άνοιγμα λογικού τόμου</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Αντιστοίχιση μελών...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Νέα ανάγνωση</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Αυτός ο τύπος τόμου δεν υποστηρίζεται: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα του {0}. Μέλη που λείπουν: {1}. Ανοίξτε τους δίσκους ή τις εικόνες ή αντιστοιχίστε τα.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>Το {0} ({1}) είναι τόμος mirror ή RAID-5. Ανοίξτε το με ανακατασκευή RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Αντιστοίχιση μελών</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Επιλέξτε δίσκο ή εικόνα για κάθε μέλος του {0} που λείπει.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(κανένα)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Άνοιγμα αρχείου...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {Λείπει # μέλος} other {Λείπουν # μέλη}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Δεν υποστηρίζεται</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Ανακατασκευή RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Απλός</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Spanned</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Striped</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Mirror</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Γραμμικός</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Δεν υποστηρίζεται ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} ομάδα {1}, τόμος {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Μέλος {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>δεν βρέθηκε</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Μετατόπιση {0} ({1}): {2} στο {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Μετατόπιση {0} ({1}): stripe {2} σε {3} μέλη</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Ασφαλής διαγραφή της επιλογής</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>εκκαθάριση διαγραφή τεμαχισμός αντικατάσταση ασφαλής περιοχή wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Ασφαλής διαγραφή δίσκου</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>εκκαθάριση διαγραφή δίσκος μονάδα αντικατάσταση ασφαλής wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Εκκαθάριση ελεύθερου χώρου</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>ελεύθερος χώρος μη εκχωρημένος εκκαθάριση διαγραφή cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Εκκαθάριση slack αρχείων</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram μονάδα εκκαθάριση διαγραφή slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Απόκρυψη περιεχομένου αρχείου (redaction)</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>απόκρυψη καθαρισμός redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Εκκαθάριση</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>Θ</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Ασφαλής διαγραφή επιλογής...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Ασφαλής διαγραφή δίσκου...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Εκκαθάριση ελεύθερου χώρου...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Εκκαθάριση slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Απόκρυψη περιεχομένου αρχείου...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>Ο</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Απόκρυψη περιεχομένου αρχείου...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Ασφαλής διαγραφή επιλογής...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Carving αρχείων από την επιλογή...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Απόκρυψη (redaction)</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Ασφαλής διαγραφή</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Προορισμός: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Έναρξη</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Μήκος</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Ανάγνωση και επαλήθευση στο τέλος</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Διαγραφή...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Η περιοχή βρίσκεται εκτός του εγγράφου.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Μη αποθηκευμένες επεξεργασίες</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Τα δεδομένα προς διαγραφή έχουν μη αποθηκευμένες επεξεργασίες. Αποθηκεύστε ή απορρίψτε τις πριν τη διαγραφή.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Απόρριψη</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Διαγραφή δεδομένων</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Προορισμός: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Δίσκος {0}: {1}, σειριακός αριθμός {2}, {3} byte</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Τόμοι: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Περιοχή: LBA έναρξης {0}, {1} τομείς, {2} byte</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Περιοχή: μετατόπιση {0}, {1} byte</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Η περιοχή επεκτάθηκε στα όρια τομέων.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Μέθοδος: {0} ({1, plural, one {# πέρασμα} other {# περάσματα}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Το τελευταίο πέρασμα διαβάζεται ξανά και επαληθεύεται.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Εκτιμώμενος χρόνος: περίπου {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Αυτή η ενέργεια δεν μπορεί να αναιρεθεί. Τα αρχικά δεδομένα δεν μπορούν να ανακτηθούν.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>Σε SSD και μέσα flash, το wear leveling μπορεί να διατηρεί τα αρχικά δεδομένα αλλού ακόμη και μετά την αντικατάσταση.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Αυτοί οι τόμοι κλειδώνονται κατά τη διαγραφή: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Τα δεδομένα γράφονται απευθείας στο αρχείο, όχι ως επεξεργασία. Δεν μπορούν να αναιρεθούν με την Αναίρεση.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Διαγραφή {0} byte</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Διαγραφή {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Δίσκος {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Για να συνεχίσετε, πληκτρολογήστε «{0}».</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Επιβεβαίωση</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Επιλέξτε την περιοχή προς διαγραφή.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Αυτό το έγγραφο δεν μπορεί να διαγραφεί απευθείας.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Ανοίξτε ολόκληρο τον φυσικό δίσκο σε καρτέλα για να τον διαγράψετε.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Αυτή η πηγή δεδομένων βρίσκεται στη λίστα τεκμηρίων και δεν μπορεί να γραφτεί.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Τα Windows χρησιμοποιούν αυτόν τον δίσκο (σύστημα, εκκίνηση ή αρχείο σελίδων), επομένως δεν μπορεί να διαγραφεί.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Δεν ήταν δυνατό το κλείδωμα του τόμου {0}, επομένως δεν διαγράφηκε τίποτα.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Η εγγραφή απορρίφθηκε: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Η διαγραφή απέτυχε: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Διαγραφή {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Πέρασμα {0} από {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Επαλήθευση</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Να διακοπεί η διαγραφή; Το τμήμα που έχει ήδη αντικατασταθεί παραμένει αντικατεστημένο· το υπόλοιπο διατηρεί τα αρχικά του δεδομένα.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Σφάλμα εγγραφής</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή στη μετατόπιση {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Παράλειψη και συνέχεια</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Αποτέλεσμα διαγραφής</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Διαγράφηκαν {0} byte σε {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Η επαλήθευση ολοκληρώθηκε με επιτυχία.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Η επαλήθευση βρήκε # περιοχή που δεν ταιριάζει:} other {Η επαλήθευση βρήκε # περιοχές που δεν ταιριάζουν:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {Δεν ήταν δυνατή η εγγραφή # περιοχής:} other {Δεν ήταν δυνατή η εγγραφή # περιοχών:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Η διαγραφή διακόπηκε. Τα δεδομένα έως τη μετατόπιση {0} αντικαταστάθηκαν στο πέρασμα {1}· τα υπόλοιπα διατηρούν το προηγούμενο περιεχόμενό τους.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Η επαλήθευση διακόπηκε. Όλα τα περάσματα είχαν γραφτεί.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Η διαγραφή διακόπηκε μετά από σφάλμα εγγραφής στη μετατόπιση {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Αρχεία που παραλείφθηκαν: {0} (συμπιεσμένα {1}, αραιά {2}, resident {3}, ασυνεπή {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Εκκαθάριση ελεύθερου χώρου</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Μέθοδος</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Μέσω των Windows (προσαρτημένος τόμος)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Άμεση εγγραφή (το σύστημα αρχείων σε αυτήν την καρτέλα)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Τόμος</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Δεν υπάρχει προσαρτημένος τόμος που να μπορεί να χρησιμοποιηθεί.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Για άμεση εγγραφή, εμφανίστε πρώτα το σύστημα αρχείων αυτής της καρτέλας.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Τόμος: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Ελεύθερος χώρος προς αντικατάσταση: {0} byte</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Μέθοδος: μέσω των Windows (προσωρινά αρχεία γεμίζουν τον ελεύθερο χώρο και διαγράφονται στο τέλος)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Μέθοδος: άμεση εγγραφή στα μη εκχωρημένα συμπλέγματα</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Όσο εκτελείται, ο τόμος δεν έχει ελεύθερο χώρο. Οι άλλες εφαρμογές συνεχίζουν να λειτουργούν αλλά δεν μπορούν να αποθηκεύσουν νέα δεδομένα.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Αν οι πληροφορίες εκχώρησης του συστήματος αρχείων είναι λανθασμένες, τα αρχεία μπορεί να υποστούν ζημιά.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Εκκαθάριση ελεύθερου χώρου</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Το σύστημα αρχείων δεν είναι συνεπές ({0}). Επισκευάστε το με το chkdsk και δοκιμάστε ξανά.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Η άμεση εγγραφή υποστηρίζει μόνο NTFS, FAT12/16/32 και exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Αποθηκεύστε ή απορρίψτε πρώτα τις επεξεργασίες σε αυτήν την καρτέλα.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Αυτά τα προσωρινά αρχεία δεν ήταν δυνατό να διαγραφούν. Διαγράψτε τα χειροκίνητα:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Αντικαταστάθηκαν {0} byte ελεύθερου χώρου σε {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Υπολογισμός ελεύθερου χώρου</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Η εκκαθάριση ελεύθερου χώρου διακόπηκε. Τα προσωρινά αρχεία διαγράφηκαν.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Εκκαθάριση slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Αρχεία: {0}, slack προς αντικατάσταση: {1} byte</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Εκκαθάριση slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Εύρεση slack αρχείων</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Αντικαταστάθηκαν {0} byte slack σε {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Απόκρυψη περιεχομένου αρχείου</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Αρχεία ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Μοτίβο</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (προεπιλογή)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Τυχαίο</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Αντικατάσταση και των ονομάτων με «_» ίδιου μήκους</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Αρχείο καταγραφής απόκρυψης (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Το περιεχόμενο αλλάζει ως επεξεργασία. Δεν γράφεται τίποτα μέχρι να αποθηκεύσετε· χρησιμοποιήστε το Αποθήκευση ως για να αποθηκεύσετε νέα εικόνα.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Απόκρυψη</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Εύρεση δεδομένων προς απόκρυψη</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {Αποκρύφθηκε # αρχείο} other {Αποκρύφθηκαν # αρχεία}} ({1} byte). Χρησιμοποιήστε το Αποθήκευση ως για να αποθηκεύσετε νέα εικόνα.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Δεν υπήρχε τίποτα προς απόκρυψη.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Αρχεία που δεν αποκρύφθηκαν</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {Δεν αποκρύφθηκε # στοιχείο:} other {Δεν αποκρύφθηκαν # στοιχεία:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>φάκελος</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>διαγραμμένο στοιχείο</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>τα μεταδεδομένα είναι κατεστραμμένα</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>οι πληροφορίες τμημάτων είναι κατεστραμμένες</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>τα resident δεδομένα δεν βρέθηκαν</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>μεταδεδομένα συστήματος αρχείων</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Δεν ήταν δυνατή η αντικατάσταση των ονομάτων για: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Το έγγραφο είναι μόνο για ανάγνωση.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Να αντικατασταθεί η αρχική εικόνα;</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Αυτό το έγγραφο έχει αποκρύψεις. Η αποθήκευση τις γράφει στο αρχικό {0} και δεν μπορεί να αναιρεθεί. Για να διατηρήσετε το πρωτότυπο, χρησιμοποιήστε το Αποθήκευση ως.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Αντικατάσταση του {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή του αρχείου καταγραφής απόκρυψης: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Εισαγάγετε το μοτίβο ως byte hex (για παράδειγμα 00 ή A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} δ</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} λ</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} ώ</value></data>
 </root>

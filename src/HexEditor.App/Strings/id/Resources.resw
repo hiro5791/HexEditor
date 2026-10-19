@@ -2136,6 +2136,7 @@ Detail ditulis ke:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Jendela {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(tidak ada tab)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Salin jalur</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Buka kembali sebagai citra disk</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Tampilkan di Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Baca-saja</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Ukuran: {0}</value></data>
@@ -6634,6 +6635,418 @@ Tipe: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Kolom komentar</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Tampilkan nama simbol, nama target percabangan, dan string yang dirujuk.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Disassembly</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Forensik</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Forensik</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Tampilan tanggal dan waktu</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Cara waktu ditampilkan dalam daftar dan rincian forensik: UTC dan waktu lokal, hanya UTC, atau hanya waktu lokal. Waktu selalu dicatat dalam UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC dan waktu lokal</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Hanya UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Hanya waktu lokal</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Aktifkan mode blokir tulis saat kasus dibuka</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Jika nonaktif, Anda akan ditanya apakah ingin mengaktifkannya.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Catat juga aktivitas penelusuran di log audit</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Catat lompatan, pencarian, dan penambahan penanda. Perubahan pada data dan barang bukti selalu dicatat.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Tampilkan gambar mini dari gambar hasil carving</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Tampilkan pratinjau kecil file JPEG, PNG, GIF, dan BMP di hasil carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Gambar logo laporan</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Jalur gambar PNG, JPEG, atau SVG yang ditampilkan di bagian atas laporan HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Teks header laporan</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Satu baris teks yang ditampilkan di bawah judul laporan, misalnya nama laboratorium Anda.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Kasus baru</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>investigasi barang bukti buat kasus folder new case investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Buka kasus</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>investigasi barang bukti muat kasus folder open case investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Tutup kasus</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>investigasi selesai tutup kasus close case investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Tambah barang bukti</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>daftarkan citra disk hash akuisisi register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Properti kasus</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>zona waktu penyidik organisasi time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Tampilkan log audit</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>rantai barang bukti riwayat log chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Verifikasi log audit</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>manipulasi rantai hash integritas pemeriksaan tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Kelola tanda tangan carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>jenis file header footer magic definisi file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Carving file</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>pulihkan ekstrak file terhapus pindai recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Buat laporan</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf ekspor dokumentasi html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Tampilkan atau sembunyikan daftar barang bukti</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>kasus barang bukti panel case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Tampilkan atau sembunyikan log audit</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>kasus log audit panel case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Tampilkan atau sembunyikan hasil carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>file hasil carving panel hasil carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Log audit</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Hasil carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Forensik</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Kasus</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Kasus baru...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Buka kasus...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Tutup kasus</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Tambah barang bukti...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Properti kasus...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Daftar barang bukti</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Tampilkan log audit</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Verifikasi log audit</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Carving file...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Kelola tanda tangan...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Hasil</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Buat laporan...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Kasus: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>waktu tidak valid</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Sebuah kasus sudah terbuka. Tutup terlebih dahulu.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Tidak ada kasus yang terbuka.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Kasus baru</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Properti kasus</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Nomor kasus (wajib)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Nama kasus (wajib)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Penyidik</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organisasi</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Folder kasus</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Telusuri...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Zona waktu</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Digunakan untuk membaca waktu yang tidak memiliki zona waktu, seperti waktu file FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Buat</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Kasus "{0}" dibuat.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Kasus "{0}" dibuka.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Kasus tidak dapat dibuat: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Nomor kasus dan nama kasus wajib diisi.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>File kasus tidak dapat dibaca (baris {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Kasus tidak dapat dibuka: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Kasus tidak dapat disimpan: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Aktifkan mode blokir tulis untuk kasus ini?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Aktifkan</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Mode blokir tulis diaktifkan untuk kasus ini.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Tambah barang bukti</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Tambah barang bukti</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} akan ditambahkan ke kasus. Sumber data tidak diubah.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Hitung hash sekarang</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Sumber data ini sudah terdaftar sebagai {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Hanya disk, volume, file citra, dan file yang dapat ditambahkan sebagai barang bukti.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Menghitung hash barang bukti {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Hash {0} telah dicatat.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Hash {0} tidak dihitung. Barang bukti tetap ada di daftar.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Data pada offset 0x{1} tidak dapat dibaca, sehingga hash {0} tidak dicatat.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Belum dihitung</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} dihapus dari daftar. Sumber data tidak disentuh.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} tidak tersedia.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Barang bukti tidak dapat dibuka: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} item</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Tidak ada kasus yang terbuka. Buat atau buka kasus dari menu Forensik.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Belum ada barang bukti yang ditambahkan.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Jalur</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Kapasitas (byte)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hash</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Verifikasi</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Ditambahkan (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Ditambahkan (lokal)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Citra</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memori</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Lulus</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Gagal</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Belum diverifikasi</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Buka (hanya-baca)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Hapus dari daftar</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Salin hash</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Salin jalur</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Buat citra...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Verifikasi...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} entri</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Tidak ada kasus yang terbuka. Log audit milik sebuah kasus.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Belum ada yang dicatat.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Baris ini bukan entri yang valid. Log mungkin telah diubah.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Verifikasi</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Ekspor CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Ekspor JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Log audit utuh ({0} baris diperiksa).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Rantai log audit terputus pada baris {0}. Log mungkin telah diubah.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Waktu (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Waktu (lokal)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Pengguna</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operasi</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Hasil</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Rincian</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Berhasil</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Gagal</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Dibatalkan</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Tidak dapat menulis ke log audit</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Operasi yang menulis data dinonaktifkan sampai log dapat ditulis lagi. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Coba lagi</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Log audit masih tidak dapat ditulis.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Log audit tidak dapat ditulis, sehingga operasi tidak dilakukan.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Log audit tidak dapat ditulis, sehingga operasi yang menulis data dinonaktifkan.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Memverifikasi log audit</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Log audit tidak dapat diverifikasi: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Mengekspor log audit</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Log audit diekspor ke {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Log audit tidak dapat diekspor: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Tanda tangan carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definisi</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>bawaan</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>nonaktif</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Ekstensi (tanpa titik)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Header (byte Hex, satu per baris; ?? adalah byte apa pun, ? adalah digit apa pun)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Offset header dari awal file</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Footer (byte Hex, opsional)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Jumlah byte dari footer yang disertakan (kosong = footer itu sendiri)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Ukuran maksimum</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Ukuran minimum</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Ambil ukuran dari nilai di header</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Nilai ukuran: offset dari awal file</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Nilai ukuran: lebar (bit)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Nilai ukuran: urutan byte</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Nilai ukuran: angka yang ditambahkan</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Pemeriksaan struktur (nama bawaan atau templat struktur)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Pemeriksaan bawaan: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Cari header hanya di awal sektor</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Gunakan definisi ini saat memindai</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Baru</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplikat</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Impor...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Ekspor...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Coba definisi ini</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Pilih rentang di dokumen terlebih dahulu.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Mencoba...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Mencoba definisi carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>{0} ditemukan dalam seleksi. Posisi pertama:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>{0} definisi diimpor.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} definisi tidak diimpor:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Diekspor ke {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Definisi tidak dapat diimpor: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Definisi tidak dapat disimpan: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Percobaan gagal: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: masukkan angka atau ukuran seperti 4096, 0x1000, atau 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Masukkan nama.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Nama ini sudah digunakan.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Masukkan ekstensi.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Ekstensi mengandung karakter yang tidak boleh digunakan dalam nama file.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Masukkan setidaknya satu header.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Header bukan urutan byte Hex yang valid (jumlah digit ganjil atau karakter tidak valid).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Header memerlukan setidaknya satu byte tetap.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Offset header tidak boleh negatif.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Footer bukan urutan byte Hex yang valid.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Jumlah byte yang disertakan tidak boleh negatif.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Ukuran maksimum minimal 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Ukuran minimum tidak boleh negatif.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Ukuran maksimum lebih kecil dari ukuran minimum.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Nilai ukuran tidak valid.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Ada nilai dengan tipe yang salah.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Carving file</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Mulai</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Cakupan</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Seluruh dokumen</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Seleksi</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Hanya ruang tidak teralokasi</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Hanya ruang slack</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Jenis file</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Jangan cari header di dalam file yang sudah ditemukan</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Tulis file hasil carving ke folder</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Folder keluaran</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Melakukan carving file</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving selesai: {0} file ditemukan.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving dibatalkan. {0} file ditemukan; hasil dan manifes dipertahankan.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving dihentikan karena folder keluaran tidak dapat ditulis. {0} file ditemukan.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving gagal: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Folder keluaran berada di disk yang sedang diselidiki. Pilih folder di disk lain.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Ruang kosong di folder keluaran tidak cukup. Dibutuhkan: {0} byte. Tersedia: {1} byte.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Sistem file pada folder keluaran membatasi file hingga {0} byte. Pilih folder lain.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Folder keluaran tidak dapat digunakan.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Tidak ada informasi alokasi untuk dokumen ini.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Tidak dapat menulis file hasil carving</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>Folder keluaran ({0}) kehabisan ruang. File berikutnya membutuhkan {1} byte, tetapi hanya {2} byte yang tersedia. Kosongkan ruang, pilih folder lain, atau hentikan.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Tidak dapat menulis ke {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Coba lagi</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Pilih folder lain...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving sedang berjalan.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Carving file...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Buka folder</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving belum dijalankan. Pilih Forensik, lalu Carving, lalu Carving file.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Tidak ada file yang ditemukan.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} file</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Pratinjau gambar hasil carving</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Panjang</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Panjang ditentukan oleh</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>File keluaran</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Struktur</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Nilai ukuran</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Footer</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Ukuran maksimum</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Jenis: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Offset: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Panjang: {0} byte</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Panjang ditentukan oleh: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Buat laporan</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Buat</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Isi</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Disk: {0} (ukuran sektor {1} byte)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Skema</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA awal</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Sektor</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Ukuran (byte)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Sistem file</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Enkripsi</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Tidak teralokasi</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Tata letak</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Dokumen</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Offset volume</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Label</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Nomor seri</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Ukuran klaster (byte)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Klaster</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Klaster kosong</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Masalah</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Volume logis: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Grup</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Ukuran (byte)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Tata letak</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Anggota</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Citra</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Sumber</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Diakuisisi</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Log akuisisi</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (satu file, dapat dibuka offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Semua entri log audit</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Log audit dari (UTC, opsional)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Log audit hingga (UTC, opsional)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Byte Hex dump untuk setiap penanda (0 sampai 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Simpan ke</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Periode bukan tanggal dan waktu yang valid.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Panjang Hex dump harus antara 0 dan 4096 byte.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Membuat laporan</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Laporan tidak dapat dibuat: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>{0} dibuat. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>PDF tidak dapat dibuat ({0}). {1} dibuat sebagai gantinya.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>Hanya baris pertama dari daftar panjang yang ada di PDF. Gunakan laporan HTML atau file CSV untuk daftar lengkap.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Buka</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Buka folder</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Laporan Forensik</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Nomor kasus</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Nama kasus</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Penyidik</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organisasi</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Kasus dibuat</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Laporan dibuat</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Zona waktu</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Dibuat oleh</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Halaman</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>dari</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Kasus</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Sampul</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Catatan akuisisi</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Informasi perangkat</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partisi</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Sistem file</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Penanda</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Hasil carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Log audit</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Jalur</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Nomor seri</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Kapasitas (byte)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sektor</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Ukuran sektor</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Verifikasi</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Ditambahkan (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Ditambahkan (lokal)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Ditambahkan oleh</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Lulus</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Gagal</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Belum diverifikasi</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Belum dihitung</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Citra</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memori</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Dokumen</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Komentar</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Panjang</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Panjang ditentukan oleh</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>File keluaran</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>File ditemukan</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Waktu (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Waktu (lokal)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Pengguna</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Komputer</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operasi</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Barang bukti</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Hasil</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Rincian</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>berhasil</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>gagal</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>dibatalkan</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Menampilkan {0} baris pertama dari {1}. Daftar lengkap ada di file CSV terlampir atau laporan HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Menampilkan {0} baris pertama. Daftar lengkap ada di laporan HTML atau file CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Daftar lengkap</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Tidak teralokasi</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Tidak ada data.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>waktu tidak valid</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Alihkan panel disassembly</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler disassembly assembly code kode assembler</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Disassemble</value></data>
@@ -8195,4 +8608,1265 @@ Koneksi tidak dibuat kecuali Anda memilih untuk mengganti kunci.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Seluruh halaman</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Sesuaikan lebar</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Pilih folder...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Terlindungi dari penulisan]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Proteksi tulis</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Mode proteksi tulis aktif. Klik untuk menonaktifkannya.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Mode proteksi tulis hanya mencegah aplikasi ini menulis. Mode ini tidak dapat mencegah Windows atau aplikasi lain menulis (misalnya penulisan yang dilakukan sistem file saat volume di-mount). Gunakan juga write blocker perangkat keras atau proteksi tulis USB bawaan OS.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Proteksi tulis USB OS...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Nonaktifkan mode proteksi tulis?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Dokumen barang bukti yang terbuka: {0}. Setelah mode dinonaktifkan, dokumen-dokumen ini dapat ditulisi:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Tidak ada dokumen barang bukti yang terbuka. Setelah mode dinonaktifkan, dokumen yang terbuka dapat ditulisi lagi.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Nonaktifkan proteksi tulis</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Sumber data tidak dapat dibuka kembali sebagai hanya-baca. Hanya data yang sudah dibaca yang ditampilkan.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Izinkan penulisan ke dokumen ini</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Penulisan diizinkan (pengecualian dari mode proteksi tulis)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Mode proteksi tulis nonaktif.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Hanya dokumen file yang dapat dikecualikan dari mode proteksi tulis.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Sumber data ini terdaftar sebagai barang bukti, sehingga penulisan tidak dapat diizinkan.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Penulisan sudah diizinkan untuk dokumen ini.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Izinkan penulisan ke dokumen ini?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Mode proteksi tulis tetap aktif, tetapi {0} ({1}) dapat diedit dan disimpan sampai Anda menutupnya. Hal ini dicatat di log audit dan tidak dapat dibatalkan untuk dokumen yang terbuka.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Ketik {0} untuk mengonfirmasi</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Izinkan penulisan ke {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Penulisan diizinkan untuk {0} sampai ditutup.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Mode proteksi tulis</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Proteksi tulis USB OS</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Perangkat</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Periksa HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Informasi SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Panel informasi perangkat</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Informasi enkripsi...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Buka dump memori...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Alihkan mode proteksi tulis</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>blokir tulis lindungi hanya-baca barang bukti write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Izinkan penulisan ke dokumen ini</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>blokir tulis pengecualian write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Alihkan proteksi tulis USB OS</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>kebijakan penyimpanan usb proteksi tulis registri usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Periksa HPA dan DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>area tersembunyi host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Tampilkan informasi SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>kesehatan disk pemantauan mandiri nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Tampilkan informasi enkripsi</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt volume terenkripsi encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Tampilkan/sembunyikan informasi perangkat</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart perangkat panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Buka dump memori</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>crash dump minidump memori fisik ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Informasi perangkat</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Selalu aktifkan mode proteksi tulis saat startup</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Jika nonaktif, aplikasi dimulai dengan mode seperti saat terakhir ditutup.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Periksa HPA / DCO saat disk dibuka</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Mengirim perintah ATA hanya-baca ke disk dan menampilkan pemberitahuan jika area tersembunyi ditemukan.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Aktifkan proteksi tulis USB OS?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows akan memblokir penulisan ke perangkat penyimpanan USB yang dihubungkan mulai sekarang (pengaturan StorageDevicePolicies WriteProtect). Perangkat yang sudah terhubung tidak terpengaruh sampai Anda menyambungkannya kembali. Disk SATA dan NVMe internal tidak dilindungi. Hak administrator diperlukan.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Nonaktifkan proteksi tulis USB OS?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Pengaturan akan dikembalikan ke kondisi sebelum Anda mengaktifkannya. Perangkat penyimpanan USB yang sudah terhubung tetap terlindungi dari penulisan sampai Anda menyambungkannya kembali. Hak administrator diperlukan.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Ubah pengaturan</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Hak administrator diperlukan. Pengaturan tidak diubah.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Pengaturan tidak dapat diubah (akses ditolak; mungkin dikelola oleh Group Policy): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Pengaturan tidak dapat diubah: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Proteksi tulis USB OS aktif. Sambungkan ulang perangkat penyimpanan USB agar berlaku.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Proteksi tulis USB OS nonaktif.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Proteksi tulis USB OS masih aktif</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows tetap memblokir penulisan ke penyimpanan USB setelah aplikasi ini ditutup. Nonaktifkan sebelum keluar?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Nonaktifkan dan keluar</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Keluar dan biarkan aktif</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Mengubah proteksi tulis USB OS memerlukan hak administrator Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Perangkat</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Periksa HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Baca SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Ekspor JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Ekspor teks...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Buka disk fisik lalu pilih Periksa HPA / DCO atau Informasi SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — diambil {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO belum diperiksa.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Disk NVMe tidak memiliki HPA atau DCO; HPA / DCO tidak berlaku.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Ukuran namespace: {0} blok ({1} byte per blok)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Kapasitas namespace: {0} blok</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Hal ini tidak dapat diperiksa pada perangkat ini (perintah tidak diteruskan, misalnya pada adaptor USB atau disk virtual).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Hak administrator diperlukan.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Perintah {0} gagal (status ATA {1}, galat {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>LBA maks (IDENTIFY DEVICE, 28-bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>LBA maks (IDENTIFY DEVICE, 48-bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>LBA maks native (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>LBA maks yang ditetapkan DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>tidak didukung oleh perangkat</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>tidak didukung oleh perangkat</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: ada, {0} sektor ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: tidak ada</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: tidak dapat ditentukan</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: ada, {0} sektor ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: tidak ada</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: tidak dapat ditentukan</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Informasi SMART belum dibaca.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Informasi SMART tidak dapat dibaca pada perangkat ini (misalnya melalui adaptor USB yang tidak mendukungnya).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART dinonaktifkan pada perangkat ini.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Checksum data SMART tidak cocok; nilainya mungkin salah.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Nomor seri: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Kapasitas: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Ukuran sektor: {0} byte logis, {1} byte fisik</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Koneksi: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Kecepatan rotasi: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>tidak berputar (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>didukung</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>tidak didukung</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Buka disk fisik untuk menggunakan perintah ini.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Informasi perangkat tidak dapat dibaca: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} memiliki area tersembunyi: HPA {1} sektor, DCO {2} sektor. Kapasitas yang dilihat Windows lebih kecil daripada kapasitas sebenarnya dari disk.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Tampilkan rincian</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Informasi perangkat diekspor ke {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Informasi perangkat tidak dapat diekspor: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Saat ini</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Terburuk</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Ambang batas</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Mentah (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Mentah (desimal)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Tidak dikenal</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Suhu</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Bit peringatan kritis: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Suhu: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Cadangan tersedia: {0}% (ambang {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Persentase terpakai: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Data dibaca: {0} byte</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Data ditulis: {0} byte</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Siklus daya: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Jam menyala: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Pemadaman tidak aman: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Galat media dan integritas data: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Diambil</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Perangkat</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Nomor seri</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Kapasitas (byte)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Ukuran sektor (logis / fisik)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Koneksi</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>LBA maks (28-bit / 48-bit / native / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Tidak dapat diperiksa pada perangkat ini</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Tidak ada</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Ada ({0} sektor)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Tidak berlaku (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Nama</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Saat ini</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Terburuk</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Ambang batas</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Mentah</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Informasi enkripsi</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Tidak ada volume terenkripsi yang ditemukan.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Rentang {0}: offset {1}, {2} byte</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Jenis: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Volume APFS terenkripsi (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (mungkin terenkripsi)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Kemungkinan data terenkripsi atau terkompresi (misalnya VeraCrypt atau TrueCrypt; tidak ada tanda tangan untuk mengenalinya)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Versi metadata: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Metode enkripsi: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID volume: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Dibuat: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Deskripsi: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Status enkripsi: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>tidak diketahui</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>didekripsi</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>sedang berlangsung</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>selesai</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>dijeda</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Terenkripsi sejauh ini: {0} byte</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Pelindung kunci: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, dibuat {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Kunci jelas</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Kunci startup</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM dan PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Kata sandi pemulihan</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Kata sandi</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Tidak dikenal (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Slot kunci: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volume {0}: terenkripsi</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volume {0}: tidak terenkripsi</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropi 64 KiB pertama: {0} bit per byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Peringatan: ketiga blok metadata tidak cocok.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Peringatan: sebagian blok metadata rusak; hanya item yang dapat dibaca yang ditampilkan.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Penjelajah sistem file tidak membuka volume terenkripsi.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows telah membuka kunci volume BitLocker ini ({0}). Jika Anda membukanya sebagai volume logis, Anda dapat membaca isi yang didekripsi Windows.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Buka sebagai volume logis</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Dump memori</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Format dump memori {0} tidak dapat dibaca. Buka sebagai raw?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Buka sebagai raw</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Dump memori tidak dapat dibuka: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Dump memori: {0}, diambil {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Dump memori: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>citra memori fisik (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>dump memori lengkap</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>dump memori kernel</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>dump memori lengkap (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Dump memori</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Data tidak dapat ditulis karena mode proteksi tulis aktif.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Citra</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Buat citra...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Buat citra kerangka...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Buka citra...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Verifikasi citra...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Informasi citra</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Klon disk...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Simpan rentang sektor...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Pulihkan rentang sektor...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Rekonstruksi RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Buat citra</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>akuisisi citra disk dd raw e01 barang bukti acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Buat citra kerangka</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>kerangka jarang metadata citra skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Buka citra sebagai disk</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk split raw 001 citra disk</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Verifikasi citra</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>verifikasi hash md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Informasi citra</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 header informasi kasus e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Klon disk</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>klon salin disk sektor clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Simpan rentang sektor</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>cadangan mbr gpt sektor backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Pulihkan rentang sektor</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>pulihkan mbr gpt sektor restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Rekonstruksi RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod stripe paritas raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Dokumen saat ini bukan citra disk.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Ini memerlukan dokumen disk, volume, atau citra disk.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Buka dulu disk, citra, atau file yang akan dipakai sebagai sumber.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Dibuka tanpa segmen yang hilang ({0}). Rentangnya terbaca sebagai galat.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Citra {0} tidak dapat dibaca (bagian: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Disk induk dari disk diferensial tidak ditemukan: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Segmen hilang</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Segmen berikut hilang: {0}. Buka citra dengan segmen yang tersedia? Rentang yang hilang terbaca sebagai galat.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Buka segmen yang tersedia</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw terpisah</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Checksum chunk tidak cocok pada {0} ({1} byte). Rentang ditampilkan sebagai galat baca.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Informasi citra</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>File</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Ukuran</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} byte ({1} sektor)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Ukuran sektor</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Diakuisisi</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Alat akuisisi</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Perangkat</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Chunk</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} sektor per chunk)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Kompresi</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Terkompresi</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Tidak terkompresi</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} tersimpan</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Sektor yang tidak dapat dibaca saat akuisisi</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Disk induk</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Segmen hilang</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Nomor kasus</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Nomor barang bukti</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Pemeriksa</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Deskripsi</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Catatan</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Cocok</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Tidak cocok</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Tidak ada nilai acuan</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Tidak dapat diverifikasi karena galat baca</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>tersimpan dalam citra</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>log akuisisi</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>daftar barang bukti</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>nilai yang dimasukkan</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>dihitung saat akuisisi</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>disk sumber</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Buat citra</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Buat citra kerangka</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Mode proteksi tulis nonaktif. Disarankan mengaktifkannya sebelum mengakuisisi barang bukti.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Aktifkan mode proteksi tulis</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Sumber: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Hanya seleksi (diperluas ke batas sektor)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Rentang yang diakuisisi</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Seluruhnya</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Jarang (lewati area tidak teralokasi)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Kerangka (hanya tabel partisi dan metadata sistem file)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Sertakan juga penanda dan rentang multi-seleksi</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Keluaran</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Keluaran</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Telusuri...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Ukuran pemisahan / segmen (misalnya 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Percobaan ulang saat galat baca</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Nilai pengisi untuk sektor yang tidak dapat dibaca (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Unit baca</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Verifikasi setelah selesai</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Galat baca</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Informasi E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Kompresi</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Tidak ada</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Cepat (zlib level 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Terbaik (zlib level 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Mulai</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Masukkan keluaran.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Ukuran pemisahan harus 1 MiB atau lebih (misalnya 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Masukkan jumlah percobaan ulang dari 0 sampai 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Masukkan nilai pengisi sebagai dua digit hex (misalnya 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Pilih setidaknya satu hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Keluaran berada di disk fisik yang sama dengan sumber. Pilih disk lain.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Keluaran berada di disk yang ada di daftar barang bukti. Pilih disk lain.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Sistem file keluaran ({0}) hanya mengizinkan file hingga {1} byte. Gunakan raw terpisah atau E01 dengan ukuran segmen lebih kecil.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Keluaran membutuhkan sekitar {0} byte, tetapi hanya {1} byte yang tersedia.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} sudah ada. Timpa?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Timpa</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Sistem file keluaran adalah {0}, bukan NTFS, sehingga area yang dikecualikan ditulis sebagai nol dan ukuran citra tidak mengecil.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Buat citra: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Menghitung rentang yang disertakan</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} partisi tidak dapat dianalisis dan disertakan seluruhnya.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Citra tidak dapat dibuat. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Sektor tidak terbaca: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Citra dibuat. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Verifikasi: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} sektor tidak dapat dibaca dan diisi.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Akuisisi terhenti. File yang sudah ditulis dipertahankan.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Akuisisi terhenti. File yang sudah ditulis dihapus.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Sumber terputus. Akuisisi dihentikan.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Buka log akuisisi</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Keluaran tidak dapat ditulis: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Coba lagi</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Batalkan</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Akuisisi dibatalkan. Pertahankan file yang sudah ditulis?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Pertahankan</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Verifikasi citra</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Citra: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Nilai pembanding (hex, opsional)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Nilai MD5, SHA-1, atau SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Masukkan nilai hex 32, 40, atau 64 digit.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Baca ulang juga disk sumber</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Verifikasi</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Verifikasi citra: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Hasil verifikasi: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Tidak dapat diverifikasi karena galat baca: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>dihitung: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Log akuisisi citra disk</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Log kloning disk</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Selesai</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Terhenti</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Sumber terputus</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Gagal</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Sumber</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Jalur</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Nomor seri</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Kapasitas</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Ukuran sektor</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Rentang</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Keluaran</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>File</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Dimulai</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Berakhir</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Sektor dibaca</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Sektor tidak terbaca</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>tidak ada</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>rentang yang disertakan</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Verifikasi</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>belum diverifikasi</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Versi aplikasi</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Kasus</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Rentang yang diakuisisi</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>seluruhnya</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>citra jarang (area tidak teralokasi tidak disertakan)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>citra kerangka (hanya tabel partisi dan metadata sistem file)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Area yang dikecualikan disimpan sebagai nol, sehingga hash citra ini tidak sama dengan hash seluruh disk sumber.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Rentang yang disertakan</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Pesan</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Klon disk</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Disk target</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disk {0}: {1}, serial {2}, {3} byte, sektor {4}-byte. Volume: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} byte)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>tidak ada</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA awal pada target</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Isi sisa target dengan nol</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash untuk verifikasi</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Folder log (opsional)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Berikutnya</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Pilih disk target.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>LBA awal berada di luar disk target.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Disk dengan ukuran sektor berbeda tidak dapat menjadi target klon.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Disk target ada di daftar barang bukti. Disk ini tidak dapat ditimpa.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Rentang yang ditulis: dari LBA {0}, {1} sektor ({2} byte)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Isi: data dari {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Semua isi volume berikut akan hilang:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Target lebih kecil daripada sumber. Hanya {0} byte pertama dari sumber yang akan ditulis.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Tindakan ini tidak dapat dibatalkan.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Klon ke {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Ketik "{0}" untuk mengonfirmasi</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Klon ke {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Jika dihentikan sekarang, disk target akan tertulis sebagian.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Lanjutkan</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Volume {0} tidak dapat dikunci, sehingga tidak ada yang ditulis. Tutup file yang terbuka di dalamnya lalu coba lagi.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Kloning gagal. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>{0} byte dikloning. Verifikasi: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Kloning dihentikan. Disk target tertulis sebagian.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Target adalah disk yang sama dengan sumber.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Disk dengan ukuran sektor berbeda tidak dapat menjadi target klon.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Mode proteksi tulis aktif.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Disk target ada di daftar barang bukti. Disk ini tidak dapat ditimpa.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows sedang menggunakan sebuah volume di disk target.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>LBA awal berada di luar disk target.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Disk target tidak dapat dibuka untuk penulisan.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Simpan rentang sektor</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Pulihkan rentang sektor</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA awal</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Jumlah sektor</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Data sektor</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Rentang berada di luar disk.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Simpan sektor: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} sektor disimpan ke {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Beberapa sektor dalam rentang tidak dapat dibaca, sehingga tidak ada yang disimpan.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Rentang sektor tidak dapat disimpan. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>File data atau file pendampingnya tidak dapat dibaca. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>File data: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Disimpan dari: {0}, serial {1}, {2} byte, sektor {3}-byte. LBA awal {4}, {5} sektor. Disimpan pada {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Tulis ke: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Cadangkan isi saat ini sebelum menulis</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Berikutnya</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 file data tidak cocok dengan file pendamping. File tidak dapat dipulihkan.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Tidak ada file pendamping. Masukkan LBA awal tujuan penulisan.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Nomor seri atau kapasitas target berbeda dari disk tempat data disimpan.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Target: {0}. Volume dalam rentang: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Isi: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Tulis {0} sektor</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Pulihkan sektor: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Rentang sektor tidak dapat dipulihkan. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Menulis {0} sektor dan mengonfirmasinya dengan membaca ulang.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Penulisan gagal. {0} sektor telah ditulis; penulisan gagal pada LBA {1}. Anda dapat menulis kembali file cadangan {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Isi yang dibaca ulang tidak cocok dengan file data.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Rekonstruksi RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Anggota (berurutan)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Naik</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Turun</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Tambah file...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Anggota ini hilang</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[hilang]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Offset awal data anggota</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Jenis</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Ukuran stripe</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Tata letak paritas</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Simetris kiri</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Asimetris kiri</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Simetris kanan</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Asimetris kanan</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Anggota yang digunakan (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Deteksi (1 MiB pertama)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} terdeteksi ({1} partisi)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Tidak ada tabel partisi</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Tanda tangan sistem file: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Tidak ada tanda tangan sistem file</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Ukuran disk logis: {0} byte</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Tidak dapat dideteksi dengan konfigurasi ini.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Anggota memiliki ukuran berbeda. Ukuran terkecil yang digunakan.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Simpan konfigurasi...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Muat konfigurasi...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Konfigurasi RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Konfigurasi RAID disimpan ke {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Konfigurasi RAID tidak dapat disimpan. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Konfigurasi RAID tidak dapat dibaca. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Disk logis tidak dapat dibuka.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} anggota)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Parameter tidak valid.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Ukuran stripe harus berupa pangkat dua dari 512 B sampai 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Anggota terlalu sedikit untuk jenis ini.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Jenis ini tidak boleh memiliki anggota yang hilang.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Dua anggota atau lebih hilang. RAID 5 tidak dapat dibuka.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Tampilkan partisi</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>partisi disk mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Buka partisi di tab baru</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>partisi tab partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Buka awal partisi</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>partisi lompat partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Buka di sini sebagai awal partisi</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>partisi di sini partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Pindai partisi yang hilang</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>partisi hilang pulihkan pindai lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Tampilkan sistem file</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>penjelajah sistem file ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Buka file di tab baru</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>file buka tab file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Ekspor file</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>ekspor ekstrak file export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Cari file terhapus</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>terhapus batalkan hapus pulihkan deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Buka rekaman MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>rekaman mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Buka klaster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>klaster blok lompat cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>File yang menggunakan posisi ini</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>pemilik klaster terbalik cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Tampilkan klaster file</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>fragmen klaster sorot fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Fragmen berikutnya</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>fragmen berikutnya fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Fragmen sebelumnya</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>fragmen sebelumnya fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Alihkan sorotan ruang kosong dan slack</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack tidak teralokasi sorot slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Ekspor ruang tidak teralokasi</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>tidak teralokasi kosong ekspor unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Ekspor slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack ekspor slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Buka ruang tidak teralokasi di tab baru</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>tidak teralokasi tab unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Panel partisi</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panel partisi panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Panel sistem file</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panel sistem file panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Panel fragmen</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panel fragmen panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Panel hasil forensik</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panel hasil forensik panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Nomor rekaman MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Partisi dan sistem file</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Tampilkan celah kecil di antara partisi</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Tampilkan celah tidak teralokasi yang lebih kecil dari 1 MiB di panel partisi.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Tampilkan offset disk di tab partisi</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Jika nonaktif, alamat tab partisi dimulai dari 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Tampilkan alternate data stream NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Stream bernama ditampilkan sebagai file.txt:stream di penjelajah sistem file.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Tampilkan legenda sorotan forensik</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Menampilkan legenda di kanan atas tampilan Hex saat sorotan aktif.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Warna sorotan forensik</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Contoh: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Kosongkan untuk warna default.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Partisi</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Sistem file</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Tampilkan partisi</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Buka partisi di tab baru</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Buka awal partisi</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Pindai partisi yang hilang...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Tampilkan penjelajah</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Buka file di tab baru</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Ekspor file...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Cari file terhapus</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Buka klaster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>File yang menggunakan posisi ini</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Tampilkan klaster file</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Buka rekaman MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Ekspor ruang tidak teralokasi...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Ekspor slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Buka ruang tidak teralokasi di tab baru</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Fragmen berikutnya</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Fragmen sebelumnya</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Sorotan forensik</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Partisi</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Sistem file</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Fragmen</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Hasil forensik</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Posisi disk dan pemilik klaster</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Partisi</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Sistem file</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Fragmen</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Hasil forensik</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Menganalisis partisi…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Belum dianalisis. Pilih Forensik &gt; Partisi &gt; Tampilkan partisi.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Tabel partisi tidak ditemukan.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} partisi, ukuran sektor {1}, ID disk {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Sektor tidak terbaca (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> No.  Format    Jenis                        Nama             LBA awal       LBA akhir    Sektor        Ukuran  Offset awal   Flag         FS        Status</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Tata letak partisi</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID jenis: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID unik: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Blok awal {0}, {1} blok</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Entri tabel di {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Buka awal partisi</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Pilih partisi</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Buka partisi di tab baru</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Tampilkan struktur entri</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Tampilkan sistem file</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Pindai partisi yang hilang...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Kursor tidak berada dalam partisi.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>GPT dengan sektor {1}-byte tidak ditemukan, tetapi ditemukan dengan sektor {0}-byte. Buka kembali dengan sektor {0}-byte?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Buka kembali dengan sektor {0}-byte</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - Partisi {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logis</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Rantai EBR berputar kembali ke LBA {1} (setelah partisi {0}). Rantai dihentikan.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Lebih dari 256 partisi logis. Sisanya tidak dibaca.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 header GPT tidak cocok (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 larik entri partisi GPT tidak cocok (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Header GPT utama dan header cadangan (LBA {1}) berbeda.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Header GPT utama rusak. Daftar dibuat dari header cadangan.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Partisi {0} dan {2} tumpang tindih.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Partisi {0} menunjuk ke luar disk (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR hibrida: MBR pelindung juga memiliki entri lain.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Beberapa sektor tidak dapat dibaca (pertama: LBA {1}). Daftar menggunakan sektor yang dapat dibaca.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Peta partisi Apple memiliki lebih dari 256 entri.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Sistem EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Dicadangkan Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Data dasar Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Pemulihan Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Metadata LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Data LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Sistem file Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Swap Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Home Linux</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Boot Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Boot BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Extended</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Extended (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 tersembunyi</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Pemulihan</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 tersembunyi</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS tersembunyi</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 tersembunyi</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (disk dinamis)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux extended</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>Pelindung GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Tidak teralokasi</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Volume fisik LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Pindai partisi yang hilang</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA awal</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA akhir (tidak termasuk)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Posisi pemindaian</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Batas 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Batas silinder (63 sektor)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Setiap sektor</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Setiap sektor memerlukan sekitar {0} (pada 200 MB/dtk).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} jam</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} mnt</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Cari</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Header GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Pindai</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Memindai partisi yang hilang</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Partisi yang hilang</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     LBA awal       Sektor          Ukuran  Jenis       Keyak.  Tumpang tindih</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Rendah</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Sedang</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Tinggi</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>tumpang tindih dengan partisi {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Dibatalkan. Hasil sejauh ini dipertahankan.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, other {# kandidat ditemukan.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Tidak terbaca: LBA {0}, {1} sektor</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Tidak ada kandidat partisi yang ditemukan.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Pindai setiap sektor</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Buka sebagai partisi</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Tampilkan sistem file</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Buat entri tabel partisi (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Buat entri tabel partisi (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Buat entri tabel partisi</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR tidak memiliki entri kosong untuk semua kandidat.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Partisi tidak dapat ditulis dalam MBR (lebih dari 2 TiB). Gunakan GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT tidak memiliki entri kosong.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Disk terlalu kecil untuk GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Tidak ada sistem file yang terbuka untuk dokumen ini.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Pilih sebuah file di penjelajah sistem file.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Tidak ada klaster file yang disorot.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Hanya untuk NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Informasi alokasi tidak dapat dibaca, sehingga sorotan tidak tersedia.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Volume terenkripsi (BitLocker). Penjelajah sistem file tidak membukanya.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Volume terenkripsi ({0}). Penjelajah sistem file tidak membukanya.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Tidak dapat dibuka sebagai {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Pilih sistem file</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Jenis tidak dapat dideteksi dari tanda tangan. Pilih jenis yang akan dicoba.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Jenis</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Buka</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Tidak teralokasi ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Rekaman MFT {0} tidak ada.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Buka blok</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Tidak ada sistem file. Pilih Forensik &gt; Sistem file &gt; Tampilkan penjelajah.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  serial {2}  klaster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Root</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>File</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Folder</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Fragmen</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filter (* dan ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Cari file (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Kolom</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT yang digunakan</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, other {FAT berbeda pada # entri.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Sektor per klaster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Analisis ulang</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Membaca…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Membaca… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} item</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Tidak dapat dibaca: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(rusak)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(waktu tidak cocok)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Waktu tidak cocok: waktu $STANDARD_INFORMATION lebih awal daripada waktu $FILE_NAME, atau tidak memiliki pecahan.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Dienkripsi dengan EFS (hanya data mentah).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Rantai klaster hilang; data dibaca sebagai klaster berurutan mulai dari klaster pertama.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>entri slack indeks</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>menghitung…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logis {0}  klaster {1} ×{2}  disk {3}  {4} byte</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logis {0}  di metadata  disk {3}  {4} byte</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(terkompresi)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Menghitung posisi slack</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Membangun peta klaster</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>{0} entri dengan metadata rusak dilewati.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Posisi tidak berada di area klaster.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Pemilik klaster {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Jenis                     Jalur</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>File terhapus (dealokasi)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Rantai klaster {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Indeks         Klaster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>File bernama {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        Ukuran  Jalur</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Mencari file: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, other {# file ditemukan.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Mencari file terhapus</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Mencari file yatim</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Buka file di tab baru</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Ekspor file...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Buka metadata</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Tampilkan klaster file</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Tampilkan rekaman MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Tampilkan INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Tampilkan $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Tampilkan entri direktori</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Tampilkan rantai klaster</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Salin jalur</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Ekspor daftar sebagai CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Eks.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Ukuran</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Dialokasikan</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Dibuat (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Dibuat (lokal)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Diubah (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Diubah (lokal)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Diakses (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Diakses (lokal)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metadata diubah (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Metadata diubah (lokal)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Atr.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID file</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Klaster pertama</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Frag.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Status</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Jalur</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Jalur asli</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Pemulihan</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Terhapus</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Yatim</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Baik</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Sebagian tertimpa</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Tertimpa</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Lokasi tidak diketahui</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Resident</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Rekaman MFT tidak digunakan</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack indeks</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Entri direktori terhapus</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Inode terhapus</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack entri direktori</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup tidak cocok (urutan pembaruan)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Tanda tangan buruk</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Nomor klaster di luar rentang</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Rantai klaster berputar</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Rantai klaster mencapai klaster kosong</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Rantai klaster tidak sesuai dengan ukuran file</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Daftar data run tidak valid</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Atribut tidak valid</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Checksum kumpulan entri tidak cocok</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Galat baca</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Terlalu dalam</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Sektor boot cadangan berbeda ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr berbeda dari $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Nilai BPB tidak konsisten ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>FAT berbeda ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo tidak cocok ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Checksum wilayah boot exFAT tidak cocok ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Checksum nama panjang tidak cocok ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Informasi alokasi tidak dapat dibaca ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Volume terenkripsi ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>File terhapus</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>File yatim</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Ruang tidak teralokasi</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack volume</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Data file</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>Slack RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Slack drive</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Tidak teralokasi</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack volume</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Celah partisi</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Legenda sorotan forensik</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Ukuran {0} byte, dialokasikan {1} byte</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Dibuat {0}, diubah {1}, diakses {2}, metadata diubah {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID file {0}, atribut {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Pemulihan: {0} ({1}). Jalur asli: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Jenis: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Nama volume: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Nomor seri: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Ukuran klaster: {0} byte</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Total klaster: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Klaster kosong: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Dibuat: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Volume mulai {0}, {1} byte</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Rekaman MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Offset rekaman</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Nomor urut</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Tautan keras</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Flag</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Byte terpakai</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Rekaman dasar</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI dibuat</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI diubah</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT berubah</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI diakses</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Nama</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Induk</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN dibuat</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN diubah</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT berubah</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN diakses</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>Ukuran $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Waktu tidak cocok</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Isi</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Offset entri</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Klaster pertama</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Nama pendek</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Klaster dalam rantai</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Panjang data</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Panjang data valid</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Partisi {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Klaster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Blok {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Terhapus: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Tidak teralokasi</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Cari pemilik</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disk: - (terkompresi / jarang / resident)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Nomor klaster ({0}–{1}; klaster = klaster saat ini)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Klaster {0} di luar rentang.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Buka</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Pertahankan struktur folder</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Ekspor juga alternate data stream (nama_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Ekspor juga slack sebagai file terpisah</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Sertakan file terhapus</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, other {# item dipilih.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Pilih folder...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Mengekspor file</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} file diekspor ke {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Ruang kosong tidak cukup: dibutuhkan {0}, tersedia {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Tidak dapat menulis: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Ekspor file yang sudah tertimpa?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Klaster file terhapus ini kini digunakan oleh file lain. Isi yang diekspor mungkin milik file lain.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Ekspor</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>File biner</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Buat file peta (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Mengekspor ruang tidak teralokasi</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Mengekspor slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} ditulis ke {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Rekaman $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      LSN sblm.  LSN undo-brkt  Jenis    ID trans.  Redo                            Undo                            Rek MFT  Panjang</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Halaman restart {0}: LSN saat ini {1}, klien: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Membaca $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Daftar</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Tidak ada hasil.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Ekspor daftar sebagai CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Tidak ada file yang disorot. Pilih Tampilkan klaster file.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} fragmen)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logis {1}  disk {2}  {3} byte  klaster {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Hapus sorotan</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Pilih ruang tidak teralokasi</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>tidak teralokasi pilih cari carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Pilih slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack pilih cari carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Pilih ruang tidak teralokasi</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Pilih slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Memilih ruang tidak teralokasi</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Mencari ruang tidak teralokasi</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Memilih slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Tidak ada yang dapat dipilih.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Hanya 1.000.000 rentang pertama yang dipilih.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Tampilkan volume logis</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>volume logis ldm disk dinamis lvm lvm2 stripe span logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Buka inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Nomor inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Tampilkan volume logis</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Buka inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Checksum tidak cocok</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Format tidak didukung</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Checksum superblok ext tidak cocok ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Checksum deskriptor grup tidak cocok (grup {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Fitur ext ini tidak sepenuhnya didukung: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Header volume alternatif berbeda dari yang utama ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Checksum objek APFS tidak cocok (blok {0}). Dilewati.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Checkpoint APFS terbaru rusak; checkpoint yang lebih lama digunakan (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Checksum tag deskriptor UDF tidak cocok (sektor {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC deskriptor UDF tidak cocok (sektor {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Jenis partisi UDF ini tidak didukung: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Disk memiliki {0} sesi. Sesi terakhir ditampilkan; pilih sesi lain dengan Sesi.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Hanya tersedia untuk ext2, ext3, dan ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Tidak ada inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Volume ini terenkripsi. Daftar file tidak ditampilkan.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Checkpoint APFS tidak ditemukan.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Tampilkan inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Tampilkan jurnal</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Nama</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (dasar)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Sesi</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Sistem file ini tidak memiliki jurnal.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>jurnal ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Blok      Offset disk  Jenis            Urutan</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Ukuran blok {0}, {1} blok, urutan {2}, awal {3} (0 = bersih). Jurnal tidak diputar ulang.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Membaca jurnal ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Deskriptor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblok v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblok v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Tampilkan volume logis</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Buat citra rentang ini...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Volume logis</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Nama                  Jenis         Ukuran      Tata letak                    Status</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Membaca metadata volume...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>Tidak ada volume logis LDM atau LVM2 yang ditemukan di disk dan citra yang terbuka.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Buka volume logis</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Tetapkan anggota...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Baca ulang</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Jenis volume ini tidak didukung: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} tidak dapat dibuka. Anggota yang hilang: {1}. Buka disk atau citranya, atau tetapkan.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) adalah volume mirror atau RAID-5. Buka dengan rekonstruksi RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Tetapkan anggota</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Pilih disk atau citra untuk setiap anggota {0} yang hilang.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(tidak ada)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Buka file...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, other {# anggota hilang}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Tidak didukung</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Rekonstruksi RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Sederhana</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Spanned</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Striped</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Mirror</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Linear</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Tidak didukung ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} grup {1}, volume {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Anggota {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>tidak ditemukan</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Offset {0} ({1}): {2} pada {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Offset {0} ({1}): stripe {2} pada {3} anggota</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Hapus aman seleksi</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>wipe hapus aman timpa rentang wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Hapus aman disk</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>wipe hapus aman disk drive timpa wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Bersihkan ruang kosong</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>ruang kosong tidak teralokasi wipe hapus cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Bersihkan slack file</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram drive wipe hapus slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Redaksi isi file</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>redaksi sanitasi kosongkan hitamkan redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Hapus aman</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Hapus aman seleksi...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Hapus aman disk...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Bersihkan ruang kosong...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Bersihkan slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Redaksi isi file...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Redaksi isi file...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Hapus aman seleksi...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Carving file dari seleksi...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Redaksi</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Hapus aman</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Mulai</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Panjang</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Baca ulang dan verifikasi di akhir</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Hapus...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Rentang berada di luar dokumen.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Perubahan belum disimpan</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Data yang akan dihapus memiliki perubahan yang belum disimpan. Simpan atau buang perubahan sebelum menghapus.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Buang</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Hapus data</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disk {0}: {1}, nomor seri {2}, {3} byte</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Rentang: LBA awal {0}, {1} sektor, {2} byte</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Rentang: offset {0}, {1} byte</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Rentang diperluas hingga batas sektor.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Metode: {0} ({1, plural, other {# putaran}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Putaran terakhir dibaca ulang dan diverifikasi.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Perkiraan waktu: sekitar {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Tindakan ini tidak dapat dibatalkan. Data asli tidak dapat dipulihkan.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>Pada SSD dan media flash, wear leveling dapat menyimpan data asli di tempat lain meskipun sudah ditimpa.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Volume berikut dikunci selama penghapusan: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Data ditulis langsung ke file, bukan sebagai suntingan. Tidak dapat dibatalkan dengan Undo.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Hapus {0} byte</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Hapus {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Untuk melanjutkan, ketik “{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Konfirmasi</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Pilih rentang yang akan dihapus.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Dokumen ini tidak dapat dihapus secara langsung.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Buka seluruh disk fisik di sebuah tab untuk menghapusnya.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Sumber data ini ada di daftar barang bukti dan tidak dapat ditulis.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows sedang menggunakan disk ini (sistem, boot, atau file halaman), sehingga tidak dapat dihapus.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Volume {0} tidak dapat dikunci, sehingga tidak ada yang dihapus.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Penulisan ditolak: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Penghapusan gagal: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Menghapus {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Putaran {0} dari {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Memverifikasi</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Hentikan penghapusan? Bagian yang sudah ditimpa tetap tertimpa; sisanya mempertahankan data aslinya.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Galat tulis</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Tidak dapat menulis pada offset {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Lewati dan lanjutkan</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Hentikan</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Hasil penghapusan</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>{0} byte dihapus dalam {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Verifikasi berhasil.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, other {Verifikasi menemukan # rentang yang tidak cocok:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, other {# rentang tidak dapat ditulis:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Penghapusan dihentikan. Data hingga offset {0} ditimpa pada putaran {1}; sisanya mempertahankan isi sebelumnya.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Verifikasi dihentikan. Semua putaran telah ditulis.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Penghapusan dihentikan setelah galat tulis pada offset {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>File dilewati: {0} (terkompresi {1}, jarang {2}, resident {3}, tidak konsisten {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Bersihkan ruang kosong</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Metode</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Melalui Windows (volume yang di-mount)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Penulisan langsung (sistem file di tab ini)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Tidak ada volume ter-mount yang dapat digunakan.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Untuk menulis langsung, tampilkan dulu sistem file di tab ini.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Ruang kosong yang akan ditimpa: {0} byte</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Metode: melalui Windows (file sementara mengisi ruang kosong dan dihapus di akhir)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Metode: penulisan langsung ke klaster tidak teralokasi</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Selama proses ini berjalan, volume tidak memiliki ruang kosong. Aplikasi lain tetap berjalan tetapi tidak dapat menyimpan data baru.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Jika informasi alokasi sistem file salah, file dapat rusak.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Bersihkan ruang kosong</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Sistem file tidak konsisten ({0}). Perbaiki dengan chkdsk, lalu coba lagi.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Penulisan langsung hanya mendukung NTFS, FAT12/16/32, dan exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Simpan atau buang dulu perubahan di tab ini.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>File sementara berikut tidak dapat dihapus. Hapus secara manual:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>{0} byte ruang kosong ditimpa dalam {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Menghitung ruang kosong</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Pembersihan ruang kosong dihentikan. File sementara telah dihapus.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Bersihkan slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>File: {0}, slack yang akan ditimpa: {1} byte</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Bersihkan slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Mencari slack file</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>{0} byte slack ditimpa dalam {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Redaksi isi file</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>File ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Pola</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (default)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Acak</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Ganti juga nama dengan “_” dengan panjang yang sama</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Log redaksi (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Isi berubah sebagai suntingan. Tidak ada yang ditulis sampai Anda menyimpan; gunakan Simpan Sebagai untuk menyimpan citra baru.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Redaksi</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Mencari data yang akan di-redaksi</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, other {# file di-redaksi}} ({1} byte). Gunakan Simpan Sebagai untuk menyimpan citra baru.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Tidak ada yang perlu di-redaksi.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>File yang tidak di-redaksi</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, other {# item tidak di-redaksi:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>folder</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>item terhapus</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>metadata rusak</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>informasi fragmen rusak</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>data resident tidak ditemukan</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>metadata sistem file</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Nama tidak dapat diganti untuk: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Dokumen bersifat hanya-baca.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Timpa citra asli?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Dokumen ini memiliki redaksi. Menyimpan akan menuliskannya ke {0} asli, dan ini tidak dapat dibatalkan. Untuk mempertahankan aslinya, gunakan Simpan Sebagai.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Timpa {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Log redaksi tidak dapat ditulis: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Masukkan pola sebagai byte hex (misalnya 00 atau A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} dtk</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} mnt</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} jam</value></data>
 </root>

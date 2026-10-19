@@ -2136,6 +2136,7 @@ Ayrıntılar şuraya yazıldı:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Pencere {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(sekme yok)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Yolu kopyala</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Disk imajı olarak yeniden aç</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Gezgin'de göster</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Salt okunur</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Boyut: {0}</value></data>
@@ -6634,6 +6635,418 @@ Tür: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Açıklama sütunu</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Sembol adlarını, dal hedefi adlarını ve başvurulan dizeleri göster.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Ters montaj</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Adli bilişim</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Adli bilişim</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Tarih ve saat gösterimi</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Adli bilişim listelerinde ve ayrıntılarında zamanların nasıl gösterileceği: UTC ve yerel saat, yalnızca UTC veya yalnızca yerel saat. Zamanlar her zaman UTC olarak kaydedilir.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC ve yerel saat</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Yalnızca UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Yalnızca yerel saat</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Vaka açıldığında yazma engelleme modunu aç</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Kapalıyken açıp açmayacağınız sorulur.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Gezinme işlemlerini de denetim günlüğüne kaydet</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Atlamaları, aramaları ve yer işareti eklemelerini kaydeder. Veri ve delillerdeki değişiklikler her zaman kaydedilir.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Carving ile çıkarılan görüntülerin küçük resimlerini göster</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Carving sonuçlarında JPEG, PNG, GIF ve BMP dosyalarının küçük bir önizlemesini göster.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Rapor logosu görüntüsü</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Raporlarının en üstünde gösterilen PNG, JPEG veya SVG görüntüsünün yolu.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Rapor üst bilgi metni</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Raporların başlığının altında gösterilen bir satır metin; örneğin laboratuvarınızın adı.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Yeni vaka</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>soruşturma delil oluştur vaka klasörü new case investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Vakayı aç</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>soruşturma delil yükle vaka klasörü open case investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Vakayı kapat</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>soruşturma bitir kapat close case investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Delil ekle</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>kaydet disk imajı karma edinim register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Vaka özellikleri</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>saat dilimi inceleyici kuruluş time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Denetim günlüğünü göster</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>gözetim zinciri geçmiş günlük chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Denetim günlüğünü doğrula</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>kurcalama karma zinciri bütünlük denetim tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Carving imzalarını yönet</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>dosya türleri üst bilgi alt bilgi sihirli tanım file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Dosyaları carving ile çıkar</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>kurtar çıkar silinmiş dosyalar tara recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Rapor oluştur</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf dışa aktar belgelendirme html pdf export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Delil listesini göster veya gizle</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>vaka delil panel case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Denetim günlüğünü göster veya gizle</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>vaka denetim günlüğü panel case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Carving sonuçlarını göster veya gizle</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>carving ile çıkarılan dosyalar panel sonuçlar carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Deliller</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Denetim günlüğü</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Carving sonuçları</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Adli bilişim</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Vaka</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Yeni vaka...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Vakayı aç...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Vakayı kapat</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Delil ekle...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Vaka özellikleri...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Delil listesi</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Denetim günlüğünü göster</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Denetim günlüğünü doğrula</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Dosyaları carving ile çıkar...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>İmzaları yönet...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>İ</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Sonuçlar</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Rapor oluştur...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Vaka: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>geçersiz zaman</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Bir vaka zaten açık. Önce onu kapatın.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Açık vaka yok.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Yeni vaka</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Vaka özellikleri</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Vaka numarası (zorunlu)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Vaka adı (zorunlu)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>İnceleyici</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Kuruluş</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Vaka klasörü</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Gözat...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Saat dilimi</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Saat dilimi bilgisi olmayan zamanları, örneğin FAT dosya zamanlarını okumak için kullanılır.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Oluştur</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>"{0}" vakası oluşturuldu.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>"{0}" vakası açıldı.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Vaka oluşturulamadı: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Vaka numarası ve vaka adı zorunludur.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Vaka dosyası okunamıyor (satır {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Vaka açılamadı: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Vaka kaydedilemedi: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Bu vaka için yazma engelleme modu açılsın mı?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Aç</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Bu vaka için yazma engelleme modu açıldı.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Delil ekle</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Delil ekle</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} vakaya eklenecek. Veri kaynağı değiştirilmez.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Karmaları şimdi hesapla</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Bu veri kaynağı zaten {0} olarak kayıtlı.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Yalnızca diskler, birimler, imaj dosyaları ve dosyalar delil olarak eklenebilir.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>{0} delilinin karması hesaplanıyor</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>{0} karmaları kaydedildi.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>{0} karması hesaplanmadı. Delil listede kalır.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>0x{1} ofsetindeki veri okunamıyor, bu nedenle {0} karması kaydedilmedi.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Hesaplanmadı</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} listeden kaldırıldı. Veri kaynağına dokunulmadı.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} kullanılamıyor.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Delil açılamadı: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} öğe</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Açık vaka yok. Adli bilişim menüsünden bir vaka oluşturun veya açın.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Henüz delil eklenmedi.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Delil</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Yol</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Kapasite (bayt)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Karmalar</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Doğrulama</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Eklenme (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Eklenme (yerel)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Birim</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>İmaj</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Dosya</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Bellek</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Başarılı</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Başarısız</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Doğrulanmadı</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Aç (salt okunur)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Listeden kaldır</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Karmaları kopyala</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Yolu kopyala</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>İmaj oluştur...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Doğrula...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} girdi</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Açık vaka yok. Denetim günlüğü bir vakaya aittir.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Henüz hiçbir şey kaydedilmedi.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Bu satır geçerli bir girdi değil. Günlük değiştirilmiş olabilir.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Doğrula</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>CSV olarak dışa aktar</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>JSON olarak dışa aktar</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Denetim günlüğü sağlam ({0} satır denetlendi).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Denetim günlüğü zinciri {0}. satırda kopuk. Günlük değiştirilmiş olabilir.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Zaman (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Zaman (yerel)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Kullanıcı</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>İşlem</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Delil</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Sonuç</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Ayrıntılar</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Başarılı</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Başarısız</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>İptal edildi</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Denetim günlüğüne yazılamıyor</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Günlüğe yeniden yazılabilene kadar veri yazan işlemler kapatıldı. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Yeniden dene</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Denetim günlüğüne hâlâ yazılamıyor.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Denetim günlüğüne yazılamadığı için işlem yapılmadı.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Denetim günlüğüne yazılamadığı için veri yazan işlemler kapatıldı.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Denetim günlüğü doğrulanıyor</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Denetim günlüğü doğrulanamadı: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Denetim günlüğü dışa aktarılıyor</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Denetim günlüğü {0} konumuna aktarıldı.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Denetim günlüğü dışa aktarılamadı: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Carving imzaları</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Tanımlar</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>yerleşik</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>devre dışı</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Uzantı (noktasız)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Üst bilgiler (Hex baytlar, her satırda bir tane; ?? herhangi bir bayt, ? herhangi bir rakam)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Dosya başından üst bilgi ofseti</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Alt bilgi (Hex baytlar, isteğe bağlı)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Alt bilgiden eklenecek bayt sayısı (boş = alt bilginin kendisi)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>En büyük boyut</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>En küçük boyut</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Boyutu üst bilgideki bir değerden al</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Boyut değeri: dosya başından ofset</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Boyut değeri: genişlik (bit)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Boyut değeri: bayt sırası</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Boyut değeri: eklenecek sayı</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Yapı denetimi (yerleşik ad veya yapı şablonu)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Yerleşik denetimler: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Üst bilgiyi yalnızca sektör başında ara</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Tararken bu tanımı kullan</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Yeni</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Çoğalt</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>İçe aktar...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Dışa aktar...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Bu tanımı dene</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Önce belgede bir aralık seçin.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Deneniyor...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Carving tanımı deneniyor</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Seçimde {0} bulundu. İlk konumlar:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>{0} tanım içe aktarıldı.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>{0} tanım içe aktarılmadı:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>{0} konumuna aktarıldı.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Tanımlar içe aktarılamadı: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Tanımlar kaydedilemedi: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Deneme başarısız oldu: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: bir sayı veya 4096, 0x1000 ya da 1M gibi bir boyut girin.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Bir ad girin.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Bu ad zaten kullanılıyor.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Bir uzantı girin.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Uzantıda dosya adında kullanılamayan karakterler var.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>En az bir üst bilgi girin.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Üst bilgi geçerli bir Hex bayt dizisi değil (tek sayıda rakam veya geçersiz karakter).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Üst bilgide en az bir sabit bayt olmalı.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Üst bilgi ofseti negatif olamaz.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Alt bilgi geçerli bir Hex bayt dizisi değil.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Eklenecek bayt sayısı negatif olamaz.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>En büyük boyut en az 1 olmalı.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>En küçük boyut negatif olamaz.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>En büyük boyut, en küçük boyuttan küçük.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Boyut değeri geçerli değil.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Bir değerin türü yanlış.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Dosyaları carving ile çıkar</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Başlat</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Kapsam</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Tüm belge</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Seçim</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Yalnızca ayrılmamış alan</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Yalnızca slack alanı</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Dosya türleri</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Bulunan bir dosyanın içinde üst bilgi arama</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Carving ile çıkarılan dosyaları bir klasöre yaz</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Çıktı klasörü</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Dosyalar carving ile çıkarılıyor</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving tamamlandı: {0} dosya bulundu.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving iptal edildi. {0} dosya bulundu; sonuçlar ve bildirim dosyası korundu.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Çıktı klasörüne yazılamadığı için carving durduruldu. {0} dosya bulundu.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving başarısız oldu: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Çıktı klasörü incelenen bir diskte. Başka bir diskteki bir klasörü seçin.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Çıktı klasöründe yeterli boş alan yok. Gereken: {0} bayt. Boş: {1} bayt.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Çıktı klasörünün dosya sistemi bir dosyayı {0} bayt ile sınırlar. Başka bir klasör seçin.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Çıktı klasörü kullanılamıyor.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Bu belge için ayırma bilgisi yok.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Carving ile çıkarılan dosyalar yazılamıyor</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>Çıktı klasöründe ({0}) yer kalmadı. Sonraki dosya {1} bayt gerektiriyor ama {2} bayt boş. Yer açın, başka bir klasör seçin veya durdurun.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>{0} konumuna yazılamıyor: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Yeniden dene</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Başka klasör seç...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Durdur</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving zaten çalışıyor.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Dosyaları carving ile çıkar...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Klasörü aç</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving henüz çalıştırılmadı. Adli bilişim, ardından Carving, ardından Dosyaları carving ile çıkar seçeneğini seçin.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Dosya bulunamadı.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} dosya</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Carving ile çıkarılan görüntünün önizlemesi</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Ofset</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Uzunluğu belirleyen</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Çıktı dosyası</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Yapı</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Boyut değeri</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Alt bilgi</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>En büyük boyut</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Tür: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Ofset: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Uzunluk: {0} bayt</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Uzunluğu belirleyen: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Rapor oluştur</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Oluştur</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>İçerik</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Disk: {0} (sektör boyutu {1} bayt)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Şema</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>Başlangıç LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Sektörler</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Boyut (bayt)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Dosya sistemi</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Şifreleme</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Ayrılmamış</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Yerleşim</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Belge</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Birim ofseti</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Etiket</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Seri numarası</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Küme boyutu (bayt)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Kümeler</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Boş kümeler</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Sorunlar</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Mantıksal birimler: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Grup</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Tür</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Boyut (bayt)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Yerleşim</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Üyeler</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>İmaj</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Kaynak</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Edinildi</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Karmalar</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Edinim günlüğü</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (tek dosya, çevrimdışı açılır)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Tüm denetim günlüğü girdileri</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Denetim günlüğü başlangıcı (UTC, isteğe bağlı)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Denetim günlüğü bitişi (UTC, isteğe bağlı)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Her yer işareti için Hex dökümü baytları (0 ile 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Kaydedilecek yer</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Dönem geçerli bir tarih ve saat değil.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Hex dökümü uzunluğu 0 ile 4096 bayt arasında olmalı.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Rapor oluşturuluyor</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Rapor oluşturulamadı: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>{0} oluşturuldu. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>PDF oluşturulamadı ({0}). Bunun yerine {1} oluşturuldu.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>PDF'de uzun listelerin yalnızca ilk satırları yer alır. Tam listeler için HTML raporunu veya CSV dosyalarını kullanın.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Aç</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Klasörü aç</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Adli Bilişim Raporu</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Vaka numarası</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Vaka adı</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>İnceleyici</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Kuruluş</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Vaka oluşturulma tarihi</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Rapor oluşturulma tarihi</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Saat dilimi</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Oluşturan</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Sayfa</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>/</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Vaka</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Kapak</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Deliller</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Edinim kayıtları</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Aygıt bilgileri</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Bölümler</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Dosya sistemleri</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Yer işaretleri</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Carving sonuçları</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Denetim günlüğü</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Delil</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Yol</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Seri numarası</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Kapasite (bayt)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sektörler</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Sektör boyutu</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Karmalar</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Doğrulama</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Eklenme (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Eklenme (yerel)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Ekleyen</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Başarılı</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Başarısız</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Doğrulanmadı</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Hesaplanmadı</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Birim</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>İmaj</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Dosya</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Bellek</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Belge</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Ofset</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Yorum</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dökümü</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Ofset</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Uzunluğu belirleyen</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Çıktı dosyası</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Bulunan dosyalar</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>No.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Zaman (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Zaman (yerel)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Kullanıcı</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Bilgisayar</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>İşlem</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Delil</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Sonuç</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Ayrıntılar</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>başarılı</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>başarısız</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>iptal edildi</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>{1} satırın ilk {0} satırı gösteriliyor. Tam liste ekteki CSV dosyasında veya HTML raporunda.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>İlk {0} satır gösteriliyor. Tam liste HTML raporunda veya CSV dosyasında.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Tam liste</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Ayrılmamış</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Veri yok.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>geçersiz zaman</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Ters montaj panelini aç/kapat</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler disassembly assembly code ters montaj derleme kod</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Ters montajla</value></data>
@@ -8195,4 +8608,1265 @@ Anahtarı değiştirmeyi seçmedikçe bağlantı kurulmaz.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Tüm sayfa</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Genişliğe sığdır</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Klasör seç...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Yazma korumalı]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Yazma koruması</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Yazma koruması modu açık. Kapatmak için tıklayın.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Yazma koruması modu yalnızca bu uygulamanın yazmasını engeller. Windows'un veya diğer uygulamaların yazmasını (örneğin bir dosya sistemi birimi bağlarken yaptığı yazmalar) engelleyemez. Ayrıca bir donanım yazma engelleyici veya işletim sisteminin USB yazma korumasını kullanın.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Yazma koruması USB (işletim sistemi)...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Yazma koruması modu kapatılsın mı?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Açık delil belgeleri: {0}. Mod kapatıldıktan sonra bu belgelere yazılabilir:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Açık delil belgesi yok. Mod kapatıldıktan sonra açık belgelere yeniden yazılabilir.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Yazma korumasını kapat</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Veri kaynağı salt okunur olarak yeniden açılamadı. Yalnızca önceden okunan veriler gösteriliyor.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Bu belgeye yazmaya izin ver</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Yazmaya izin verildi (yazma koruması modu istisnası)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Yazma koruması modu kapalı.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Yalnızca dosya belgeleri yazma koruması modundan hariç tutulabilir.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Bu veri kaynağı delil olarak kayıtlı olduğundan yazmaya izin verilemez.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Bu belge için yazmaya zaten izin verilmiş.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Bu belgeye yazmaya izin verilsin mi?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Yazma koruması modu açık kalır, ancak {0} ({1}) siz kapatana kadar düzenlenebilir ve kaydedilebilir. Bu, denetim günlüğüne kaydedilir ve açık belge için geri alınamaz.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Onaylamak için {0} yazın</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>{0} dosyasına yazmaya izin ver</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>{0} için yazmaya kapatılana kadar izin verildi.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Yazma koruması modu</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>İşletim sistemi USB yazma koruması</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>İ</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Aygıt</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>HPA / DCO denetle</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART bilgileri</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Aygıt bilgileri paneli</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Şifreleme bilgileri...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Ş</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Bellek dökümü aç...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Yazma koruması modunu aç/kapat</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>yazma engelle koru salt okunur delil write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Bu belgeye yazmaya izin ver</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>yazma engelleme istisna write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>İşletim sistemi USB yazma korumasını aç/kapat</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb depolama ilkesi yazma koruması kayıt defteri usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>HPA ve DCO denetle</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>gizli alan host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>SMART bilgilerini göster</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>sağlık disk kendi kendini izleme nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Şifreleme bilgilerini göster</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt şifreli birim encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Aygıt bilgilerini göster/gizle</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart aygıt panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Bellek dökümü aç</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>kilitlenme dökümü minidump fiziksel bellek ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Aygıt bilgileri</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Başlangıçta yazma koruması modunu her zaman aç</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Kapalıyken uygulama, mod en son kapatıldığındaki durumda başlar.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Disk açıldığında HPA / DCO denetle</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Diske salt okunur ATA komutları gönderir ve gizli alanlar bulunursa bildirim gösterir.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>İşletim sistemi USB yazma koruması açılsın mı?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows, bundan sonra bağlanan USB depolama aygıtlarına yazmayı engelleyecek (StorageDevicePolicies WriteProtect ayarı). Zaten bağlı olan aygıtlar, yeniden bağlayana kadar etkilenmez. Dahili SATA ve NVMe diskler korunmaz. Yönetici hakları gerekir.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>İşletim sistemi USB yazma koruması kapatılsın mı?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Ayar, açmadan önceki duruma döner. Zaten bağlı olan USB depolama aygıtları, yeniden bağlayana kadar yazmaya karşı korumalı kalır. Yönetici hakları gerekir.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Ayarı değiştir</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Yönetici hakları gerekir. Ayar değiştirilmedi.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Ayar değiştirilemedi (erişim reddedildi; Grup İlkesi tarafından yönetiliyor olabilir): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Ayar değiştirilemedi: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>İşletim sistemi USB yazma koruması açık. Etkili olması için USB depolama aygıtlarını yeniden bağlayın.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>İşletim sistemi USB yazma koruması kapalı.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>İşletim sistemi USB yazma koruması hâlâ açık</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows, bu uygulama kapandıktan sonra da USB depolamaya yazmayı engellemeye devam eder. Çıkmadan önce kapatılsın mı?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Kapat ve çık</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Çık ve açık bırak</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>İşletim sistemi USB yazma korumasını değiştirmek için Windows yönetici hakları gerekir.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Aygıt</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>HPA / DCO denetle</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>SMART oku</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>JSON olarak dışa aktar...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Metin olarak dışa aktar...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Bir fiziksel disk açın ve HPA / DCO denetle veya SMART bilgileri seçeneğini seçin.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — alınma: {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO denetlenmedi.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe disklerinde HPA veya DCO yoktur; HPA / DCO geçerli değildir.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Ad alanı boyutu: {0} blok (blok başına {1} bayt)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Ad alanı kapasitesi: {0} blok</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Bu aygıtta denetlenemiyor (komutlar iletilmiyor; örneğin USB bağdaştırıcılarında veya sanal disklerde).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Yönetici hakları gerekir.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>{0} komutu başarısız oldu (ATA durumu {1}, hata {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>En büyük LBA (IDENTIFY DEVICE, 28 bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>En büyük LBA (IDENTIFY DEVICE, 48 bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Yerel en büyük LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>DCO tarafından ayarlanan en büyük LBA (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>aygıt tarafından desteklenmiyor</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>aygıt tarafından desteklenmiyor</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: var, {0} sektör ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: yok</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: belirlenemedi</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: var, {0} sektör ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: yok</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: belirlenemedi</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>SMART bilgileri okunmadı.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>SMART bilgileri bu aygıtta okunamıyor (örneğin bunu desteklemeyen bir USB bağdaştırıcısı üzerinden).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART bu aygıtta devre dışı.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>SMART verilerinin sağlama toplamı eşleşmiyor; değerler yanlış olabilir.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Seri numarası: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Bellenim: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Kapasite: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Sektör boyutu: {0} bayt mantıksal, {1} bayt fiziksel</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Bağlantı: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Dönüş hızı: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>dönmüyor (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>destekleniyor</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>desteklenmiyor</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Bu komutu kullanmak için bir fiziksel disk açın.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Aygıt bilgileri okunamadı: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} üzerinde gizli alanlar var: HPA {1} sektör, DCO {2} sektör. Windows'un gördüğü kapasite diskin gerçek kapasitesinden küçük.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Ayrıntıları göster</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Aygıt bilgileri {0} konumuna aktarıldı.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Aygıt bilgileri dışa aktarılamadı: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Geçerli</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>En kötü</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Eşik</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Ham (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Ham (ondalık)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Durum</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Uyarı</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Bilinmiyor</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Sıcaklık</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Kritik uyarı bitleri: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Sıcaklık: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Kullanılabilir yedek: %{0} (eşik %{1})</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Kullanılan yüzde: %{0}</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Okunan veri: {0} bayt</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Yazılan veri: {0} bayt</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Güç döngüleri: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Çalışma saatleri: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Güvenli olmayan kapanmalar: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Ortam ve veri bütünlüğü hataları: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Alındı</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Aygıt</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Seri numarası</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Bellenim</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Kapasite (bayt)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Sektör boyutu (mantıksal / fiziksel)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Bağlantı</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>En büyük LBA (28 bit / 48 bit / yerel / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Bu aygıtta denetlenemiyor</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Yok</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Var ({0} sektör)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Geçerli değil (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Ad</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Geçerli</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>En kötü</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Eşik</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Ham</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Durum</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Uyarı</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Şifreleme bilgileri</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Şifreli birim bulunamadı.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Aralık {0}: ofset {1}, {2} bayt</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Tür: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Şifreli APFS birimi (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (şifreli olabilir)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Şifreli veya sıkıştırılmış olabilecek veri (örneğin VeraCrypt veya TrueCrypt; bunları tanıyacak bir imza yoktur)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Üst veri sürümü: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Şifreleme yöntemi: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>Birim GUID'i: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Oluşturulma: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Açıklama: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Şifreleme durumu: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>bilinmiyor</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>şifresi çözüldü</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>sürüyor</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>tamamlandı</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>duraklatıldı</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Şimdiye kadar şifrelenen: {0} bayt</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Anahtar koruyucuları: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, oluşturulma {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Açık anahtar</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Başlangıç anahtarı</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM ve PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Kurtarma parolası</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Parola</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Bilinmiyor (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Anahtar yuvaları: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Birim {0}: şifreli</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Birim {0}: şifreli değil</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>İlk 64 KiB'nin entropisi: bayt başına {0} bit</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Uyarı: üç üst veri bloğu eşleşmiyor.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Uyarı: bazı üst veri blokları bozuk; yalnızca okunabilen öğeler gösteriliyor.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Dosya sistemi gezgini şifreli birimleri açmaz.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows bu BitLocker biriminin kilidini açtı ({0}). Mantıksal birim olarak açarsanız Windows'un şifresini çözdüğü içeriği okuyabilirsiniz.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Mantıksal birim olarak aç</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Bellek dökümü</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>{0} bellek dökümü biçimi okunamadı. Ham olarak açılsın mı?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Ham olarak aç</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Bellek dökümü açılamadı: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Bellek dökümü: {0}, alınma: {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Bellek dökümü: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>fiziksel bellek imajı (ham)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>tam bellek dökümü</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>çekirdek bellek dökümü</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>tam bellek dökümü (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Bellek dökümü</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Yazma koruması modu açık olduğundan veri yazılamıyor.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>İmaj</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>İmaj oluştur...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>İ</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>İskelet imajı oluştur...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>İmajı aç...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>İmajı doğrula...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>İmaj bilgileri</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Diski klonla...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Sektör aralığını kaydet...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Sektör aralığını geri yükle...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>RAID'i yeniden oluştur...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>İmaj oluştur</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>edinim disk imajı dd raw e01 delil acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>İskelet imajı oluştur</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>iskelet seyrek imaj üst veri skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>İmajı disk olarak aç</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk bölünmüş ham 001 imaj disk</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>İmajı doğrula</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>doğrula karma md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>İmaj bilgileri</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 üst bilgi vaka bilgileri e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Diski klonla</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>klonla kopyala disk sektör clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Sektör aralığını kaydet</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>yedek mbr gpt sektörler backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Sektör aralığını geri yükle</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>geri yükle mbr gpt sektörler restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>RAID'i yeniden oluştur</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod şerit eşlik raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Geçerli belge bir disk imajı değil.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Bunun için bir disk, birim veya disk imajı belgesi gerekir.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Önce kaynak olarak kullanılacak diski, imajı veya dosyayı açın.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Eksik bölümler olmadan açıldı ({0}). Bu aralıklar hata olarak okunur.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>{0} imajı okunamadı (bölüm: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Fark diskinin üst diski bulunamadı: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Bölümler eksik</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Şu bölümler eksik: {0}. İmaj mevcut bölümlerle açılsın mı? Eksik aralıklar hata olarak okunur.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Mevcut bölümleri aç</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Bölünmüş ham</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Ham (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>{0} konumunda ({1} bayt) bir parça sağlama toplamı eşleşmiyor. Aralık okuma hatası olarak gösterilir.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>İmaj bilgileri</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} bayt ({1} sektör)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Sektör boyutu</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Edinildi</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Edinim aracı</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Aygıt</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Parçalar</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} (parça başına {1} sektör)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Sıkıştırma</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Sıkıştırılmış</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Sıkıştırılmamış</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Kayıtlı {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Edinim sırasında okunamayan sektörler</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Üst disk</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Eksik bölümler</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Vaka numarası</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Delil numarası</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>İncelemeci</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Açıklama</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Notlar</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Eşleşiyor</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Eşleşmiyor</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Başvuru değeri yok</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Okuma hataları nedeniyle doğrulanamıyor</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>imajda kayıtlı</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>edinim günlüğü</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>delil listesi</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>girilen değer</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>edinim sırasında hesaplandı</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>kaynak disk</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>İmaj oluştur</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>İskelet imajı oluştur</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Yazma koruması modu kapalı. Delil edinmeden önce açmanız önerilir.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Yazma koruması modunu aç</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Kaynak: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Yalnızca seçim (sektör sınırlarına genişletilir)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Edinilecek aralıklar</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Tamamı</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Seyrek (ayrılmamış alanları atla)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>İskelet (yalnızca bölüm tabloları ve dosya sistemi üst verisi)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Yer işaretlerini ve çoklu seçim aralıklarını da dahil et</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Çıktı</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Çıktı</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Gözat...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Bölme / segment boyutu (örneğin 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Karmalar</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Okuma hatalarında yeniden deneme</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Okunamayan sektörler için doldurma değeri (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Okuma birimi</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Tamamlandıktan sonra doğrula</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Okuma hataları</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>E01 bilgileri</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Sıkıştırma</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Yok</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Hızlı (zlib düzey 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>En iyi (zlib düzey 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Başlat</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Çıktıyı girin.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Bölme boyutu 1 MiB veya daha büyük olmalı (örneğin 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>0 ile 100 arasında bir yeniden deneme sayısı girin.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Doldurma değerini iki hex rakamı olarak girin (örneğin 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>En az bir karma seçin.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Çıktı, kaynakla aynı fiziksel disk üzerinde. Başka bir disk seçin.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Çıktı, delil listesindeki bir diskte. Başka bir disk seçin.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Çıktı dosya sistemi ({0}) en çok {1} bayt boyutunda dosyalara izin verir. Bölünmüş ham veya daha küçük segment boyutlu E01 kullanın.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Çıktı yaklaşık {0} bayt gerektiriyor ama yalnızca {1} bayt boş.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} zaten var. Üzerine yazılsın mı?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Üzerine yaz</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Çıktı dosya sistemi NTFS değil, {0}; bu yüzden hariç tutulan alanlar sıfır olarak yazılır ve imaj küçülmez.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>İmaj oluştur: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Dahil edilecek aralıklar hesaplanıyor</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} bölüm çözümlenemedi ve tamamen dahil edildi.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>İmaj oluşturulamadı. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Okunamayan sektörler: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>İmaj oluşturuldu. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Doğrulama: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} sektör okunamadı ve dolduruldu.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Edinim yarıda kesildi. Şimdiye kadar yazılan dosyalar korundu.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Edinim yarıda kesildi. Şimdiye kadar yazılan dosyalar silindi.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Kaynak kayboldu. Edinim durduruldu.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Edinim günlüğünü aç</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Çıktı yazılamadı: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Yeniden dene</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Durdur</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Edinim iptal edildi. Şimdiye kadar yazılan dosyalar korunsun mu?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Koru</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>İmajı doğrula</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>İmaj: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Karşılaştırılacak değer (hex, isteğe bağlı)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>MD5, SHA-1 veya SHA-256 değeri</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>32, 40 veya 64 haneli bir hex değeri girin.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Kaynak diski de yeniden oku</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Doğrula</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>İmajı doğrula: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Doğrulama sonucu: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Okuma hataları nedeniyle doğrulanamıyor: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>hesaplanan: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Disk imajı edinim günlüğü</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Disk klonlama günlüğü</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Durum</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Tamamlandı</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Yarıda kesildi</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Kaynak kayboldu</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Başarısız</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Kaynak</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Yol</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Seri numarası</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Kapasite</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Sektör boyutu</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Aralık</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Çıktı</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Hedef</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Bitiş</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Okunan sektörler</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Okunamayan sektörler</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>yok</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Karmalar</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>dahil edilen aralıklar</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Doğrulama</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>doğrulanmadı</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Uygulama sürümü</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Vaka</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Edinilen aralıklar</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>tamamı</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>seyrek imaj (ayrılmamış alanlar dahil değil)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>iskelet imaj (yalnızca bölüm tabloları ve dosya sistemi üst verisi)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Hariç tutulan alanlar sıfır olarak saklanır; bu nedenle bu imajın karmaları kaynak diskin tamamının karmalarıyla eşleşmez.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Dahil edilen aralıklar</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>İleti</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Diski klonla</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Hedef disk</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disk {0}: {1}, seri no {2}, {3} bayt, {4} baytlık sektörler. Birimler: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} bayt)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>yok</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>Hedefteki başlangıç LBA</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Hedefin kalanını sıfırlarla doldur</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Doğrulama için karma</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Günlük klasörü (isteğe bağlı)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>İleri</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Hedef diski seçin.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>Başlangıç LBA hedef diskin dışında.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Farklı sektör boyutuna sahip bir disk klonlama hedefi olamaz.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Hedef disk delil listesinde. Üzerine yazılamaz.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Hedef: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Yazılacak aralık: LBA {0} konumundan, {1} sektör ({2} bayt)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>İçerik: {0} verileri</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Şu birimlerin tüm içeriği kaybolacak:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Hedef kaynaktan küçük. Kaynağın yalnızca ilk {0} baytı yazılacak.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Bu işlem geri alınamaz.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>{0} diskine klonla</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Onaylamak için "{0}" yazın</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>{0} diskine klonla</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Şimdi durdurursanız hedef disk kısmen yazılmış kalır.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Durdur</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Devam et</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>{0} birimi kilitlenemedi, bu yüzden hiçbir şey yazılmadı. Üzerinde açık olan dosyaları kapatıp yeniden deneyin.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Klonlama başarısız oldu. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>{0} bayt klonlandı. Doğrulama: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Klonlama durduruldu. Hedef disk kısmen yazılmış durumda.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Hedef, kaynakla aynı disk.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Farklı sektör boyutuna sahip bir disk klonlama hedefi olamaz.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Yazma koruması modu açık.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Hedef disk delil listesinde. Üzerine yazılamaz.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows, hedef diskteki bir birimi kullanıyor.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>Başlangıç LBA hedef diskin dışında.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Hedef disk yazma için açılamadı.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Sektör aralığını kaydet</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Sektör aralığını geri yükle</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>Başlangıç LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Sektör sayısı</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Sektör verileri</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Aralık diskin dışında.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Sektörleri kaydet: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} sektör {1} konumuna kaydedildi.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Aralıktaki bazı sektörler okunamadı, bu yüzden hiçbir şey kaydedilmedi.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Sektör aralığı kaydedilemedi. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Veri dosyası veya ek (sidecar) dosyası okunamadı. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Veri dosyası: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Kaynak: {0}, seri no {1}, {2} bayt, {3} baytlık sektörler. Başlangıç LBA {4}, {5} sektör. Kaydedilme zamanı {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Yazılacak yer: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Yazmadan önce geçerli içeriği yedekle</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>İleri</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>Veri dosyasının SHA-256 değeri ek dosyayla eşleşmiyor. Geri yüklenemez.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Ek dosya yok. Yazılacak başlangıç LBA'yı girin.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Hedefin seri numarası veya kapasitesi, verilerin kaydedildiği diskinkinden farklı.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Hedef: {0}. Aralıktaki birimler: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>İçerik: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>{0} sektör yaz</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Sektörleri geri yükle: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Sektör aralığı geri yüklenemedi. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>{0} sektör yazıldı ve geri okunarak doğrulandı.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Yazma başarısız oldu. {0} sektör yazıldı; yazma LBA {1} konumunda başarısız oldu. {2} yedek dosyasını geri yazabilirsiniz.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Geri okunan içerik veri dosyasıyla eşleşmiyor.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>RAID'i yeniden oluştur</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Üyeler (sırayla)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Yukarı</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Aşağı</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Dosya ekle...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Kaldır</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Bu üye eksik</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[eksik]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Üyenin veri başlangıç ofseti</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Tür</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Şerit boyutu</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Eşlik düzeni</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Sol simetrik</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Sol asimetrik</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Sağ simetrik</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Sağ asimetrik</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Kullanılacak üye (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Algılama (ilk 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} algılandı ({1} bölüm)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Bölüm tablosu yok</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Dosya sistemi imzası: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Dosya sistemi imzası yok</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Mantıksal disk boyutu: {0} bayt</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Bu yapılandırmayla algılanamıyor.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Üyelerin boyutları farklı. En küçük boyut kullanılır.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Yapılandırmayı kaydet...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Yapılandırmayı yükle...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>RAID yapılandırması</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>RAID yapılandırması {0} konumuna kaydedildi.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>RAID yapılandırması kaydedilemedi. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>RAID yapılandırması okunamadı. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Mantıksal disk açılamadı.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} üye)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Parametreler geçerli değil.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Şerit boyutu 512 B ile 16 MiB arasında ikinin kuvveti olmalı.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Bu tür için üye sayısı çok az.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Bu türde eksik üye olamaz.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>İki veya daha fazla üye eksik. RAID 5 açılamaz.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Bölümleri göster</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>bölümler disk mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Bölümü yeni sekmede aç</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>bölüm sekme partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Bölümün başına git</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>bölüm atla partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Burayı bölüm başlangıcı olarak aç</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>bölüm burada partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Kayıp bölümleri tara</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>kayıp bölüm kurtar tara lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Dosya sistemini göster</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>dosya sistemi gezgini ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Dosyayı yeni sekmede aç</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>dosya aç sekme file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Dosyaları dışa aktar</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>dışa aktar çıkar dosyalar export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Silinmiş dosyaları bul</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>silinmiş silmeyi geri al kurtar deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT kaydına git</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft kaydı ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Kümeye git</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>küme blok atla cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Bu konumu kullanan dosyalar</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>küme sahibi ters cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Dosyanın kümelerini göster</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>parçalar kümeler vurgula fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Sonraki parça</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>parça sonraki fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Önceki parça</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>parça önceki fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Boş alan ve slack vurgusunu aç/kapat</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack ayrılmamış vurgula slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Ayrılmamış alanı dışa aktar</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>ayrılmamış boş dışa aktar unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Slack alanını dışa aktar</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack dışa aktar slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Ayrılmamış alanı yeni sekmede aç</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>ayrılmamış sekme unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Bölümler paneli</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panel bölümler panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Dosya sistemi paneli</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panel dosya sistemi panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Parçalar paneli</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panel parçalar panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Adli bilişim sonuçları paneli</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panel sonuçlar adli bilişim panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT kayıt numarası</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Bölümler ve dosya sistemleri</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Bölümler arasındaki küçük boşlukları göster</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Bölümler panelinde 1 MiB'den küçük ayrılmamış boşlukları listeler.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Bölüm sekmelerinde disk ofsetlerini göster</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Kapalıyken bölüm sekmesi adresleri 0'dan başlar.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>NTFS alternatif veri akışlarını listele</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Adlandırılmış akışlar, dosya sistemi gezgininde file.txt:stream biçiminde görünür.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Adli bilişim vurgusunun açıklamasını göster</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Vurgu açıkken Hex görünümünün sağ üstünde açıklamayı gösterir.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Adli bilişim vurgusunun renkleri</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Örnek: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Varsayılan renkler için boş bırakın.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Bölümler</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Dosya sistemi</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Bölümleri göster</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Bölümü yeni sekmede aç</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Bölümün başına git</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Kayıp bölümleri tara...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Gezgini göster</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Dosyayı yeni sekmede aç</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Dosyaları dışa aktar...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Silinmiş dosyaları bul</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Kümeye git...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Bu konumu kullanan dosyalar</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Dosyanın kümelerini göster</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>MFT kaydına git...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Ayrılmamış alanı dışa aktar...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Slack alanını dışa aktar...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Ayrılmamış alanı yeni sekmede aç</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Sonraki parça</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Önceki parça</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>Ç</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Adli bilişim vurgusu</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Bölümler</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Dosya sistemi</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Parçalar</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Adli bilişim sonuçları</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Disk konumu ve küme sahibi</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Bölümler</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Dosya sistemi</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Parçalar</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Adli bilişim sonuçları</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Bölümler çözümleniyor…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Çözümlenmedi. Adli bilişim &gt; Bölümler &gt; Bölümleri göster seçeneğini seçin.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Bölüm tablosu bulunamadı.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} bölüm, sektör boyutu {1}, disk kimliği {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Okunamayan sektörler (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> No.  Biçim     Tür                          Ad               Başl. LBA      Bitiş LBA    Sektörler     Boyut   Başl. ofset   Bayraklar    DS        Durum</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Bölüm yerleşimi</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Uyarı</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>Tür GUID'i: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Benzersiz GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Başlangıç bloğu {0}, {1} blok</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Tablo girdisi: {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Bölümün başına git</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Bölümü seç</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Bölümü yeni sekmede aç</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Girdi yapısını göster</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Dosya sistemini göster</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Kayıp bölümleri tara...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>İmleç bir bölümün içinde değil.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>{1} baytlık sektörlerle GPT bulunamadı, ancak {0} baytlık sektörlerle bulundu. {0} baytlık sektörlerle yeniden açılsın mı?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>{0} baytlık sektörlerle yeniden aç</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - Bölüm {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Mantıksal</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>EBR zinciri LBA {1} konumuna geri döngü yapıyor ({0}. bölümden sonra). Zincir durduruldu.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>256'dan fazla mantıksal bölüm var. Geri kalanı okunmadı.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>GPT üst bilgisinin CRC32 değeri eşleşmiyor (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>GPT bölüm girdisi dizisinin CRC32 değeri eşleşmiyor (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Birincil GPT üst bilgisi ile yedek üst bilgi (LBA {1}) farklı.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Birincil GPT üst bilgisi bozuk. Liste yedek üst bilgiden oluşturuldu.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>{0} ve {2} bölümleri çakışıyor.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>{0} bölümü diskin dışını gösteriyor (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Karma MBR: koruyucu MBR'de başka girdiler de var.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Bazı sektörler okunamadı (ilki: LBA {1}). Liste okunabilen sektörleri kullanıyor.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Apple bölüm haritasında 256'dan fazla girdi var.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>EFI sistemi</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft ayrılmış</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Windows temel veri</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Windows kurtarma</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>LDM üst verisi</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>LDM verisi</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Linux dosya sistemi</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux takas</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple önyükleme</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS önyükleme</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Genişletilmiş</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Genişletilmiş (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Gizli FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Kurtarma</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Gizli FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Gizli NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Gizli FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (dinamik disk)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux genişletilmiş</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT koruyucu</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Ayrılmamış</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>LVM2 fiziksel birimi</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Kayıp bölümleri tara</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>Başlangıç LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>Bitiş LBA (dahil değil)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Tarama konumları</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>1 MiB sınırları</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Silindir sınırları (63 sektör)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Her sektör</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Her sektör yaklaşık {0} sürer (200 MB/sn hızında).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} saat</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} dk</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Aranacaklar</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>GPT üst bilgisi / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Tara</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Kayıp bölümler taranıyor</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Kayıp bölümler</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     Başl. LBA         Sektörler        Boyut  Tür         Güv.    Çakışma</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Düşük</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Orta</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Yüksek</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>{0} bölümüyle çakışıyor</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>İptal edildi. Şimdiye kadarki sonuçlar korundu.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {# aday bulundu.} other {# aday bulundu.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Okunamayan: LBA {0}, {1} sektör</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Bölüm adayı bulunamadı.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Her sektörü tara</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Bölüm olarak aç</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Dosya sistemini göster</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Bölüm tablosu girdileri oluştur (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Bölüm tablosu girdileri oluştur (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Bölüm tablosu girdileri oluştur</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR'de tüm adaylar için boş girdi yok.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Bölüm MBR'ye yazılamaz (2 TiB'den büyük). GPT kullanın.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT'de boş girdi yok.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Disk, GPT için çok küçük.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Bu belge için açık dosya sistemi yok.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Dosya sistemi gezgininde bir dosya seçin.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Vurgulanan dosya kümesi yok.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Yalnızca NTFS için.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Ayırma bilgisi okunamadığından vurgu kullanılamıyor.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Birim şifreli (BitLocker). Dosya sistemi gezgini bunu açmaz.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Birim şifreli ({0}). Dosya sistemi gezgini bunu açmaz.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>{0} olarak açılamıyor: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Dosya sistemini seçin</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Tür, imzadan algılanamadı. Denenecek türü seçin.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Tür</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Aç</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Ayrılmamış ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>MFT kaydı {0} yok.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Bloğa git</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Dosya sistemi yok. Adli bilişim &gt; Dosya sistemi &gt; Gezgini göster seçeneğini seçin.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  seri no {2}  küme {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Kök</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Klasörler</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Parçalar</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filtre (* ve ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Dosya bul (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Sütunlar</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>Kullanılacak FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {FAT'ler # girdide farklı.} other {FAT'ler # girdide farklı.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Küme başına sektör</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Yeniden çözümle</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Okunuyor…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Okunuyor… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} öğe</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Okunamadı: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(bozuk)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(zaman uyuşmazlığı)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Zaman uyuşmazlığı: $STANDARD_INFORMATION zamanları $FILE_NAME zamanlarından önce veya kesirsiz.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>EFS ile şifrelenmiş (yalnızca ham veri).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Küme zinciri yok; veri, ilk kümeden başlayarak ardışık kümeler olarak okunuyor.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>dizin slack girdisi</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>sayılıyor…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Mantıksal {0}  küme {1} ×{2}  disk {3}  {4} bayt</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Mantıksal {0}  üst veride  disk {3}  {4} bayt</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(sıkıştırılmış)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Slack konumları hesaplanıyor</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Küme haritası oluşturuluyor</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Üst verisi bozuk {0} girdi atlandı.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Konum küme alanında değil.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>{0}–{1} kümelerinin sahipleri</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Tür                       Yol</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Dosya</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Üst veri</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Silinmiş dosya (ayırması kaldırılmış)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>{0} ({1}) küme zinciri</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Dizin          Küme</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Adı {0} olan dosyalar</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        Boyut   Yol</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Dosyalar bulunuyor: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {# dosya bulundu.} other {# dosya bulundu.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Silinmiş dosyalar bulunuyor</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Sahipsiz dosyalar bulunuyor</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Dosyayı yeni sekmede aç</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Dosyaları dışa aktar...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Üst veriye git</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Dosyanın kümelerini göster</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>MFT kaydını göster</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>INDX göster</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>$LogFile göster</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Dizin girdisini göster</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Küme zincirini göster</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Yolu kopyala</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Listeyi CSV / JSON olarak dışa aktar...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Uzantı</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Ayrılan</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Oluşturma (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Oluşturma (yerel)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Değiştirme (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Değiştirme (yerel)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Erişim (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Erişim (yerel)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Üst veri değişikliği (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Üst veri değişikliği (yerel)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Öznitelik</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>Dosya kimliği</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>İlk küme</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Parça</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Durum</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Yol</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Özgün yol</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Kurtarma</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Silinmiş</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Sahipsiz</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>İyi</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Kısmen üzerine yazılmış</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Üzerine yazılmış</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Konum bilinmiyor</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Yerleşik (resident)</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>MFT kaydı kullanımda değil</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Dizin slack</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Silinmiş dizin girdisi</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Silinmiş inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Dizin girdisi slack</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup uyuşmazlığı (güncelleme sırası)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Hatalı imza</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Küme numarası aralık dışı</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Küme zinciri döngü oluşturuyor</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Küme zinciri boş bir kümeye ulaşıyor</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Küme zinciri dosya boyutuyla uyuşmuyor</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Geçersiz veri çalıştırma (data run) listesi</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Geçersiz öznitelik</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Girdi kümesi sağlama toplamı eşleşmiyor</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Okuma hatası</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Çok derin</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Yedek önyükleme sektörü farklı ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr, $MFT'den farklı ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>BPB değerleri tutarsız ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>FAT'ler farklı ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo eşleşmiyor ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>exFAT önyükleme bölgesi sağlama toplamı eşleşmiyor ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Uzun ad sağlama toplamı eşleşmiyor ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Ayırma bilgisi okunamıyor ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Birim şifreli ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Silinmiş dosyalar</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Sahipsiz dosyalar</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Ayrılmamış alan</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Birim slack</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Üst veri</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Dosya verisi</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM slack</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Sürücü slack</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Ayrılmamış</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Birim slack</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Bölüm boşluğu</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Adli bilişim vurgusu açıklaması</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Boyut {0} bayt, ayrılan {1} bayt</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Oluşturma {0}, değiştirme {1}, erişim {2}, üst veri değişikliği {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>Dosya kimliği {0}, öznitelikler {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Kurtarma: {0} ({1}). Özgün yol: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Tür: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Birim adı: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Seri numarası: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Küme boyutu: {0} bayt</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Toplam küme: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Boş kümeler: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Oluşturulma: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Birim başlangıcı {0}, {1} bayt</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>MFT kaydı</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Kayıt ofseti</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Sıra numarası</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Sabit bağlantılar</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Bayraklar</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Kullanılan bayt</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Temel kayıt</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI oluşturma</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI değiştirme</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT değişikliği</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI erişim</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Ad</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Üst</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN oluşturma</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN değiştirme</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT değişikliği</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN erişim</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN boyutu</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Zaman uyuşmazlığı</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>İçerik</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Girdi ofseti</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>İlk küme</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Kısa ad</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Zincirdeki kümeler</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Veri uzunluğu</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Geçerli veri uzunluğu</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Bölüm {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Küme {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Blok {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Silinmiş: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Ayrılmamış</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Sahibini bul</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disk: - (sıkıştırılmış / seyrek / yerleşik)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Küme numarası ({0}–{1}; küme = geçerli küme)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>{0} kümesi aralık dışı.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Git</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Klasör yapısını koru</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Alternatif veri akışlarını da dışa aktar (ad_akış)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Slack alanını da ayrı dosyalar olarak dışa aktar</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Silinmiş dosyaları dahil et</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {# öğe seçildi.} other {# öğe seçildi.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Klasör seç...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Dosyalar dışa aktarılıyor</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} dosya {1} konumuna aktarıldı (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Yeterli boş alan yok: {0} gerekiyor, {1} boş.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Yazılamadı: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Üzerine yazılmış bir dosya dışa aktarılsın mı?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Bu silinmiş dosyanın kümeleri artık başka dosyalar tarafından kullanılıyor. Dışa aktarılan içerik başka bir dosyaya ait olabilir.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Dışa aktar</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>İkili dosya</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Eşleme dosyası oluştur (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Ayrılmamış alan dışa aktarılıyor</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Slack dışa aktarılıyor</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0}, {1} konumuna yazıldı.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>$LogFile kayıtları</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Önceki LSN   UndoNext LSN  Tür      İşlem No   Redo                            Undo                            MFT kyd  Uzunluk</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Yeniden başlatma sayfası {0}: geçerli LSN {1}, istemciler: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>$LogFile okunuyor</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Liste</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Sonuç yok.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Listeyi CSV / JSON olarak dışa aktar...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Vurgulanan dosya yok. Dosyanın kümelerini göster seçeneğini seçin.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} parça)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  mantıksal {1}  disk {2}  {3} bayt  kümeler {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Vurguyu temizle</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Ayrılmamış alanı seç</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>ayrılmamış seç ara carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Slack alanını seç</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack seç ara carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Ayrılmamış alanı seç</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Slack alanını seç</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Ayrılmamış alan seçiliyor</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Ayrılmamış alan bulunuyor</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Slack seçiliyor</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Seçilecek bir şey yok.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Yalnızca ilk 1.000.000 aralık seçildi.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Mantıksal birimleri göster</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>mantıksal birim ldm dinamik disk lvm lvm2 şerit kapsama logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Inode'a git</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Inode numarası</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Mantıksal birimleri göster</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Inode'a git...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Sağlama toplamı eşleşmiyor</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Desteklenmeyen biçim</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>ext süper bloğunun sağlama toplamı eşleşmiyor ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Grup tanımlayıcılarının sağlama toplamları eşleşmiyor (gruplar {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Bu ext özelliği tam desteklenmiyor: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Alternatif birim üst bilgisi birincilden farklı ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Bir APFS nesnesinin sağlama toplamı eşleşmiyor (blok {0}). Atlandı.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>En yeni APFS denetim noktası hasarlı; daha eski bir tanesi kullanılıyor (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>UDF tanımlayıcı etiketinin sağlama toplamı eşleşmiyor (sektör {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>UDF tanımlayıcısının CRC değeri eşleşmiyor (sektör {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Bu UDF bölüm türü desteklenmiyor: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Diskte {0} oturum var. Son oturum gösteriliyor; Oturum ile başka birini seçin.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Yalnızca ext2, ext3 ve ext4 için kullanılabilir.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>inode {0} yok.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Bu birim şifreli. Dosya listesi gösterilmiyor.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>APFS denetim noktası bulunamadı.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Inode'u göster</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Günlüğü göster</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Adlar</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (temel)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Oturum</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Bu dosya sisteminde günlük (journal) yok.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ext günlüğü (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Blok      Disk ofseti  Tür              Sıra</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Blok boyutu {0}, {1} blok, sıra {2}, başlangıç {3} (0 = temiz). Günlük yeniden oynatılmaz.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>ext günlüğü okunuyor</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Tanımlayıcı</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Süper blok v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Süper blok v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Mantıksal birimleri göster</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Bu aralığın imajını oluştur...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Mantıksal birimler</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Ad                    Tür           Boyut       Yerleşim                      Durum</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Birim üst verisi okunuyor...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>Açık disklerde ve imajlarda LDM veya LVM2 mantıksal birimi bulunamadı.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Mantıksal birimi aç</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Üyeleri ata...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Yeniden oku</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Bu birim türü desteklenmiyor: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} açılamıyor. Eksik üyeler: {1}. Diskleri veya imajları açın ya da atayın.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) bir yansıma (mirror) veya RAID-5 birimidir. RAID yeniden oluşturma ile açın.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Üyeleri ata</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>{0} için eksik her üyeye bir disk veya imaj seçin.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(yok)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Dosya aç...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {# üye eksik} other {# üye eksik}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Desteklenmiyor</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>RAID yeniden oluşturma</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Basit</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Yayılmış (spanned)</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Şeritli (striped)</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Yansıma (mirror)</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Doğrusal</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Desteklenmiyor ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} grup {1}, birim {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Üye {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>bulunamadı</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Ofset {0} ({1}): {2}, {3} konumunda</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Ofset {0} ({1}): {3} üye üzerinde {2} şerit</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Seçimi güvenli şekilde sil</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>güvenli sil ez üzerine yaz aralık wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Diski güvenli şekilde sil</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>güvenli sil disk sürücü üzerine yaz wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Boş alanı temizle</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>boş alan ayrılmamış temizle sil cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Dosya slack alanını temizle</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram sürücü temizle sil slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Dosya içeriğini karart</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>karart temizle boşalt redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Güvenli silme</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Seçimi güvenli sil...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Diski güvenli sil...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Boş alanı temizle...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Slack alanını temizle...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Dosya içeriğini karart...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Dosya içeriğini karart...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Seçimi güvenli sil...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Seçimden dosyaları carving ile çıkar...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Karartma</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Güvenli silme</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Hedef: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Sonunda geri oku ve doğrula</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Sil...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Aralık belgenin dışında.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Kaydedilmemiş düzenlemeler</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Silinecek verilerde kaydedilmemiş düzenlemeler var. Silmeden önce bunları kaydedin veya atın.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>At</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Verileri sil</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Hedef: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disk {0}: {1}, seri numarası {2}, {3} bayt</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Birimler: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Aralık: başlangıç LBA {0}, {1} sektör, {2} bayt</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Aralık: ofset {0}, {1} bayt</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Aralık sektör sınırlarına genişletildi.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Yöntem: {0} ({1, plural, one {# geçiş} other {# geçiş}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Son geçiş geri okunur ve doğrulanır.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Tahmini süre: yaklaşık {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Bu işlem geri alınamaz. Özgün veriler kurtarılamaz.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>SSD'lerde ve flash ortamlarda, aşınma dengeleme (wear leveling) üzerine yazılsa bile özgün verileri başka bir yerde tutabilir.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Bu birimler silme sırasında kilitlenir: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Veriler bir düzenleme olarak değil, doğrudan dosyaya yazılır. Geri Al ile geri alınamaz.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>{0} baytı sil</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>{0} sil</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Devam etmek için “{0}” yazın.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Onay</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Silinecek aralığı seçin.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Bu belge doğrudan silinemez.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Bir diski silmek için tüm fiziksel diski bir sekmede açın.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Bu veri kaynağı delil listesinde ve yazılamaz.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows bu diski kullanıyor (sistem, önyükleme veya disk belleği dosyası), bu yüzden silinemez.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>{0} birimi kilitlenemedi, bu yüzden hiçbir şey silinmedi.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Yazma reddedildi: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Silme başarısız oldu: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>{0} siliniyor</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Geçiş {0} / {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Doğrulanıyor</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Silme durdurulsun mu? Üzerine yazılmış kısım öyle kalır; geri kalanı özgün verilerini korur.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Yazma hatası</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>{0} ofsetine yazılamadı: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Atla ve devam et</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Durdur</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Silme sonucu</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>{0} bayt {1} içinde silindi.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Doğrulama başarılı.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Doğrulama eşleşmeyen # aralık buldu:} other {Doğrulama eşleşmeyen # aralık buldu:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# aralık yazılamadı:} other {# aralık yazılamadı:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Silme durduruldu. {0} ofsetine kadar olan veriler {1}. geçişte üzerine yazıldı; geri kalanı önceki içeriğini korur.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Doğrulama durduruldu. Tüm geçişler yazılmıştı.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>{0} ofsetindeki bir yazma hatasından sonra silme durduruldu.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Atlanan dosyalar: {0} (sıkıştırılmış {1}, seyrek {2}, yerleşik {3}, tutarsız {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Boş alanı temizle</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Yöntem</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Windows üzerinden (bağlı bir birim)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Doğrudan yazma (bu sekmedeki dosya sistemi)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Birim</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Kullanılabilecek bağlı birim yok.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Doğrudan yazmak için önce bu sekmenin dosya sistemini gösterin.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Birim: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Üzerine yazılacak boş alan: {0} bayt</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Yöntem: Windows üzerinden (geçici dosyalar boş alanı doldurur ve sonunda silinir)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Yöntem: ayrılmamış kümelere doğrudan yazma</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Bu çalışırken birimde boş alan kalmaz. Diğer uygulamalar çalışmaya devam eder ama yeni veri kaydedemez.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Dosya sisteminin ayırma bilgisi yanlışsa dosyalar zarar görebilir.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Boş alanı temizle</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Dosya sistemi tutarlı değil ({0}). chkdsk ile onarın, sonra yeniden deneyin.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Doğrudan yazma yalnızca NTFS, FAT12/16/32 ve exFAT'ı destekler.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Önce bu sekmedeki düzenlemeleri kaydedin veya atın.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Bu geçici dosyalar silinemedi. Elle silin:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>{0} bayt boş alanın üzerine {1} içinde yazıldı.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Boş alan hesaplanıyor</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Boş alan temizleme durduruldu. Geçici dosyalar silindi.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Slack alanını temizle</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Dosyalar: {0}, üzerine yazılacak slack: {1} bayt</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Slack alanını temizle</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Dosya slack alanı bulunuyor</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>{0} bayt slack üzerine {1} içinde yazıldı.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Dosya içeriğini karart</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Dosyalar ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Desen</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (varsayılan)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Rastgele</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Hex baytlar</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Hex baytlar</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Adları da aynı uzunlukta “_” ile değiştir</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Karartma günlüğü (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>İçerik bir düzenleme olarak değişir. Kaydedene kadar hiçbir şey yazılmaz; yeni bir imaj kaydetmek için Farklı Kaydet'i kullanın.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Karart</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Karartılacak veriler bulunuyor</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {# dosya karartıldı} other {# dosya karartıldı}} ({1} bayt). Yeni bir imaj kaydetmek için Farklı Kaydet'i kullanın.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Karartılacak bir şey yoktu.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Karartılmayan dosyalar</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# öğe karartılmadı:} other {# öğe karartılmadı:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>klasör</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>silinmiş öğe</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>üst veri hasarlı</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>parça bilgisi bozuk</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>yerleşik (resident) veri bulunamadı</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>dosya sistemi üst verisi</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Şunlar için adlar değiştirilemedi: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Belge salt okunur.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Özgün imajın üzerine yazılsın mı?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Bu belgede karartmalar var. Kaydetmek bunları özgün {0} dosyasına yazar ve bu geri alınamaz. Özgün dosyayı korumak için Farklı Kaydet'i kullanın.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>{0} üzerine yaz</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Karartma günlüğü yazılamadı: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Deseni hex baytlar olarak girin (örneğin 00 veya A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} sn</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} dk</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} sa</value></data>
 </root>
