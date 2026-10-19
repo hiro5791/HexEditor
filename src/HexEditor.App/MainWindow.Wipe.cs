@@ -43,6 +43,12 @@ public sealed partial class MainWindow
     /// <summary>テスト用: 最後に開いた消去の確認ダイアログ。</summary>
     internal ContentDialog? LastWipeConfirmDialog { get; private set; }
 
+    /// <summary>テスト用: 確認ダイアログを開いたときにフォーカスを置いたボタン。</summary>
+    internal string? LastWipeConfirmInitialFocus { get; private set; }
+
+    /// <summary>テスト用: 確認ダイアログが開き終わった (Opened)。</summary>
+    internal bool LastWipeConfirmOpened { get; private set; }
+
     private void RegisterWipeCommands()
     {
         Commands.Register("forensics.wipe.selection", () => ShowWipeSelectionAsync(), WipeSelectionState);
@@ -566,15 +572,47 @@ public sealed partial class MainWindow
             input.TextChanged += (_, _) => dialog.IsPrimaryButtonEnabled = string.Equals(input.Text.Trim(), typeToConfirm, StringComparison.Ordinal);
         }
 
+        // 既定のフォーカスを「キャンセル」に置く (共通の前提の 2)。ボタンはダイアログのポップアップの中のテンプレートの部品で、開いた直後には
+        // まだ見つからないことがあるため、見つかるまで少し後で試し直す。
+        bool FocusCancel()
+        {
+            foreach (Microsoft.UI.Xaml.Controls.Primitives.Popup popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+            {
+                if (popup.Child is { } child && FindDescendant<Button>(child, b => b.Name == "CloseButton" && b.Visibility == Visibility.Visible) is { } close
+                    && close.Focus(FocusState.Programmatic))
+                {
+                    LastWipeConfirmInitialFocus = close.Name;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         dialog.Opened += (_, _) =>
         {
-            // 既定のフォーカスを「キャンセル」に置く (共通の前提の 2)。
-            if (FindDescendant<Button>(dialog, b => b.Name == "CloseButton") is { } close)
+            LastWipeConfirmOpened = true;
+            if (FocusCancel())
             {
-                close.Focus(FocusState.Programmatic);
+                return;
             }
+
+            // 開いた直後にはまだボタンを作っていないことがある: 50 ms ごとに 3 秒まで試し直す。
+            Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            int ticks = 0;
+            timer.Tick += (_, _) =>
+            {
+                if (FocusCancel() || ++ticks >= 60)
+                {
+                    timer.Stop();
+                }
+            };
+            timer.Start();
         };
         LastWipeConfirmDialog = dialog;
+        LastWipeConfirmInitialFocus = null;
+        LastWipeConfirmOpened = false;
         try
         {
             return await ShowEditDialogAsync(dialog) == ContentDialogResult.Primary

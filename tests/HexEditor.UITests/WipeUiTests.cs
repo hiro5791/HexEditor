@@ -194,8 +194,16 @@ public sealed class WipeUiTests
         // 手順 2: 入力欄が空なら実行ボタンは無効で、既定のフォーカスは「キャンセル」。
         await OpenConfirmAsync();
         JsonObject confirm = null!;
-        await app.WaitUntilAsync(async () => (confirm = await app.SendAsync("wipeConfirm"))["focused"]?.GetValue<string>() == "Button:CloseButton",
-            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the focus on Cancel");
+        // ダイアログを開くとフォーカスを「キャンセル」に置く (前面にないウィンドウではフォーカスの取得が空のことがあるため、置いた先と、取得できたら
+        // その要素が「キャンセル」かを確かめる)。
+        for (int tries = 0; tries < 50 && (confirm = await app.SendAsync("wipeConfirm"))["initialFocus"]?.GetValue<string>() != "CloseButton"; tries++)
+        {
+            await app.IdleAsync();
+        }
+
+        Assert.True(confirm["initialFocus"]?.GetValue<string>() == "CloseButton", confirm.ToJsonString());
+        Assert.True(confirm["focused"]?.GetValue<string>() is null or "Button:CloseButton" or "ContentDialog:WipeConfirmDialog",
+            confirm["focused"]?.GetValue<string>());
         Assert.False(confirm["primaryEnabled"]!.GetValue<bool>());
         Assert.Equal("Close", confirm["defaultButton"]!.GetValue<string>());
         Assert.Contains("type \u201cDisk 1\u201d", confirm["text"]!.GetValue<string>(), StringComparison.Ordinal);

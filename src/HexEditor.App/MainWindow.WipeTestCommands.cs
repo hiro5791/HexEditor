@@ -239,7 +239,7 @@ public sealed partial class MainWindow
 
     private JsonObject TestWipeConfirm()
     {
-        if (LastWipeConfirmDialog is not { } dialog)
+        if (LastWipeConfirmDialog is not { } dialog || !LastWipeConfirmOpened)
         {
             return new JsonObject { ["open"] = false };
         }
@@ -265,6 +265,7 @@ public sealed partial class MainWindow
             ["primary"] = dialog.PrimaryButtonText,
             ["primaryEnabled"] = dialog.IsPrimaryButtonEnabled,
             ["defaultButton"] = dialog.DefaultButton.ToString(),
+            ["initialFocus"] = LastWipeConfirmInitialFocus,
             ["focused"] = focused is Button { Name: var name } ? "Button:" + name : focused is FrameworkElement fe ? $"{fe.GetType().Name}:{AutomationProperties.GetAutomationId(fe)}" : focused?.GetType().Name,
             ["text"] = string.Join("\n", texts),
             ["input"] = input is null ? null : AutomationProperties.GetAutomationId(input),
