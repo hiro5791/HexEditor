@@ -29,6 +29,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [フォルダの比較](folder-compare.md)
 - [ファイルの分割・結合・インターリーブ](split-join.md)
 - [安全な削除](secure-delete.md)
+- [ディスクイメージとクローン](disk-images.md)
 - [NTFS の代替データストリーム](alternate-streams.md)
 - [ケース、証拠、監査ログ](forensics-cases.md)
 - [書き込み保護](write-protection.md)

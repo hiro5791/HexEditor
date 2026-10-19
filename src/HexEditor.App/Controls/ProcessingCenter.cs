@@ -107,7 +107,7 @@ public sealed partial class ProcessingCenter : UserControl
                 // 書き込みを始めたずらしながらのその場保存はキャンセルできない (ENG-24 の仕様 5)。理由をツールチップで示す。
                 ToolTipService.SetToolTip(cancel, Loc.Get("Operations_CannotCancel"));
             }
-            cancel.Click += (_, _) => op.Cancel();
+            cancel.Click += (_, _) => _ = op.RequestCancelAsync();
             Grid.SetColumn(cancel, 1);
             row.Children.Add(cancel);
         }

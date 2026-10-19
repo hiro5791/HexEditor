@@ -482,6 +482,19 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Signatures" cmd:CommandUi.Id="forensics.carving.signatures" AutomationProperties.AutomationId="Command_CarvingSignatures" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Results" cmd:CommandUi.Id="view.panel.carving" AutomationProperties.AutomationId="Command_PanelCarving" />
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Image" AutomationProperties.AutomationId="Menu_Forensics_Image">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageCreate" cmd:CommandUi.Id="forensics.image.create" AutomationProperties.AutomationId="Command_ImageCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageSkeleton" cmd:CommandUi.Id="forensics.image.skeleton" AutomationProperties.AutomationId="Command_ImageSkeleton" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageOpen" cmd:CommandUi.Id="forensics.image.open" AutomationProperties.AutomationId="Command_ImageOpen" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageVerify" cmd:CommandUi.Id="forensics.image.verify" AutomationProperties.AutomationId="Command_ImageVerify" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageInfo" cmd:CommandUi.Id="forensics.image.info" AutomationProperties.AutomationId="Command_ImageInfo" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_DiskClone" cmd:CommandUi.Id="forensics.disk.clone" AutomationProperties.AutomationId="Command_DiskClone" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_SectorsSave" cmd:CommandUi.Id="forensics.sectors.save" AutomationProperties.AutomationId="Command_SectorsSave" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_SectorsRestore" cmd:CommandUi.Id="forensics.sectors.restore" AutomationProperties.AutomationId="Command_SectorsRestore" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Raid" cmd:CommandUi.Id="forensics.raid.reconstruct" AutomationProperties.AutomationId="Command_RaidReconstruct" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Forensics_Report" cmd:CommandUi.Id="forensics.report.create" AutomationProperties.AutomationId="Command_ReportCreate" />
                     </MenuBarItem>

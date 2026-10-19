@@ -636,8 +636,38 @@ jobs:
           shasum -a 256 -c CHECKSUM.SHA256 | tee ../bsd.txt
           test "$(grep -c ': OK$' ../bsd.txt)" = 5
 
+  # E01 の基準の検証 (12 の FOR-20 の仕様 8、TC-FOR-20-03・TC-FOR-20-04・TC-FOR-21-04): 本アプリ (HexEditor.Core) で作った E01 を
+  # libewf のツール (ewfverify、ewfinfo) で確かめる。libewf は Ubuntu のパッケージ ewf-tools を使い、アプリには同梱しない。
+  # テストのプロジェクトは Core と TestData だけを参照するため Linux でビルドできる。HEXEDITOR_EWF_TOOLS=1 でツールがないことを失敗にする。
+  ewf-crosscheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HEXEDITOR_TESTDATA: ${{ github.workspace }}/../testdata
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Install libewf tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ewf-tools
+          ewfverify -V
+      - name: E01 cross-check
+        env:
+          HEXEDITOR_EWF_TOOLS: "1"
+        run: dotnet test tests/HexEditor.Images.CrossCheck -c Release -p:HexTestHooks=true --logger "trx;LogFileName=ewf-crosscheck.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ewf-crosscheck-results
+          retention-days: 7
+          path: TestResults/
+
   coverage:
-    needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged, kaitai-reference]
+    needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged, kaitai-reference, ewf-crosscheck]
     if: always()
     runs-on: windows-latest
     timeout-minutes: 15
@@ -683,6 +713,12 @@ jobs:
         with:
           name: kaitai-results
           path: results/kaitai
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ewf-crosscheck-results
+          path: results/ewf
 
       - name: Test coverage
         shell: pwsh
@@ -889,7 +925,7 @@ jobs:
           HEXEDITOR_CI_PRIVILEGED: "1"
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
           HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests.|FullyQualifiedName~HexEditor.UITests.ForensicImagePrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
       - name: Detach TD-VHDX-MBR
         if: always()
         shell: powershell

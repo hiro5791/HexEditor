@@ -679,6 +679,16 @@ public static class BuiltInCommands
         new("forensics.device.smart", "forensics") { Condition = "documentOpen" },
         new("forensics.encryption.info", "forensics") { Condition = "documentOpen" },
         new("view.panel.deviceInfo", "view"),
+        // ---- フォレンジック: イメージとクローン (12 の FOR-20〜FOR-26)。既定のショートカットはなし ----
+        new("forensics.image.create", "forensics"),
+        new("forensics.image.skeleton", "forensics"),
+        new("forensics.image.open", "forensics"),
+        new("forensics.image.verify", "forensics"),
+        new("forensics.image.info", "forensics") { Condition = "documentOpen" },
+        new("forensics.disk.clone", "forensics"),
+        new("forensics.sectors.save", "forensics") { Condition = "documentOpen" },
+        new("forensics.sectors.restore", "forensics") { Condition = "documentOpen" },
+        new("forensics.raid.reconstruct", "forensics"),
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

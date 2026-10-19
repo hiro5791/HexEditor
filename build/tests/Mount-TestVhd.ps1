@@ -12,7 +12,12 @@
   elevated helper that the app starts with runas does not wait for a consent prompt. GitHub's Windows images already
   use this value; the script makes sure of it.
 
-  -Dismount detaches and deletes the image (the end of the job; the runner is thrown away anyway).
+  It also attaches two more disks for the forensic image tests (FOR-24, FOR-25 in
+  tests/HexEditor.UITests/ForensicImagePrivilegedTests.cs): an empty 512 MiB VHDX as the clone target
+  (HEXEDITOR_TEST_CLONE_DISK) and TD-VHDX-GPT, a 64 MiB VHDX with GPT and two partitions (NTFS and FAT32) without
+  drive letters (HEXEDITOR_TEST_GPT_DISK).
+
+  -Dismount detaches and deletes the images (the end of the job; the runner is thrown away anyway).
   Never run this on a desktop: it attaches a disk and changes a UAC policy value.
 #>
 [CmdletBinding()]
@@ -27,10 +32,16 @@ if ($env:GITHUB_ACTIONS -ne 'true' -or $env:RUNNER_ENVIRONMENT -ne 'github-hoste
     throw 'This script attaches a virtual disk and changes UAC; run it only on GitHub-hosted CI runners (RUNNER_ENVIRONMENT=github-hosted).'
 }
 
+$folder = Split-Path -Parent $Path
+$clonePath = Join-Path $folder 'TD-VHDX-CLONE.vhdx'
+$gptPath = Join-Path $folder 'TD-VHDX-GPT.vhdx'
+
 if ($Dismount) {
-    if (Test-Path $Path) {
-        Dismount-DiskImage -ImagePath $Path -ErrorAction SilentlyContinue | Out-Null
-        Remove-Item $Path -Force -ErrorAction SilentlyContinue
+    foreach ($image in @($Path, $clonePath, $gptPath)) {
+        if (Test-Path $image) {
+            Dismount-DiskImage -ImagePath $image -ErrorAction SilentlyContinue | Out-Null
+            Remove-Item $image -Force -ErrorAction SilentlyContinue
+        }
     }
     return
 }
@@ -73,4 +84,37 @@ Write-Host "TD-VHDX-MBR: \\.\PhysicalDrive$number, volume ${letter}: ($((Get-Dis
 if ($env:GITHUB_ENV) {
     Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_TEST_VHD_DISK=$number" -Encoding utf8
     Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_TEST_VHD_VOLUME=$letter" -Encoding utf8
+}
+
+# Forensic image tests: an empty clone target and TD-VHDX-GPT (no drive letters).
+function New-TestVhd([string]$File, [int]$MiB) {
+    if (Test-Path $File) {
+        Dismount-DiskImage -ImagePath $File -ErrorAction SilentlyContinue | Out-Null
+        Remove-Item $File -Force
+    }
+    $commands = Join-Path ([System.IO.Path]::GetTempPath()) 'hexeditor-vhd-extra.txt'
+    Set-Content -Path $commands -Value "create vdisk file=`"$File`" maximum=$MiB type=expandable" -Encoding ascii
+    & diskpart.exe /s $commands | Out-Host
+    if ($LASTEXITCODE -ne 0) { throw "diskpart could not create $File" }
+    Remove-Item $commands -Force
+    return (Mount-DiskImage -ImagePath $File -PassThru | Get-Disk)
+}
+
+$clone = New-TestVhd $clonePath 512
+$gpt = New-TestVhd $gptPath 64
+$gpt | Initialize-Disk -PartitionStyle GPT
+$ntfs = New-Partition -DiskNumber $gpt.Number -Size 24MB
+$ntfs | Format-Volume -FileSystem NTFS -NewFileSystemLabel 'GPTNTFS' -Confirm:$false | Out-Null
+$fat = New-Partition -DiskNumber $gpt.Number -UseMaximumSize
+$fat | Format-Volume -FileSystem FAT32 -NewFileSystemLabel 'GPTFAT' -Confirm:$false | Out-Null
+foreach ($part in Get-Partition -DiskNumber $gpt.Number) {
+    foreach ($access in @($part.AccessPaths | Where-Object { $_ -match '^[A-Z]:\\$' })) {
+        Remove-PartitionAccessPath -DiskNumber $gpt.Number -PartitionNumber $part.PartitionNumber -AccessPath $access
+    }
+}
+
+Write-Host "Clone target: \\.\PhysicalDrive$($clone.Number); TD-VHDX-GPT: \\.\PhysicalDrive$($gpt.Number)"
+if ($env:GITHUB_ENV) {
+    Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_TEST_CLONE_DISK=$($clone.Number)" -Encoding utf8
+    Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_TEST_GPT_DISK=$($gpt.Number)" -Encoding utf8
 }

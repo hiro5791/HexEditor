@@ -616,7 +616,7 @@
 2. ARM64 の PC には ARM64 版を配る。MSIX は Microsoft Store が `.msixbundle` から PC に合ったものを選び、インストーラとポータブルはファイル名でアーキテクチャを示す (PKG-26)。winget は利用者の PC に合ったものを選ぶ (PKG-27)。
 3. ARM64 の PC で x64 版を使うこと (エミュレーション) は妨げないが、更新 (PKG-18) では同じアーキテクチャの版を入れる。
 4. 32 bit の Windows には対応しない。ダウンロードページにその旨を書く。
-5. ネイティブのライブラリ (Capstone、YARA、libewf など、06・04・12 で使うもの) は両方のアーキテクチャ版を同梱する。どちらかがない機能は、そのアーキテクチャで無効にし理由を表示する。
+5. ネイティブのライブラリ (Capstone、YARA など、06・04 で使うもの) は両方のアーキテクチャ版を同梱する。どちらかがない機能は、そのアーキテクチャで無効にし理由を表示する。
 
 **画面**: なし。
 
@@ -992,7 +992,7 @@
 
 **仕様**:
 
-1. 署名しないもの: 自分たちの `.exe` と `.dll` (`HexEditor.exe`、`hexed.exe`、`HexEditor.*.dll`、`HexEditor.Elevated.exe`、`IExplorerCommand` の DLL)、`Setup.exe`、`Update.exe`、ポータブル版の zip、C# スクリプト コンポーネントの zip。第三者のバイナリ (.NET のランタイム、Roslyn、libewf など) は配布元の状態のまま同梱する (配布元の署名があればそのまま残る)。
+1. 署名しないもの: 自分たちの `.exe` と `.dll` (`HexEditor.exe`、`hexed.exe`、`HexEditor.*.dll`、`HexEditor.Elevated.exe`、`IExplorerCommand` の DLL)、`Setup.exe`、`Update.exe`、ポータブル版の zip、C# スクリプト コンポーネントの zip。第三者のバイナリ (.NET のランタイム、Roslyn など) は配布元の状態のまま同梱する (配布元の署名があればそのまま残る)。
 2. MSIX は Microsoft Store でだけ配り、Store が署名する (PKG-02、PKG-04)。署名のない MSIX は一般の利用者がインストールできないため、Store の外では MSIX を配らない。
 3. インストーラ版とポータブル版の利用者には、ダウンロードしたファイルを初めて実行するときに Windows SmartScreen の警告 (「Windows によって PC が保護されました」) が出る。リリースノート (PKG-29) と README (リポジトリの `README.md` とポータブル版の `README.txt`) に次を書く。
    - 警告が出る理由 (コード署名をしていないため)。

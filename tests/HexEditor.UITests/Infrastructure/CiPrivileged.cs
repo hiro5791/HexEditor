@@ -110,6 +110,26 @@ public static class CiPrivileged
     }
 
     /// <summary>
+    /// CI のランナーで接続したテスト用の仮想ディスクの <paramref name="offset"/> に書く (FOR-25 のテストで GPT を壊す)。ボリュームの外の
+    /// セクタだけに使う。この PC では <see cref="EnsureEnabled"/> で止まる。
+    /// </summary>
+    public static void WriteDevice(string path, long offset, byte[] data)
+    {
+        EnsureEnabled();
+        using SafeFileHandle handle = Native.CreateFile(path, Native.GenericRead | Native.GenericWrite, Native.FileShareRead | Native.FileShareWrite, 0,
+            Native.OpenExisting, 0, 0);
+        if (handle.IsInvalid)
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error(), $"Cannot open {path}");
+        }
+
+        using var stream = new FileStream(handle, FileAccess.ReadWrite, 0);
+        stream.Position = offset;
+        stream.Write(data);
+        stream.Flush();
+    }
+
+    /// <summary>
     /// ボリュームを開いてロックできるか (FSCTL_LOCK_VOLUME。TC-ENG-28-08)。ロックできたらすぐに解除して閉じる。書き込みはしない。
     /// </summary>
     public static bool TryLockVolume(string letter, out int error)

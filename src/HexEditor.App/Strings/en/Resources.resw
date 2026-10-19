@@ -8841,4 +8841,299 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
   <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Memory dump</value></data>
   <data name="WriteBlock_Refused" xml:space="preserve"><value>The data cannot be written because write protection mode is on.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Image</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Create image...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Create skeleton image...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Open image...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Verify image...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Image information</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Clone disk...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Save sector range...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Restore sector range...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Reconstruct RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Create image</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Create skeleton image</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Open image as a disk</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk split raw 001</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Verify image</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Image information</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Clone disk</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Save sector range</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Restore sector range</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Reconstruct RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>The current document is not a disk image.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>This needs a disk, volume, or disk image document.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Open the disk, image, or file to use as the source first.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Opened without the missing segments ({0}). Their ranges read as errors.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>The {0} image could not be read (part: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>The parent disk of the differencing disk was not found: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Segments are missing</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>These segments are missing: {0}. Open the image with the available segments? The missing ranges read as errors.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Open available segments</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Split raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>A chunk checksum does not match at {0} ({1} bytes). The range is shown as a read error.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Image information</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Files</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} bytes ({1} sectors)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Sector size</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Acquired</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Acquisition tool</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Device</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Chunks</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} sectors per chunk)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Compression</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Compressed</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Not compressed</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Stored {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Sectors unreadable during acquisition</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Parent disk</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Missing segments</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Case number</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Evidence number</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Examiner</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Notes</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Match</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Mismatch</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>No reference value</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Cannot verify because of read errors</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>stored in the image</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>acquisition log</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>evidence list</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>entered value</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>computed during acquisition</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>source disk</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Create image</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Create skeleton image</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Write-protect mode is off. Turning it on before acquiring evidence is recommended.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Turn on write-protect mode</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Source: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Selection only (widened to sector boundaries)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Ranges to acquire</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Whole</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Sparse (leave out unallocated areas)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Skeleton (partition tables and file system metadata only)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Also include bookmarks and multi-selection ranges</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Output</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Output</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Split / segment size (for example 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Retries on read errors</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Fill value for unreadable sectors (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Read unit</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Verify after completion</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Read errors</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>E01 information</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Compression</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>None</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Fast (zlib level 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Best (zlib level 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Enter the output.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>The split size must be 1 MiB or more (for example 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Enter a number of retries from 0 to 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Enter the fill value as two hex digits (for example 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Choose at least one hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>The output is on the same physical disk as the source. Choose another disk.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>The output is on a disk in the evidence list. Choose another disk.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>The output file system ({0}) allows files of up to {1} bytes. Use split raw or E01 with a smaller segment size.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>The output needs about {0} bytes, but only {1} bytes are free.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} already exists. Overwrite it?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>The output file system is {0}, not NTFS, so the excluded areas are written as zeros and the image does not get smaller.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Create image: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Calculating the ranges to include</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} partition(s) could not be analyzed and are included whole.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>The image could not be created. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Unreadable sectors: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>The image was created. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Verification: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} sector(s) could not be read and were filled.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>The acquisition was interrupted. The files written so far were kept.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>The acquisition was interrupted. The files written so far were deleted.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>The source was lost. The acquisition was stopped.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Open acquisition log</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>The output could not be written: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Abort</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>The acquisition was cancelled. Keep the files written so far?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Keep</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Verify image</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Image: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Value to compare (hex, optional)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>MD5, SHA-1, or SHA-256 value</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Enter a 32, 40, or 64 digit hex value.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Also reread the source disk</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Verify</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Verify image: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Verification result: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Cannot verify because of read errors: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>computed: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Disk image acquisition log</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Disk clone log</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Interrupted</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>The source was lost</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Source</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Serial number</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Capacity</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Sector size</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Range</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Output</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Files</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Started</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Ended</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Sectors read</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Unreadable sectors</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>none</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hashes</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>included ranges</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Verification</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>not verified</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Application version</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Case</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Acquired ranges</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>whole</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>sparse image (unallocated areas are not included)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>skeleton image (partition tables and file system metadata only)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>The excluded areas are stored as zeros, so the hashes of this image do not match the hashes of the whole source disk.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Included ranges</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Message</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Clone disk</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Target disk</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disk {0}: {1}, serial {2}, {3} bytes, {4}-byte sectors. Volumes: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} bytes)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>none</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>Start LBA on the target</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Fill the rest of the target with zeros</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash for verification</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Log folder (optional)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Next</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Choose the target disk.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>The start LBA is outside the target disk.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>A disk with a different sector size cannot be the clone target.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>The target disk is in the evidence list. It cannot be overwritten.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Range to write: from LBA {0}, {1} sectors ({2} bytes)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Content: the data of {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>All content of these volumes will be lost:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>The target is smaller than the source. Only the first {0} bytes of the source will be written.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>This cannot be undone.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Clone to {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Type "{0}" to confirm</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Clone to {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>If you stop now, the target disk stays partly written.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Continue</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>The volume {0} could not be locked, so nothing was written. Close the files open on it and try again.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>The clone failed. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Cloned {0} bytes. Verification: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>The clone was stopped. The target disk is partly written.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>The target is the same disk as the source.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>A disk with a different sector size cannot be the clone target.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Write-protect mode is on.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>The target disk is in the evidence list. It cannot be overwritten.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows is using a volume on the target disk.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>The start LBA is outside the target disk.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>The target disk could not be opened for writing.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Save sector range</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Restore sector range</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>Start LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Number of sectors</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Sector data</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>The range is outside the disk.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Save sectors: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Saved {0} sectors to {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Some sectors in the range could not be read, so nothing was saved.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>The sector range could not be saved. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>The data file or its sidecar file could not be read. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Data file: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Saved from: {0}, serial {1}, {2} bytes, {3}-byte sectors. Start LBA {4}, {5} sectors. Saved at {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Write to: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Back up the current content before writing</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Next</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>The SHA-256 of the data file does not match the sidecar file. It cannot be restored.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>There is no sidecar file. Enter the start LBA to write to.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>The serial number or capacity of the target differs from the disk the data was saved from.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Target: {0}. Volumes in the range: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Content: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Write {0} sectors</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Restore sectors: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>The sector range could not be restored. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Wrote {0} sectors and confirmed them by reading back.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Writing failed. {0} sectors were written; the write failed at LBA {1}. You can write back the backup file {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>The content read back does not match the data file.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Reconstruct RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Members (in order)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Up</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Down</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Add file...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>This member is missing</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[missing]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Data start offset of the member</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Type</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Stripe size</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Parity layout</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Left symmetric</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Left asymmetric</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Right symmetric</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Right asymmetric</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Member to use (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Detection (first 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>{0} detected ({1} partitions)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>No partition table</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>File system signature: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>No file system signature</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Logical disk size: {0} bytes</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Cannot be detected with this configuration.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>The members have different sizes. The smallest size is used.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Save configuration...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Load configuration...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>RAID configuration</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Saved the RAID configuration to {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>The RAID configuration could not be saved. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>The RAID configuration could not be read. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>The logical disk could not be opened.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} members)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>The parameters are not valid.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>The stripe size must be a power of two from 512 B to 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>There are too few members for this type.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>This type cannot have a missing member.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Two or more members are missing. RAID 5 cannot be opened.</value></data>
 </root>
