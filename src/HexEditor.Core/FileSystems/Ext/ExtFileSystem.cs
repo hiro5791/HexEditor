@@ -104,6 +104,9 @@ public sealed class ExtFileSystem : FileSystemBase
 
     public int InodeSize => _sb.InodeSize;
 
+    /// <summary>走査するグループの数 (ボリュームに収まる分だけ。壊れたスーパーブロックの大きすぎるブロック数への備え)。</summary>
+    private long ScanGroups => Math.Min(_sb.GroupCount, Volume.Length / _sb.BlockSize / _sb.BlocksPerGroup + 1);
+
     // ---- グループ記述子 ----
 
     private long GroupFirstBlock(long group) => _sb.FirstDataBlock + group * _sb.BlocksPerGroup;
@@ -184,7 +187,7 @@ public sealed class ExtFileSystem : FileSystemBase
         }
 
         uint seed = _sb.CsumSeed;
-        long count = Math.Min(_sb.GroupCount, 65536);
+        long count = Math.Min(ScanGroups, 65536);
         var bad = new List<long>();
         for (long g = 0; g < count; g++)
         {
@@ -953,7 +956,7 @@ public sealed class ExtFileSystem : FileSystemBase
     /// <summary>inode テーブルの走査 (長時間処理)。<paramref name="select"/> が true を返した inode を返す。</summary>
     private IEnumerable<ExtInode> ScanInodes(Func<ExtInode, bool> select, IProgress<double>? progress, double progressBase, CancellationToken token)
     {
-        long groups = _sb.GroupCount;
+        long groups = ScanGroups;
         int perChunk = Math.Max(1, 64 * 1024 / _sb.InodeSize);
         for (long g = 0; g < groups; g++)
         {
@@ -1112,7 +1115,7 @@ public sealed class ExtFileSystem : FileSystemBase
             long bs = _sb.BlockSize;
             var list = new List<FsRegion> { new(0, Math.Max(2048, (_sb.FirstDataBlock + 1) * bs), FsRegionKind.Metadata) };
             long gdtBlocks = (_sb.GroupCount * _sb.DescriptorSize + bs - 1) / bs;
-            long groups = Math.Min(_sb.GroupCount, 1_000_000);
+            long groups = Math.Min(ScanGroups, 1_000_000);
             long inodeTableBlocks = ((long)_sb.InodesPerGroup * _sb.InodeSize + bs - 1) / bs;
             for (long g = 0; g < groups; g++)
             {
@@ -1166,7 +1169,7 @@ public sealed class ExtFileSystem : FileSystemBase
     {
         private readonly CachedVolumeReader _bitmaps = new(fs.Volume, 4096, 64);
 
-        public long ClusterCount => fs._sb.BlocksCount;
+        public long ClusterCount => Math.Min(fs._sb.BlocksCount, Math.Max(1, fs.Volume.Length / fs._sb.BlockSize));
 
         public bool IsAllocated(long cluster)
         {
@@ -1219,25 +1222,68 @@ public sealed class ExtFileSystem : FileSystemBase
 
         public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default)
         {
+            ExtSuperblock sb = fs._sb;
             long start = Math.Max(0, first);
             long end = Math.Min(first + count, ClusterCount);
             long runStart = -1;
-            for (long c = start; c < end; c++)
+            byte[] bits = new byte[sb.BlockSize];
+            long c = start;
+            while (c < end)
             {
-                if ((c & 0xFFFF) == 0)
+                cancellationToken.ThrowIfCancellationRequested();
+                long group = c < sb.FirstDataBlock ? -1 : (c - sb.FirstDataBlock) / sb.BlocksPerGroup;
+                long groupEnd = group < 0 ? sb.FirstDataBlock : Math.Min(end, fs.GroupFirstBlock(group) + sb.BlocksPerGroup);
+                ExtGroupDescriptor d = group < 0 ? default : fs.Group(group);
+                bool direct = group >= 0 && (d.Flags & ExtGroupDescriptor.BlockUninit) == 0 && d.BlockBitmap > 0 && d.BlockBitmap < sb.BlocksCount;
+                if (direct)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    // ビットマップのブロックを 1 回読み、0x00 と 0xFF のバイトはまとめて進める。
+                    _bitmaps.Read(d.BlockBitmap * sb.BlockSize, bits);
                 }
 
-                bool used = IsAllocated(c);
-                if (!used && runStart < 0)
+                long groupStart = group < 0 ? 0 : fs.GroupFirstBlock(group);
+                while (c < groupEnd)
                 {
-                    runStart = c;
-                }
-                else if (used && runStart >= 0)
-                {
-                    yield return (runStart, c - runStart);
-                    runStart = -1;
+                    bool used;
+                    if (direct)
+                    {
+                        long bit = c - groupStart;
+                        byte value = bits[bit >> 3];
+                        if ((bit & 7) == 0 && c + 8 <= groupEnd && value is 0 or 0xFF)
+                        {
+                            used = value == 0xFF;
+                            if (!used && runStart < 0)
+                            {
+                                runStart = c;
+                            }
+                            else if (used && runStart >= 0)
+                            {
+                                yield return (runStart, c - runStart);
+                                runStart = -1;
+                            }
+
+                            c += 8;
+                            continue;
+                        }
+
+                        used = (value & (1 << (int)(bit & 7))) != 0;
+                    }
+                    else
+                    {
+                        used = IsAllocated(c);
+                    }
+
+                    if (!used && runStart < 0)
+                    {
+                        runStart = c;
+                    }
+                    else if (used && runStart >= 0)
+                    {
+                        yield return (runStart, c - runStart);
+                        runStart = -1;
+                    }
+
+                    c++;
                 }
             }
 
