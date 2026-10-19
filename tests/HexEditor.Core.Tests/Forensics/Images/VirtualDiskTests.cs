@@ -63,6 +63,7 @@ public sealed class VirtualDiskTests
     }
 
     [Fact]
+    [Trait("TC", "TC-FOR-21-05")]
     public void Vhd_fixed_dynamic_and_differencing_read_like_the_original_disk()
     {
         using var dir = new ImageTempDir();
@@ -98,6 +99,7 @@ public sealed class VirtualDiskTests
     }
 
     [Fact]
+    [Trait("TC", "TC-FOR-21-05")]
     public void Vhdx_dynamic_fixed_4k_and_differencing_read_like_the_original_disk()
     {
         using var dir = new ImageTempDir();
@@ -131,6 +133,7 @@ public sealed class VirtualDiskTests
     }
 
     [Fact]
+    [Trait("TC", "TC-FOR-21-05")]
     public void Vmdk_monolithic_sparse_stream_optimized_and_flat_extents_read_like_the_original_disk()
     {
         using var dir = new ImageTempDir();
