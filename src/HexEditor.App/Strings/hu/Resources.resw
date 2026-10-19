@@ -2136,6 +2136,7 @@ A részletek helye:
   <data name="Tab_WindowItem" xml:space="preserve"><value>{0}. ablak: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(nincsenek lapok)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Elérési út másolása</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Újranyitás lemezképként</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Megjelenítés a Fájlkezelőben</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Írásvédett</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Méret: {0}</value></data>
@@ -6634,6 +6635,418 @@ Típus: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Megjegyzés oszlop</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>A szimbólumnevek, az elágazási célok nevei és a hivatkozott karakterláncok megjelenítése.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Diszasszemblálás</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Kriminalisztika</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Kriminalisztika</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Dátum és idő megjelenítése</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Hogyan jelennek meg az időpontok a kriminalisztikai listákban és részletekben: UTC és helyi idő, csak UTC vagy csak helyi idő. Az időpontok mindig UTC-ben kerülnek rögzítésre.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC és helyi idő</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Csak UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Csak helyi idő</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Írásvédelem bekapcsolása eset megnyitásakor</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Ha ki van kapcsolva, a program megkérdezi, hogy bekapcsolja-e.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>A böngészési műveletek rögzítése az auditnaplóban is</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Rögzíti az ugrásokat, a kereséseket és a könyvjelzők hozzáadását. Az adatok és a bizonyítékok módosítása mindig rögzítésre kerül.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Kifaragott képek miniatűrjeinek megjelenítése</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Kis előnézet megjelenítése a JPEG, PNG, GIF és BMP fájlokról a carving eredményei között.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>A jelentés logóképe</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>A HTML-jelentések tetején megjelenő PNG, JPEG vagy SVG kép elérési útja.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>A jelentés fejlécének szövege</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>A jelentések címe alatt megjelenő szövegsor, például a laboratórium neve.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Új eset</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>nyomozás bizonyíték létrehozás eset mappa investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Eset megnyitása</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>nyomozás bizonyíték betöltés eset mappa investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Eset bezárása</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>nyomozás befejezés investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Bizonyíték hozzáadása</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>regisztrálás lemezkép kivonat akvizíció register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Eset tulajdonságai</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>időzóna nyomozó szervezet time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Auditnapló megjelenítése</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>felügyeleti lánc előzmények napló chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Auditnapló ellenőrzése</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>manipuláció kivonatlánc integritás ellenőrzés tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Carving-aláírások kezelése</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>fájltípusok fejléc lábléc magic definíciók file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Fájlok kifaragása (carving)</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>helyreállítás kinyerés törölt fájlok vizsgálat recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Jelentés készítése</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf exportálás dokumentáció export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Bizonyítéklista megjelenítése vagy elrejtése</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>eset bizonyítékok panel case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Auditnapló megjelenítése vagy elrejtése</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>eset auditnapló panel case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Carving-eredmények megjelenítése vagy elrejtése</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>kifaragott fájlok panel eredmények carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Bizonyítékok</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Auditnapló</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Carving-eredmények</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Kriminalisztika</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Eset</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Új eset...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>Ú</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Eset megnyitása...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Eset bezárása</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Bizonyíték hozzáadása...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Eset tulajdonságai...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Bizonyítéklista</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Auditnapló megjelenítése</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Auditnapló ellenőrzése</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>Ő</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Fájlok kifaragása...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Aláírások kezelése...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Eredmények</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Jelentés készítése...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Eset: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>érvénytelen időpont</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Már meg van nyitva egy eset. Előbb zárja be.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Nincs megnyitott eset.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Új eset</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Eset tulajdonságai</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Eset száma (kötelező)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Eset neve (kötelező)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Nyomozó</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Szervezet</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Eset mappája</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Tallózás...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Időzóna</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Az időzóna nélküli időpontok, például a FAT-fájlok időpontjainak olvasásához használatos.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Létrehozás</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>A(z) „{0}” eset létrejött.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>A(z) „{0}” eset megnyílt.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Az esetet nem sikerült létrehozni: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Az eset száma és neve kötelező.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Az esetfájl nem olvasható (sor: {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Az esetet nem sikerült megnyitni: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Az esetet nem sikerült menteni: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Bekapcsolja az írásvédelmet ennél az esetnél?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Bekapcsolás</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Az írásvédelem bekapcsolva ennél az esetnél.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Bizonyíték hozzáadása</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Bizonyíték hozzáadása</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>A(z) {0} hozzá lesz adva az esethez. Az adatforrás nem változik.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Kivonatok számítása most</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Ez az adatforrás már regisztrálva van mint {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Bizonyítékként csak lemezek, kötetek, lemezképfájlok és fájlok adhatók hozzá.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>A(z) {0} bizonyíték kivonatolása</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>A(z) {0} kivonatai rögzítve lettek.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>A(z) {0} kivonata nem lett kiszámítva. A bizonyíték a listában marad.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>A(z) 0x{1} eltolásnál lévő adat nem olvasható, ezért a(z) {0} kivonata nem lett rögzítve.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Nincs kiszámítva</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>A(z) {0} el lett távolítva a listából. Az adatforrást nem módosítottuk.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>A(z) {0} nem érhető el.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>A bizonyítékot nem sikerült megnyitni: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} – {1}: {2} elem</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Nincs megnyitott eset. Hozzon létre vagy nyisson meg egy esetet a Kriminalisztika menüből.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Még nem lett bizonyíték hozzáadva.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Bizonyíték</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Elérési út</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Kapacitás (bájt)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Kivonatok</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Hozzáadva (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Hozzáadva (helyi)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Lemez</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Kötet</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Lemezkép</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Fájl</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memória</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Sikeres</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Sikertelen</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Nincs ellenőrizve</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Megnyitás (csak olvasható)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Eltávolítás a listából</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Kivonatok másolása</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Elérési út másolása</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Lemezkép létrehozása...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Ellenőrzés...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} bejegyzés</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Nincs megnyitott eset. Az auditnapló egy esethez tartozik.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Még semmi sem lett rögzítve.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Ez a sor nem érvényes bejegyzés. A napló módosítva lehetett.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Exportálás CSV-be</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Exportálás JSON-ba</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Az auditnapló sértetlen ({0} sor ellenőrizve).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Az auditnapló lánca megszakad a(z) {0}. sornál. A napló módosítva lehetett.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>Sz.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Idő (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Idő (helyi)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Felhasználó</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Művelet</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Bizonyíték</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Eredmény</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Részletek</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Sikeres</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Sikertelen</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Megszakítva</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Az auditnapló nem írható</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Az adatokat író műveletek ki vannak kapcsolva, amíg a napló újra írható nem lesz. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Újra</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Az auditnapló továbbra sem írható.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Az auditnapló nem írható, ezért a művelet nem lett végrehajtva.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Az auditnapló nem írható, ezért az adatokat író műveletek ki vannak kapcsolva.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Az auditnapló ellenőrzése</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Az auditnaplót nem sikerült ellenőrizni: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Az auditnapló exportálása</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Az auditnapló exportálva ide: {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Az auditnaplót nem sikerült exportálni: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Carving-aláírások</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definíciók</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>beépített</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>letiltva</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Kiterjesztés (pont nélkül)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Fejlécek (Hex bájtok, soronként egy; a ?? bármely bájt, a ? bármely számjegy)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>A fejléc eltolása a fájl elejétől</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Lábléc (Hex bájtok, nem kötelező)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Hány bájt kerüljön bele a láblécből (üres = maga a lábléc)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Maximális méret</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Minimális méret</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>A méret átvétele a fejlécben lévő értékből</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Méretérték: eltolás a fájl elejétől</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Méretérték: szélesség (bit)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Méretérték: bájtsorrend</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Méretérték: hozzáadandó szám</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Szerkezetellenőrzés (beépített név vagy szerkezeti sablon)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Beépített ellenőrzések: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>A fejléc keresése csak a szektor elején</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Ennek a definíciónak a használata a vizsgálatkor</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Új</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Kettőzés</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Importálás...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Exportálás...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>A definíció kipróbálása</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Először jelöljön ki egy tartományt a dokumentumban.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Kipróbálás...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Carving-definíció kipróbálása</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>A kijelölésben található: {0}. Első pozíciók:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Importált definíciók: {0}.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Nem importált definíciók: {0}:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exportálva ide: {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>A definíciókat nem sikerült importálni: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>A definíciókat nem sikerült menteni: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>A kipróbálás nem sikerült: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: adjon meg számot vagy méretet, például 4096, 0x1000 vagy 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Adjon meg egy nevet.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Ez a név már használatban van.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Adjon meg egy kiterjesztést.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>A kiterjesztés olyan karaktereket tartalmaz, amelyek nem használhatók fájlnévben.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Adjon meg legalább egy fejlécet.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>A fejléc nem érvényes Hex bájtsorozat (páratlan számú számjegy vagy érvénytelen karakterek).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>A fejlécnek legalább egy rögzített bájtot tartalmaznia kell.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>A fejléc eltolása nem lehet negatív.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>A lábléc nem érvényes Hex bájtsorozat.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>A belefoglalandó bájtok száma nem lehet negatív.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>A maximális méret legalább 1 legyen.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>A minimális méret nem lehet negatív.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>A maximális méret kisebb a minimálisnál.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>A méretérték érvénytelen.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Egy érték típusa hibás.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Fájlok kifaragása (carving)</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Indítás</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Hatókör</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>A teljes dokumentum</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Kijelölés</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Csak a nem lefoglalt terület</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Csak a slack terület</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Fájltípusok</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Ne keressen fejléceket egy már megtalált fájl belsejében</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>A kifaragott fájlok írása mappába</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Kimeneti mappa</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Fájlok kifaragása</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>A carving befejeződött: {0} fájl található.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>A carving megszakítva. {0} fájl található; az eredmények és a jegyzék megmaradnak.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>A carving leállt, mert a kimeneti mappa nem írható. {0} fájl található.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>A carving sikertelen: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>A kimeneti mappa a vizsgált lemezen van. Válasszon mappát egy másik lemezen.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>A kimeneti mappában nincs elég szabad hely. Szükséges: {0} bájt. Szabad: {1} bájt.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>A kimeneti mappa fájlrendszere {0} bájtban korlátozza a fájlok méretét. Válasszon másik mappát.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>A kimeneti mappa nem használható.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Ehhez a dokumentumhoz nincs lefoglalási információ.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>A kifaragott fájlok nem írhatók</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>A kimeneti mappában ({0}) elfogyott a hely. A következő fájlhoz {1} bájt kell, de csak {2} bájt szabad. Szabadítson fel helyet, válasszon másik mappát, vagy állítsa le.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Nem írható ide: {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Újra</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Másik mappa kiválasztása...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>A carving már fut.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Fájlok kifaragása...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Mappa megnyitása</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>A carving még nem futott. Válassza a Kriminalisztika, majd a Carving, végül a Fájlok kifaragása parancsot.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Nem található fájl.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} fájl</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>A kifaragott kép előnézete</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>Sz.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Eltolás</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>A hosszt meghatározta</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Kimeneti fájl</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Szerkezet</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Méretérték</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Lábléc</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Maximális méret</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Típus: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Eltolás: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Hossz: {0} bájt</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>A hosszt meghatározta: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Jelentés készítése</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Létrehozás</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Tartalom</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Lemez: {0} (szektorméret: {1} bájt)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>Sz.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Séma</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>Kezdő LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Szektorok</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Méret (bájt)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Fájlrendszer</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Titkosítás</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Nem lefoglalt</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Elrendezés</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Dokumentum</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>A kötet eltolása</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Címke</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Sorozatszám</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Klaszterméret (bájt)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Klaszterek</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Szabad klaszterek</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Problémák</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Logikai kötetek: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Csoport</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Típus</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Méret (bájt)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Elrendezés</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Tagok</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Lemezkép</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Forrás</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Akvizíció ideje</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Kivonatok</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Akvizíciós napló</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (egyetlen fájl, offline is megnyílik)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Az auditnapló összes bejegyzése</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Auditnapló ettől (UTC, nem kötelező)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Auditnapló eddig (UTC, nem kötelező)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Hex-dump bájtjai minden könyvjelzőhöz (0–4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Mentés ide</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Az időszak nem érvényes dátum és idő.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>A Hex-dump hosszának 0 és 4096 bájt között kell lennie.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>A jelentés készítése</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>A jelentést nem sikerült elkészíteni: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Létrehozva: {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>A PDF-et nem sikerült létrehozni ({0}). Helyette ez készült: {1}.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>A PDF a hosszú listáknak csak az első sorait tartalmazza. A teljes listákat a HTML-jelentés vagy a CSV-fájlok tartalmazzák.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Megnyitás</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Mappa megnyitása</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Kriminalisztikai jelentés</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Eset száma</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Eset neve</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Nyomozó</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Szervezet</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Eset létrehozva</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Jelentés készítve</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Időzóna</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Készítette</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Oldal</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>/</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Eset</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Címlap</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Bizonyítékok</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Akvizíciós feljegyzések</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Eszközinformációk</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partíciók</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Fájlrendszerek</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Könyvjelzők</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Carving-eredmények</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Auditnapló</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Bizonyíték</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Elérési út</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Modell</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Sorozatszám</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Kapacitás (bájt)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Szektorok</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Szektorméret</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Kivonatok</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Hozzáadva (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Hozzáadva (helyi)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Hozzáadta</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Sikeres</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Sikertelen</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Nincs ellenőrizve</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Nincs kiszámítva</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Lemez</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Kötet</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Lemezkép</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Fájl</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memória</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Dokumentum</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Eltolás</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Megjegyzés</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex-dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>Sz.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Eltolás</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>A hosszt meghatározta</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Kimeneti fájl</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Talált fájlok</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>Sz.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Idő (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Idő (helyi)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Felhasználó</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Számítógép</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Művelet</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Bizonyíték</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Eredmény</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Részletek</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>sikeres</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>sikertelen</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>megszakítva</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Az első {0} sor látható {1} sorból. A teljes lista a mellékelt CSV-fájlban vagy a HTML-jelentésben van.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Az első {0} sor látható. A teljes lista a HTML-jelentésben vagy a CSV-fájlban van.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Teljes lista</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Nem lefoglalt</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Nincs adat.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>érvénytelen időpont</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Diszasszemblálás panel megjelenítése/elrejtése</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>diszassembler assembly kód disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Diszasszemblálás</value></data>
@@ -8193,4 +8606,1264 @@ A kapcsolat nem jön létre, hacsak nem dönt a kulcs cseréje mellett.</value><
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Teljes oldal</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Szélességhez igazítás</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Mappa kiválasztása...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Írásvédett]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Írásvédelem</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Az írásvédelmi mód be van kapcsolva. Kattintson a kikapcsoláshoz.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Az írásvédelmi mód csak ezt az alkalmazást akadályozza meg az írásban. A Windowst és más alkalmazásokat nem tudja megakadályozni (például a fájlrendszer által kötet csatlakoztatásakor végzett írásokat). Használjon emellett hardveres írásvédőt vagy az operációs rendszer USB-írásvédelmét.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelme...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Kikapcsolja az írásvédelmi módot?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Megnyitott bizonyíték-dokumentumok: {0}. A mód kikapcsolása után ezekbe a dokumentumokba lehet írni:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Nincs megnyitott bizonyíték-dokumentum. A mód kikapcsolása után a megnyitott dokumentumokba újra lehet írni.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Írásvédelem kikapcsolása</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Az adatforrást nem sikerült csak olvashatóként újra megnyitni. Csak a már beolvasott adatok láthatók.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Írás engedélyezése ebbe a dokumentumba</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Írás engedélyezve (kivétel az írásvédelmi mód alól)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Az írásvédelmi mód ki van kapcsolva.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Csak fájl-dokumentumok vonhatók ki az írásvédelmi mód alól.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Ez az adatforrás bizonyítékként van regisztrálva, ezért az írás nem engedélyezhető.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Az írás ebbe a dokumentumba már engedélyezve van.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Engedélyezi az írást ebbe a dokumentumba?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Az írásvédelmi mód bekapcsolva marad, de a(z) {0} ({1}) szerkeszthető és menthető lesz, amíg be nem zárja. Ez bekerül az auditnaplóba, és a megnyitott dokumentumnál nem vonható vissza.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>A megerősítéshez írja be: {0}</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Írás engedélyezése: {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Az írás engedélyezve van ebbe: {0}, amíg be nem zárja.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Írásvédelmi mód</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelme</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Eszköz</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>HPA / DCO ellenőrzése</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>Ő</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART-információk</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Eszközinformációs panel</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Titkosítási információk...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Memóriakép megnyitása...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Írásvédelmi mód átkapcsolása</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>írásvédő védelem csak olvasható bizonyíték write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Írás engedélyezése ebbe a dokumentumba</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>kivétel írásvédelem write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelmének átkapcsolása</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb tároló házirend írásvédelem registry usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>HPA és DCO ellenőrzése</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>rejtett terület védett terület eszközkonfiguráció hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>SMART-információk megjelenítése</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>állapot lemez önellenőrzés nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Titkosítási információk megjelenítése</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt titkosított kötet encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Eszközinformációk megjelenítése vagy elrejtése</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart eszköz panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Memóriakép megnyitása</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>összeomlási kép minidump fizikai memória ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Eszközinformációk</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Az írásvédelmi mód mindig legyen bekapcsolva indításkor</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Ha ki van kapcsolva, az alkalmazás a mód legutóbbi bezáráskori állapotával indul.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>HPA / DCO ellenőrzése lemez megnyitásakor</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Csak olvasási ATA-parancsokat küld a lemeznek, és értesítést jelenít meg, ha rejtett területeket talál.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Bekapcsolja az operációs rendszer USB-írásvédelmét?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>A Windows megakadályozza az írást az ezután csatlakoztatott USB-tárolóeszközökre (StorageDevicePolicies WriteProtect beállítás). A már csatlakoztatott eszközöket ez nem érinti, amíg újra nem csatlakoztatja őket. A belső SATA- és NVMe-lemezek nincsenek védve. Rendszergazdai jogosultság szükséges.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Kikapcsolja az operációs rendszer USB-írásvédelmét?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>A beállítás visszaáll a bekapcsolás előtti állapotra. A már csatlakoztatott USB-tárolóeszközök írásvédettek maradnak, amíg újra nem csatlakoztatja őket. Rendszergazdai jogosultság szükséges.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Beállítás módosítása</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Rendszergazdai jogosultság szükséges. A beállítás nem változott.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>A beállítást nem sikerült módosítani (hozzáférés megtagadva; lehet, hogy csoportházirend kezeli): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>A beállítást nem sikerült módosítani: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelme be van kapcsolva. A hatás érvényesüléséhez csatlakoztassa újra az USB-tárolóeszközöket.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelme ki van kapcsolva.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelme még be van kapcsolva</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>A Windows az alkalmazás bezárása után is blokkolja az írást az USB-tárolóeszközökre. Kikapcsolja kilépés előtt?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Kikapcsolás és kilépés</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Kilépés bekapcsolva hagyva</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Az operációs rendszer USB-írásvédelmének módosításához Windows-rendszergazdai jogosultság szükséges.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Eszköz</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>HPA / DCO ellenőrzése</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>SMART beolvasása</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Exportálás JSON-ba...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Exportálás szövegként...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Nyisson meg egy fizikai lemezt, és válassza a HPA / DCO ellenőrzése vagy a SMART-információk parancsot.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} – rögzítve: {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>A HPA / DCO nem lett ellenőrizve.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Az NVMe-lemezeknek nincs HPA-ja és DCO-ja; a HPA / DCO nem alkalmazható.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Névtér mérete: {0} blokk (blokkonként {1} bájt)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Névtér kapacitása: {0} blokk</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Ezen az eszközön ez nem ellenőrizhető (a parancsok nem jutnak át, például USB-adaptereken vagy virtuális lemezeken).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Rendszergazdai jogosultság szükséges.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>A(z) {0} parancs sikertelen (ATA-állapot: {1}, hiba: {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Maximális LBA (IDENTIFY DEVICE, 28 bites): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Maximális LBA (IDENTIFY DEVICE, 48 bites): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Natív maximális LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>A DCO által beállított maximális LBA (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>az eszköz nem támogatja</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>az eszköz nem támogatja</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: van, {0} szektor ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: nincs</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: nem határozható meg</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: van, {0} szektor ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: nincs</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: nem határozható meg</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>A SMART-információk nincsenek beolvasva.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>A SMART-információk ezen az eszközön nem olvashatók (például olyan USB-adapteren keresztül, amely nem támogatja).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>A SMART ki van kapcsolva ezen az eszközön.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>A SMART-adatok ellenőrzőösszege nem egyezik; az értékek hibásak lehetnek.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Modell: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Sorozatszám: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Kapacitás: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Szektorméret: {0} bájt logikai, {1} bájt fizikai</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Csatlakozás: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Fordulatszám: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>nem forog (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>támogatott</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>nem támogatott</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>A parancs használatához nyisson meg egy fizikai lemezt.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Az eszközinformációkat nem sikerült beolvasni: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>A(z) {0} rejtett területekkel rendelkezik: HPA {1} szektor, DCO {2} szektor. A Windows által látott kapacitás kisebb a lemez valódi kapacitásánál.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Részletek megjelenítése</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Az eszközinformációk exportálva ide: {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Az eszközinformációkat nem sikerült exportálni: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Jelenlegi</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Legrosszabb</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Küszöb</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Nyers (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Nyers (decimális)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Állapot</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Figyelmeztetés</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Ismeretlen</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Olvasási hibák aránya</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Átviteli teljesítmény</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Felpörgési idő</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Indítások és leállítások száma</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Újraleképezett szektorok száma</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Pozicionálási hibák aránya</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Pozicionálási teljesítmény</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Üzemórák</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Felpörgetési újrapróbálkozások száma</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Kalibrálási újrapróbálkozások száma</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Bekapcsolási ciklusok száma</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Elérhető tartalékterület</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Programozási hibák száma</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Törlési hibák száma</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Kopáskiegyenlítések száma</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Váratlan áramkimaradások száma</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Kopás tartományának eltérése</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Felhasznált tartalékblokkok összesen</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Programozási hibák összesen</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Törlési hibák összesen</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Üzem közben keletkezett hibás blokkok</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>Végponttól végpontig tartó hiba</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Jelentett kijavíthatatlan hibák</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Parancs-időtúllépések</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>Magas repülési magasságú írások</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Légáram hőmérséklete</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>Ütés okozta hibák aránya (G-Sense)</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Áramkimaradáskori visszahúzások száma</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Fejbetöltési ciklusok száma</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Hőmérséklet</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardveres ECC által helyreállítva</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Újraleképezési események száma</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Függőben lévő szektorok száma</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline kijavíthatatlan szektorok száma</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC-hibák száma</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Többzónás hibák aránya</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD hátralévő élettartama</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Hátralévő élettartam</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Adathordozó kopásjelzője</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Jó blokkok száma</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Összes írt LBA</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Összes olvasott LBA</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Kritikus figyelmeztetés bitjei: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Hőmérséklet: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Elérhető tartalék: {0}% (küszöb: {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Felhasznált: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Olvasott adatok: {0} bájt</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Írt adatok: {0} bájt</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Bekapcsolások száma: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Üzemórák: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Nem biztonságos leállások: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Adathordozó- és adatintegritási hibák: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Rögzítve</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Eszköz</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Modell</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Sorozatszám</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Kapacitás (bájt)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Szektorméret (logikai / fizikai)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Csatlakozás</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Maximális LBA (28 bites / 48 bites / natív / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Ezen az eszközön nem ellenőrizhető</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Nincs</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Van ({0} szektor)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Nem alkalmazható (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Név</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Jelenlegi</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Legrosszabb</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Küszöb</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Nyers</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Állapot</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Figyelmeztetés</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Titkosítási információk</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Nem található titkosított kötet.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>{0}. tartomány: eltolás {1}, {2} bájt</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Típus: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Titkosított APFS-kötet (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (esetleg titkosított)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Esetleg titkosított vagy tömörített adatok (például VeraCrypt vagy TrueCrypt; nincs aláírás, amely azonosítaná őket)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Metaadatok verziója: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Titkosítási módszer: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>A kötet GUID-ja: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Létrehozva: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Leírás: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Titkosítás állapota: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>ismeretlen</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>visszafejtve</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>folyamatban</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>befejezve</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>szüneteltetve</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Eddig titkosítva: {0} bájt</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Kulcsvédők: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, létrehozva: {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Nyílt kulcs</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Indítókulcs</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM és PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Helyreállítási jelszó</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Jelszó</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Ismeretlen (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Kulcsrések: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• {0}. kötet: titkosított</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• {0}. kötet: nem titkosított</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Az első 64 KiB entrópiája: {0} bit bájtonként</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Figyelmeztetés: a három metaadat-blokk nem egyezik.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Figyelmeztetés: néhány metaadat-blokk sérült; csak az olvasható elemek láthatók.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>A fájlrendszer-böngésző nem nyitja meg a titkosított köteteket.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>A Windows feloldotta ezt a BitLocker-kötetet ({0}). Ha logikai kötetként nyitja meg, olvashatja a Windows által visszafejtett tartalmat.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Megnyitás logikai kötetként</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Memóriakép</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>A(z) {0} memóriakép formátuma nem olvasható. Megnyitja nyers formátumban?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Megnyitás nyersként</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>A memóriaképet nem sikerült megnyitni: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Memóriakép: {0}, rögzítve: {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Memóriakép: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>fizikai memóriakép (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>teljes memóriakép</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>kernel-memóriakép</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>teljes memóriakép (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Memóriakép</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Az adatok nem írhatók, mert az írásvédelmi mód be van kapcsolva.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Lemezkép</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Lemezkép készítése...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Csontváz-lemezkép készítése...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Lemezkép megnyitása...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Lemezkép ellenőrzése...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>Ő</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Lemezkép adatai</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Lemez klónozása...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Szektortartomány mentése...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Szektortartomány visszaállítása...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>RAID rekonstruálása...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Lemezkép készítése</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>akvizíció lemezkép dd raw e01 bizonyíték acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Csontváz-lemezkép készítése</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>váz ritka lemezkép metaadat skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Lemezkép megnyitása lemezként</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk osztott raw 001 split</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Lemezkép ellenőrzése</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>ellenőrzés kivonat md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Lemezkép adatai</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 fejléc eset adatai header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Lemez klónozása</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>klón másolat lemez szektor clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Szektortartomány mentése</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>biztonsági mentés mbr gpt szektorok backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Szektortartomány visszaállítása</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>visszaállítás mbr gpt szektorok restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>RAID rekonstruálása</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod csíkozás paritás stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>A jelenlegi dokumentum nem lemezkép.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Lemez, kötet vagy lemezkép dokumentum szükséges hozzá.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Előbb nyissa meg a forrásként használandó lemezt, lemezképet vagy fájlt.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Megnyitva a hiányzó szegmensek nélkül ({0}). Tartományaik hibaként olvashatók.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>A(z) {0} lemezkép nem olvasható (rész: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>A különbségi lemez szülőlemeze nem található: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Hiányzó szegmensek</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Ezek a szegmensek hiányoznak: {0}. Megnyitja a lemezképet a meglévő szegmensekkel? A hiányzó tartományok hibaként olvashatók.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Meglévő szegmensek megnyitása</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Osztott raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Egy adattömb ellenőrzőösszege nem egyezik itt: {0} ({1} bájt). A tartomány olvasási hibaként jelenik meg.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Lemezkép adatai</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Fájlok</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Méret</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} bájt ({1} szektor)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Szektorméret</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Akvizíció ideje</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Akvizíciós eszköz</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Eszköz</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Adattömbök</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} (adattömbönként {1} szektor)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Tömörítés</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Tömörítve</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Nincs tömörítve</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Tárolt {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Az akvizíció során nem olvasható szektorok</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Szülőlemez</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Hiányzó szegmensek</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Eset száma</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Bizonyíték száma</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Vizsgáló</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Leírás</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Megjegyzések</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Egyezik</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Nem egyezik</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Nincs referenciaérték</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Olvasási hibák miatt nem ellenőrizhető</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>a lemezképben tárolva</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>akvizíciós napló</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>bizonyítéklista</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>megadott érték</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>az akvizíció során kiszámítva</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>forráslemez</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Lemezkép készítése</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Csontváz-lemezkép készítése</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Az írásvédelmi mód ki van kapcsolva. Bizonyítékok akvizíciója előtt ajánlott bekapcsolni.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Írásvédelmi mód bekapcsolása</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Forrás: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Csak a kijelölés (szektorhatárokra kiterjesztve)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Akvirálandó tartományok</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Teljes</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Ritka (a nem lefoglalt területek kihagyásával)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Csontváz (csak a partíciós táblák és a fájlrendszer-metaadatok)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>A könyvjelzők és a többszörös kijelölés tartományainak belefoglalása</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Kimenet</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Kimenet</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Tallózás...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Darabolási / szegmensméret (például 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Kivonatok</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Újrapróbálkozások olvasási hibánál</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Kitöltőérték az olvashatatlan szektorokhoz (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Olvasási egység</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Ellenőrzés a befejezés után</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Olvasási hibák</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>E01-információk</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Tömörítés</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Nincs</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Gyors (zlib, 1. szint)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Legjobb (zlib, 9. szint)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Indítás</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Adja meg a kimenetet.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>A darabolási méret legalább 1 MiB legyen (például 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Adja meg az újrapróbálkozások számát 0 és 100 között.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Adja meg a kitöltőértéket két hexadecimális számjegyként (például 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Válasszon legalább egy kivonatot.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>A kimenet ugyanazon a fizikai lemezen van, mint a forrás. Válasszon másik lemezt.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>A kimenet a bizonyítéklistában szereplő lemezen van. Válasszon másik lemezt.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>A kimenet fájlrendszere ({0}) legfeljebb {1} bájtos fájlokat enged. Használjon osztott raw vagy E01 formátumot kisebb szegmensmérettel.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>A kimenethez nagyjából {0} bájt kell, de csak {1} bájt szabad.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>A(z) {0} már létezik. Felülírja?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Felülírás</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>A kimenet fájlrendszere {0}, nem NTFS, ezért a kihagyott területek nullákkal íródnak, és a lemezkép nem lesz kisebb.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Lemezkép készítése: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>A belefoglalandó tartományok kiszámítása</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} partíciót nem sikerült elemezni, ezért teljes egészükben bekerültek.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>A lemezképet nem sikerült létrehozni. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Olvashatatlan szektorok: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>A lemezkép elkészült. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Ellenőrzés: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} szektor nem volt olvasható, ezért ki lett töltve.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Az akvizíció megszakadt. Az addig írt fájlok megmaradtak.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Az akvizíció megszakadt. Az addig írt fájlok törölve lettek.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>A forrás elveszett. Az akvizíció leállt.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Akvizíciós napló megnyitása</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>A kimenetet nem sikerült írni: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Újra</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Megszakítás</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Az akvizíció megszakítva. Megtartja az addig írt fájlokat?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Megtartás</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Lemezkép ellenőrzése</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Lemezkép: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Összehasonlítandó érték (hex, nem kötelező)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>MD5, SHA-1 vagy SHA-256 érték</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Adjon meg 32, 40 vagy 64 számjegyű hexadecimális értéket.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>A forráslemez újraolvasása is</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Lemezkép ellenőrzése: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Az ellenőrzés eredménye: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Olvasási hibák miatt nem ellenőrizhető: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>kiszámítva: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Lemezkép-akvizíciós napló</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Lemezklónozási napló</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Állapot</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Befejezve</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Megszakítva</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>A forrás elveszett</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Sikertelen</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Forrás</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Elérési út</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Modell</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Sorozatszám</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Kapacitás</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Szektorméret</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Tartomány</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Kimenet</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Fájlok</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Cél</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Kezdés</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Befejezés</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Beolvasott szektorok</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Olvashatatlan szektorok</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>nincs</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Kivonatok</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>belefoglalt tartományok</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>nincs ellenőrizve</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Alkalmazás verziója</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Eset</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Akvirált tartományok</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>teljes</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>ritka lemezkép (a nem lefoglalt területek nincsenek benne)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>csontváz-lemezkép (csak a partíciós táblák és a fájlrendszer-metaadatok)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>A kihagyott területek nullákkal vannak tárolva, ezért a lemezkép kivonatai nem egyeznek a teljes forráslemez kivonataival.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Belefoglalt tartományok</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Üzenet</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Lemez klónozása</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Célmeghajtó</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>{0}. lemez</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>{0}. lemez: {1}, sorozatszám: {2}, {3} bájt, {4} bájtos szektorok. Kötetek: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} bájt)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>nincs</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>Kezdő LBA a célon</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>A cél fennmaradó részének kitöltése nullákkal</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Ellenőrző kivonat</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Naplómappa (nem kötelező)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Tovább</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Válassza ki a célmeghajtót.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>A kezdő LBA a célmeghajtón kívül esik.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>A más szektorméretű lemez nem lehet klónozási cél.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>A célmeghajtó szerepel a bizonyítéklistában. Nem írható felül.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Cél: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Írandó tartomány: {0}. LBA-tól, {1} szektor ({2} bájt)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Tartalom: a(z) {0} adatai</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Ezeknek a köteteknek a teljes tartalma elvész:&#xA;{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>A cél kisebb a forrásnál. A forrásnak csak az első {0} bájtja lesz kiírva.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Ez nem vonható vissza.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Klónozás ide: {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>A megerősítéshez írja be: „{0}”</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Klónozás ide: {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Ha most leállítja, a célmeghajtó csak részben lesz kiírva.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Folytatás</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>A(z) {0} kötetet nem sikerült zárolni, ezért nem történt írás. Zárja be a rajta megnyitott fájlokat, és próbálja újra.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>A klónozás sikertelen. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Klónozott bájtok: {0}. Ellenőrzés: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>A klónozás leállt. A célmeghajtó csak részben lett kiírva.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>A cél ugyanaz a lemez, mint a forrás.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>A más szektorméretű lemez nem lehet klónozási cél.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Az írásvédelmi mód be van kapcsolva.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>A célmeghajtó szerepel a bizonyítéklistában. Nem írható felül.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>A Windows használ egy kötetet a célmeghajtón.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>A kezdő LBA a célmeghajtón kívül esik.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>A célmeghajtót nem sikerült írásra megnyitni.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Szektortartomány mentése</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Szektortartomány visszaállítása</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>Kezdő LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Szektorok száma</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Szektoradatok</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>A tartomány a lemezen kívül esik.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Szektorok mentése: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>{0} szektor elmentve ide: {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>A tartomány néhány szektora nem olvasható, ezért semmi sem lett mentve.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>A szektortartományt nem sikerült menteni. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Az adatfájl vagy a hozzá tartozó kísérőfájl nem olvasható. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Adatfájl: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Mentve innen: {0}, sorozatszám: {1}, {2} bájt, {3} bájtos szektorok. Kezdő LBA: {4}, {5} szektor. Mentés ideje: {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Írás ide: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Írás előtt az aktuális tartalom mentése</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Tovább</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>Az adatfájl SHA-256 értéke nem egyezik a kísérőfájléval. Nem állítható vissza.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Nincs kísérőfájl. Adja meg a kezdő LBA-t az íráshoz.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>A cél sorozatszáma vagy kapacitása eltér attól a lemeztől, amelyről az adatok mentve lettek.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Cél: {0}. Kötetek a tartományban: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Tartalom: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>{0} szektor írása</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Szektorok visszaállítása: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>A szektortartományt nem sikerült visszaállítani. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>{0} szektor kiírva, és visszaolvasással megerősítve.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Az írás sikertelen. {0} szektor lett kiírva; az írás a(z) {1}. LBA-nál hibázott. Visszaírhatja a(z) {2} biztonsági mentési fájlt.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>A visszaolvasott tartalom nem egyezik az adatfájllal.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>RAID rekonstruálása</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Tagok (sorrendben)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Fel</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Le</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Fájl hozzáadása...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Ez a tag hiányzik</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[hiányzik]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>A tag adatainak kezdő eltolása</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Típus</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Csíkméret</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Paritás elrendezése</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Bal szimmetrikus</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Bal aszimmetrikus</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Jobb szimmetrikus</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Jobb aszimmetrikus</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Használt tag (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Felismerés (az első 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Felismerve: {0} ({1} partíció)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Nincs partíciós tábla</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Fájlrendszer-aláírás: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Nincs fájlrendszer-aláírás</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>A logikai lemez mérete: {0} bájt</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Ezzel a konfigurációval nem észlelhető.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>A tagok mérete különböző. A legkisebb méret lesz használva.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Konfiguráció mentése...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Konfiguráció betöltése...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>RAID-konfiguráció</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>A RAID-konfiguráció elmentve ide: {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>A RAID-konfigurációt nem sikerült menteni. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>A RAID-konfigurációt nem sikerült beolvasni. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>A logikai lemezt nem sikerült megnyitni.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} tag)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>A paraméterek érvénytelenek.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>A csíkméretnek kettő hatványának kell lennie 512 B és 16 MiB között.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Ehhez a típushoz túl kevés a tag.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Ennél a típusnál nem lehet hiányzó tag.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Két vagy több tag hiányzik. A RAID 5 nem nyitható meg.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Partíciók megjelenítése</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>partíciók lemez mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Partíció megnyitása új lapon</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>partíció lap partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Ugrás a partíció elejére</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>partíció ugrás partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Megnyitás innen partíció kezdeteként</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>partíció itt partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Elveszett partíciók keresése</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>elveszett partíció helyreállítás keresés lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Fájlrendszer megjelenítése</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>fájlrendszer-böngésző ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Fájl megnyitása új lapon</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>fájl megnyitás lap file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Fájlok exportálása</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>exportálás kinyerés fájlok export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Törölt fájlok keresése</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>törölt helyreállítás deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Ugrás az MFT-rekordhoz</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft rekord ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Ugrás a klaszterhez</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>klaszter blokk ugrás cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Ezt a pozíciót használó fájlok</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>klaszter tulajdonosa fordított keresés cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>A fájl klasztereinek megjelenítése</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>töredékek klaszterek kiemelés fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Következő töredék</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>töredék következő fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Előző töredék</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>töredék előző fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Szabad terület és slack kiemelésének átkapcsolása</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack nem lefoglalt kiemelés slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Nem lefoglalt terület exportálása</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>nem lefoglalt szabad exportálás unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Slack exportálása</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack exportálás slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Nem lefoglalt terület megnyitása új lapon</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>nem lefoglalt lap unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Partíciók panel</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panel partíciók panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Fájlrendszer panel</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panel fájlrendszer panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Töredékek panel</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panel töredékek panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Kriminalisztikai eredmények panel</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panel eredmények kriminalisztika panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT-rekord száma</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Partíciók és fájlrendszerek</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Kis hézagok megjelenítése a partíciók között</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Az 1 MiB-nál kisebb nem lefoglalt hézagok felsorolása a partíciók panelen.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Lemezeltolások megjelenítése a partíciólapokon</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Ha ki van kapcsolva, a partíciólap címei 0-tól kezdődnek.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>NTFS alternatív adatfolyamok listázása</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>A névvel ellátott adatfolyamok file.txt:stream formában jelennek meg a fájlrendszer-böngészőben.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>A kriminalisztikai kiemelés jelmagyarázatának megjelenítése</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>A jelmagyarázatot a Hex-nézet jobb felső sarkában jeleníti meg, amíg a kiemelés be van kapcsolva.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>A kriminalisztikai kiemelés színei</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Például: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Hagyja üresen az alapértelmezett színekhez.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Partíciók</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Fájlrendszer</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Partíciók megjelenítése</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Partíció megnyitása új lapon</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>Ú</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Ugrás a partíció elejére</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Elveszett partíciók keresése...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Böngésző megjelenítése</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Fájl megnyitása új lapon</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>Ú</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Fájlok exportálása...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Törölt fájlok keresése</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Ugrás a klaszterhez...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Ezt a pozíciót használó fájlok</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>A fájl klasztereinek megjelenítése</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Ugrás az MFT-rekordhoz...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Nem lefoglalt terület exportálása...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>Ü</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Slack exportálása...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Nem lefoglalt terület megnyitása új lapon</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Következő töredék</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Előző töredék</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>Ő</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Kriminalisztikai kiemelés</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Partíciók</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Fájlrendszer</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Töredékek</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Kriminalisztikai eredmények</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Lemezpozíció és a klaszter tulajdonosa</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Partíciók</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Fájlrendszer</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Töredékek</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Kriminalisztikai eredmények</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Partíciók elemzése…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Nincs elemezve. Válassza a Kriminalisztika &gt; Partíciók &gt; Partíciók megjelenítése parancsot.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Nem található partíciós tábla.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} partíció, szektorméret: {1}, lemezazonosító: {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Olvashatatlan szektorok (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> Sz.  Formátum  Típus                        Név              Kezdő LBA     Záró LBA      Szektor      Méret  Kezdő eltolás Jelzők       FR        Állapot</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Partícióelrendezés</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Figyelmeztetés</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>Típus GUID: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Egyedi GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Kezdő blokk: {0}, {1} blokk</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Táblabejegyzés itt: {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Ugrás a partíció elejére</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Partíció kijelölése</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Partíció megnyitása új lapon</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Bejegyzés szerkezetének megjelenítése</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Fájlrendszer megjelenítése</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Elveszett partíciók keresése...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>A kurzor nem partícióban van.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>{1} bájtos szektorokkal nem található GPT, de {0} bájtos szektorokkal igen. Újranyitja {0} bájtos szektorokkal?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Újranyitás {0} bájtos szektorokkal</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} – {1}. partíció</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} – LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logikai</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Az EBR-lánc visszakanyarodik a(z) {1}. LBA-ra (a(z) {0}. partíció után). A lánc megállt.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Több mint 256 logikai partíció. A többi nem lett beolvasva.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>A GPT-fejléc CRC32-értéke nem egyezik (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>A GPT-partícióbejegyzések tömbjének CRC32-értéke nem egyezik (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Az elsődleges GPT-fejléc és a tartalék fejléc (LBA {1}) eltér.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Az elsődleges GPT-fejléc sérült. A lista a tartalék fejlécből készült.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>A(z) {0}. és {2}. partíció átfedi egymást.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>A(z) {0}. partíció a lemezen kívülre mutat (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Hibrid MBR: a védő MBR más bejegyzéseket is tartalmaz.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Néhány szektor nem olvasható (az első: LBA {1}). A lista az olvasható szektorokat használja.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Az Apple partíciótérkép több mint 256 bejegyzést tartalmaz.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>EFI rendszer</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft fenntartott</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Windows alapadatok</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Windows helyreállítás</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>LDM-metaadatok</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>LDM-adatok</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Linux fájlrendszer</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux lapozóterület</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple rendszerindító</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS rendszerindító</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Kiterjesztett</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Kiterjesztett (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Rejtett FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Helyreállítás</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Rejtett FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Rejtett NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Rejtett FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (dinamikus lemez)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux kiterjesztett</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT védő</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Nem lefoglalt</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>LVM2 fizikai kötet</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Elveszett partíciók keresése</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>Kezdő LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>Záró LBA (nem tartozik bele)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Vizsgált pozíciók</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>1 MiB-os határok</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Cilinderhatárok (63 szektor)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Minden szektor</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Minden szektor ellenőrzése kb. {0} (200 MB/s sebességnél).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} óra</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} perc</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Keresés</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>GPT-fejléc / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Vizsgálat</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Elveszett partíciók keresése</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Elveszett partíciók</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     Kezdő LBA         Szektor         Méret  Típus       Biz.    Átfedések</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Alacsony</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Közepes</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Magas</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>átfedi a(z) {0}. partíciót</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Megszakítva. Az eddigi eredmények megmaradnak.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {# jelölt található.} other {# jelölt található.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Olvashatatlan: LBA {0}, {1} szektor</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Nem található partíciójelölt.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Minden szektor vizsgálata</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Megnyitás partícióként</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Fájlrendszer megjelenítése</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Partíciós táblabejegyzések létrehozása (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Partíciós táblabejegyzések létrehozása (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Partíciós táblabejegyzések létrehozása</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>Az MBR-ben nincs elég szabad bejegyzés az összes jelölthöz.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>A partíció nem írható MBR-be (2 TiB felett). Használjon GPT-t.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>A GPT-ben nincs szabad bejegyzés.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>A lemez túl kicsi a GPT-hez.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Ehhez a dokumentumhoz nincs megnyitott fájlrendszer.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Válasszon egy fájlt a fájlrendszer-böngészőben.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Nincs kiemelt fájlklaszter.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Csak NTFS esetén.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>A lefoglalási információ nem olvasható, ezért a kiemelés nem érhető el.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>A kötet titkosított (BitLocker). A fájlrendszer-böngésző nem nyitja meg.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>A kötet titkosított ({0}). A fájlrendszer-böngésző nem nyitja meg.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Nem nyitható meg {0} formátumként: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Fájlrendszer kiválasztása</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>A típus nem állapítható meg az aláírásból. Válassza ki a kipróbálandó típust.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Típus</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Megnyitás</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Nem lefoglalt ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Nincs {0}. MFT-rekord.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Ugrás a blokkra</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Nincs fájlrendszer. Válassza a Kriminalisztika &gt; Fájlrendszer &gt; Böngésző megjelenítése parancsot.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  sorozatszám: {2}  klaszter: {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Gyökér</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Fájlok</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Mappák</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Töredékek</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Szűrő (* és ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Fájlok keresése (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Oszlopok</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>Használt FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {A FAT-ok # bejegyzésben különböznek.} other {A FAT-ok # bejegyzésben különböznek.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Szektorok klaszterenként</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Újraelemzés</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Olvasás…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Olvasás… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} elem</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Nem olvasható: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(sérült)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(időeltérés)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Időeltérés: a $STANDARD_INFORMATION időpontjai korábbiak a $FILE_NAME időpontjainál, vagy nincs törtrészük.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>EFS-sel titkosítva (csak nyers adatok).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>A klaszterlánc elveszett; az adatok összefüggő klaszterekként lesznek olvasva az első klaszterről kezdve.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>indexslack-bejegyzés</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>számolás…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logikai {0}  klaszter {1} ×{2}  lemez {3}  {4} bájt</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logikai {0}  a metaadatokban  lemez {3}  {4} bájt</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(tömörített)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>A slack pozícióinak kiszámítása</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>A klasztertérkép összeállítása</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>{0} sérült metaadatú bejegyzés kimaradt.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>A pozíció nem a klaszterterületen van.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>A(z) {0}–{1} klaszterek tulajdonosai</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Fajta                     Útvonal</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Fájl</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metaadatok</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Törölt fájl (felszabadítva)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>{0} klaszterlánca ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Index        Klaszter</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>{0} nevű fájlok</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>         Méret  Útvonal</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Fájlok keresése: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {# fájl található.} other {# fájl található.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Törölt fájlok keresése</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Árva fájlok keresése</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Fájl megnyitása új lapon</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Fájlok exportálása...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Ugrás a metaadatokhoz</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>A fájl klasztereinek megjelenítése</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>MFT-rekord megjelenítése</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>INDX megjelenítése</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>$LogFile megjelenítése</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Könyvtárbejegyzés megjelenítése</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Klaszterlánc megjelenítése</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Elérési út másolása</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Lista exportálása CSV / JSON formátumba...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Kit.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Méret</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Lefoglalt</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Létrehozva (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Létrehozva (helyi)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Módosítva (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Módosítva (helyi)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Hozzáférés (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Hozzáférés (helyi)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metaadat módosítva (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Metaadat módosítva (helyi)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Attr.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>Fájlazonosító</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Első klaszter</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Töredék</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Állapot</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Elérési út</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Eredeti elérési út</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Helyreállítás</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normál</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Törölt</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Árva</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Jó</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Részben felülírva</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Felülírva</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Ismeretlen hely</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Rezidens</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Az MFT-rekord nincs használatban</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Indexslack</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Törölt könyvtárbejegyzés</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Törölt inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Könyvtárbejegyzés-slack</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup-eltérés (frissítési sorozat)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Hibás aláírás</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>A klaszterszám kívül esik a tartományon</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>A klaszterlánc hurkot alkot</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>A klaszterlánc szabad klaszterbe jut</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>A klaszterlánc nem egyezik a fájlmérettel</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Érvénytelen adatfutam-lista</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Érvénytelen attribútum</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>A bejegyzéskészlet ellenőrzőösszege nem egyezik</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Olvasási hiba</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Túl mély</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>A tartalék rendszerindító szektor eltér ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>A $MFTMirr eltér a $MFT-től ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>A BPB értékei ellentmondásosak ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>A FAT-ok eltérnek ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>Az FSInfo nem egyezik ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Az exFAT rendszerindító terület ellenőrzőösszege nem egyezik ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Egy hosszú név ellenőrzőösszege nem egyezik ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>A lefoglalási információ nem olvasható ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>A kötet titkosított ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Törölt fájlok</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Árva fájlok</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Nem lefoglalt terület</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Kötet slack</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metaadatok</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Fájladatok</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM slack</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Meghajtó slack</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>L</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Nem lefoglalt</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>N</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Kötet slack</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>K</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Partíciók közötti hézag</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>H</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>A kriminalisztikai kiemelés jelmagyarázata</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Méret: {0} bájt, lefoglalt: {1} bájt</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Létrehozva: {0}, módosítva: {1}, hozzáférés: {2}, metaadat módosítva: {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>Fájlazonosító: {0}, attribútumok: {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Helyreállítás: {0} ({1}). Eredeti elérési út: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Típus: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Kötetnév: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Sorozatszám: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Klaszterméret: {0} bájt</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Összes klaszter: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Szabad klaszterek: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Létrehozva: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>A kötet kezdete: {0}, {1} bájt</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>MFT-rekord</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Rekord eltolása</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Sorszám</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Hardlinkek</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Jelzők</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Használt bájtok</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Alaprekord</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI létrehozva</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI módosítva</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT módosítva</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI hozzáférés</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Név</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Szülő</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN létrehozva</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN módosítva</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT módosítva</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN hozzáférés</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN mérete</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Időeltérés</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Tartalom</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Bejegyzés eltolása</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Első klaszter</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Rövid név</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Klaszterek a láncban</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Adathossz</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Érvényes adatok hossza</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>{0}. partíció</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>{0}. klaszter + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>{0}. blokk + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Törölve: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Nem lefoglalt</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Tulajdonos keresése</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Lemez: {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Lemez: - (tömörített / ritka / rezidens)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Klaszterszám ({0}–{1}; cluster = aktuális klaszter)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>A(z) {0}. klaszter kívül esik a tartományon.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Ugrás</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Mappaszerkezet megőrzése</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Az alternatív adatfolyamok exportálása is (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>A slack exportálása külön fájlokba is</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Törölt fájlok belefoglalása</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {# elem kijelölve.} other {# elem kijelölve.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Mappa kiválasztása...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Fájlok exportálása</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} fájl exportálva ide: {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Nincs elég szabad hely: szükséges: {0}, szabad: {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Nem írható: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Exportálja a felülírt fájlt?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>A törölt fájl klasztereit most más fájlok használják. Az exportált tartalom egy másik fájlhoz tartozhat.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Exportálás</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Bináris fájl</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Térképfájl létrehozása (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>A nem lefoglalt terület exportálása</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>A slack exportálása</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} kiírva ide: {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>$LogFile-bejegyzések</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Prev LSN  UndoNext LSN  Típus    Trans.ID  Redo                            Undo                           MFT-rek.   Hossz</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Újraindítási oldal {0}: jelenlegi LSN: {1}, kliensek: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>A $LogFile olvasása</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Lista</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Nincs eredmény.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Lista exportálása CSV / JSON formátumba...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Nincs kiemelt fájl. Válassza a A fájl klasztereinek megjelenítése parancsot.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} töredék)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logikai {1}  lemez {2}  {3} bájt  klaszterek {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Kiemelés törlése</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Nem lefoglalt terület kijelölése</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>nem lefoglalt kijelölés keresés carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Slack kijelölése</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack kijelölés keresés carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Nem lefoglalt terület kijelölése</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Slack kijelölése</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>A nem lefoglalt terület kijelölése</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>A nem lefoglalt terület keresése</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>A slack kijelölése</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Nincs mit kijelölni.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Csak az első 1 000 000 tartomány lett kijelölve.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Logikai kötetek megjelenítése</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>logikai kötet ldm dinamikus lemez lvm lvm2 csíkozás összefűzés logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Ugrás az inode-hoz</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 i-csomópont</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Inode száma</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Logikai kötetek megjelenítése</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Ugrás az inode-hoz...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Az ellenőrzőösszeg nem egyezik</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Nem támogatott formátum</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Az ext szuperblokk ellenőrzőösszege nem egyezik ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>A csoportleírók ellenőrzőösszegei nem egyeznek (csoportok: {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Ez az ext-szolgáltatás nem teljesen támogatott: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>A másodlagos kötetfejléc eltér az elsődlegestől ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Egy APFS-objektum ellenőrzőösszege nem egyezik ({0}. blokk). Kihagyva.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>A legújabb APFS-ellenőrzőpont sérült; egy régebbi van használatban (xid: {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Egy UDF-leírócímke ellenőrzőösszege nem egyezik ({0}. szektor).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>Egy UDF-leíró CRC-értéke nem egyezik ({0}. szektor).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Ez az UDF-partíciótípus nem támogatott: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>A lemezen {0} munkamenet van. Az utolsó látható; másikat a Munkamenet listában választhat.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Csak ext2, ext3 és ext4 esetén érhető el.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Nincs {0}. inode.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>A kötet titkosított. A fájllista nem jelenik meg.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Nem található APFS-ellenőrzőpont.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Inode megjelenítése</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Napló megjelenítése</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Nevek</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (alap)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Munkamenet</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Ennek a fájlrendszernek nincs naplója.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ext napló (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Blokk      Lemezeltolás  Típus            Sorozat</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Blokkméret: {0}, {1} blokk, sorozat: {2}, kezdet: {3} (0 = tiszta). A napló nincs visszajátszva.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Az ext napló olvasása</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Leíró</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Véglegesítés</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Szuperblokk v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Szuperblokk v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Visszavonás</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Logikai kötetek megjelenítése</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Lemezkép készítése erről a tartományról...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Logikai kötetek</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Név                   Típus         Méret       Elrendezés                    Állapot</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>A kötet metaadatainak olvasása...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>A megnyitott lemezeken és lemezképeken nem található LDM- vagy LVM2-logikaikötet.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Logikai kötet megnyitása</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Tagok hozzárendelése...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Újraolvasás</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Ez a kötettípus nem támogatott: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>A(z) {0} nem nyitható meg. Hiányzó tagok: {1}. Nyissa meg a lemezeket vagy lemezképeket, vagy rendelje hozzá őket.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>A(z) {0} ({1}) tükrözött vagy RAID-5 kötet. Nyissa meg a RAID rekonstruálásával.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Tagok hozzárendelése</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Válasszon lemezt vagy lemezképet a(z) {0} minden hiányzó tagjához.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(nincs)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Fájl megnyitása...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {# tag hiányzik} other {# tag hiányzik}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Nem támogatott</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>RAID rekonstruálása</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Egyszerű</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Átnyúló</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Csíkozott</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Tükrözött</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Lineáris</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Nem támogatott ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} csoport: {1}, kötet: {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>{0}. tag: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>nem található</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Eltolás: {0} ({1}): {2} itt: {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Eltolás: {0} ({1}): {2}. csík {3} tagon</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>A kijelölés biztonságos törlése</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>törlés felülírás biztonságos törlés tartomány wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>A lemez biztonságos törlése</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>törlés lemez felülírás biztonságos wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Szabad terület felülírása</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>szabad terület nem lefoglalt törlés cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Fájlslack felülírása</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram meghajtó törlés slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Fájltartalom kitakarása</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>kitakarás tisztítás redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Kijelölés törlése...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Lemez törlése...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Szabad terület felülírása...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>Ü</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Slack felülírása...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Fájltartalom kitakarása...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Fájltartalom kitakarása...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>A kijelölés biztonságos törlése...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Fájlok kifaragása a kijelölésből...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Kitakarás</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Biztonságos törlés</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Cél: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Kezdet</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>A végén visszaolvasás és ellenőrzés</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Törlés...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>A tartomány a dokumentumon kívül esik.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Nem mentett módosítások</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>A törlendő adatokban nem mentett módosítások vannak. Törlés előtt mentse vagy vesse el őket.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Elvetés</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Adatok törlése</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Cél: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>{0}. lemez: {1}, sorozatszám: {2}, {3} bájt</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Kötetek: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Tartomány: kezdő LBA: {0}, {1} szektor, {2} bájt</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Tartomány: eltolás: {0}, {1} bájt</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>A tartomány szektorhatárokra lett kiterjesztve.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Módszer: {0} ({1, plural, one {# menet} other {# menet}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Az utolsó menet visszaolvasásra és ellenőrzésre kerül.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Becsült idő: kb. {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Ez nem vonható vissza. Az eredeti adatok nem állíthatók helyre.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>SSD-n és flash-adathordozókon a kopáskiegyenlítés a felülírás után is megőrizheti az eredeti adatokat máshol.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Ezek a kötetek zárolva lesznek a törlés alatt: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Az adatok közvetlenül a fájlba íródnak, nem szerkesztésként. A Visszavonás nem vonhatja vissza.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>{0} bájt törlése</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>{0} törlése</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>{0}. lemez</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>A folytatáshoz írja be: „{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Megerősítés</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Jelölje ki a törlendő tartományt.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Ez a dokumentum nem törölhető közvetlenül.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Fizikai lemez törléséhez nyissa meg egészében egy lapon.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Ez az adatforrás szerepel a bizonyítéklistában, és nem írható.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>A Windows használja ezt a lemezt (rendszer, rendszerindító vagy lapozófájl), ezért nem törölhető.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>A(z) {0} kötetet nem sikerült zárolni, ezért semmi sem lett törölve.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Az írás elutasítva: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>A törlés sikertelen: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>{0} törlése</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>{0}. menet / {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Ellenőrzés</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Leállítja a törlést? A már felülírt rész felülírva marad; a többi megtartja az eredeti adatokat.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Írási hiba</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Nem írható a(z) {0} eltolásnál: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Kihagyás és folytatás</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>A törlés eredménye</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>{0} bájt törölve, idő: {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Az ellenőrzés sikeres volt.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Az ellenőrzés # nem egyező tartományt talált:} other {Az ellenőrzés # nem egyező tartományt talált:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# tartományt nem sikerült kiírni:} other {# tartományt nem sikerült kiírni:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>A törlés leállt. A(z) {0} eltolásig az adatok felülíródtak a(z) {1}. menetben; a többi megtartotta korábbi tartalmát.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Az ellenőrzés leállt. Minden menet kiírásra került.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>A törlés leállt a(z) {0} eltolásnál történt írási hiba után.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Kihagyott fájlok: {0} (tömörített: {1}, ritka: {2}, rezidens: {3}, következetlen: {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Szabad terület felülírása</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Módszer</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>A Windowson keresztül (csatlakoztatott kötet)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Közvetlen írás (az ezen a lapon lévő fájlrendszer)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Kötet</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Nincs használható csatlakoztatott kötet.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Közvetlen íráshoz előbb jelenítse meg a lap fájlrendszerét.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Kötet: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Felülírandó szabad terület: {0} bájt</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Módszer: a Windowson keresztül (ideiglenes fájlok töltik ki a szabad területet, majd a végén törlődnek)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Módszer: közvetlen írás a nem lefoglalt klaszterekbe</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Amíg ez fut, a köteten nincs szabad hely. Más alkalmazások tovább működnek, de nem tudnak új adatot menteni.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Ha a fájlrendszer lefoglalási információi hibásak, a fájlok megsérülhetnek.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Szabad terület felülírása</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>A fájlrendszer nem konzisztens ({0}). Javítsa a chkdsk-val, majd próbálja újra.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>A közvetlen írás csak NTFS-t, FAT12/16/32-t és exFAT-ot támogat.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Előbb mentse vagy vesse el a lapon lévő módosításokat.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Ezeket az ideiglenes fájlokat nem sikerült törölni. Törölje őket kézzel:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>{0} bájt szabad terület felülírva, idő: {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>A szabad terület kiszámítása</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>A szabad terület felülírása leállt. Az ideiglenes fájlok törölve lettek.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Slack felülírása</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Fájlok: {0}, felülírandó slack: {1} bájt</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Slack felülírása</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>A fájlslack keresése</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>{0} bájt slack felülírva, idő: {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Fájltartalom kitakarása</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Fájlok ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Minta</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (alapértelmezett)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Véletlenszerű</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Hex bájtok</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Hex bájtok</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>A nevek cseréje is azonos hosszúságú „_” karakterekre</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Kitakarási napló (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>A tartalom szerkesztésként módosul. Semmi sem íródik ki, amíg nem ment; új lemezkép mentéséhez használja a Mentés másként parancsot.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Kitakarás</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>A kitakarandó adatok keresése</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {# fájl kitakarva} other {# fájl kitakarva}} ({1} bájt). Új lemezkép mentéséhez használja a Mentés másként parancsot.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Nem volt mit kitakarni.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Nem kitakart fájlok</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# elem nem lett kitakarva:} other {# elem nem lett kitakarva:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>mappa</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>törölt elem</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>a metaadatok sérültek</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>a töredékinformációk sérültek</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>a rezidens adatok nem találhatók</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>fájlrendszer-metaadatok</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>A nevek nem cserélhetők ezeknél: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>A dokumentum csak olvasható.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Felülírja az eredeti lemezképet?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Ez a dokumentum kitakarásokat tartalmaz. Mentéskor az eredeti {0} fájlba íródnak, és ez nem vonható vissza. Az eredeti megtartásához használja a Mentés másként parancsot.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>{0} felülírása</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>A kitakarási naplót nem sikerült írni: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Adja meg a mintát Hex bájtokként (például 00 vagy A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} mp</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} perc</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} óra</value></data>
 </root>

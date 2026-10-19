@@ -2136,6 +2136,7 @@ Detaliile au fost scrise în:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Fereastra {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(nicio filă)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Copiere cale</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Redeschide ca imagine de disc</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Afișare în Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Doar în citire</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Dimensiune: {0}</value></data>
@@ -6634,6 +6635,418 @@ Tip: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Coloana de comentarii</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Afișează numele simbolurilor, numele țintelor de salt și șirurile referite.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Dezasamblare</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Criminalistică</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Criminalistică</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Afișarea datei și a orei</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Cum sunt afișate orele în listele și detaliile criminalistice: UTC și ora locală, doar UTC sau doar ora locală. Orele sunt înregistrate întotdeauna în UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC și ora locală</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Doar UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Doar ora locală</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Activează protecția la scriere la deschiderea unui caz</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Când este dezactivată, vi se va cere confirmarea pentru activare.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Înregistrează în jurnalul de audit și acțiunile de navigare</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Se înregistrează salturile, căutările și adăugarea marcajelor. Modificările datelor și ale dovezilor sunt înregistrate întotdeauna.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Afișează miniaturi pentru imaginile extrase prin carving</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Afișează o previzualizare mică a fișierelor JPEG, PNG, GIF și BMP în rezultatele carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Imaginea siglei raportului</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Calea unei imagini PNG, JPEG sau SVG afișate în partea de sus a rapoartelor HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Textul antetului raportului</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Un rând de text afișat sub titlul rapoartelor, de exemplu numele laboratorului dvs.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Caz nou</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>investigație dovezi creare caz dosar investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Deschide caz</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>investigație dovezi încărcare caz dosar investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Închide cazul</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>investigație finalizare investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Adaugă dovadă</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>înregistrare imagine disc hash achiziție register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Proprietățile cazului</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>fus orar anchetator organizație time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Afișează jurnalul de audit</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>lanț de custodie istoric jurnal chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Verifică jurnalul de audit</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>falsificare lanț de hash-uri integritate verificare tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Gestionează semnăturile carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>tipuri de fișiere antet subsol magic definiții file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Extrage fișiere (carving)</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>recuperare extragere fișiere șterse scanare recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Creează raport</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf export documentație export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Afișează sau ascunde lista de dovezi</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>caz dovezi panou case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Afișează sau ascunde jurnalul de audit</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>caz jurnal de audit panou case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Afișează sau ascunde rezultatele carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>fișiere extrase panou rezultate carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Dovezi</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Jurnal de audit</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Rezultate carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Criminalistică</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Caz</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Caz nou...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Deschide caz...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Închide cazul</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>Î</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Adaugă dovadă...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Proprietățile cazului...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Lista de dovezi</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Afișează jurnalul de audit</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Verifică jurnalul de audit</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Extrage fișiere...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Gestionare semnături...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Rezultate</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Creează raport...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Caz: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>oră nevalidă</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Un caz este deja deschis. Închideți-l mai întâi.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Niciun caz nu este deschis.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Caz nou</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Proprietățile cazului</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Numărul cazului (obligatoriu)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Numele cazului (obligatoriu)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Anchetator</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organizație</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Dosarul cazului</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Răsfoire...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Fus orar</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Se folosește pentru citirea orelor fără fus orar, cum ar fi orele fișierelor FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Creează</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Salvează</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Cazul „{0}” a fost creat.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Cazul „{0}” a fost deschis.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Cazul nu a putut fi creat: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Numărul și numele cazului sunt obligatorii.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Fișierul cazului nu poate fi citit (linia {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Cazul nu a putut fi deschis: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Cazul nu a putut fi salvat: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Activați protecția la scriere pentru acest caz?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Activează</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Protecția la scriere a fost activată pentru acest caz.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Adaugă dovadă</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Adăugare dovadă</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} va fi adăugat la caz. Sursa de date nu se modifică.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Calculează hash-urile acum</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Această sursă de date este deja înregistrată ca {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Ca dovezi pot fi adăugate doar discuri, volume, fișiere imagine și fișiere.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Calcularea hash-ului pentru dovada {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Hash-urile pentru {0} au fost înregistrate.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Hash-ul pentru {0} nu a fost calculat. Dovada rămâne în listă.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Datele de la deplasamentul 0x{1} nu pot fi citite, deci hash-ul pentru {0} nu a fost înregistrat.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Necalculat</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} a fost eliminat din listă. Sursa de date nu a fost modificată.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} nu este disponibil.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Dovada nu a putut fi deschisă: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} – {1}: {2} elemente</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Niciun caz nu este deschis. Creați sau deschideți un caz din meniul Criminalistică.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Nu a fost adăugată încă nicio dovadă.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Dovadă</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Cale</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Capacitate (octeți)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hash-uri</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Verificare</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Adăugat (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Adăugat (local)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disc</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volum</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Imagine</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Fișier</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Memorie</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Reușită</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Eșuată</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Neverificat</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Deschide (doar citire)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Elimină din listă</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Copiază hash-urile</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Copiază calea</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Creează imagine...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Verifică...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} intrări</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Niciun caz nu este deschis. Jurnalul de audit aparține unui caz.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Nu a fost înregistrat încă nimic.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Această linie nu este o intrare validă. Jurnalul ar fi putut fi modificat.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Verifică</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Exportă în CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Exportă în JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Jurnalul de audit este intact ({0} linii verificate).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Lanțul jurnalului de audit este întrerupt la linia {0}. Jurnalul ar fi putut fi modificat.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>Nr.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Ora (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Ora (locală)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Utilizator</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operație</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Dovadă</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Rezultat</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Detalii</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Reușită</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Eșec</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Anulat</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Nu se poate scrie în jurnalul de audit</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Operațiile care scriu date sunt dezactivate până când jurnalul poate fi din nou scris. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Reîncearcă</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Jurnalul de audit încă nu poate fi scris.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Jurnalul de audit nu poate fi scris, deci operația nu a fost efectuată.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Jurnalul de audit nu poate fi scris, deci operațiile care scriu date sunt dezactivate.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Verificarea jurnalului de audit</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Jurnalul de audit nu a putut fi verificat: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Exportul jurnalului de audit</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Jurnalul de audit a fost exportat în {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Jurnalul de audit nu a putut fi exportat: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Semnături carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definiții</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>integrată</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>dezactivată</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Extensie (fără punct)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Anteturi (octeți Hex, câte unul pe linie; ?? este orice octet, ? este orice cifră)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Deplasamentul antetului de la începutul fișierului</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Subsol (octeți Hex, opțional)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Câți octeți din subsol se includ (gol = subsolul însuși)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Dimensiune maximă</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Dimensiune minimă</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Preia dimensiunea dintr-o valoare din antet</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Valoarea dimensiunii: deplasament de la începutul fișierului</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Valoarea dimensiunii: lățime (biți)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Valoarea dimensiunii: ordinea octeților</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Valoarea dimensiunii: număr de adăugat</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Verificarea structurii (nume integrat sau șablon de structură)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Verificări integrate: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Caută antetul doar la începutul unui sector</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Folosește această definiție la scanare</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Nouă</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplică</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Șterge</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Salvează</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Importă...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Exportă...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Încearcă această definiție</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Mai întâi selectați un interval în document.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Se încearcă...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Încercarea unei definiții carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Găsite în selecție: {0}. Primele poziții:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Definiții importate: {0}.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Definiții neimportate: {0}:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exportat în {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Definițiile nu au putut fi importate: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Definițiile nu au putut fi salvate: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Încercarea a eșuat: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: introduceți un număr sau o dimensiune, de exemplu 4096, 0x1000 sau 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Introduceți un nume.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Acest nume este deja folosit.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Introduceți o extensie.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Extensia conține caractere care nu pot fi folosite într-un nume de fișier.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Introduceți cel puțin un antet.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Antetul nu este o secvență validă de octeți Hex (număr impar de cifre sau caractere nevalide).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Antetul are nevoie de cel puțin un octet fix.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Deplasamentul antetului nu poate fi negativ.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Subsolul nu este o secvență validă de octeți Hex.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Numărul de octeți de inclus nu poate fi negativ.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Dimensiunea maximă trebuie să fie cel puțin 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Dimensiunea minimă nu poate fi negativă.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Dimensiunea maximă este mai mică decât cea minimă.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Valoarea dimensiunii nu este validă.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>O valoare are tipul greșit.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Extragerea fișierelor (carving)</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Pornește</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Domeniu</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Întregul document</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Selecție</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Doar spațiul nealocat</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Doar spațiul slack</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Tipuri de fișiere</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Nu căuta anteturi în interiorul unui fișier găsit</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Scrie fișierele extrase într-un dosar</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Dosar de ieșire</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Extragerea fișierelor</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving finalizat: {0} fișiere găsite.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving a fost anulat. Au fost găsite {0} fișiere; rezultatele și manifestul sunt păstrate.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving s-a oprit deoarece în dosarul de ieșire nu se poate scrie. Au fost găsite {0} fișiere.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving a eșuat: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Dosarul de ieșire se află pe un disc aflat în investigație. Alegeți un dosar de pe alt disc.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Nu este suficient spațiu liber în dosarul de ieșire. Necesar: {0} octeți. Liber: {1} octeți.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Sistemul de fișiere al dosarului de ieșire limitează un fișier la {0} octeți. Alegeți alt dosar.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Dosarul de ieșire nu poate fi folosit.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Pentru acest document nu sunt disponibile informații despre alocare.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Fișierele extrase nu pot fi scrise</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>În dosarul de ieșire ({0}) nu mai este spațiu. Următorul fișier necesită {1} octeți, dar sunt liberi {2} octeți. Eliberați spațiu, alegeți alt dosar sau opriți.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Nu se poate scrie în {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Reîncearcă</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Alege alt dosar...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Oprește</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving rulează deja.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Extrage fișiere...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Deschide dosarul</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving nu a fost rulat. Alegeți Criminalistică, apoi Carving, apoi Extrage fișiere.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Nu au fost găsite fișiere.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} fișiere</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Previzualizarea imaginii extrase</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>Nr.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Deplasament</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Lungime stabilită prin</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Fișier de ieșire</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Structură</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Valoarea dimensiunii</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Subsol</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Dimensiune maximă</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Tip: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Deplasament: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Lungime: {0} octeți</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Lungime stabilită prin: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Creare raport</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Creează</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Conținut</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Disc: {0} (dimensiunea sectorului {1} octeți)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>Nr.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Schemă</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA de început</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Sectoare</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Dimensiune (octeți)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Sistem de fișiere</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Criptare</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Nealocat</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Aranjament</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Deplasamentul volumului</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Etichetă</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Număr de serie</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Dimensiunea clusterului (octeți)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Clustere</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Clustere libere</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Probleme</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Volume logice: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Grup</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Tip</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Dimensiune (octeți)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Configurație</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Membri</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Imagine</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Sursă</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Achiziționat</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Hash-uri</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Jurnalul achiziției</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (un singur fișier, se deschide offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Toate intrările jurnalului de audit</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Jurnal de audit de la (UTC, opțional)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Jurnal de audit până la (UTC, opțional)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Octeți din dump-ul Hex pentru fiecare marcaj (0 până la 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Salvează în</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Perioada nu este o dată și o oră valide.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Lungimea dump-ului Hex trebuie să fie între 0 și 4096 de octeți.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Se creează raportul</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Raportul nu a putut fi creat: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Creat: {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>PDF-ul nu a putut fi creat ({0}). A fost creat {1} în loc.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>În PDF apar doar primele rânduri ale listelor lungi. Listele complete se află în raportul HTML sau în fișierele CSV.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Deschide</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Deschide dosarul</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Raport criminalistic</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Numărul cazului</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Numele cazului</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Anchetator</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organizație</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Caz creat</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Raport creat</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Fus orar</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Creat de</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Pagina</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>din</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Caz</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Copertă</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Dovezi</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Înregistrări de achiziție</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Informații despre dispozitiv</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Partiții</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Sisteme de fișiere</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Marcaje</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Rezultate carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Jurnal de audit</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Dovadă</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Cale</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Număr de serie</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Capacitate (octeți)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sectoare</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Dimensiunea sectorului</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hash-uri</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Verificare</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Adăugat (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Adăugat (local)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Adăugat de</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Reușită</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Eșuată</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Neverificat</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Necalculat</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disc</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volum</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Imagine</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Fișier</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Memorie</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Deplasament</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Comentariu</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Dump Hex</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>Nr.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Deplasament</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Lungime stabilită prin</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Fișier de ieșire</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Fișiere găsite</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>Nr.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Ora (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Ora (locală)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Utilizator</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Computer</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operație</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Dovadă</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Rezultat</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Detalii</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>reușită</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>eșec</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>anulat</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Se afișează primele {0} din {1} rânduri. Lista completă se află în fișierul CSV atașat sau în raportul HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Se afișează primele {0} rânduri. Lista completă se află în raportul HTML sau în fișierul CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Lista completă</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Nealocat</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Nu există date.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>oră nevalidă</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Afișează sau ascunde panoul de dezasamblare</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>dezasamblor asamblare cod disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Dezasamblează</value></data>
@@ -8193,4 +8606,1264 @@ Conexiunea nu se stabilește decât dacă alegeți să înlocuiți cheia.</value
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Pagina întreagă</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Potrivire la lățime</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Alege folderul...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Protejat la scriere]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Protecție la scriere</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Modul de protecție la scriere este activat. Faceți clic pentru a-l dezactiva.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Modul de protecție la scriere oprește doar această aplicație să scrie. Nu poate împiedica Windows sau alte aplicații să scrie (de exemplu, scrierile pe care le face un sistem de fișiere la montarea unui volum). Folosiți suplimentar un blocator hardware de scriere sau protecția USB la scriere a sistemului de operare.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Protecția USB la scriere a sistemului de operare...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Dezactivați modul de protecție la scriere?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Documente de dovezi deschise: {0}. După dezactivarea modului, în aceste documente se va putea scrie:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Nu este deschis niciun document de dovezi. După dezactivarea modului, în documentele deschise se va putea scrie din nou.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Dezactivează protecția la scriere</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Sursa de date nu a putut fi redeschisă doar pentru citire. Sunt afișate doar datele deja citite.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Permite scrierea în acest document</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Scriere permisă (excepție de la modul de protecție la scriere)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Modul de protecție la scriere este dezactivat.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Din modul de protecție la scriere pot fi excluse doar documentele de tip fișier.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Această sursă de date este înregistrată ca dovadă, deci scrierea nu poate fi permisă.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Scrierea în acest document este deja permisă.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Permiteți scrierea în acest document?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Modul de protecție la scriere rămâne activat, dar {0} ({1}) va putea fi editat și salvat până îl închideți. Acest lucru este înregistrat în jurnalul de audit și nu poate fi anulat pentru documentul deschis.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Tastați {0} pentru confirmare</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Permite scrierea în {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Scrierea în {0} este permisă până la închidere.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Mod protecție la scriere</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Protecția USB la scriere a sistemului de operare</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Dispozitiv</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Verifică HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Informații SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Panou informații dispozitiv</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Informații despre criptare...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Deschide dump de memorie...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Comută modul de protecție la scriere</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>blocator scriere protecție doar citire dovezi write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Permite scrierea în acest document</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>excepție protecție la scriere write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Comută protecția USB la scriere a sistemului de operare</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb stocare politică protecție la scriere registru usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Verifică HPA și DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>zonă ascunsă zonă protejată configurație dispozitiv hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Afișează informațiile SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>stare disc autodiagnosticare nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Afișează informațiile despre criptare</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt volum criptat encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Afișează sau ascunde informațiile despre dispozitiv</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panou hpa smart dispozitiv panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Deschide dump de memorie</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>dump de blocare minidump memorie fizică ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Informații despre dispozitiv</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Activează întotdeauna modul de protecție la scriere la pornire</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Când este dezactivată, aplicația pornește cu modul în starea în care era la ultima închidere.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Verifică HPA / DCO la deschiderea unui disc</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Trimite discului comenzi ATA doar pentru citire și afișează o notificare dacă sunt găsite zone ascunse.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Activați protecția USB la scriere a sistemului de operare?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows va bloca scrierea pe dispozitivele de stocare USB conectate de acum încolo (setarea StorageDevicePolicies WriteProtect). Dispozitivele deja conectate nu sunt afectate până le reconectați. Discurile interne SATA și NVMe nu sunt protejate. Sunt necesare drepturi de administrator.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Dezactivați protecția USB la scriere a sistemului de operare?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Setarea revine la starea de dinaintea activării. Dispozitivele de stocare USB deja conectate rămân protejate la scriere până le reconectați. Sunt necesare drepturi de administrator.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Modifică setarea</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Sunt necesare drepturi de administrator. Setarea nu a fost modificată.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Setarea nu a putut fi modificată (acces refuzat; poate fi gestionată prin Group Policy): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Setarea nu a putut fi modificată: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Protecția USB la scriere a sistemului de operare este activată. Reconectați dispozitivele de stocare USB pentru ca setarea să aibă efect.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Protecția USB la scriere a sistemului de operare este dezactivată.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Protecția USB la scriere a sistemului de operare este încă activată</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows va continua să blocheze scrierea pe dispozitivele de stocare USB după închiderea acestei aplicații. Dezactivați înainte de ieșire?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Dezactivează și ieși</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Ieși și păstrează activată</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Modificarea protecției USB la scriere a sistemului de operare necesită drepturi de administrator Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Dispozitiv</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Verifică HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Citește SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Exportă în JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Exportă ca text...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Deschideți un disc fizic și alegeți Verifică HPA / DCO sau Informații SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} – capturat {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO nu au fost verificate.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Discurile NVMe nu au HPA sau DCO; HPA / DCO nu se aplică.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Dimensiunea spațiului de nume: {0} blocuri ({1} octeți per bloc)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Capacitatea spațiului de nume: {0} blocuri</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Acest lucru nu poate fi verificat pe acest dispozitiv (comenzile nu trec, de exemplu prin adaptoare USB sau pe discuri virtuale).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Sunt necesare drepturi de administrator.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Comanda {0} a eșuat (stare ATA {1}, eroare {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>LBA maxim (IDENTIFY DEVICE, 28 biți): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>LBA maxim (IDENTIFY DEVICE, 48 biți): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>LBA maxim nativ (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>LBA maxim setat de DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>nu este acceptat de dispozitiv</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>nu este acceptat de dispozitiv</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: prezentă, {0} sectoare ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: absentă</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: nu a putut fi determinată</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: prezent, {0} sectoare ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: absent</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: nu a putut fi determinat</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Informațiile SMART nu au fost citite.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Informațiile SMART nu pot fi citite pe acest dispozitiv (de exemplu, printr-un adaptor USB care nu le acceptă).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART este dezactivat pe acest dispozitiv.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Suma de control a datelor SMART nu se potrivește; valorile pot fi greșite.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Număr de serie: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Capacitate: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Dimensiunea sectorului: {0} octeți logic, {1} octeți fizic</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Conexiune: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Viteza de rotație: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>fără rotație (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>acceptat</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>neacceptat</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Pentru a folosi această comandă, deschideți un disc fizic.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Informațiile despre dispozitiv nu au putut fi citite: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} are zone ascunse: HPA {1} sectoare, DCO {2} sectoare. Capacitatea văzută de Windows este mai mică decât capacitatea reală a discului.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Afișează detaliile</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Informațiile despre dispozitiv au fost exportate în {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Informațiile despre dispozitiv nu au putut fi exportate: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Curent</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Cel mai slab</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Prag</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Brut (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Brut (zecimal)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Stare</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Avertisment</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Necunoscut</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Rata erorilor de citire</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Performanța transferului</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Timp de pornire a rotației</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Număr de porniri/opriri</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Număr de sectoare realocate</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Rata erorilor de poziționare</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Performanța poziționării</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Ore de funcționare</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Număr de reîncercări de pornire</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Număr de reîncercări de calibrare</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Număr de cicluri de alimentare</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Spațiu rezervat disponibil</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Număr de erori de programare</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Număr de erori de ștergere</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Număr de operații de uniformizare a uzurii</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Număr de pierderi neașteptate de alimentare</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Diferența intervalului de uzură</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Total blocuri de rezervă utilizate</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Total erori de programare</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Total erori de ștergere</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Blocuri defecte apărute în timpul funcționării</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>Eroare end-to-end</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Erori necorectabile raportate</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Expirări de timp ale comenzilor</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>Scrieri cu înălțime mare de zbor</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Temperatura fluxului de aer</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>Rata erorilor de șoc (G-Sense)</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Număr de retrageri la oprirea alimentării</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Număr de cicluri de încărcare</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Temperatură</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Recuperat prin ECC hardware</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Număr de evenimente de realocare</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Număr de sectoare în așteptare</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Număr de sectoare necorectabile offline</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>Număr de erori CRC UltraDMA</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Rata erorilor multi-zonă</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>Durata de viață rămasă a SSD</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Anduranță rămasă</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Indicator de uzură a mediului</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Număr de blocuri bune</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBA scrise</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBA citite</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Biți de avertisment critic: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Temperatură: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Rezervă disponibilă: {0}% (prag {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Procent utilizat: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Date citite: {0} octeți</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Date scrise: {0} octeți</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Cicluri de alimentare: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Ore de funcționare: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Opriri nesigure: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Erori de mediu și de integritate a datelor: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Capturat</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Dispozitiv</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Număr de serie</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Capacitate (octeți)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Dimensiunea sectorului (logic / fizic)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Conexiune</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>LBA maxim (28 biți / 48 biți / nativ / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Nu poate fi verificat pe acest dispozitiv</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Niciuna</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Prezent ({0} sectoare)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Nu se aplică (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Nume</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Curent</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Cel mai slab</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Prag</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Brut</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Stare</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Avertisment</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Informații despre criptare</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Nu au fost găsite volume criptate.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Interval {0}: deplasament {1}, {2} octeți</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Tip: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Volum APFS criptat (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (posibil criptat)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Date posibil criptate sau comprimate (de exemplu VeraCrypt sau TrueCrypt; nu există o semnătură care să le identifice)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Versiunea metadatelor: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Metoda de criptare: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID-ul volumului: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Creat: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Descriere: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Starea criptării: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>necunoscută</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>decriptat</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>în curs</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>finalizată</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>întreruptă</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Criptat până acum: {0} octeți</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Protectori de cheie: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, creat {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Cheie în clar</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Cheie de pornire</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM și PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Parolă de recuperare</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Parolă</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Necunoscut (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Sloturi de chei: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volum {0}: criptat</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volum {0}: necriptat</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropia primilor 64 KiB: {0} biți pe octet</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Avertisment: cele trei blocuri de metadate nu se potrivesc.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Avertisment: unele blocuri de metadate sunt deteriorate; sunt afișate doar elementele care au putut fi citite.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Navigatorul sistemului de fișiere nu deschide volume criptate.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows a deblocat acest volum BitLocker ({0}). Dacă îl deschideți ca volum logic, puteți citi conținutul pe care Windows îl decriptează.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Deschide ca volum logic</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Dump de memorie</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Formatul dump-ului de memorie {0} nu a putut fi citit. Îl deschideți ca brut?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Deschide ca brut</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Dump-ul de memorie nu a putut fi deschis: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Dump de memorie: {0}, capturat {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Dump de memorie: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>imagine a memoriei fizice (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>dump complet de memorie</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>dump de memorie al nucleului</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>dump complet de memorie (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Dump de memorie</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Datele nu pot fi scrise deoarece modul de protecție la scriere este activat.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Imagine</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Creează imagine...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Creează imagine schelet...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Deschide imagine...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Verifică imaginea...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Informații despre imagine</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Clonează discul...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Salvează intervalul de sectoare...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Restaurează intervalul de sectoare...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Reconstruiește RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Creează imagine</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>achiziție imagine disc dd raw e01 dovezi acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Creează imagine schelet</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>schelet rar imagine metadate skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Deschide imaginea ca disc</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk împărțit raw 001 split</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Verifică imaginea</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>verificare hash md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Informații despre imagine</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 antet informații caz header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Clonează discul</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>clonă copie disc sector clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Salvează intervalul de sectoare</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>copie de rezervă mbr gpt sectoare backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Restaurează intervalul de sectoare</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>restaurare mbr gpt sectoare restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Reconstruiește RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod striping paritate stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Documentul curent nu este o imagine de disc.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Este necesar un document de tip disc, volum sau imagine de disc.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Mai întâi deschideți discul, imaginea sau fișierul care va fi sursa.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Deschis fără segmentele lipsă ({0}). Intervalele lor se citesc ca erori.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Imaginea {0} nu a putut fi citită (parte: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Discul părinte al discului diferențial nu a fost găsit: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Lipsesc segmente</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Aceste segmente lipsesc: {0}. Deschideți imaginea cu segmentele disponibile? Intervalele lipsă se citesc ca erori.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Deschide segmentele disponibile</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw împărțit</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Suma de control a unui fragment nu se potrivește la {0} ({1} octeți). Intervalul este afișat ca eroare de citire.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Informații despre imagine</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Fișiere</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Dimensiune</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} octeți ({1} sectoare)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Dimensiunea sectorului</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Achiziționat</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Instrument de achiziție</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Dispozitiv</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Fragmente</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} sectoare per fragment)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Comprimare</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Comprimat</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Necomprimat</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} stocat</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Sectoare ilizibile în timpul achiziției</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Disc părinte</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Segmente lipsă</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Numărul cazului</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Numărul dovezii</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Examinator</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Descriere</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Note</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Se potrivește</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Nu se potrivește</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Nicio valoare de referință</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Nu se poate verifica din cauza erorilor de citire</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>stocat în imagine</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>jurnalul achiziției</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>lista de dovezi</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>valoare introdusă</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>calculat în timpul achiziției</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>disc sursă</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Creare imagine</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Creare imagine schelet</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Modul de protecție la scriere este dezactivat. Se recomandă activarea lui înainte de achiziția dovezilor.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Activează modul de protecție la scriere</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Sursă: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Doar selecția (extinsă la limitele sectoarelor)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Intervale de achiziționat</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Complet</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Rar (fără zonele nealocate)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Schelet (doar tabelele de partiții și metadatele sistemelor de fișiere)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Include și marcajele și intervalele selecției multiple</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Răsfoire...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Dimensiunea părții / segmentului (de exemplu 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hash-uri</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Reîncercări la erori de citire</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Valoare de umplere pentru sectoarele ilizibile (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Unitate de citire</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Verifică după finalizare</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Erori de citire</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Informații E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Comprimare</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Fără</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Rapidă (zlib, nivel 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Maximă (zlib, nivel 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Pornește</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Specificați ieșirea.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Dimensiunea părții trebuie să fie cel puțin 1 MiB (de exemplu 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Introduceți un număr de reîncercări între 0 și 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Introduceți valoarea de umplere ca două cifre hex (de exemplu 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Alegeți cel puțin un hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Ieșirea se află pe același disc fizic cu sursa. Alegeți alt disc.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Ieșirea se află pe un disc din lista de dovezi. Alegeți alt disc.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Sistemul de fișiere al ieșirii ({0}) permite fișiere de până la {1} octeți. Folosiți raw împărțit sau E01 cu un segment mai mic.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Ieșirea necesită aproximativ {0} octeți, dar sunt liberi doar {1} octeți.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} există deja. Îl suprascrieți?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Suprascrie</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Sistemul de fișiere al ieșirii este {0}, nu NTFS, deci zonele excluse se scriu ca zerouri și imaginea nu se micșorează.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Creare imagine: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Se calculează intervalele de inclus</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>{0} partiții nu au putut fi analizate și sunt incluse integral.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Imaginea nu a putut fi creată. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Sectoare ilizibile: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Imaginea a fost creată. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Verificare: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>{0} sectoare nu au putut fi citite și au fost umplute.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Achiziția a fost întreruptă. Fișierele scrise până acum au fost păstrate.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Achiziția a fost întreruptă. Fișierele scrise până acum au fost șterse.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Sursa a fost pierdută. Achiziția a fost oprită.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Deschide jurnalul achiziției</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Ieșirea nu a putut fi scrisă: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Reîncearcă</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Abandonează</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Achiziția a fost anulată. Păstrați fișierele scrise până acum?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Păstrează</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Șterge</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Verificare imagine</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Imagine: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Valoare de comparat (hex, opțional)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Valoare MD5, SHA-1 sau SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Introduceți o valoare hex de 32, 40 sau 64 de cifre.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Recitește și discul sursă</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Verifică</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Verificare imagine: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Rezultatul verificării: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Nu se poate verifica din cauza erorilor de citire: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>calculat: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Jurnalul achiziției imaginii de disc</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Jurnalul clonării discului</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Stare</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Finalizat</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Întrerupt</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Sursa a fost pierdută</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Eșuat</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Sursă</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Cale</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Număr de serie</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Capacitate</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Dimensiunea sectorului</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Interval</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Fișiere</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Țintă</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Început</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Sfârșit</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Sectoare citite</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Sectoare ilizibile</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>niciunul</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hash-uri</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>intervale incluse</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Verificare</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>neverificat</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Versiunea aplicației</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Caz</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Intervale achiziționate</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>complet</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>imagine rară (zonele nealocate nu sunt incluse)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>imagine schelet (doar tabelele de partiții și metadatele sistemelor de fișiere)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Zonele excluse sunt stocate ca zerouri, deci hash-urile acestei imagini nu se potrivesc cu hash-urile întregului disc sursă.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Intervale incluse</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Mesaj</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Clonarea discului</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Disc țintă</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disc {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disc {0}: {1}, număr de serie {2}, {3} octeți, sectoare de {4} octeți. Volume: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} octeți)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>niciunul</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA de început pe țintă</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Umple restul țintei cu zerouri</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash pentru verificare</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Dosar pentru jurnal (opțional)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Următorul</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Alegeți discul țintă.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>LBA-ul de început este în afara discului țintă.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Un disc cu altă dimensiune a sectorului nu poate fi ținta clonării.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Discul țintă este în lista de dovezi. Nu poate fi suprascris.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Țintă: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Intervalul de scris: de la LBA {0}, {1} sectoare ({2} octeți)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Conținut: datele din {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Tot conținutul acestor volume va fi pierdut:&#xA;{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Ținta este mai mică decât sursa. Se vor scrie doar primii {0} octeți ai sursei.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Această acțiune nu poate fi anulată.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Clonează pe {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Tastați „{0}” pentru confirmare</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Clonare pe {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Dacă opriți acum, discul țintă va rămâne scris parțial.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Oprește</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Continuă</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Volumul {0} nu a putut fi blocat, deci nu s-a scris nimic. Închideți fișierele deschise pe el și încercați din nou.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Clonarea a eșuat. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Octeți clonați: {0}. Verificare: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Clonarea a fost oprită. Discul țintă este scris parțial.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Ținta este același disc cu sursa.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Un disc cu altă dimensiune a sectorului nu poate fi ținta clonării.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Modul de protecție la scriere este activat.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Discul țintă este în lista de dovezi. Nu poate fi suprascris.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows folosește un volum de pe discul țintă.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>LBA-ul de început este în afara discului țintă.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Discul țintă nu a putut fi deschis pentru scriere.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Salvarea intervalului de sectoare</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Restaurarea intervalului de sectoare</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA de început</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Număr de sectoare</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Salvează</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Date de sectoare</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Intervalul este în afara discului.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Salvare sectoare: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Au fost salvate {0} sectoare în {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Unele sectoare din interval nu au putut fi citite, deci nu s-a salvat nimic.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Intervalul de sectoare nu a putut fi salvat. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Fișierul de date sau fișierul lui însoțitor nu a putut fi citit. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Fișier de date: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Salvat de pe: {0}, număr de serie {1}, {2} octeți, sectoare de {3} octeți. LBA de început {4}, {5} sectoare. Salvat la {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Scrie pe: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Fă o copie de rezervă a conținutului curent înainte de scriere</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Următorul</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 al fișierului de date nu se potrivește cu cel al fișierului însoțitor. Nu poate fi restaurat.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Nu există fișier însoțitor. Introduceți LBA-ul de început pentru scriere.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Numărul de serie sau capacitatea țintei diferă de discul de pe care au fost salvate datele.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Țintă: {0}. Volume în interval: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Conținut: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Scrie {0} sectoare</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Restaurare sectoare: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Intervalul de sectoare nu a putut fi restaurat. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Au fost scrise {0} sectoare și confirmate prin recitire.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Scrierea a eșuat. Au fost scrise {0} sectoare; scrierea a eșuat la LBA {1}. Puteți scrie înapoi fișierul de rezervă {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Conținutul recitit nu se potrivește cu fișierul de date.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Reconstruire RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Membri (în ordine)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Sus</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Jos</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Adaugă fișier...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Elimină</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Acest membru lipsește</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[lipsă]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Deplasamentul de început al datelor membrului</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Tip</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Dimensiunea stripe</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Aranjamentul parității</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Stânga simetric</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Stânga asimetric</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Dreapta simetric</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Dreapta asimetric</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Membrul de folosit (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Detectare (primul 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Detectat: {0} ({1} partiții)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Fără tabel de partiții</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Semnătura sistemului de fișiere: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Fără semnătură de sistem de fișiere</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Dimensiunea discului logic: {0} octeți</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Nu poate fi detectat cu această configurație.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Membrii au dimensiuni diferite. Se folosește cea mai mică dimensiune.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Salvează configurația...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Încarcă configurația...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Configurație RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Configurația RAID a fost salvată în {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Configurația RAID nu a putut fi salvată. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Configurația RAID nu a putut fi citită. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Discul logic nu a putut fi deschis.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} membri)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Parametrii nu sunt valizi.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Dimensiunea stripe trebuie să fie o putere a lui doi între 512 B și 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Sunt prea puțini membri pentru acest tip.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Acest tip nu poate avea un membru lipsă.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Lipsesc doi sau mai mulți membri. RAID 5 nu poate fi deschis.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Afișează partițiile</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>partiții disc mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Deschide partiția într-o filă nouă</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>partiție filă partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Salt la începutul partiției</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>partiție salt partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Deschide de aici ca început de partiție</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>partiție aici partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Caută partiții pierdute</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>partiție pierdută recuperare căutare lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Afișează sistemul de fișiere</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>navigator sistem de fișiere ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Deschide fișierul într-o filă nouă</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>fișier deschidere filă file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Exportă fișiere</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>export extragere fișiere export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Caută fișiere șterse</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>șterse recuperare deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Salt la înregistrarea MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>înregistrare mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Salt la cluster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>cluster bloc salt cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Fișiere care folosesc această poziție</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>proprietar cluster căutare inversă cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Afișează clusterele fișierului</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>fragmente clustere evidențiere fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Fragmentul următor</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>fragment următor fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Fragmentul anterior</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>fragment anterior fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Comută evidențierea spațiului liber și a slack</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack nealocat evidențiere slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Exportă spațiul nealocat</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>nealocat liber export unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Exportă slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack export slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Deschide spațiul nealocat într-o filă nouă</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>nealocat filă unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Panou partiții</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panou partiții panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Panou sistem de fișiere</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panou sistem de fișiere panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Panou fragmente</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panou fragmente panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Panou rezultate criminalistice</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panou rezultate criminalistică panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Numărul înregistrării MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Partiții și sisteme de fișiere</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Afișează golurile mici dintre partiții</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Listează în panoul partițiilor golurile nealocate mai mici de 1 MiB.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Afișează deplasamentele pe disc în filele partițiilor</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Când este dezactivată, adresele dintr-o filă de partiție încep de la 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Listează fluxurile de date alternative NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Fluxurile cu nume apar în navigatorul sistemului de fișiere ca file.txt:stream.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Afișează legenda evidențierii criminalistice</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Afișează legenda în colțul din dreapta sus al vizualizării Hex cât timp evidențierea este activată.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Culorile evidențierii criminalistice</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>De exemplu: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Lăsați gol pentru culorile implicite.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Partiții</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Sistem de fișiere</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Afișează partițiile</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Deschide partiția într-o filă nouă</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>Î</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Salt la începutul partiției</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Caută partiții pierdute...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Afișează navigatorul</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Deschide fișierul într-o filă nouă</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>Î</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Exportă fișiere...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Caută fișiere șterse</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Salt la cluster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Fișiere care folosesc această poziție</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Afișează clusterele fișierului</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Salt la înregistrarea MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Exportă spațiul nealocat...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Exportă slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Deschide spațiul nealocat într-o filă nouă</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Fragmentul următor</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Fragmentul anterior</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Evidențiere criminalistică</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Partiții</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Sistem de fișiere</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Fragmente</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Rezultate criminalistice</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Poziția pe disc și proprietarul clusterului</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Partiții</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Sistem de fișiere</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Fragmente</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Rezultate criminalistice</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Se analizează partițiile…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Neanalizat. Alegeți Criminalistică &gt; Partiții &gt; Afișează partițiile.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Nu a fost găsit niciun tabel de partiții.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} partiții, dimensiunea sectorului {1}, ID disc {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Sectoare ilizibile (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> Nr.  Format    Tip                          Nume           LBA început  LBA sfârșit     Sectoare       Dim.  Deplasament   Indicat.     SF        Stare</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Aranjamentul partițiilor</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Avertisment</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID tip: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID unic: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Bloc de început {0}, {1} blocuri</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Intrarea din tabel la {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Salt la începutul partiției</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Selectează partiția</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Deschide partiția într-o filă nouă</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Afișează structura intrării</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Afișează sistemul de fișiere</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Caută partiții pierdute...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Cursorul nu este într-o partiție.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>Nu a fost găsit GPT cu sectoare de {1} octeți, dar a fost găsit unul cu sectoare de {0} octeți. Redeschideți cu sectoare de {0} octeți?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Redeschide cu sectoare de {0} octeți</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - partiția {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logică</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Lanțul EBR se întoarce la LBA {1} (după partiția {0}). Lanțul a fost oprit.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Mai mult de 256 de partiții logice. Restul nu au fost citite.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 al antetului GPT nu se potrivește (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 al matricei de intrări de partiții GPT nu se potrivește (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Antetul GPT primar și antetul de rezervă (LBA {1}) diferă.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Antetul GPT primar este deteriorat. Lista a fost construită din antetul de rezervă.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Partițiile {0} și {2} se suprapun.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Partiția {0} indică în afara discului (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR hibrid: MBR-ul de protecție conține și alte intrări.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Unele sectoare nu au putut fi citite (primul: LBA {1}). Lista folosește sectoarele care pot fi citite.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Harta de partiții Apple are mai mult de 256 de intrări.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Sistem EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Rezervat Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Date de bază Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Recuperare Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Metadate LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Date LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Sistem de fișiere Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Swap Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Boot Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Boot BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Extinsă</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Extinsă (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 ascuns</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Recuperare</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 ascuns</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS ascuns</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 ascuns</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (disc dinamic)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux extinsă</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT de protecție</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Nealocat</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Volum fizic LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Căutarea partițiilor pierdute</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA de început</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA de sfârșit (neinclus)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Poziții de scanare</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Limite de 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Limite de cilindru (63 de sectoare)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Fiecare sector</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Verificarea fiecărui sector durează aproximativ {0} (la 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Caută</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Antet GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Scanează</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Căutarea partițiilor pierdute</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Partiții pierdute</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>   LBA început        Sectoare          Dim.  Tip         Încr.   Suprapuneri</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Scăzută</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Medie</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Ridicată</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>se suprapune cu partiția {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Anulat. Rezultatele de până acum sunt păstrate.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {A fost găsit # candidat.} few {Au fost găsiți # candidați.} other {Au fost găsiți # de candidați.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Ilizibil: LBA {0}, {1} sectoare</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Nu au fost găsiți candidați de partiții.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Scanează fiecare sector</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Deschide ca partiție</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Afișează sistemul de fișiere</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Creează intrări în tabelul de partiții (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Creează intrări în tabelul de partiții (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Creează intrări în tabelul de partiții</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR nu are intrări libere pentru toți candidații.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Partiția nu poate fi scrisă în MBR (peste 2 TiB). Folosiți GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT nu are nicio intrare liberă.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Discul este prea mic pentru GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Pentru acest document nu este deschis niciun sistem de fișiere.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Selectați un fișier în navigatorul sistemului de fișiere.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Niciun cluster de fișier nu este evidențiat.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Doar pentru NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Informațiile de alocare nu pot fi citite, deci evidențierea nu este disponibilă.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Volumul este criptat (BitLocker). Navigatorul sistemului de fișiere nu îl deschide.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Volumul este criptat ({0}). Navigatorul sistemului de fișiere nu îl deschide.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Nu se poate deschide ca {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Alegerea sistemului de fișiere</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Tipul nu a putut fi detectat din semnătură. Alegeți tipul de încercat.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Tip</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Deschide</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Nealocat ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Nu există înregistrarea MFT {0}.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Salt la bloc</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Niciun sistem de fișiere. Alegeți Criminalistică &gt; Sistem de fișiere &gt; Afișează navigatorul.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  număr de serie {2}  cluster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Rădăcină</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Fișiere</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Foldere</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Fragmente</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filtru (* și ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Caută fișiere (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Coloane</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT de folosit</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {FAT-urile diferă într-o intrare (#).} few {FAT-urile diferă în # intrări.} other {FAT-urile diferă în # de intrări.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Sectoare per cluster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Analizează din nou</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Se citește…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Se citește… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} elemente</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Nu a putut fi citit: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(corupt)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(nepotrivire de timp)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Nepotrivire de timp: orele $STANDARD_INFORMATION sunt mai devreme decât orele $FILE_NAME sau nu au fracțiune.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Criptat cu EFS (doar date brute).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Lanțul de clustere lipsește; datele sunt citite ca clustere contigue începând de la primul cluster.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>intrare în slack-ul indexului</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>se numără…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logic {0}  cluster {1} ×{2}  disc {3}  {4} octeți</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logic {0}  în metadate  disc {3}  {4} octeți</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(comprimat)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Se calculează pozițiile slack</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Se construiește harta clusterelor</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Au fost omise {0} intrări cu metadate corupte.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Poziția nu este în zona de clustere.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Proprietarii clusterelor {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Fel                       Cale</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Fișier</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metadate</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Fișier șters (dealocat)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Lanțul de clustere al {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Index         Cluster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Fișiere cu numele {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>          Dim.  Cale</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Căutare fișiere: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {A fost găsit # fișier.} few {Au fost găsite # fișiere.} other {Au fost găsite # de fișiere.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Căutare fișiere șterse</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Căutare fișiere orfane</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Deschide fișierul într-o filă nouă</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Exportă fișiere...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Salt la metadate</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Afișează clusterele fișierului</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Afișează înregistrarea MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Afișează INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Afișează $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Afișează intrarea de director</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Afișează lanțul de clustere</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Copiază calea</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Exportă lista în CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Ext.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Dimensiune</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Alocat</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Creat (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Creat (local)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Modificat (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Modificat (local)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Accesat (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Accesat (local)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metadate modificate (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Metadate modificate (local)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Atr.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID fișier</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Primul cluster</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Fragm.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Stare</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Cale</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Calea originală</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Recuperare</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Șters</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Orfan</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Bună</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Parțial suprascris</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Suprascris</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Locație necunoscută</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Rezident</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Înregistrare MFT nefolosită</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack de index</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Intrare de director ștearsă</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Inode șters</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack de intrare de director</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Nepotrivire fixup (secvență de actualizare)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Semnătură incorectă</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Numărul clusterului este în afara intervalului</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Lanțul de clustere formează o buclă</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Lanțul de clustere ajunge la un cluster liber</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Lanțul de clustere nu corespunde dimensiunii fișierului</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Listă de rulări de date nevalidă</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Atribut nevalid</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Suma de control a setului de intrări nu se potrivește</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Eroare de citire</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Prea adânc</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Sectorul de boot de rezervă diferă ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr diferă de $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Valorile BPB sunt inconsistente ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>Copiile FAT diferă ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo nu se potrivește ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Suma de control a regiunii de boot exFAT nu se potrivește ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Suma de control a unui nume lung nu se potrivește ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Informațiile de alocare nu pot fi citite ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Volumul este criptat ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Fișiere șterse</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Fișiere orfane</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Spațiu nealocat</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack de volum</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metadate</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Date de fișier</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM slack</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Drive slack</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Nealocat</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>N</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack de volum</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Gol între partiții</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Legenda evidențierii criminalistice</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Dimensiune {0} octeți, alocat {1} octeți</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Creat {0}, modificat {1}, accesat {2}, metadate modificate {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID fișier {0}, atribute {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Recuperare: {0} ({1}). Calea originală: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Tip: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Numele volumului: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Număr de serie: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Dimensiunea clusterului: {0} octeți</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Total clustere: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Clustere libere: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Creat: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Începutul volumului {0}, {1} octeți</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Înregistrare MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Deplasamentul înregistrării</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Număr de secvență</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Legături hard</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Indicatori</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Octeți în uz</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Înregistrare de bază</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI creat</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI modificat</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT modificat</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI accesat</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Nume</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Părinte</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN creat</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN modificat</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT modificat</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN accesat</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>Dimensiune $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Nepotrivire de timp</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Conținut</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Deplasamentul intrării</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Primul cluster</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Nume scurt</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Clustere în lanț</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Lungimea datelor</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Lungimea datelor valide</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Partiția {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Cluster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Bloc {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Șters: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Nealocat</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Găsește proprietarul</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disc {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disc: - (comprimat / rar / rezident)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Numărul clusterului ({0}–{1}; cluster = clusterul curent)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Clusterul {0} este în afara intervalului.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Salt</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Păstrează structura de dosare</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Exportă și fluxurile de date alternative (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Exportă și slack ca fișiere separate</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Include fișierele șterse</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {A fost selectat # element.} few {Au fost selectate # elemente.} other {Au fost selectate # de elemente.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Alege dosarul...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Export fișiere</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Au fost exportate {0} fișiere în {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Spațiu liber insuficient: necesar {0}, liber {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Nu se poate scrie: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Exportați un fișier suprascris?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Clusterele acestui fișier șters sunt acum folosite de alte fișiere. Conținutul exportat poate aparține altui fișier.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Exportă</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Fișier binar</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Creează fișierul hartă (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Export spațiu nealocat</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Export slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} scris în {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Înregistrările $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Prev LSN  UndoNext LSN  Tip      Trans.ID  Redo                            Undo                           Înr. MFT Lungime</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Pagina de repornire {0}: LSN curent {1}, clienți: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Citire $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Listă</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Nu există rezultate.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Exportă lista în CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Niciun fișier nu este evidențiat. Alegeți Afișează clusterele fișierului.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} fragmente)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logic {1}  disc {2}  {3} octeți  clustere {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Șterge evidențierea</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Selectează spațiul nealocat</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>nealocat selectare căutare carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Selectează slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack selectare căutare carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Selectează spațiul nealocat</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Selectează slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Se selectează spațiul nealocat</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Se caută spațiul nealocat</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Se selectează slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Nu există nimic de selectat.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Au fost selectate doar primele 1.000.000 de intervale.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Afișează volumele logice</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>volum logic ldm disc dinamic lvm lvm2 striping span logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Salt la inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 nod index</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Numărul inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Afișează volumele logice</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Salt la inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Suma de control nu se potrivește</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Format neacceptat</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Suma de control a superblocului ext nu se potrivește ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Sumele de control ale descriptorilor de grup nu se potrivesc (grupuri {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Această funcție ext nu este acceptată complet: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Antetul alternativ al volumului diferă de cel primar ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Suma de control a unui obiect APFS nu se potrivește (bloc {0}). A fost omis.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Cel mai nou punct de control APFS este deteriorat; se folosește unul mai vechi (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Suma de control a etichetei unui descriptor UDF nu se potrivește (sector {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC-ul unui descriptor UDF nu se potrivește (sector {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Acest tip de partiție UDF nu este acceptat: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Discul are {0} sesiuni. Este afișată ultima sesiune; alegeți alta din Sesiune.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Disponibil doar pentru ext2, ext3 și ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Nu există inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Volumul este criptat. Lista de fișiere nu este afișată.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Nu a fost găsit niciun punct de control APFS.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Afișează inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Afișează jurnalul</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Nume</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (de bază)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Sesiune</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Acest sistem de fișiere nu are jurnal.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>Jurnal ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>      Bloc  Deplasament disc  Tip              Secvență</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Dimensiunea blocului {0}, {1} blocuri, secvență {2}, început {3} (0 = curat). Jurnalul nu este redat.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Citirea jurnalului ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Descriptor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superbloc v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superbloc v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revocare</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Afișează volumele logice</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Creează imagine a acestui interval...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Volume logice</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Nume                  Tip           Dimensiune  Configurație                  Stare</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Se citesc metadatele volumului...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>În discurile și imaginile deschise nu a fost găsit niciun volum logic LDM sau LVM2.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Deschide volumul logic</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Atribuie membri...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Citește din nou</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Acest tip de volum nu este acceptat: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} nu poate fi deschis. Membri lipsă: {1}. Deschideți discurile sau imaginile ori atribuiți-le.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) este un volum în oglindă sau RAID-5. Deschideți-l cu reconstruirea RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Atribuire membri</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Alegeți discul sau imaginea pentru fiecare membru lipsă al {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(niciunul)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Deschide fișier...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {Lipsește # membru} few {Lipsesc # membri} other {Lipsesc # de membri}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Neacceptat</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Reconstruire RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Simplu</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Extins (spanned)</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Cu striping</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>În oglindă</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Liniar</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Neacceptat ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} grup {1}, volum {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Membru {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>negăsit</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Deplasament {0} ({1}): {2} la {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Deplasament {0} ({1}): stripe {2} pe {3} membri</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Șterge sigur selecția</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>ștergere suprascriere ștergere sigură interval wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Șterge sigur discul</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>ștergere disc suprascriere sigur wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Șterge spațiul liber</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>spațiu liber nealocat ștergere cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Șterge slack-ul fișierelor</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram disc ștergere slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Maschează conținutul fișierelor</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>mascare curățare redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Ștergere</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Șterge selecția...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>Ș</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Șterge discul...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Șterge spațiul liber...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>Ț</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Șterge slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Maschează conținutul fișierelor...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Maschează conținutul fișierelor...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Șterge sigur selecția...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Extrage fișiere din selecție (carving)...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Mascare</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Ștergere sigură</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Țintă: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Început</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>La final, citește și verifică</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Șterge...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Intervalul este în afara documentului.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Modificări nesalvate</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Datele de șters au modificări nesalvate. Salvați-le sau renunțați la ele înainte de ștergere.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Salvează</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Renunță</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Ștergerea datelor</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Țintă: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disc {0}: {1}, număr de serie {2}, {3} octeți</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Interval: LBA de început {0}, {1} sectoare, {2} octeți</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Interval: deplasament {0}, {1} octeți</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Intervalul a fost extins la limitele sectoarelor.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Metodă: {0} ({1, plural, one {# trecere} few {# treceri} other {# de treceri}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Ultima trecere este citită înapoi și verificată.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Timp estimat: aproximativ {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Această acțiune nu poate fi anulată. Datele originale nu pot fi recuperate.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>Pe SSD-uri și medii flash, uniformizarea uzurii poate păstra datele originale în altă parte chiar și după suprascriere.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Aceste volume sunt blocate în timpul ștergerii: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Datele sunt scrise direct în fișier, nu ca modificare. Nu pot fi anulate cu Anulare.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Șterge {0} octeți</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Șterge {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disc {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Pentru a continua, tastați „{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Confirmare</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Selectați intervalul de șters.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Acest document nu poate fi șters direct.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Pentru a șterge un disc fizic, deschideți-l integral într-o filă.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Această sursă de date este în lista de dovezi și nu poate fi scrisă.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows folosește acest disc (sistem, boot sau fișier de paginare), deci nu poate fi șters.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Volumul {0} nu a putut fi blocat, deci nu s-a șters nimic.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Scrierea a fost refuzată: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Ștergerea a eșuat: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Se șterge {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Trecerea {0} din {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Verificare</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Opriți ștergerea? Partea deja suprascrisă rămâne suprascrisă; restul păstrează datele originale.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Eroare de scriere</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Nu se poate scrie la deplasamentul {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Omite și continuă</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Oprește</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Rezultatul ștergerii</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Au fost șterși {0} octeți în {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Verificarea a reușit.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Verificarea a găsit # interval care nu se potrivește:} few {Verificarea a găsit # intervale care nu se potrivesc:} other {Verificarea a găsit # de intervale care nu se potrivesc:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# interval nu a putut fi scris:} few {# intervale nu au putut fi scrise:} other {# de intervale nu au putut fi scrise:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Ștergerea a fost oprită. Datele până la deplasamentul {0} au fost suprascrise la trecerea {1}; restul își păstrează conținutul anterior.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Verificarea a fost oprită. Toate trecerile fuseseră scrise.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Ștergerea a fost oprită după o eroare de scriere la deplasamentul {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Fișiere omise: {0} (comprimate {1}, rare {2}, rezidente {3}, inconsistente {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Ștergerea spațiului liber</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Metodă</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Prin Windows (un volum montat)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Scriere directă (sistemul de fișiere din această filă)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Volum</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Niciun volum montat nu poate fi folosit.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Pentru scriere directă, afișați mai întâi sistemul de fișiere al acestei file.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Volum: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Spațiu liber de suprascris: {0} octeți</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Metodă: prin Windows (fișiere temporare umplu spațiul liber și sunt șterse la final)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Metodă: scriere directă în clusterele nealocate</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Cât timp rulează, volumul nu are spațiu liber. Alte aplicații continuă să funcționeze, dar nu pot salva date noi.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Dacă informațiile de alocare ale sistemului de fișiere sunt greșite, fișierele pot fi deteriorate.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Șterge spațiul liber</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Sistemul de fișiere nu este consistent ({0}). Reparați-l cu chkdsk și încercați din nou.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Scrierea directă acceptă doar NTFS, FAT12/16/32 și exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Salvați sau renunțați mai întâi la modificările din această filă.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Aceste fișiere temporare nu au putut fi șterse. Ștergeți-le manual:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Au fost suprascriși {0} octeți de spațiu liber în {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Se calculează spațiul liber</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Ștergerea spațiului liber a fost oprită. Fișierele temporare au fost șterse.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Ștergerea slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Fișiere: {0}, slack de suprascris: {1} octeți</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Șterge slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Se caută slack-ul fișierelor</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Au fost suprascriși {0} octeți de slack în {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Mascarea conținutului fișierelor</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Fișiere ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Model</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (implicit)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Aleator</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Octeți Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Octeți Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Înlocuiește și numele cu „_” de aceeași lungime</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Jurnal de mascare (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Conținutul se modifică ca editare. Nu se scrie nimic până nu salvați; folosiți Salvare ca pentru a salva o imagine nouă.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Maschează</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Se caută datele de mascat</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {A fost mascat # fișier} few {Au fost mascate # fișiere} other {Au fost mascate # de fișiere}} ({1} octeți). Folosiți Salvare ca pentru a salva o imagine nouă.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Nu a fost nimic de mascat.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Fișiere nemascate</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# element nu a fost mascat:} few {# elemente nu au fost mascate:} other {# de elemente nu au fost mascate:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>dosar</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>element șters</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>metadatele sunt deteriorate</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>informațiile despre fragmente sunt deteriorate</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>datele rezidente nu au fost găsite</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>metadatele sistemului de fișiere</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Numele nu au putut fi înlocuite pentru: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Documentul este doar pentru citire.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Suprascrieți imaginea originală?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Acest document are mascări. Salvarea le scrie în {0} original și nu poate fi anulată. Pentru a păstra originalul, folosiți Salvare ca.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Suprascrie {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Jurnalul de mascare nu a putut fi scris: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Introduceți modelul ca octeți Hex (de exemplu 00 sau A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
 </root>
