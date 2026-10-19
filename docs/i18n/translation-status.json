@@ -25059,6 +25059,7 @@
       "WriteBlock_Enabled": "reviewed:df34543a46c086a4",
       "WriteBlock_FirstNotice": "reviewed:a03a1fa58a6bd12c",
       "WriteBlock_FirstNotice_Usb": "reviewed:a5d75e7fd28f8f09",
+      "WriteBlock_Refused": "reviewed:95a1f8e746108ab2",
       "WriteBlock_ReopenFailed": "reviewed:c3f225968afd4119",
       "Yara_AddFiles": "reviewed:fd78f9f1c7daf04b",
       "Yara_AddFolder": "reviewed:c185c294159fef06",

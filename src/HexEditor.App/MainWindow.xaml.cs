@@ -421,6 +421,12 @@ public sealed partial class MainWindow : Window
         {
             return false;
         }
+        catch (Core.Forensics.WriteBlock.WriteBlockedException)
+        {
+            // 書き込み保護モード (12 の FOR-01 の「エラー」): 「書き込み保護モードのため書き込めません」。
+            ShowNotice(Loc.Get("WriteBlock_Refused"), InfoBarSeverity.Error, doc);
+            return false;
+        }
         catch (InsufficientSpaceException ex)
         {
             ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);

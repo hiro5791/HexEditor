@@ -8840,4 +8840,5 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>complete memory dump (bitmap)</value></data>
   <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
   <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Memory dump</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>The data cannot be written because write protection mode is on.</value></data>
 </root>

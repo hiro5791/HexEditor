@@ -574,7 +574,7 @@ public sealed partial class MainWindow
     {
         Win32Errors.AccessDenied or Win32Errors.SharingViolation or Win32Errors.LockViolation => Loc.Format("OpenDisk_AccessDenied", ex.Message),
         Win32Errors.NotReady => Loc.Get("OpenDisk_NoMedia"),
-        Win32Errors.WriteProtect => Loc.Get("DiskWrite_WriteProtected"),
+        Win32Errors.WriteProtect => WriteBlockMode.IsEnabled ? Loc.Get("WriteBlock_Refused") : Loc.Get("DiskWrite_WriteProtected"),
         var fve when fve == Win32Errors.FveLocked => Loc.Get("OpenDisk_BitLocker"),
         _ => Loc.Format("OpenDisk_Error", ex.Message),
     };

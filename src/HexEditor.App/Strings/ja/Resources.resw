@@ -8840,4 +8840,5 @@ SHA-256 のフィンガープリント: {2}
   <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>完全メモリダンプ (ビットマップ形式)</value></data>
   <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>ミニダンプ</value></data>
   <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>メモリダンプ</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>書き込み保護モードのため書き込めません。</value></data>
 </root>
