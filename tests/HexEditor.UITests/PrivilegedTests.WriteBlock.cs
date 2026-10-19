@@ -14,6 +14,7 @@ public sealed partial class PrivilegedTests
 
     [CiPrivilegedFact("Installer", "Portable")]
     [Trait(UiTest.TC, "TC-FOR-01-05")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task The_helper_refuses_write_requests_after_SetWriteBlock_and_the_virtual_disk_is_unchanged() => UiTestContext.RunAsync(async ctx =>
     {
         // 前提: TD-VHDX-MBR を接続し、内容のハッシュを記録する。テスト用の命令が、管理者のアプリから本物の補助プロセスを起動して
