@@ -191,6 +191,84 @@ public static class FileSystemImageSet
         return disk;
     });
 
+    /// <summary>ext のイメージの dir1 のファイルの数 (ext4 では htree のディレクトリ)。</summary>
+    public const int ExtDir1Files = 300;
+
+    /// <summary>TD-FOR-EXT2・EXT3・EXT4 (64 MiB、ブロック 4 KiB、グループあたり 4096 ブロックで 4 グループ)。</summary>
+    public static (SparseImage Image, ExtImageBuilder Builder) Ext(ExtVariant variant) => Cached("ext:" + variant, () =>
+    {
+        string suffix = variant switch { ExtVariant.Ext2 => "E2", ExtVariant.Ext3 => "E3", _ => "E4" };
+        var b = new ExtImageBuilder(variant, 64 * MiB, new Guid($"00000000-0000-0000-0000-0000000000{suffix}"), $"EXT{suffix[1]}TEST");
+        ExtImageBuilder.Node? deleted = null;
+        foreach (FileSetItem item in FileSet.Common)
+        {
+            ExtImageBuilder.Node node = b.AddFile(b.Root, item.Name, item.Content, item.ModifiedUtc, fragments: item.Name == "frag.bin" ? 3 : 1);
+            if (item.Name == "deleted.txt")
+            {
+                deleted = node;
+            }
+        }
+
+        ExtImageBuilder.Node dir1 = b.AddDirectory(b.Root, "dir1", FileSet.TimeOf(12), htree: variant == ExtVariant.Ext4);
+        for (int i = 1; i <= ExtDir1Files; i++)
+        {
+            b.AddFile(dir1, $"f{i:D3}.txt", FileSet.Dir1File(i), FileSet.TimeOf(12).AddSeconds(i));
+        }
+
+        b.Delete(deleted!);
+        return (b.Build(), b);
+    });
+
+    /// <summary>ext のイメージに入れたファイル (削除したものを除く。テストのマニフェスト)。</summary>
+    public static IReadOnlyList<FileSetItem> ExtManifest =>
+    [
+        .. FileSet.Common.Where(i => i.Name != "deleted.txt"),
+        .. Enumerable.Range(1, ExtDir1Files).Select(i => new FileSetItem($"f{i:D3}.txt", FileSet.Dir1File(i), FileSet.TimeOf(12).AddSeconds(i), Directory: "dir1")),
+    ];
+
+    /// <summary>TD-FOR-ISO-JRR のブートイメージ (2,048 バイト。00, 01, …, FF を 8 回)。</summary>
+    public static byte[] IsoBootImage => [.. Enumerable.Range(0, 2048).Select(i => (byte)i)];
+
+    /// <summary>TD-FOR-ISO-JRR のファイル (名前、内容、更新日時)。</summary>
+    public static IReadOnlyList<FileSetItem> IsoFiles =>
+    [
+        new("日本語の名前.txt", TestDataCatalog.TextUtf8_4K(), FileSet.TimeOf(1).AddTicks(-1234567)),
+        new("MixedCase_Long_Name.txt", TestDataCatalog.TextAscii4K(), FileSet.TimeOf(2).AddTicks(-1234567)),
+        new("colon:name.txt", Encoding.ASCII.GetBytes("colon"), FileSet.TimeOf(3).AddTicks(-1234567)),
+        new("boot.img", IsoBootImage, FileSet.TimeOf(4).AddTicks(-1234567)),
+    ];
+
+    /// <summary>TD-FOR-ISO-JRR (Joliet・Rock Ridge・El Torito。約 1 MiB)。</summary>
+    public static (SparseImage Image, IsoImageBuilder Builder) IsoJrr() => Cached("iso-jrr", () =>
+    {
+        var b = new IsoImageBuilder("ISOTEST", FileSet.ReadmeModifiedUtc);
+        foreach (FileSetItem item in IsoFiles)
+        {
+            IsoImageBuilder.Node node = b.AddFile(b.Root, item.Name, item.Content, item.ModifiedUtc);
+            if (item.Name == "boot.img")
+            {
+                b.BootImage = node;
+            }
+        }
+
+        return (b.Build(), b);
+    });
+
+    /// <summary>TD-FOR-UDF250 のファイル (TD-FOR-FILESET の readme.txt・photo.png・data.bin)。</summary>
+    public static IReadOnlyList<FileSetItem> UdfFiles => [.. FileSet.Common.Where(i => i.Name is "readme.txt" or "photo.png" or "data.bin")];
+
+    /// <summary>TD-FOR-UDF250 (UDF 2.50、メタデータパーティションあり、64 MiB)。</summary>
+    public static (SparseImage Image, UdfImageBuilder Builder) Udf250() => Cached("udf250", () =>
+    {
+        var b = new UdfImageBuilder(64 * MiB, "UDFTEST", FileSet.ReadmeModifiedUtc);
+        foreach (FileSetItem item in UdfFiles)
+        {
+            b.AddFile(b.Root, item.Name, item.Content, item.ModifiedUtc);
+        }
+
+        return (b.Build(), b);
+    });
+
     /// <summary>ID からメモリ上のイメージを作る。</summary>
     public static SparseImage Image(string id) => id switch
     {
@@ -210,6 +288,11 @@ public static class FileSystemImageSet
         "TD-FOR-LOST-PART" => NtfsFat32Disk(lostMbr: true),
         "TD-FOR-FAT12" or "TD-FOR-FAT16" or "TD-FOR-FAT32" or "TD-FOR-FAT32-FATDIFF" or "TD-FOR-FAT32-LOOP" => Fat(id).Image,
         "TD-FOR-EXFAT" => ExFat().Image,
+        "TD-FOR-EXT2" => Ext(ExtVariant.Ext2).Image,
+        "TD-FOR-EXT3" => Ext(ExtVariant.Ext3).Image,
+        "TD-FOR-EXT4" => Ext(ExtVariant.Ext4).Image,
+        "TD-FOR-ISO-JRR" => IsoJrr().Image,
+        "TD-FOR-UDF250" => Udf250().Image,
         _ => throw new ArgumentException(id),
     };
 
@@ -223,6 +306,8 @@ public static class FileSystemImageSet
         "TD-FOR-FAT12" => 4 * MiB,
         "TD-FOR-FAT32" or "TD-FOR-FAT32-FATDIFF" or "TD-FOR-FAT32-LOOP" => 512 * MiB,
         "TD-FOR-NTFS-1M" => 4096 * MiB,
+        "TD-FOR-EXT2" or "TD-FOR-EXT3" or "TD-FOR-EXT4" or "TD-FOR-UDF250" => 64 * MiB,
+        "TD-FOR-ISO-JRR" => 512 * 2048,
         _ => throw new ArgumentException(id),
     };
 
@@ -231,5 +316,6 @@ public static class FileSystemImageSet
         "TD-FOR-MBR-EXT", "TD-FOR-MBR-EBRLOOP", "TD-FOR-GPT", "TD-FOR-GPT-BADCRC", "TD-FOR-GPT-BADBACKUP", "TD-FOR-GPT-4K", "TD-FOR-APM", "TD-FOR-BSD",
         "TD-FOR-NTFS", "TD-FOR-NTFS-BADFIXUP", "TD-FOR-NTFS-BADTIME", "TD-FOR-NTFS-OVERWRITE", "TD-FOR-NTFS-FAT32", "TD-FOR-LOST-PART",
         "TD-FOR-FAT12", "TD-FOR-FAT16", "TD-FOR-FAT32", "TD-FOR-FAT32-FATDIFF", "TD-FOR-FAT32-LOOP", "TD-FOR-EXFAT",
+        "TD-FOR-EXT2", "TD-FOR-EXT3", "TD-FOR-EXT4", "TD-FOR-ISO-JRR", "TD-FOR-UDF250",
     ];
 }

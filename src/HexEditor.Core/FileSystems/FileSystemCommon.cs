@@ -49,7 +49,10 @@ public sealed class FileSystemOpenException(string message, FileSystemKind kind 
 /// <summary>形式ごとの開く処理の一覧。</summary>
 public static class FileSystemRegistry
 {
-    private static readonly List<IFileSystemProvider> Providers = [new Fat.FatFileSystemProvider(), new Ntfs.NtfsFileSystemProvider()];
+    private static readonly List<IFileSystemProvider> Providers =
+    [
+        new Fat.FatFileSystemProvider(), new Ntfs.NtfsFileSystemProvider(), new Ext.ExtFileSystemProvider(), new Iso.OpticalFileSystemProvider(),
+    ];
     private static readonly object Gate = new();
 
     /// <summary>形式を加える (同じ種類の既存の処理より優先する)。</summary>

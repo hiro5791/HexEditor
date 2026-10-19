@@ -99,6 +99,12 @@ public enum FsCorruptionKind
     BadEntrySet,
     ReadError,
     DepthLimit,
+
+    /// <summary>メタデータのチェックサムの不一致 (ext4 の metadata_csum、APFS の Fletcher-64、UDF のタグ)。</summary>
+    ChecksumMismatch,
+
+    /// <summary>対応していない形式 (UDF の拡張アロケーション記述子など)。</summary>
+    Unsupported,
 }
 
 /// <summary>日時 1 つ (FOR-05)。<see cref="Utc"/> が null で <see cref="Invalid"/> なら「不正な日時」。</summary>
@@ -259,6 +265,36 @@ public enum FsIssueKind
     LfnChecksum,
     AllocationUnreadable,
     Encrypted,
+
+    /// <summary>ext: スーパーブロックのチェックサムの不一致 (metadata_csum。FOR-12 の仕様 2)。</summary>
+    ExtSuperblockChecksum,
+
+    /// <summary>ext: グループ記述子のチェックサムの不一致 (詳細はグループ番号)。</summary>
+    ExtGroupDescriptorChecksum,
+
+    /// <summary>ext: 読めない機能 (bigalloc など。詳細は機能の名前)。</summary>
+    ExtUnsupportedFeature,
+
+    /// <summary>HFS+: 末尾の予備ボリュームヘッダーが主と違う (FOR-13 の仕様 1)。</summary>
+    HfsAlternateHeaderMismatch,
+
+    /// <summary>APFS: チェックサムの合わないオブジェクト (詳細はブロック番号)。</summary>
+    ApfsChecksum,
+
+    /// <summary>APFS: 最新のチェックポイントが壊れていて、古いものを使った。</summary>
+    ApfsOlderCheckpoint,
+
+    /// <summary>UDF: 記述子のタグのチェックサムの不一致 (詳細はセクタ番号)。</summary>
+    UdfTagChecksum,
+
+    /// <summary>UDF: 記述子の CRC の不一致 (詳細はセクタ番号)。</summary>
+    UdfDescriptorCrc,
+
+    /// <summary>UDF: 対応していないパーティション (VAT・スペアリングテーブル。FOR-14 の仕様 3)。</summary>
+    UdfUnsupportedPartition,
+
+    /// <summary>ISO 9660: 複数のセッション (詳細はセッションの数)。最後のセッションを使う (FOR-14 の仕様 2)。</summary>
+    IsoMultiSession,
 }
 
 public sealed record FsIssue(FsIssueKind Kind, string Detail = "");
