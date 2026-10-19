@@ -53,6 +53,8 @@
     "command-line",
     "partitions",
     "file-systems",
+    "secure-wipe",
+    "redaction",
     "settings",
     "accessibility",
     "troubleshooting"

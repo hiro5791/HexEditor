@@ -529,6 +529,16 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsOpenUnallocated" cmd:CommandUi.Id="forensics.fs.openUnallocated" AutomationProperties.AutomationId="Command_FsOpenUnallocated" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectUnallocated" cmd:CommandUi.Id="forensics.fs.selectUnallocated" AutomationProperties.AutomationId="Command_FsSelectUnallocated" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectSlack" cmd:CommandUi.Id="forensics.fs.selectSlack" AutomationProperties.AutomationId="Command_FsSelectSlack" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsRedact" cmd:CommandUi.Id="forensics.fs.redact" AutomationProperties.AutomationId="Command_FsRedact" />
+                        </MenuFlyoutSubItem>
+                        <!--  消去 (FOR-30・FOR-31)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Wipe" AutomationProperties.AutomationId="Menu_Forensics_Wipe">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeSelection" cmd:CommandUi.Id="forensics.wipe.selection" AutomationProperties.AutomationId="Command_WipeSelection" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeDisk" cmd:CommandUi.Id="forensics.wipe.disk" AutomationProperties.AutomationId="Command_WipeDisk" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeFreeSpace" cmd:CommandUi.Id="forensics.wipe.freeSpace" AutomationProperties.AutomationId="Command_WipeFreeSpace" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeSlack" cmd:CommandUi.Id="forensics.wipe.slack" AutomationProperties.AutomationId="Command_WipeSlack" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Forensics_Report" cmd:CommandUi.Id="forensics.report.create" AutomationProperties.AutomationId="Command_ReportCreate" />

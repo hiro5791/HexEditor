@@ -304,6 +304,12 @@ public sealed partial class MainWindow : Window
             return await SaveSftpAsync(doc);
         }
 
+        // 墨塗りしたドキュメントを元のイメージ・ディスクに保存するときは確かめる (12 の FOR-32 の仕様 2)。
+        if (!saveAs && doc.IsDevice && !await ConfirmRedactedInPlaceSaveAsync(doc))
+        {
+            return false;
+        }
+
         // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
         if (!saveAs && doc.IsDevice)
         {
@@ -401,6 +407,12 @@ public sealed partial class MainWindow : Window
 
         // 外部で変更されたファイルを上書きする・削除されたファイルを作り直すときは確かめる (ENG-19 の仕様 5・8)。
         if (string.Equals(path, doc.FilePath, StringComparison.OrdinalIgnoreCase) && !await ConfirmExternalSaveAsync(doc))
+        {
+            return false;
+        }
+
+        // 墨塗りしたドキュメントを元のイメージに上書きするときは確かめる (12 の FOR-32 の仕様 2)。
+        if (string.Equals(path, doc.FilePath, StringComparison.OrdinalIgnoreCase) && !await ConfirmRedactedInPlaceSaveAsync(doc))
         {
             return false;
         }

@@ -160,6 +160,7 @@ public sealed partial class MainWindow
         RegisterDeviceCommands();
         RegisterImageCommands();
         RegisterFileSystemCommands();
+        RegisterWipeCommands();
         HookForensicStatus();
 
         // ---- 編集 ----

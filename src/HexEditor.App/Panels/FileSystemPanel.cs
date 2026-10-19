@@ -125,7 +125,13 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             }
         };
 
-        _list.SelectionChanged += (_, _) => ShowSelectedDetails();
+        _list.SelectionChanged += (_, _) =>
+        {
+            ShowSelectedDetails();
+
+            // 選んだ項目で使えるかが変わるコマンド (ファイルの内容を墨塗り・書き出しなど) のメニューの状態を更新する。
+            Window?.Commands.NotifyStatesChanged();
+        };
         _list.DoubleTapped += (_, _) => ActivateSelected();
         _list.KeyDown += (_, e) =>
         {
@@ -932,6 +938,8 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         menu.Items.Add(Item("Fs_Menu_Inode", () => Window?.ShowInode(_document!, SelectedEntries[0])));
         menu.Items.Add(Item("Fs_Menu_Journal", () => _ = Window?.ShowExtJournalAsync(_document!)));
         menu.Items.Add(new MenuFlyoutSeparator());
+        menu.Items.Add(Item("Fs_Menu_Redact", () => _ = Window?.ShowRedactDialogAsync(_document!, SelectedEntries)));
+        menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(Item("Fs_Menu_CopyPath", CopyPath));
         menu.Items.Add(Item("Fs_Menu_ExportList", () => _ = Window?.ExportListAsync("files.csv", json => json ? FsListExport.ToJson(Entries) : FsListExport.ToCsv(Entries))));
         menu.Opening += (_, _) =>
@@ -959,10 +967,18 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
                         || first?.Name == "$Journal"),
                     "Fs_Menu_Journal" => (ext, first?.Name == "$Journal"),
                     "Fs_Menu_CopyPath" => (true, first is not null),
+                    "Fs_Menu_Redact" => (true, Window?.CanRedact(_document, selected) ?? false),
                     _ => (true, _rows.Count > 0),
                 };
                 item.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
                 item.IsEnabled = enabled;
+                if (id == "Fs_Menu_Redact")
+                {
+                    // 使えない理由 (書き込み保護モードなど。FOR-01 の仕様 2) をツールチップに出す。
+                    string? reason = enabled ? null : Window?.RedactDisabledReason(_document, selected);
+                    ToolTipService.SetToolTip(item, reason);
+                    AutomationProperties.SetHelpText(item, reason ?? string.Empty);
+                }
             }
         };
         return menu;

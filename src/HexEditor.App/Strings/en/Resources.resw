@@ -9693,4 +9693,142 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Lv_Detail_Missing" xml:space="preserve"><value>not found</value></data>
   <data name="Lv_Detail_Piece" xml:space="preserve"><value>Offset {0} ({1}): {2} at {3}</value></data>
   <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Offset {0} ({1}): stripe {2} over {3} members</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Securely erase selection</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Securely erase disk</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Wipe free space</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Wipe file slack</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Redact file contents</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Wipe</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Erase selection...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Erase disk...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Wipe free space...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Wipe slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Redact file contents...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Redact file contents...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Securely erase selection...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Redaction</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Securely erase</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Read back and verify at the end</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Erase...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>The range is outside the document.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Unsaved edits</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>The data to erase has unsaved edits. Save or discard them before erasing.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Discard</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Erase data</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disk {0}: {1}, serial number {2}, {3} bytes</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Volumes: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Range: start LBA {0}, {1} sectors, {2} bytes</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Range: offset {0}, {1} bytes</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>The range was widened to sector boundaries.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Method: {0} ({1, plural, one {# pass} other {# passes}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>The last pass is read back and verified.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Estimated time: about {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>This cannot be undone. The original data cannot be recovered.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>On SSDs and flash media, wear leveling may keep the original data elsewhere even after it is overwritten.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>These volumes are locked while erasing: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>The data is written directly to the file, not as an edit. It cannot be undone with Undo.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Erase {0} bytes</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Erase {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>To continue, type “{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Confirmation</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Select the range to erase.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>This document cannot be erased directly.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Open a whole physical disk in a tab to erase it.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>This data source is in the evidence list and cannot be written.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows is using this disk (system, boot or page file), so it cannot be erased.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>The volume {0} could not be locked, so nothing was erased.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Writing was refused: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Erasing failed: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Erasing {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Pass {0} of {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Verifying</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Stop erasing? The part already overwritten stays overwritten; the rest keeps its original data.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Write error</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Could not write at offset {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Skip and continue</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Stop</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Erase result</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Erased {0} bytes in {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Verification succeeded.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Verification found # range that does not match:} other {Verification found # ranges that do not match:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# range could not be written:} other {# ranges could not be written:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Erasing was stopped. The data up to offset {0} was overwritten in pass {1}; the rest keeps its earlier contents.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Verification was stopped. All passes had been written.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Erasing was stopped after a write error at offset {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Files skipped: {0} (compressed {1}, sparse {2}, resident {3}, inconsistent {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Wipe free space</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Method</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Through Windows (a mounted volume)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Direct writing (the file system in this tab)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>No mounted volume can be used.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>To write directly, show the file system of this tab first.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Free space to overwrite: {0} bytes</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Method: through Windows (temporary files fill the free space and are deleted at the end)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Method: direct writing to the unallocated clusters</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>While this runs, the volume has no free space. Other apps keep working but cannot save new data.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>If the file system's allocation information is wrong, files can be damaged.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Wipe free space</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>The file system is not consistent ({0}). Repair it with chkdsk, then try again.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Direct writing supports NTFS, FAT12/16/32 and exFAT only.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Save or discard the edits in this tab first.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>These temporary files could not be deleted. Delete them manually:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Overwrote {0} bytes of free space in {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Calculating free space</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Wiping free space was stopped. The temporary files were deleted.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Wipe slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Files: {0}, slack to overwrite: {1} bytes</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Wipe slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Finding file slack</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Overwrote {0} bytes of slack in {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Redact file contents</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Files ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Pattern</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (default)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Random</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Hex bytes</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Hex bytes</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Also replace the names with “_” of the same length</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Redaction log (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>The contents change as an edit. Nothing is written until you save; use Save As to save a new image.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Redact</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Finding the data to redact</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {Redacted # file} other {Redacted # files}} ({1} bytes). Use Save As to save a new image.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>There was nothing to redact.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Files not redacted</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# item was not redacted:} other {# items were not redacted:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>folder</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>deleted item</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>the metadata is damaged</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>the fragment information is broken</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>the resident data was not found</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>file system metadata</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>The names could not be replaced for: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>The document is read-only.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Overwrite the original image?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>This document has redactions. Saving writes them to the original {0}, and this cannot be undone. To keep the original, use Save As.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Overwrite {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>The redaction log could not be written: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Enter the pattern as hex bytes (for example 00 or A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
 </root>

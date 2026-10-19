@@ -62,6 +62,8 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 
 - [パーティション](partitions.md)
 - [ファイルシステム](file-systems.md)
+- [安全な消去](secure-wipe.md)
+- [墨塗り](redaction.md)
 
 ## 設定とヘルプ {#settings-and-help}
 
