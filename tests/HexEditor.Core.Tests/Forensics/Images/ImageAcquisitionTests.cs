@@ -62,7 +62,8 @@ public sealed class ImageAcquisitionTests
             Assert.Contains("C-0001", log);                       // ケース情報
 
             // 監査ログに開始と終了 (ハッシュ値付き) の 2 件 (FOR-04 の受け入れ基準 1)。
-            Assert.Equal([ImageAuditResult.Started, ImageAuditResult.Success], recorder.Records.Select(r => r.Result));
+            Assert.Equal([ImageAuditResult.Started, ImageAuditResult.Success], recorder.Records.Where(r => r.Operation == "image.create").Select(r => r.Result));
+            Assert.Contains(recorder.Records, r => r.Operation == "image.verify" && r.Parameters["verdict"] == "Match");
             Assert.Equal(Convert.ToHexStringLower(sha256), recorder.Records[1].Parameters["hash.SHA-256"]);
             Assert.Single(recorder.Registered);
         }

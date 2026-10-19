@@ -589,6 +589,75 @@ public static class ImageAcquisition
         public EwfEncodedChunk[]? Chunks { get; set; }
     }
 
+    /// <summary>
+    /// 読み込みエラーからの回復 (FOR-20 の仕様 3): 読めなければ <paramref name="retries"/> 回まで読み直し、それでも読めない範囲は 1 セクタずつ読んで
+    /// 読める部分を取る。読めないセクタは <paramref name="fill"/> で埋め、<paramref name="bad"/> に (<paramref name="lbaOrigin"/> からの LBA で) 加える。
+    /// 入力元が失われた (取り外し) なら false。クローン (FOR-24) とセクタ範囲の保存 (FOR-25) でも使う。
+    /// </summary>
+    public static bool RecoveringRead(ReadFunc read, long offset, Span<byte> target, int sector, int retries, byte fill, long lbaOrigin,
+        List<SectorRange> bad, CancellationToken token)
+    {
+        token.ThrowIfCancellationRequested();
+        ReadResult r = read(offset, target);
+        if (r.IsComplete)
+        {
+            return true;
+        }
+
+        for (int attempt = 0; attempt < retries && !r.IsComplete; attempt++)
+        {
+            if (r.Unreadable.Any(u => u.Reason == UnreadableReason.Disconnected))
+            {
+                return false;
+            }
+
+            token.ThrowIfCancellationRequested();
+            r = read(offset, target);
+        }
+
+        if (r.IsComplete)
+        {
+            return true;
+        }
+
+        if (r.Unreadable.Any(u => u.Reason == UnreadableReason.Disconnected))
+        {
+            return false;
+        }
+
+        // 読み込み単位を 1 セクタまで小さくして、読める部分を取る。読めないセクタは指定の値で埋める。
+        byte[] one = new byte[sector];
+        long end = offset + target.Length;
+        foreach (UnreadableRange u in r.Unreadable.ToList())
+        {
+            long first = Math.Max(offset, u.Offset) / sector * sector;
+            long last = Math.Min(end, u.End);
+            for (long s = Math.Max(first, offset); s < last; s += sector)
+            {
+                token.ThrowIfCancellationRequested();
+                int len = (int)Math.Min(sector, end - s);
+                ReadResult single = read(s, one.AsSpan(0, len));
+                if (single.Unreadable.Any(x => x.Reason == UnreadableReason.Disconnected))
+                {
+                    return false;
+                }
+
+                Span<byte> part = target.Slice((int)(s - offset), len);
+                if (single.IsComplete)
+                {
+                    one.AsSpan(0, len).CopyTo(part);
+                }
+                else
+                {
+                    part.Fill(fill);
+                    bad.Add(new SectorRange((s - lbaOrigin) / sector, 1));
+                }
+            }
+        }
+
+        return true;
+    }
+
     private static Block ReadBlock(ReadFunc read, long start, long length, long at, int n, int sector, IReadOnlyList<(long Offset, long Length)> included,
         AcquisitionOptions options, CancellationToken token)
     {
@@ -607,60 +676,10 @@ public static class ImageAcquisition
 
         foreach ((int from, int count) in block.IncludedParts)
         {
-            token.ThrowIfCancellationRequested();
-            Span<byte> part = block.Data.AsSpan(from, count);
-            ReadResult r = read(blockStart + from, part);
-            if (r.IsComplete)
-            {
-                continue;
-            }
-
-            if (r.Unreadable.Any(u => u.Reason == UnreadableReason.Disconnected))
+            if (!RecoveringRead(read, blockStart + from, block.Data.AsSpan(from, count), sector, options.Retries, options.Fill, start, block.Bad, token))
             {
                 block.SourceLost = true;
                 return block;
-            }
-
-            // 再試行 (既定 3 回)。
-            for (int attempt = 0; attempt < options.Retries && !r.IsComplete; attempt++)
-            {
-                token.ThrowIfCancellationRequested();
-                r = read(blockStart + from, part);
-            }
-
-            if (r.IsComplete)
-            {
-                continue;
-            }
-
-            // 読み込み単位を 1 セクタまで小さくして、読める部分を取る。読めないセクタは指定の値で埋める。
-            byte[] one = new byte[sector];
-            foreach (UnreadableRange u in r.Unreadable.ToList())
-            {
-                long first = Math.Max(blockStart + from, u.Offset) / sector * sector;
-                long last = Math.Min(blockStart + from + count, u.End);
-                for (long s = first; s < last; s += sector)
-                {
-                    token.ThrowIfCancellationRequested();
-                    int len = (int)Math.Min(sector, blockStart + from + count - s);
-                    ReadResult single = read(s, one.AsSpan(0, len));
-                    Span<byte> target = block.Data.AsSpan((int)(s - blockStart), len);
-                    if (single.Unreadable.Any(x => x.Reason == UnreadableReason.Disconnected))
-                    {
-                        block.SourceLost = true;
-                        return block;
-                    }
-
-                    if (single.IsComplete)
-                    {
-                        one.AsSpan(0, len).CopyTo(target);
-                    }
-                    else
-                    {
-                        target.Fill(options.Fill);
-                        block.Bad.Add(new SectorRange((s - start) / sector, 1));
-                    }
-                }
             }
         }
 

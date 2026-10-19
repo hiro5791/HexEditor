@@ -45,7 +45,8 @@ public static class ImagePartitions
                 return new ImagePartitionTable(null, [], []);
             }
 
-            if (type == 0 || count == 0)
+            // 保護 MBR (EE) は GPT の印: GPT を読めなかった場合はパーティションなしとする。
+            if (type is 0 or 0xEE || count == 0)
             {
                 continue;
             }
