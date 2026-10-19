@@ -25,7 +25,8 @@ public sealed partial class MainWindow
 {
     private bool _carvingRunning;
 
-    private async Task ShowCarvingDialogAsync()
+    /// <param name="fromSelection">Hex ビューの右クリックメニュー (選択範囲があるとき) から呼んだ: 対象範囲の既定を「選択範囲」にする。</param>
+    private async Task ShowCarvingDialogAsync(bool fromSelection = false)
     {
         if (Vm.Selected is not { } doc)
         {
@@ -33,8 +34,9 @@ public sealed partial class MainWindow
         }
 
         IAllocationMap? allocation = ForensicsService.AllocationMapProvider?.Invoke(doc);
-        RadioButton whole = DialogParts.Radio("Carve_Scope_Whole", Loc.Get("Carve_Scope_Whole"), "CarveScope", true);
-        RadioButton selection = DialogParts.Radio("Carve_Scope_Selection", Loc.Get("Carve_Scope_Selection"), "CarveScope", false);
+        bool preferSelection = fromSelection && doc.Editor.HasSelection;
+        RadioButton whole = DialogParts.Radio("Carve_Scope_Whole", Loc.Get("Carve_Scope_Whole"), "CarveScope", !preferSelection);
+        RadioButton selection = DialogParts.Radio("Carve_Scope_Selection", Loc.Get("Carve_Scope_Selection"), "CarveScope", preferSelection);
         RadioButton unallocated = DialogParts.Radio("Carve_Scope_Unallocated", Loc.Get("Carve_Scope_Unallocated"), "CarveScope", false);
         RadioButton slack = DialogParts.Radio("Carve_Scope_Slack", Loc.Get("Carve_Scope_Slack"), "CarveScope", false);
         selection.IsEnabled = doc.Editor.HasSelection;
@@ -162,16 +164,15 @@ public sealed partial class MainWindow
         }
 
         IReadOnlyList<SearchRange> selection = doc.Editor.HasSelection ? [new SearchRange(doc.Editor.SelectionStart, doc.Editor.SelectionLength)] : [];
-        IReadOnlyList<SearchRange> ranges;
-        try
-        {
-            ranges = CarveScope.Resolve(request.Scope, doc.Document.Length, selection, ForensicsService.AllocationMapProvider?.Invoke(doc));
-        }
-        catch (InvalidOperationException)
+        // 割り当ての状況 (未割り当て・スラックの区間) の計算はボリューム全体の走査になるため、UI のスレッドではなく処理の中で行う (FOR-19 の対象範囲)。
+        IAllocationMap? allocation = request.Scope is CarveScopeKind.Unallocated or CarveScopeKind.Slack ? ForensicsService.AllocationMapProvider?.Invoke(doc) : null;
+        if (request.Scope is CarveScopeKind.Unallocated or CarveScopeKind.Slack && allocation is null)
         {
             ShowNotice(Loc.Get("Carve_Error_NoAllocation"), InfoBarSeverity.Error);
             return null;
         }
+
+        long documentLength = doc.Document.Length;
 
         int sector = SectorSizeOf(doc);
         var store = new CarvedFileStore(request.Signatures, sector);
@@ -189,7 +190,11 @@ public sealed partial class MainWindow
         try
         {
             CarvingResult result = await Vm.Operations.RunAsync(Loc.Get("Carve_Operation"), exporting ? OperationKind.WritesExternal : OperationKind.ReadOnly, exporting ? null : doc.Document,
-                ranges.Sum(r => r.Length), op => CarvingEngine.RunAsync(new SnapshotCarveData(snapshot), new CarvingOptions
+                null, op =>
+                {
+                    IReadOnlyList<SearchRange> ranges = CarveScope.Resolve(request.Scope, documentLength, selection, allocation);
+                    op.SetTotal(ranges.Sum(r => r.Length));
+                    return CarvingEngine.RunAsync(new SnapshotCarveData(snapshot), new CarvingOptions
                 {
                     Signatures = request.Signatures,
                     Ranges = ranges,
@@ -210,7 +215,8 @@ public sealed partial class MainWindow
                         op.ReportDetail(string.Join(", ", p.CountsByType.OrderBy(c => c.Key).Select(c => $"{c.Key} {c.Value:N0}")));
                     }),
                 },
-                op.CancellationToken));
+                op.CancellationToken);
+                });
             ForensicsService.SetCarving(result, result.Files);
             ShowCarvingSummary(result);
             return result;
@@ -271,6 +277,27 @@ public sealed partial class MainWindow
             }
         });
         return completion.Task;
+    }
+
+    // ---- Hex ビューの右クリックメニュー (FOR-19 の「呼び出し」: 選択範囲があるとき) ----
+
+    private void ExtendHexViewCarvingMenu(MenuFlyout menu)
+    {
+        const string Id = "HexViewMenu_CarveSelection";
+        if (menu.Items.FirstOrDefault(i => AutomationProperties.GetAutomationId(i) == Id) is not MenuFlyoutItem item)
+        {
+            item = new MenuFlyoutItem { Text = Loc.Get("HexViewMenu_CarveSelection"), Tag = "Command" };
+            AutomationProperties.SetAutomationId(item, Id);
+            item.Click += (_, _) => _ = ShowCarvingDialogAsync(fromSelection: true);
+            menu.Items.Add(item);
+        }
+
+        // 選択範囲があるときだけ出す。使えないとき (カービングの実行中、監査ログに書けないときなど) は無効にして理由をツールチップに出す。
+        CommandState state = Commands.StateOf("forensics.carving.run");
+        item.Visibility = Vm.Selected?.Editor.HasSelection == true ? Visibility.Visible : Visibility.Collapsed;
+        item.IsEnabled = state.Enabled;
+        ToolTipService.SetToolTip(item, state.Enabled ? null : state.Reason);
+        AutomationProperties.SetHelpText(item, state.Enabled ? string.Empty : state.Reason ?? string.Empty);
     }
 
     /// <summary>結果の行を選んだ: 開始位置へジャンプして範囲を選択する (FOR-19 の仕様 5)。</summary>

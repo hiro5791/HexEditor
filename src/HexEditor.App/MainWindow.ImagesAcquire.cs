@@ -36,7 +36,8 @@ public sealed partial class MainWindow
     /// <summary>最後の完了の通知の文 (テスト用)。</summary>
     internal string? LastAcquisitionNotice { get; private set; }
 
-    private async Task CreateImageAsync(AcquisitionScope scope)
+    /// <param name="selectionOnly">パーティションパネルの右クリックメニューから呼んだ: 選択した範囲 (パーティション) を入力元の既定にする。</param>
+    internal async Task CreateImageAsync(AcquisitionScope scope, bool selectionOnly = false)
     {
         if (Vm.Selected is not { } doc)
         {
@@ -44,7 +45,7 @@ public sealed partial class MainWindow
             return;
         }
 
-        CreateImageRequest? request = await ShowCreateImageDialogAsync(doc, scope);
+        CreateImageRequest? request = await ShowCreateImageDialogAsync(doc, scope, selectionOnly);
         if (request is not null)
         {
             await RunAcquisitionAsync(request);
@@ -64,7 +65,7 @@ public sealed partial class MainWindow
     /// イメージ作成のダイアログ (FOR-20 の「画面」、FOR-23 の取得する範囲): 入力元、取得する範囲、出力形式、出力先と名前、分割サイズ、ハッシュ、
     /// エラー時の動作、E01 の情報。書き込み保護モードが無効なら、有効にすることを勧める (仕様 1)。
     /// </summary>
-    private async Task<CreateImageRequest?> ShowCreateImageDialogAsync(DocumentViewModel doc, AcquisitionScope initialScope)
+    private async Task<CreateImageRequest?> ShowCreateImageDialogAsync(DocumentViewModel doc, AcquisitionScope initialScope, bool selectionOnlyDefault = false)
     {
         var panel = new StackPanel { Spacing = 8, MinWidth = 480 };
         if (!ImageForensics.Hooks.IsWriteBlocked)
@@ -86,7 +87,7 @@ public sealed partial class MainWindow
         TextBlock sourceText = ImgNote("ImgCreate_Source", Loc.Format("Img_SourceLabel", doc.DisplayName));
         panel.Children.Add(sourceText);
         bool hasSelection = doc.Editor.SelectionLength > 0;
-        CheckBox selectionOnly = DialogParts.Check("ImgCreate_SelectionOnly", Loc.Get("Img_SelectionOnly"), false);
+        CheckBox selectionOnly = DialogParts.Check("ImgCreate_SelectionOnly", Loc.Get("Img_SelectionOnly"), selectionOnlyDefault && hasSelection);
         selectionOnly.IsEnabled = hasSelection;
         panel.Children.Add(selectionOnly);
 
@@ -554,7 +555,13 @@ public sealed partial class MainWindow
 
     private async Task VerifyImageCommandAsync()
     {
-        // 対象: 開いているイメージのドキュメント、またはファイルを選ぶ (仕様 1)。
+        // 対象: 開いているイメージのドキュメント、証拠一覧のディスク (開いているディスクのタブ)、またはファイルを選ぶ (仕様 1)。
+        if (Vm.Selected is { Device: { } device } diskDoc && diskDoc.Document.Source is not IImageSource)
+        {
+            await VerifySourceAsync(diskDoc.Document.Source, null, device.Info.Path);
+            return;
+        }
+
         IImageSource? image = Vm.Selected?.Document.Source as IImageSource;
         string? path = image is ImageSourceBase b ? b.PrimaryPath : null;
         bool owned = false;
@@ -600,7 +607,52 @@ public sealed partial class MainWindow
     }
 
     /// <summary>検証のダイアログ (対象、アルゴリズム、比べる値の入力欄、入力元のディスクも読み直す) と、結果のダイアログ (FOR-22 の「画面」)。</summary>
-    internal async Task<VerificationResult?> VerifyImageAsync(IImageSource image, string path, Func<ContentDialog, Task>? interact = null)
+    internal Task<VerificationResult?> VerifyImageAsync(IImageSource image, string path, Func<ContentDialog, Task>? interact = null) =>
+        VerifySourceAsync(image, image, path, interact);
+
+    /// <summary>
+    /// 証拠を検証する (証拠パネルの右クリックメニュー。FOR-22 の「呼び出し」): ディスクの証拠は開いて (読み取り専用) そのデータソースを、
+    /// イメージ・ファイルの証拠はイメージとして開いて検証する。比べる値は証拠一覧の値 (と、イメージなら格納値・取得ログ)。
+    /// </summary>
+    internal async Task VerifyEvidenceAsync(Core.Forensics.Cases.EvidenceItem item)
+    {
+        if (item.IsDevice)
+        {
+            await OpenEvidenceAsync(item);
+            if (Vm.Selected is { Device: { } device } d && string.Equals(device.Info.Path, item.Path, StringComparison.OrdinalIgnoreCase))
+            {
+                await VerifySourceAsync(d.Document.Source, null, item.Path);
+            }
+
+            return;
+        }
+
+        IImageSource image;
+        try
+        {
+            image = ImageOpener.Open(item.Path, new ImageOpenOptions { AllowMissingSegments = true });
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Error_Open", Path.GetFileName(item.Path), ex.Message), InfoBarSeverity.Error);
+            return;
+        }
+
+        try
+        {
+            await VerifyImageAsync(image, item.Path);
+        }
+        finally
+        {
+            image.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// 検証のダイアログと実行。<paramref name="image"/> はイメージのとき (格納値・取得ログを比べる値にし、入力元のディスクの読み直しができる)。
+    /// ディスクのとき (<paramref name="image"/> が null) は、証拠一覧の値と入力した値と比べる。
+    /// </summary>
+    private async Task<VerificationResult?> VerifySourceAsync(IByteSource data, IImageSource? image, string path, Func<ContentDialog, Task>? interact = null)
     {
         var panel = new StackPanel { Spacing = 8, MinWidth = 460 };
         panel.Children.Add(ImgNote("ImgVerify_Target", Loc.Format("Img_VerifyTarget", path)));
@@ -617,7 +669,7 @@ public sealed partial class MainWindow
         panel.Children.Add(expected);
 
         // 入力元のディスクがまだ開いていれば、読み直して 3 者を比べられる (仕様 4)。取得ログの入力元のパスで探す。
-        DocumentViewModel? sourceDisk = SourceDiskOf(image);
+        DocumentViewModel? sourceDisk = image is null ? null : SourceDiskOf(image);
         CheckBox reread = DialogParts.Check("ImgVerify_Reread", Loc.Get("Img_VerifyReread"), false);
         reread.IsEnabled = sourceDisk is not null;
         panel.Children.Add(reread);
@@ -666,15 +718,17 @@ public sealed partial class MainWindow
             algorithms.Add(ImageHashes.Sha256);
         }
 
-        string identity = image.Identity;
-        IReadOnlyList<ReferenceHash> refs = ImageVerifier.FindReferences(image, expected.Text, null,
-            MergeEvidence(ImageForensics.Hooks.EvidenceHashesOf(path), ImageForensics.Hooks.EvidenceHashesOf(identity)));
+        string identity = data.Identity;
+        IReadOnlyDictionary<string, byte[]> evidenceHashes = MergeEvidence(ImageForensics.Hooks.EvidenceHashesOf(path), ImageForensics.Hooks.EvidenceHashesOf(identity));
+        IReadOnlyList<ReferenceHash> refs = image is not null
+            ? ImageVerifier.FindReferences(image, expected.Text, null, evidenceHashes)
+            : DiskReferences(evidenceHashes, expected.Text);
         IByteSource? disk = reread.IsChecked == true ? sourceDisk?.Document.Source : null;
         VerificationResult result;
         try
         {
-            result = await Vm.Operations.RunAsync(Loc.Format("Img_VerifyOperation", Path.GetFileName(path)), OperationKind.ReadOnly, null, image.Length,
-                op => ImageVerification.RunAsync(image, path, algorithms, refs, op, disk, TestHooks.Time));
+            result = await Vm.Operations.RunAsync(Loc.Format("Img_VerifyOperation", Path.GetFileName(path)), OperationKind.ReadOnly, null, data.Length,
+                op => ImageVerification.RunAsync(data, path, algorithms, refs, op, disk, TestHooks.Time));
         }
         catch (OperationCanceledException)
         {
@@ -684,6 +738,26 @@ public sealed partial class MainWindow
         LastVerification = result;
         await ShowVerificationResultAsync(result);
         return result;
+    }
+
+    /// <summary>ディスクの比べる値: 証拠一覧の値と、利用者が入力した値 (FOR-22 の仕様 2。ディスクには格納値・取得ログがない)。</summary>
+    private static List<ReferenceHash> DiskReferences(IReadOnlyDictionary<string, byte[]> evidence, string userHex)
+    {
+        var refs = new List<ReferenceHash>();
+        foreach ((string algorithm, byte[] value) in evidence)
+        {
+            if (ImageHashes.TryNormalize(algorithm, out string a))
+            {
+                refs.Add(new ReferenceHash(a, value, ReferenceSource.Evidence));
+            }
+        }
+
+        if (ImageVerifier.ParseUserHash(userHex) is { } user)
+        {
+            refs.Add(user);
+        }
+
+        return refs;
     }
 
     private static IReadOnlyDictionary<string, byte[]> MergeEvidence(IReadOnlyDictionary<string, byte[]> a, IReadOnlyDictionary<string, byte[]> b)

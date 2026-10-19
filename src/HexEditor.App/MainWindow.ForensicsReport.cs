@@ -189,6 +189,8 @@ public sealed partial class MainWindow
             Registry = ReportRegistry.Shared,
         };
 
+        // 節の寄稿者 (パーティション・ファイルシステム) が読むドキュメントの一覧は、UI のスレッドで写してからバックグラウンドで作る。
+        ForensicsService.CaptureReportDocuments();
         try
         {
             ReportResult result = await Vm.Operations.RunAsync(Loc.Get("Report_Operation"), OperationKind.WritesExternal, null, null,
@@ -205,6 +207,10 @@ public sealed partial class MainWindow
         {
             ShowNotice(Loc.Format("Report_Failed", ex.Message), InfoBarSeverity.Error);
             return null;
+        }
+        finally
+        {
+            ForensicsService.ReleaseReportDocuments();
         }
     }
 

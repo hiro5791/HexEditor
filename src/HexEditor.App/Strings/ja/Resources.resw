@@ -6781,6 +6781,8 @@
   <data name="Evidence_Menu_Remove" xml:space="preserve"><value>一覧から外す</value></data>
   <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>ハッシュをコピー</value></data>
   <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>イメージを作成...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>検証...</value></data>
 
   <data name="AuditLog_Summary" xml:space="preserve"><value>{0} 件</value></data>
   <data name="AuditLog_NoCase" xml:space="preserve"><value>ケースを開いていません。監査ログはケースに属します。</value></data>
@@ -9263,11 +9265,11 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
   <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>未割り当て領域を別タブで開く(N)</value></data>
   <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>次の断片</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>次の断片(N)</value></data>
   <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>前の断片</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>前の断片(P)</value></data>
   <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>P</value></data>
-  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>フォレンジックの強調</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>フォレンジックの強調(H)</value></data>
   <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>パーティション</value></data>
   <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
@@ -9275,7 +9277,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
   <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>断片一覧</value></data>
   <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
-  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>フォレンジックの結果一覧</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>フォレンジックの結果一覧(7)</value></data>
   <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
   <data name="Status_Item_Forensic" xml:space="preserve"><value>ディスクの位置とクラスタの持ち主</value></data>
   <data name="Panel_Partitions_Title" xml:space="preserve"><value>パーティション</value></data>
@@ -9651,6 +9653,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>スラックを選択(S)</value></data>
   <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>未割り当て領域を選択しています</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>未割り当て領域を調べています</value></data>
   <data name="Fs_SelectingSlack" xml:space="preserve"><value>スラックを選択しています</value></data>
   <data name="Fs_NothingToSelect" xml:space="preserve"><value>選択する範囲がありません。</value></data>
   <data name="Fs_SelectionTruncated" xml:space="preserve"><value>先頭から 1,000,000 個の範囲だけを選択しました。</value></data>
@@ -9700,6 +9703,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>スーパーブロック v2</value></data>
   <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>取り消し</value></data>
   <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>論理ボリュームを表示</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>この範囲のイメージを作成...</value></data>
   <data name="Lv_Title" xml:space="preserve"><value>論理ボリューム</value></data>
   <data name="Lv_Header" xml:space="preserve"><value>名前                  種類          サイズ      構成                          状態</value></data>
   <data name="Lv_Analyzing" xml:space="preserve"><value>ボリュームのメタデータを読んでいます...</value></data>
@@ -9756,6 +9760,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="Fs_Menu_Redact" xml:space="preserve"><value>ファイルの内容を墨塗り...</value></data>
   <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>選択範囲を安全に消去...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>選択範囲からファイルを切り出す...</value></data>
   <data name="EditOp_Redact" xml:space="preserve"><value>墨塗り</value></data>
   <data name="Wipe_Title" xml:space="preserve"><value>安全な消去</value></data>
   <data name="Wipe_Target" xml:space="preserve"><value>対象: {0}</value></data>

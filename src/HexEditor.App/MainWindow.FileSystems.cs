@@ -101,7 +101,7 @@ public sealed partial class MainWindow
         Commands.Register("forensics.fs.exportSlack", () => ExportSlackAsync(), () => NeedsSession());
         Commands.Register("forensics.fs.selectUnallocated", () => SelectRegionsAsync(slack: false), () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
         Commands.Register("forensics.fs.selectSlack", () => SelectRegionsAsync(slack: true), () => NeedsSession());
-        Commands.Register("forensics.fs.openUnallocated", OpenUnallocatedTab, () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
+        Commands.Register("forensics.fs.openUnallocated", () => OpenUnallocatedTabAsync(), () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
 
         // ---- LDM・LVM2 (FOR-07)、ext (FOR-12) ----
         RegisterFileSystemMoreCommands();
@@ -550,7 +550,7 @@ public sealed partial class MainWindow
 
     // ---- 未割り当て領域のタブ (FOR-16 の仕様 5) ----
 
-    private void OpenUnallocatedTab()
+    private async Task OpenUnallocatedTabAsync()
     {
         if (Vm.Selected is not { } d || StateOf(d)?.Session is not { } session)
         {
@@ -558,8 +558,24 @@ public sealed partial class MainWindow
         }
 
         IVolumeReader document = ReaderOf(d);
-        var source = new ConcatenatedByteSource(document, FileSystemExtraction.UnallocatedRuns(session.FileSystem, session.VolumeOffset),
-            Loc.Format("Fs_UnallocatedTabName", d.DisplayName));
+        string name = Loc.Format("Fs_UnallocatedTabName", d.DisplayName);
+
+        // 空き領域の区間はボリューム全体の割り当て情報 (ビットマップ・FAT) を読んで求めるため、UI のスレッドではなく長時間処理で作る。
+        ConcatenatedByteSource source;
+        try
+        {
+            source = await Vm.Operations.RunAsync(Loc.Get("Fs_FindingUnallocated"), OperationKind.ReadOnly, d.Document, null,
+                op => Task.FromResult(new ConcatenatedByteSource(document, FileSystemExtraction.UnallocatedRuns(session.FileSystem, session.VolumeOffset, op.CancellationToken), name)));
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        if (!Vm.Documents.Contains(d))
+        {
+            return;
+        }
         DocumentViewModel vm = Vm.AddFileSystemContent(source, source.DisplayName);
         long diskBase = d.LinkParent is not null ? d.Document.LinkStart : 0;
         StateOf(vm)!.DiskOffsetOf = offset => source.DiskOffsetOf(offset) is long v ? diskBase + v : null;

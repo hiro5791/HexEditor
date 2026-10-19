@@ -111,13 +111,13 @@ internal static class ForensicsService
         // デバイス情報 (FOR-27・28) の節は MainWindow.DeviceReports が登録する。
         Func<string, string?> localize = key => Loc.TryGet("Report_" + key);
         Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.PartitionReportContributor(
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Partitions))
-                .Where(x => x.Partitions is not null).Select(x => (x.DisplayName, x.Partitions!)), localize));
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.Partitions))
+                .Where(x => x.Partitions is not null).Select(x => (x.Name, x.Partitions!)), localize));
         Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.FileSystemReportContributor(
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Session))
-                .Where(x => x.Session is not null).Select(x => (x.DisplayName, x.Session!.VolumeOffset, x.Session.FileSystem)),
-            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.LogicalVolumes))
-                .Where(x => x.LogicalVolumes is not null).Select(x => (x.DisplayName, x.LogicalVolumes!)),
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.Session))
+                .Where(x => x.Session is not null).Select(x => (x.Name, x.Session!.VolumeOffset, x.Session.FileSystem)),
+            () => ReportDocuments().Select(d => (d.Name, ViewModels.FileSystemDocumentState.Find(d.Document)?.LogicalVolumes))
+                .Where(x => x.LogicalVolumes is not null).Select(x => (x.Name, x.LogicalVolumes!)),
             localize));
         Core.Forensics.Reports.ReportRegistry.Shared.Register(AcquisitionReports = new Core.Forensics.Reports.AcquisitionReportContributor(localize));
     }
@@ -125,9 +125,21 @@ internal static class ForensicsService
     /// <summary>レポートの「取得記録」の節 (イメージの取得のたびに加える)。</summary>
     public static Core.Forensics.Reports.AcquisitionReportContributor AcquisitionReports { get; private set; } = new();
 
-    /// <summary>すべてのウィンドウの開いているドキュメント (レポートの節が読む)。</summary>
-    private static List<ViewModels.DocumentViewModel> OpenDocuments() =>
-        [.. WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray())];
+    private static volatile IReadOnlyList<(string Name, Core.Engine.Document Document)>? s_reportDocuments;
+
+    /// <summary>
+    /// レポートの節が読む、すべてのウィンドウの開いているドキュメント (表示名とドキュメント)。レポートはバックグラウンドで作るため、
+    /// ドキュメントの一覧 (UI のスレッドが変更するコレクション) は <see cref="CaptureReportDocuments"/> が UI のスレッドで写したものを使う。
+    /// </summary>
+    private static IReadOnlyList<(string Name, Core.Engine.Document Document)> ReportDocuments() => s_reportDocuments ?? CaptureOpenDocuments();
+
+    private static List<(string Name, Core.Engine.Document Document)> CaptureOpenDocuments() =>
+        [.. WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray()).Distinct().Select(d => (d.DisplayName, d.Document))];
+
+    /// <summary>レポートを作る前に UI のスレッドで呼ぶ: 開いているドキュメントの一覧を写す (作り終えたら <see cref="ReleaseReportDocuments"/>)。</summary>
+    public static void CaptureReportDocuments() => s_reportDocuments = CaptureOpenDocuments();
+
+    public static void ReleaseReportDocuments() => s_reportDocuments = null;
 
     /// <summary>ファイルシステムの機能の操作を監査ログに記録する (FOR-09 の受け入れ基準 4、FOR-16 の仕様 5・6、FOR-08 の仕様 4)。</summary>
     internal static void RecordFileSystemEvent(Core.FileSystems.FileSystemAuditEvent e)

@@ -6781,6 +6781,8 @@ Type: {4}</value></data>
   <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Remove from the list</value></data>
   <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Copy hashes</value></data>
   <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Create image...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Verify...</value></data>
 
   <data name="AuditLog_Summary" xml:space="preserve"><value>{0} entries</value></data>
   <data name="AuditLog_NoCase" xml:space="preserve"><value>No case is open. The audit log belongs to a case.</value></data>
@@ -9651,6 +9653,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Select slack</value></data>
   <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Selecting unallocated space</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Finding unallocated space</value></data>
   <data name="Fs_SelectingSlack" xml:space="preserve"><value>Selecting slack</value></data>
   <data name="Fs_NothingToSelect" xml:space="preserve"><value>There is nothing to select.</value></data>
   <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Only the first 1,000,000 ranges were selected.</value></data>
@@ -9700,6 +9703,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblock v2</value></data>
   <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
   <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Show logical volumes</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Create image of this range...</value></data>
   <data name="Lv_Title" xml:space="preserve"><value>Logical volumes</value></data>
   <data name="Lv_Header" xml:space="preserve"><value>Name                  Type          Size        Layout                        State</value></data>
   <data name="Lv_Analyzing" xml:space="preserve"><value>Reading the volume metadata...</value></data>
@@ -9756,6 +9760,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="Fs_Menu_Redact" xml:space="preserve"><value>Redact file contents...</value></data>
   <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Securely erase selection...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Carve files from selection...</value></data>
   <data name="EditOp_Redact" xml:space="preserve"><value>Redaction</value></data>
   <data name="Wipe_Title" xml:space="preserve"><value>Securely erase</value></data>
   <data name="Wipe_Target" xml:space="preserve"><value>Target: {0}</value></data>
