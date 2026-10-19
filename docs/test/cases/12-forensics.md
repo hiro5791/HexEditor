@@ -1355,7 +1355,7 @@
 | テストデータ | TD-FOR-EXT2、TD-FOR-EXT3、TD-FOR-EXT4 |
 | 環境 | 標準 |
 
-**前提**: 各イメージの作成時に Linux でマウントして記録したマニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) を用意する。
+**前提**: マニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) は、テストデータの生成ツールが入れたファイルの定義 (TD-FOR-FILESET の削除するもの以外と `dir1` の 300 個のファイル) とする。Linux の mke2fs で作ったイメージと Linux で記録したマニフェストとの比較は、CI のジョブ fs-crosscheck (毎晩と手動の実行。build/tests/make-fs-crosscheck.sh と FileSystemCrossCheckTests) が行う。
 
 **手順**:
 
@@ -1425,7 +1425,7 @@
 | テストデータ | TD-FOR-APFS |
 | 環境 | 標準 |
 
-**前提**: TD-FOR-APFS の作成時に macOS でマウントして記録したマニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) を用意する。
+**前提**: マニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) は、テストデータの生成ツールがボリューム `Data` に入れたファイルの定義 (TD-FOR-FILESET の削除するもの以外) とする。macOS で作ったイメージは CI で作れない (macOS の diskutil はディスクイメージの作成に管理者のマウントを使う) ため、APFS は生成ツールのイメージだけで確かめる。
 
 **手順**:
 
@@ -3114,7 +3114,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 ファイルシステムのイメージに入れるファイルの組。「NTFS のみ」と書いたもの以外は、すべてのファイルシステムのイメージに入れる。
 
-TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・パーティション表のイメージは、テストデータの生成ツール (tools/HexEditor.TestData の FileSystemImages) がコードで書く (OS のフォーマッタ・FSCTL_MOVE_FILE は使わない)。断片の配置 (frag.bin の隙間)、切り詰めたファイル (small100.bin のクラスタの残り)、上書き (TD-FOR-NTFS-OVERWRITE の over1.bin・over2.bin のクラスタ)、削除 (使用中の印・ビットマップ・FAT を戻し、データは残す)、インデックススラック (dir1 の最後の INDX の使用領域の後ろに victim.txt のエントリ) は、生成ツールが直接その形に書く。NTFS の圧縮は Windows の RtlCompressBuffer (LZNT1) で作る。生成ツールはアプリの解析の実装を使わない。
+TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・TD-FOR-EXT*・TD-FOR-HFSPLUS・TD-FOR-APFS*・TD-FOR-ISO-JRR・TD-FOR-UDF250・TD-FOR-LDM-*・TD-FOR-LVM-*・パーティション表のイメージは、テストデータの生成ツール (tools/HexEditor.TestData の FileSystemImages) がコードで書く (OS のフォーマッタ・FSCTL_MOVE_FILE は使わない)。断片の配置 (frag.bin の隙間)、切り詰めたファイル (small100.bin のクラスタの残り)、上書き (TD-FOR-NTFS-OVERWRITE の over1.bin・over2.bin のクラスタ)、削除 (使用中の印・ビットマップ・FAT を戻し、データは残す)、インデックススラック (dir1 の最後の INDX の使用領域の後ろに victim.txt のエントリ) は、生成ツールが直接その形に書く。NTFS の圧縮は Windows の RtlCompressBuffer (LZNT1) で作る。生成ツールはアプリの解析の実装を使わない。
 
 | 名前 | 内容 |
 | --- | --- |
@@ -3158,14 +3158,14 @@ TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・パーティション表のイメー�
 | TD-FOR-FAT32-FATDIFF | 512 MiB (スパース) | TD-FOR-FAT32 の 2 つ目の FAT で、`data.bin` のクラスタチェーンの 2〜11 番目のクラスタのエントリ (10 個) を終端 (0x0FFFFFFF) にしたもの。1 つ目の FAT は変えない |
 | TD-FOR-FAT32-LOOP | 512 MiB (スパース) | TD-FOR-FAT32 の両方の FAT で、`frag.bin` のクラスタチェーンの 100 番目のクラスタのエントリを、チェーンの 1 番目のクラスタの番号にしたもの |
 | TD-FOR-EXFAT | 64 MiB | exFAT のボリュームのイメージ (クラスタ 4 KiB、ラベル `EXFAT`)。TD-FOR-FILESET を入れる |
-| TD-FOR-EXT2 | 64 MiB | ext2 のボリュームのイメージ。`mke2fs -t ext2 -b 4096 -U 00000000-0000-0000-0000-0000000000E2` (環境変数 `E2FSPROGS_FAKE_TIME=1767225600`) で作り、TD-FOR-FILESET (NTFS のみのものを除く) を入れる。生成時に Linux でマウントしてマニフェストを記録する |
-| TD-FOR-EXT3 | 64 MiB | TD-FOR-EXT2 と同じ方法で、`-t ext3`、UUID の末尾を `E3` にしたもの |
-| TD-FOR-EXT4 | 64 MiB | TD-FOR-EXT2 と同じ方法で、`-t ext4 -O 64bit,flex_bg,extent,metadata_csum`、UUID の末尾を `E4` にしたもの |
-| TD-FOR-HFSPLUS | 32 MiB | HFS+ のボリュームのイメージ (Linux の `mkfs.hfsplus -v HFSTEST`)。`forked.txt` のデータフォークに ASCII の `DATA-FORK` + LF、リソースフォーク (`forked.txt/..namedfork/rsrc`) に ASCII の `RSRC-FORK` + LF を書く |
-| TD-FOR-APFS | 64 MiB | 保管。macOS の `diskutil` で作った APFS のコンテナのイメージ。暗号化しないボリューム `Data` に TD-FOR-FILESET (NTFS のみのものを除く) を入れる。作成時に macOS でマウントしてマニフェストを記録する |
-| TD-FOR-APFS-ENC | 64 MiB | 保管。macOS で作った APFS のコンテナのイメージ。ボリューム `Secret` をパスワード `HexEditor-Test-01` で暗号化し、`readme.txt` を入れる |
-| TD-FOR-ISO-JRR | 約 1 MiB | `xorriso` で作る ISO 9660 のイメージ (Joliet と Rock Ridge あり)。ファイル: `日本語の名前.txt` (TD-TEXT-UTF8)、`MixedCase_Long_Name.txt` (TD-TEXT-ASCII)、`colon:name.txt` (ASCII の `colon` 5 バイト)。El Torito のブートカタログに、エミュレーションなし・4 セクタ (512 バイト単位) のブートイメージ `boot.img` (2,048 バイト。00, 01, …, FF を 8 回) を登録する |
-| TD-FOR-UDF250 | 64 MiB | `mkudffs --udfrev=0x0250 --media-type=bdr --label=UDFTEST` で作る UDF 2.50 のイメージ (メタデータパーティションあり)。`readme.txt`、`photo.png`、`data.bin` (TD-FOR-FILESET と同じ内容) を入れる |
+| TD-FOR-EXT2 | 64 MiB | ext2 のボリュームのイメージ。テストデータの生成ツール (ExtImageBuilder) が mke2fs と同じ配置の規則で直接書く (ブロック 4 KiB、グループあたり 4,096 ブロックで 4 グループ、inode 256 バイト、sparse_super、UUID 00000000-0000-0000-0000-0000000000E2、作成日時 2026-01-01T00:00:00Z)。TD-FOR-FILESET (NTFS のみのものを除く) と、`dir1` に `f001.txt`〜`f300.txt` (各 10 バイト、`file-001` + CRLF など) を入れる。`frag.bin` は 3 つの断片 (間に 64 KiB の空き) に分ける。`deleted.txt` は最後に削除する (前のエントリの rec_len に吸収させ、inode に dtime を書き、ビットマップを戻す。ext2 は位置情報を残す) |
+| TD-FOR-EXT3 | 64 MiB | TD-FOR-EXT2 と同じ方法で、ジャーナル (inode 8、1,024 ブロック、jbd2 のスーパーブロック v2 と、記述子・コミット・取り消しのブロックを持つ 2 つのトランザクション) を持ち、UUID の末尾を `E3` にしたもの。削除では位置情報を消す |
+| TD-FOR-EXT4 | 64 MiB | TD-FOR-EXT3 と同じ方法で、機能 `64bit`・`flex_bg`・`extent`・`metadata_csum` (と `huge_file`・`dir_nlink`・`extra_isize`) を持ち、UUID の末尾を `E4` にしたもの。グループ記述子は 64 バイト、ビットマップと inode テーブルはグループ 0 にまとめる。`dir1` は htree のディレクトリ。スーパーブロック・グループ記述子・inode・ディレクトリの末尾・エクステントのブロック・ビットマップの CRC32C は正しい値。使わないグループは BLOCK_UNINIT・INODE_UNINIT |
+| TD-FOR-HFSPLUS | 32 MiB | HFS+ のボリュームのイメージ。テストデータの生成ツール (HfsPlusImageBuilder) が直接書く (ブロック 4 KiB、ラベル `HFSTEST`、カタログのノード 8 KiB、ジャーナルあり)。`forked.txt` のデータフォークに ASCII の `DATA-FORK` + LF、リソースフォーク (`forked.txt/..namedfork/rsrc`) に ASCII の `RSRC-FORK` + LF を書く。ほかに TD-FOR-FILESET (削除するものを除く)、10 個の断片の `manyfrag.bin` (9 個目以降はエクステントオーバーフロー B 木)、UF_COMPRESSED の `compressed.txt`、同じ `iNode` を指すハードリンク `link1.txt`・`link2.txt` (内容 `HARDLINK-TARGET` + LF)、`dir1` に 40 個のファイルを入れる |
+| TD-FOR-APFS | 64 MiB | APFS のコンテナのイメージ。テストデータの生成ツール (ApfsImageBuilder) が Apple File System Reference の構造で直接書く (ブロック 4 KiB、Fletcher-64 のチェックサム、チェックポイント 2 つ (xid 1 と 2)、コンテナとボリュームのオブジェクトマップ、2 段のファイルシステムツリー、スナップショット 1 つ、空き領域マネージャ)。暗号化しないボリューム `Data` (役割 Data) に TD-FOR-FILESET (NTFS のみのものと削除するものを除く) を入れる |
+| TD-FOR-APFS-ENC | 64 MiB | TD-FOR-APFS と同じ生成ツールで、ボリューム `Secret` を暗号化されたボリューム (APFS_FS_UNENCRYPTED を立てない) にしたもの。ファイルシステムツリーのブロックは乱数 (暗号化されたものとして読まない) |
+| TD-FOR-ISO-JRR | 約 1 MiB | ISO 9660 のイメージ (Joliet と Rock Ridge あり)。テストデータの生成ツール (IsoImageBuilder) が直接書く (xorriso と同じく、Joliet では `:` を `_` に置き換え、基本の名前は大文字の 8.3 に `;1` を付ける。ディレクトリレコードの日時は +09:00)。ファイル: `日本語の名前.txt` (TD-TEXT-UTF8)、`MixedCase_Long_Name.txt` (TD-TEXT-ASCII)、`colon:name.txt` (ASCII の `colon` 5 バイト)。El Torito のブートカタログに、エミュレーションなし・4 セクタ (512 バイト単位) のブートイメージ `boot.img` (2,048 バイト。00, 01, …, FF を 8 回) を登録する。xorriso で作ったイメージとの比較は CI のジョブ fs-crosscheck が行う |
+| TD-FOR-UDF250 | 64 MiB | UDF 2.50 のイメージ (メタデータパーティションあり、ラベル `UDFTEST`)。テストデータの生成ツール (UdfImageBuilder) が直接書く (ボリューム認識シーケンス、アンカー 2 つ、主と予備のボリューム記述子シーケンス、空き領域のビットマップ、拡張ファイルエントリ、タグのチェックサムと CRC)。`readme.txt`、`photo.png`、`data.bin` (TD-FOR-FILESET と同じ内容) を入れる。Linux はメタデータパーティションに書けないため、mkudffs で作った UDF 2.01 のイメージとの比較を CI のジョブ fs-crosscheck が行う |
 | TD-FOR-JPEG | 約 1 KiB | 32×32 画素のグレースケールの横方向のグラデーションを、生成ツールに同梱する固定のエンコーダ設定 (品質 75、ベースライン) で JPEG にしたもの |
 | TD-FOR-PDF | 約 1 KiB | 生成ツールがバイト単位で固定の内容を書く PDF 1.4 (1 ページ、テキスト `HexEditor`、xref と `%%EOF` を持つ) |
 | TD-FOR-CARVE | 8 MiB | すべて 00 のデータの、オフセット 0x100000 に TD-FOR-JPEG、0x200000 に TD-PNG、0x300000 に TD-FOR-PDF、0x400000 に TD-ZIP を置いたもの |
@@ -3176,10 +3176,10 @@ TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・パーティション表のイメー�
 | TD-FOR-RAID-SRC | 128 MiB | セクタ 512 バイトの raw のディスクイメージ。GPT で Windows 基本データのパーティション 1 つ (LBA 2,048〜末尾 − 34) を持ち、パーティションの中に種 0x5A1D の乱数を書く |
 | TD-FOR-RAID5-M0、TD-FOR-RAID5-M1、TD-FOR-RAID5-M2 | 各 64 MiB | TD-FOR-RAID-SRC を 3 台構成の RAID 5 (左対称。Linux md の left-symmetric と同じ配置、ストライプサイズ 64 KiB、データ開始オフセット 0) に分けたメンバー。パリティは XOR |
 | TD-FOR-RAID0-M0、TD-FOR-RAID0-M1 | 各 64 MiB | TD-FOR-RAID-SRC を 2 台構成の RAID 0 (ストライプサイズ 64 KiB) に分けたメンバー |
-| TD-FOR-LDM-STRIPE-A、TD-FOR-LDM-STRIPE-B | 各 64 MiB | 2 つの 64 MiB の VHDX を diskpart で動的ディスク (MBR) にし、2 台にまたがるストライプのボリューム (NTFS、ラベル `STRIPE`、`readme.txt` を入れる) を作ってから、各ディスクの全体を raw で書き出したもの |
-| TD-FOR-LDM-STRIPE-VOL | 約 60 MiB | TD-FOR-LDM-STRIPE-A・B の作成時に、OS からストライプのボリューム (`\\.\X:`) の全体を raw で書き出したもの |
-| TD-FOR-LVM-LINEAR-A、TD-FOR-LVM-LINEAR-B | 各 32 MiB | Linux で 2 つのループデバイスを PV にし、VG `vg0` と、2 つの PV の全体を使う linear の LV `lv0` を作り、`lv0` に種 0x1F の乱数を書いてから、各 PV の全体を書き出したもの |
-| TD-FOR-LVM-LINEAR-LV | 約 56 MiB | TD-FOR-LVM-LINEAR-A・B の作成時に `/dev/vg0/lv0` の全体を書き出したもの |
+| TD-FOR-LDM-STRIPE-A、TD-FOR-LDM-STRIPE-B | 各 64 MiB | 2 台の動的ディスク (MBR の種類 42、論理ディスクの開始 LBA 63、データベースは末尾の 1 MiB) のイメージ。テストデータの生成ツール (LogicalVolumeImages) が Linux の ldm.c と同じ配置で PRIVHEAD (LBA 6 とデータベースの中の写し)・TOCBLOCK・VMDB・VBLK (ディスクグループ、ディスク 2 つ、ボリューム `Volume1`、ストライプのコンポーネント (64 KiB)、パーティション 2 つ) を書き、TD-FOR-LDM-STRIPE-VOL を 64 KiB ずつ交互に置く。ディスク GUID は A が 4C444D41-0000-4000-8000-0000000000A1、B が 4C444D42-0000-4000-8000-0000000000B2 |
+| TD-FOR-LDM-STRIPE-VOL | 60 MiB | 2 台にまたがるストライプのボリュームの内容。テストデータの生成ツールが NTFS (ラベル `STRIPE`、`readme.txt` を入れる) で書いたもの |
+| TD-FOR-LVM-LINEAR-A、TD-FOR-LVM-LINEAR-B | 各 32 MiB | LVM2 の 2 つの PV のイメージ。テストデータの生成ツール (LogicalVolumeImages) が、ラベル (セクタ 1)、PV ヘッダー、メタデータ領域 (4 KiB 目から) と calc_crc のチェックサム、テキストのメタデータ (VG `vg0`、エクステント 4 MiB、PV の先頭のエクステントは 1 MiB 目、LV `lv0` は 2 つの PV の全体を使う linear のセグメント 2 つ) を書き、TD-FOR-LVM-LINEAR-LV の内容を置く。lvm2 で作ったイメージとの比較は CI のジョブ fs-crosscheck が行う |
+| TD-FOR-LVM-LINEAR-LV | 56 MiB | `lv0` の内容 (種 0x1F の乱数、14 エクステント) |
 | TD-FOR-LUKS2 | 32 MiB | `cryptsetup luksFormat --type luks2 --uuid 12345678-1234-1234-1234-123456789abc --pbkdf pbkdf2` (キー `HexEditor-Test-01`、キースロット 1 つ) で作ったイメージ |
 | TD-FOR-BITLOCKER | 64 MiB | 保管。Windows 11 Pro で作った VHDX。GPT で NTFS のパーティション 1 つを持ち、`inside.txt` (ASCII の `INSIDE`) を入れてから、BitLocker (AES-XTS 128、パスワード `HexEditor-Test-01` と回復パスワードの 2 つの保護機能) で全体を暗号化したもの |
 | TD-FOR-BITLOCKER-RAW | 64 MiB | TD-FOR-BITLOCKER のディスクの内容を raw で書き出したもの (保管した VHDX から生成ツールが作る) |

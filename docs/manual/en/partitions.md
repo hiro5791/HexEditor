@@ -58,3 +58,16 @@ Right-click a candidate to:
 - **Create partition table entries (MBR)** or **(GPT)**. This changes the document only. The disk or image is not changed until you save. In write-protect mode these items are not available.
 
 You can cancel the scan at any time. The results found so far stay in the list. To save the list, right-click it and select **Export list as CSV / JSON**.
+
+## Logical volumes (LDM and LVM2) {#logical-volumes}
+
+Windows dynamic disks (LDM) and Linux LVM2 physical volumes appear in the partition list as **LDM** or **LVM2 physical volume** rows. To see their logical volumes:
+
+1. Open every disk or image that belongs to the volume.
+2. Right-click the LDM or LVM2 row and select **Show logical volumes**, or select **Forensics > Partitions > Show logical volumes**.
+
+The **Logical volumes** list under the partition list shows each volume's name, type, size, layout and state. HexEditor finds the member disks among the open disks and images by the LDM disk GUID or the LVM2 PV UUID. When the copies of the metadata on the members differ, the newest one is used and a warning is shown.
+
+- **Open logical volume** opens a simple, spanned or striped LDM volume, or a linear or striped LVM2 logical volume, as one read-only document. Only the parts you look at are read from the members.
+- When a member is missing, the volume is not opened and the message names the missing disk GUID or PV UUID. Open that disk or image, or select **Assign members** and choose an open document or a file for each missing member.
+- LDM mirror and RAID-5 volumes are opened with RAID reconstruction. LVM2 thin, snapshot, cache and RAID volumes are only listed; they show **Not supported**.

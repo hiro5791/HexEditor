@@ -1,6 +1,6 @@
 # File systems
 
-This page shows how to browse the files of an NTFS, FAT12, FAT16, FAT32 or exFAT volume without Windows mounting it, find deleted files, see which file uses a cluster, and export files, free space and slack.
+This page shows how to browse the files of an NTFS, FAT12, FAT16, FAT32, exFAT, ext2/3/4, HFS+, APFS, ISO 9660 or UDF volume without Windows mounting it, find deleted files, see which file uses a cluster, and export files, free space and slack.
 
 HexEditor only reads the file system. It never creates, deletes, renames or undeletes anything on it.
 
@@ -77,3 +77,29 @@ Select **View > Forensic highlight** to mark metadata, unallocated clusters, RAM
 - **Export unallocated space** joins all free clusters into one file, and **Export slack** joins the slack of all files. Both can write a map file (`.map.csv`) that gives the disk offset of each part.
 - **Open unallocated space in new tab** shows the free clusters as one document. The status bar shows the disk offset of the cursor.
 - **Select unallocated space** and **Select slack** select these areas, so you can search only in them with the **Selection** scope of the find bar.
+
+## ext2, ext3 and ext4 {#ext}
+
+The browser reads ext2, ext3 and ext4 volumes: the superblock, the group descriptors (also the 64-byte ones of the `64bit` feature and `flex_bg`), inodes, extent trees, direct and indirect blocks, inline data and htree directories. The summary lists the superblock fields, including the `compat`, `incompat` and `ro_compat` features. With `metadata_csum`, the superblock, group descriptor and inode checksums are checked; a mismatch is shown as a warning, or as a damaged mark on the file.
+
+- Right-click a file and select **Show inode** to color the inode as a structure template and move to it. To go to an inode by number, select **Forensics > File system > Go to inode** and enter the number.
+- **Deleted files** lists names left in the unused space of directory entries (`rec_len`) and inodes that have a deletion time. ext3 and ext4 usually erase the block list when a file is deleted; such files are marked **Location unknown**.
+- The journal (`$Journal` in **$Metadata**) is only listed: right-click it and select **Show journal** to list its descriptor, commit and revoke blocks. HexEditor never replays the journal.
+- Files encrypted with fscrypt are marked as encrypted; their names and contents are shown as stored.
+- Free space comes from the block bitmaps. ext, HFS+ and APFS count in blocks, so **Go to cluster** is shown as **Go to block**.
+
+## HFS+ and APFS {#apple}
+
+**HFS+ and HFSX**: the summary shows the volume header and whether the alternate volume header at the end of the volume matches it. Files and folders come from the catalog B-tree; fragments after the eighth come from the extents overflow B-tree. A resource fork is listed as `name/..namedfork/rsrc` and opens like any other file. Hard links are resolved to their `iNode` files. Compressed files (decmpfs) are marked as compressed and shown without decompression. The journal is only shown, never replayed. Free space comes from the allocation file.
+
+**APFS**: HexEditor uses the newest container checkpoint whose checksum is correct; if the newest one is damaged, a warning says that an older one is used. The volumes are the top folders of the tree. A volume shows its name, role and whether it is encrypted. Snapshots are listed in the volume's **$Snapshots** folder; their contents cannot be browsed. An encrypted volume (including FileVault) is only detected: it is marked as encrypted and its file list is not shown. Free space comes from the space manager; when it cannot be read, the free space highlight is not available.
+
+Deleted files on HFS+ and APFS are not searched.
+
+## ISO 9660 and UDF {#optical}
+
+Disc images use 2,048-byte sectors (raw 2,352-byte sector images are not supported).
+
+**ISO 9660**: the browser shows the Joliet names if the disc has them, otherwise the Rock Ridge names, otherwise the basic ISO 9660 names. Switch between them with **Names** above the file list. With Rock Ridge names, the **Attributes** column shows the POSIX mode. A bootable disc lists its El Torito boot catalog entries (platform, emulation, start sector, sector count) in the summary, and its boot images in **$Metadata** as `$BootImage1` and so on; export them like files. On a multisession disc the last session is shown; choose another one with **Session**.
+
+**UDF**: versions 1.02 to 2.60 are read, including the metadata partition of UDF 2.50 and later. The summary shows the UDF version. Descriptors whose tag checksum or CRC does not match are reported as warnings and reading continues. Virtual partitions (VAT) and sparing tables are not supported. When a disc has both UDF and ISO 9660, UDF is shown; switch with **Format**. Free space comes from the unallocated space bitmap, if the disc has one. Deleted files are not searched on ISO 9660 and UDF.
