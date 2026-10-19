@@ -36,6 +36,9 @@ public sealed record CrashDumpHeader
     public const int MaxRuns64 = 43;
     public const int MaxRuns32 = 86;
 
+    /// <summary>範囲の一覧の形式の物理アドレス空間の大きさの単位 (1 GiB)。</summary>
+    public const long PhysicalAlignment = 1L << 30;
+
     /// <summary>物理アドレス空間の上限 (4 PiB。壊れた値で極端な長さにしない)。</summary>
     public const long MaxPhysicalPages = 1L << 40;
 
@@ -147,7 +150,10 @@ public sealed record CrashDumpHeader
             throw new MemoryDumpFormatException($"The dump file is shorter than its physical memory runs ({sum} pages, {totalPages} declared).");
         }
 
-        return header with { Runs = runs, DataOffset = headerSize, PhysicalLength = previousEnd * PageSize };
+        // 物理アドレス空間の大きさは、最後の範囲の終わりを 1 GiB の境界に切り上げたもの (ダンプは機械の物理アドレス空間の大きさを持たないため。
+        // 範囲の後ろの空きも「未割り当て」として見せる)。
+        long end = previousEnd * PageSize;
+        return header with { Runs = runs, DataOffset = headerSize, PhysicalLength = Math.Min((end + PhysicalAlignment - 1) / PhysicalAlignment * PhysicalAlignment, MaxPhysicalPages * PageSize) };
     }
 
     private static CrashDumpHeader ParseBitmap(CrashDumpHeader header, long fileLength, int headerSize, Func<long, int, byte[]?> readAt)
@@ -247,6 +253,10 @@ public sealed class CrashDumpByteSource : ByteSourceBase, IRegionMapSource
         _chunkRank = chunkRank;
         OpenBytesRead = bytesRead;
         _regions = header.Runs.Count > 0 ? BuildRegions(header) : [new SourceRegion(0, header.PhysicalLength, RegionAccess.Readable)];
+        if (header.Runs.Count > 0 && _regions[^1].End < header.PhysicalLength)
+        {
+            _regions.Add(new SourceRegion(_regions[^1].End, header.PhysicalLength - _regions[^1].End, RegionAccess.Unallocated));
+        }
     }
 
     public string Path { get; }
