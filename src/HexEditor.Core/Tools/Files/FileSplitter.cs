@@ -4,6 +4,7 @@ using HexEditor.Core.Hashing;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Tools.Checksums;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Tools.Files;
 
@@ -223,6 +224,7 @@ public static class FileSplitter
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 string target = plan.PathOf(part);
+                WriteBlockGate.Current.EnsureFileWrite(target);
                 temp = target + ".~part";
                 operation?.ReportDetail(part.FileName);
                 using IncrementalHash? partHash = wantHashes ? IncrementalHash.CreateHash(HashAlgorithmName.SHA256) : null;

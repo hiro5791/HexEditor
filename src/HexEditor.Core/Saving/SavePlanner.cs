@@ -1,6 +1,7 @@
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Saving;
 
@@ -368,6 +369,9 @@ public static class SavePlanner
         {
             throw new InvalidOperationException($"この計画は実行できません ({plan.Method}, {plan.Issue})。");
         }
+
+        // 書き込み保護モード (FOR-01): 元の場所への保存と、保護の対象 (開いているデータソース・証拠) への保存を拒否する。
+        WriteBlockGate.Current.EnsureFileSave(plan.TargetPath!, (plan.Document.Source as FileByteSource)?.Path);
 
         if (plan.Method is SaveMethod.StreamRewrite or SaveMethod.StreamRewriteUnprotected)
         {

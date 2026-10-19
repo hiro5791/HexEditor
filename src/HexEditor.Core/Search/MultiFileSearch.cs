@@ -6,6 +6,7 @@ using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
 using HexEditor.Core.View;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Search;
 
@@ -1129,6 +1130,9 @@ public static class MultiFileSearch
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
+
+            // 書き込み保護モード (FOR-01): 属性も含めてファイルを変えない (置換は元の場所への保存と同じ扱い)。
+            WriteBlockGate.Current.EnsureFileSave(path, path);
             if (readOnly)
             {
                 info.IsReadOnly = false;

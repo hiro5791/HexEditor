@@ -1,5 +1,6 @@
 using System.Buffers;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Devices;
 
@@ -209,6 +210,8 @@ public sealed class DeviceByteSource : ByteSourceBase, View.IViewDefaultsSource
     /// <exception cref="DeviceException">書き込みに失敗した。</exception>
     public override void Write(long offset, ReadOnlySpan<byte> data)
     {
+        // 書き込み保護モード (FOR-01): ディスク・ボリュームへの書き込みはすべて拒否する。
+        WriteBlockGate.Current.EnsureDeviceWrite(Path);
         if (!_handle.Writable)
         {
             throw new DeviceException(Win32Errors.AccessDenied, "The device is open for reading only.");

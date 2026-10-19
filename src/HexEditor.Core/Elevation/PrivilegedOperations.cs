@@ -1,6 +1,7 @@
 using System.Text.Json;
 using HexEditor.Core.Devices;
 using HexEditor.Core.Processes;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Elevation;
 
@@ -18,14 +19,18 @@ public sealed class PrivilegedOperations : IDisposable
     private readonly IDeviceAccess _devices;
     private readonly IProcessAccess _processes;
     private readonly Action<string> _log;
+    private readonly IUsbWriteProtectStore _usbPolicy;
     private uint _next = 1;
     private bool _writeBlock;
     private DateTime _idleSince = DateTime.UtcNow;
 
-    public PrivilegedOperations(IDeviceAccess devices, IProcessAccess processes, Action<string>? log = null, string? appVersion = null)
+    /// <param name="usbPolicy">OS の USB 書き込み保護の値 (FOR-02)。null なら実機のレジストリ (補助プロセス・管理者として実行したアプリだけが書ける)。</param>
+    public PrivilegedOperations(IDeviceAccess devices, IProcessAccess processes, Action<string>? log = null, string? appVersion = null,
+        IUsbWriteProtectStore? usbPolicy = null)
     {
         _devices = devices;
         _processes = processes;
+        _usbPolicy = usbPolicy ?? RegistryUsbWriteProtectStore.Instance;
         _log = log ?? (_ => { });
         AppVersion = appVersion ?? string.Empty;
     }
@@ -408,21 +413,41 @@ public sealed class PrivilegedOperations : IDisposable
                     throw Reject($"QueryDeviceInfo with a command that is not allowed (0x{kind:X4})");
                 }
 
-                if (Get<IDeviceHandle>(id) is null)
+                if (Get<IDeviceHandle>(id) is not { } device)
                 {
                     return Fail(Win32Errors.InvalidHandle);
                 }
 
-                // 読み取り専用のデバイス情報の取得 (FOR-27、FOR-28) はフェーズ 5。許可リストの判定だけを先に置く。
-                _log($"QueryDeviceInfo {(DeviceInfoKind)kind} -> not supported");
-                return Fail(Win32Errors.NotSupported);
+                // 読み取り専用のデバイス情報の取得 (FOR-27、FOR-28)。書き込み保護モードの間も受け付ける (FOR-01 の仕様 2)。
+                // ATA のコマンドは許可リスト (AtaCommands) のものだけを、データを受け取る方向でだけ送る。
+                if (device is not Devices.Info.IDeviceInfoSource info)
+                {
+                    _log($"QueryDeviceInfo {(DeviceInfoKind)kind} -> not supported");
+                    return Fail(Win32Errors.NotSupported);
+                }
+
+                int infoError = info.QueryDeviceInfo((DeviceInfoKind)kind, out byte[] infoData);
+                _log($"QueryDeviceInfo {device.Path} {(DeviceInfoKind)kind} -> {infoError}");
+                return infoError == 0 ? Ok(infoData) : Fail(infoError);
             }
 
             case HelperCommand.GetUsbWriteProtect:
+            {
                 reader.End();
 
-                // OS の USB 書き込み保護の取得・切り替え (FOR-02) はフェーズ 5。
-                return Fail(Win32Errors.NotSupported);
+                // OS の USB 書き込み保護 (FOR-02) の値。値がなければ UsbWriteProtectDelete (0xFFFFFFFF)。
+                try
+                {
+                    uint? current = _usbPolicy.Read();
+                    _log($"GetUsbWriteProtect -> {(current is { } c ? c.ToString(System.Globalization.CultureInfo.InvariantCulture) : "absent")}");
+                    return Ok(new BodyWriter().U32(current ?? HelperProtocol.UsbWriteProtectDelete).ToArray());
+                }
+                catch (UsbWriteProtectException ex)
+                {
+                    _log($"GetUsbWriteProtect -> error {ex.ErrorCode}");
+                    return Fail(ex.ErrorCode);
+                }
+            }
 
             case HelperCommand.SetUsbWriteProtect:
             {
@@ -433,13 +458,26 @@ public sealed class PrivilegedOperations : IDisposable
                     throw Reject($"SetUsbWriteProtect with a value that is not allowed ({value})");
                 }
 
-                if (_writeBlock)
+                // OS の USB 書き込み保護の切り替えは、書き込み保護モードの間も受け付ける (FOR-01 の仕様 2。調査対象への書き込みではない)。
+                try
                 {
-                    return Fail(Win32Errors.WriteProtect);
-                }
+                    if (value == HelperProtocol.UsbWriteProtectDelete)
+                    {
+                        _usbPolicy.Delete();
+                    }
+                    else
+                    {
+                        _usbPolicy.Write(value);
+                    }
 
-                _log($"SetUsbWriteProtect {value} -> not supported");
-                return Fail(Win32Errors.NotSupported);
+                    _log($"SetUsbWriteProtect {(value == HelperProtocol.UsbWriteProtectDelete ? "delete" : value.ToString(System.Globalization.CultureInfo.InvariantCulture))} -> 0");
+                    return Ok([]);
+                }
+                catch (UsbWriteProtectException ex)
+                {
+                    _log($"SetUsbWriteProtect {value} -> error {ex.ErrorCode}");
+                    return Fail(ex.ErrorCode);
+                }
             }
 
             case HelperCommand.SetWriteBlock:

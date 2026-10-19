@@ -1,4 +1,5 @@
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Remote.Gdb;
 
@@ -286,6 +287,7 @@ public sealed class GdbByteSource : ByteSourceBase, IRemoteByteSource
     /// </summary>
     public async Task WriteAsync(long offset, ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureRemoteWrite(Identity);
         if (!_writable)
         {
             throw new NotSupportedException("The GDB target was opened read-only.");

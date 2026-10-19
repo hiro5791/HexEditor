@@ -3,6 +3,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Scripting.Api;
 using HexEditor.Sdk;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Scripting;
 
@@ -305,6 +306,9 @@ public sealed class ScriptContext : IDisposable
     public void RequireFileWrite(string path)
     {
         string full = System.IO.Path.GetFullPath(path);
+
+        // 書き込み保護モード (FOR-01): 開いているデータソース・証拠のファイルには、許可があっても書かない。
+        WriteBlockGate.Current.EnsureFileWrite(full);
         if (IsPicked(full, write: true))
         {
             return;
