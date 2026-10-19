@@ -61,6 +61,38 @@ public sealed partial class MainWindow
     internal static string ImageAppVersion =>
         "HexEditor " + (typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0");
 
+    private readonly HashSet<MenuFlyout> _imageMenuCleanup = [];
+
+    /// <summary>
+    /// Hex ビューの右クリックメニューの「セクタ範囲を保存」(12 の FOR-25 の「呼び出し」): ディスク・イメージのドキュメントで選択範囲があるときだけ出す。
+    /// </summary>
+    private void ExtendHexViewImageMenu(HexView view, MenuFlyout menu)
+    {
+        const string id = "HexViewMenu_SaveSectors";
+        if (!menu.IsOpen && _imageMenuCleanup.Add(menu))
+        {
+            menu.Closed += (_, _) =>
+            {
+                foreach (MenuFlyoutItemBase item in menu.Items.Where(i => AutomationProperties.GetAutomationId(i) == id).ToList())
+                {
+                    menu.Items.Remove(item);
+                }
+            };
+            return;
+        }
+
+        if (DocumentOf(view) is not { } doc || doc.Document.Source.LogicalSectorSize <= 1 || doc.Editor.SelectionLength == 0
+            || menu.Items.Any(i => AutomationProperties.GetAutomationId(i) == id))
+        {
+            return;
+        }
+
+        var save = new MenuFlyoutItem { Text = Loc.Get("Cmd_forensics_sectors_save") };
+        AutomationProperties.SetAutomationId(save, id);
+        save.Click += (_, _) => _ = Commands.ExecuteAsync("forensics.sectors.save");
+        menu.Items.Add(save);
+    }
+
     // ---- イメージをディスクとして開く (FOR-21) ----
 
     private async Task OpenImageCommandAsync()

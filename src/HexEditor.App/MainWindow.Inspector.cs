@@ -529,6 +529,7 @@ public sealed partial class MainWindow
         {
             ExtendHexViewEditMenu(menu);
             ExtendHexViewDataMenu(menu);
+            ExtendHexViewImageMenu(view, menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewTemplateMenu(menu);
