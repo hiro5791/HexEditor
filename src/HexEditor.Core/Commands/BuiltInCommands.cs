@@ -38,6 +38,9 @@ public static class BuiltInCommands
 
         // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
         new("file.openDiskImage", "file"),
+
+        // メモリダンプを開く (01 の ENG-36)。
+        new("file.openMemoryDump", "file"),
         new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
 
         // プロセスのスナップショット・ミニダンプの保存 (ENG-35)、リモートに接続 (ENG-40〜ENG-42)、切断したリモートの再接続。既定のキーはなし。
@@ -667,6 +670,15 @@ public static class BuiltInCommands
         new("view.panel.evidence", "view"),
         new("view.panel.auditLog", "view"),
         new("view.panel.carving", "view"),
+
+        // ---- フォレンジック: 書き込み保護・デバイス情報・暗号化 (12 の FOR-01、FOR-02、FOR-27〜FOR-29)。既定のショートカットはなし ----
+        new("forensics.writeBlock", "forensics"),
+        new("forensics.writeBlock.allowDocument", "forensics") { Condition = "documentOpen" },
+        new("forensics.usbWriteProtect", "forensics"),
+        new("forensics.device.hpaDco", "forensics") { Condition = "documentOpen" },
+        new("forensics.device.smart", "forensics") { Condition = "documentOpen" },
+        new("forensics.encryption.info", "forensics") { Condition = "documentOpen" },
+        new("view.panel.deviceInfo", "view"),
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

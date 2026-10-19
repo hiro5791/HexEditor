@@ -29,6 +29,7 @@ public sealed partial class MainWindow
     {
         HookDeviceIntegration();
         RegisterSnapshotCommands();
+        RegisterMemoryDumpCommands();
         RegisterRemoteCommands();
         var e = new RoutedEventArgs();
         Commands.Register("file.openDisk", () => OpenDisk_Click(this, e));

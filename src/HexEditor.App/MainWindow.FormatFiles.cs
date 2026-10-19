@@ -110,7 +110,10 @@ public sealed partial class MainWindow
         public Action Validate { get; set; } = () => { };
     }
 
-    private static readonly string[] OpenFormats = ["auto", FormatIds.Binary, FormatIds.IntelHex, FormatIds.SRecord, FormatIds.Base64];
+    /// <summary>形式「メモリダンプ」(01 の ENG-36)。</summary>
+    private const string MemoryDumpFormat = "memory-dump";
+
+    private static readonly string[] OpenFormats = ["auto", FormatIds.Binary, FormatIds.IntelHex, FormatIds.SRecord, FormatIds.Base64, MemoryDumpFormat];
 
     /// <summary>
     /// 「詳細を指定して開く」(ENG-11 の仕様 2): パス、読み取り専用、範囲 (ENG-13)、形式 (ENG-38)、他のアプリの書き込みを禁止 (ENG-15)。
@@ -205,7 +208,7 @@ public sealed partial class MainWindow
 
             // 範囲とデコードする形式は組み合わせられない (範囲は元のファイルのバイトを開く。ENG-13)。黙って無視せず、理由を示して開けなくする。
             string chosen = OpenFormats[Math.Max(0, format.SelectedIndex)];
-            bool encodedFormat = chosen is FormatIds.IntelHex or FormatIds.SRecord or FormatIds.Base64;
+            bool encodedFormat = chosen is FormatIds.IntelHex or FormatIds.SRecord or FormatIds.Base64 or MemoryDumpFormat;
             bool conflict = !image && range.IsChecked == true && encodedFormat;
             formatError.Text = conflict ? Loc.Get("OpenAdv_RangeFormatConflict") : string.Empty;
             formatError.Visibility = conflict ? Visibility.Visible : Visibility.Collapsed;
@@ -271,6 +274,12 @@ public sealed partial class MainWindow
         if (diskImage.IsChecked == true)
         {
             await OpenDiskImageAsync(file);
+            return;
+        }
+
+        if (chosenFormat == MemoryDumpFormat)
+        {
+            await OpenMemoryDumpAsync(file);
             return;
         }
 

@@ -231,6 +231,9 @@ public sealed partial class MainWindow
             // 開いているケースの名前 (FOR-03 の仕様 3): 隠せない項目。
             ["case"] = ForensicsService.Cases.CurrentCase is not null,
 
+            // 書き込み保護モード (FOR-01 の仕様 3): 有効な間は隠せない項目。
+            ["writeblock"] = WriteBlockMode.IsEnabled,
+
             // マクロの記録中 (AUTO-27 の仕様 4): 隠せない項目。
             ["recording"] = ScriptWorkspace.Macros.IsRecording,
 
@@ -258,7 +261,7 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" or "remote" or "case" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" or "automation" or "transform" or "remote" or "case" or "writeblock" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusTransform.Content = doc?.Document.ViewTransform is { } transform ? Controls.HexView.TransformViewLabel(transform) : string.Empty;

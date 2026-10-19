@@ -456,6 +456,15 @@
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Forensics">
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_WriteBlock" cmd:CommandUi.Id="forensics.writeBlock" AutomationProperties.AutomationId="Command_WriteBlock" />
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_UsbWriteProtect" cmd:CommandUi.Id="forensics.usbWriteProtect" AutomationProperties.AutomationId="Command_UsbWriteProtect" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Device" AutomationProperties.AutomationId="Menu_Forensics_Device">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Hpa" cmd:CommandUi.Id="forensics.device.hpaDco" AutomationProperties.AutomationId="Command_DeviceHpaDco" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Smart" cmd:CommandUi.Id="forensics.device.smart" AutomationProperties.AutomationId="Command_DeviceSmart" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Panel" cmd:CommandUi.Id="view.panel.deviceInfo" AutomationProperties.AutomationId="Command_PanelDeviceInfo" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_Encryption" cmd:CommandUi.Id="forensics.encryption.info" AutomationProperties.AutomationId="Command_EncryptionInfo" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_Case" AutomationProperties.AutomationId="Menu_Forensics_Case">
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_New" cmd:CommandUi.Id="forensics.case.new" AutomationProperties.AutomationId="Command_CaseNew" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Open" cmd:CommandUi.Id="forensics.case.open" AutomationProperties.AutomationId="Command_CaseOpen" />
@@ -778,6 +787,13 @@
                 Orientation="Horizontal"
                 TabFocusNavigation="Once"
                 XYFocusKeyboardNavigation="Enabled">
+                <!--  書き込み保護モード (12 の FOR-01 の仕様 3): 左端に錠のアイコンと文字で示す (色だけに頼らない)。有効な間は隠せない。クリックで切り替える。  -->
+                <Button x:Name="StatusWriteBlock" AutomationProperties.AutomationId="Status_WriteBlock" Click="StatusWriteBlock_Click" Style="{StaticResource StatusItemStyle}" Tag="writeblock" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon AutomationProperties.AccessibilityView="Raw" FontSize="14" Glyph="&#xE72E;" />
+                        <TextBlock x:Name="StatusWriteBlockText" FontWeight="SemiBold" />
+                    </StackPanel>
+                </Button>
                 <!--  開いているケースの名前 (12 の FOR-03 の仕様 3)。ケースを開いている間は必ず出す (隠せない項目)。  -->
                 <Button x:Name="StatusCase" AutomationProperties.AutomationId="Status_Case" Click="StatusCase_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="case" Visibility="Collapsed" />
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.StatusDocument.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />

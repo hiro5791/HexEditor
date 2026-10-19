@@ -60,6 +60,10 @@ public sealed partial class MainWindow
         Commands.Register("forensics.audit.verify", () => VerifyAuditAsync(), NeedsCase);
         RegisterCarvingCommands();
         RegisterReportCommands();
+        InitializeWriteBlock();
+        InitializeUsbWriteProtect();
+        InitializeDeviceInfo();
+        InitializeEncryption();
 
         EventHandler caseChanged = (_, _) => DispatcherQueue.TryEnqueue(OnCaseStateChanged);
         EventHandler<AuditFaultEventArgs> faultChanged = (_, e) => DispatcherQueue.TryEnqueue(() => OnAuditFault(e));

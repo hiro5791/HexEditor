@@ -8579,4 +8579,265 @@ SHA-256 のフィンガープリント: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[書き込み保護]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>書き込み保護</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>書き込み保護モードが有効です。クリックすると解除します。</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>書き込み保護モードは、このアプリからの書き込みだけを防ぎます。Windows や他のアプリによる書き込み (ボリュームのマウント時にファイルシステムが行う書き込みなど) は防げません。ハードウェアの書き込み防止装置か、OS の USB 書き込み保護も併せて使ってください。</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>OS の USB 書き込み保護...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>書き込み保護モードを解除しますか?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>開いている証拠のドキュメント: {0} 個。解除すると、次のドキュメントに書き込めるようになります:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>開いている証拠のドキュメントはありません。解除すると、開いているドキュメントに再び書き込めるようになります。</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>書き込み保護を解除する</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>読み取り専用で開き直せませんでした。読み込み済みの範囲だけを表示します。</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>このドキュメントへの書き込みを許可</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>書き込みを許可 (書き込み保護モードの例外)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>書き込み保護モードが無効です。</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>書き込みを許可できるのはファイルのドキュメントだけです。</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>証拠に登録されたデータソースには、書き込みを許可できません。</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>このドキュメントへの書き込みはすでに許可されています。</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>このドキュメントへの書き込みを許可しますか?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>書き込み保護モードは有効のままですが、{0} ({1}) は閉じるまで編集・保存できるようになります。この操作は監査ログに記録され、開いている間は取り消せません。</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>確認のため {0} と入力してください</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>{0} への書き込みを許可する</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>{0} は閉じるまで書き込みができます。</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>書き込み保護モード(W)</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>OS の USB 書き込み保護(U)</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>デバイス(D)</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>HPA / DCO の確認(H)</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART 情報(S)</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>デバイス情報パネル(P)</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>暗号化の情報(Y)...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>書き込み保護モードの切り替え</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>かきこみほごもーど らいとぶろっく よみとりせんよう</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>このドキュメントへの書き込みを許可</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>かきこみをきょか れいがい</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>OS の USB 書き込み保護の切り替え</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>ゆーえすびー かきこみほご すとれーじ</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>HPA と DCO を確認</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>かくしりょういき えいちぴーえー でぃーしーおー</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>SMART 情報を表示</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>すまーと けんこうじょうたい でぃすく</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>暗号化の情報を表示</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>あんごうか びっとろっかー</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>デバイス情報の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>でばいすじょうほう ぱねる</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>メモリダンプを開く</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>めもりだんぷ くらっしゅだんぷ ぶつりめもり</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>デバイス情報</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>起動時に常に書き込み保護モードを有効にする</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>オフのときは、前回終了したときの状態で起動します。</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>ディスクを開いたときに HPA / DCO を確認する</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>読み取りだけの ATA のコマンドを送り、隠し領域があれば知らせます。</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>OS の USB 書き込み保護を有効にしますか?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>これから接続する USB ストレージへの書き込みを Windows が禁止します (StorageDevicePolicies の WriteProtect の設定)。すでに接続されているデバイスには、接続し直すまで効きません。内蔵の SATA・NVMe のディスクは保護しません。管理者権限が必要です。</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>OS の USB 書き込み保護を無効にしますか?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>設定を有効にする前の状態に戻します。すでに接続されている USB ストレージは、接続し直すまで書き込みが禁止されたままです。管理者権限が必要です。</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>設定を変更する</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>管理者権限が必要です。設定は変更していません。</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>設定を変更できませんでした (アクセスが拒否されました。グループポリシーで管理されている可能性があります): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>設定を変更できませんでした: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>OS の USB 書き込み保護を有効にしました。USB ストレージは接続し直すと保護されます。</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>OS の USB 書き込み保護を無効にしました。</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>OS の USB 書き込み保護が有効のままです</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>このアプリを終了した後も、Windows は USB ストレージへの書き込みを禁止し続けます。無効にしてから終了しますか?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>無効にして終了</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>有効のまま終了</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>OS の USB 書き込み保護を変えるには、Windows の管理者権限が必要です。</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>デバイス情報</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>HPA / DCO を確認</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>SMART を取得</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>JSON に書き出す...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>テキストに書き出す...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>物理ディスクを開いて、「HPA / DCO の確認」か「SMART 情報」を選んでください。</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — 取得日時 {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO はまだ確認していません。</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe のディスクには HPA・DCO がありません。HPA / DCO は該当しません。</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>名前空間のサイズ: {0} ブロック (1 ブロック {1} バイト)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>名前空間の容量: {0} ブロック</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>このデバイスでは確認できません (USB 変換や仮想ディスクなどでコマンドが通りません)。</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>管理者権限が必要です。</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>コマンド {0} が失敗しました (ATA のステータス {1}、エラー {2})。</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>最大 LBA (IDENTIFY DEVICE、28 bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>最大 LBA (IDENTIFY DEVICE、48 bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>本来の最大 LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>DCO で設定された最大 LBA (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>デバイスが対応していません</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>デバイスが対応していません</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: あり、{0} セクタ ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: なし</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: 判定できません</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: あり、{0} セクタ ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: なし</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: 判定できません</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>SMART 情報はまだ取得していません。</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>このデバイスでは SMART 情報を取得できません (対応していない USB 変換など)。</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>このデバイスでは SMART が無効にされています。</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>SMART のデータのチェックサムが合いません。値が正しくない可能性があります。</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>モデル名: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>シリアル番号: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>ファームウェア: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>容量: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>セクタサイズ: 論理 {0} バイト、物理 {1} バイト</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>接続の種類: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>回転数: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>回転しない (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>対応</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>非対応</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>物理ディスクを開いているときに使えます。</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>デバイス情報を取得できませんでした: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} に隠し領域があります: HPA {1} セクタ、DCO {2} セクタ。Windows から見える容量は、ディスクの本来の容量より小さくなっています。</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>詳細を表示</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>デバイス情報を {0} に書き出しました。</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>デバイス情報を書き出せませんでした: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>現在値</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>最悪値</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>閾値</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>生の値 (16 進)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>生の値 (10 進)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>状態</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>注意</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>読み取りエラー率</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>スループット性能</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>スピンアップ時間</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>開始・停止の回数</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>代替処理済みのセクタ数</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>シークエラー率</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>シーク時間の性能</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>電源投入時間</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>スピンアップの再試行回数</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>キャリブレーションの再試行回数</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>電源投入回数</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>利用できる予備領域</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>書き込みの失敗回数</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>消去の失敗回数</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>ウェアレベリングの回数</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>予期しない電源断の回数</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>消耗の偏り</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>使用済みの予備ブロック数</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>書き込みの失敗回数の合計</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>消去の失敗回数の合計</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>実行時の不良ブロック</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>エンドツーエンドのエラー</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>報告された訂正できないエラー</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>コマンドのタイムアウト</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>ヘッドの浮上量の異常な書き込み</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>吸気温度</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>衝撃によるエラー率</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>電源断時のヘッド退避の回数</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>ロード・アンロードの回数</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>温度</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>ハードウェア ECC で回復したエラー</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>代替処理の発生回数</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>代替処理を保留中のセクタ数</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>オフラインで訂正できないセクタ数</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA の CRC エラー数</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>書き込みエラー率</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD の残り寿命</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>残りの耐久性</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>媒体の消耗度</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>正常なブロック数</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>書き込んだ LBA の合計</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>読み取った LBA の合計</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>警告ビット: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>温度: {0} ℃</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>残りの予備領域: {0}% (閾値 {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>使用率: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>読み取ったデータ量: {0} バイト</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>書き込んだデータ量: {0} バイト</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>電源投入回数: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>電源投入時間: {0} 時間</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>異常終了の回数: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>メディアのエラー数: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>取得日時</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>デバイス</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>モデル名</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>シリアル番号</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>ファームウェア</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>容量 (バイト)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>セクタサイズ (論理 / 物理)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>接続の種類</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>最大 LBA (28 bit / 48 bit / 本来 / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>このデバイスでは確認できません</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>なし</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>あり ({0} セクタ)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>該当しません (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>名前</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>現在値</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>最悪値</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>閾値</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>生の値</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>状態</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>注意</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>暗号化の情報</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>暗号化されたボリュームは見つかりませんでした。</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>範囲 {0}: オフセット {1}、{2} バイト</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>種類: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>暗号化された APFS のボリューム (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (暗号化の可能性)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>暗号化または圧縮されたデータの可能性 (VeraCrypt・TrueCrypt など。判定できる署名はありません)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>メタデータの版: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>暗号化方式: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>ボリュームの GUID: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>作成日時: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>説明: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>暗号化の状態: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>復号済み</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>進行中</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>完了</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>一時停止</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>暗号化済み: {0} バイト</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>キー保護機能: {0} 個</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}、{1}、作成日時 {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>クリアキー (保護なし)</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>スタートアップキー</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM と PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>回復パスワード</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>パスワード</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>不明 (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>キースロット: {0} 個</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• ボリューム {0}: 暗号化あり</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• ボリューム {0}: 暗号化なし</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>先頭 64 KiB のエントロピー: {0} ビット / バイト</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>警告: 3 つのメタデータブロックの内容が食い違っています。</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>警告: 壊れたメタデータブロックがあります。読めた項目だけを表示しています。</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>暗号化されたボリュームは、ファイルシステムブラウザで開きません。</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>この BitLocker のボリューム ({0}) は Windows がロックを解除しています。論理ボリュームとして開けば、OS が復号した内容を読めます。</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>論理ボリュームとして開く</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>メモリダンプ</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>{0} のメモリダンプの形式を読めませんでした。raw として開きますか?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>raw として開く</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>メモリダンプを開けませんでした: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>メモリダンプ: {0}、取得日時 {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>メモリダンプ: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>物理メモリのイメージ (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>完全メモリダンプ</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>カーネルメモリダンプ</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>完全メモリダンプ (ビットマップ形式)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>ミニダンプ</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>メモリダンプ</value></data>
 </root>

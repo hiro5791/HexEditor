@@ -473,6 +473,7 @@ public sealed partial class MainWindow
             .. CompareTabMenuEntries(doc),
             .. DeviceTabMenuEntries(doc),
             .. AdsTabMenuEntries(doc),
+            .. WriteBlockTabMenuEntries(doc),
         ];
     }
 }

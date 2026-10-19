@@ -3,6 +3,7 @@ using HexEditor.Core.Elevation;
 using HexEditor.Core.Processes;
 using HexEditor.Core.Settings;
 using HexEditor.Platform;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.App.Services;
 
@@ -146,6 +147,8 @@ public sealed class DeviceService : IAsyncDisposable
     public async Task<DeviceByteSource> OpenDeviceAsync(DeviceOpenInfo info, bool writable, OpenRoute route, CancellationToken cancellationToken = default,
         Func<DeviceGeometry, DeviceOpenInfo, DeviceOpenInfo>? adjust = null)
     {
+        // 書き込み保護モード (FOR-01 の仕様 2): 新しく開くディスク・ボリュームは読み取りのアクセス権 (GENERIC_READ) だけで開く。
+        writable &= !WriteBlockMode.IsEnabled;
         IDeviceAccess access = await DeviceAccessForAsync(route, cancellationToken).ConfigureAwait(true);
         IDeviceHandle handle = access.Open(info.Path, writable);
         try
@@ -163,6 +166,7 @@ public sealed class DeviceService : IAsyncDisposable
     /// <summary>プロセスメモリを開く。</summary>
     public async Task<ProcessMemoryByteSource> OpenProcessAsync(int pid, ProcessOpenInfo info, bool writable, OpenRoute route, CancellationToken cancellationToken = default)
     {
+        writable &= !WriteBlockMode.IsEnabled;
         IProcessAccess access = await ProcessAccessForAsync(route, cancellationToken).ConfigureAwait(true);
         IProcessMemory memory = access.Open(pid, writable);
         try
@@ -176,8 +180,14 @@ public sealed class DeviceService : IAsyncDisposable
         }
     }
 
-    /// <summary>与えられた経路のデバイスのアクセス手段 (補助プロセスなら接続する)。</summary>
-    public async Task<IDeviceAccess> DeviceAccessForAsync(OpenRoute route, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 与えられた経路のデバイスのアクセス手段 (補助プロセスなら接続する)。どの経路も書き込み保護モード (FOR-01) の関門
+    /// (<see cref="WriteBlockedDeviceAccess"/>) で包む: モードが有効な間は、読み書きでのオープン・書き込み・ロック・ディスマウントを拒否する。
+    /// </summary>
+    public async Task<IDeviceAccess> DeviceAccessForAsync(OpenRoute route, CancellationToken cancellationToken = default) =>
+        new WriteBlockedDeviceAccess(await RawDeviceAccessForAsync(route, cancellationToken).ConfigureAwait(true));
+
+    private async Task<IDeviceAccess> RawDeviceAccessForAsync(OpenRoute route, CancellationToken cancellationToken)
     {
         switch (route)
         {
@@ -196,7 +206,10 @@ public sealed class DeviceService : IAsyncDisposable
         }
     }
 
-    public async Task<IProcessAccess> ProcessAccessForAsync(OpenRoute route, CancellationToken cancellationToken = default)
+    public async Task<IProcessAccess> ProcessAccessForAsync(OpenRoute route, CancellationToken cancellationToken = default) =>
+        new WriteBlockedProcessAccess(await RawProcessAccessForAsync(route, cancellationToken).ConfigureAwait(true));
+
+    private async Task<IProcessAccess> RawProcessAccessForAsync(OpenRoute route, CancellationToken cancellationToken)
     {
         switch (route)
         {
@@ -256,6 +269,9 @@ public sealed class DeviceService : IAsyncDisposable
         });
         session.StateChanged += (_, _) => HelperStateChanged?.Invoke(this, EventArgs.Empty);
         session.Disconnected += (_, _) => HelperDisconnected?.Invoke(this, EventArgs.Empty);
+
+        // 書き込み保護モード (FOR-01): 接続の直後 (Hello の後) に SetWriteBlock で通知する (セッションが覚えて送る)。
+        _ = session.SetWriteBlockAsync(_writeBlock);
         return session;
     }
 
@@ -282,9 +298,48 @@ public sealed class DeviceService : IAsyncDisposable
         }
     }
 
-    /// <summary>補助プロセスに書き込み保護モード (FOR-01) の状態を通知する。</summary>
+    private bool _writeBlock;
+
+    /// <summary>
+    /// OS の USB 書き込み保護 (FOR-02) の今の値を読む保存先。レジストリの読み取りは管理者権限なしでできるため、UI のプロセスで読む。
+    /// テスト用のビルドでは偽物 (実機のレジストリに触れない)。
+    /// </summary>
+    public IUsbWriteProtectStore UsbWriteProtectReader => TestHooks.Active ? TestHooks.UsbWriteProtect! : RegistryUsbWriteProtectStore.Instance;
+
+    /// <summary>
+    /// 値を書き換える経路 (FOR-02 の仕様 2): アプリ全体を管理者として実行していれば同じプロセス、そうでなければ補助プロセス (UAC の確認が出る)。
+    /// どちらも使えなければ null (管理者権限の案内を出す)。テスト用のビルドでは常に偽物 (昇格しない・レジストリを書かない)。
+    /// </summary>
+    public async Task<IUsbWriteProtectStore?> UsbWriteProtectWriterAsync(CancellationToken cancellationToken = default)
+    {
+        if (TestHooks.Active)
+        {
+            if (!IsElevated)
+            {
+                MarkFakeHelperRunning();
+            }
+
+            return TestHooks.UsbWriteProtect;
+        }
+
+        if (IsElevated)
+        {
+            return RegistryUsbWriteProtectStore.Instance;
+        }
+
+        if (!HelperAvailable)
+        {
+            return null;
+        }
+
+        HelperClient client = await ConnectHelperAsync(cancellationToken).ConfigureAwait(true);
+        return new HelperUsbWriteProtectStore(client);
+    }
+
+    /// <summary>補助プロセスに書き込み保護モード (FOR-01) の状態を通知する (まだ起動していなければ、起動したときに通知する)。</summary>
     public async Task SetWriteBlockAsync(bool enabled)
     {
+        _writeBlock = enabled;
         if (_session is { } session)
         {
             await session.SetWriteBlockAsync(enabled).ConfigureAwait(true);

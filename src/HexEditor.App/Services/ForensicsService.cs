@@ -21,11 +21,11 @@ internal static class ForensicsService
 
     public static SignatureStore Signatures { get; private set; } = new(null);
 
-    /// <summary>書き込み保護モードが有効か (FOR-01 を担当する部品が差し替える。既定はアプリの <see cref="WriteBlockMode"/>)。</summary>
+    /// <summary>書き込み保護モードが有効か (FOR-01。<see cref="WriteBlockMode"/>)。</summary>
     public static Func<bool> IsWriteBlockEnabled { get; set; } = () => WriteBlockMode.IsEnabled;
 
-    /// <summary>書き込み保護モードを有効にする (ケースを開いたときの提案と自動で有効にする設定。FOR-01 を担当する部品が差し替える)。</summary>
-    public static Action EnableWriteBlock { get; set; } = () => WriteBlockMode.Initialize(true);
+    /// <summary>書き込み保護モードを有効にする (ケースを開いたときの提案と自動で有効にする設定。FOR-03 の仕様 4)。</summary>
+    public static Action EnableWriteBlock { get; set; } = () => WriteBlockMode.Enable("case");
 
     /// <summary>ケースを作った・開いた・閉じた。</summary>
     public static event EventHandler? CaseChanged
@@ -135,9 +135,46 @@ internal static class ForensicsService
         }
     }
 
-    /// <summary>コマンドが監査ログのために使えない理由 (使えるなら null)。<see cref="Commands.CommandHost.WriteGate"/> に設定する。</summary>
+    private static readonly HashSet<string> s_destructiveCommands = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// 書き込み保護モード (FOR-01) が有効な間は無効表示にする破壊的なコマンドとして登録する (仕様 2 の 5 つ目: 消去、クローン、セクタ範囲の復元、
+    /// パーティションの書き込み、安全な削除、代替データストリームの作成・削除)。ツールチップは「書き込み保護モードが有効です」。
+    /// 消去・クローン・復元・パーティションの書き込みの各部品は、自分のコマンドをここに登録する (実行時の拒否は Core の WriteBlockGate)。
+    /// </summary>
+    public static void RegisterDestructiveCommands(params string[] commandIds)
+    {
+        lock (s_destructiveCommands)
+        {
+            foreach (string id in commandIds)
+            {
+                s_destructiveCommands.Add(id);
+            }
+        }
+
+        RegisterWriteCommands(commandIds);
+    }
+
+    /// <summary>書き込み保護モードで無効にする破壊的なコマンドか。</summary>
+    public static bool IsDestructiveCommand(string commandId)
+    {
+        lock (s_destructiveCommands)
+        {
+            return s_destructiveCommands.Contains(commandId);
+        }
+    }
+
+    /// <summary>
+    /// コマンドが使えない理由 (使えるなら null)。<see cref="Commands.CommandHost.WriteGate"/> に設定する。書き込み保護モードの間の破壊的なコマンド
+    /// (FOR-01 の仕様 2) と、監査ログに書けない間の書き込みを伴うコマンド (FOR-04 の「エラー」)。
+    /// </summary>
     public static string? WriteGateReason(string commandId)
     {
+        if (IsWriteBlockEnabled() && IsDestructiveCommand(commandId))
+        {
+            return Loc.Get("WriteBlock_Enabled");
+        }
+
         bool isWrite;
         lock (s_writeCommands)
         {

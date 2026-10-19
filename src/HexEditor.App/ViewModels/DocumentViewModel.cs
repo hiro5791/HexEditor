@@ -180,14 +180,16 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     /// タブの見出し。読み取り専用なら鍵の記号 (EDIT-16 の仕様 6)、変更があれば ● (色だけに頼らない)、外部で変更された (ENG-19) なら ⚠
     /// (形で区別する) を先頭に付ける。
     /// </summary>
-    public string Header => (Document.IsReadOnly ? LockGlyph + " " : string.Empty) + (Document.IsModified ? "● " : string.Empty)
+    public string Header => (Document.IsReadOnly ? LockGlyph + " " : WriteBlockException ? UnlockGlyph + " " : string.Empty) + (Document.IsModified ? "● " : string.Empty)
         + (HasExternalChange ? "⚠ " : string.Empty) + TabTitle;
 
     public bool IsUntitled => FilePath is null;
 
     public void SetSavedPath(string path)
     {
+        string? before = FilePath;
         FilePath = path;
+        FilePathChanged?.Invoke(this, before);
         DisplayName = Path.GetFileName(path);
         OnPropertyChanged(nameof(DisplayName));
         OnPropertyChanged(nameof(TabTitle));

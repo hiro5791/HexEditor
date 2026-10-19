@@ -8579,4 +8579,265 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Whole page</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Fit width</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Choose folder...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Write-protected]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Write protection</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Write protection mode is on. Click to turn it off.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Write protection mode only stops this app from writing. It cannot stop Windows or other apps from writing (for example, the writes a file system makes when a volume is mounted). Use a hardware write blocker or the OS USB write protection as well.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>OS USB write protection...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Turn off write protection mode?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Evidence documents open: {0}. After you turn off the mode, these documents can be written to:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>No evidence documents are open. After you turn off the mode, the open documents can be written to again.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Turn off write protection</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>The data source could not be reopened read-only. Only the data already read is shown.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Allow writing to this document</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Writing allowed (exception to write protection mode)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Write protection mode is off.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Only file documents can be excepted from write protection mode.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>This data source is registered as evidence, so writing cannot be allowed.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Writing is already allowed for this document.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Allow writing to this document?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Write protection mode stays on, but {0} ({1}) can be edited and saved until you close it. This is recorded in the audit log and cannot be undone for the open document.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Type {0} to confirm</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Allow writing to {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Writing is allowed for {0} until it is closed.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Write protection mode</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>OS USB write protection</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Device</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Check HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART information</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Device information panel</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Encryption information...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Toggle write protection mode</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Allow writing to this document</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Toggle OS USB write protection</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Check HPA and DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Show SMART information</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Show encryption information</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Toggle device information</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Open memory dump</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Device information</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Always turn on write protection mode at startup</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>When off, the app starts with the mode as it was when it was last closed.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Check for HPA / DCO when a disk is opened</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Sends read-only ATA commands to the disk and shows a notice if hidden areas are found.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Turn on OS USB write protection?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows will block writing to USB storage devices that are connected from now on (the StorageDevicePolicies WriteProtect setting). Devices that are already connected are not affected until you reconnect them. Internal SATA and NVMe disks are not protected. Administrator rights are required.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Turn off OS USB write protection?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>The setting returns to the state it had before you turned it on. USB storage devices that are already connected stay write-protected until you reconnect them. Administrator rights are required.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Change the setting</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Administrator rights are required. The setting was not changed.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>The setting could not be changed (access denied; it may be managed by Group Policy): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>The setting could not be changed: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>OS USB write protection is on. Reconnect USB storage devices for it to take effect.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>OS USB write protection is off.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>OS USB write protection is still on</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows keeps blocking writes to USB storage after this app closes. Turn it off before exiting?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Turn off and exit</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Exit and keep it on</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Changing the OS USB write protection requires Windows administrator rights.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Device</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Check HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Read SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Export JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Export text...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Open a physical disk and choose Check HPA / DCO or SMART information.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — captured {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO have not been checked.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe disks have no HPA or DCO; HPA / DCO do not apply.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Namespace size: {0} blocks ({1} bytes per block)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Namespace capacity: {0} blocks</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>This cannot be checked on this device (the commands do not pass through, for example on USB adapters or virtual disks).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Administrator rights are required.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>The command {0} failed (ATA status {1}, error {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Max LBA (IDENTIFY DEVICE, 28-bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Max LBA (IDENTIFY DEVICE, 48-bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Native max LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>Max LBA set by DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>not supported by the device</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>not supported by the device</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: present, {0} sectors ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: none</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: could not be determined</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: present, {0} sectors ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: none</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: could not be determined</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>SMART information has not been read.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>SMART information cannot be read on this device (for example, through a USB adapter that does not support it).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART is disabled on this device.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>The checksum of the SMART data does not match; the values may be wrong.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Serial number: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Capacity: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Sector size: {0} bytes logical, {1} bytes physical</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Connection: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Rotation rate: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>non-rotating (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>supported</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>not supported</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Open a physical disk to use this command.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>The device information could not be read: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} has hidden areas: HPA {1} sectors, DCO {2} sectors. The capacity Windows sees is smaller than the disk's real capacity.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Show details</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>The device information was exported to {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>The device information could not be exported: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Current</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Worst</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Threshold</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Raw (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Raw (decimal)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Temperature</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Critical warning bits: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Temperature: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Available spare: {0}% (threshold {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Percentage used: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Data read: {0} bytes</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Data written: {0} bytes</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Power cycles: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Power-on hours: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Unsafe shutdowns: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Media and data integrity errors: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Captured</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Device</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Serial number</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Capacity (bytes)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Sector size (logical / physical)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Connection</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Max LBA (28-bit / 48-bit / native / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Cannot be checked on this device</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>None</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Present ({0} sectors)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Not applicable (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Name</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Current</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Worst</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Threshold</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Raw</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Encryption information</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>No encrypted volumes were found.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Range {0}: offset {1}, {2} bytes</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Type: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Encrypted APFS volume (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (possibly encrypted)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Possibly encrypted or compressed data (for example VeraCrypt or TrueCrypt; there is no signature to identify them)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Metadata version: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Encryption method: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>Volume GUID: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Created: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Description: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Encryption state: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>unknown</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>decrypted</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>in progress</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>completed</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>paused</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Encrypted so far: {0} bytes</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Key protectors: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, created {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Clear key</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Startup key</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM and PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Recovery password</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Password</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Unknown (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Key slots: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volume {0}: encrypted</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volume {0}: not encrypted</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropy of the first 64 KiB: {0} bits per byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Warning: the three metadata blocks do not match.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Warning: some metadata blocks are damaged; only the items that could be read are shown.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>The file system browser does not open encrypted volumes.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows has unlocked this BitLocker volume ({0}). If you open it as a logical volume, you can read the contents that Windows decrypts.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Open as logical volume</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Memory dump</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>The memory dump format of {0} could not be read. Open it as raw?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Open as raw</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>The memory dump could not be opened: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Memory dump: {0}, captured {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Memory dump: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>physical memory image (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>complete memory dump</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>kernel memory dump</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>complete memory dump (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Memory dump</value></data>
 </root>

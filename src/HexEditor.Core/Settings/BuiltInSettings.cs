@@ -377,6 +377,10 @@ public static class BuiltInSettings
         new("forensics.report.logo", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 50 },
         new("forensics.report.header", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 60 },
 
+        // 書き込み保護モード (FOR-01 の仕様 1) とディスクを開いたときの HPA / DCO の自動確認 (FOR-27)。
+        new("forensics.writeBlock.alwaysOnStartup", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 5 },
+        new("forensics.device.autoHpaCheck", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 70 },
+
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
         // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。
