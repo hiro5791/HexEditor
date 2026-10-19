@@ -111,6 +111,7 @@ public partial class App : Application
         Devices = new Services.DeviceService(env);
         // フォレンジック (12): ケース・監査ログ・カービングの定義。
         Services.ForensicsService.Initialize(env);
+        Services.ForensicsService.ConnectAreas();
 
         // 書き込み保護モード (12 の FOR-01): セッションの復元とコマンドラインのファイルを開く前に有効にする (--write-block、設定、前回の状態)。
         Services.WriteBlockMode.Start(Program.CommandLine.WriteBlock);
@@ -153,7 +154,6 @@ public partial class App : Application
         MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
         MainWindow.RegisterFileSystemPanels();
-        Core.Wiping.WipeForensics.Hooks = Services.AppWipeForensicHooks.Instance;
         MainWindow.RegisterDisassemblyPanel();
         MainWindow.RegisterPacketsPanel();
         MainWindow.RegisterForensicsPanels();

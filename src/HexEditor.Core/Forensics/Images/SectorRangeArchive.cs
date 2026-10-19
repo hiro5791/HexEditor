@@ -5,6 +5,7 @@ using HexEditor.Core.Devices;
 using HexEditor.Core.Forensics.Images.Scope;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Forensics.Images;
 
@@ -264,6 +265,9 @@ public static class SectorRangeArchive
         {
             throw new InvalidOperationException("Write-block mode is on; sector ranges cannot be restored.");
         }
+
+        // 書き込みの前の関門 (FOR-01)。
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.RestoreSectors, plan.Target.Path);
 
         if (!plan.CanRun)
         {

@@ -216,7 +216,7 @@ public sealed partial class MainWindow
     /// </summary>
     internal bool CreatePartitionEntries(DocumentViewModel d, IReadOnlyList<LostPartitionCandidate> candidates, bool gpt)
     {
-        if (WriteBlockMode.IsEnabled)
+        if (WriteBlockMode.IsEnabled || Core.Forensics.WriteBlock.WriteBlockGate.Current.Blocks(Core.Forensics.WriteBlock.BlockedOperation.PartitionWrite))
         {
             ShowNotice(Loc.Get("WriteBlock_Enabled"), InfoBarSeverity.Warning, d);
             return false;
@@ -225,6 +225,17 @@ public sealed partial class MainWindow
         if (d.Editor.ReadOnly)
         {
             ShowNotice(Loc.Get("Command_ReadOnly"), InfoBarSeverity.Warning, d);
+            return false;
+        }
+
+        // 監査ログに書けない間は書き込みを伴う操作をしない (FOR-04 の「エラー」)。
+        try
+        {
+            ForensicsService.Audit.EnsureCanWrite();
+        }
+        catch (Core.Forensics.Audit.AuditWriteException)
+        {
+            ShowNotice(Loc.Get("Audit_WritesDisabled"), InfoBarSeverity.Warning, d);
             return false;
         }
 

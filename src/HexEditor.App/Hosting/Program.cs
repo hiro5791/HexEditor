@@ -64,9 +64,6 @@ public static class Program
             CommandLine = SafeModeStartup.Apply(CommandLine);
 
             // 書き込み保護モード (12 の FOR-01) の起動時の状態は、設定と監査ログを読んだ後、最初のドキュメントを開く前に決める (App の WriteBlockMode.Start)。
-
-            // イメージの機能 (12 の FOR-20〜26) がほかの領域の機能 (書き込み保護、ケース、監査ログ) を使う口。
-            AppImageForensicHooks.Install();
         }
         catch (Exception ex)
         {

@@ -96,6 +96,31 @@ internal static class ForensicsService
         }
     }
 
+    /// <summary>
+    /// ほかの領域の口をこのサービスにつなぐ (起動時に 1 回)。イメージ (FOR-20〜26) と消去・墨塗り (FOR-30〜32) の書き込み保護・証拠・監査ログ、
+    /// ファイルシステム (FOR-08〜17) の監査ログ、カービング (FOR-18) の「未割り当て領域のみ」「スラックのみ」の範囲。
+    /// </summary>
+    public static void ConnectAreas()
+    {
+        AppImageForensicHooks.Install();
+        Core.Wiping.WipeForensics.Hooks = AppWipeForensicHooks.Instance;
+        Core.FileSystems.FileSystemAudit.Sink = RecordFileSystemEvent;
+        AllocationMapProvider = doc => Core.FileSystems.FileSystemAllocationMap.For(doc.Document);
+    }
+
+    /// <summary>ファイルシステムの機能の操作を監査ログに記録する (FOR-09 の受け入れ基準 4、FOR-16 の仕様 5・6、FOR-08 の仕様 4)。</summary>
+    internal static void RecordFileSystemEvent(Core.FileSystems.FileSystemAuditEvent e)
+    {
+        string operation = e.Action == Core.FileSystems.FileSystemAuditAction.CreatePartitionEntries ? AuditOperations.PartitionEntriesCreate : AuditOperations.FileExport;
+        var parameters = new List<KeyValuePair<string, string>>(e.Details) { new("action", e.Action.ToString()) };
+        Audit.Record(new AuditRecord(operation)
+        {
+            EvidenceId = Cases.ActiveEvidence.FirstOrDefault(x => string.Equals(x.Path, e.Source, StringComparison.OrdinalIgnoreCase))?.Id,
+            Path = e.Source,
+            Parameters = parameters,
+        });
+    }
+
     /// <summary>設定の反映 (閲覧操作の記録、日時の表示)。</summary>
     public static void ApplySettings()
     {

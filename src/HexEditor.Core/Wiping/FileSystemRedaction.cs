@@ -7,6 +7,7 @@ using HexEditor.Core.FileSystems;
 using HexEditor.Core.FileSystems.Fat;
 using HexEditor.Core.FileSystems.Ntfs;
 using HexEditor.Core.Tools.Files;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Wiping;
 
@@ -252,7 +253,7 @@ public static class FileSystemRedaction
             details["log"] = logPath;
         }
 
-        WipeRefusal refusal = document.IsReadOnly ? WipeRefusal.WriteBlock : WipeRefusal.None;
+        WipeRefusal refusal = document.IsReadOnly || hooks.IsWriteBlockEnabled || WriteBlockGate.Current.Blocks(BlockedOperation.Redact) ? WipeRefusal.WriteBlock : WipeRefusal.None;
         string? reason = null;
         if (refusal == WipeRefusal.None && hooks.EnsureCanWrite(WipeAuditOperations.Redact, targetName) is { } denied)
         {

@@ -45,6 +45,9 @@ public static class AuditOperations
     public const string Clone = "write.clone";
     public const string Restore = "write.restore";
     public const string Redact = "write.redact";
+
+    /// <summary>パーティション表のエントリの作成 (ドキュメントの編集。FOR-08 の仕様 4)。</summary>
+    public const string PartitionEntriesCreate = "edit.partitionEntries";
     public const string ReportCreate = "report.create";
     public const string SettingChange = "settings.change";
     public const string AuditVerify = "audit.verify";

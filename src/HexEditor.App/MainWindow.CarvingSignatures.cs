@@ -478,8 +478,6 @@ public sealed partial class MainWindow
         }
     }
 
-    internal static int SectorSizeOf(DocumentViewModel doc) => doc.Document.Source.LogicalSectorSize is > 1 and var s ? s : 512;
-
     private static IStructureResolver StructureResolver() =>
         new TemplateStructureResolver(Templates.TemplateService.Catalog);
 }

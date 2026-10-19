@@ -3,6 +3,7 @@ using HexEditor.Core.Devices;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Tools.Files;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Wiping;
 
@@ -68,7 +69,7 @@ public static class WipeRunner
     {
         hooks ??= WipeForensics.Hooks;
         detail = null;
-        if (hooks.IsWriteBlockEnabled)
+        if (hooks.IsWriteBlockEnabled || WriteBlockGate.Current.Blocks(BlockedOperation.Wipe))
         {
             return WipeRefusal.WriteBlock;
         }
@@ -125,6 +126,8 @@ public static class WipeRunner
             throw new WipeRefusedException(refusal, reason);
         }
 
+        // 書き込みの直前の関門 (FOR-01。Check と同じ判定を Core の WriteBlockGate でもう一度確かめる)。
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.Wipe, job.Path);
         WipeResult? result = null;
         try
         {
@@ -192,6 +195,7 @@ public static class WipeRunner
             throw new WipeRefusedException(refusal, reason);
         }
 
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.Wipe, volume.Root);
         OsFreeSpaceWipeResult result = OsFreeSpaceWipe.Execute(volume, method, operation, progress, cancellationToken);
         details["bytes"] = result.BytesOverwritten.ToString(CultureInfo.InvariantCulture);
         details["written"] = result.BytesWritten.ToString(CultureInfo.InvariantCulture);

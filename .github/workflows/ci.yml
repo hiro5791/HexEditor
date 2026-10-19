@@ -977,7 +977,7 @@ jobs:
           HEXEDITOR_CI_PRIVILEGED: "1"
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
           HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests.|FullyQualifiedName~HexEditor.UITests.ForensicImagePrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests.|FullyQualifiedName~HexEditor.UITests.ForensicImagePrivilegedTests.|FullyQualifiedName~HexEditor.UITests.PrivilegedWipeTests.|FullyQualifiedName~HexEditor.UITests.PrivilegedFileSystemTests.|FullyQualifiedName~HexEditor.UITests.CarvingUiTests.Carving_does_not_start_when_the_output_is_on_the_investigated_disk|FullyQualifiedName~HexEditor.UITests.ForensicsCaseTests.Adding_a_disk_shows_model_serial_capacity_and_hashes_and_refuses_a_duplicate" --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
       - name: Detach TD-VHDX-MBR
         if: always()
         shell: powershell

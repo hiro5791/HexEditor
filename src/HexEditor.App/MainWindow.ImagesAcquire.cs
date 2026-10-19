@@ -74,7 +74,7 @@ public sealed partial class MainWindow
             AutomationProperties.SetAutomationId(enable, "ImgCreate_EnableWriteBlock");
             enable.Click += (_, _) =>
             {
-                WriteBlockMode.Initialize(true);
+                WriteBlockMode.Enable("image");
                 suggest.IsOpen = false;
             };
             suggest.ActionButton = enable;

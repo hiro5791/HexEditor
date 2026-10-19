@@ -32,9 +32,14 @@ public sealed partial class MainWindow
         Commands.Register(WriteBlockAllowCommandId, () => Vm.Selected is { } doc ? AllowWritingAsync(doc) : Task.CompletedTask,
             () => Vm.Selected is { } doc ? AllowWritingState(doc) : NeedsDocument());
 
-        // 書き込み保護モードで無効にする破壊的な操作 (仕様 2 の 5 つ目)。消去・クローン・復元・パーティションの書き込みの担当部品も
-        // ForensicsService.RegisterDestructiveCommands で登録する。
-        ForensicsService.RegisterDestructiveCommands("tools.files.shred");
+        // 書き込み保護モードで無効にする破壊的な操作 (仕様 2 の 5 つ目): 安全な削除、消去 (FOR-30・31)、墨塗り (FOR-32)、クローン (FOR-24)、
+        // セクタ範囲の復元 (FOR-25)。パーティション表を書き込むコマンドはない (FOR-08 は読み取りだけ)。実行時の拒否は Core の WriteBlockGate。
+        ForensicsService.RegisterDestructiveCommands("tools.files.shred", "forensics.wipe.selection", "forensics.wipe.disk", "forensics.wipe.freeSpace",
+            "forensics.wipe.slack", "forensics.fs.redact", "forensics.disk.clone", "forensics.sectors.restore");
+
+        // 監査ログに書けない間は止める、ファイルを書き出すコマンド (FOR-04 の「エラー」)。
+        ForensicsService.RegisterWriteCommands("forensics.image.create", "forensics.image.skeleton", "forensics.sectors.save", "forensics.raid.reconstruct",
+            "forensics.fs.exportFiles", "forensics.fs.exportUnallocated", "forensics.fs.exportSlack");
 
         EventHandler changed = (_, _) => DispatcherQueue.TryEnqueue(OnWriteBlockChanged);
         WriteBlockMode.Changed += changed;

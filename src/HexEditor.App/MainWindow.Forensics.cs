@@ -525,7 +525,7 @@ public sealed partial class MainWindow
         try
         {
             IReadOnlyList<EvidenceHash> hashes = await Vm.Operations.RunAsync(Loc.Format("Evidence_HashOperation", item.Id), OperationKind.ReadOnly, doc.Document, snapshot.Raw.Length,
-                op => Task.Run(() => EvidenceHasher.Compute(snapshot, algorithms, new OperationProgress(op), op.CancellationToken)));
+                op => Task.Run(() => EvidenceHasher.Compute(snapshot, algorithms, new EvidenceHashProgress(op), op.CancellationToken)));
             ForensicsService.Cases.RecordHashes(item.Id, hashes);
             ShowNotice(Loc.Format("Evidence_HashDone", item.Id), InfoBarSeverity.Success);
         }
@@ -541,7 +541,7 @@ public sealed partial class MainWindow
         }
     }
 
-    private sealed class OperationProgress(LongRunningOperation op) : IProgress<long>
+    private sealed class EvidenceHashProgress(LongRunningOperation op) : IProgress<long>
     {
         public void Report(long value) => op.Report(value);
     }

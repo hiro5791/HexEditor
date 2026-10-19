@@ -2,6 +2,7 @@ using System.Globalization;
 using HexEditor.Core.Devices;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Forensics.Images;
 
@@ -166,6 +167,9 @@ public static class DiskClone
         {
             throw new InvalidOperationException("The clone cannot run: " + (plan.Problem == CloneProblem.None ? CloneProblem.WriteBlocked : plan.Problem));
         }
+
+        // 書き込みの前の関門 (FOR-01)。
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.Clone, plan.Target.Path);
 
         await Task.Yield();
         time ??= TimeProvider.System;
