@@ -38,8 +38,12 @@ public sealed class ForensicImagePrivilegedTests
     private static async Task PassStrongConfirmAsync(AppSession app, string dialogId, string name, string execute)
     {
         AutomationElement dialog = await app.WaitForDialogAsync(dialogId);
-        await app.WaitUntilAsync(() => Task.FromResult(AppSession.NameOf(AppSession.Automation.FocusedElement()) == R("Common_Cancel")),
+        // 前面にないウィンドウでは OS のフォーカスが UI オートメーションから取れないため、アプリが開いたときにフォーカスを置いた先 (Close = キャンセル) と
+        // 既定のボタンを、アプリの中から読む。
+        JsonObject state = null!;
+        await app.WaitUntilAsync(async () => (state = await app.SendAsync("imgConfirm"))["initialFocus"]?.GetValue<string>() == "CloseButton",
             UiTest.Scaled(TimeSpan.FromSeconds(10)), "the default focus on Cancel");
+        Assert.Equal("Close", state["defaultButton"]!.GetValue<string>());
         Assert.False(app.Button(execute)!.IsEnabled);
         await app.UiaSetValueAsync(dialogId + "_Name", "Disk 999");
         Assert.False(app.Button(execute)!.IsEnabled);
@@ -140,7 +144,10 @@ public sealed class ForensicImagePrivilegedTests
         Assert.EndsWith("Z", json["savedAt"]!.GetValue<string>(), StringComparison.Ordinal);
 
         // LBA 1〜33 を 00 で上書きし、パーティションがなくなったことを確かめる。
+        // 末尾にバックアップの GPT (最後の 33 セクタ) が残っていると、Windows はそちらからパーティションを読み戻してしまうので、
+        // バックアップも壊す。テスト用ディスクは 64 MiB (Mount-TestVhd.ps1)。元に戻すのは先頭の 34 セクタだけで、バックアップは OS が直す。
         CiPrivileged.WriteDevice(disk, 512, new byte[33 * 512]);
+        CiPrivileged.WriteDevice(disk, (64L << 20) - 33 * 512, new byte[33 * 512]);
         Assert.Equal(0, PartitionCount(GptDisk));
         byte[] broken = CiPrivileged.ReadDevice(disk, 34 * 512);
 

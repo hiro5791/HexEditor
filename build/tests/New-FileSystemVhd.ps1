@@ -59,7 +59,12 @@ try {
     }
 
     # Timestamps copied from the source (Copy-Item keeps the modified time).
-    $rows = foreach ($file in Get-ChildItem -Path $root -Recurse -File -Force | Where-Object { $_.FullName -notmatch 'System Volume Information' }) {
+    # System Volume Information cannot be enumerated even as admin (access denied): skip it at the root and descend into the rest.
+    $top = Get-ChildItem -Path $root -Force | Where-Object { $_.Name -notin @('System Volume Information', '$RECYCLE.BIN') }
+    $files = foreach ($t in $top) {
+        if ($t.PSIsContainer) { Get-ChildItem -LiteralPath $t.FullName -Recurse -File -Force } else { $t }
+    }
+    $rows = foreach ($file in $files) {
         [pscustomobject]@{
             path             = $file.FullName.Substring($root.Length - 1)
             size             = $file.Length

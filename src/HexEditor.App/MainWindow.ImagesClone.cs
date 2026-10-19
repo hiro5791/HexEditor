@@ -26,6 +26,11 @@ public sealed partial class MainWindow
     /// <summary>テスト用: 強い確認のダイアログの操作 (入力欄に名前を入れて押す・押せるかを見る)。</summary>
     internal Func<ContentDialog, Task>? ImgStrongConfirmInteraction { get; set; }
 
+    /// <summary>テスト用: 最後の強い確認のダイアログと、開いたときにフォーカスを置いた先 (前面にないウィンドウでは OS のフォーカスが取れないため)。</summary>
+    internal ContentDialog? LastImgStrongConfirmDialog { get; private set; }
+
+    internal string? LastImgStrongConfirmInitialFocus { get; private set; }
+
     /// <summary>強い確認での対象の表示名 (例: <c>ディスク 2</c>)。</summary>
     internal static string ImgDiskName(int number) => Loc.Format("ImgClone_DiskName", number.ToString(CultureInfo.InvariantCulture));
 
@@ -325,8 +330,11 @@ public sealed partial class MainWindow
             if (ImgFindDescendant<Button>(dialog, "CloseButton") is { } close)
             {
                 close.Focus(FocusState.Programmatic);
+                LastImgStrongConfirmInitialFocus = close.Name;
             }
         };
+        LastImgStrongConfirmDialog = dialog;
+        LastImgStrongConfirmInitialFocus = null;
         Task<ContentDialogResult> shown = dialog.ShowQueuedAsync();
         if (ImgStrongConfirmInteraction is { } interact)
         {

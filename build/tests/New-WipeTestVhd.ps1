@@ -46,7 +46,10 @@ function Write-Repeated([string]$file, [string]$unit, [int]$length) {
     $bytes = [byte[]]::new($length)
     $pattern = [System.Text.Encoding]::ASCII.GetBytes($unit)
     for ($i = 0; $i -lt $length; $i++) { $bytes[$i] = $pattern[$i % $pattern.Length] }
-    [System.IO.File]::WriteAllBytes($file, $bytes)
+    # Write through to the disk: a file that is deleted (or truncated) before the lazy writer ran never puts its data on the disk,
+    # and the tests need the old content to stay in the unallocated clusters and in the slack.
+    $stream = [System.IO.File]::Open($file, 'Create', 'Write', 'None')
+    try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) } finally { $stream.Dispose() }
 }
 
 switch ($Action) {
@@ -68,11 +71,12 @@ switch ($Action) {
         $slack = Join-Path $root 'slack.txt'
         Write-Repeated $slack 'SLACK-REMNANT' 4096
         $stream = [System.IO.File]::Open($slack, 'Open', 'ReadWrite')
-        try { $stream.SetLength(100) } finally { $stream.Dispose() }
+        try { $stream.SetLength(100); $stream.Flush($true) } finally { $stream.Dispose() }
         [System.IO.File]::WriteAllBytes((Join-Path $root 'tiny.txt'), [System.Text.Encoding]::ASCII.GetBytes('tiny-file!'))
         $wipe = Join-Path $root 'wipe.bin'
         Write-Repeated $wipe 'WIPE-ME-0123456789' 1048576
         Remove-Item $wipe -Force
+        Write-VolumeCache -DriveLetter $volume.DriveLetter
         Write-Output (ConvertTo-Json -Compress -InputObject (Get-Letter $Path))
     }
     'Attach' {

@@ -194,6 +194,23 @@ public sealed partial class MainWindow
                 };
             }
 
+            case "imgConfirm":
+            {
+                // 強い確認のダイアログの状態: 既定のボタンと、開いたときにフォーカスを置いた先、実行ボタンが押せるか。
+                if (LastImgStrongConfirmDialog is not { } confirm)
+                {
+                    return new JsonObject { ["open"] = false };
+                }
+
+                return new JsonObject
+                {
+                    ["open"] = true,
+                    ["defaultButton"] = confirm.DefaultButton.ToString(),
+                    ["initialFocus"] = LastImgStrongConfirmInitialFocus,
+                    ["primaryEnabled"] = confirm.IsPrimaryButtonEnabled,
+                };
+            }
+
             case "imgState":
                 return ImageTestState();
         }

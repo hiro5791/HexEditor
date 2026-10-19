@@ -70,7 +70,7 @@ xorriso -as mkisofs -quiet -input-charset utf-8 -J -R -V ISOTEST -b boot.img -no
 # ---- UDF 2.01 (mkudffs で作り、マウントして書く。Linux は 2.50 のメタデータパーティションに書けないため、2.50 は生成ツールのイメージで確かめる) ----
 mnt="$(mktemp -d)"
 truncate -s 64M "$out/udf201.img"
-mkudffs --udfrev=0x0201 --media-type=hd --label=UDFTEST "$out/udf201.img" > /dev/null
+mkudffs --media-type=hd --udfrev=0x0201 --label=UDFTEST "$out/udf201.img" > /dev/null
 sudo mount -o loop -t udf "$out/udf201.img" "$mnt"
 sudo cp -a "$src/." "$mnt/"
 sudo umount "$mnt"
