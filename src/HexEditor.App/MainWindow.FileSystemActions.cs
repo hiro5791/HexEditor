@@ -711,7 +711,7 @@ public sealed partial class MainWindow
         }
 
         IReadOnlyList<NtfsRestartArea> restart = NtfsLogFile.ReadRestartAreas(log, ntfs.BytesPerSector);
-        string restartText = string.Join("  ", restart.Select(r => Loc.Format("LogFile_Restart", r.PageOffset / 4096, r.CurrentLsn,
+        string restartText = string.Join("  ", restart.Select(r => Loc.Format("LogFile_Restart", r.PageOffset / 4096, r.CurrentLsn.ToString(CultureInfo.InvariantCulture),
             string.Join(", ", r.Clients.Select(c => c.Name)))));
         ForensicList list = NewForensicList(d, ForensicListKind.LogFile, Loc.Get("LogFile_Title"), Loc.Get("LogFile_Header"));
         list.Status = restartText;

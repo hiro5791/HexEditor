@@ -252,6 +252,7 @@ public sealed partial class MainWindow
                 FileSystemDocumentState state = StateOf(d)!;
                 return new JsonObject
                 {
+                    ["fragmentCount"] = state.HighlightedFragments.Count,
                     ["fragments"] = new JsonArray([.. state.HighlightedFragments.Select(f => (JsonNode?)new JsonObject { ["offset"] = f.Offset, ["length"] = f.Length })]),
                     ["panel"] = new JsonArray([.. (FindPanelContent<FragmentListPanel>(FragmentsPanelId)?.Texts ?? []).Select(t => (JsonNode?)t)]),
                     ["goMenu"] = GoNextFragmentItem.Visibility == Visibility.Visible,
@@ -299,6 +300,17 @@ public sealed partial class MainWindow
                     ["secondary"] = dialog.SecondaryButtonText,
                     ["close"] = dialog.CloseButtonText,
                 };
+            }
+
+            case "fsCancel":
+            {
+                DocumentViewModel d = Vm.Selected ?? throw new InvalidOperationException("No document.");
+                foreach (Core.Operations.LongRunningOperation op in Vm.Operations.ActiveFor(d.Document))
+                {
+                    op.Cancel();
+                }
+
+                return new JsonObject();
             }
 
             case "fsCommandNames":
@@ -350,6 +362,14 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>UI スレッドに積んだ処理 (結果一覧の行の追加など) が終わるまで待つ。</summary>
+    private Task DispatcherIdleAsync()
+    {
+        var done = new TaskCompletionSource();
+        DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => done.TrySetResult());
+        return done.Task;
+    }
+
     private async Task<T> WaitPanelAsync<T>(string id) where T : FrameworkElement
     {
         await WaitUntilTestAsync(() => FindPanelContent<T>(id) is { IsLoaded: true });
@@ -389,13 +409,14 @@ public sealed partial class MainWindow
 
         if (request["waitLoaded"]?.GetValue<bool>() != false)
         {
-            await WaitUntilTestAsync(() => !panel.IsLoadingList, (int)TestHookSettings.ReadLong(request["timeoutMs"], 60_000));
+            await WaitUntilTestAsync(() => panel.FolderLoaded, (int)TestHookSettings.ReadLong(request["timeoutMs"], 60_000));
         }
 
         if (request["fat"] is { } fat)
         {
             panel.FatChoice = (int)fat.GetValue<long>();
-            await WaitUntilTestAsync(() => !panel.IsLoadingList);
+            await DispatcherIdleAsync();
+            await WaitUntilTestAsync(() => panel.FolderLoaded);
         }
 
         if (request["select"] is JsonArray many)
@@ -425,9 +446,11 @@ public sealed partial class MainWindow
                 break;
             case "logFile":
                 await ShowLogFileAsync(d);
+                await DispatcherIdleAsync();
                 return TestForensicResults(d);
             case "clusterChain" when selected is not null:
                 ShowClusterChain(d, selected);
+                await DispatcherIdleAsync();
                 return TestForensicResults(d);
         }
 

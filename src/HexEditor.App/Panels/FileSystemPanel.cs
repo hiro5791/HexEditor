@@ -507,6 +507,9 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         }));
     }
 
+    /// <summary>今のファイルシステムのフォルダを読み終えたか (テスト用)。</summary>
+    internal bool FolderLoaded => !IsLoadingList && _folder is not null && _state is not null && ReferenceEquals(_session, _state.Session);
+
     /// <summary>読み込み中か (テスト用)。</summary>
     internal bool IsLoadingList { get; private set; }
 

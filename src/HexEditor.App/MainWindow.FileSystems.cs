@@ -205,10 +205,10 @@ public sealed partial class MainWindow
             var actions = new List<Core.Notifications.NotificationAction>();
             if (d.Document.Source is DiskImageByteSource)
             {
-                actions.Add(new Core.Notifications.NotificationAction(Loc.Format("Part_ReopenWithSector", suggested), () => ReopenWithSectorSize(d, suggested)));
+                actions.Add(new Core.Notifications.NotificationAction(Loc.Format("Part_ReopenWithSector", suggested.ToString(CultureInfo.InvariantCulture)), () => ReopenWithSectorSize(d, suggested)));
             }
 
-            ShowNotice(Loc.Format("Part_SuggestSector", suggested, sector), InfoBarSeverity.Informational, d, actions: actions);
+            ShowNotice(Loc.Format("Part_SuggestSector", suggested.ToString(CultureInfo.InvariantCulture), sector.ToString(CultureInfo.InvariantCulture)), InfoBarSeverity.Informational, d, actions: actions);
         }
 
         UpdateForensicStatus();

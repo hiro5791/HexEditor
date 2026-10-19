@@ -100,7 +100,7 @@ public sealed partial class MainWindow
             if (kv.Length == 2 && string.Equals(kv[0], kind.ToString(), StringComparison.OrdinalIgnoreCase) && kv[1].StartsWith('#') && kv[1].Length == 7
                 && uint.TryParse(kv[1].AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb))
             {
-                return Windows.UI.Color.FromArgb(0xC0, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+                return new Windows.UI.Color { A = 0xC0, R = (byte)(rgb >> 16), G = (byte)(rgb >> 8), B = (byte)rgb };
             }
         }
 

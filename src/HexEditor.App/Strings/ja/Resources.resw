@@ -8251,7 +8251,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>フォレンジックの強調の凡例を表示する</value></data>
   <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>強調の表示中、Hex ビューの右上に凡例を出します。</value></data>
   <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>フォレンジックの強調の色</value></data>
-  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>例: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0。空のときはテーマの色を使います。</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>例: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0。空のときは既定の色を使います。</value></data>
   <data name="Menu_Forensics.Title" xml:space="preserve"><value>フォレンジック</value></data>
   <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>パーティション</value></data>
