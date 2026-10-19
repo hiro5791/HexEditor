@@ -260,6 +260,15 @@ public sealed class ForensicsSecurityAuditTests : IDisposable
     }
 
     [Fact]
+    public void Iso_root_record_at_the_end_of_the_volume_is_not_read_out_of_range()
+    {
+        (SparseImage iso, _) = FileSystemImageSet.IsoJrr();
+        var reader = new SparseImageReader(iso);
+        Fuzz.Run([Patches("D430=2E D431=B6 D432=24 D433=3F D434=07 D435=85 D436=CC D437=75 9438=00 D59D=FF 80A8=FF 80A9=FF 95AC=00 95AD=01 95AE=00 95AF=00")],
+            p => FileSystemFuzzMoreTests.Exercise(new PatchedImageReader(reader, p)), Allowed);
+    }
+
+    [Fact]
     public void Hfs_short_overflow_records_and_unpaired_surrogates_in_names_do_not_throw()
     {
         (SparseImage hfs, _) = FileSystemImageSet.HfsPlus();
@@ -290,6 +299,14 @@ public sealed class ForensicsSecurityAuditTests : IDisposable
 
                 // ルートの $INDEX_ALLOCATION の実サイズ (INDX の走査)。
                 Patches("65A14=BF 65A15=D5 65A16=C6 65A17=A1 6B078=FE 6B079=FF 6B07A=FF 6B07B=7F 66584=64 66585=B7 66586=02 66587=74 3B9DE3=00"),
+
+                // INDX のエントリのオフセットが負 (範囲外の読み込み)。
+                Patches("148=FF 149=7F 14A=00 14B=00 6DD30=B2 6DD31=79 6DD32=FF 6DD33=9B"),
+                Patches("6B1A9=FF 3BAB6C=03 3BAB6D=00 3BAB6E=00 3BAB6F=00 6EC3C=FF 6EC3D=FF 6EC3E=FF 6EC3F=7F"),
+
+                // 属性の長さ (32 bit) と位置の和のあふれ。
+                Patches("6DCC=02 6DCD=00 6DCE=00 6DCF=00 4250=00 4251=00 4252=00 4253=00 4254=00 4255=00 4256=00 4257=02 3B9C78=80 3B9C79=00 3BA018=47 3BA019=07"),
+                Patches("3BA4F8=1A 3BA4F9=CD 3BA4FA=FB 3BA4FB=D9 6E034=7E A0=00 A1=00 A2=00 A3=00 A4=00 A5=00 A6=00 A7=7F 3BA01B=BD 6E3E8=00 6E3E9=00"),
             ],
             p =>
             {

@@ -644,6 +644,12 @@ public sealed class NtfsFileSystem : FileSystemBase
 
     private static IEnumerable<IndexEntry> ParseIndexEntries(byte[] buffer, int start, int end, long volumeBase)
     {
+        // 開始位置 (エントリのオフセット) は信頼できない値: 負や buffer の外なら読まない。
+        if (start < 0 || end > buffer.Length)
+        {
+            yield break;
+        }
+
         int at = start;
         for (int n = 0; n < 65536 && at + 16 <= end; n++)
         {
@@ -673,6 +679,8 @@ public sealed class NtfsFileSystem : FileSystemBase
     /// <summary>インデックススラックに残ったエントリを探す (仕様 6)。親の参照がこのディレクトリのものだけを候補にする。</summary>
     private static IEnumerable<IndexEntry> ScanSlack(byte[] buffer, int start, int end, long directory, long volumeBase)
     {
+        start = Math.Max(0, start);
+        end = Math.Min(end, buffer.Length);
         for (int at = (start + 7) & ~7; at + 16 + 66 <= end; at += 8)
         {
             int length = BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(at + 8));

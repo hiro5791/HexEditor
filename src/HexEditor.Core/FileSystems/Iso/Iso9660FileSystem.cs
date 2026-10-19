@@ -302,7 +302,14 @@ public sealed class Iso9660FileSystem : FileSystemBase, IFsChoices
             return;
         }
 
-        byte[] first = _meta.ReadBytes(root.Lba * _blockSize, Math.Min(SectorBytes, (int)Math.Max(34, root.Length)));
+        byte[] first = _meta.ReadBytes(root.Lba * _blockSize, (int)Math.Min(SectorBytes, Math.Max(34, root.Length)));
+
+        // ボリュームの末尾では短く (空で) 返ることがある。
+        if (first.Length < 34)
+        {
+            return;
+        }
+
         int len = first[0];
         if (len < 34 || len > first.Length)
         {
