@@ -111,7 +111,7 @@ public sealed class ReportRegistry
 public sealed record ReportBookmark(string Document, string Name, long Offset, long? Lba, string Comment, byte[] Dump);
 
 /// <summary>レポートの入力。</summary>
-public sealed class ReportInput
+public sealed record ReportInput
 {
     public required CaseInfo Case { get; init; }
 
@@ -136,7 +136,7 @@ public sealed class ReportInput
 }
 
 /// <summary>レポートの設定 (ダイアログ)。</summary>
-public sealed class ReportOptions
+public sealed record ReportOptions
 {
     /// <summary>含める項目 (<see cref="ReportSections"/>)。</summary>
     public ISet<string> Sections { get; init; } = new HashSet<string>(ReportSections.All);

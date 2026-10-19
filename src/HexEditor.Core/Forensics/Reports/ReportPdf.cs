@@ -35,6 +35,9 @@ internal sealed class ReportPdf
     private List<Op> _page = [];
     private double _y;
 
+    /// <summary>書体の取得 (テストで「使える書体がない」状態を作るために差し替える)。</summary>
+    internal static Func<FontFace?> PrimaryFontProvider { get; set; } = () => SystemFontCatalog.Instance.Primary(null);
+
     public bool Truncated { get; private set; }
 
     private ReportPdf(ReportContext context, FontFace primary)
@@ -397,7 +400,7 @@ internal sealed class ReportPdf
     public static int Write(Stream output, ReportContext context, IEnumerable<ReportSection> sections, string attachmentFolder, string attachmentPrefix,
         List<string> attachments, out bool truncated, CancellationToken token)
     {
-        FontFace primary = SystemFontCatalog.Instance.Primary(null) ?? throw new ReportPdfException("No usable font was found.");
+        FontFace primary = PrimaryFontProvider() ?? throw new ReportPdfException("No usable font was found.");
         var pdf = new ReportPdf(context, primary);
         pdf.Layout(sections, attachmentFolder, attachmentPrefix, attachments, token);
         truncated = pdf.Truncated;
