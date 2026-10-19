@@ -46,6 +46,7 @@ public sealed class FileSystemMoreUiTests
         await app.SendAsync("fsOpenImage", new JsonObject { ["path"] = ctx.TestData("TD-FOR-LVM-LINEAR-A"), ["sectorSize"] = 512 });
         await app.SendAsync("fsLogicalVolumes", new JsonObject { ["action"] = "show" }, UiTest.Scaled(TimeSpan.FromSeconds(30)));
         result = await app.SendAsync("fsLogicalVolumes", new JsonObject { ["action"] = "open", ["name"] = "lv0" });
+        Assert.True(result["message"] is not null, result.ToJsonString());
         Assert.Contains(LogicalVolumeImages.LvmUuidText(LogicalVolumeImages.LvmPvB), result["message"]!.GetValue<string>(), StringComparison.Ordinal);
         Assert.Null(result["opened"]);
         Assert.Equal(1, result["documents"]!.GetValue<int>());

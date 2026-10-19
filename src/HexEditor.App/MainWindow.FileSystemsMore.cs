@@ -143,6 +143,7 @@ public sealed partial class MainWindow
         {
             state.LogicalVolumesRunning = false;
             state.RaiseChanged();
+            PartitionView?.EnsureAttached();
         }
     }
 
@@ -200,6 +201,7 @@ public sealed partial class MainWindow
         FileSystemDocumentState state = StateOf(d)!;
         state.LogicalVolumesMessage = message;
         state.RaiseChanged();
+        PartitionView?.EnsureAttached();
         ShowNotice(message, severity, d, actions: actions);
     }
 

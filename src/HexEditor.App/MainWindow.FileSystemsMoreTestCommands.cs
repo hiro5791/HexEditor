@@ -27,6 +27,10 @@ public sealed partial class MainWindow
 
                 PartitionPanel panel = await WaitPanelAsync<PartitionPanel>(PartitionsPanelId);
                 await DispatcherIdleAsync();
+
+                // パネルが今のドキュメントの一覧を出すまで待つ (ドキュメントの切り替えと状態の変化は UI スレッドに積まれる)。
+                await WaitUntilTestAsync(() => StateOf(d)?.LogicalVolumes is not { } s
+                    || panel.LogicalVolumes.Select(v => v.Name).SequenceEqual(s.Volumes.Select(v => v.Name)) && panel.LogicalVolumes.All(v => s.Volumes.Contains(v)));
                 DocumentViewModel? opened = null;
                 if (action == "open")
                 {

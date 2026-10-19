@@ -134,6 +134,19 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         Refresh();
     }
 
+    /// <summary>今のドキュメントに結び付いていなければ結び直す (ドキュメントを閉じた直後に開いた場合など)。</summary>
+    internal void EnsureAttached()
+    {
+        if (!ReferenceEquals(_context.ActiveDocument, _document))
+        {
+            Attach();
+        }
+        else
+        {
+            Refresh();
+        }
+    }
+
     private void Detach()
     {
         if (_state is not null)
@@ -235,7 +248,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         menu.Items.Add(Item("Lv_Menu_Open", () => _ = OpenSelectedLogicalVolumeAsync()));
         menu.Items.Add(Item("Lv_Menu_Assign", () =>
         {
-            if (SelectedLogicalVolume is { } v && _document is { } d)
+            if (SelectedLogicalVolume is { } v && (_context.ActiveDocument ?? _document) is { } d)
             {
                 _ = Window?.AssignMembersAsync(d, v);
             }
@@ -321,7 +334,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
     }
 
     internal Task<DocumentViewModel?> OpenSelectedLogicalVolumeAsync() =>
-        SelectedLogicalVolume is { } v && _document is { } d && Window is { } w ? w.OpenLogicalVolumeAsync(d, v) : Task.FromResult<DocumentViewModel?>(null);
+        SelectedLogicalVolume is { } v && (_context.ActiveDocument ?? _document) is { } d && Window is { } w ? w.OpenLogicalVolumeAsync(d, v) : Task.FromResult<DocumentViewModel?>(null);
 
     private sealed record LvItem(LogicalVolumeInfo Volume, string Text)
     {
