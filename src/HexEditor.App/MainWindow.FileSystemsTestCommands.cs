@@ -373,6 +373,13 @@ public sealed partial class MainWindow
 
     private async Task<T> WaitPanelAsync<T>(string id) where T : FrameworkElement
     {
+        // 同じ場所の別のタブが選ばれていると、表示中でも中身は読み込まれない (前回の配置を戻した場合)。テストでは目的のタブを選ぶ。
+        if (FindPanelContent<T>(id) is not { IsLoaded: true } && PanelRegistry.Find(id) is { } reg)
+        {
+            _panelLayout.Show(id, reg.DefaultDock);
+            ApplyPanelLayout();
+        }
+
         try
         {
             // 遅い CI のランナーでは、ディスクイメージを開いた直後にパネルが読み込まれるまで 10 秒を超えることがある。
