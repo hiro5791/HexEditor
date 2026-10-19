@@ -630,8 +630,10 @@ public sealed partial class MainWindow
         try
         {
             SectorRestorePlan run = plan;
+            // コントロールの値は UI スレッドで読む (処理本体はスレッドプールで動き、そこで読むと RPC_E_WRONG_THREAD で落ちる)。
+            bool makeBackup = backup.IsChecked == true;
             result = await Vm.Operations.RunAsync(Loc.Format("ImgSectors_RestoreOperation", Path.GetFileName(path)), OperationKind.WritesExternal, doc.Document, plan.Bytes,
-                op => Task.FromResult(SectorRangeArchive.Restore(run, path, device, backup.IsChecked == true, device, ConfirmDismountSync, op, TestHooks.Time)));
+                op => Task.FromResult(SectorRangeArchive.Restore(run, path, device, makeBackup, device, ConfirmDismountSync, op, TestHooks.Time)));
         }
         catch (VolumeLockException ex)
         {

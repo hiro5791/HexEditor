@@ -373,7 +373,18 @@ public sealed partial class MainWindow
 
     private async Task<T> WaitPanelAsync<T>(string id) where T : FrameworkElement
     {
-        await WaitUntilTestAsync(() => FindPanelContent<T>(id) is { IsLoaded: true });
+        try
+        {
+            // 遅い CI のランナーでは、ディスクイメージを開いた直後にパネルが読み込まれるまで 10 秒を超えることがある。
+            await WaitUntilTestAsync(() => FindPanelContent<T>(id) is { IsLoaded: true }, 40_000);
+        }
+        catch (TimeoutException)
+        {
+            T? content = FindPanelContent<T>(id);
+            throw new TimeoutException($"Panel {id} was not loaded: shown={IsPanelShown(id)}, content={(content is null ? "none" : "present")}, "
+                + $"loaded={content?.IsLoaded}, window={Root.ActualWidth:0}x{Root.ActualHeight:0}, document={Vm.Selected?.Name}");
+        }
+
         return FindPanelContent<T>(id)!;
     }
 
