@@ -23,6 +23,18 @@ public enum HexMark
 
     /// <summary>斜線の模様 (揃えるための空白・読み込み不可)。</summary>
     Hatch,
+
+    /// <summary>逆向きの斜線 (ドライブスラック。RAM スラックの斜線と区別する。FOR-16 の仕様 2)。</summary>
+    BackHatch,
+
+    /// <summary>点の模様 (未割り当て領域。FOR-16 の仕様 2)。</summary>
+    Dots,
+
+    /// <summary>横線の模様 (ファイルシステムのメタデータ。FOR-16)。</summary>
+    Horizontal,
+
+    /// <summary>格子の模様 (ボリュームスラック・パーティションの隙間。FOR-16)。</summary>
+    CrossHatch,
 }
 
 /// <summary>
@@ -491,7 +503,7 @@ public sealed partial class HexView
         p.Visibility = Visibility.Visible;
         p.Stroke = brush;
         double height = _rowHeight;
-        width = Math.Max(mark == HexMark.Hatch ? 6 : 2, width);
+        width = Math.Max(mark is HexMark.Hatch or HexMark.BackHatch or HexMark.Dots or HexMark.Horizontal or HexMark.CrossHatch ? 6 : 2, width);
         Canvas.SetLeft(p, x);
         Canvas.SetTop(p, y);
         p.Width = width;
@@ -512,6 +524,50 @@ public sealed partial class HexView
             case HexMark.Strike:
                 p.StrokeThickness = 1.5;
                 group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(0, height / 2), EndPoint = new Windows.Foundation.Point(width, height / 2) });
+                break;
+            case HexMark.BackHatch:
+                p.StrokeThickness = 1;
+                for (double i = -height; i < width; i += 6)
+                {
+                    group.Children.Add(new LineGeometry
+                    {
+                        StartPoint = new Windows.Foundation.Point(i, 0),
+                        EndPoint = new Windows.Foundation.Point(i + height, height),
+                    });
+                }
+
+                break;
+            case HexMark.Dots:
+                p.StrokeThickness = 1.5;
+                for (double yy = 3; yy < height - 1; yy += 5)
+                {
+                    for (double xx = ((int)(yy / 5) % 2) * 2.5 + 1; xx < width; xx += 5)
+                    {
+                        group.Children.Add(new LineGeometry
+                        {
+                            StartPoint = new Windows.Foundation.Point(xx, yy),
+                            EndPoint = new Windows.Foundation.Point(xx + 0.75, yy),
+                        });
+                    }
+                }
+
+                break;
+            case HexMark.Horizontal:
+                p.StrokeThickness = 1;
+                for (double yy = 2; yy < height; yy += 4)
+                {
+                    group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(0, yy), EndPoint = new Windows.Foundation.Point(width, yy) });
+                }
+
+                break;
+            case HexMark.CrossHatch:
+                p.StrokeThickness = 1;
+                for (double i = -height; i < width; i += 8)
+                {
+                    group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(i, height), EndPoint = new Windows.Foundation.Point(i + height, 0) });
+                    group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(i, 0), EndPoint = new Windows.Foundation.Point(i + height, height) });
+                }
+
                 break;
             default:
                 p.StrokeThickness = 1;

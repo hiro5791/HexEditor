@@ -54,6 +54,9 @@ public static class TestHooks
     /// <summary>テストではディスクイメージの提案 (ENG-31 の仕様 6) を、有効にしたテスト以外では出さない。</summary>
     public static bool SuppressDiskImageSuggestion => Active && !Settings.SuggestDiskImage;
 
+    /// <summary>ファイルシステムの種類を判定できないときに選ぶ種類 (FOR-09 の仕様 1 のダイアログの代わり。null ならダイアログを出す)。</summary>
+    public static string? FileSystemKindChoice { get; set; }
+
     /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
     public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
 
@@ -688,6 +691,8 @@ public static class TestHooks
     public static bool SuppressActivation => false;
 
     public static bool SuppressDiskImageSuggestion => false;
+
+    public static string? FileSystemKindChoice => null;
 
     public static TimeProvider? Time => null;
 

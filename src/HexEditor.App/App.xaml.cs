@@ -147,6 +147,7 @@ public partial class App : Application
         MainWindow.RegisterComparePanel();
         MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
+        MainWindow.RegisterFileSystemPanels();
         MainWindow.RegisterDisassemblyPanel();
         MainWindow.RegisterPacketsPanel();
 

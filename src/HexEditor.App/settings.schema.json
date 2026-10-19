@@ -467,6 +467,31 @@
       ],
       "default": "whileModified"
     },
+    "forensics.fileSystem.showStreams": {
+      "description": "List NTFS alternate data streams",
+      "type": "boolean",
+      "default": true
+    },
+    "forensics.highlight.colors": {
+      "description": "Colors of the forensic highlight",
+      "type": "string",
+      "default": ""
+    },
+    "forensics.highlight.legend": {
+      "description": "Show the legend of the forensic highlight",
+      "type": "boolean",
+      "default": true
+    },
+    "forensics.partitions.absoluteOffsets": {
+      "description": "Show disk offsets in partition tabs",
+      "type": "boolean",
+      "default": false
+    },
+    "forensics.partitions.showSmallGaps": {
+      "description": "Show small gaps between partitions",
+      "type": "boolean",
+      "default": false
+    },
     "formats.gapFill": {
       "description": "Fill value for gaps in Intel HEX and S-record files",
       "type": "string",

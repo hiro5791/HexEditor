@@ -157,6 +157,8 @@ public sealed partial class MainWindow
         RegisterFormatCommands();
         RegisterTabCommands();
         RegisterDeviceCommands();
+        RegisterFileSystemCommands();
+        HookForensicStatus();
 
         // ---- 編集 ----
         Commands.Register("edit.undo", () => Undo_Click(this, e),

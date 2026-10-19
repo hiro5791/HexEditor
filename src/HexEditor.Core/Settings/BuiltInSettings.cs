@@ -282,6 +282,13 @@ public static class BuiltInSettings
         new(DeviceSettings.MemoryMapRefreshKey, SettingCategories.Advanced, SettingKind.Int, 5) { Min = 0, Max = 60, Order = 123, Group = "devices" },
         new(DeviceSettings.SuggestDiskImageKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 11 },
 
+        // パーティションとファイルシステム (12 の FOR-06 の仕様 4・6、FOR-10 の仕様 5、FOR-16 の仕様 2)。
+        new("forensics.partitions.showSmallGaps", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 140, Group = "fileSystems" },
+        new("forensics.partitions.absoluteOffsets", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 141, Group = "fileSystems" },
+        new("forensics.fileSystem.showStreams", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 142, Group = "fileSystems" },
+        new("forensics.highlight.legend", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 143, Group = "fileSystems" },
+        new("forensics.highlight.colors", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 144, Group = "fileSystems" },
+
         // リモートのデータソース (ENG-40〜ENG-42)。
         new(Remote.RemoteSettings.GdbTimeoutKey, SettingCategories.Files, SettingKind.Int, 5) { Min = 1, Max = 120, Order = 12 },
         new(Remote.RemoteSettings.SftpConfirmPartialWriteKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 13 },

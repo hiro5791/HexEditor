@@ -8193,4 +8193,474 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Whole page</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Fit width</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Choose folder...</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Show partitions</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Open partition in new tab</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Go to start of partition</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Open here as start of partition</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Scan for lost partitions</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Show file system</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Open file in new tab</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Export files</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Find deleted files</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Go to MFT record</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Go to cluster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Files using this position</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Show clusters of file</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Next fragment</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Previous fragment</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Toggle free space and slack highlight</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Export unallocated space</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Export slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Open unallocated space in new tab</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Partitions panel</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>File system panel</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Fragments panel</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Forensic results panel</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panel results forensic</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Forensics</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT record number</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Partitions and file systems</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Show small gaps between partitions</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>List unallocated gaps smaller than 1 MiB in the partition panel.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Show disk offsets in partition tabs</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>When off, a partition tab starts its addresses at 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>List NTFS alternate data streams</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Named streams appear as file.txt:stream in the file system browser.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Show the legend of the forensic highlight</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Shows the legend at the top right of the hex view while the highlight is on.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Colors of the forensic highlight</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>For example: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Empty uses the theme colors.</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Forensics</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Partitions</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>File system</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Show partitions</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Open partition in new tab</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Go to start of partition</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Scan for lost partitions...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Show browser</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Open file in new tab</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Export files...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Find deleted files</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Go to cluster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Files using this position</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Show clusters of file</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Go to MFT record...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Export unallocated space...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Export slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Open unallocated space in new tab</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Next fragment</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Previous fragment</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Forensic highlight</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Partitions</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>File system</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Fragments</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Forensic results</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Disk position and cluster owner</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Partitions</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>File system</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Fragments</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Forensic results</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Analyzing partitions…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Not analyzed. Choose Forensics &gt; Partitions &gt; Show partitions.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>No partition table was found.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} partitions, sector size {1}, disk ID {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Unreadable sectors (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> No.  Format    Type                         Name             Start LBA      End LBA      Sectors       Size  Start offset  Flags        FS        State</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Partition layout</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>Type GUID: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Unique GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Start block {0}, {1} blocks</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Table entry at {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Go to start of partition</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Select partition</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Open partition in new tab</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Show entry structure</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Show file system</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Scan for lost partitions...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>The cursor is not in a partition.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>No GPT was found with {1}-byte sectors, but one was found with {0}-byte sectors. Reopen with {0}-byte sectors?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Reopen with {0}-byte sectors</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - Partition {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logical</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>The EBR chain loops back at LBA {1} (after partition {0}). The chain was stopped.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>More than 256 logical partitions. The rest were not read.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>The GPT header CRC32 does not match (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>The CRC32 of the GPT partition entry array does not match (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>The primary GPT header and the backup header (LBA {1}) differ.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>The primary GPT header is broken. The list was built from the backup header.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Partitions {0} and {2} overlap.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Partition {0} points outside the disk (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Hybrid MBR: the protective MBR also has other entries.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Some sectors could not be read (first: LBA {1}). The list uses the readable sectors.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>The Apple partition map has more than 256 entries.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>EFI system</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft reserved</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Windows basic data</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Windows recovery</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>LDM metadata</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>LDM data</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Linux file system</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux swap</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple boot</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS boot</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Extended</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Extended (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Hidden FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Recovery</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Hidden FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Hidden NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Hidden FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (dynamic disk)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux extended</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT protective</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>LVM2 physical volume</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Scan for lost partitions</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>Start LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>End LBA (not included)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Scan positions</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>1 MiB boundaries</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Cylinder boundaries (63 sectors)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Every sector</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Every sector takes about {0} (at 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} hours</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Look for</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>GPT header / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Scan</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Scanning for lost partitions</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Lost partitions</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     Start LBA         Sectors          Size  Type        Conf.   Overlaps</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Low</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>High</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>overlaps partition {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Cancelled. The results so far are kept.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {# candidate found.} other {# candidates found.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Unreadable: LBA {0}, {1} sectors</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>No partition candidates were found.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Scan every sector</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Open as partition</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Show file system</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Create partition table entries (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Create partition table entries (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Create partition table entries</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>The MBR has no free entry for all candidates.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>The partition cannot be written in an MBR (over 2 TiB). Use GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>The GPT has no free entry.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>The disk is too small for a GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>No file system is open for this document.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Select a file in the file system browser.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>No file clusters are highlighted.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Only for NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>The allocation information cannot be read, so the highlight is not available.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>The volume is encrypted (BitLocker). The file system browser does not open it.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Cannot open as {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Choose the file system</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>The type could not be detected from the signature. Choose the type to try.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Type</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Unallocated ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>No MFT record {0}.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Go to block</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>No file system. Choose Forensics &gt; File system &gt; Show browser.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  serial {2}  cluster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Root</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Files</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Folders</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Fragments</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filter (* and ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Find files (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Columns</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT to use</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {The FATs differ in # entry.} other {The FATs differ in # entries.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Sectors per cluster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Analyze again</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Reading…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Reading… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} items</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Could not read: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(corrupt)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(time mismatch)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Time mismatch: the $STANDARD_INFORMATION times are earlier than the $FILE_NAME times, or have no fraction.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Encrypted with EFS (raw data only).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>The cluster chain is gone; the data is read as contiguous clusters from the first cluster.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>index slack entry</value></data>
+  <data name="Fs_InvalidTime" xml:space="preserve"><value>invalid time</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>counting…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logical {0}  cluster {1} ×{2}  disk {3}  {4} bytes</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logical {0}  in metadata  disk {3}  {4} bytes</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(compressed)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Computing slack positions</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Building the cluster map</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>{0} entries with corrupt metadata were skipped.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>The position is not in the cluster area.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Owners of clusters {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Kind                      Path</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Deleted file (deallocated)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Cluster chain of {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Index         Cluster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Files named {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>          Size  Path</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Finding files: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {# file found.} other {# files found.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Finding deleted files</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Finding orphan files</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Open file in new tab</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Export files...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Go to metadata</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Show clusters of file</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Show MFT record</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Show INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Show $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Show directory entry</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Show cluster chain</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Export list as CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Ext</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Allocated</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Created (UTC)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Modified (UTC)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Accessed (UTC)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metadata changed (UTC)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Attr</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>File ID</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>First cluster</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Frags</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>State</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Path</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Original path</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Recovery</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Deleted</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Orphan</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Good</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Partially overwritten</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Overwritten</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Location unknown</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Resident</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>MFT record not in use</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Index slack</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Deleted directory entry</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Deleted inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Directory entry slack</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup mismatch (update sequence)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Bad signature</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Cluster number out of range</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>The cluster chain loops</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>The cluster chain reaches a free cluster</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>The cluster chain does not match the file size</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Invalid data run list</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Invalid attribute</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Entry set checksum mismatch</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Read error</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Too deep</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>The backup boot sector differs ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr differs from $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>The BPB values are inconsistent ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>The FATs differ ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo does not match ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>The exFAT boot region checksum does not match ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>A long name checksum does not match ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>The allocation information cannot be read ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>The volume is encrypted ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Deleted files</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Orphan files</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Unallocated space</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Volume slack</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>File data</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM slack</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Drive slack</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Volume slack</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Partition gap</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Forensic highlight legend</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Size {0} bytes, allocated {1} bytes</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Created {0}, modified {1}, accessed {2}, metadata changed {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>File ID {0}, attributes {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Recovery: {0} ({1}). Original path: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Type: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Volume name: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Serial number: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Cluster size: {0} bytes</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Total clusters: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Free clusters: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Created: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Volume start {0}, {1} bytes</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>MFT record</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Record offset</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Sequence number</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Hard links</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Flags</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Bytes in use</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Base record</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI created</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI modified</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT changed</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI accessed</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Name</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Parent</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN created</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN modified</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT changed</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN accessed</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN size</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Time mismatch</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Content</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Entry offset</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>First cluster</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Short name</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Clusters in chain</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Data length</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Valid data length</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Partition {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Cluster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Block {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Deleted: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Find owner</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disk: - (compressed / sparse / resident)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Cluster number ({0}–{1}; cluster = current cluster)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Cluster {0} is out of range.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Go</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Keep the folder structure</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Also export alternate data streams (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Also export slack as separate files</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Include deleted files</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {# item selected.} other {# items selected.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Choose folder...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Exporting files</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Exported {0} files to {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Not enough free space: {0} needed, {1} free.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Could not write: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Export an overwritten file?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>The clusters of this deleted file are now used by other files. The exported content may belong to another file.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Export</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Binary file</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Create the map file (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Exporting unallocated space</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Exporting slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>Wrote {0} to {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>$LogFile records</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Prev LSN  UndoNext LSN  Type     Trans.ID  Redo                            Undo                            MFT rec  Length</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Restart page {0}: current LSN {1}, clients: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Reading $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>List</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>No results.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Export list as CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>No file is highlighted. Choose Show clusters of file.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} fragments)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logical {1}  disk {2}  {3} bytes  clusters {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Clear highlight</value></data>
 </root>

@@ -197,8 +197,15 @@ public sealed partial class HexView
             palette?.Selection ?? fallback,
             palette?.SearchMarker ?? fallback,
             palette?.Modified ?? fallback,
-            palette?.Difference ?? fallback);
+            palette?.Difference ?? fallback)
+        {
+            Fragments = [.. MinimapFragments?.Invoke() ?? []],
+            FragmentBrush = palette?.CursorMarker ?? fallback,
+        };
     }
+
+    /// <summary>強調中のファイルの断片 (FOR-15 の仕様 6。ミニマップに印を付ける)。</summary>
+    public Func<IEnumerable<(long Offset, long Length)>>? MinimapFragments { get; set; }
 
     /// <summary>ミニマップの描画モデル (テスト用)。表示していなければ null。</summary>
     internal System.Text.Json.Nodes.JsonObject? ReadMinimap()

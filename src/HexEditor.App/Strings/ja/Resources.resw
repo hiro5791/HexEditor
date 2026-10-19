@@ -8193,4 +8193,474 @@ SHA-256 のフィンガープリント: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>ページ全体</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>幅に合わせる</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>フォルダを選ぶ...</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>パーティションを表示</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>ぱーてぃしょんをひょうじ ぱーてぃしょん partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>パーティションを別タブで開く</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>ぱーてぃしょんをべつたぶでひらく partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>パーティションの先頭へ移動</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>ぱーてぃしょんのせんとうへいどう partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>ここをパーティションの先頭として開く</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>ここをぱーてぃしょんのせんとうとしてひらく partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>失われたパーティションをスキャン</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>うしなわれたぱーてぃしょんをすきゃん lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>ファイルシステムを表示</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>ふぁいるしすてむをひょうじ file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>ファイルを別タブで開く</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>ふぁいるをべつたぶでひらく file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>ファイルを書き出す</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>ふぁいるをかきだす export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>削除されたファイルを探す</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>さくじょされたふぁいるをさがす deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT レコードへ移動</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>えむえふてぃーれこーどへいどう mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>クラスタへ移動</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>くらすたへいどう cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>この位置を使っているファイル</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>このいちをつかっているふぁいる cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>ファイルのクラスタを表示</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>ふぁいるのくらすたをひょうじ fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>次の断片</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>つぎのだんぺん fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>前の断片</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>まえのだんぺん fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>空き領域とスラックの強調の切り替え</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>あきりょういきとすらっくのきょうちょうのきりかえ slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>未割り当て領域を書き出す</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>みわりあてりょういきをかきだす unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>スラックを書き出す</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>すらっくをかきだす slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>未割り当て領域を別タブで開く</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>みわりあてりょういきをべつたぶでひらく unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>パーティションパネル</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>ぱーてぃしょんぱねる panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>ファイルシステムパネル</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>ふぁいるしすてむぱねる panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>断片一覧パネル</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>だんぺんいちらんぱねる panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>フォレンジックの結果一覧パネル</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>ふぉれんじっくのけっかいちらんぱねる panel results forensic</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>フォレンジック</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT レコード番号</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>パーティションとファイルシステム</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>パーティションの小さな隙間も表示する</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>1 MiB 未満の未割り当ての隙間もパーティションパネルの一覧に出します。</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>パーティションのタブにディスク上のオフセットを表示する</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>オフのとき、パーティションのタブのアドレスは 0 から始まります。</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>NTFS の代替データストリームを一覧に出す</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>名前付きのストリームを、ファイルシステムのブラウザに file.txt:ストリーム名 として出します。</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>フォレンジックの強調の凡例を表示する</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>強調の表示中、Hex ビューの右上に凡例を出します。</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>フォレンジックの強調の色</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>例: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0。空のときはテーマの色を使います。</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>フォレンジック</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>パーティション</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>ファイルシステム</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>パーティションを表示</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>パーティションを別タブで開く</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>パーティションの先頭へ移動</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>失われたパーティションをスキャン...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>ブラウザを表示</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>ファイルを別タブで開く</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>ファイルを書き出す...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>削除されたファイルを探す</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>クラスタへ移動...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>この位置を使っているファイル</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>ファイルのクラスタを表示</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>MFT レコードへ移動...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>未割り当て領域を書き出す...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>スラックを書き出す...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>未割り当て領域を別タブで開く</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>次の断片</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>前の断片</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>フォレンジックの強調</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>パーティション</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>ファイルシステム</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>断片一覧</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>フォレンジックの結果一覧</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>ディスクの位置とクラスタの持ち主</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>パーティション</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>ファイルシステム</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>断片一覧</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>フォレンジックの結果一覧</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>解析中…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>まだ解析していません。「フォレンジック &gt; パーティション &gt; パーティションを表示」を選んでください。</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>パーティション表が見つかりません。</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>パーティション {0} 個、セクタサイズ {1}、ディスクの識別 {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>読めなかったセクタ (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> 番号 形式      種類                         名前             開始 LBA      終了 LBA     セクタ数     サイズ  開始オフセット 属性        FS        状態</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>パーティションの配置図</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>種類 GUID: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>固有 GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>開始ブロック {0}、{1} ブロック</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>表のエントリの位置 {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>パーティションの先頭へ移動</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>パーティションを選択</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>パーティションを別タブで開く</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>エントリの構造を表示</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>ファイルシステムを表示</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>失われたパーティションをスキャン...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>カーソルはパーティションの中にありません。</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>セクタサイズ {1} では GPT が見つかりませんでしたが、{0} では見つかりました。セクタサイズ {0} で開き直しますか?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>セクタサイズ {0} で開き直す</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - パーティション {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>論理</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>EBR の連鎖が LBA {1} で循環しています (パーティション {0} の後)。連鎖をたどるのをやめました。</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>論理パーティションが 256 個を超えています。残りは読んでいません。</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>GPT ヘッダーの CRC32 が一致しません (LBA {1})。</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>GPT のエントリ配列の CRC32 が一致しません (LBA {1})。</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>GPT の主ヘッダーとバックアップヘッダー (LBA {1}) が一致しません。</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>GPT の主ヘッダーが壊れています。バックアップヘッダーから一覧を作りました。</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>パーティション {0} と {2} が重なっています。</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>パーティション {0} がディスクの範囲外を指しています (LBA {1})。</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>ハイブリッド MBR: 保護 MBR に EE 以外のエントリもあります。</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>読めないセクタがありました (最初: LBA {1})。読めた範囲で一覧を作りました。</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Apple パーティションマップのエントリが 256 個を超えています。</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>EFI システム</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft 予約</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Windows 基本データ</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Windows 回復</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>LDM メタデータ</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>LDM データ</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Linux ファイルシステム</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux スワップ</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux ホーム</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple ブート</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS ブート</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (32 MB 未満)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>拡張</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>拡張 (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>隠し FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>回復</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>隠し FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>隠し NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>隠し FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (動的ディスク)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux 拡張</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT 保護</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>LVM2 物理ボリューム</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>失われたパーティションをスキャン</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>開始 LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>終了 LBA (この LBA を含まない)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>走査の間隔</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>1 MiB 境界</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>シリンダ境界 (63 セクタ)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>すべてのセクタ</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>すべてのセクタは約 {0} かかります (200 MB/s の場合)。</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} 時間</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} 分</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>探すもの</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>GPT ヘッダー・EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>スキャン</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>失われたパーティションのスキャン</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>失われたパーティション</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>      開始 LBA        セクタ数        サイズ  種類        確度    重なり</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>パーティション {0} と重なる</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>キャンセルしました。それまでの結果は残しています。</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>候補が {0} 件見つかりました。</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>読めなかった範囲: LBA {0}、{1} セクタ</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>パーティションの候補は見つかりませんでした。</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>すべてのセクタでスキャン</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>パーティションとして開く</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>ファイルシステムを表示</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>パーティション表のエントリを作成 (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>パーティション表のエントリを作成 (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>パーティション表のエントリを作成</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR に候補の数だけ空きのエントリがありません。</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>このパーティションは MBR で表せません (2 TiB を超える)。GPT を使ってください。</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT に空きのエントリがありません。</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>ディスクが小さすぎて GPT を置けません。</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>このドキュメントではファイルシステムを開いていません。</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>ファイルシステムのブラウザでファイルを選んでください。</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>ファイルのクラスタを強調していません。</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>NTFS のときだけ使えます。</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>割り当て情報を読めないため、強調を使えません。</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>ボリュームは暗号化されています (BitLocker)。ファイルシステムのブラウザでは開きません。</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>{0} として開けません: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>ファイルシステムの種類を選ぶ</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>署名から種類を判定できませんでした。試す種類を選んでください。</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>種類</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>未割り当て ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>MFT レコード {0} はありません。</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>ブロックへ移動</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>ファイルシステムを開いていません。「フォレンジック &gt; ファイルシステム &gt; ブラウザを表示」を選んでください。</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  シリアル番号 {2}  クラスタ {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>ルート</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>ファイル一覧</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>フォルダ</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>断片</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>絞り込み (* と ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>ファイルを検索 (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>列</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>使う FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>FAT の違い: {0} エントリ</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>クラスタあたりのセクタ数</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>再解析</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>読み込み中…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>読み込み中… {0} 件</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>読めませんでした: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(破損)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(日時の不一致)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>日時の不一致: $STANDARD_INFORMATION の日時が $FILE_NAME の日時より前か、小数部がありません。</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>EFS で暗号化されています (生データだけを扱います)。</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>クラスタのチェーンが消えているため、先頭クラスタから連続したクラスタと仮定して読みます。</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>インデックススラックのエントリ</value></data>
+  <data name="Fs_InvalidTime" xml:space="preserve"><value>不正な日時</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>計算中…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>論理 {0}  クラスタ {1} ×{2}  ディスク上 {3}  {4} バイト</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>論理 {0}  メタデータ内  ディスク上 {3}  {4} バイト</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(圧縮)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>スラックの位置を計算中</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>クラスタの逆引き表を作成中</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>メタデータが壊れた {0} 件を飛ばしました。</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>この位置はクラスタの領域にありません。</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>クラスタ {0}–{1} の持ち主</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>種類                      パス</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>メタデータ</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>削除されたファイル (割り当て解除済み)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>{0} のクラスタチェーン ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>    順番        クラスタ</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>名前が {0} のファイル</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        サイズ  パス</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>ファイルを検索: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0} 件見つかりました。</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>削除されたファイルを探しています</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>孤立したファイルを探しています</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>ファイルを別タブで開く</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>ファイルを書き出す...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>メタデータの位置へ移動</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>ファイルのクラスタを表示</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>MFT レコードを表示</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>INDX を表示</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>$LogFile を表示</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>ディレクトリエントリを表示</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>クラスタチェーンを表示</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>一覧を CSV / JSON にエクスポート...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>拡張子</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>割り当てサイズ</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>作成日時 (UTC)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>更新日時 (UTC)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>アクセス日時 (UTC)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>メタデータ変更日時 (UTC)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>属性</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ファイル ID</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>先頭クラスタ</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>断片</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>状態</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>元のパス</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>復元の見込み</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>通常</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>削除</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>孤立</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>良好</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>一部上書き</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>上書き済み</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>位置不明</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>常駐</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>使用中でない MFT レコード</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>インデックススラック</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>削除されたディレクトリエントリ</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>削除された inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>ディレクトリエントリの余り</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>フィックスアップの不一致</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>署名の不一致</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>範囲外のクラスタ番号</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>クラスタチェーンが循環しています</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>クラスタチェーンの途中に空きクラスタがあります</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>クラスタチェーンの長さがファイルサイズと合いません</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>データランの不正</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>属性の不正</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>エントリセットのチェックサムの不一致</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>読み込みエラー</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>階層が深すぎます</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>予備のブートセクタが一致しません ({0})。</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr が $MFT と一致しません ({0})。</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>BPB の値が矛盾しています ({0})。</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>FAT が食い違っています ({0})。</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo が一致しません ({0})。</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>exFAT のブート領域のチェックサムが一致しません ({0})。</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>長い名前のチェックサムが一致しません ({0})。</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>割り当て情報を読めません ({0})。</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>ボリュームは暗号化されています ({0})。</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$メタデータ</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>削除されたファイル</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>孤立したファイル</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>未割り当て領域</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>ボリュームスラック</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>メタデータ</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>ファイルのデータ</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM スラック</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>ドライブスラック</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>ボリュームスラック</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>パーティションの隙間</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>フォレンジックの強調の凡例</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>サイズ {0} バイト、割り当て {1} バイト</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>作成 {0}、更新 {1}、アクセス {2}、メタデータ変更 {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ファイル ID {0}、属性 {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>復元の見込み: {0} ({1})。元のパス: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>種類: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>ボリューム名: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>シリアル番号: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>クラスタサイズ: {0} バイト</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>総クラスタ数: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>空きクラスタ数: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>作成日時: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>ボリュームの開始 {0}、{1} バイト</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>MFT レコード</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>レコードの位置</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>シーケンス番号</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>ハードリンク数</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>フラグ</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>使用サイズ</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>ベースレコード</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>フィックスアップ</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI 作成</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI 更新</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT 変更</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI アクセス</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>名前</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>親</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN 作成</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN 更新</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT 変更</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN アクセス</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN サイズ</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>日時の不一致</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>内容</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>エントリの位置</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>先頭クラスタ</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>短い名前</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>チェーンのクラスタ数</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>データの長さ</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>有効なデータの長さ</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>パーティション {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>クラスタ {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>ブロック {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>削除済み: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>スラック</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>調べる</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>ディスク上 {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>ディスク上: - (圧縮・スパース・常駐)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>クラスタ番号 ({0}〜{1}。cluster は現在のクラスタ)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>クラスタ {0} は範囲外です。</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>移動</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>ディレクトリ構造を保つ</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>代替データストリームも書き出す (名前_ストリーム名)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>スラックも別ファイルで書き出す</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>削除されたファイルを含める</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0} 件を選んでいます。</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>書き出し先を選ぶ...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>ファイルの書き出し</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>{0} 件を {1} に書き出しました (export-manifest.csv)。</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>書き出し先の空き容量が足りません: 必要 {0}、空き {1}。</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>書き込めませんでした: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>上書き済みのファイルを書き出しますか?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>この削除されたファイルのクラスタは、今は他のファイルが使っています。書き出す内容は他のファイルのものである可能性があります。</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>書き出す</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>バイナリファイル</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>対応表 (.map.csv) を作る</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>未割り当て領域の書き出し</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>スラックの書き出し</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} を {1} に書き出しました。</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>$LogFile のログレコード</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN       前の LSN  Undo 次の LSN  種類     トランザ  Redo 操作                       Undo 操作                       MFT 番号   長さ</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>リスタートページ {0}: 現在の LSN {1}、クライアント: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>$LogFile の読み込み</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>一覧</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>結果はありません。</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>一覧を CSV / JSON にエクスポート...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>強調しているファイルはありません。「ファイルのクラスタを表示」を選んでください。</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} (断片 {1} 個)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  論理 {1}  ディスク上 {2}  {3} バイト  クラスタ {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>強調を消す</value></data>
 </root>
