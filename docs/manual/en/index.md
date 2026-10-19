@@ -51,6 +51,11 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [HexEditor plugin SDK](api-plugins.md)
 - [Command line (hexed)](command-line.md)
 
+## Forensics {#forensics}
+
+- [Partitions](partitions.md)
+- [File systems](file-systems.md)
+
 ## Settings and help {#settings-and-help}
 
 - [Settings and keyboard shortcuts](settings.md)

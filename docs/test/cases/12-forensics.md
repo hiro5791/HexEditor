@@ -995,7 +995,7 @@
 | テストデータ | TD-FOR-NTFS、TD-FOR-FAT32、TD-FOR-EXFAT |
 | 環境 | 管理者 (CI) |
 
-**前提**: 各イメージ (ボリュームのイメージ) の大きさのパーティションを 1 つ持つ VHDX を作り、パーティションにイメージの内容を書き込んでから、読み取り専用で接続してドライブ文字を割り当てる。テストコードが OS のファイル API で、全ファイルの相対パス・サイズ・更新日時 (UTC) の一覧を作る。
+**前提**: パーティションを 1 つ持つ固定サイズの VHD を作り、Windows でそのパーティションを NTFS・FAT32・exFAT にフォーマットして、TD-FOR-FILESET を OS のファイル API で書き込む (build/tests/New-FileSystemVhd.ps1)。テストコードが OS のファイル API で、全ファイルの相対パス・サイズ・更新日時 (UTC)・SHA-256 の一覧を作ってから VHD を切り離す。アプリはその VHD のファイル (固定サイズの VHD は生のディスクの後ろに 512 バイトのフッターが付いたもの) をディスクイメージとして開く。テスト用に生成したイメージ (TD-FOR-NTFS など) は Windows のドライバの検査を通ることを保証しないため、OS との比較には Windows がフォーマットしたボリュームを使う。TD-FOR-NTFS などと TD-FOR-FILESET の定義との一致は、単体テスト (FsTestImages) が確かめる。
 
 **手順**:
 
@@ -1042,7 +1042,7 @@
 | テストデータ | TD-FOR-NTFS、TD-FOR-FAT32、TD-FOR-EXFAT |
 | 環境 | 管理者 (CI) |
 
-**前提**: TC-FOR-09-01 と同じ方法で各イメージを接続し、OS 経由で各ファイルをコピーして SHA-256 を計算する。
+**前提**: TC-FOR-09-01 と同じ方法で VHD を作り、OS 経由で各ファイルの SHA-256 を計算する。
 
 **手順**:
 
@@ -1209,7 +1209,7 @@
 | テストデータ | TD-FOR-NTFS |
 | 環境 | 管理者 (CI) |
 
-**前提**: TD-FOR-NTFS の内容を書き込んだ VHDX を読み取り専用で接続し、OS 経由で `compressed.bin` をコピーして SHA-256 を計算する。
+**前提**: TC-FOR-09-01 と同じ方法で、`compressed.bin` に NTFS の圧縮属性を付けた (compact /c) VHD を作り、OS 経由で SHA-256 を計算する。単体テストは、TD-FOR-NTFS の `compressed.bin` (Windows の RtlCompressBuffer で LZNT1 に圧縮して作ったもの) の展開が TD-FOR-FILESET の内容と一致することを確かめる。
 
 **手順**:
 
@@ -3113,6 +3113,8 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 ### ファイルの組 TD-FOR-FILESET
 
 ファイルシステムのイメージに入れるファイルの組。「NTFS のみ」と書いたもの以外は、すべてのファイルシステムのイメージに入れる。
+
+TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・パーティション表のイメージは、テストデータの生成ツール (tools/HexEditor.TestData の FileSystemImages) がコードで書く (OS のフォーマッタ・FSCTL_MOVE_FILE は使わない)。断片の配置 (frag.bin の隙間)、切り詰めたファイル (small100.bin のクラスタの残り)、上書き (TD-FOR-NTFS-OVERWRITE の over1.bin・over2.bin のクラスタ)、削除 (使用中の印・ビットマップ・FAT を戻し、データは残す)、インデックススラック (dir1 の最後の INDX の使用領域の後ろに victim.txt のエントリ) は、生成ツールが直接その形に書く。NTFS の圧縮は Windows の RtlCompressBuffer (LZNT1) で作る。生成ツールはアプリの解析の実装を使わない。
 
 | 名前 | 内容 |
 | --- | --- |

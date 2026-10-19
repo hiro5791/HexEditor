@@ -44,6 +44,8 @@
     "api-reference",
     "api-plugins",
     "command-line",
+    "partitions",
+    "file-systems",
     "settings",
     "accessibility",
     "troubleshooting"

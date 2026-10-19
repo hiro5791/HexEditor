@@ -733,6 +733,11 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             lines.Add(Loc.Get("Fs_EfsEncrypted"));
         }
 
+        if (e.Flags.HasFlag(FsEntryFlags.LfnMismatch))
+        {
+            lines.Add("⚠ " + Loc.Format("FsIssue_LfnChecksum", e.Name));
+        }
+
         if (e.Flags.HasFlag(FsEntryFlags.AssumedContiguous))
         {
             lines.Add(Loc.Get("Fs_AssumedContiguous"));

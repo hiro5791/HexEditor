@@ -487,6 +487,8 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportUnallocated" cmd:CommandUi.Id="forensics.fs.exportUnallocated" AutomationProperties.AutomationId="Command_FsExportUnallocated" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportSlack" cmd:CommandUi.Id="forensics.fs.exportSlack" AutomationProperties.AutomationId="Command_FsExportSlack" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsOpenUnallocated" cmd:CommandUi.Id="forensics.fs.openUnallocated" AutomationProperties.AutomationId="Command_FsOpenUnallocated" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectUnallocated" cmd:CommandUi.Id="forensics.fs.selectUnallocated" AutomationProperties.AutomationId="Command_FsSelectUnallocated" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectSlack" cmd:CommandUi.Id="forensics.fs.selectSlack" AutomationProperties.AutomationId="Command_FsSelectSlack" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">

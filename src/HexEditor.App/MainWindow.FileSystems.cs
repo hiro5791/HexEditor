@@ -99,6 +99,8 @@ public sealed partial class MainWindow
                 : NeedsSession(s => s.Classifier.CanClassify ? null : Loc.Get("Fs_HighlightUnavailable")));
         Commands.Register("forensics.fs.exportUnallocated", () => ExportUnallocatedAsync(), () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
         Commands.Register("forensics.fs.exportSlack", () => ExportSlackAsync(), () => NeedsSession());
+        Commands.Register("forensics.fs.selectUnallocated", () => SelectRegionsAsync(slack: false), () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
+        Commands.Register("forensics.fs.selectSlack", () => SelectRegionsAsync(slack: true), () => NeedsSession());
         Commands.Register("forensics.fs.openUnallocated", OpenUnallocatedTab, () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
     }
 
@@ -543,6 +545,37 @@ public sealed partial class MainWindow
         StateOf(vm)!.DiskOffsetOf = offset => source.DiskOffsetOf(offset) is long v ? diskBase + v : null;
         UpdateTitle();
         UpdateForensicStatus();
+    }
+
+    /// <summary>
+    /// 「未割り当て領域を選択」「スラックを選択」(FOR-16 の仕様 7): 区間をマルチ選択 (EDIT-07) にする。検索 (FIND-06 の「選択範囲」)・文字列の抽出・カービングの
+    /// 対象範囲として使う。区間の数がマルチ選択の上限を超える分は選ばない (知らせる)。
+    /// </summary>
+    internal async Task SelectRegionsAsync(bool slack)
+    {
+        if (Vm.Selected is not { } d || StateOf(d)?.Session is not { } session)
+        {
+            return;
+        }
+
+        List<ByteRange> ranges = await Vm.Operations.RunAsync(Loc.Get(slack ? "Fs_SelectingSlack" : "Fs_SelectingUnallocated"), OperationKind.ReadOnly,
+            d.Document, null, op =>
+            {
+                IEnumerable<ExtractMapRow> rows = slack
+                    ? FileSystemExtraction.SlackRuns(session.FileSystem, session.VolumeOffset, session.Classifier.Tails ?? FileTailTable.Build(session.FileSystem, false, null, op.CancellationToken))
+                    : FileSystemExtraction.UnallocatedRuns(session.FileSystem, session.VolumeOffset, op.CancellationToken);
+                return Task.FromResult(rows.Select(r => new ByteRange(r.DiskOffset, r.Length)).Take(Core.View.EditorState.DefaultMaxSelectionElements + 1).ToList());
+            });
+        if (ranges.Count == 0)
+        {
+            ShowNotice(Loc.Get("Fs_NothingToSelect"), InfoBarSeverity.Informational, d);
+            return;
+        }
+
+        if (d.Editor.SetSelections(ranges) == Core.View.SelectionResult.Truncated)
+        {
+            ShowNotice(Loc.Get("Fs_SelectionTruncated"), InfoBarSeverity.Warning, d);
+        }
     }
 
     /// <summary>ドキュメントが閉じられた・変わったときにパネルを更新する。</summary>

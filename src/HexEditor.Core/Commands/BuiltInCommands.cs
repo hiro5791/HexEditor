@@ -716,6 +716,8 @@ public static class BuiltInCommands
         new("forensics.fs.exportUnallocated", "forensics") { Condition = "fileSystem" },
         new("forensics.fs.exportSlack", "forensics") { Condition = "fileSystem" },
         new("forensics.fs.openUnallocated", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.selectUnallocated", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.selectSlack", "forensics") { Condition = "fileSystem" },
         new("view.panel.partitions", "view"),
         new("view.panel.fileSystem", "view"),
         new("view.panel.fragments", "view"),

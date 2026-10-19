@@ -8663,4 +8663,16 @@ SHA-256 のフィンガープリント: {2}
   <data name="Fragments_Title" xml:space="preserve"><value>{0} (断片 {1} 個)</value></data>
   <data name="Fragments_Row" xml:space="preserve"><value>#{0}  論理 {1}  ディスク上 {2}  {3} バイト  クラスタ {4}</value></data>
   <data name="Fragments_Clear" xml:space="preserve"><value>強調を消す</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>未割り当て領域を選択</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>みわりあてりょういきをせんたく unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>スラックを選択</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>すらっくをせんたく slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>未割り当て領域を選択</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>スラックを選択</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>未割り当て領域を選択しています</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>スラックを選択しています</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>選択する範囲がありません。</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>先頭から 1,000,000 個の範囲だけを選択しました。</value></data>
 </root>

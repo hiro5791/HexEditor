@@ -8663,4 +8663,16 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} fragments)</value></data>
   <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logical {1}  disk {2}  {3} bytes  clusters {4}</value></data>
   <data name="Fragments_Clear" xml:space="preserve"><value>Clear highlight</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Select unallocated space</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Select slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Select unallocated space</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Select slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Selecting unallocated space</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Selecting slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>There is nothing to select.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Only the first 1,000,000 ranges were selected.</value></data>
 </root>
