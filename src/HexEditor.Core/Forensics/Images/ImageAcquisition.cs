@@ -402,6 +402,10 @@ public static class ImageAcquisition
         WriteLog(result, info, options, sector, start, length, verification?.Overall);
         Audit(info, options, ImageAuditResult.Success, result, null);
         ImageForensics.Hooks.RegisterAcquiredImage(sink.Files[0], info.Path, hashes);
+        if (verification is not null)
+        {
+            ImageVerification.Record(sink.Files[0], null, verification);
+        }
         return result;
     }
 

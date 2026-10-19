@@ -179,3 +179,49 @@ public static class ImageVerifier
         return (hashes.Finish(), errors);
     }
 }
+
+/// <summary>検証の実行と記録 (FOR-22 の仕様 5: 監査ログと証拠一覧の「検証結果」)。</summary>
+public static class ImageVerification
+{
+    /// <summary>検証して、結果を監査ログと証拠一覧に記録する。</summary>
+    public static Task<VerificationResult> RunAsync(IByteSource image, string targetPath, IEnumerable<string> algorithms, IReadOnlyList<ReferenceHash> references,
+        LongRunningOperation? operation = null, IByteSource? sourceDisk = null, TimeProvider? time = null)
+    {
+        List<string> names = [.. algorithms];
+        return Task.Run(() =>
+        {
+            VerificationResult result = ImageVerifier.Verify(image, names, references, operation, sourceDisk, time);
+            Record(targetPath, image.Identity, result);
+            return result;
+        });
+    }
+
+    /// <summary>検証の結果を記録する (取得の直後の自動の検証からも呼ぶ)。</summary>
+    public static void Record(string targetPath, string? identity, VerificationResult result)
+    {
+        var parameters = new Dictionary<string, string>(StringComparer.Ordinal) { ["verdict"] = result.Overall.ToString() };
+        foreach (AlgorithmVerification row in result.Algorithms)
+        {
+            parameters["verdict." + row.Algorithm] = row.Verdict.ToString();
+            if (row.Computed is { } value)
+            {
+                parameters["hash." + row.Algorithm] = Convert.ToHexStringLower(value);
+            }
+        }
+
+        if (result.ReadErrors.Count > 0)
+        {
+            parameters["readErrors"] = string.Join(";", result.ReadErrors.Take(100).Select(r => $"{r.Offset}+{r.Length}"));
+        }
+
+        ImageForensics.Hooks.Audit(new ImageAuditRecord
+        {
+            Operation = "image.verify",
+            TargetPath = targetPath,
+            TargetIdentity = identity,
+            Parameters = parameters,
+            Result = result.Overall is VerificationVerdict.Match or VerificationVerdict.NoReference ? ImageAuditResult.Success : ImageAuditResult.Failure,
+        });
+        ImageForensics.Hooks.RecordVerification(targetPath, result);
+    }
+}
