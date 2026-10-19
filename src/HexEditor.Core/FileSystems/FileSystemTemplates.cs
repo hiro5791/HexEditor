@@ -219,6 +219,62 @@ public static class FileSystemTemplates
 
         """ + $"DirectoryEntry entries[{count.ToString(CultureInfo.InvariantCulture)}];\n";
 
+    /// <summary>ext の inode (「inode を表示」。FOR-12)。<paramref name="inodeSize"/> は 128 以上 (拡張領域は 128 を超える場合)。</summary>
+    public static string ExtInode(int inodeSize) => Header + """
+        #pragma name "ext inode"
+        #pragma name.ja "ext の inode"
+
+        struct ExtentHeader {
+            u16 magic [[format("hex"), comment("F30A")]];
+            u16 entries;
+            u16 max;
+            u16 depth;
+            u32 generation;
+        };
+
+        struct Inode {
+            u16 mode [[format("oct")]];
+            u16 uid_lo;
+            u32 size_lo;
+            u32 atime;
+            u32 ctime;
+            u32 mtime;
+            u32 dtime [[comment("0 でなければ削除された")]];
+            u16 gid_lo;
+            u16 links_count;
+            u32 blocks_lo;
+            u32 i_flags [[format("hex"), comment("80000: extents、10000000: inline_data、800: encrypted、1000: htree")]];
+            u32 osd1;
+            if ((i_flags & 0x80000) != 0) {
+                ExtentHeader extent_header;
+                u8 extents[48];
+            } else {
+                u32 block[15];
+            }
+            u32 generation;
+            u32 file_acl_lo;
+            u32 size_high;
+            u32 obso_faddr;
+            u16 blocks_high;
+            u16 file_acl_high;
+            u16 uid_high;
+            u16 gid_high;
+            u16 checksum_lo [[format("hex")]];
+            u16 reserved;
+
+        """ + (inodeSize > 128 ? """
+            u16 extra_isize;
+            u16 checksum_hi [[format("hex")]];
+            u32 ctime_extra;
+            u32 mtime_extra;
+            u32 atime_extra;
+            u32 crtime;
+            u32 crtime_extra;
+            u32 version_hi;
+            u32 projid;
+
+        """ : string.Empty) + $"}} [[size({inodeSize.ToString(CultureInfo.InvariantCulture)})]];\n\nInode inode;\n";
+
     /// <summary>テンプレートを書き出す (同じ内容なら書き直さない)。パスを返す。</summary>
     public static string Write(string folder, string name, string text)
     {

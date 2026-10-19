@@ -63,6 +63,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
     private readonly TextBlock _details = new() { TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true, Margin = new Thickness(8, 4, 8, 4) };
     private readonly TextBlock _listStatus = new() { Margin = new Thickness(8, 0, 8, 0) };
     private readonly ComboBox _fatChoice = new() { Visibility = Visibility.Collapsed };
+    private readonly StackPanel _choices = new() { Orientation = Orientation.Horizontal, Spacing = 6 };
     private readonly StackPanel _override = new() { Orientation = Orientation.Horizontal, Spacing = 6, Visibility = Visibility.Collapsed, Margin = new Thickness(8, 4, 8, 0) };
     private readonly NumberBox _overrideSpc = new() { Minimum = 1, Maximum = 128, Value = 8, SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact };
     private readonly ObservableCollection<FsRow> _rows = [];
@@ -195,6 +196,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         toolbar.Children.Add(_search);
         toolbar.Children.Add(columns);
         toolbar.Children.Add(_fatChoice);
+        toolbar.Children.Add(_choices);
 
         var grid = new Grid();
         grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -298,6 +300,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         _details.Text = string.Empty;
         _fragments.ItemsSource = null;
         _fatChoice.Visibility = Visibility.Collapsed;
+        _choices.Children.Clear();
         _override.Visibility = Visibility.Collapsed;
         UpdateHeader();
         if (_session is not { } session)
@@ -332,6 +335,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             _ = CountFatDifferencesAsync(fat);
         }
 
+        BuildChoices(session);
         _tree.SelectedNode = root;
         ShowFolder(session.Root);
         ShowSummary();
@@ -380,6 +384,64 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             }
         }
     }
+
+    // ---- 表示の選択 (ISO 9660 の名前の種類・セッション、ブリッジ形式の UDF / ISO 9660。FOR-14) ----
+
+    private void BuildChoices(FileSystemSession session)
+    {
+        _choices.Children.Clear();
+        if (session.FileSystem is not IFsChoices choices)
+        {
+            return;
+        }
+
+        foreach (FsChoice choice in choices.Choices)
+        {
+            string label = Loc.TryGet("FsChoice_" + choice.Key) ?? choice.Key;
+            var combo = new ComboBox { Header = label, MinWidth = 120 };
+            foreach (string option in choice.Options)
+            {
+                combo.Items.Add(Loc.TryGet($"FsChoice_{choice.Key}_{option}") ?? option);
+            }
+
+            combo.SelectedIndex = choice.Selected;
+            AutomationProperties.SetAutomationId(combo, "Fs_Choice_" + choice.Key);
+            AutomationProperties.SetName(combo, label);
+            string key = choice.Key;
+            combo.SelectionChanged += (_, _) =>
+            {
+                if (combo.SelectedIndex >= 0 && combo.SelectedIndex != CurrentChoice(key))
+                {
+                    _ = SelectChoiceAsync(key, combo.SelectedIndex);
+                }
+            };
+            _choices.Children.Add(combo);
+        }
+    }
+
+    private int CurrentChoice(string key) => (_session?.FileSystem as IFsChoices)?.Choices.FirstOrDefault(c => c.Key == key)?.Selected ?? -1;
+
+    /// <summary>表示の選択を変える。別の種類で開き直す場合 (ブリッジ形式) はファイルシステムを開き直し、それ以外は木と一覧を読み直す。</summary>
+    internal async Task SelectChoiceAsync(string key, int index)
+    {
+        if (_session is not { FileSystem: IFsChoices choices } session || _document is not { } d)
+        {
+            return;
+        }
+
+        FileSystemKind? reopen = choices.Select(key, index);
+        if (reopen is FileSystemKind kind && Window is { } w)
+        {
+            await w.ShowFileSystemAsync(d, session.VolumeOffset, session.VolumeLength, kind);
+            return;
+        }
+
+        Rebuild();
+        Window?.NotifyForensicStateChanged(d);
+    }
+
+    /// <summary>表示の選択 (テスト用)。</summary>
+    internal IReadOnlyList<FsChoice> Choices => (_session?.FileSystem as IFsChoices)?.Choices ?? [];
 
     /// <summary>使う FAT を切り替えて、今のフォルダを読み直す (FOR-11 の仕様 3)。</summary>
     private void SwitchFat()
@@ -503,6 +565,11 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
 
             IsLoadingList = false;
             _listStatus.Text = error is null ? Loc.Format("Fs_Count", _all.Count.ToString("N0", CultureInfo.CurrentCulture)) : Loc.Format("Fs_ListError", error);
+            if (error is null && _all.Count == 0 && folder.Flags.HasFlag(FsEntryFlags.Encrypted))
+            {
+                // 暗号化されたボリューム・フォルダ (APFS の暗号化されたボリュームなど) は一覧を出さない (FOR-13 の仕様 2)。
+                _listStatus.Text = Loc.Get("Fs_FolderEncrypted");
+            }
             UpdateHeader();
         }));
     }
@@ -862,6 +929,8 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         menu.Items.Add(Item("Fs_Menu_LogFile", () => _ = Window?.ShowLogFileAsync(_document!)));
         menu.Items.Add(Item("Fs_Menu_DirectoryEntry", () => Window?.ShowDirectoryEntry(_document!, SelectedEntries[0])));
         menu.Items.Add(Item("Fs_Menu_ClusterChain", () => Window?.ShowClusterChain(_document!, SelectedEntries[0])));
+        menu.Items.Add(Item("Fs_Menu_Inode", () => Window?.ShowInode(_document!, SelectedEntries[0])));
+        menu.Items.Add(Item("Fs_Menu_Journal", () => _ = Window?.ShowExtJournalAsync(_document!)));
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(Item("Fs_Menu_CopyPath", CopyPath));
         menu.Items.Add(Item("Fs_Menu_ExportList", () => _ = Window?.ExportListAsync("files.csv", json => json ? FsListExport.ToJson(Entries) : FsListExport.ToCsv(Entries))));
@@ -871,6 +940,7 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             FsEntry? first = selected.FirstOrDefault();
             bool ntfs = _session?.FileSystem is NtfsFileSystem;
             bool fat = _session?.FileSystem is FatFileSystem or ExFatFileSystem;
+            bool ext = _session?.FileSystem is Core.FileSystems.Ext.ExtFileSystem;
             foreach (MenuFlyoutItem item in menu.Items.OfType<MenuFlyoutItem>())
             {
                 string id = AutomationProperties.GetAutomationId(item);
@@ -885,6 +955,9 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
                     "Fs_Menu_LogFile" => (ntfs, first?.Name == "$LogFile"),
                     "Fs_Menu_DirectoryEntry" => (fat, first?.MetadataOffset is not null && !first.Flags.HasFlag(FsEntryFlags.Metadata)),
                     "Fs_Menu_ClusterChain" => (fat, first?.FirstCluster is not null),
+                    "Fs_Menu_Inode" => (ext, first?.MetadataOffset is not null && !first.Flags.HasFlag(FsEntryFlags.Metadata) && first.DeletedSource != FsDeletedSource.DirectorySlack
+                        || first?.Name == "$Journal"),
+                    "Fs_Menu_Journal" => (ext, first?.Name == "$Journal"),
                     "Fs_Menu_CopyPath" => (true, first is not null),
                     _ => (true, _rows.Count > 0),
                 };

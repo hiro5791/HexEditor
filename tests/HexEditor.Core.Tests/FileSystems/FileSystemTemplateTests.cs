@@ -49,4 +49,15 @@ public sealed class FileSystemTemplateTests
         string exjson = Apply(FileSystemTemplates.ExFatEntries(3), exfat, e.Files["contig.bin"].EntryOffset, 96);
         Assert.Contains("contig.bin", exjson, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void Ext_inode_template_shows_the_extent_header_and_times()
+    {
+        (SparseImage image, ExtImageBuilder b) = FileSystemImageSet.Ext(ExtVariant.Ext4);
+        long offset = b.InodeOffset(b.Nodes.First(n => n.Name == "readme.txt").Inode);
+        string json = Apply(FileSystemTemplates.ExtInode(256), image, offset, 256);
+        Assert.Contains("extent_header", json, StringComparison.Ordinal);
+        Assert.Contains("crtime_extra", json, StringComparison.Ordinal);
+        Assert.DoesNotContain(TemplateLoader.LoadText(FileSystemTemplates.ExtInode(128), "inode128.hxt").Diagnostics, d => d.Severity == TemplateSeverity.Error);
+    }
 }

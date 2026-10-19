@@ -3,6 +3,7 @@ using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.FileSystems;
 using HexEditor.Core.FileSystems.Partitions;
+using HexEditor.Core.FileSystems.Volumes;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -24,9 +25,14 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
     private readonly HyperlinkButton _scanLink = new();
     private readonly TextBlock _details = new() { TextWrapping = TextWrapping.Wrap, Margin = new Thickness(8, 4, 8, 8), IsTextSelectionEnabled = true };
     private readonly TextBlock _header = new() { Margin = new Thickness(12, 0, 8, 0), FontFamily = new FontFamily("Cascadia Mono, Consolas") };
+    private readonly ListView _lvList = new() { SelectionMode = ListViewSelectionMode.Single, MaxHeight = 160 };
+    private readonly TextBlock _lvTitle = new() { Margin = new Thickness(8, 6, 8, 0) };
+    private readonly TextBlock _lvStatus = new() { TextWrapping = TextWrapping.Wrap, Margin = new Thickness(8, 0, 8, 6), IsTextSelectionEnabled = true };
+    private readonly StackPanel _lvSection = new() { Visibility = Visibility.Collapsed };
     private DocumentViewModel? _document;
     private FileSystemDocumentState? _state;
     private List<RowItem> _rows = [];
+    private List<LvItem> _lvRows = [];
 
     public PartitionPanel(PanelContext context)
     {
@@ -65,6 +71,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(0.5, GridUnitType.Star), MinHeight = 60 });
+        grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         var top = new StackPanel { Margin = new Thickness(8, 8, 8, 0) };
         top.Children.Add(new ScrollViewer
         {
@@ -99,6 +106,9 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         var detailScroll = new ScrollViewer { Content = _details };
         Grid.SetRow(detailScroll, 4);
         grid.Children.Add(detailScroll);
+        BuildLogicalVolumeSection(mono);
+        Grid.SetRow(_lvSection, 5);
+        grid.Children.Add(_lvSection);
         Content = grid;
 
         context.ActiveDocumentChanged += (_, _) => Attach();
@@ -158,6 +168,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
 
     private void Refresh()
     {
+        RefreshLogicalVolumes();
         PartitionAnalysis? analysis = _state?.Partitions;
         _scanLink.Visibility = Visibility.Collapsed;
         if (_document is null)
@@ -197,6 +208,106 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         }
 
         SetRows(analysis.Rows);
+    }
+
+    // ---- 論理ボリューム (FOR-07 の画面) ----
+
+    private void BuildLogicalVolumeSection(FontFamily mono)
+    {
+        _lvTitle.Text = Loc.Get("Lv_Title");
+        _lvTitle.Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"];
+        _lvList.FontFamily = mono;
+        _lvList.DisplayMemberPath = nameof(LvItem.Text);
+        AutomationProperties.SetAutomationId(_lvList, "Partitions_LogicalVolumes");
+        AutomationProperties.SetName(_lvList, Loc.Get("Lv_Title"));
+        AutomationProperties.SetAutomationId(_lvStatus, "Partitions_LogicalVolumesStatus");
+        _lvList.DoubleTapped += (_, _) => _ = OpenSelectedLogicalVolumeAsync();
+        _lvList.KeyDown += (_, e) =>
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                _ = OpenSelectedLogicalVolumeAsync();
+                e.Handled = true;
+            }
+        };
+        var menu = new MenuFlyout();
+        menu.Items.Add(Item("Lv_Menu_Open", () => _ = OpenSelectedLogicalVolumeAsync()));
+        menu.Items.Add(Item("Lv_Menu_Assign", () =>
+        {
+            if (SelectedLogicalVolume is { } v && _document is { } d)
+            {
+                _ = Window?.AssignMembersAsync(d, v);
+            }
+        }));
+        menu.Items.Add(Item("Lv_Menu_Refresh", () => _ = Window?.ShowLogicalVolumesAsync()));
+        _lvList.ContextFlyout = menu;
+        var header = new TextBlock { Text = Loc.Get("Lv_Header"), Margin = new Thickness(12, 0, 8, 0) };
+        header.Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"];
+        header.FontFamily = mono;
+        _lvSection.Children.Add(_lvTitle);
+        _lvSection.Children.Add(new ScrollViewer { Content = header, HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden, VerticalScrollBarVisibility = ScrollBarVisibility.Disabled });
+        _lvSection.Children.Add(new ScrollViewer
+        {
+            Content = _lvList,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollMode = ScrollMode.Auto,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+        });
+        _lvSection.Children.Add(_lvStatus);
+    }
+
+    private void RefreshLogicalVolumes()
+    {
+        LogicalVolumeScan? scan = _state?.LogicalVolumes;
+        bool running = _state?.LogicalVolumesRunning == true;
+        _lvSection.Visibility = scan is not null || running ? Visibility.Visible : Visibility.Collapsed;
+        if (running)
+        {
+            _lvStatus.Text = Loc.Get("Lv_Analyzing");
+            return;
+        }
+
+        string? selected = SelectedLogicalVolume?.Name;
+        _lvRows = scan is null ? [] : [.. scan.Volumes.Select(v => new LvItem(v, MainWindow.LvRowText(v, scan)))];
+        _lvList.ItemsSource = _lvRows;
+        _lvList.SelectedItem = _lvRows.FirstOrDefault(r => r.Volume.Name == selected) ?? _lvRows.FirstOrDefault();
+        var lines = new List<string>();
+        if (_state?.LogicalVolumesMessage is { } message)
+        {
+            lines.Add(message);
+        }
+
+        foreach (LogicalVolumeIssue issue in scan?.Issues ?? [])
+        {
+            lines.Add(Loc.Format("Lv_Issue", issue.Group, issue.Detail));
+        }
+
+        _lvStatus.Text = string.Join(Environment.NewLine, lines);
+    }
+
+    /// <summary>表示している論理ボリューム (テスト用)。</summary>
+    internal IReadOnlyList<LogicalVolumeInfo> LogicalVolumes => [.. _lvRows.Select(r => r.Volume)];
+
+    internal IReadOnlyList<string> LogicalVolumeTexts => [.. _lvRows.Select(r => r.Text)];
+
+    internal string LogicalVolumeStatus => _lvStatus.Text;
+
+    internal LogicalVolumeInfo? SelectedLogicalVolume => (_lvList.SelectedItem as LvItem)?.Volume;
+
+    /// <summary>テスト用: 名前で選ぶ。</summary>
+    internal bool SelectLogicalVolume(string name)
+    {
+        LvItem? item = _lvRows.FirstOrDefault(r => r.Volume.Name == name);
+        _lvList.SelectedItem = item;
+        return item is not null;
+    }
+
+    internal Task<DocumentViewModel?> OpenSelectedLogicalVolumeAsync() =>
+        SelectedLogicalVolume is { } v && _document is { } d && Window is { } w ? w.OpenLogicalVolumeAsync(d, v) : Task.FromResult<DocumentViewModel?>(null);
+
+    private sealed record LvItem(LogicalVolumeInfo Volume, string Text)
+    {
+        public override string ToString() => Text;
     }
 
     private void SetRows(IReadOnlyList<PartitionRow> rows)
@@ -372,6 +483,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         menu.Items.Add(Item("Part_Menu_OpenInNewTab", () => OpenInNewTab()));
         menu.Items.Add(Item("Part_Menu_ShowStructure", ShowStructure));
         menu.Items.Add(Item("Part_Menu_ShowFileSystem", () => _ = ShowFileSystemAsync()));
+        menu.Items.Add(Item("Part_Menu_LogicalVolumes", () => _ = Window?.ShowLogicalVolumesAsync()));
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(Item("Part_Menu_Scan", () => _ = Window?.ShowLostPartitionScanAsync(SelectedRow is { IsUnallocated: true } gap ? gap : null)));
         menu.Opening += (_, _) =>
@@ -385,6 +497,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
                     "Part_Menu_Scan" => _document is not null,
                     "Part_Menu_ShowStructure" => row?.Template is not null,
                     "Part_Menu_ShowFileSystem" or "Part_Menu_OpenInNewTab" => row is { IsUnallocated: false, IsContainer: false },
+                    "Part_Menu_LogicalVolumes" => row?.FileSystem is FileSystemKind.Ldm or FileSystemKind.Lvm2,
                     _ => row is not null,
                 };
             }

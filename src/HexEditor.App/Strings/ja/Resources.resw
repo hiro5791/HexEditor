@@ -8675,4 +8675,77 @@ SHA-256 のフィンガープリント: {2}
   <data name="Fs_SelectingSlack" xml:space="preserve"><value>スラックを選択しています</value></data>
   <data name="Fs_NothingToSelect" xml:space="preserve"><value>選択する範囲がありません。</value></data>
   <data name="Fs_SelectionTruncated" xml:space="preserve"><value>先頭から 1,000,000 個の範囲だけを選択しました。</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>論理ボリュームを表示</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>ろんりぼりゅーむをひょうじ どうてきでぃすく logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>inode へ移動</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>あいのーどへいどう いのーど inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>inode 番号</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>論理ボリュームを表示</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>inode へ移動...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>チェックサムの不一致</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>対応していない形式</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>ext のスーパーブロックのチェックサムが合いません ({0})。</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>グループ記述子のチェックサムが合いません (グループ {0})。</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>この ext の機能には完全には対応していません: {0}。</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>予備のボリュームヘッダーが主のものと違います ({0})。</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>APFS のオブジェクトのチェックサムが合いません (ブロック {0})。読み飛ばしました。</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>APFS の最新のチェックポイントが壊れているため、古いものを使っています (xid {0})。</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>UDF の記述子のタグのチェックサムが合いません (セクタ {0})。</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>UDF の記述子の CRC が合いません (セクタ {0})。</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>この UDF のパーティションの種類には対応していません: {0}。</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>このディスクにはセッションが {0} 個あります。最後のセッションを表示しています。「セッション」で選べます。</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>ext2・ext3・ext4 だけで使えます。</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>inode {0} はありません。</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>このボリュームは暗号化されています。ファイル一覧は表示しません。</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>APFS のチェックポイントが見つかりません。</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>inode を表示</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>ジャーナルを表示</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>名前の種類</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (基本)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>セッション</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>このファイルシステムにはジャーナルがありません。</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ext のジャーナル (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>  ブロック    ディスク上の位置  種類             シーケンス</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>ブロック {0} バイト、{1} ブロック、シーケンス {2}、開始 {3} (0 は空)。ジャーナルは再生しません。</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>ext のジャーナルの読み込み</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>記述子</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>コミット</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>スーパーブロック v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>スーパーブロック v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>取り消し</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>論理ボリュームを表示</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>論理ボリューム</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>名前                  種類          サイズ      構成                          状態</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>ボリュームのメタデータを読んでいます...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>開いているディスク・イメージに LDM・LVM2 の論理ボリュームは見つかりませんでした。</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>論理ボリュームを開く</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>構成要素を割り当てる...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>読み直す</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>対応していない種類です: {0}。</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} を開けません。足りない構成要素: {1}。ディスク・イメージを開くか、割り当ててください。</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) はミラーまたは RAID-5 のボリュームです。RAID の再構成で開いてください。</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>構成要素の割り当て</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>{0} の足りない構成要素ごとに、ディスクまたはイメージを選んでください。</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(なし)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>ファイルを開く...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>構成要素が {0} 個足りない</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>非対応</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>RAID の再構成</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>シンプル</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>スパン</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>ストライプ</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>ミラー</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>linear</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>非対応 ({0})</value></data>
 </root>

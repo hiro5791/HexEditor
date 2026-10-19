@@ -102,6 +102,9 @@ public sealed partial class MainWindow
         Commands.Register("forensics.fs.selectUnallocated", () => SelectRegionsAsync(slack: false), () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
         Commands.Register("forensics.fs.selectSlack", () => SelectRegionsAsync(slack: true), () => NeedsSession());
         Commands.Register("forensics.fs.openUnallocated", OpenUnallocatedTab, () => NeedsSession(s => s.FileSystem.Allocation is null ? Loc.Get("Fs_HighlightUnavailable") : null));
+
+        // ---- LDM・LVM2 (FOR-07)、ext (FOR-12) ----
+        RegisterFileSystemMoreCommands();
     }
 
     // ---- ドキュメントの判別 ----
@@ -385,7 +388,7 @@ public sealed partial class MainWindow
         }
         catch (FileSystemOpenException ex)
         {
-            state.FileSystemMessage = Loc.Format("Fs_OpenFailed", FileSystemDetector.DisplayName(kind.Value), ex.Message);
+            state.FileSystemMessage = Loc.Format("Fs_OpenFailed", FileSystemDetector.DisplayName(kind.Value), ex.MessageKey is { } key ? Loc.Get(key) : ex.Message);
             state.RaiseChanged();
             ShowPanel(FileSystemPanelId, focus: false);
             ShowNotice(state.FileSystemMessage, InfoBarSeverity.Warning, d);

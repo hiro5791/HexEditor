@@ -12,6 +12,7 @@ internal enum ForensicListKind
     LogFile,
     Owners,
     FileSearch,
+    Journal,
 }
 
 /// <summary>結果一覧の 1 行 (表示の文字列と、選んだときに移動するドキュメント上の位置)。</summary>
@@ -56,6 +57,16 @@ internal sealed class FileSystemDocumentState
 
     /// <summary>セクタサイズの提案を出した (同じドキュメントで繰り返さない)。</summary>
     public bool SuggestionShown { get; set; }
+
+    // ---- FOR-07 ----
+
+    /// <summary>論理ボリュームの解析の結果 (「論理ボリュームを表示」の後。パーティションパネルの下に一覧を出す)。</summary>
+    public Core.FileSystems.Volumes.LogicalVolumeScan? LogicalVolumes { get; set; }
+
+    public bool LogicalVolumesRunning { get; set; }
+
+    /// <summary>論理ボリュームの一覧の下に出す文 (足りない構成要素など)。</summary>
+    public string? LogicalVolumesMessage { get; set; }
 
     // ---- FOR-09 ----
 

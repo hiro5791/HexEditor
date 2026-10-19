@@ -8675,4 +8675,77 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Fs_SelectingSlack" xml:space="preserve"><value>Selecting slack</value></data>
   <data name="Fs_NothingToSelect" xml:space="preserve"><value>There is nothing to select.</value></data>
   <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Only the first 1,000,000 ranges were selected.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Show logical volumes</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Go to inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Inode number</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Show logical volumes</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Go to inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Checksum mismatch</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Unsupported format</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>The ext superblock checksum does not match ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Group descriptor checksums do not match (groups {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>This ext feature is not fully supported: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>The alternate volume header differs from the primary one ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>An APFS object checksum does not match (block {0}). It was skipped.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>The newest APFS checkpoint is damaged; an older one is used (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>A UDF descriptor tag checksum does not match (sector {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>A UDF descriptor CRC does not match (sector {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>This UDF partition type is not supported: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>The disc has {0} sessions. The last session is shown; choose another one with Session.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Available for ext2, ext3 and ext4 only.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>There is no inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>This volume is encrypted. The file list is not shown.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>No APFS checkpoint was found.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Show inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Show journal</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Names</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (basic)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Session</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>This file system has no journal.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ext journal (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Block       Disk offset  Type             Sequence</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Block size {0}, {1} blocks, sequence {2}, start {3} (0 = clean). The journal is not replayed.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Reading the ext journal</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Descriptor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblock v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblock v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Show logical volumes</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Logical volumes</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Name                  Type          Size        Layout                        State</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Reading the volume metadata...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>No LDM or LVM2 logical volume was found in the open disks and images.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Open logical volume</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Assign members...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Read again</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>This volume type is not supported: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} cannot be opened. Missing members: {1}. Open the disks or images, or assign them.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) is a mirror or RAID-5 volume. Open it with RAID reconstruction.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Assign members</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Choose the disk or image for each missing member of {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(none)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Open file...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {# member missing} other {# members missing}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Not supported</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>RAID reconstruction</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Simple</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Spanned</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Striped</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Mirror</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Linear</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Not supported ({0})</value></data>
 </root>

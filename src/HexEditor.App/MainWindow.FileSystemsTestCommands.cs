@@ -412,6 +412,15 @@ public sealed partial class MainWindow
             await WaitUntilTestAsync(() => panel.FolderLoaded, (int)TestHookSettings.ReadLong(request["timeoutMs"], 60_000));
         }
 
+        if (request["choice"] is JsonObject choice)
+        {
+            // 表示の選択 (ISO 9660 の名前の種類など。FOR-14)。UI の選択欄と同じ処理を呼ぶ。
+            await panel.SelectChoiceAsync(choice["key"]!.GetValue<string>(), (int)TestHookSettings.ReadLong(choice["index"], 0));
+            panel = await WaitPanelAsync<FileSystemPanel>(FileSystemPanelId);
+            await DispatcherIdleAsync();
+            await WaitUntilTestAsync(() => panel.FolderLoaded, (int)TestHookSettings.ReadLong(request["timeoutMs"], 60_000));
+        }
+
         if (request["fat"] is { } fat)
         {
             panel.FatChoice = (int)fat.GetValue<long>();
@@ -448,6 +457,13 @@ public sealed partial class MainWindow
                 await ShowLogFileAsync(d);
                 await DispatcherIdleAsync();
                 return TestForensicResults(d);
+            case "inode" when selected is not null:
+                ShowInode(d, selected);
+                break;
+            case "journal":
+                await ShowExtJournalAsync(d);
+                await DispatcherIdleAsync();
+                return TestForensicResults(d);
             case "clusterChain" when selected is not null:
                 ShowClusterChain(d, selected);
                 await DispatcherIdleAsync();
@@ -466,6 +482,12 @@ public sealed partial class MainWindow
             ["cursor"] = d.Editor.Cursor,
             ["menu"] = new JsonArray([.. panel.MenuItems.Select(m => (JsonNode?)new JsonObject { ["id"] = m.Id, ["text"] = m.Text, ["visible"] = m.Visible })]),
             ["opened"] = opened is null ? null : TabResult(opened),
+            ["choices"] = new JsonArray([.. panel.Choices.Select(c => (JsonNode?)new JsonObject
+            {
+                ["key"] = c.Key,
+                ["selected"] = c.Selected,
+                ["options"] = new JsonArray([.. c.Options.Select(o => (JsonNode?)o)]),
+            })]),
         };
         if (request["entries"]?.GetValue<bool>() != false && panel.LoadedCount <= 5000)
         {
@@ -483,6 +505,8 @@ public sealed partial class MainWindow
                 ["corruption"] = e.Corruption.ToString(),
                 ["timeMismatch"] = e.Flags.HasFlag(FsEntryFlags.TimeMismatch),
                 ["directory"] = e.IsDirectory,
+                ["attributes"] = e.Attributes,
+                ["encrypted"] = e.Flags.HasFlag(FsEntryFlags.Encrypted),
                 ["text"] = panel.Format(e),
             })]);
         }

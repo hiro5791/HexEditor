@@ -472,6 +472,7 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsGoTo" cmd:CommandUi.Id="forensics.partitions.goToStart" AutomationProperties.AutomationId="Command_PartitionsGoTo" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsScan" cmd:CommandUi.Id="forensics.partitions.scan" AutomationProperties.AutomationId="Command_PartitionsScan" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsLogical" cmd:CommandUi.Id="forensics.partitions.logicalVolumes" AutomationProperties.AutomationId="Command_PartitionsLogical" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_FileSystem" AutomationProperties.AutomationId="Menu_Forensics_FileSystem">
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsShow" cmd:CommandUi.Id="forensics.fs.show" AutomationProperties.AutomationId="Command_FsShow" />
@@ -483,6 +484,7 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsWhoUses" cmd:CommandUi.Id="forensics.fs.whoUsesThis" AutomationProperties.AutomationId="Command_FsWhoUses" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsClusters" cmd:CommandUi.Id="forensics.fs.showFileClusters" AutomationProperties.AutomationId="Command_FsClusters" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsMft" cmd:CommandUi.Id="forensics.fs.goToMftRecord" AutomationProperties.AutomationId="Command_FsMft" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsInode" cmd:CommandUi.Id="forensics.fs.goToInode" AutomationProperties.AutomationId="Command_FsInode" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportUnallocated" cmd:CommandUi.Id="forensics.fs.exportUnallocated" AutomationProperties.AutomationId="Command_FsExportUnallocated" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportSlack" cmd:CommandUi.Id="forensics.fs.exportSlack" AutomationProperties.AutomationId="Command_FsExportSlack" />
