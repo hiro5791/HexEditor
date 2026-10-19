@@ -686,6 +686,7 @@ public sealed partial class MainWindow
                 op =>
                 {
                     LastWipeOperation = op;
+                    op.ConfirmCancel = () => ImgOnUiAsync(ConfirmWipeCancelAsync);
                     WipeResult result = WipeRunner.Run(job, () => OpenWipeTarget(target),
                         target.Device is { } device && volumes.Count > 0 ? () => WipeVolumeLocks.Acquire(device, volumes, ConfirmDismountSync) : null,
                         op, onError, p =>
@@ -865,8 +866,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
-    /// 処理センターのキャンセルの確認の文 (仕様「巨大ファイル・長時間処理」)。統合の注記: 処理センターがキャンセルの確認を持つ版
-    /// (<c>LongRunningOperation.ConfirmCancel</c>) では、消去の処理にこの確認を設定する。
+    /// 処理センターのキャンセルの確認 (仕様「巨大ファイル・長時間処理」)。消去の処理の <c>LongRunningOperation.ConfirmCancel</c> に設定する。
     /// </summary>
     internal Task<bool> ConfirmWipeCancelAsync() =>
         ConfirmAsync(Loc.Get("Wipe_Title"), Loc.Get("Wipe_CancelConfirm"), Loc.Get("Wipe_WriteError_Abort"), "WipeCancelDialog");
@@ -1066,6 +1066,7 @@ public sealed partial class MainWindow
                 op =>
                 {
                     LastWipeOperation = op;
+                    op.ConfirmCancel = () => ImgOnUiAsync(ConfirmWipeCancelAsync);
                     OsFreeSpaceWipeResult r = WipeRunner.RunOs(volume, name, "volume:" + volume.Root.ToUpperInvariant(), method, op, p =>
                     {
                         if (p.Pass != lastPass)

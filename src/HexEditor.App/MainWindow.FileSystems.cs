@@ -191,7 +191,9 @@ public sealed partial class MainWindow
         IVolumeReader reader = ReaderOf(d);
         try
         {
-            state.Partitions = await Task.Run(() => PartitionAnalyzer.Analyze(reader, sector, options));
+            // 暗号化の検出 (FOR-29) もパーティションごとに行う (元のデータを読む)。
+            var data = new Core.Forensics.Carving.SnapshotCarveData(d.Document.DataSnapshot);
+            state.Partitions = await Task.Run(() => PartitionEncryption.Annotate(PartitionAnalyzer.Analyze(reader, sector, options), data));
             state.PartitionsSectorSize = sector;
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException or ObjectDisposedException)
@@ -345,10 +347,25 @@ public sealed partial class MainWindow
         FileSystemDocumentState state = StateOf(d)!;
         IVolumeReader volume = ReaderOf(d).Slice(offset, length);
         FileSystemSignature? signature = await Task.Run(() => FileSystemDetector.Detect(volume, 0, checkBackup: false));
+        bool chosen = kind is not null;
         kind ??= signature?.Kind;
+
+        // 暗号化されたボリュームは開かない (FOR-29 の仕様 4)。APFS のコンテナはボリュームごとに FOR-13 の解析が暗号化のフラグを見て
+        // ファイル一覧を出さないので、ここでは止めない。種類を選んで開くときは、署名で判定できる暗号化だけで止める。
+        Guid? partitionType = state.Partitions?.Rows.FirstOrDefault(r => !r.IsUnallocated && r.StartOffset == offset && r.Size == length)?.TypeGuid;
+        var data = new Core.Forensics.Carving.SnapshotCarveData(d.Document.DataSnapshot);
+        Core.Forensics.Encryption.EncryptionInfo? encrypted = await Task.Run(() => Core.Forensics.Encryption.EncryptionDetector.FileSystemBlockReason(data, offset, length, partitionType));
+        if (encrypted is { Kind: not Core.Forensics.Encryption.EncryptionKind.ApfsEncrypted }
+            && !(chosen && encrypted.Kind == Core.Forensics.Encryption.EncryptionKind.PossiblyEncrypted))
+        {
+            kind = FileSystemKind.BitLocker;
+        }
+
         if (kind == FileSystemKind.BitLocker)
         {
-            state.FileSystemMessage = Loc.Get("Fs_Encrypted");
+            state.FileSystemMessage = encrypted is { } info && info.Kind is not (Core.Forensics.Encryption.EncryptionKind.BitLocker or Core.Forensics.Encryption.EncryptionKind.BitLockerToGo)
+                ? Loc.Format("Fs_EncryptedKind", Loc.Get("Encryption_Kind_" + info.Kind))
+                : Loc.Get("Fs_Encrypted");
             state.RaiseChanged();
             ShowPanel(FileSystemPanelId, focus: false);
             return null;

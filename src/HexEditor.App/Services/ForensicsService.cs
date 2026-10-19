@@ -106,7 +106,28 @@ internal static class ForensicsService
         Core.Wiping.WipeForensics.Hooks = AppWipeForensicHooks.Instance;
         Core.FileSystems.FileSystemAudit.Sink = RecordFileSystemEvent;
         AllocationMapProvider = doc => Core.FileSystems.FileSystemAllocationMap.For(doc.Document);
+
+        // レポート (FOR-33) の節: パーティション (FOR-06)、ファイルシステムと論理ボリューム (FOR-07、FOR-09〜14)、取得記録 (FOR-20)。
+        // デバイス情報 (FOR-27・28) の節は MainWindow.DeviceReports が登録する。
+        Func<string, string?> localize = key => Loc.TryGet("Report_" + key);
+        Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.PartitionReportContributor(
+            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Partitions))
+                .Where(x => x.Partitions is not null).Select(x => (x.DisplayName, x.Partitions!)), localize));
+        Core.Forensics.Reports.ReportRegistry.Shared.Register(new Core.Forensics.Reports.FileSystemReportContributor(
+            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.Session))
+                .Where(x => x.Session is not null).Select(x => (x.DisplayName, x.Session!.VolumeOffset, x.Session.FileSystem)),
+            () => OpenDocuments().Select(d => (d.DisplayName, ViewModels.FileSystemDocumentState.Find(d.Document)?.LogicalVolumes))
+                .Where(x => x.LogicalVolumes is not null).Select(x => (x.DisplayName, x.LogicalVolumes!)),
+            localize));
+        Core.Forensics.Reports.ReportRegistry.Shared.Register(AcquisitionReports = new Core.Forensics.Reports.AcquisitionReportContributor(localize));
     }
+
+    /// <summary>レポートの「取得記録」の節 (イメージの取得のたびに加える)。</summary>
+    public static Core.Forensics.Reports.AcquisitionReportContributor AcquisitionReports { get; private set; } = new();
+
+    /// <summary>すべてのウィンドウの開いているドキュメント (レポートの節が読む)。</summary>
+    private static List<ViewModels.DocumentViewModel> OpenDocuments() =>
+        [.. WindowManager.Windows.ToArray().SelectMany(w => w.Vm.Documents.ToArray())];
 
     /// <summary>ファイルシステムの機能の操作を監査ログに記録する (FOR-09 の受け入れ基準 4、FOR-16 の仕様 5・6、FOR-08 の仕様 4)。</summary>
     internal static void RecordFileSystemEvent(Core.FileSystems.FileSystemAuditEvent e)

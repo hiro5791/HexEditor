@@ -464,16 +464,8 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
+                    <!--  フォレンジック (12): ケースと監査ログ、書き込み保護とデバイス、イメージ、パーティションとファイルシステム、カービング、消去、レポート  -->
                     <MenuBarItem x:Uid="Menu_Forensics" x:Name="ForensicsMenu" AutomationProperties.AutomationId="Menu_Forensics">
-                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_WriteBlock" cmd:CommandUi.Id="forensics.writeBlock" AutomationProperties.AutomationId="Command_WriteBlock" />
-                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_UsbWriteProtect" cmd:CommandUi.Id="forensics.usbWriteProtect" AutomationProperties.AutomationId="Command_UsbWriteProtect" />
-                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Device" AutomationProperties.AutomationId="Menu_Forensics_Device">
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Hpa" cmd:CommandUi.Id="forensics.device.hpaDco" AutomationProperties.AutomationId="Command_DeviceHpaDco" />
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Smart" cmd:CommandUi.Id="forensics.device.smart" AutomationProperties.AutomationId="Command_DeviceSmart" />
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Panel" cmd:CommandUi.Id="view.panel.deviceInfo" AutomationProperties.AutomationId="Command_PanelDeviceInfo" />
-                        </MenuFlyoutSubItem>
-                        <MenuFlyoutItem x:Uid="Menu_Forensics_Encryption" cmd:CommandUi.Id="forensics.encryption.info" AutomationProperties.AutomationId="Command_EncryptionInfo" />
-                        <MenuFlyoutSeparator />
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_Case" AutomationProperties.AutomationId="Menu_Forensics_Case">
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_New" cmd:CommandUi.Id="forensics.case.new" AutomationProperties.AutomationId="Command_CaseNew" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Open" cmd:CommandUi.Id="forensics.case.open" AutomationProperties.AutomationId="Command_CaseOpen" />
@@ -486,11 +478,17 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditShow" cmd:CommandUi.Id="forensics.audit.show" AutomationProperties.AutomationId="Command_AuditShow" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditVerify" cmd:CommandUi.Id="forensics.audit.verify" AutomationProperties.AutomationId="Command_AuditVerify" />
                         </MenuFlyoutSubItem>
-                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Carving" AutomationProperties.AutomationId="Menu_Forensics_Carving">
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Run" cmd:CommandUi.Id="forensics.carving.run" AutomationProperties.AutomationId="Command_CarvingRun" />
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Signatures" cmd:CommandUi.Id="forensics.carving.signatures" AutomationProperties.AutomationId="Command_CarvingSignatures" />
-                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Results" cmd:CommandUi.Id="view.panel.carving" AutomationProperties.AutomationId="Command_PanelCarving" />
+                        <MenuFlyoutSeparator />
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_WriteBlock" cmd:CommandUi.Id="forensics.writeBlock" AutomationProperties.AutomationId="Command_WriteBlock" />
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_UsbWriteProtect" cmd:CommandUi.Id="forensics.usbWriteProtect" AutomationProperties.AutomationId="Command_UsbWriteProtect" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Device" AutomationProperties.AutomationId="Menu_Forensics_Device">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Hpa" cmd:CommandUi.Id="forensics.device.hpaDco" AutomationProperties.AutomationId="Command_DeviceHpaDco" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Smart" cmd:CommandUi.Id="forensics.device.smart" AutomationProperties.AutomationId="Command_DeviceSmart" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Panel" cmd:CommandUi.Id="view.panel.deviceInfo" AutomationProperties.AutomationId="Command_PanelDeviceInfo" />
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_Encryption" cmd:CommandUi.Id="forensics.encryption.info" AutomationProperties.AutomationId="Command_EncryptionInfo" />
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_MemoryDump" cmd:CommandUi.Id="file.openMemoryDump" AutomationProperties.AutomationId="Command_OpenMemoryDump" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_Image" AutomationProperties.AutomationId="Menu_Forensics_Image">
                             <MenuFlyoutItem x:Uid="Menu_Forensics_ImageCreate" cmd:CommandUi.Id="forensics.image.create" AutomationProperties.AutomationId="Command_ImageCreate" />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_ImageSkeleton" cmd:CommandUi.Id="forensics.image.skeleton" AutomationProperties.AutomationId="Command_ImageSkeleton" />
@@ -531,6 +529,11 @@
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectSlack" cmd:CommandUi.Id="forensics.fs.selectSlack" AutomationProperties.AutomationId="Command_FsSelectSlack" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Forensics_FsRedact" cmd:CommandUi.Id="forensics.fs.redact" AutomationProperties.AutomationId="Command_FsRedact" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Carving" AutomationProperties.AutomationId="Menu_Forensics_Carving">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Run" cmd:CommandUi.Id="forensics.carving.run" AutomationProperties.AutomationId="Command_CarvingRun" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Signatures" cmd:CommandUi.Id="forensics.carving.signatures" AutomationProperties.AutomationId="Command_CarvingSignatures" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Results" cmd:CommandUi.Id="view.panel.carving" AutomationProperties.AutomationId="Command_PanelCarving" />
                         </MenuFlyoutSubItem>
                         <!--  消去 (FOR-30・FOR-31)  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Forensics_Wipe" AutomationProperties.AutomationId="Menu_Forensics_Wipe">

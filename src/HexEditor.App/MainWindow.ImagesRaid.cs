@@ -62,6 +62,34 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>
+    /// LDM のミラー・RAID-5 のボリューム (FOR-07) を RAID の再構成 (FOR-26) の論理ディスクとして開く (<see cref="RaidReconstructionHook"/>)。
+    /// 開けたか。
+    /// </summary>
+    internal Task<bool> OpenLogicalVolumeRaidAsync(Core.FileSystems.Volumes.LogicalVolumeRaidRequest request,
+        IReadOnlyDictionary<string, Core.FileSystems.IVolumeReader> readers)
+    {
+        RaidByteSource source;
+        try
+        {
+            source = LogicalVolumeRaid.Open(request, readers);
+        }
+        catch (RaidConfigException ex)
+        {
+            ShowNotice(Loc.Get("ImgRaid_Problem_" + ex.Problem), InfoBarSeverity.Warning);
+            return Task.FromResult(false);
+        }
+
+        DocumentViewModel vm = Vm.OpenRaidSource(source);
+        if (source.SizesDiffer)
+        {
+            ShowNotice(Loc.Get("ImgRaid_SizesDiffer"), InfoBarSeverity.Warning, vm);
+        }
+
+        UpdateTitle();
+        return Task.FromResult(true);
+    }
+
     /// <summary>RAID 再構成のダイアログ (FOR-26 の「画面」)。開くを押したら、構成から論理ディスクを作って返す (データは走査しない)。</summary>
     internal async Task<RaidByteSource?> ShowRaidDialogAsync(RaidConfig? initial = null)
     {

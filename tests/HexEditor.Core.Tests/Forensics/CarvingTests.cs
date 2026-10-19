@@ -142,6 +142,38 @@ public sealed class CarvingTests : IDisposable
 
     [Fact]
     [Trait(TC, "TC-FOR-19-02")]
+    public async Task UnallocatedOnlyScopeOnTheNtfsImageFindsOnlyTheDeletedJpeg()
+    {
+        // TD-FOR-CARVE-FS: container.bin の中の JPEG (割り当て済み) と、削除した tmp.jpg の JPEG (未割り当て領域)。割り当ての情報はファイルシステムの解析
+        // (FOR-15・FOR-16) から取る (アプリの ForensicsService.AllocationMapProvider と同じ FileSystemAllocationMap)。
+        var image = HexEditor.TestData.FileSystemImages.FileSystemImageSet.CarveFs();
+        var reader = new HexEditor.Core.Tests.FileSystems.SparseImageReader(image.Image);
+        HexEditor.Core.FileSystems.IFileSystem fs = HexEditor.Core.FileSystems.FileSystemRegistry.Open(reader);
+        var allocation = new HexEditor.Core.FileSystems.FileSystemAllocationMap(fs, 0);
+        var data = new VolumeCarveData(reader);
+        CarvingSignature jpegSignature = BuiltInSignatures.All.Single(s => s.Name == "JPEG");
+        long deleted = image.Fragments(@"\tmp.jpg")[0].Offset;
+        long contained = image.Fragments(@"\container.bin")[0].Offset + 4096;
+
+        // 1・2. 「未割り当て領域のみ」: 1 件で、未割り当て領域に置いた JPEG の位置。container.bin の中の JPEG は含まれない。
+        IReadOnlyList<SearchRange> unallocated = CarveScope.Resolve(CarveScopeKind.Unallocated, reader.Length, [], allocation);
+        CarvingResult only = await CarvingEngine.RunAsync(data, new CarvingOptions { Signatures = [jpegSignature], Ranges = unallocated, Export = false, SectorSize = 512 });
+        Assert.Equal([deleted], only.Files.Enumerate().Select(f => f.Offset));
+
+        // 3. 「ドキュメント全体」: 2 件。
+        IReadOnlyList<SearchRange> whole = CarveScope.Resolve(CarveScopeKind.WholeDocument, reader.Length, [], allocation);
+        CarvingResult all = await CarvingEngine.RunAsync(data, new CarvingOptions { Signatures = [jpegSignature], Ranges = whole, Export = false, SectorSize = 512 });
+        Assert.Equal(new[] { contained, deleted }.Order(), all.Files.Enumerate().Select(f => f.Offset).Order());
+    }
+
+    private sealed class VolumeCarveData(HexEditor.Core.FileSystems.IVolumeReader reader) : ICarveData
+    {
+        public long Length => reader.Length;
+
+        public ReadResult Read(long offset, Span<byte> destination) => reader.Read(offset, destination);
+    }
+
+    [Fact]
     public async Task UnallocatedOnlyScopeFindsOnlyTheJpegInTheUnallocatedArea()
     {
         // container.bin (0x4000 から 8 KiB: 00 × 4 KiB + JPEG + 00 × 4 KiB より小さい配置) と、削除済みの tmp.jpg を未割り当て領域に残した、64 KiB のボリューム。

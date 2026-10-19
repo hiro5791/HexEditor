@@ -487,6 +487,12 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
                 lines.Add(Loc.Format("Part_Detail_Entry", "0x" + entry.ToString("X", CultureInfo.InvariantCulture)));
             }
 
+            // 暗号化の検出 (FOR-29 の「画面」: パーティションパネルの詳細欄)。
+            if (r.Encryption is { } encryption)
+            {
+                lines.Add(Loc.Format("Encryption_Kind", Loc.Get("Encryption_Kind_" + encryption.Kind)));
+            }
+
             foreach (PartitionIssue issue in analysis?.IssuesFor(r.Number) ?? [])
             {
                 lines.Add("⚠ " + IssueText(issue));

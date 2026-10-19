@@ -6925,6 +6925,39 @@
   <data name="Report_Create" xml:space="preserve"><value>作成</value></data>
   <data name="Report_Sections" xml:space="preserve"><value>含める項目</value></data>
   <data name="Report_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>ディスク: {0} (セクタサイズ {1} バイト)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>形式</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>開始 LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>セクタ数</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>サイズ (バイト)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>ファイルシステム</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>暗号化</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>配置図</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>ボリュームの位置</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>ラベル</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>シリアル番号</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>クラスタサイズ (バイト)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>クラスタ数</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>空きクラスタ数</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>問題</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>論理ボリューム: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>グループ</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>サイズ (バイト)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>構成</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>構成要素</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>イメージ</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>入力元</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>取得日時</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>取得ログ</value></data>
   <data name="Report_Format_Html" xml:space="preserve"><value>HTML (1 つのファイル。オフラインで開けます)</value></data>
   <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
   <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
@@ -8614,6 +8647,8 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>暗号化の情報(Y)...</value></data>
   <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>メモリダンプを開く(M)...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>M</value></data>
   <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>書き込み保護モードの切り替え</value></data>
   <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>かきこみほごもーど らいとぶろっく よみとりせんよう</value></data>
   <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>このドキュメントへの書き込みを許可</value></data>
@@ -9194,39 +9229,39 @@ SHA-256 のフィンガープリント: {2}
   <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>強調の表示中、Hex ビューの右上に凡例を出します。</value></data>
   <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>フォレンジックの強調の色</value></data>
   <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>例: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0。空のときは既定の色を使います。</value></data>
-  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>パーティション</value></data>
-  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>P</value></data>
-  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>ファイルシステム</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>パーティション(T)</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>ファイルシステム(F)</value></data>
   <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
-  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>パーティションを表示</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>パーティションを表示(S)</value></data>
   <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>S</value></data>
-  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>パーティションを別タブで開く</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>パーティションを別タブで開く(O)</value></data>
   <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>O</value></data>
-  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>パーティションの先頭へ移動</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>パーティションの先頭へ移動(G)</value></data>
   <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
-  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>失われたパーティションをスキャン...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>失われたパーティションをスキャン(L)...</value></data>
   <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>L</value></data>
-  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>ブラウザを表示</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>ブラウザを表示(B)</value></data>
   <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>B</value></data>
-  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>ファイルを別タブで開く</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>ファイルを別タブで開く(O)</value></data>
   <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>O</value></data>
-  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>ファイルを書き出す...</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>ファイルを書き出す(E)...</value></data>
   <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
-  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>削除されたファイルを探す</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>削除されたファイルを探す(D)</value></data>
   <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>D</value></data>
-  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>クラスタへ移動...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>クラスタへ移動(C)...</value></data>
   <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>C</value></data>
-  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>この位置を使っているファイル</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>この位置を使っているファイル(W)</value></data>
   <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>W</value></data>
-  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>ファイルのクラスタを表示</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>ファイルのクラスタを表示(L)</value></data>
   <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>L</value></data>
-  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>MFT レコードへ移動...</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>MFT レコードへ移動(M)...</value></data>
   <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>未割り当て領域を書き出す...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>未割り当て領域を書き出す(U)...</value></data>
   <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>U</value></data>
-  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>スラックを書き出す...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>スラックを書き出す(K)...</value></data>
   <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
-  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>未割り当て領域を別タブで開く</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>未割り当て領域を別タブで開く(N)</value></data>
   <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>次の断片</value></data>
   <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
@@ -9380,6 +9415,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Fs_NtfsOnly" xml:space="preserve"><value>NTFS のときだけ使えます。</value></data>
   <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>割り当て情報を読めないため、強調を使えません。</value></data>
   <data name="Fs_Encrypted" xml:space="preserve"><value>ボリュームは暗号化されています (BitLocker)。ファイルシステムのブラウザでは開きません。</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>ボリュームは暗号化されています ({0})。ファイルシステムのブラウザでは開きません。</value></data>
   <data name="Fs_OpenFailed" xml:space="preserve"><value>{0} として開けません: {1}</value></data>
   <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>ファイルシステムの種類を選ぶ</value></data>
   <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>署名から種類を判定できませんでした。試す種類を選んでください。</value></data>
@@ -9451,9 +9487,13 @@ SHA-256 のフィンガープリント: {2}
   <data name="FsColumn_Size" xml:space="preserve"><value>サイズ</value></data>
   <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>割り当てサイズ</value></data>
   <data name="FsColumn_Created" xml:space="preserve"><value>作成日時 (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>作成日時 (ローカル)</value></data>
   <data name="FsColumn_Modified" xml:space="preserve"><value>更新日時 (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>更新日時 (ローカル)</value></data>
   <data name="FsColumn_Accessed" xml:space="preserve"><value>アクセス日時 (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>アクセス日時 (ローカル)</value></data>
   <data name="FsColumn_Changed" xml:space="preserve"><value>メタデータ変更日時 (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>メタデータ変更日時 (ローカル)</value></data>
   <data name="FsColumn_Attributes" xml:space="preserve"><value>属性</value></data>
   <data name="FsColumn_FileId" xml:space="preserve"><value>ファイル ID</value></data>
   <data name="FsColumn_FirstCluster" xml:space="preserve"><value>先頭クラスタ</value></data>
@@ -9607,9 +9647,9 @@ SHA-256 のフィンガープリント: {2}
   <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>みわりあてりょういきをせんたく unallocated select search carve</value></data>
   <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>スラックを選択</value></data>
   <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>すらっくをせんたく slack select search carve</value></data>
-  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>未割り当て領域を選択</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>未割り当て領域を選択(A)</value></data>
   <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>A</value></data>
-  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>スラックを選択</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>スラックを選択(S)</value></data>
   <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>未割り当て領域を選択しています</value></data>
   <data name="Fs_SelectingSlack" xml:space="preserve"><value>スラックを選択しています</value></data>
@@ -9620,9 +9660,9 @@ SHA-256 のフィンガープリント: {2}
   <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>inode へ移動</value></data>
   <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>あいのーどへいどう いのーど inode ext ext2 ext3 ext4</value></data>
   <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>inode 番号</value></data>
-  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>論理ボリュームを表示</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>論理ボリュームを表示(V)</value></data>
   <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
-  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>inode へ移動...</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>inode へ移動(I)...</value></data>
   <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>チェックサムの不一致</value></data>
   <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>対応していない形式</value></data>
@@ -9703,17 +9743,17 @@ SHA-256 のフィンガープリント: {2}
   <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>ふぁいるすらっくをしょうきょ wipe slack</value></data>
   <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>ファイルの内容を墨塗り</value></data>
   <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>ふぁいるのないようをすみぬり すみぬり redact</value></data>
-  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>消去</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>消去(E)</value></data>
   <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
-  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>選択範囲を消去...</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>選択範囲を消去(S)...</value></data>
   <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
-  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>ディスクを消去...</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>ディスクを消去(D)...</value></data>
   <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
-  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>空き領域を消去...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>空き領域を消去(F)...</value></data>
   <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>F</value></data>
-  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>スラックを消去...</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>スラックを消去(K)...</value></data>
   <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>K</value></data>
-  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>ファイルの内容を墨塗り...</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>ファイルの内容を墨塗り(R)...</value></data>
   <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="Fs_Menu_Redact" xml:space="preserve"><value>ファイルの内容を墨塗り...</value></data>
   <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>選択範囲を安全に消去...</value></data>

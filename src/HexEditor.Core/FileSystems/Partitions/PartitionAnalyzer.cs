@@ -75,6 +75,9 @@ public sealed record PartitionRow
     /// <summary>拡張パーティションの入れ物 (中の論理パーティションが本体)。</summary>
     public bool IsContainer { get; init; }
 
+    /// <summary>暗号化の検出の結果 (FOR-29。パーティション解析のときに <see cref="PartitionEncryption.Annotate"/> が入れる)。なければ null。</summary>
+    public Forensics.Encryption.EncryptionInfo? Encryption { get; init; }
+
     public long EndLba => StartLba + Math.Max(0, SectorCount) - 1;
     public long StartOffset => StartLba * SectorSize;
     public long Size => SectorCount * SectorSize;

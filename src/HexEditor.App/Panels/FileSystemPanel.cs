@@ -5,6 +5,7 @@ using HexEditor.App.ViewModels;
 using HexEditor.Core.FileSystems;
 using HexEditor.Core.FileSystems.Fat;
 using HexEditor.Core.FileSystems.Ntfs;
+using HexEditor.Core.Forensics.Time;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -267,11 +268,17 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             _state.Changed += OnStateChanged;
         }
 
+        // 日時の表示の設定・ケースのタイムゾーンが変わったら日時の列を作り直す (FOR-05)。
+        ForensicsService.TimeDisplayChanged += OnTimeDisplayChanged;
+        ForensicsService.CaseChanged += OnTimeDisplayChanged;
+
         Rebuild();
     }
 
     private void Detach()
     {
+        ForensicsService.TimeDisplayChanged -= OnTimeDisplayChanged;
+        ForensicsService.CaseChanged -= OnTimeDisplayChanged;
         if (_state is not null)
         {
             _state.Changed -= OnStateChanged;
@@ -281,6 +288,12 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         _state = null;
         _document = null;
     }
+
+    private void OnTimeDisplayChanged(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(() =>
+    {
+        RefreshRowTexts();
+        ShowSelectedDetails();
+    });
 
     private void OnStateChanged(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(() =>
     {
@@ -607,10 +620,49 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         }
     }
 
-    private static readonly int[] Widths = [40, 6, 14, 14, 21, 21, 21, 21, 8, 12, 12, 6, 10, 40, 40, 16];
+    private static readonly int[] Widths = [40, 6, 14, 14, 26, 26, 26, 26, 8, 12, 12, 6, 10, 40, 40, 16];
 
-    private string FormatHeader() =>
-        string.Join("  ", Enum.GetValues<FsColumn>().Where(_columns.Contains).Select(c => Pad(Loc.Get("FsColumn_" + c), c)));
+    private static bool IsTimeColumn(FsColumn column) => column is FsColumn.Created or FsColumn.Modified or FsColumn.Accessed or FsColumn.Changed;
+
+    /// <summary>
+    /// 見出し。日時の列は、設定「日時の表示」(FOR-05 の仕様 3) に従って UTC の列とローカルの列 (ケースのタイムゾーン) に分ける。
+    /// </summary>
+    private string FormatHeader()
+    {
+        ForensicTimeContext time = ForensicsService.TimeContext;
+        var parts = new List<string>();
+        foreach (FsColumn c in Enum.GetValues<FsColumn>().Where(_columns.Contains))
+        {
+            if (IsTimeColumn(c))
+            {
+                parts.AddRange(time.Columns.Select(t => Pad(Loc.Get("FsColumn_" + c + (t == TimeColumn.Local ? "Local" : string.Empty)), c)));
+            }
+            else
+            {
+                parts.Add(Pad(Loc.Get("FsColumn_" + c), c));
+            }
+        }
+
+        return string.Join("  ", parts);
+    }
+
+    /// <summary>日時の列のセル (FOR-05: ISO 8601。タイムゾーンを推定した値には「~」の印)。</summary>
+    private static IEnumerable<string> TimeCells(FsTimestamp value, ForensicTimeContext time, string invalid)
+    {
+        ForensicTimestamp? ts = FsTimeConversion.ToForensic(value, time.Zone);
+        foreach (TimeColumn column in time.Columns)
+        {
+            yield return ts is not { } v ? string.Empty : (v.ZoneEstimated ? "~" : string.Empty) + time.Cell(v, column, invalid);
+        }
+    }
+
+    /// <summary>詳細欄の日時 (設定が「両方」なら UTC の後に括弧でローカル)。</summary>
+    internal static string Time(FsTimestamp value)
+    {
+        ForensicTimeContext time = ForensicsService.TimeContext;
+        ForensicTimestamp? ts = FsTimeConversion.ToForensic(value, time.Zone);
+        return ts is not { } v ? string.Empty : (v.ZoneEstimated ? "~" : string.Empty) + time.Detail(v, Loc.Get("Time_Invalid"));
+    }
 
     private static string Pad(string text, FsColumn column)
     {
@@ -627,19 +679,30 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
     internal string Format(FsEntry e)
     {
         CultureInfo c = CultureInfo.CurrentCulture;
+        ForensicTimeContext time = ForensicsService.TimeContext;
+        string invalid = Loc.Get("Time_Invalid");
         var parts = new List<string>();
         foreach (FsColumn column in Enum.GetValues<FsColumn>().Where(_columns.Contains))
         {
+            if (IsTimeColumn(column))
+            {
+                FsTimestamp stamp = column switch
+                {
+                    FsColumn.Created => e.Created,
+                    FsColumn.Modified => e.Modified,
+                    FsColumn.Accessed => e.Accessed,
+                    _ => e.Changed,
+                };
+                parts.AddRange(TimeCells(stamp, time, invalid).Select(v => Pad(v, column)));
+                continue;
+            }
+
             string value = column switch
             {
                 FsColumn.Name => (e.Flags.HasFlag(FsEntryFlags.Corrupt) ? "⚠" : string.Empty) + (e.IsDirectory ? "📁 " : string.Empty) + e.Name,
                 FsColumn.Extension => e.Extension,
                 FsColumn.Size => e.IsDirectory ? string.Empty : e.Size.ToString("N0", c),
                 FsColumn.AllocatedSize => e.AllocatedSize.ToString("N0", c),
-                FsColumn.Created => Time(e.Created),
-                FsColumn.Modified => Time(e.Modified),
-                FsColumn.Accessed => Time(e.Accessed),
-                FsColumn.Changed => Time(e.Changed),
                 FsColumn.Attributes => e.Attributes,
                 FsColumn.FileId => e.FileIdText,
                 FsColumn.FirstCluster => e.FirstCluster?.ToString("N0", c) ?? string.Empty,
@@ -658,23 +721,6 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
         return string.Join("  ", parts);
     }
 
-    /// <summary>日時の表示 (FOR-05: UTC とローカル時刻。タイムゾーンの分からない FAT の日時には「~」の印)。</summary>
-    internal static string Time(FsTimestamp t)
-    {
-        if (t.Invalid)
-        {
-            return Loc.Get("Fs_InvalidTime");
-        }
-
-        if (t.Utc is not DateTime utc)
-        {
-            return string.Empty;
-        }
-
-        string text = utc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "Z";
-        return t.ZoneUnknown ? "~" + text : text;
-    }
-
     /// <summary>表示している項目 (テスト用)。</summary>
     internal IReadOnlyList<FsEntry> Entries => [.. _rows.Select(r => r.Entry)];
 
@@ -684,6 +730,11 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
     internal IReadOnlyList<FsEntry> SelectedEntries => [.. _list.SelectedItems.OfType<FsRow>().Select(r => r.Entry)];
 
     internal string DetailsText => _details.Text;
+
+    /// <summary>一覧の見出しと、先頭の行の文字列 (テスト用。FOR-05 の日時の列)。</summary>
+    internal string HeaderText => _header.Text;
+
+    internal IReadOnlyList<string> RowTexts => [.. _rows.Take(500).Select(r => r.Text)];
 
     internal string TitleText => _title.Text;
 

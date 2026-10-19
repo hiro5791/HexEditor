@@ -475,6 +475,8 @@ public sealed partial class MainWindow
             ["title"] = panel.TitleText,
             ["warnings"] = panel.WarningsText,
             ["details"] = panel.DetailsText,
+            ["header"] = panel.HeaderText,
+            ["rows"] = new JsonArray([.. panel.RowTexts.Select(r => (JsonNode?)r)]),
             ["status"] = panel.ListStatusText,
             ["count"] = panel.LoadedCount,
             ["fatDifferences"] = panel.FatDifferences,

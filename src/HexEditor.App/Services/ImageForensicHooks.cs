@@ -75,6 +75,12 @@ internal sealed class AppImageForensicHooks : IImageForensicHooks
 
     public void RegisterAcquiredImage(string imagePath, string sourcePath, IReadOnlyDictionary<string, byte[]> hashes)
     {
+        // レポートの「取得記録」の節 (FOR-33)。取得ログは出力と同じ名前の .txt (FOR-20 の仕様 5)。
+        string log = Path.ChangeExtension(imagePath, ".txt");
+        ForensicsService.AcquisitionReports.Add(new Core.Forensics.Reports.AcquiredImageRecord(imagePath, sourcePath,
+            hashes.ToDictionary(h => h.Key, h => Convert.ToHexStringLower(h.Value), StringComparer.Ordinal), ForensicsService.Clock.GetUtcNow().UtcDateTime,
+            File.Exists(log) ? log : null));
+
         if (ForensicsService.Cases.CurrentCase is not { } c)
         {
             return;

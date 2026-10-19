@@ -123,6 +123,23 @@ public static class FileSystemImageSet
         return new NtfsImage(image, b);
     });
 
+    /// <summary>
+    /// TD-FOR-CARVE-FS (64 MiB): <c>container.bin</c> (00 × 4 KiB + TD-FOR-JPEG + 00 × 4 KiB) と、TD-FOR-JPEG だけを入れて削除した <c>tmp.jpg</c>
+    /// (JPEG は未割り当て領域に残る)。カービングの「未割り当て領域のみ」(TC-FOR-19-02) に使う。
+    /// </summary>
+    public static NtfsImage CarveFs() => Cached("ntfs:carve", () =>
+    {
+        var b = new NtfsImageBuilder(64 * MiB, "CARVEFS");
+        byte[] jpeg = TestDataCatalog.ForJpeg();
+        byte[] container = [.. new byte[4096], .. jpeg, .. new byte[4096]];
+        b.AddFile(b.Root, "container.bin", container, FileSet.TimeOf(1), resident: false);
+        NtfsImageBuilder.Node tmp = b.AddFile(b.Root, "tmp.jpg", jpeg, FileSet.TimeOf(2), resident: false);
+        b.Delete(tmp);
+        var image = new SparseImage(64 * MiB);
+        b.Build(new SparseImageTarget(image));
+        return new NtfsImage(image, b);
+    });
+
     /// <summary>TD-FOR-NTFS-1M: フォルダ many に長さ 0 のファイル 100 万個 (4 GiB のスパースファイルに直接書く)。</summary>
     public static void WriteNtfs1M(string path, int files = 1_000_000)
     {
@@ -357,6 +374,7 @@ public static class FileSystemImageSet
         "TD-FOR-NTFS-BADFIXUP" => Ntfs("BADFIXUP").Image,
         "TD-FOR-NTFS-BADTIME" => Ntfs("BADTIME").Image,
         "TD-FOR-NTFS-OVERWRITE" => NtfsOverwrite().Image,
+        "TD-FOR-CARVE-FS" => CarveFs().Image,
         "TD-FOR-NTFS-FAT32" => NtfsFat32Disk(),
         "TD-FOR-LOST-PART" => NtfsFat32Disk(lostMbr: true),
         "TD-FOR-FAT12" or "TD-FOR-FAT16" or "TD-FOR-FAT32" or "TD-FOR-FAT32-FATDIFF" or "TD-FOR-FAT32-LOOP" => Fat(id).Image,
@@ -382,7 +400,7 @@ public static class FileSystemImageSet
     public static long LengthOf(string id) => id switch
     {
         "TD-FOR-MBR-EXT" or "TD-FOR-MBR-EBRLOOP" or "TD-FOR-NTFS-FAT32" or "TD-FOR-LOST-PART" => 256 * MiB,
-        "TD-FOR-GPT" or "TD-FOR-GPT-BADCRC" or "TD-FOR-GPT-BADBACKUP" or "TD-FOR-GPT-4K" or "TD-FOR-NTFS-OVERWRITE" or "TD-FOR-FAT16" or "TD-FOR-EXFAT" => 64 * MiB,
+        "TD-FOR-GPT" or "TD-FOR-GPT-BADCRC" or "TD-FOR-GPT-BADBACKUP" or "TD-FOR-GPT-4K" or "TD-FOR-NTFS-OVERWRITE" or "TD-FOR-CARVE-FS" or "TD-FOR-FAT16" or "TD-FOR-EXFAT" => 64 * MiB,
         "TD-FOR-APM" or "TD-FOR-BSD" => 32 * MiB,
         "TD-FOR-NTFS" or "TD-FOR-NTFS-BADFIXUP" or "TD-FOR-NTFS-BADTIME" => 128 * MiB,
         "TD-FOR-FAT12" => 4 * MiB,
@@ -401,7 +419,7 @@ public static class FileSystemImageSet
     public static readonly string[] Ids =
     [
         "TD-FOR-MBR-EXT", "TD-FOR-MBR-EBRLOOP", "TD-FOR-GPT", "TD-FOR-GPT-BADCRC", "TD-FOR-GPT-BADBACKUP", "TD-FOR-GPT-4K", "TD-FOR-APM", "TD-FOR-BSD",
-        "TD-FOR-NTFS", "TD-FOR-NTFS-BADFIXUP", "TD-FOR-NTFS-BADTIME", "TD-FOR-NTFS-OVERWRITE", "TD-FOR-NTFS-FAT32", "TD-FOR-LOST-PART",
+        "TD-FOR-NTFS", "TD-FOR-NTFS-BADFIXUP", "TD-FOR-NTFS-BADTIME", "TD-FOR-NTFS-OVERWRITE", "TD-FOR-CARVE-FS", "TD-FOR-NTFS-FAT32", "TD-FOR-LOST-PART",
         "TD-FOR-FAT12", "TD-FOR-FAT16", "TD-FOR-FAT32", "TD-FOR-FAT32-FATDIFF", "TD-FOR-FAT32-LOOP", "TD-FOR-EXFAT",
         "TD-FOR-EXT2", "TD-FOR-EXT3", "TD-FOR-EXT4", "TD-FOR-ISO-JRR", "TD-FOR-UDF250", "TD-FOR-HFSPLUS", "TD-FOR-APFS", "TD-FOR-APFS-ENC",
         "TD-FOR-LDM-STRIPE-A", "TD-FOR-LDM-STRIPE-B", "TD-FOR-LDM-STRIPE-VOL", "TD-FOR-LVM-LINEAR-A", "TD-FOR-LVM-LINEAR-B", "TD-FOR-LVM-LINEAR-LV",

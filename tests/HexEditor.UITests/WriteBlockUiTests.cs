@@ -187,15 +187,20 @@ public sealed class WriteBlockUiTests
     [Trait(UiTest.TC, "TC-FOR-01-06")]
     public Task Destructive_commands_are_disabled_with_the_reason() => UiTestContext.RunAsync(async ctx =>
     {
-        // 物理ディスク (偽) を開いて範囲を選び、モードを有効にする。消去・クローン・復元・パーティションの書き込みのコマンドは各担当の部品が
-        // ForensicsService.RegisterDestructiveCommands で登録し、同じ関門で無効になる (このブランチにあるのは安全な削除と ADS の管理)。
+        // 物理ディスク (偽) を開いて範囲を選び、モードを有効にする。消去・クローン・復元・墨塗りのコマンドは各担当の部品が
+        // ForensicsService.RegisterDestructiveCommands で登録し、同じ関門で無効になる。パーティション表のエントリの作成はコマンドではなく
+        // 失われたパーティションの結果の操作 (FOR-08) で、同じ書き込み保護の判定で断る (FileSystemUiTests が確かめる)。
         AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
         await app.SendAsync("openDisk", new JsonObject { ["path"] = @"\\.\PhysicalDrive2" });
         await app.SelectAsync(0x100000, 0x200);
         await WriteBlock(app, "enable");
 
         // 1・2. メニューとコマンドパレットの同じコマンドが無効で、理由は「書き込み保護モードが有効です」。
-        foreach (string id in new[] { "tools.files.shred" })
+        foreach (string id in new[]
+        {
+            "tools.files.shred", "forensics.wipe.selection", "forensics.wipe.disk", "forensics.wipe.freeSpace", "forensics.wipe.slack", "forensics.fs.redact",
+            "forensics.disk.clone", "forensics.sectors.restore",
+        })
         {
             JsonObject s = await WriteBlock(app, "commandState", ("id", id));
             Assert.False(s["enabled"]!.GetValue<bool>(), id);
@@ -205,6 +210,10 @@ public sealed class WriteBlockUiTests
         // ディスクの書き込み (保存) も無効。読み取りの操作 (選択範囲のエクスポート) は使える。
         Assert.False((await WriteBlock(app, "commandState", ("id", "file.save")))["enabled"]!.GetValue<bool>());
         Assert.True((await WriteBlock(app, "commandState", ("id", "forensics.device.hpaDco")))["enabled"]!.GetValue<bool>());
+
+        // 3. 「セクタ範囲を保存」(読み取り) は使える。
+        JsonObject save = await WriteBlock(app, "commandState", ("id", "forensics.sectors.save"));
+        Assert.True(save["enabled"]!.GetValue<bool>(), save["reason"]?.GetValue<string>());
     });
 
     [Fact]

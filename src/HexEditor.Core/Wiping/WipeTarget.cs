@@ -159,20 +159,11 @@ public sealed class FileWipeTarget : IWipeTarget
 
 /// <summary>
 /// 消去の前に、書き込む範囲に重なるボリュームをロックする (共通の前提「ディスクへのアクセス」の 3、ENG-30 の仕様 2・3)。
-/// ボリュームのドキュメントでは開いているハンドルそのものでロックし (ロックしたハンドルからしか書けない)、物理ディスクでは重なるボリュームを
-/// 別のハンドルでロックする。ロックできなければ書き込まない (<see cref="VolumeLockException"/>)。
+/// ロックそのものはディスクへの書き込み (ENG-30) と同じ <see cref="DiskWrite.LockVolumes"/> を使う (ボリュームのドキュメントでは開いている
+/// ハンドルそのもので、物理ディスクでは重なるボリュームを別のハンドルでロックする)。ロックできなければ書き込まない (<see cref="VolumeLockException"/>)。
 /// </summary>
-public sealed class WipeVolumeLocks : IDisposable
+public static class WipeVolumeLocks
 {
-    private readonly List<(IDeviceHandle Handle, bool Owned)> _locks = [];
-
-    private WipeVolumeLocks()
-    {
-    }
-
-    /// <summary>ロックしたボリュームのパス。</summary>
-    public IReadOnlyList<string> Locked => [.. _locks.Select(l => l.Handle.Path)];
-
     /// <summary>
     /// 書き込む範囲 (デバイスのドキュメント上の位置) に重なるボリュームを求める。<paramref name="blocked"/> は Windows が使用中でロックできないもの。
     /// </summary>
@@ -202,59 +193,8 @@ public sealed class WipeVolumeLocks : IDisposable
 
     /// <summary>
     /// ロックする。開いているファイルがあってロックできないときは <paramref name="confirmDismount"/> に確かめ、承認されたらディスマウントしてから
-    /// ロックし直す。失敗したら取ったロックを解除して <see cref="VolumeLockException"/>。
+    /// ロックし直す。失敗したら取ったロックを解除して <see cref="VolumeLockException"/>。破棄でロックを解除する。
     /// </summary>
-    public static WipeVolumeLocks Acquire(DeviceByteSource source, IReadOnlyList<VolumeDeviceInfo> volumes, Func<VolumeDeviceInfo, bool>? confirmDismount = null)
-    {
-        var locks = new WipeVolumeLocks();
-        try
-        {
-            foreach (VolumeDeviceInfo volume in volumes)
-            {
-                bool own = string.Equals(volume.Path, source.Path, StringComparison.OrdinalIgnoreCase);
-                IDeviceHandle handle = own ? source.Handle : source.Access.Open(volume.Path, writable: true);
-                bool ok = handle.LockVolume() == 0
-                    || (confirmDismount?.Invoke(volume) == true && handle.DismountVolume() == 0 && handle.LockVolume() == 0);
-                if (!ok)
-                {
-                    if (!own)
-                    {
-                        handle.Dispose();
-                    }
-
-                    throw new VolumeLockException(volume.Name);
-                }
-
-                locks._locks.Add((handle, !own));
-            }
-        }
-        catch
-        {
-            locks.Dispose();
-            throw;
-        }
-
-        return locks;
-    }
-
-    public void Dispose()
-    {
-        foreach ((IDeviceHandle handle, bool owned) in _locks)
-        {
-            try
-            {
-                handle.UnlockVolume();
-            }
-            catch (Exception ex) when (ex is IOException or DeviceException)
-            {
-            }
-
-            if (owned)
-            {
-                handle.Dispose();
-            }
-        }
-
-        _locks.Clear();
-    }
+    public static IDisposable Acquire(DeviceByteSource source, IReadOnlyList<VolumeDeviceInfo> volumes, Func<VolumeDeviceInfo, bool>? confirmDismount = null) =>
+        DiskWrite.LockVolumes(source, volumes, confirmDismount);
 }

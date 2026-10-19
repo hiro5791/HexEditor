@@ -29,10 +29,11 @@ public sealed partial class MainWindow
     internal static readonly string[] FileSystemOpenMessageKeys = ["Fs_ApfsNoCheckpoint"];
 
     /// <summary>
-    /// LDM のミラー・RAID-5 を FOR-26 (RAID の再構成) で開く処理 (統合で RAID の再構成の画面につなぐ)。設定 (構成要素・ストライプ・配置) と、見つかった構成要素の
-    /// 読み込みを渡す。null のときは設定を通知に出すだけにする。
+    /// LDM のミラー・RAID-5 を FOR-26 (RAID の再構成) で開く処理 (既定は <see cref="OpenLogicalVolumeRaidAsync"/>)。設定 (構成要素・ストライプ・配置) と、
+    /// 見つかった構成要素の読み込みを渡す。null のときは設定を通知に出すだけにする。
     /// </summary>
-    internal static Func<MainWindow, LogicalVolumeRaidRequest, IReadOnlyDictionary<string, Core.FileSystems.IVolumeReader>, Task<bool>>? RaidReconstructionHook { get; set; }
+    internal static Func<MainWindow, LogicalVolumeRaidRequest, IReadOnlyDictionary<string, Core.FileSystems.IVolumeReader>, Task<bool>>? RaidReconstructionHook { get; set; } =
+        (window, request, readers) => window.OpenLogicalVolumeRaidAsync(request, readers);
 
     private void RegisterFileSystemMoreCommands()
     {

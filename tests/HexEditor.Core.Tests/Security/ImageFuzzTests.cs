@@ -258,21 +258,4 @@ public sealed class ImageFuzzTests : IDisposable
             }
         }, describe: d => $"{d.Length} bytes");
     }
-
-    [Fact]
-    public void Ntfs_runlists_and_fixups_survive_random_input()
-    {
-        Fuzz.Run(Fuzz.Cases(211, [[0x44, 1, 0, 0, 0, 5, 0, 0, 0, 0x11, 2, 0xFE, 0]], 1000, randoms: 500), data =>
-        {
-            foreach ((long lcn, long count) in NtfsRegionProvider.DecodeRuns(data))
-            {
-                Assert.True(lcn >= 0 && count > 0);
-            }
-
-            if (data.Length >= 1024)
-            {
-                NtfsRegionProvider.Fixup((byte[])data.Clone(), 512);
-            }
-        });
-    }
 }

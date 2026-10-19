@@ -24,10 +24,10 @@ public interface IFileSystemRegionProvider
     FileSystemRegions? Analyze(IByteSource volume, CancellationToken cancellationToken);
 }
 
-/// <summary>登録されたファイルシステムの領域の解析 (既定は NTFS、FAT12/16/32、exFAT)。</summary>
+/// <summary>登録されたファイルシステムの領域の解析 (既定はファイルシステムの解析 FOR-09〜14 の <see cref="FileSystemSessionRegionProvider"/>)。</summary>
 public static class FileSystemRegionProviders
 {
-    private static readonly List<IFileSystemRegionProvider> Providers = [new NtfsRegionProvider(), new FatRegionProvider(), new ExFatRegionProvider()];
+    private static readonly List<IFileSystemRegionProvider> Providers = [new FileSystemSessionRegionProvider()];
 
     /// <summary>より詳しい解析を登録する (先頭に加える)。</summary>
     public static void Register(IFileSystemRegionProvider provider)
@@ -98,57 +98,5 @@ public static class FileSystemRegionProviders
         }
 
         return result;
-    }
-
-    /// <summary>ビットマップ (1 ビット = 1 クラスタ、下位ビットから) の立っている範囲 (クラスタ番号と個数)。</summary>
-    internal static void BitmapRuns(ReadOnlySpan<byte> bitmap, long firstCluster, long clusterLimit, List<(long Cluster, long Count)> runs)
-    {
-        long runStart = -1;
-        for (int i = 0; i < bitmap.Length; i++)
-        {
-            byte b = bitmap[i];
-            if ((b == 0 && runStart < 0) || (b == 0xFF && runStart >= 0))
-            {
-                continue;
-            }
-
-            for (int bit = 0; bit < 8; bit++)
-            {
-                long cluster = firstCluster + i * 8L + bit;
-                if (cluster >= clusterLimit)
-                {
-                    break;
-                }
-
-                bool set = (b & (1 << bit)) != 0;
-                if (set && runStart < 0)
-                {
-                    runStart = cluster;
-                }
-                else if (!set && runStart >= 0)
-                {
-                    Add(runs, runStart, cluster - runStart);
-                    runStart = -1;
-                }
-            }
-        }
-
-        long end = Math.Min(clusterLimit, firstCluster + bitmap.Length * 8L);
-        if (runStart >= 0 && end > runStart)
-        {
-            Add(runs, runStart, end - runStart);
-        }
-    }
-
-    private static void Add(List<(long Cluster, long Count)> runs, long start, long count)
-    {
-        if (runs.Count > 0 && runs[^1].Cluster + runs[^1].Count == start)
-        {
-            runs[^1] = (runs[^1].Cluster, runs[^1].Count + count);
-        }
-        else
-        {
-            runs.Add((start, count));
-        }
     }
 }

@@ -393,7 +393,9 @@ public sealed class FatImageBuilder
             root.AddRange(e);
         }
 
-        long rootOffset = RootEntryOffset(0) - 32;
+        // ルートディレクトリの先頭にボリュームラベル、その後にエントリ (EntryOffsetOf の +32)。FAT12/16 のルートディレクトリの領域も先頭から書く
+        // (以前は 32 バイト前から書いていて、ラベルが 2 つ目の FAT の末尾に入り、FAT の写しが食い違っていた)。
+        long rootOffset = RootEntryOffset(0);
         if (Type == FatType.Fat32)
         {
             if (root.Count > ClusterSize)

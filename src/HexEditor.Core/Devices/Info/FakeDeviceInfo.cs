@@ -69,6 +69,7 @@ public sealed record FakeNvmeSpec
     public int BlockSize { get; init; } = 512;
 }
 
+#if HEX_TEST_HOOKS
 /// <summary>偽のデバイスの <see cref="IDeviceInfoSource"/> の応答を作る。ATA に対応しない接続 (USB・仮想ディスク) は <see cref="Win32Errors.NotSupported"/>。</summary>
 public static class FakeDeviceInfo
 {
@@ -202,3 +203,4 @@ public static class FakeDeviceInfo
 
     private static SmartAttribute Attribute(FakeSmartAttributeSpec s) => new(s.Id, s.Flags, s.Current, s.Worst, s.Raw, s.Threshold);
 }
+#endif
