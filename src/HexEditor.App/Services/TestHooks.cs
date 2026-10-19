@@ -278,6 +278,11 @@ public static class TestHooks
         {
             App.RecoveryInterval = interval;
         }
+
+        if (Settings.CrashRecoveryBudget is { } budget)
+        {
+            CrashReporter.RecoveryBudget = budget;
+        }
     }
 
     /// <summary>

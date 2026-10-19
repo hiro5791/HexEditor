@@ -80,6 +80,7 @@ public sealed record VirtualSourceSpec(
 /// {
 ///   "noActivate": true,                         // ウィンドウを前面に出さない (既定 true)
 ///   "recoveryIntervalSeconds": 2,               // 復旧用データの保存間隔 (ENG-27。既定は 60 秒)
+///   "crashRecoveryBudgetSeconds": 30,           // 異常終了の直前に復旧用データを書く時間の上限 (PKG-30。既定は 2 秒。混んだ CI 用)
 ///   "frozenTime": "2026-01-02T03:04:05Z",       // 時刻の固定
 ///   "fileSources": [ { "match": "*.bin", "delayMs": 500, "delayFromOffset": 65536,
 ///                      "readErrors": [ { "offset": "0x1000", "length": 512 } ] } ],
@@ -114,6 +115,9 @@ public sealed record TestHookSettings
     public bool SuggestDiskImage { get; init; }
 
     public TimeSpan? RecoveryInterval { get; init; }
+
+    /// <summary>異常終了の直前に復旧用データを書く時間の上限の上書き (null なら既定の 2 秒)。</summary>
+    public TimeSpan? CrashRecoveryBudget { get; init; }
 
     public DateTimeOffset? FrozenTime { get; init; }
 
@@ -228,6 +232,7 @@ public sealed record TestHookSettings
             NoActivate = root["noActivate"]?.GetValue<bool>() ?? true,
             SuggestDiskImage = root["suggestDiskImage"]?.GetValue<bool>() ?? false,
             RecoveryInterval = root["recoveryIntervalSeconds"] is { } s ? TimeSpan.FromSeconds(ReadDouble(s)) : null,
+            CrashRecoveryBudget = root["crashRecoveryBudgetSeconds"] is { } b ? TimeSpan.FromSeconds(ReadDouble(b)) : null,
             FrozenTime = root["frozenTime"] is { } t ? DateTimeOffset.Parse(t.GetValue<string>(), CultureInfo.InvariantCulture) : null,
             FileSources = root["fileSources"]?.AsArray().Select(n => new FileSourceSpec(
                 n!["match"]?.GetValue<string>() ?? "*",

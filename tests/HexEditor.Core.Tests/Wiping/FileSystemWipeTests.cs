@@ -149,6 +149,43 @@ public sealed class FileSystemWipeTests
     }
 
     [Fact]
+    [Trait("TC", "TC-FOR-31-03")]
+    public async Task Cancelling_the_operation_during_the_os_method_still_returns_a_cancelled_result_and_cleans_up()
+    {
+        // 長時間処理の Report はキャンセルされると OperationCanceledException を投げる。結果・監査ログ・一時ファイルの削除は失われてはならない
+        // (CI の実機のテストで、キャンセルしても結果が返らなかった)。
+        SparseImage disk = WipeImages.DeletedDisk();
+        IFileSystem fs = OpenVolume(disk);
+        WipeRange[] free = [.. FileSystemWipe.FreeRanges(fs, VolumeOffset)];
+        var volume = new FakeFreeSpaceVolume(disk, free.Select(r => (r.Offset, r.Length)));
+        long freeBefore = volume.FreeBytes();
+        var hooks = new RecordingWipeHooks();
+        var center = new HexEditor.Core.Operations.OperationCenter();
+        OsFreeSpaceWipeResult result = await center.RunAsync("wipe", HexEditor.Core.Operations.OperationKind.WritesExternal, null, freeBefore * ShredMethod.Dod.Passes.Count,
+            op =>
+            {
+                // 書き込みの最中にキャンセルする (キャンセルの確認のあと・進捗の報告の前に来る、実際のタイミング)。
+                int writes = 0;
+                var cancelling = new CancellingVolume(volume, () =>
+                {
+                    if (++writes == 20)
+                    {
+                        op.Cancel();
+                    }
+                });
+                return Task.FromResult(WipeRunner.RunOs(cancelling, "X:", "volume:X", ShredMethod.Dod, op, null, hooks));
+            });
+
+        Assert.True(result.Cancelled);
+        Assert.Null(result.Error);
+        Assert.Empty(volume.Files);
+        Assert.Empty(volume.Directories);
+        Assert.Empty(result.Leftovers);
+        Assert.Equal(freeBefore, volume.FreeBytes());
+        Assert.Equal(WipeAuditOutcome.Cancelled, Assert.Single(hooks.Records).Outcome);
+    }
+
+    [Fact]
     [Trait("TC", "TC-FOR-31-04")]
     public void Direct_writing_is_refused_on_ntfs_with_the_dirty_flag()
     {
@@ -219,5 +256,74 @@ public sealed class FileSystemWipeTests
     {
         IFileSystem fs = FsTestImages.Open("TD-FOR-FAT32-FATDIFF");
         Assert.Equal(FsInconsistency.FatCopiesDiffer, FileSystemWipe.CheckConsistency(fs));
+    }
+
+    /// <summary>書き込みのたびに指定の処理を呼ぶボリューム (キャンセルのタイミングを決めるテスト用)。</summary>
+    private sealed class CancellingVolume(IFreeSpaceVolume inner, Action onWrite) : IFreeSpaceVolume
+    {
+        public string Root => inner.Root;
+
+        public string FileSystem => inner.FileSystem;
+
+        public long MaxFileSize => inner.MaxFileSize;
+
+        public long FreeBytes() => inner.FreeBytes();
+
+        public void CreateDirectory(string path) => inner.CreateDirectory(path);
+
+        public Stream CreateFile(string path) => new Hooked(inner.CreateFile(path), onWrite);
+
+        public Stream OpenFile(string path) => new Hooked(inner.OpenFile(path), onWrite);
+
+        public void DeleteFile(string path) => inner.DeleteFile(path);
+
+        public void DeleteDirectory(string path) => inner.DeleteDirectory(path);
+
+        public bool FileExists(string path) => inner.FileExists(path);
+
+        public bool DirectoryExists(string path) => inner.DirectoryExists(path);
+
+        public bool IsDiskFull(IOException exception) => inner.IsDiskFull(exception);
+
+        private sealed class Hooked(Stream stream, Action onWrite) : Stream
+        {
+            public override bool CanRead => stream.CanRead;
+
+            public override bool CanSeek => stream.CanSeek;
+
+            public override bool CanWrite => stream.CanWrite;
+
+            public override long Length => stream.Length;
+
+            public override long Position
+            {
+                get => stream.Position;
+                set => stream.Position = value;
+            }
+
+            public override void Flush() => stream.Flush();
+
+            public override int Read(byte[] buffer, int offset, int count) => stream.Read(buffer, offset, count);
+
+            public override long Seek(long offset, SeekOrigin origin) => stream.Seek(offset, origin);
+
+            public override void SetLength(long value) => stream.SetLength(value);
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                stream.Write(buffer, offset, count);
+                onWrite();
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    stream.Dispose();
+                }
+
+                base.Dispose(disposing);
+            }
+        }
     }
 }

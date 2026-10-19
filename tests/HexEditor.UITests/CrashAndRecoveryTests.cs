@@ -190,8 +190,9 @@ public sealed class CrashAndRecoveryTests
     {
         string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
 
-        // 保存間隔を 60 分にして、定期の書き出しが起きないようにする。
-        var hooks = new JsonObject { ["recoveryIntervalSeconds"] = 3600 };
+        // 保存間隔を 60 分にして、定期の書き出しが起きないようにする。異常終了の直前の書き出しの上限 (既定 2 秒) は、混んだ CI のランナーで
+        // 2 件目が間に合わないことがあるため延ばす。
+        var hooks = new JsonObject { ["recoveryIntervalSeconds"] = 3600, ["crashRecoveryBudgetSeconds"] = 30 };
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = hooks });
 
         // 1. ファイルのオフセット 0 を AB に上書きし、Ctrl+N の無題のドキュメントに 01 02 03 を入力する。

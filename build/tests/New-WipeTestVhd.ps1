@@ -72,11 +72,27 @@ switch ($Action) {
         Write-Repeated $slack 'SLACK-REMNANT' 4096
         $stream = [System.IO.File]::Open($slack, 'Open', 'ReadWrite')
         try { $stream.SetLength(100); $stream.Flush($true) } finally { $stream.Dispose() }
+        # Where slack.txt lives on the disk (the file is non-resident: it was 4 KiB before it was truncated).
+        $extents = (& fsutil.exe file queryextents $slack | Out-String)
+        if ($extents -notmatch 'LCN:\s*0x([0-9a-fA-F]+)') { throw "fsutil queryextents gave no LCN for slack.txt: $extents" }
+        $slackLcn = [Convert]::ToInt64($Matches[1], 16)
+        $partitionOffset = [int64](Get-Partition -DiskNumber $disk.Number | Where-Object { $_.DriveLetter -eq $volume.DriveLetter }).Offset
+        $slackOffset = $partitionOffset + $slackLcn * 4096
         [System.IO.File]::WriteAllBytes((Join-Path $root 'tiny.txt'), [System.Text.Encoding]::ASCII.GetBytes('tiny-file!'))
         $wipe = Join-Path $root 'wipe.bin'
         Write-Repeated $wipe 'WIPE-ME-0123456789' 1048576
         Remove-Item $wipe -Force
         Write-VolumeCache -DriveLetter $volume.DriveLetter
+        # Windows (the cache manager) zeroes the rest of the cluster when a file is truncated, so there is no remnant left in the slack.
+        # Detach the VHD and put the remnant there directly in the VHD file (a fixed VHD is the raw disk plus a footer). Bytes 0-99 are
+        # slack.txt itself; the file system never looks at the rest of the cluster.
+        Dismount-DiskImage -ImagePath $Path | Out-Null
+        $remnant = [byte[]]::new(4096 - 100)
+        $pattern = [System.Text.Encoding]::ASCII.GetBytes('SLACK-REMNANT')
+        for ($i = 0; $i -lt $remnant.Length; $i++) { $remnant[$i] = $pattern[$i % $pattern.Length] }
+        $file = [System.IO.File]::Open($Path, 'Open', 'ReadWrite', 'None')
+        try { $file.Position = $slackOffset + 100; $file.Write($remnant, 0, $remnant.Length); $file.Flush($true) } finally { $file.Dispose() }
+        Mount-DiskImage -ImagePath $Path | Out-Null
         Write-Output (ConvertTo-Json -Compress -InputObject (Get-Letter $Path))
     }
     'Attach' {

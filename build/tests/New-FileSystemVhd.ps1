@@ -39,6 +39,14 @@ Set-Content -Path $script -Value "create vdisk file=`"$Path`" maximum=$SizeMB ty
 if ($LASTEXITCODE -ne 0) { throw 'diskpart could not create the VHD' }
 Remove-Item $script -Force
 
+# Get-FileHash is not available in the restricted PowerShell the tests start (module autoload fails there), so use .NET.
+function Get-Sha256([string]$file) {
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    $stream = [System.IO.File]::Open($file, 'Open', 'Read', 'ReadWrite')
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash($stream)) -replace '-', '').ToLowerInvariant() }
+    finally { $stream.Dispose(); $sha.Dispose() }
+}
+
 $disk = Mount-DiskImage -ImagePath $Path -PassThru | Get-Disk
 try {
     $volume = $disk | Initialize-Disk -PartitionStyle MBR -PassThru |
@@ -69,7 +77,7 @@ try {
             path             = $file.FullName.Substring($root.Length - 1)
             size             = $file.Length
             modifiedUtcTicks = $file.LastWriteTimeUtc.Ticks
-            sha256           = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            sha256           = (Get-Sha256 $file.FullName)
         }
     }
 

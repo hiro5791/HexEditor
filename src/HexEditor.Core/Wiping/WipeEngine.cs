@@ -181,7 +181,7 @@ public static class WipeEngine
                         position += n;
                         passDone += n;
                         done += n;
-                        operation?.Report(done);
+                        ReportProgress(operation, done);
                         progress?.Invoke(new WipeProgress(pass + 1, passes, passDone, total, false));
                     }
                 }
@@ -242,7 +242,7 @@ public static class WipeEngine
                     pos += n;
                     passDone += n;
                     done += n;
-                    operation?.Report(done);
+                    ReportProgress(operation, done);
                     progress?.Invoke(new WipeProgress(passes, passes, passDone, total, true));
                 }
             }
@@ -285,6 +285,21 @@ public static class WipeEngine
                 StoppedPass = stoppedPass,
                 Elapsed = time.GetElapsedTime(started),
             };
+        }
+    }
+
+    /// <summary>
+    /// 進捗を報告する。<see cref="LongRunningOperation.Report"/> はキャンセルされると例外を投げるが、ここでは投げさせない
+    /// (キャンセルは次の書き込みの前の確認で止まり、結果を返す。結果と監査ログを失わないため)。
+    /// </summary>
+    private static void ReportProgress(LongRunningOperation? operation, long done)
+    {
+        try
+        {
+            operation?.Report(done);
+        }
+        catch (OperationCanceledException)
+        {
         }
     }
 

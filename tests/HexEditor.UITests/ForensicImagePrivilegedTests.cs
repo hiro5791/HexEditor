@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json.Nodes;
 using FlaUI.Core.AutomationElements;
 using HexEditor.TestData;
@@ -75,11 +76,14 @@ public sealed class ForensicImagePrivilegedTests
     [Trait(UiTest.TC, "TC-FOR-24-02")]
     public Task A_volume_with_an_open_file_cannot_be_locked_and_nothing_is_written() => UiTestContext.RunAsync(async ctx =>
     {
-        string before = Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 64 << 20));
+        // クローンは先頭 (LBA 0 から) に書くので、ファイルシステムの外の先頭 34 セクタ (MBR・GPT の領域) で「何も書かれない」を確かめる。
+        // ディスク全体のハッシュは使えない: 開いているファイルを作る・消すだけで NTFS のメタデータが変わる。
+        const int Head = 34 * 512;
         string source = TestDataCatalog.Get("TD-FOR-RAID0-M0");
         using var open = new FileStream($@"{CiPrivileged.VhdVolumeLetter}:\open.txt", FileMode.Create, FileAccess.ReadWrite, FileShare.None);
         open.Write("held"u8);
         open.Flush();
+        string before = Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, Head));
         AppSession app = await StartAsync(ctx, [source]);
         await app.SendAsync("imgCloneStart", new JsonObject { ["disk"] = CiPrivileged.VhdDisk, ["verify"] = false });
         string name = DiskName(CiPrivileged.VhdDisk);
@@ -97,7 +101,7 @@ public sealed class ForensicImagePrivilegedTests
         }, UiTest.Scaled(TimeSpan.FromSeconds(60)), "the lock failure notice");
         open.Dispose();
         File.Delete($@"{CiPrivileged.VhdVolumeLetter}:\open.txt");
-        Assert.Equal(before, Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 64 << 20)));
+        Assert.Equal(before, Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, Head)));
     });
 
     /// <summary>TD-VHDX-GPT を「ディスクを開く」で読み書きを許可して開く (偽ではない、本物の経路)。</summary>
@@ -148,8 +152,11 @@ public sealed class ForensicImagePrivilegedTests
         // バックアップも壊す。テスト用ディスクは 64 MiB (Mount-TestVhd.ps1)。元に戻すのは先頭の 34 セクタだけで、バックアップは OS が直す。
         CiPrivileged.WriteDevice(disk, 512, new byte[33 * 512]);
         CiPrivileged.WriteDevice(disk, (64L << 20) - 33 * 512, new byte[33 * 512]);
-        Assert.Equal(0, PartitionCount(GptDisk));
+        // Windows は使用中のボリュームのあるパーティションを、テーブルが壊れても (列挙し直すまで) 手放さないことがあるので、
+        // 「パーティションがなくなった」はディスク上の GPT の署名 (LBA 1 と最後のセクタの "EFI PART") が消えたことで確かめる。
         byte[] broken = CiPrivileged.ReadDevice(disk, 34 * 512);
+        Assert.DoesNotContain("EFI PART", Encoding.ASCII.GetString(broken, 512, 8), StringComparison.Ordinal);
+        Assert.NotEqual(File.ReadAllBytes(bin), broken);
 
         await app.SendAsync("imgSectorsRestoreStart", new JsonObject { ["path"] = bin });
         await app.WaitForDialogAsync("ImgSectorsRestoreDialog");
@@ -159,6 +166,7 @@ public sealed class ForensicImagePrivilegedTests
         await app.WaitUntilAsync(async () => (await app.SendAsync("imgState"))["restore"] is not null, UiTest.Scaled(TimeSpan.FromSeconds(60)), "the restore");
         JsonObject restore = (await app.SendAsync("imgState"))["restore"]!.AsObject();
         Assert.True(restore["success"]!.GetValue<bool>());
+        Assert.Equal(File.ReadAllBytes(bin), CiPrivileged.ReadDevice(disk, 34 * 512));
         Assert.Equal(partitions, PartitionCount(GptDisk));
         Assert.Equal(broken, File.ReadAllBytes(restore["backup"]!.GetValue<string>()));
     });

@@ -67,11 +67,11 @@ mke2fs -q -t ext4 -b 4096 -O 64bit,flex_bg,extent,metadata_csum -U 00000000-0000
 # ---- ISO 9660 (Joliet・Rock Ridge・El Torito) ----
 xorriso -as mkisofs -quiet -input-charset utf-8 -J -R -V ISOTEST -b boot.img -no-emul-boot -boot-load-size 4 -o "$out/iso.iso" "$src"
 
-# ---- UDF 2.01 (mkudffs で作り、マウントして書く。Linux は 2.50 のメタデータパーティションに書けないため、2.50 は生成ツールのイメージで確かめる) ----
+# ---- UDF 2.01 (mkudffs で作り (ブロックサイズは 2048 に固定。パーサーは 2048 バイトのセクタ前提)、マウントして書く。Linux は 2.50 のメタデータパーティションに書けないため、2.50 は生成ツールのイメージで確かめる) ----
 mnt="$(mktemp -d)"
 truncate -s 64M "$out/udf201.img"
-mkudffs --media-type=hd --udfrev=0x0201 --label=UDFTEST "$out/udf201.img" > /dev/null
-sudo mount -o loop -t udf "$out/udf201.img" "$mnt"
+mkudffs --blocksize=2048 --media-type=hd --udfrev=0x0201 --label=UDFTEST "$out/udf201.img" > /dev/null
+sudo mount -o loop,bs=2048 -t udf "$out/udf201.img" "$mnt"
 sudo cp -a "$src/." "$mnt/"
 sudo umount "$mnt"
 

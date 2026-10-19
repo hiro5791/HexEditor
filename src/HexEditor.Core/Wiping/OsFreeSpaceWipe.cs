@@ -292,6 +292,12 @@ public static class OsFreeSpaceWipe
                 lastPassBytes = passBytes;
             }
         }
+        catch (OperationCanceledException)
+        {
+            // 長時間処理の進捗報告 (LongRunningOperation.Report) はキャンセルされると例外を投げる。これもキャンセルとして扱い、
+            // 一時ファイルの削除 (下の finally) と結果の返却・監査ログを必ず行う。
+            cancelled = true;
+        }
         catch (IOException ex)
         {
             error = ex.Message;

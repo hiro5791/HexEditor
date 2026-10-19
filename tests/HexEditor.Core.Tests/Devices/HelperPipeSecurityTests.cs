@@ -127,7 +127,8 @@ public sealed class HelperPipeSecurityTests : IDisposable
         HelperClient client = await session.ConnectAsync();
         foreach (Process rogue in launcher.Rogues)
         {
-            Assert.True(rogue.WaitForExit(30_000), "the test process did not finish");
+            // 終了の見張りだけの上限 (powershell.exe の起動が、並列のテストで混んだ CI では 15 秒を超えることがある)。
+            Assert.True(rogue.WaitForExit(180_000), "the test process did not finish");
             string output = (await rogue.StandardOutput.ReadToEndAsync()).Trim();
             Assert.DoesNotContain("DATA", output, StringComparison.Ordinal);
         }
