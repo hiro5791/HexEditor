@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    E01 の基準の検証 (12 の FOR-20 の仕様 8、TC-FOR-20-03・TC-FOR-20-04・TC-FOR-21-04): 本アプリで作った E01 を libewf のツール
+    (ewfverify、ewfinfo) で確かめる。Linux のランナーに ewf-tools を入れた CI のジョブ ewf-crosscheck だけで実行する
+    (HexEditor.Core と HexEditor.TestData だけを参照し、Windows 専用の部品を含まない)。ツールがない環境ではテストはスキップされる。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HexEditor.Core\HexEditor.Core.csproj" />
+    <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
+    <Compile Include="..\HexEditor.Core.Tests\Forensics\Images\ImageTestSupport.cs" Link="Shared\ImageTestSupport.cs" />
+    <Compile Include="..\HexEditor.Core.Tests\Forensics\Images\EwfTools.cs" Link="Shared\EwfTools.cs" />
+  </ItemGroup>
+
+</Project>

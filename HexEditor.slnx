@@ -16,6 +16,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/HexEditor.Cli.Tests/HexEditor.Cli.Tests.csproj" />
     <Project Path="tests/HexEditor.Core.Tests/HexEditor.Core.Tests.csproj" />
+    <Project Path="tests/HexEditor.Images.CrossCheck/HexEditor.Images.CrossCheck.csproj" />
     <Project Path="tests/HexEditor.Performance.Tests/HexEditor.Performance.Tests.csproj" />
     <Project Path="tests/HexEditor.Platform.Tests/HexEditor.Platform.Tests.csproj" />
     <Project Path="tests/HexEditor.UITests/HexEditor.UITests.csproj" />
