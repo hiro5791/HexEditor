@@ -8748,4 +8748,9 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
   <data name="LvKind_Linear" xml:space="preserve"><value>Linear</value></data>
   <data name="LvKind_Unsupported" xml:space="preserve"><value>Not supported ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} group {1}, volume {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Member {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>not found</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Offset {0} ({1}): {2} at {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Offset {0} ({1}): stripe {2} over {3} members</value></data>
 </root>

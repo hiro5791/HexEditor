@@ -222,6 +222,7 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         AutomationProperties.SetName(_lvList, Loc.Get("Lv_Title"));
         AutomationProperties.SetAutomationId(_lvStatus, "Partitions_LogicalVolumesStatus");
         _lvList.DoubleTapped += (_, _) => _ = OpenSelectedLogicalVolumeAsync();
+        _lvList.SelectionChanged += (_, _) => ShowLogicalVolumeStatus();
         _lvList.KeyDown += (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -271,6 +272,18 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         _lvRows = scan is null ? [] : [.. scan.Volumes.Select(v => new LvItem(v, MainWindow.LvRowText(v, scan)))];
         _lvList.ItemsSource = _lvRows;
         _lvList.SelectedItem = _lvRows.FirstOrDefault(r => r.Volume.Name == selected) ?? _lvRows.FirstOrDefault();
+        ShowLogicalVolumeStatus();
+    }
+
+    /// <summary>一覧の下の欄: 知らせ (足りない構成要素など)、メタデータの警告、選んだボリュームの詳細。</summary>
+    private void ShowLogicalVolumeStatus()
+    {
+        LogicalVolumeScan? scan = _state?.LogicalVolumes;
+        if (_state?.LogicalVolumesRunning == true)
+        {
+            return;
+        }
+
         var lines = new List<string>();
         if (_state?.LogicalVolumesMessage is { } message)
         {
@@ -280,6 +293,11 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         foreach (LogicalVolumeIssue issue in scan?.Issues ?? [])
         {
             lines.Add(Loc.Format("Lv_Issue", issue.Group, issue.Detail));
+        }
+
+        if (scan is not null && SelectedLogicalVolume is { } v)
+        {
+            lines.AddRange(MainWindow.LvDetailLines(v, scan));
         }
 
         _lvStatus.Text = string.Join(Environment.NewLine, lines);

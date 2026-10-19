@@ -100,6 +100,21 @@ public sealed class HfsPlusFileSystemTests
     }
 
     [Fact]
+    public void A_broken_catalog_node_marks_the_folder_and_continues()
+    {
+        (SparseImage image, HfsPlusImageBuilder b) = FileSystemImageSet.HfsPlus();
+        long catalog = (long)b.CatalogStart * b.BlockSize;
+
+        // 最初の葉のノード (ノード 1。ルートの中身がある) の記録の数を壊す。
+        long node = catalog + HfsPlusImageBuilder.CatalogNodeSize;
+        var patches = new Dictionary<long, byte> { [node + 10] = 0xFF, [node + 11] = 0xFF };
+        IFileSystem fs = FileSystemRegistry.Open(new PatchedImageReader(new SparseImageReader(image), patches));
+        _ = fs.ListDirectory(fs.Root).ToList();
+        Assert.True(fs.Root.Flags.HasFlag(FsEntryFlags.Corrupt));
+        Assert.Contains("catalog node 1", fs.Root.CorruptionDetail, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Allocation_file_marks_used_blocks()
     {
         HfsPlusFileSystem fs = Open();

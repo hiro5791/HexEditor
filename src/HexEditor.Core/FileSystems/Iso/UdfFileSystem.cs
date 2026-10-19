@@ -871,35 +871,21 @@ public sealed class UdfFileSystem : FileSystemBase, IFsChoices
             return (b[0] & (1 << (int)(bit & 7))) == 0;
         }
 
-        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default)
-        {
-            long start = Math.Max(first, partitionStart);
-            long end = Math.Min(Math.Min(first + count, clusterCount), partitionStart + partitionBlocks);
-            long runStart = -1;
-            for (long c = start; c < end; c++)
+        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default) =>
+            AllocationScan.FreeRuns(Math.Max(first, partitionStart), Math.Min(Math.Min(first + count, clusterCount), partitionStart + partitionBlocks), IsAllocated, c =>
             {
-                if ((c & 0xFFFF) == 0)
+                long bit = c - partitionStart;
+                if ((bit & 7) != 0 || bit + 8 > partitionBlocks)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    return -1;
                 }
 
-                bool used = IsAllocated(c);
-                if (!used && runStart < 0)
-                {
-                    runStart = c;
-                }
-                else if (used && runStart >= 0)
-                {
-                    yield return (runStart, c - runStart);
-                    runStart = -1;
-                }
-            }
+                Span<byte> b = stackalloc byte[1];
+                _bits.Read(bit >> 3, b);
 
-            if (runStart >= 0)
-            {
-                yield return (runStart, end - runStart);
-            }
-        }
+                // UDF のビットマップは 1 が空き。
+                return b[0] switch { 0xFF => 0, 0 => 1, _ => -1 };
+            }, cancellationToken);
 
         public long CountFree(CancellationToken cancellationToken = default) => FreeRuns(0, clusterCount, cancellationToken).Sum(r => r.Count);
     }

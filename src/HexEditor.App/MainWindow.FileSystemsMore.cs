@@ -296,6 +296,31 @@ public sealed partial class MainWindow
             : v.CanOpenDirectly ? Loc.Get("Lv_State_Ok") : Loc.Get("Lv_State_Raid");
     }
 
+    /// <summary>選んだ論理ボリュームの詳細 (グループ、構成要素とそれを見つけたドキュメント、セグメント)。</summary>
+    internal static IEnumerable<string> LvDetailLines(LogicalVolumeInfo v, LogicalVolumeScan scan)
+    {
+        CultureInfo c = CultureInfo.CurrentCulture;
+        yield return Loc.Format("Lv_Detail_Group", v.Scheme == LogicalVolumeScheme.Ldm ? "LDM" : "LVM2", v.Group, v.Name);
+        foreach (string id in v.Members.Distinct())
+        {
+            LogicalVolumeMember? m = scan.Members.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase));
+            string shown = v.Scheme == LogicalVolumeScheme.Lvm2 ? Lvm2PhysicalVolumeLabel.Format(id) : id;
+            yield return Loc.Format("Lv_Detail_Member", shown, m?.DisplayName ?? Loc.Get("Lv_Detail_Missing"));
+        }
+
+        foreach (LvPiece p in v.Pieces.Take(64))
+        {
+            string member = v.Scheme == LogicalVolumeScheme.Lvm2 ? Lvm2PhysicalVolumeLabel.Format(p.MemberId) : p.MemberId;
+            yield return Loc.Format("Lv_Detail_Piece", $"0x{p.LogicalOffset:X}", StatusFormat.ShortSize(p.Length, c) ?? p.Length.ToString(c), member, $"0x{p.MemberOffset:X}");
+        }
+
+        foreach (LvStripeSet s in v.Stripes.Take(64))
+        {
+            yield return Loc.Format("Lv_Detail_Stripes", $"0x{s.LogicalOffset:X}", StatusFormat.ShortSize(s.Length, c) ?? s.Length.ToString(c),
+                StatusFormat.ShortSize(s.StripeSize, c) ?? s.StripeSize.ToString(c), s.Columns.Count);
+        }
+    }
+
     /// <summary>一覧の 1 行 (名前、種類、サイズ、構成、状態)。</summary>
     internal static string LvRowText(LogicalVolumeInfo v, LogicalVolumeScan scan) =>
         string.Format(CultureInfo.CurrentCulture, "{0,-20}  {1,-12}  {2,10}  {3,-28}  {4}", $"{v.Group}/{v.Name}", LvKindText(v),

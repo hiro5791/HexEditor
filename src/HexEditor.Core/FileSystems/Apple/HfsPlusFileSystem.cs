@@ -298,9 +298,14 @@ public sealed class HfsPlusFileSystem : FileSystemBase
         /// <paramref name="compare"/> (キーと目的の比較: 負ならキーが小さい) で、目的以上の最初の葉のレコードから順に返す。fLink を
         /// たどり、ノードの数に上限を設ける (循環への備え)。
         /// </summary>
-        public IEnumerable<(Node Node, int Index, byte[] Key, byte[] Data)> Scan(Func<byte[], int> compare)
+        public IEnumerable<(Node Node, int Index, byte[] Key, byte[] Data)> Scan(Func<byte[], int> compare, List<uint>? bad = null)
         {
             Node? node = Read(RootNode);
+            if (node is null)
+            {
+                bad?.Add(RootNode);
+            }
+
             var visited = new HashSet<uint>();
             for (int level = 0; node is not null && node.Kind == 0 && level < 16; level++)
             {
@@ -329,6 +334,10 @@ public sealed class HfsPlusFileSystem : FileSystemBase
                 }
 
                 node = child == uint.MaxValue ? null : Read(child);
+                if (node is null && child != uint.MaxValue)
+                {
+                    bad?.Add(child);
+                }
             }
 
             int nodes = 0;
@@ -350,7 +359,12 @@ public sealed class HfsPlusFileSystem : FileSystemBase
                     yield return (node, i, key, rec[keyLength..]);
                 }
 
-                node = node.FLink == 0 ? null : Read(node.FLink);
+                uint next = node.FLink;
+                node = next == 0 ? null : Read(next);
+                if (node is null && next != 0)
+                {
+                    bad?.Add(next);
+                }
             }
         }
 
@@ -427,9 +441,9 @@ public sealed class HfsPlusFileSystem : FileSystemBase
     private sealed record CatalogRecord(string Name, short Type, byte[] Data, long Offset);
 
     /// <summary>フォルダの中のレコード (スレッドを除く)。</summary>
-    private IEnumerable<CatalogRecord> Children(uint folder, CancellationToken token)
+    private IEnumerable<CatalogRecord> Children(uint folder, CancellationToken token, List<uint>? bad = null)
     {
-        foreach ((BTree.Node node, int index, byte[] key, byte[] data) in _catalog.Scan(k => CompareParent(k, folder, emptyName: true)))
+        foreach ((BTree.Node node, int index, byte[] key, byte[] data) in _catalog.Scan(k => CompareParent(k, folder, emptyName: true), bad))
         {
             token.ThrowIfCancellationRequested();
             if (KeyParent(key) != folder)
@@ -617,7 +631,8 @@ public sealed class HfsPlusFileSystem : FileSystemBase
             yield break;
         }
 
-        foreach (CatalogRecord r in Children(tag.Cnid, cancellationToken))
+        var bad = new List<uint>();
+        foreach (CatalogRecord r in Children(tag.Cnid, cancellationToken, bad))
         {
             if (tag.Cnid == RootFolderId && r.Name is PrivateDataName or PrivateDirName)
             {
@@ -630,6 +645,14 @@ public sealed class HfsPlusFileSystem : FileSystemBase
             {
                 yield return resource;
             }
+        }
+
+        if (bad.Count > 0)
+        {
+            // 読めない B 木のノード: このフォルダ (の下) に破損の印を付けて続ける (FOR-13 の「エラー」)。
+            directory.Flags |= FsEntryFlags.Corrupt;
+            directory.Corruption = FsCorruptionKind.BadSignature;
+            directory.CorruptionDetail = "catalog node " + string.Join(", ", bad.Distinct());
         }
     }
 
@@ -968,34 +991,13 @@ public sealed class HfsPlusFileSystem : FileSystemBase
             return (b[0] & (0x80 >> (int)(cluster & 7))) != 0;
         }
 
-        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default)
-        {
-            long end = Math.Min(first + count, blocks);
-            long runStart = -1;
-            for (long c = Math.Max(0, first); c < end; c++)
+        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default) =>
+            AllocationScan.FreeRuns(Math.Max(0, first), Math.Min(first + count, blocks), IsAllocated, c =>
             {
-                if ((c & 0xFFFF) == 0)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-
-                bool used = IsAllocated(c);
-                if (!used && runStart < 0)
-                {
-                    runStart = c;
-                }
-                else if (used && runStart >= 0)
-                {
-                    yield return (runStart, c - runStart);
-                    runStart = -1;
-                }
-            }
-
-            if (runStart >= 0)
-            {
-                yield return (runStart, end - runStart);
-            }
-        }
+                Span<byte> b = stackalloc byte[1];
+                bits.Read(c >> 3, b);
+                return b[0] switch { 0xFF => 1, 0 => 0, _ => -1 };
+            }, cancellationToken);
 
         public long CountFree(CancellationToken cancellationToken = default) => FreeRuns(0, blocks, cancellationToken).Sum(r => r.Count);
     }

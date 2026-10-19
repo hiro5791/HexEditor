@@ -98,6 +98,8 @@ public sealed class ApfsFileSystemTests
         FsEntry volume = Assert.Single(fs.ListDirectory(fs.Root));
         _ = fs.ListDirectory(volume).ToList();
         Assert.Contains(fs.Issues, i => i.Kind == FsIssueKind.ApfsChecksum && i.Detail == "44");
+        Assert.True(volume.Flags.HasFlag(FsEntryFlags.Corrupt));
+        Assert.Equal(FsCorruptionKind.ChecksumMismatch, volume.Corruption);
     }
 
     [Fact]

@@ -284,7 +284,7 @@ public sealed class ApfsFileSystem : FileSystemBase
     /// <paramref name="compare"/> (キーと目的の範囲の比較。範囲内は 0) が 0 の葉のレコードを順に返す。<paramref name="resolve"/> は索引の値
     /// (子の oid) をブロック番号にする (物理の木はそのまま、仮想の木はオブジェクトマップ)。
     /// </summary>
-    private IEnumerable<(byte[] Key, byte[] Value)> Range(long rootBlock, Func<byte[], int> compare, Func<ulong, long?> resolve)
+    private IEnumerable<(byte[] Key, byte[] Value)> Range(long rootBlock, Func<byte[], int> compare, Func<ulong, long?> resolve, List<long>? bad = null)
     {
         var stack = new Stack<(long Block, int Depth)>();
         stack.Push((rootBlock, 0));
@@ -295,6 +295,7 @@ public sealed class ApfsFileSystem : FileSystemBase
             (long block, int depth) = stack.Pop();
             if (depth > MaxTreeDepth || ReadNode(block) is not { } node)
             {
+                bad?.Add(block);
                 continue;
             }
 
@@ -461,15 +462,16 @@ public sealed class ApfsFileSystem : FileSystemBase
         return c != 0 ? c : ((int)(head >> 60)).CompareTo(type);
     }
 
-    private IEnumerable<(byte[] Key, byte[] Value)> FsRecords(ApfsVolume v, ulong objId, int type)
+    private IEnumerable<(byte[] Key, byte[] Value)> FsRecords(ApfsVolume v, ulong objId, int type, List<long>? bad = null)
     {
         long? root = Lookup(v.OmapTreeBlock, v.RootTreeOid);
         if (root is not long r)
         {
+            bad?.Add(-1);
             return [];
         }
 
-        return Range(r, k => CompareFsKey(k, objId, type), oid => Lookup(v.OmapTreeBlock, oid));
+        return Range(r, k => CompareFsKey(k, objId, type), oid => Lookup(v.OmapTreeBlock, oid), bad);
     }
 
     private sealed record Inode(ulong Id, ulong Parent, ulong PrivateId, FsTimestamp Created, FsTimestamp Modified, FsTimestamp Changed,
@@ -624,7 +626,8 @@ public sealed class ApfsFileSystem : FileSystemBase
             };
         }
 
-        foreach ((byte[] key, byte[] value) in FsRecords(vol, tag.InodeId, TypeDirRecord))
+        var bad = new List<long>();
+        foreach ((byte[] key, byte[] value) in FsRecords(vol, tag.InodeId, TypeDirRecord, bad))
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (value.Length < 18)
@@ -657,6 +660,14 @@ public sealed class ApfsFileSystem : FileSystemBase
             ulong fileId = BinaryPrimitives.ReadUInt64LittleEndian(value);
             int dtype = BinaryPrimitives.ReadUInt16LittleEndian(value.AsSpan(16)) & 0xF;
             yield return MakeEntry(vol, fileId, name, dtype == 4, directory);
+        }
+
+        if (bad.Count > 0)
+        {
+            // チェックサムの合わない・読めないノード: このフォルダに破損の印を付けて続ける (FOR-13 の「エラー」)。
+            directory.Flags |= FsEntryFlags.Corrupt;
+            directory.Corruption = FsCorruptionKind.ChecksumMismatch;
+            directory.CorruptionDetail = "node " + string.Join(", ", bad.Distinct());
         }
     }
 
@@ -974,33 +985,44 @@ public sealed class ApfsFileSystem : FileSystemBase
             return (b[0] & (1 << (int)(bit & 7))) != 0;
         }
 
-        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default)
+        public IEnumerable<(long Start, long Count)> FreeRuns(long first, long count, CancellationToken cancellationToken = default) =>
+            AllocationScan.FreeRuns(Math.Max(0, first), Math.Min(first + count, blocks), IsAllocated, c =>
+            {
+                int found = Find(c);
+                if (found < 0 || c + 8 > chunks[found].Addr + chunks[found].Count || (c - chunks[found].Addr & 7) != 0)
+                {
+                    return -1;
+                }
+
+                (long addr, _, long bitmap) = chunks[found];
+                if (bitmap <= 0 || bitmap >= blocks)
+                {
+                    return 0;
+                }
+
+                Span<byte> b = stackalloc byte[1];
+                _bits.Read(bitmap * fs._blockSize + ((c - addr) >> 3), b);
+                return b[0] switch { 0xFF => 1, 0 => 0, _ => -1 };
+            }, cancellationToken);
+
+        private int Find(long cluster)
         {
-            long end = Math.Min(first + count, blocks);
-            long runStart = -1;
-            for (long c = Math.Max(0, first); c < end; c++)
+            int lo = 0, hi = chunks.Count - 1, found = -1;
+            while (lo <= hi)
             {
-                if ((c & 0xFFFF) == 0)
+                int mid = (lo + hi) >>> 1;
+                if (chunks[mid].Addr <= cluster)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    found = mid;
+                    lo = mid + 1;
                 }
-
-                bool used = IsAllocated(c);
-                if (!used && runStart < 0)
+                else
                 {
-                    runStart = c;
-                }
-                else if (used && runStart >= 0)
-                {
-                    yield return (runStart, c - runStart);
-                    runStart = -1;
+                    hi = mid - 1;
                 }
             }
 
-            if (runStart >= 0)
-            {
-                yield return (runStart, end - runStart);
-            }
+            return found;
         }
 
         public long CountFree(CancellationToken cancellationToken = default) => FreeRuns(0, blocks, cancellationToken).Sum(r => r.Count);
