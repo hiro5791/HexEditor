@@ -578,6 +578,58 @@ jobs:
   # TC-TOOL-18-01〜03: Windows で作ったチェックサムファイル (GNU 形式と BSD 形式。日本語のファイル名を含むフォルダ) を、Linux の
   # sha256sum -c と macOS の shasum -c で検証する (TOOL-18 の受け入れ基準)。作る側は Core のテスト (環境変数 HEXEDITOR_CHECKSUM_OUT に
   # 出力する)。毎晩と手動の実行だけ。
+  # FOR-07・FOR-12〜FOR-14: 実際の道具 (ubuntu-24.04 の apt の e2fsprogs・xorriso・udftools・lvm2・hfsprogs) で作ったイメージを、アプリの解析で読む。
+  # 生成ツールのイメージ (TestDataCatalog) と解析が同じ思い違いをしていないことを確かめる。毎晩と手動の実行だけ。
+  fs-crosscheck-images:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the file system tools (Ubuntu 24.04 archive)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q e2fsprogs xorriso udftools lvm2 hfsprogs
+          sudo modprobe udf || true
+          sudo modprobe hfsplus || true
+      - name: Make the images (build/tests/make-fs-crosscheck.sh)
+        run: bash build/tests/make-fs-crosscheck.sh "$GITHUB_WORKSPACE/fs-crosscheck"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fs-crosscheck
+          retention-days: 3
+          path: fs-crosscheck/
+
+  fs-crosscheck:
+    needs: fs-crosscheck-images
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      HEXEDITOR_FS_CROSSCHECK: ${{ github.workspace }}\fs-crosscheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - uses: actions/download-artifact@v4
+        with:
+          name: fs-crosscheck
+          path: fs-crosscheck
+      - name: Compare with the manifest
+        run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "FullyQualifiedName~HexEditor.Core.Tests.FileSystems.FileSystemCrossCheckTests" --logger "trx;LogFileName=fs-crosscheck.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fs-crosscheck-results
+          retention-days: 7
+          path: TestResults/
+
   checksum-interop-create:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest

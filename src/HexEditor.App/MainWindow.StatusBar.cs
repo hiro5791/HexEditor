@@ -17,11 +17,11 @@ public sealed partial class MainWindow
     /// <summary>項目の ID (設定 ui.statusBar.items と右クリックメニューに使う)。</summary>
     private static readonly string[] StatusItemIds =
         ["cursor", "value", "selection", "position", "column", "format", "encoding", "endian", "fileType", "mode", "modified", "compare", "size", "sync",
-            "zoom", "operations", "notifications"];
+            "zoom", "operations", "notifications", "forensic"];
 
     /// <summary>幅が足りないときに隠す順 (UI-06 の仕様 5)。カーソル位置・選択範囲・入力モード・変更の有無・処理センターは隠さない。</summary>
     private static readonly string[] CollapseOrder =
-        ["zoom", "sync", "format", "column", "position", "value", "size-short", "endian", "encoding", "fileType", "size", "notifications"];
+        ["forensic", "zoom", "sync", "format", "column", "position", "value", "size-short", "endian", "encoding", "fileType", "size", "notifications"];
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _operationsTimer;
     private TaskbarProgress? _taskbar;
@@ -256,6 +256,9 @@ public sealed partial class MainWindow
             ["zoom"] = true,
             ["operations"] = operations,
             ["notifications"] = true,
+
+            // LBA・パーティション・クラスタ・持ち主 (12 の FOR-06 の仕様 9、FOR-15 の仕様 1)。
+            ["forensic"] = doc is not null && ForensicStatusText.Length > 0,
         };
         foreach (Button button in StatusButtons)
         {

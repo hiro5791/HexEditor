@@ -58,6 +58,11 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [HexEditor のプラグイン SDK](api-plugins.md)
 - [コマンドライン (hexed)](command-line.md)
 
+## フォレンジック {#forensics}
+
+- [パーティション](partitions.md)
+- [ファイルシステム](file-systems.md)
+
 ## 設定とヘルプ {#settings-and-help}
 
 - [設定とショートカット](settings.md)

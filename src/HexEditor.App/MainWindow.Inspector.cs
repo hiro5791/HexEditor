@@ -525,6 +525,7 @@ public sealed partial class MainWindow
             ? [.. a.Bookmarks.Overlapping(at, at + 1).Where(a.Bookmarks.IsVisible).Select(BookmarkToolTip)]
             : [];
         AttachAnnotationLayers(view);
+        AttachFileSystemHighlights(view);
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
@@ -538,6 +539,7 @@ public sealed partial class MainWindow
             ExtendHexViewFilesMenu(menu);
             ExtendHexViewScriptMenu(menu);
             ExtendHexViewPluginMenu(menu);
+            ExtendHexViewForensicsMenu(menu);
         });
     }
 

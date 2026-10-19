@@ -33,8 +33,16 @@ public static class Loc
     /// <summary>キーがなければ null (実行時に登録されたコマンドの別名など、ないことがある文字列)。</summary>
     public static string? TryGet(string key)
     {
-        string value = Loader.GetString(key);
-        return string.IsNullOrEmpty(value) ? null : value;
+        try
+        {
+            string value = Loader.GetString(key);
+            return string.IsNullOrEmpty(value) ? null : value;
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            // キーがない (ERROR_MRM_NAMED_RESOURCE_NOT_FOUND)。
+            return null;
+        }
     }
 
     private static Dictionary<string, string>? _english;
