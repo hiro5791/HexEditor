@@ -51,6 +51,9 @@ public sealed class CaseManager : IEvidenceRegistry
 
     public ForensicAudit Audit { get; }
 
+    /// <summary>監査ログの保存先 (null ならファイル)。テストで書き込みエラー・空き容量不足を再現するために差し替える。</summary>
+    public IAuditStorage? Storage { get; set; }
+
     public ForensicCase? CurrentCase
     {
         get
@@ -132,7 +135,7 @@ public sealed class CaseManager : IEvidenceRegistry
 
     private void Attach(ForensicCase c)
     {
-        AuditLog log = AuditLog.Open(c.AuditPath, AuditIdentity.Current(AppVersion), _time);
+        AuditLog log = AuditLog.Open(c.AuditPath, AuditIdentity.Current(AppVersion), _time, Storage);
         lock (_gate)
         {
             _current = c;
