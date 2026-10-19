@@ -653,6 +653,17 @@ public static class BuiltInCommands
         new("tools.files.shred", "fileTools"),
         new("tools.ads", "fileTools"),
 
+        // ---- フォレンジック: イメージとクローン (12 の FOR-20〜FOR-26)。既定のショートカットはなし ----
+        new("forensics.image.create", "forensicImages"),
+        new("forensics.image.skeleton", "forensicImages"),
+        new("forensics.image.open", "forensicImages"),
+        new("forensics.image.verify", "forensicImages"),
+        new("forensics.image.info", "forensicImages") { Condition = "documentOpen" },
+        new("forensics.disk.clone", "forensicImages"),
+        new("forensics.sectors.save", "forensicImages") { Condition = "documentOpen" },
+        new("forensics.sectors.restore", "forensicImages") { Condition = "documentOpen" },
+        new("forensics.raid.reconstruct", "forensicImages"),
+
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
         new("macro.playLast", "macro"),
