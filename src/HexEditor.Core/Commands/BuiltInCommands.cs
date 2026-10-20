@@ -38,6 +38,9 @@ public static class BuiltInCommands
 
         // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
         new("file.openDiskImage", "file"),
+
+        // メモリダンプを開く (01 の ENG-36)。
+        new("file.openMemoryDump", "file"),
         new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
 
         // プロセスのスナップショット・ミニダンプの保存 (ENG-35)、リモートに接続 (ENG-40〜ENG-42)、切断したリモートの再接続。既定のキーはなし。
@@ -653,6 +656,40 @@ public static class BuiltInCommands
         new("tools.files.shred", "fileTools"),
         new("tools.ads", "fileTools"),
 
+        // ---- フォレンジック: ケース・監査ログ・カービング・レポート (12 の FOR-03、FOR-04、FOR-18、FOR-19、FOR-33)。既定のショートカットはなし ----
+        new("forensics.case.new", "forensics"),
+        new("forensics.case.open", "forensics"),
+        new("forensics.case.close", "forensics"),
+        new("forensics.case.addEvidence", "forensics") { Condition = "documentOpen" },
+        new("forensics.case.properties", "forensics"),
+        new("forensics.audit.show", "forensics"),
+        new("forensics.audit.verify", "forensics"),
+        new("forensics.carving.signatures", "forensics"),
+        new("forensics.carving.run", "forensics") { Condition = "documentOpen" },
+        new("forensics.report.create", "forensics"),
+        new("view.panel.evidence", "view"),
+        new("view.panel.auditLog", "view"),
+        new("view.panel.carving", "view"),
+
+        // ---- フォレンジック: 書き込み保護・デバイス情報・暗号化 (12 の FOR-01、FOR-02、FOR-27〜FOR-29)。既定のショートカットはなし ----
+        new("forensics.writeBlock", "forensics"),
+        new("forensics.writeBlock.allowDocument", "forensics") { Condition = "documentOpen" },
+        new("forensics.usbWriteProtect", "forensics"),
+        new("forensics.device.hpaDco", "forensics") { Condition = "documentOpen" },
+        new("forensics.device.smart", "forensics") { Condition = "documentOpen" },
+        new("forensics.encryption.info", "forensics") { Condition = "documentOpen" },
+        new("view.panel.deviceInfo", "view"),
+        // ---- フォレンジック: イメージとクローン (12 の FOR-20〜FOR-26)。既定のショートカットはなし ----
+        new("forensics.image.create", "forensics"),
+        new("forensics.image.skeleton", "forensics"),
+        new("forensics.image.open", "forensics"),
+        new("forensics.image.verify", "forensics"),
+        new("forensics.image.info", "forensics") { Condition = "documentOpen" },
+        new("forensics.disk.clone", "forensics"),
+        new("forensics.sectors.save", "forensics") { Condition = "documentOpen" },
+        new("forensics.sectors.restore", "forensics") { Condition = "documentOpen" },
+        new("forensics.raid.reconstruct", "forensics"),
+
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
         new("macro.playLast", "macro"),
@@ -695,6 +732,40 @@ public static class BuiltInCommands
         new("help.reportTranslation", "help"),
         new("help.checkForUpdates", "help"),
         new("help.about", "help"),
+
+        // ---- フォレンジック: パーティションとファイルシステム (12 の FOR-06〜FOR-17)。既定のキーはなし ----
+        new("forensics.partitions.show", "forensics") { Condition = "documentOpen" },
+        new("forensics.partitions.openInNewTab", "forensics") { Condition = "documentOpen" },
+        new("forensics.partitions.goToStart", "forensics") { Condition = "documentOpen" },
+        new("forensics.partitions.openHere", "forensics") { Condition = "documentOpen" },
+        new("forensics.partitions.scan", "forensics") { Condition = "documentOpen" },
+        new("forensics.partitions.logicalVolumes", "forensics") { Condition = "documentOpen" },
+        new("forensics.fs.show", "forensics") { Condition = "documentOpen" },
+        new("forensics.fs.openFile", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.exportFiles", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.findDeleted", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.goToMftRecord", "forensics") { Condition = "fileSystem", Argument = new("expression") },
+        new("forensics.fs.goToInode", "forensics") { Condition = "fileSystem", Argument = new("expression") },
+        new("forensics.fs.goToCluster", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.whoUsesThis", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.showFileClusters", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.nextFragment", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.previousFragment", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.toggleHighlight", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.exportUnallocated", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.exportSlack", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.openUnallocated", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.selectUnallocated", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.selectSlack", "forensics") { Condition = "fileSystem" },
+        new("forensics.fs.redact", "forensics") { Condition = "fileSystem" },
+        new("forensics.wipe.selection", "forensics") { Condition = "documentOpen" },
+        new("forensics.wipe.disk", "forensics") { Condition = "documentOpen" },
+        new("forensics.wipe.freeSpace", "forensics"),
+        new("forensics.wipe.slack", "forensics") { Condition = "fileSystem" },
+        new("view.panel.partitions", "view"),
+        new("view.panel.fileSystem", "view"),
+        new("view.panel.fragments", "view"),
+        new("view.panel.forensicResults", "view"),
     ];
 
     private static KeyBinding K(string chord, KeyScope scope = KeyScope.Global) => KeyBinding.Parse(chord, scope);

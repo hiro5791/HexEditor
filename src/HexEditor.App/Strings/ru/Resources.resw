@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>Окно {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(нет вкладок)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Копировать путь</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Открыть повторно как образ диска</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Показать в проводнике</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Только чтение</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Размер: {0}</value></data>
@@ -6634,6 +6635,418 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Столбец комментариев</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Показывать имена символов, имена целей переходов и строки, на которые есть ссылки.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Дизассемблирование</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Криминалистика</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Криминалистика</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Отображение даты и времени</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Как показывается время в криминалистических списках и сведениях: UTC и местное время, только UTC или только местное время. Время всегда записывается в UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC и местное время</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Только UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Только местное время</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Включать защиту от записи при открытии дела</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Если выключено, программа спросит, включать ли её.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Также записывать в журнал аудита действия просмотра</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Записываются переходы, поиск и добавление закладок. Изменения данных и улик записываются всегда.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Показывать эскизы восстановленных изображений</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Показывать небольшой предварительный просмотр файлов JPEG, PNG, GIF и BMP в результатах карвинга.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Изображение логотипа отчёта</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Путь к изображению PNG, JPEG или SVG, которое показывается в верхней части HTML-отчётов.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Текст заголовка отчёта</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Строка текста под заголовком отчётов, например название вашей лаборатории.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Новое дело</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>расследование улики создать дело папка investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Открыть дело</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>расследование улики загрузить дело папка investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Закрыть дело</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>расследование завершить investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Добавить улику</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>зарегистрировать образ диска хэш получение register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Свойства дела</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>часовой пояс следователь организация time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Показать журнал аудита</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>цепочка хранения история журнал chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Проверить журнал аудита</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>подделка цепочка хэшей целостность проверка tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Управление сигнатурами карвинга</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>типы файлов заголовок окончание magic определения file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Восстановить файлы (карвинг)</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>восстановление извлечь удалённые файлы сканирование recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Создать отчёт</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf экспорт документация export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Показать или скрыть список улик</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>дело улики панель case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Показать или скрыть журнал аудита</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>дело журнал аудита панель case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Показать или скрыть результаты карвинга</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>восстановленные файлы панель результаты carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Улики</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Журнал аудита</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Результаты карвинга</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Криминалистика</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Дело</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Новое дело...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Открыть дело...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Закрыть дело</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Добавить улику...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Свойства дела...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Список улик</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Показать журнал аудита</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Проверить журнал аудита</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>Ж</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Карвинг</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Восстановить файлы...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Управление сигнатурами...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Результаты</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Создать отчёт...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Дело: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>недопустимое время</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Дело уже открыто. Сначала закройте его.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Ни одно дело не открыто.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Новое дело</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Свойства дела</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Номер дела (обязательно)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Название дела (обязательно)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Следователь</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Организация</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Папка дела</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Обзор...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Часовой пояс</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Используется для чтения времени без часового пояса, например времени файлов FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Создать</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Дело «{0}» создано.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Дело «{0}» открыто.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Не удалось создать дело: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Номер и название дела обязательны.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Не удаётся прочитать файл дела (строка {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Не удалось открыть дело: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Не удалось сохранить дело: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Включить защиту от записи для этого дела?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Включить</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Защита от записи включена для этого дела.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Добавить улику</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Добавление улики</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} будет добавлен в дело. Источник данных не изменяется.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Вычислить хэши сейчас</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Этот источник данных уже зарегистрирован как {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>В качестве улик можно добавлять только диски, тома, файлы образов и файлы.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Хэширование улики {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Хэши {0} записаны.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Хэш {0} не вычислен. Улика остаётся в списке.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Данные по смещению 0x{1} не читаются, поэтому хэш {0} не записан.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Не вычислен</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} удалена из списка. Источник данных не затронут.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} недоступна.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Не удалось открыть улику: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} — {1}: элементов: {2}</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Ни одно дело не открыто. Создайте или откройте дело в меню «Криминалистика».</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Улики ещё не добавлены.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Улика</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Путь</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Ёмкость (байт)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Хэши</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Проверка</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Добавлено (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Добавлено (местное)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Диск</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Том</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Образ</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Файл</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Память</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Пройдена</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Не пройдена</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Не проверена</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Открыть (только чтение)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Удалить из списка</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Копировать хэши</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Копировать путь</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Создать образ...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Проверить...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>Записей: {0}</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Ни одно дело не открыто. Журнал аудита относится к делу.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Ничего ещё не записано.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Эта строка не является допустимой записью. Журнал мог быть изменён.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Проверить</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Экспорт в CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Экспорт в JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Журнал аудита не нарушен (проверено строк: {0}).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Цепочка журнала аудита разорвана на строке {0}. Журнал мог быть изменён.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>№</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Время (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Время (местное)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Пользователь</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Операция</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Улика</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Результат</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Подробности</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Успешно</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Сбой</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Отменено</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Не удаётся записать в журнал аудита</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Операции, записывающие данные, отключены, пока журнал снова не станет доступен для записи. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>В журнал аудита по-прежнему нельзя записывать.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>В журнал аудита нельзя записывать, поэтому операция не выполнена.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>В журнал аудита нельзя записывать, поэтому операции записи данных отключены.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Проверка журнала аудита</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Не удалось проверить журнал аудита: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Экспорт журнала аудита</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Журнал аудита экспортирован в {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Не удалось экспортировать журнал аудита: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Сигнатуры карвинга</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Определения</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>встроенное</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>отключено</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Название</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Расширение (без точки)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Заголовки (байты Hex, по одному в строке; ?? — любой байт, ? — любая цифра)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Смещение заголовка от начала файла</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Окончание (байты Hex, необязательно)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Сколько байт окончания включить (пусто = само окончание)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Максимальный размер</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Минимальный размер</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Брать размер из значения в заголовке</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Значение размера: смещение от начала файла</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Значение размера: ширина (бит)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Значение размера: порядок байтов</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Значение размера: добавляемое число</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Проверка структуры (встроенное имя или шаблон структуры)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Встроенные проверки: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Искать заголовок только в начале сектора</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Использовать это определение при сканировании</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Создать</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Дублировать</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Импорт...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Экспорт...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Проверить это определение</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Сначала выделите диапазон в документе.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Проверка...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Проверка определения карвинга</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Найдено в выделении: {0}. Первые позиции:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Импортировано определений: {0}.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Не импортировано определений: {0}:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Экспортировано в {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Не удалось импортировать определения: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Не удалось сохранить определения: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Проверка не удалась: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: введите число или размер, например 4096, 0x1000 или 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Введите название.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Это название уже используется.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Введите расширение.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>В расширении есть символы, недопустимые в имени файла.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Введите хотя бы один заголовок.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Заголовок не является допустимой последовательностью байтов Hex (нечётное число цифр или недопустимые символы).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>В заголовке должен быть хотя бы один фиксированный байт.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Смещение заголовка не может быть отрицательным.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Окончание не является допустимой последовательностью байтов Hex.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Число включаемых байтов не может быть отрицательным.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Максимальный размер должен быть не меньше 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Минимальный размер не может быть отрицательным.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Максимальный размер меньше минимального.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Значение размера недопустимо.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Значение имеет неверный тип.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Восстановление файлов (карвинг)</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Начать</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Область</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Весь документ</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Выделение</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Только нераспределённое пространство</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Только слэк-пространство</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Типы файлов</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Не искать заголовки внутри найденного файла</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Записать восстановленные файлы в папку</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Папка вывода</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Восстановление файлов</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Карвинг завершён: найдено файлов: {0}.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Карвинг отменён. Найдено файлов: {0}; результаты и манифест сохранены.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Карвинг остановлен, так как в папку вывода нельзя записывать. Найдено файлов: {0}.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Карвинг не удался: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Папка вывода находится на исследуемом диске. Выберите папку на другом диске.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>В папке вывода недостаточно свободного места. Нужно: {0} байт. Свободно: {1} байт.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Файловая система папки вывода ограничивает размер файла до {0} байт. Выберите другую папку.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Папку вывода нельзя использовать.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Для этого документа нет сведений о распределении.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Не удаётся записать восстановленные файлы</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>В папке вывода ({0}) закончилось место. Для следующего файла нужно {1} байт, свободно {2} байт. Освободите место, выберите другую папку или остановите процесс.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Не удаётся записать в {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Выбрать другую папку...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Карвинг уже выполняется.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Восстановить файлы...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Открыть папку</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Карвинг не выполнялся. Выберите «Криминалистика», затем «Карвинг», затем «Восстановить файлы».</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Файлы не найдены.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>Файлов: {0}</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Эскиз восстановленного изображения</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>№</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Смещение</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Длина определена по</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Выходной файл</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Структура</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Значение размера</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Окончание</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Максимальный размер</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Тип: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Смещение: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Длина: {0} байт</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Длина определена по: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Создание отчёта</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Создать</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Содержимое</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Диск: {0} (размер сектора {1} байт)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>№</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Схема</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Название</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>Начальный LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Секторов</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Размер (байт)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Файловая система</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Шифрование</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Не распределено</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Схема размещения</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Документ</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Смещение тома</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Метка</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Серийный номер</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Размер кластера (байт)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Кластеры</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Свободные кластеры</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Проблемы</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Логические тома: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Название</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Группа</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Тип</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Размер (байт)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Структура</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Участники</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Образ</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Источник</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Получено</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Хэши</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Журнал получения образа</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (один файл, открывается без сети)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Все записи журнала аудита</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Журнал аудита с (UTC, необязательно)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Журнал аудита по (UTC, необязательно)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Байты дампа Hex для каждой закладки (от 0 до 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Сохранить в</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Период не является допустимой датой и временем.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Длина дампа Hex должна быть от 0 до 4096 байт.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Создание отчёта</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Не удалось создать отчёт: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Создан файл {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>Не удалось создать PDF ({0}). Вместо него создан {1}.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>В PDF попадают только первые строки длинных списков. Полные списки смотрите в HTML-отчёте или в файлах CSV.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Открыть папку</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Криминалистический отчёт</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Номер дела</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Название дела</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Следователь</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Организация</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Дело создано</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Отчёт создан</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Часовой пояс</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Автор отчёта</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Страница</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>из</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Дело</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Титульный лист</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Улики</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Записи о получении образов</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Сведения об устройстве</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Разделы</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Файловые системы</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Закладки</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Результаты карвинга</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Журнал аудита</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Улика</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Путь</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Модель</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Серийный номер</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Ёмкость (байт)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Секторов</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Размер сектора</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Хэши</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Проверка</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Добавлено (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Добавлено (местное)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Кто добавил</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Пройдена</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Не пройдена</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Не проверена</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Не вычислен</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Диск</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Том</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Образ</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Файл</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Память</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Документ</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Название</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Смещение</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Комментарий</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Дамп Hex</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>№</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Смещение</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Длина определена по</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Выходной файл</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Найдено файлов</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>№</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Время (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Время (местное)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Пользователь</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Компьютер</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Операция</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Улика</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Результат</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Подробности</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>успешно</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>сбой</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>отменено</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Показаны первые строки: {0} из {1}. Полный список — в приложенном файле CSV или в HTML-отчёте.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Показаны первые строки: {0}. Полный список — в HTML-отчёте или в файле CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Полный список</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Не распределено</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Нет данных.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>недопустимое время</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Показать или скрыть панель дизассемблирования</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>дизассемблер ассемблер код disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Дизассемблировать</value></data>
@@ -8193,4 +8606,1264 @@
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Страница целиком</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>По ширине</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Выбрать папку...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Защита от записи]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Защита от записи</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Режим защиты от записи включён. Щёлкните, чтобы выключить.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Режим защиты от записи запрещает запись только этому приложению. Он не может помешать записи со стороны Windows или других приложений (например, записи, которую файловая система делает при подключении тома). Дополнительно используйте аппаратный блокиратор записи или защиту USB от записи в ОС.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Защита USB от записи в ОС...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Выключить режим защиты от записи?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Открыто документов-улик: {0}. После выключения режима в эти документы можно будет записывать:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Документов-улик нет. После выключения режима в открытые документы снова можно будет записывать.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Выключить защиту от записи</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Не удалось заново открыть источник данных только для чтения. Показаны только уже прочитанные данные.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Разрешить запись в этот документ</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Запись разрешена (исключение из режима защиты от записи)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Режим защиты от записи выключен.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Исключить из режима защиты от записи можно только файловые документы.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Этот источник данных зарегистрирован как улика, поэтому разрешить запись нельзя.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Запись в этот документ уже разрешена.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Разрешить запись в этот документ?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Режим защиты от записи остаётся включённым, но {0} ({1}) можно будет изменять и сохранять, пока вы его не закроете. Это записывается в журнал аудита, и для открытого документа это нельзя отменить.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Введите {0} для подтверждения</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Разрешить запись в {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Запись в {0} разрешена до закрытия документа.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Режим защиты от записи</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Защита USB от записи в ОС</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Устройство</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>У</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Проверить HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Сведения SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Панель сведений об устройстве</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Сведения о шифровании...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Открыть дамп памяти...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Переключить режим защиты от записи</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>блокиратор записи защита только чтение улики write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Разрешить запись в этот документ</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>исключение защита от записи write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Переключить защиту USB от записи в ОС</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb накопитель политика защита от записи реестр usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Проверить HPA и DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>скрытая область защищённая область конфигурация устройства hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Показать сведения SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>состояние диск самодиагностика nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Показать сведения о шифровании</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt зашифрованный том encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Показать или скрыть сведения об устройстве</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>панель hpa smart устройство panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Открыть дамп памяти</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>аварийный дамп минидамп физическая память ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Сведения об устройстве</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Всегда включать режим защиты от записи при запуске</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Если выключено, программа запускается с тем состоянием режима, которое было при последнем закрытии.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Проверять HPA / DCO при открытии диска</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Отправляет диску команды ATA только для чтения и показывает уведомление, если найдены скрытые области.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Включить защиту USB от записи в ОС?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows будет блокировать запись на USB-накопители, подключаемые с этого момента (параметр StorageDevicePolicies WriteProtect). Уже подключённые устройства не затрагиваются, пока вы не подключите их заново. Внутренние диски SATA и NVMe не защищаются. Требуются права администратора.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Выключить защиту USB от записи в ОС?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Параметр вернётся в состояние, которое было до включения. Уже подключённые USB-накопители остаются защищёнными от записи, пока вы не подключите их заново. Требуются права администратора.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Изменить параметр</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Требуются права администратора. Параметр не изменён.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Не удалось изменить параметр (доступ запрещён; возможно, он управляется групповой политикой): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Не удалось изменить параметр: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Защита USB от записи в ОС включена. Чтобы она заработала, подключите USB-накопители заново.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Защита USB от записи в ОС выключена.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Защита USB от записи в ОС всё ещё включена</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows продолжит блокировать запись на USB-накопители после закрытия этого приложения. Выключить защиту перед выходом?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Выключить и выйти</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Выйти, оставив включённой</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Для изменения защиты USB от записи в ОС нужны права администратора Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Устройство</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Проверить HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Прочитать SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Экспорт в JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Экспорт в текст...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Откройте физический диск и выберите «Проверить HPA / DCO» или «Сведения SMART».</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — получено {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO не проверялись.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>У дисков NVMe нет HPA и DCO; HPA / DCO к ним не применимы.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Размер пространства имён: {0} блоков ({1} байт в блоке)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Ёмкость пространства имён: {0} блоков</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Проверить это на данном устройстве нельзя (команды не проходят, например через USB-адаптеры или на виртуальных дисках).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Требуются права администратора.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Команда {0} не выполнена (состояние ATA {1}, ошибка {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Максимальный LBA (IDENTIFY DEVICE, 28 бит): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Максимальный LBA (IDENTIFY DEVICE, 48 бит): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Собственный максимальный LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>Максимальный LBA, заданный DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>не поддерживается устройством</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>не поддерживается устройством</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: есть, секторов: {0} ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: нет</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: определить не удалось</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: есть, секторов: {0} ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: нет</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: определить не удалось</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Сведения SMART не считывались.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Сведения SMART на этом устройстве прочитать нельзя (например, через USB-адаптер, который их не поддерживает).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART на этом устройстве отключён.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Контрольная сумма данных SMART не совпадает; значения могут быть неверными.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Модель: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Серийный номер: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Микропрограмма: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Ёмкость: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Размер сектора: {0} байт логический, {1} байт физический</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Подключение: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Скорость вращения: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>не вращается (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>поддерживается</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>не поддерживается</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Чтобы использовать эту команду, откройте физический диск.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Не удалось прочитать сведения об устройстве: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>На {0} есть скрытые области: HPA — секторов: {1}, DCO — секторов: {2}. Ёмкость, которую видит Windows, меньше реальной ёмкости диска.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Показать подробности</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Сведения об устройстве экспортированы в {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Не удалось экспортировать сведения об устройстве: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Название</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Текущее</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Худшее</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Порог</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Исходное (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Исходное (десятичное)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Состояние</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Предупреждение</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Неизвестно</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Частота ошибок чтения</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Производительность передачи данных</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Время раскрутки</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Число запусков и остановок</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Число переназначенных секторов</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Частота ошибок позиционирования</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Скорость позиционирования</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Часы работы</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Число повторных раскруток</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Число повторных калибровок</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Число циклов включения питания</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Доступный резервный объём</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Число ошибок программирования</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Число ошибок стирания</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Число операций выравнивания износа</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Число неожиданных отключений питания</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Разброс износа</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Всего использовано резервных блоков</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Всего ошибок программирования</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Всего ошибок стирания</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Сбойные блоки, появившиеся при работе</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>Сквозная ошибка</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Число неисправимых ошибок</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Число тайм-аутов команд</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>Записи при завышенной высоте полёта головок</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Температура воздушного потока</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>Частота ошибок от ударов (G-Sense)</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Число аварийных парковок при отключении питания</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Число циклов загрузки головок</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Температура</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Исправлено аппаратным ECC</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Число событий переназначения</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Число секторов, ожидающих переназначения</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Число неисправимых секторов при автономной проверке</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>Число ошибок CRC UltraDMA</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Частота многозонных ошибок</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>Оставшийся ресурс SSD</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Оставшийся ресурс</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Индикатор износа носителя</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Число исправных блоков</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Всего записано LBA</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Всего прочитано LBA</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Биты критического предупреждения: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Температура: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Доступный резерв: {0}% (порог {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Использовано ресурса: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Прочитано данных: {0} байт</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Записано данных: {0} байт</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Число включений питания: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Часы работы: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Небезопасных отключений: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Ошибки носителя и целостности данных: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Получено</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Устройство</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Модель</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Серийный номер</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Микропрограмма</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Ёмкость (байт)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Размер сектора (логический / физический)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Подключение</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Максимальный LBA (28 бит / 48 бит / собственный / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>На этом устройстве проверить нельзя</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Нет</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Есть (секторов: {0})</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Не применимо (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Название</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Текущее</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Худшее</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Порог</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Исходное</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Состояние</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Предупреждение</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Сведения о шифровании</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Зашифрованные тома не найдены.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Диапазон {0}: смещение {1}, {2} байт</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Тип: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Зашифрованный том APFS (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (возможно, зашифрован)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Возможно, зашифрованные или сжатые данные (например, VeraCrypt или TrueCrypt; сигнатуры для их определения нет)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Версия метаданных: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Метод шифрования: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID тома: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Создан: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Описание: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Состояние шифрования: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>неизвестно</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>расшифрован</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>выполняется</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>завершено</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>приостановлено</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Зашифровано на данный момент: {0} байт</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Защитники ключа: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, создан {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Открытый ключ</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Ключ запуска</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM и PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Пароль восстановления</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Пароль</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Неизвестно (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Слоты ключей: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Том {0}: зашифрован</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Том {0}: не зашифрован</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Энтропия первых 64 КиБ: {0} бит на байт</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Предупреждение: три блока метаданных не совпадают.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Предупреждение: некоторые блоки метаданных повреждены; показаны только те элементы, которые удалось прочитать.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Обозреватель файловой системы не открывает зашифрованные тома.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows разблокировала этот том BitLocker ({0}). Если открыть его как логический том, можно читать содержимое, которое расшифровывает Windows.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Открыть как логический том</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Дамп памяти</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Не удалось прочитать формат дампа памяти {0}. Открыть как необработанный?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Открыть как необработанный</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Не удалось открыть дамп памяти: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Дамп памяти: {0}, получен {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Дамп памяти: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>образ физической памяти (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>полный дамп памяти</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>дамп памяти ядра</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>полный дамп памяти (битовая карта)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>минидамп</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Дамп памяти</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Данные нельзя записать, так как включён режим защиты от записи.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Образ</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>Б</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Создать образ...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Создать образ-скелет...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Открыть образ...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Проверить образ...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Сведения об образе</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Клонировать диск...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Сохранить диапазон секторов...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Восстановить диапазон секторов...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>А</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Реконструировать RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Создать образ</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>получить образ диска dd raw e01 улики acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Создать образ-скелет</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>скелет разреженный образ метаданные skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Открыть образ как диск</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk разделённый raw 001 split</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Проверить образ</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>проверка хэш md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Сведения об образе</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 заголовок сведения о деле header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Клонировать диск</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>клон копия диск сектор clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Сохранить диапазон секторов</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>резервная копия mbr gpt секторы backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Восстановить диапазон секторов</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>восстановление mbr gpt секторы restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Реконструировать RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod чередование чётность stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Текущий документ не является образом диска.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Нужен документ диска, тома или образа диска.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Сначала откройте диск, образ или файл, который будет источником.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Открыто без отсутствующих сегментов ({0}). Их диапазоны читаются как ошибки.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Не удалось прочитать образ {0} (часть: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Родительский диск разностного диска не найден: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Отсутствуют сегменты</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Отсутствуют сегменты: {0}. Открыть образ с имеющимися сегментами? Отсутствующие диапазоны читаются как ошибки.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Открыть имеющиеся сегменты</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Разделённый raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Контрольная сумма фрагмента не совпадает по смещению {0} ({1} байт). Диапазон показан как ошибка чтения.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Сведения об образе</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Файлы</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Размер</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} байт (секторов: {1})</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Размер сектора</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Получен</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Программа получения образа</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Устройство</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Фрагменты</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} (секторов во фрагменте: {1})</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Сжатие</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Сжат</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Не сжат</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Сохранённый {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Секторы, не читавшиеся при получении образа</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Родительский диск</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Отсутствующие сегменты</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Номер дела</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Номер улики</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Эксперт</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Примечания</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Совпадает</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Не совпадает</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Нет эталонного значения</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Проверка невозможна из-за ошибок чтения</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>сохранено в образе</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>журнал получения образа</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>список улик</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>введённое значение</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>вычислено при получении образа</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>исходный диск</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Создание образа</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Создание образа-скелета</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Режим защиты от записи выключен. Перед получением образа улик его рекомендуется включить.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Включить режим защиты от записи</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Источник: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Только выделение (расширяется до границ секторов)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Диапазоны для получения</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Целиком</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Разреженный (без нераспределённых областей)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Скелет (только таблицы разделов и метаданные файловых систем)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Также включить закладки и диапазоны множественного выделения</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Вывод</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Вывод</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Обзор...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Размер части / сегмента (например, 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Хэши</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Повторов при ошибках чтения</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Значение-заполнитель для нечитаемых секторов (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Единица чтения</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Проверить после завершения</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Ошибки чтения</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Сведения E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Сжатие</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Нет</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Быстрое (zlib, уровень 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Максимальное (zlib, уровень 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Начать</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Укажите вывод.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Размер части должен быть не менее 1 МиБ (например, 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Укажите число повторов от 0 до 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Укажите значение-заполнитель двумя шестнадцатеричными цифрами (например, 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Выберите хотя бы один хэш.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Вывод находится на том же физическом диске, что и источник. Выберите другой диск.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Вывод находится на диске из списка улик. Выберите другой диск.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Файловая система вывода ({0}) допускает файлы размером до {1} байт. Используйте разделённый raw или E01 с меньшим размером сегмента.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Для вывода нужно около {0} байт, а свободно только {1} байт.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} уже существует. Перезаписать?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Перезаписать</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Файловая система вывода — {0}, а не NTFS, поэтому исключённые области записываются нулями и образ не становится меньше.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Создание образа: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Вычисление включаемых диапазонов</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>Не удалось проанализировать разделов: {0}; они включены целиком.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Не удалось создать образ. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Нечитаемые секторы: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Образ создан. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Проверка: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>Секторов, которые не удалось прочитать и которые были заполнены: {0}.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Получение образа прервано. Записанные к этому моменту файлы сохранены.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Получение образа прервано. Записанные к этому моменту файлы удалены.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Источник потерян. Получение образа остановлено.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Открыть журнал получения образа</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Не удалось записать вывод: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Прервать</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Получение образа отменено. Сохранить записанные к этому моменту файлы?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Проверка образа</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Образ: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Значение для сравнения (hex, необязательно)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Значение MD5, SHA-1 или SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Введите шестнадцатеричное значение из 32, 40 или 64 цифр.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Также перечитать исходный диск</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Проверить</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Проверка образа: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Результат проверки: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Проверка невозможна из-за ошибок чтения: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>вычислено: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Журнал получения образа диска</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Журнал клонирования диска</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Состояние</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Завершено</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Прервано</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Источник потерян</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Сбой</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Источник</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Путь</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Модель</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Серийный номер</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Ёмкость</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Размер сектора</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Диапазон</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Вывод</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Файлы</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Целевой диск</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Начало</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Окончание</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Прочитано секторов</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Нечитаемые секторы</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>нет</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Хэши</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>включённые диапазоны</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Проверка</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>не проверено</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Версия приложения</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Дело</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Полученные диапазоны</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>целиком</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>разреженный образ (нераспределённые области не включены)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>образ-скелет (только таблицы разделов и метаданные файловых систем)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Исключённые области сохранены нулями, поэтому хэши этого образа не совпадают с хэшами всего исходного диска.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Включённые диапазоны</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Сообщение</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Клонирование диска</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Целевой диск</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Диск {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Диск {0}: {1}, серийный номер {2}, {3} байт, секторы по {4} байт. Тома: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} байт)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>нет</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>Начальный LBA на целевом диске</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Заполнить остальную часть целевого диска нулями</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Хэш для проверки</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Папка журнала (необязательно)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Далее</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Выберите целевой диск.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>Начальный LBA находится за пределами целевого диска.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Диск с другим размером сектора не может быть целевым диском клонирования.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Целевой диск находится в списке улик. Его нельзя перезаписать.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Целевой диск: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Записываемый диапазон: с LBA {0}, секторов: {1} ({2} байт)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Содержимое: данные {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Всё содержимое этих томов будет потеряно:&#xA;{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Целевой диск меньше источника. Будут записаны только первые {0} байт источника.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Это действие нельзя отменить.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Клонировать на {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Введите «{0}» для подтверждения</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Клонирование на {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Если остановить сейчас, целевой диск останется записанным частично.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Продолжить</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Не удалось заблокировать том {0}, поэтому ничего не записано. Закройте открытые на нём файлы и повторите попытку.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Клонирование не удалось. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Клонировано байт: {0}. Проверка: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Клонирование остановлено. Целевой диск записан частично.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Целевой диск совпадает с источником.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Диск с другим размером сектора не может быть целевым диском клонирования.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Включён режим защиты от записи.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Целевой диск находится в списке улик. Его нельзя перезаписать.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows использует том на целевом диске.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>Начальный LBA находится за пределами целевого диска.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Не удалось открыть целевой диск для записи.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Сохранение диапазона секторов</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Восстановление диапазона секторов</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>Начальный LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Число секторов</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Данные секторов</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Диапазон выходит за пределы диска.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Сохранение секторов: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Сохранено секторов: {0} в {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Некоторые секторы диапазона не удалось прочитать, поэтому ничего не сохранено.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Не удалось сохранить диапазон секторов. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Не удалось прочитать файл данных или его сопутствующий файл. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Файл данных: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Сохранено с: {0}, серийный номер {1}, {2} байт, секторы по {3} байт. Начальный LBA {4}, секторов: {5}. Сохранено {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Куда записать: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Сделать резервную копию текущего содержимого перед записью</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Далее</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 файла данных не совпадает с сопутствующим файлом. Восстановление невозможно.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Сопутствующего файла нет. Введите начальный LBA для записи.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Серийный номер или ёмкость целевого диска отличаются от диска, с которого сохранены данные.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Целевой диск: {0}. Тома в диапазоне: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Содержимое: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Записать секторов: {0}</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Восстановление секторов: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Не удалось восстановить диапазон секторов. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Записано секторов: {0}; запись подтверждена чтением.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Запись не удалась. Записано секторов: {0}; сбой на LBA {1}. Можно записать обратно файл резервной копии {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Прочитанное обратно содержимое не совпадает с файлом данных.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Реконструкция RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Участники (по порядку)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Вверх</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Вниз</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Добавить файл...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Этот участник отсутствует</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[отсутствует]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Смещение начала данных участника</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Тип</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Размер полосы</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Расположение чётности</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Левое симметричное</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Левое асимметричное</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Правое симметричное</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Правое асимметричное</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Используемый участник (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Обнаружение (первый 1 МиБ)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Обнаружено: {0} (разделов: {1})</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Таблицы разделов нет</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Сигнатура файловой системы: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Сигнатуры файловой системы нет</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Размер логического диска: {0} байт</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>При такой конфигурации обнаружить не удаётся.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Размеры участников различаются. Используется наименьший размер.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Сохранить конфигурацию...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Загрузить конфигурацию...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Конфигурация RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Конфигурация RAID сохранена в {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Не удалось сохранить конфигурацию RAID. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Не удалось прочитать конфигурацию RAID. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Не удалось открыть логический диск.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} (участников: {1})</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Параметры недопустимы.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Размер полосы должен быть степенью двойки от 512 Б до 16 МиБ.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Для этого типа участников слишком мало.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>У этого типа не может быть отсутствующего участника.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Отсутствуют два или более участника. RAID 5 открыть нельзя.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Показать разделы</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>разделы диск mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Открыть раздел в новой вкладке</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>раздел вкладка partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Перейти к началу раздела</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>раздел переход partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Открыть отсюда как начало раздела</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>раздел здесь partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Поиск потерянных разделов</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>потерянный раздел восстановление поиск lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Показать файловую систему</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>обозреватель файловой системы ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Открыть файл в новой вкладке</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>файл открыть вкладка file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Экспортировать файлы</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>экспорт извлечь файлы export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Найти удалённые файлы</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>удалённые восстановить deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Перейти к записи MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>запись mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Перейти к кластеру</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>кластер блок переход cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Файлы, использующие эту позицию</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>владелец кластера обратный поиск cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Показать кластеры файла</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>фрагменты кластеры подсветка fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Следующий фрагмент</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>фрагмент следующий fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Предыдущий фрагмент</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>фрагмент предыдущий fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Переключить подсветку свободного места и слэка</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>слэк нераспределённое подсветка slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Экспортировать нераспределённое пространство</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>нераспределённое свободное экспорт unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Экспортировать слэк</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>слэк экспорт slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Открыть нераспределённое пространство в новой вкладке</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>нераспределённое вкладка unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Панель разделов</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>панель разделы panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Панель файловой системы</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>панель файловая система panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Панель фрагментов</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>панель фрагменты panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Панель криминалистических результатов</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>панель результаты криминалистика panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Номер записи MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Разделы и файловые системы</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Показывать небольшие промежутки между разделами</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Показывать на панели разделов нераспределённые промежутки меньше 1 МиБ.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Показывать смещения на диске во вкладках разделов</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Если выключено, адреса во вкладке раздела начинаются с 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Показывать альтернативные потоки данных NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Именованные потоки отображаются в обозревателе файловой системы как file.txt:stream.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Показывать легенду криминалистической подсветки</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Показывает легенду в правом верхнем углу представления Hex, пока подсветка включена.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Цвета криминалистической подсветки</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Например: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Оставьте пустым для цветов по умолчанию.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Разделы</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>А</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Файловая система</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>Ф</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Показать разделы</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Открыть раздел в новой вкладке</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Перейти к началу раздела</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Поиск потерянных разделов...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Показать обозреватель</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Открыть файл в новой вкладке</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Экспортировать файлы...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>Э</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Найти удалённые файлы</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Перейти к кластеру...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Файлы, использующие эту позицию</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>Ф</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Показать кластеры файла</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>А</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Перейти к записи MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Экспортировать нераспределённое пространство...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Экспортировать слэк...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Открыть нераспределённое пространство в новой вкладке</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Следующий фрагмент</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>М</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Предыдущий фрагмент</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>Ф</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Криминалистическая подсветка</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>Ф</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Разделы</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Файловая система</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>Й</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Фрагменты</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Криминалистические результаты</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Позиция на диске и владелец кластера</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Разделы</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Файловая система</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Фрагменты</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Криминалистические результаты</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Анализ разделов…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Не анализировалось. Выберите «Криминалистика» &gt; «Разделы» &gt; «Показать разделы».</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Таблица разделов не найдена.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>Разделов: {0}, размер сектора {1}, ID диска {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Нечитаемые секторы (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> №    Формат    Тип                          Название        Начало LBA    Конец LBA     Секторов     Размер  Смещ. начала  Флаги        ФС        Сост.</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Схема разделов</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Предупреждение</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID типа: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Уникальный GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Начальный блок {0}, блоков: {1}</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Запись таблицы по адресу {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Перейти к началу раздела</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Выделить раздел</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Открыть раздел в новой вкладке</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Показать структуру записи</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Показать файловую систему</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Поиск потерянных разделов...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Курсор находится вне раздела.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>GPT с секторами по {1} байт не найдена, но найдена GPT с секторами по {0} байт. Открыть заново с секторами по {0} байт?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Открыть заново с секторами по {0} байт</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - раздел {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Логический</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Цепочка EBR замыкается на LBA {1} (после раздела {0}). Цепочка остановлена.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Более 256 логических разделов. Остальные не прочитаны.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 заголовка GPT не совпадает (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 массива записей разделов GPT не совпадает (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Основной заголовок GPT и резервный заголовок (LBA {1}) различаются.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Основной заголовок GPT повреждён. Список построен по резервному заголовку.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Разделы {0} и {2} перекрываются.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Раздел {0} указывает за пределы диска (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Гибридный MBR: защитный MBR содержит и другие записи.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Некоторые секторы не удалось прочитать (первый: LBA {1}). Список построен по читаемым секторам.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>В карте разделов Apple больше 256 записей.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Системный EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Зарезервировано Microsoft</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Основные данные Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Восстановление Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Метаданные LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Данные LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Файловая система Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Раздел подкачки Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Домашний раздел Linux</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Загрузочный Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Загрузочный BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 МБ)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Расширенный</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Расширенный (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Скрытый FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Восстановление</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Скрытый FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Скрытый NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Скрытый FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (динамический диск)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Расширенный Linux</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>Защитный GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Не распределено</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Физический том LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Поиск потерянных разделов</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>Начальный LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>Конечный LBA (не включается)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Позиции сканирования</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Границы по 1 МиБ</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Границы цилиндров (63 сектора)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Каждый сектор</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Проверка каждого сектора займёт около {0} (при 200 МБ/с).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} ч</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} мин</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Искать</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Заголовок GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Сканировать</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Поиск потерянных разделов</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Потерянные разделы</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>    Начало LBA        Секторов        Размер  Тип         Увер.   Пересечения</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Низкая</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Средняя</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Высокая</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>пересекается с разделом {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Отменено. Полученные результаты сохранены.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {Найден # кандидат.} few {Найдено # кандидата.} many {Найдено # кандидатов.} other {Найдено # кандидата.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Нечитаемо: LBA {0}, секторов: {1}</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Кандидаты в разделы не найдены.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Сканировать каждый сектор</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Открыть как раздел</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Показать файловую систему</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Создать записи таблицы разделов (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Создать записи таблицы разделов (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Создать записи таблицы разделов</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>В MBR нет свободных записей для всех кандидатов.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Раздел нельзя записать в MBR (больше 2 ТиБ). Используйте GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>В GPT нет свободной записи.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Диск слишком мал для GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Для этого документа не открыта файловая система.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Выберите файл в обозревателе файловой системы.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Кластеры файла не выделены.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Только для NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Сведения о распределении прочитать нельзя, поэтому подсветка недоступна.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Том зашифрован (BitLocker). Обозреватель файловой системы его не открывает.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Том зашифрован ({0}). Обозреватель файловой системы его не открывает.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Не удалось открыть как {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Выбор файловой системы</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Тип не удалось определить по сигнатуре. Выберите тип для попытки.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Тип</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Не распределено ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Записи MFT {0} нет.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Перейти к блоку</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Файловая система не открыта. Выберите «Криминалистика» &gt; «Файловая система» &gt; «Показать обозреватель».</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  серийный номер {2}  кластер {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Корень</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Файлы</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Папки</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Фрагменты</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Фильтр (* и ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Найти файлы (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Столбцы</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>Используемая FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {FAT различаются в # записи.} few {FAT различаются в # записях.} many {FAT различаются в # записях.} other {FAT различаются в # записи.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Секторов на кластер</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Проанализировать заново</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Чтение…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Чтение… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>Элементов: {0}</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Не удалось прочитать: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(повреждено)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(несоответствие времени)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Несоответствие времени: время $STANDARD_INFORMATION раньше времени $FILE_NAME или не содержит долей секунды.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Зашифровано EFS (только необработанные данные).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Цепочка кластеров утрачена; данные читаются как непрерывные кластеры, начиная с первого.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>запись в слэке индекса</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>подсчёт…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Логический {0}  кластер {1} ×{2}  диск {3}  {4} байт</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Логический {0}  в метаданных  диск {3}  {4} байт</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(сжато)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Вычисление позиций слэка</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Построение карты кластеров</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Записей с повреждёнными метаданными пропущено: {0}.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Позиция находится вне области кластеров.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Владельцы кластеров {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Вид                       Путь</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Файл</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Метаданные</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Удалённый файл (освобождён)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Цепочка кластеров {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>  Индекс         Кластер</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Файлы с именем {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        Размер  Путь</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Поиск файлов: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {Найден # файл.} few {Найдено # файла.} many {Найдено # файлов.} other {Найдено # файла.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Поиск удалённых файлов</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Поиск осиротевших файлов</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Открыть файл в новой вкладке</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Экспортировать файлы...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Перейти к метаданным</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Показать кластеры файла</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Показать запись MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Показать INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Показать $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Показать запись каталога</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Показать цепочку кластеров</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Копировать путь</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Экспортировать список в CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Расш.</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Размер</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Выделено</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Создан (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Создан (местное)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Изменён (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Изменён (местное)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Доступ (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Доступ (местное)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Метаданные изменены (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Метаданные изменены (местное)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Атр.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID файла</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Первый кластер</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Фрагм.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Состояние</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Путь</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Исходный путь</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Восстановление</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Обычный</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Удалён</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Осиротевший</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Хорошее</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Частично перезаписан</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Перезаписан</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Расположение неизвестно</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Резидентный</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Запись MFT не используется</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Слэк индекса</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Удалённая запись каталога</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Удалённый inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Слэк записи каталога</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Несовпадение поправок (последовательность обновления)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Неверная сигнатура</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Номер кластера вне допустимого диапазона</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Цепочка кластеров зациклена</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Цепочка кластеров доходит до свободного кластера</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Цепочка кластеров не соответствует размеру файла</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Недопустимый список фрагментов данных</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Недопустимый атрибут</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Контрольная сумма набора записей не совпадает</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Ошибка чтения</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Слишком глубоко</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Резервный загрузочный сектор отличается ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr отличается от $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Значения BPB противоречивы ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>Копии FAT различаются ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo не совпадает ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Контрольная сумма загрузочной области exFAT не совпадает ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Контрольная сумма длинного имени не совпадает ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Сведения о распределении не удаётся прочитать ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Том зашифрован ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Удалённые файлы</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Осиротевшие файлы</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Нераспределённое пространство</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Слэк тома</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Метаданные</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>М</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Данные файлов</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>Ф</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM-слэк</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>Р</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Слэк диска</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>Д</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Не распределено</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>Н</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Слэк тома</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>Т</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Промежуток между разделами</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>П</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Легенда криминалистической подсветки</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Размер {0} байт, выделено {1} байт</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Создан {0}, изменён {1}, доступ {2}, метаданные изменены {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID файла {0}, атрибуты {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Восстановление: {0} ({1}). Исходный путь: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Тип: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Имя тома: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Серийный номер: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Размер кластера: {0} байт</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Всего кластеров: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Свободных кластеров: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Создан: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Начало тома {0}, {1} байт</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Запись MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Смещение записи</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Порядковый номер</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Жёсткие ссылки</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Флаги</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Используется байт</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Базовая запись</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Поправка (fixup)</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI создан</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI изменён</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT изменён</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI доступ</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Имя</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Родитель</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN создан</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN изменён</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT изменён</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN доступ</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>Размер $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Несоответствие времени</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Содержимое</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Смещение записи</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Первый кластер</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Короткое имя</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Кластеров в цепочке</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Длина данных</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Длина допустимых данных</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Раздел {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Кластер {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Блок {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Удалён: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Не распределено</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Слэк</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Найти владельца</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Диск {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Диск: - (сжато / разрежённо / резидентно)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Номер кластера ({0}–{1}; cluster = текущий кластер)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Кластер {0} вне допустимого диапазона.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Перейти</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Сохранить структуру папок</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Также экспортировать альтернативные потоки данных (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Также экспортировать слэк в отдельные файлы</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Включать удалённые файлы</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {Выбран # элемент.} few {Выбрано # элемента.} many {Выбрано # элементов.} other {Выбрано # элемента.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Выбрать папку...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Экспорт файлов</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Экспортировано файлов: {0} в {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Недостаточно свободного места: нужно {0}, свободно {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Не удалось записать: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Экспортировать перезаписанный файл?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Кластеры этого удалённого файла теперь используются другими файлами. Экспортированное содержимое может принадлежать другому файлу.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Экспортировать</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Двоичный файл</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Создать файл карты (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Экспорт нераспределённого пространства</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Экспорт слэка</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} записан в {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Записи $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Prev LSN  UndoNext LSN  Тип      Trans.ID  Redo                            Undo                           Зап. MFT   Длина</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Страница перезапуска {0}: текущий LSN {1}, клиентов: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Чтение $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Список</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Результатов нет.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Экспортировать список в CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Ни один файл не подсвечен. Выберите «Показать кластеры файла».</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} (фрагментов: {1})</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>№{0}  логический {1}  диск {2}  {3} байт  кластеры {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Снять подсветку</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Выделить нераспределённое пространство</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>нераспределённое выделить поиск карвинг unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Выделить слэк</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>слэк выделить поиск карвинг slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Выделить нераспределённое пространство</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Выделить слэк</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>Е</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Выделение нераспределённого пространства</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Поиск нераспределённого пространства</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Выделение слэка</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Выделять нечего.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Выделены только первые 1 000 000 диапазонов.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Показать логические тома</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>логический том ldm динамический диск lvm lvm2 чередование объединение logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Перейти к inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 индексный дескриптор</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Номер inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Показать логические тома</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>Л</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Перейти к inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>Й</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Контрольная сумма не совпадает</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Неподдерживаемый формат</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Контрольная сумма суперблока ext не совпадает ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Контрольные суммы дескрипторов групп не совпадают (группы {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Эта возможность ext поддерживается не полностью: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Альтернативный заголовок тома отличается от основного ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Контрольная сумма объекта APFS не совпадает (блок {0}). Объект пропущен.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Новейшая контрольная точка APFS повреждена; используется более старая (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Контрольная сумма тега дескриптора UDF не совпадает (сектор {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC дескриптора UDF не совпадает (сектор {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Этот тип раздела UDF не поддерживается: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>На диске сессий: {0}. Показана последняя сессия; другую можно выбрать в списке «Сессия».</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Доступно только для ext2, ext3 и ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Inode {0} не существует.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Том зашифрован. Список файлов не показывается.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Контрольная точка APFS не найдена.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Показать inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Показать журнал</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Имена</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (базовый)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Сессия</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>В этой файловой системе нет журнала.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>Журнал ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>      Блок    Смещ. на диске  Тип              Последоват.</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Размер блока {0}, блоков: {1}, последовательность {2}, начало {3} (0 = чистый). Журнал не воспроизводится.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Чтение журнала ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Дескриптор</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Фиксация</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Суперблок v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Суперблок v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Отзыв</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Показать логические тома</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Создать образ этого диапазона...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Логические тома</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Название              Тип           Размер      Структура                     Состояние</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Чтение метаданных тома...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>В открытых дисках и образах логические тома LDM или LVM2 не найдены.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Открыть логический том</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Назначить участников...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Прочитать заново</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Этот тип тома не поддерживается: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} открыть нельзя. Отсутствуют участники: {1}. Откройте диски или образы либо назначьте их.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) — это зеркальный том или том RAID-5. Откройте его через реконструкцию RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Назначение участников</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Выберите диск или образ для каждого отсутствующего участника {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(нет)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Открыть файл...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {Отсутствует # участник} few {Отсутствуют # участника} many {Отсутствуют # участников} other {Отсутствуют # участника}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Не поддерживается</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Реконструкция RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Простой</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Составной</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Чередующийся</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Зеркальный</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Линейный</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Не поддерживается ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} группа {1}, том {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Участник {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>не найден</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Смещение {0} ({1}): {2} по адресу {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Смещение {0} ({1}): полоса {2} на {3} участниках</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Надёжно стереть выделение</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>затирание стирание перезапись безопасное удаление диапазон wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Надёжно стереть диск</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>затирание стирание диск перезапись безопасно wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Затереть свободное место</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>свободное место нераспределённое затирание стирание cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Затереть слэк файлов</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>слэк ram диск затирание стирание slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Замаскировать содержимое файлов</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>маскирование очистка закрасить redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Затирание</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Стереть выделение...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Стереть диск...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Затереть свободное место...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Затереть слэк...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>А</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Замаскировать содержимое файлов...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>М</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Замаскировать содержимое файлов...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Надёжно стереть выделение...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Восстановить файлы из выделения (карвинг)...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Маскирование</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Надёжное стирание</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Цель: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Начало</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>В конце прочитать и проверить</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Стереть...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Диапазон находится вне документа.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Несохранённые изменения</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>В стираемых данных есть несохранённые изменения. Сохраните или отмените их перед стиранием.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Отменить</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Стирание данных</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Цель: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Диск {0}: {1}, серийный номер {2}, {3} байт</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Тома: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Диапазон: начальный LBA {0}, секторов: {1}, байт: {2}</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Диапазон: смещение {0}, байт: {1}</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Диапазон расширен до границ секторов.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Метод: {0} ({1, plural, one {# проход} few {# прохода} many {# проходов} other {# прохода}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Последний проход читается обратно и проверяется.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Расчётное время: около {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Это действие нельзя отменить. Исходные данные восстановить невозможно.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>На SSD и флеш-носителях выравнивание износа может сохранить исходные данные в другом месте даже после перезаписи.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Эти тома блокируются на время стирания: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Данные записываются прямо в файл, а не как правка. Отменить это через «Отменить» нельзя.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Стереть байт: {0}</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Стереть {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Диск {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Чтобы продолжить, введите «{0}».</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Подтверждение</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Выделите диапазон для стирания.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Этот документ нельзя стереть напрямую.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Чтобы стереть физический диск, откройте его целиком во вкладке.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Этот источник данных находится в списке улик, и в него нельзя записывать.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows использует этот диск (системный, загрузочный или файл подкачки), поэтому его нельзя стереть.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Не удалось заблокировать том {0}, поэтому ничего не стёрто.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Запись отклонена: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Не удалось стереть: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Стирание {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Проход {0} из {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Проверка</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Остановить стирание? Уже перезаписанная часть останется перезаписанной; остальное сохранит исходные данные.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Ошибка записи</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Не удалось записать по смещению {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Пропустить и продолжить</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Остановить</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Результат стирания</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Стёрто байт: {0} за {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Проверка прошла успешно.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {При проверке найден # несовпадающий диапазон:} few {При проверке найдено # несовпадающих диапазона:} many {При проверке найдено # несовпадающих диапазонов:} other {При проверке найдено # несовпадающего диапазона:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# диапазон не удалось записать:} few {# диапазона не удалось записать:} many {# диапазонов не удалось записать:} other {# диапазона не удалось записать:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Стирание остановлено. Данные до смещения {0} перезаписаны в проходе {1}; остальное сохранило прежнее содержимое.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Проверка остановлена. Все проходы были записаны.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Стирание остановлено после ошибки записи по смещению {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Пропущено файлов: {0} (сжатых {1}, разрежённых {2}, резидентных {3}, несогласованных {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Затирание свободного места</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Метод</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Через Windows (подключённый том)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Прямая запись (файловая система в этой вкладке)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Том</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Нет подключённых томов, которые можно использовать.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Для прямой записи сначала покажите файловую систему этой вкладки.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Том: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Свободное место для перезаписи: {0} байт</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Метод: через Windows (временные файлы заполняют свободное место и в конце удаляются)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Метод: прямая запись в нераспределённые кластеры</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Пока это выполняется, на томе нет свободного места. Другие приложения продолжают работать, но не могут сохранять новые данные.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Если сведения о распределении в файловой системе неверны, файлы могут быть повреждены.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Затереть свободное место</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Файловая система несогласована ({0}). Исправьте её с помощью chkdsk и повторите попытку.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Прямая запись поддерживает только NTFS, FAT12/16/32 и exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Сначала сохраните или отмените правки в этой вкладке.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Эти временные файлы удалить не удалось. Удалите их вручную:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Перезаписано свободного места: {0} байт в {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Вычисление свободного места</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Затирание свободного места остановлено. Временные файлы удалены.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Затирание слэка</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Файлов: {0}, слэка для перезаписи: {1} байт</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Затереть слэк</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Поиск слэка файлов</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Перезаписано слэка: {0} байт в {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Маскирование содержимого файлов</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Файлы ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Шаблон</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (по умолчанию)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Случайный</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Байты Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Байты Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Также заменить имена символами «_» той же длины</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Журнал маскирования (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Содержимое меняется как правка. Ничего не записывается, пока вы не сохраните; для сохранения нового образа используйте «Сохранить как».</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Замаскировать</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Поиск данных для маскирования</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {Замаскирован # файл} few {Замаскировано # файла} many {Замаскировано # файлов} other {Замаскировано # файла}} ({1} байт). Для сохранения нового образа используйте «Сохранить как».</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Маскировать было нечего.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Файлы не замаскированы</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# элемент не замаскирован:} few {# элемента не замаскированы:} many {# элементов не замаскированы:} other {# элемента не замаскированы:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>папка</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>удалённый элемент</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>метаданные повреждены</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>сведения о фрагментах повреждены</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>резидентные данные не найдены</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>метаданные файловой системы</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Не удалось заменить имена для: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Документ доступен только для чтения.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Перезаписать исходный образ?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>В этом документе есть замаскированные данные. При сохранении они будут записаны в исходный {0}, и это нельзя отменить. Чтобы сохранить оригинал, используйте «Сохранить как».</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Перезаписать {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Не удалось записать журнал маскирования: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Введите шаблон в виде байтов Hex (например, 00 или A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} с</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} мин</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} ч</value></data>
 </root>

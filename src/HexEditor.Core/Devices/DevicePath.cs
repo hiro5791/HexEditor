@@ -24,16 +24,17 @@ public enum DevicePathKind
 /// </summary>
 public static partial class DevicePath
 {
-    [GeneratedRegex(@"^\\\\\.\\PhysicalDrive(?<n>[0-9]{1,3})$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    // 末尾は \z (文字列の終わり)。$ は末尾の改行の前でも一致するため、"\\.\PhysicalDrive0\n" のような値を通してしまう。
+    [GeneratedRegex(@"^\\\\\.\\PhysicalDrive(?<n>[0-9]{1,3})\z", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex PhysicalDrivePattern();
 
-    [GeneratedRegex(@"^\\\\\.\\(?<l>[A-Za-z]):$", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"^\\\\\.\\(?<l>[A-Za-z]):\z", RegexOptions.CultureInvariant)]
     private static partial Regex DriveLetterPattern();
 
-    [GeneratedRegex(@"^\\\\\?\\Volume\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\}$", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"^\\\\\?\\Volume\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\}\z", RegexOptions.CultureInvariant)]
     private static partial Regex VolumeGuidPattern();
 
-    [GeneratedRegex(@"^\\\\\.\\CdRom(?<n>[0-9]{1,3})$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"^\\\\\.\\CdRom(?<n>[0-9]{1,3})\z", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex CdRomPattern();
 
     /// <summary><c>\\.\PhysicalDriveN</c>。</summary>

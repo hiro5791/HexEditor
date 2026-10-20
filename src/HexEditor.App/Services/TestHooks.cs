@@ -54,6 +54,9 @@ public static class TestHooks
     /// <summary>テストではディスクイメージの提案 (ENG-31 の仕様 6) を、有効にしたテスト以外では出さない。</summary>
     public static bool SuppressDiskImageSuggestion => Active && !Settings.SuggestDiskImage;
 
+    /// <summary>ファイルシステムの種類を判定できないときに選ぶ種類 (FOR-09 の仕様 1 のダイアログの代わり。null ならダイアログを出す)。</summary>
+    public static string? FileSystemKindChoice { get; set; }
+
     /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
     public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
 
@@ -207,6 +210,34 @@ public static class TestHooks
     public static FakeDeviceAccessPair? FakeDevices =>
         Active && Settings.FakeDevices is { Length: > 0 } path ? FakeDeviceAccessPair.Load(path) : null;
 
+    private static Core.Forensics.WriteBlock.IUsbWriteProtectStore? s_usb;
+
+    /// <summary>
+    /// OS の USB 書き込み保護 (FOR-02) の値の保存先。テスト用のビルドでは、フック usbWriteProtect のファイル (JSON) か、なければメモリ上の偽物にし、
+    /// 実機のレジストリ・補助プロセスには決して触れない (この PC の設定を変えない・昇格しない)。
+    /// </summary>
+    public static Core.Forensics.WriteBlock.IUsbWriteProtectStore? UsbWriteProtect
+    {
+        get
+        {
+            // CI の管理者のランナー (使い捨て) の TC-FOR-02-02 だけは、フック realUsbWriteProtect で実機のレジストリの経路を使う
+            // (環境変数 HEXEDITOR_CI_PRIVILEGED=1 と GITHUB_ACTIONS=true の両方がなければ、フックがあっても偽物のまま)。
+            if (!Active || (Settings.RealUsbWriteProtect && IsCiPrivilegedRunner))
+            {
+                return null;
+            }
+
+            lock (Lock)
+            {
+                return s_usb ??= Settings.UsbWriteProtect is { Length: > 0 } path ? new FileUsbWriteProtectStore(path) : new Core.Forensics.WriteBlock.FakeUsbWriteProtectStore();
+            }
+        }
+    }
+
+    /// <summary>CI の管理者のランナーで動いている (実機の補助プロセス・レジストリを使ってよいテストの条件)。</summary>
+    public static bool IsCiPrivilegedRunner =>
+        Environment.GetEnvironmentVariable("HEXEDITOR_CI_PRIVILEGED") == "1" && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
+
     /// <summary>偽のプロセス (ENG-32 の UI テスト)。</summary>
     public static FakeProcessAccessPair? FakeProcesses =>
         Active && Settings.FakeProcesses is { Length: > 0 } path ? FakeProcessAccessPair.Load(path) : null;
@@ -246,6 +277,11 @@ public static class TestHooks
         if (Settings.RecoveryInterval is { } interval)
         {
             App.RecoveryInterval = interval;
+        }
+
+        if (Settings.CrashRecoveryBudget is { } budget)
+        {
+            CrashReporter.RecoveryBudget = budget;
         }
     }
 
@@ -642,6 +678,34 @@ public sealed class FakeDeviceAccessPair
     }
 }
 
+/// <summary>
+/// OS の USB 書き込み保護の値を、テストの一時フォルダの JSON ファイル (<c>{"value": 1}</c>、値がなければ <c>{"value": null}</c>) に置く偽物。
+/// アプリを終了した後にテストが値を読める (TC-FOR-02-03)。<c>"managedByPolicy": true</c> で書き換えの失敗を再現する。
+/// </summary>
+public sealed class FileUsbWriteProtectStore(string path) : Core.Forensics.WriteBlock.IUsbWriteProtectStore
+{
+    private System.Text.Json.Nodes.JsonObject Load() =>
+        File.Exists(path) ? System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))?.AsObject() ?? [] : [];
+
+    public uint? Read() => Load()["value"] is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out uint value) ? value : null;
+
+    public void Write(uint value) => Save(value);
+
+    public void Delete() => Save(null);
+
+    private void Save(uint? value)
+    {
+        System.Text.Json.Nodes.JsonObject root = Load();
+        if (root["managedByPolicy"]?.GetValue<bool>() == true)
+        {
+            throw new Core.Forensics.WriteBlock.UsbWriteProtectException(Core.Devices.Win32Errors.AccessDenied, "The value is managed by Group Policy.");
+        }
+
+        root["value"] = value is { } v ? System.Text.Json.Nodes.JsonValue.Create(v) : null;
+        File.WriteAllText(path, root.ToJsonString());
+    }
+}
+
 /// <summary>偽のプロセスの「直接」と「昇格」の 2 つのアクセス手段。</summary>
 public sealed class FakeProcessAccessPair
 {
@@ -679,6 +743,8 @@ public static class TestHooks
 {
     public static bool Active => false;
 
+    public static Core.Forensics.WriteBlock.IUsbWriteProtectStore? UsbWriteProtect => null;
+
     public static bool SimulatesElevation => false;
 
     public static bool? ElevationOverride => null;
@@ -688,6 +754,8 @@ public static class TestHooks
     public static bool SuppressActivation => false;
 
     public static bool SuppressDiskImageSuggestion => false;
+
+    public static string? FileSystemKindChoice => null;
 
     public static TimeProvider? Time => null;
 

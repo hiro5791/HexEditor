@@ -2136,6 +2136,7 @@
   <data name="Tab_WindowItem" xml:space="preserve"><value>視窗 {0}：{1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>（沒有索引標籤）</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>複製路徑</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>以磁碟映像重新開啟</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>在檔案總管中顯示</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>唯讀</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>大小：{0}</value></data>
@@ -6634,6 +6635,418 @@
   <data name="Set_disassembly_comments" xml:space="preserve"><value>註解欄</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>顯示符號名稱、分支目標名稱與被參考的字串。</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>反組譯</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>鑑識</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>鑑識</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>日期和時間顯示</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>鑑識清單和詳細資料中時間的顯示方式：UTC 和本地時間、僅 UTC 或僅本地時間。時間一律以 UTC 記錄。</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC 和本地時間</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>僅 UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>僅本地時間</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>開啟案件時啟用防寫模式</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>關閉時，會詢問是否啟用。</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>同時在稽核記錄中記錄瀏覽操作</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>記錄跳轉、搜尋和新增書籤的操作。對資料和證據的變更一律會被記錄。</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>顯示已雕刻影像的縮圖</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>在雕刻結果中顯示 JPEG、PNG、GIF 和 BMP 檔案的小預覽圖。</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>報告標誌影像</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>顯示在 HTML 報告頂端的 PNG、JPEG 或 SVG 影像的路徑。</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>報告頁首文字</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>顯示在報告標題下方的一行文字，例如您的實驗室名稱。</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>新增案件</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>調查 證據 建立 案件 資料夾 investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>開啟案件</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>調查 證據 載入 案件 資料夾 investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>關閉案件</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>調查 結束 investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>新增證據</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>登錄 磁碟映像 雜湊 取得 register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>案件內容</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>時區 調查員 機構 time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>顯示稽核記錄</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>監管鏈 歷程 記錄 chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>驗證稽核記錄</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>竄改 雜湊鏈 完整性 檢查 tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>管理雕刻簽章</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>檔案類型 標頭 結尾 魔術數字 定義 file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>雕刻檔案</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>復原 擷取 已刪除檔案 掃描 recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>建立報告</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf 匯出 文件 export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>顯示或隱藏證據清單</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>案件 證據 面板 case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>顯示或隱藏稽核記錄</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>案件 稽核 記錄 面板 case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>顯示或隱藏雕刻結果</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>已雕刻檔案 面板 結果 carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>證據</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>稽核記錄</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>雕刻結果</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>鑑識(N)</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>案件(C)</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>新增案件(N)...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>開啟案件(O)...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>關閉案件(L)</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>新增證據(A)...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>案件內容(P)...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>證據清單(E)</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>顯示稽核記錄(U)</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>驗證稽核記錄(V)</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>雕刻(R)</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>雕刻檔案(C)...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>管理簽章(S)...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>結果(E)</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>建立報告(P)...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>案件：{0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>時間無效</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>已有案件處於開啟狀態。請先將其關閉。</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>沒有開啟的案件。</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>新增案件</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>案件內容</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>案件編號（必填）</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>案件名稱（必填）</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>調查員</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>機構</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>案件資料夾</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>時區</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>用於解讀不含時區的時間，例如 FAT 檔案時間。</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>建立</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>已建立案件「{0}」。</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>已開啟案件「{0}」。</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>無法建立案件：{0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>案件編號和案件名稱為必填項目。</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>無法讀取案件檔案（第 {0} 行）：{1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>無法開啟案件：{0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>無法儲存案件：{0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>要為此案件啟用防寫模式嗎？</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>啟用</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>已為此案件啟用防寫模式。</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>新增證據</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>新增證據</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} 將新增到案件中。資料來源不會被變更。</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>立即計算雜湊</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>此資料來源已登錄為 {0}。</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>只有磁碟、磁碟區、映像檔和檔案可以新增為證據。</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>正在對證據 {0} 計算雜湊</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>已記錄 {0} 的雜湊。</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>未計算 {0} 的雜湊。該證據仍保留在清單中。</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>無法讀取位移 0x{1} 處的資料，因此未記錄 {0} 的雜湊。</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>未計算</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>已將 {0} 從清單中移除。資料來源未受影響。</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} 無法使用。</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>無法開啟證據：{0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}：{2} 個項目</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>沒有開啟的案件。請從「鑑識」功能表建立或開啟案件。</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>尚未新增任何證據。</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>證據</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>路徑</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>容量（位元組）</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>雜湊</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>驗證</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>新增時間 (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>新增時間（本地）</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>磁碟</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>磁碟區</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>映像</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>檔案</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>記憶體</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>通過</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>未驗證</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>開啟（唯讀）</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>從清單中移除</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>複製雜湊</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>複製路徑</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>建立映像...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>驗證...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} 筆記錄</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>沒有開啟的案件。稽核記錄屬於某個案件。</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>尚未記錄任何內容。</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>（此行不是有效的記錄。記錄可能已遭竄改。）</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>驗證</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>匯出 CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>匯出 JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>稽核記錄完好無損（已檢查 {0} 行）。</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>稽核記錄的鏈在第 {0} 行處中斷。記錄可能已遭竄改。</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>序號</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>時間 (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>時間（本地）</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>使用者</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>操作</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>證據</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>結果</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>詳細資料</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>成功</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>失敗</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>已取消</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>無法寫入稽核記錄</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>在記錄可再次寫入之前，寫入資料的操作將被關閉。{0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>重試</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>仍然無法寫入稽核記錄。</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>無法寫入稽核記錄，因此未執行該操作。</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>無法寫入稽核記錄，因此寫入資料的操作已被關閉。</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>正在驗證稽核記錄</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>無法驗證稽核記錄：{0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>正在匯出稽核記錄</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>已將稽核記錄匯出到 {0}。</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>無法匯出稽核記錄：{0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>雕刻簽章</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>定義</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>內建</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>已停用</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>副檔名（不含點）</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>標頭（Hex 位元組，每行一個；?? 代表任意位元組，? 代表任意數字）</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>標頭相對於檔案開頭的位移</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>結尾（Hex 位元組，選填）</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>要從結尾包含的位元組數（留空 = 結尾本身）</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>最大大小</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>最小大小</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>從標頭中的某個值取得大小</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>大小值：相對於檔案開頭的位移</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>大小值：寬度（位元）</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>大小值：位元組順序</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>大小值：要加上的數</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>小端序</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>大端序</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>結構檢查（內建名稱或結構範本）</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>內建檢查：{0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>僅在磁區開頭尋找標頭</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>掃描時使用此定義</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>新增</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>複製</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>匯入...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>匯出...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>試用此定義</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>請先在文件中選取一個範圍。</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>正在試用...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>正在試用雕刻定義</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>在選取範圍中找到 {0} 個。前幾個位置：</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>已匯入 {0} 個定義。</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>有 {0} 個定義未匯入：</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>已匯出到 {0}。</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>無法匯入定義：{0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>無法儲存定義：{0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>試用失敗：{0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}：請輸入數字或大小，例如 4096、0x1000 或 1M。</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>請輸入名稱。</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>此名稱已被使用。</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>請輸入副檔名。</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>副檔名中含有不能用於檔案名稱的字元。</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>請至少輸入一個標頭。</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>標頭不是有效的 Hex 位元組序列（數字個數為奇數或含有無效字元）。</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>標頭至少需要一個固定位元組。</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>標頭位移不能為負數。</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>結尾不是有效的 Hex 位元組序列。</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>要包含的位元組數不能為負數。</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>最大大小至少為 1。</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>最小大小不能為負數。</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>最大大小小於最小大小。</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>大小值無效。</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>某個值的類型不正確。</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>雕刻檔案</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>範圍</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>整份文件</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>選取範圍</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>僅未配置空間</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>僅鬆弛空間</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>檔案類型</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>不在已找到的檔案內部尋找標頭</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>將雕刻出的檔案寫入資料夾</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>輸出資料夾</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>正在雕刻檔案</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>雕刻完成：找到 {0} 個檔案。</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>雕刻已取消。已找到 {0} 個檔案；結果和清單已保留。</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>由於無法寫入輸出資料夾，雕刻已停止。已找到 {0} 個檔案。</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>雕刻失敗：{0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>輸出資料夾位於正在調查的磁碟上。請選擇另一個磁碟上的資料夾。</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>輸出資料夾中的可用空間不足。需要：{0} 位元組。可用：{1} 位元組。</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>輸出資料夾的檔案系統將單一檔案限制為 {0} 位元組。請選擇其他資料夾。</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>無法使用該輸出資料夾。</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>此文件沒有可用的配置資訊。</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>無法寫入雕刻出的檔案</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>輸出資料夾 ({0}) 空間已滿。下一個檔案需要 {1} 位元組，但只有 {2} 位元組可用。請釋放一些空間、選擇其他資料夾，或停止。</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>無法寫入 {0}：{1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>重試</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>選擇其他資料夾...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>雕刻已在執行。</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>雕刻檔案...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>開啟資料夾</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>尚未執行雕刻。請依序選擇「鑑識」、「雕刻」、「雕刻檔案」。</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>未找到任何檔案。</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} 個檔案</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>已雕刻影像的預覽</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>序號</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>長度的判定依據</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>輸出檔案</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>結構</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>大小值</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>結尾</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>最大大小</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>類型：{0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>位移：0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>長度：{0} 位元組</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>長度的判定依據：{0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>建立報告</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>建立</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>內容</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>磁碟：{0}（磁區大小 {1} 位元組）</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>序號</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>分割配置</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>起始 LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>磁區數</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>大小（位元組）</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>檔案系統</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>加密</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>未配置</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>配置</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>文件</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>磁碟區位移</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>磁碟區標籤</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>序號</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>叢集大小（位元組）</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>叢集數</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>可用叢集數</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>問題</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>邏輯磁碟區：{0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>群組</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>類型</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>大小（位元組）</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>配置</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>成員</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>映像</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>來源</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>取得時間</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>雜湊</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>取得記錄</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML（單一檔案，可離線開啟）</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>所有稽核記錄項目</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>稽核記錄起始時間 (UTC，選填)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>稽核記錄截止時間 (UTC，選填)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>每個書籤的 Hex 傾印位元組數（0 到 4096）</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>儲存到</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>該時間段不是有效的日期和時間。</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Hex 傾印長度必須介於 0 到 4096 位元組之間。</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>正在建立報告</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>無法建立報告：{0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>已建立 {0}。SHA-256：{1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>無法建立 PDF（{0}）。已改為建立 {1}。</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>PDF 中只包含長清單的前幾列。如需完整清單，請使用 HTML 報告或 CSV 檔案。</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>開啟資料夾</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>鑑識報告</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>案件編號</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>案件名稱</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>調查員</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>機構</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>案件建立時間</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>報告建立時間</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>時區</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>建立者</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>頁</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>/</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>案件</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>封面</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>證據</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>取得記錄</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>裝置資訊</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>分割區</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>檔案系統</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>書籤</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>雕刻結果</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>稽核記錄</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>證據</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>路徑</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>型號</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>序號</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>容量（位元組）</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>磁區數</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>磁區大小</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>雜湊</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>驗證</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>新增時間 (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>新增時間（本地）</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>新增者</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>通過</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>未驗證</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>未計算</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>磁碟</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>磁碟區</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>映像</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>檔案</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>記憶體</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>文件</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>備註</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex 傾印</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>序號</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>長度的判定依據</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>輸出檔案</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>找到的檔案</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>序號</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>時間 (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>時間（本地）</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>使用者</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>電腦</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>操作</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>證據</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>結果</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>詳細資料</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>成功</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>失敗</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>已取消</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>僅顯示 {1} 列中的前 {0} 列。完整清單請見隨附的 CSV 檔案或 HTML 報告。</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>僅顯示前 {0} 列。完整清單請見 HTML 報告或 CSV 檔案。</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>完整清單</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>未配置</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>無資料。</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>時間無效</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>切換反組譯面板</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>反組譯 組合語言 程式碼 disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>反組譯</value></data>
@@ -8193,4 +8606,1265 @@ SHA-256 指紋: {2}
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>整頁</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>符合寬度</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>選擇資料夾...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[防寫]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>防寫</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>防寫模式已開啟。按一下即可關閉。</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>防寫模式只能阻止本應用程式寫入，無法阻止 Windows 或其他應用程式寫入（例如掛接磁碟區時檔案系統進行的寫入）。請同時使用硬體防寫器或作業系統的 USB 防寫。</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>作業系統 USB 防寫...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>要關閉防寫模式嗎？</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>已開啟的證據文件：{0}。關閉該模式後，這些文件將可被寫入：</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>沒有開啟的證據文件。關閉該模式後，已開啟的文件將可再次被寫入。</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>關閉防寫</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>無法以唯讀方式重新開啟資料來源。僅顯示已讀取的資料。</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>允許寫入此文件</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>允許寫入（防寫模式的例外）</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>防寫模式已關閉。</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>只有檔案文件可以被設為防寫模式的例外。</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>此資料來源已登錄為證據，因此不能允許寫入。</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>此文件已允許寫入。</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>要允許寫入此文件嗎？</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>防寫模式保持開啟，但在關閉之前，可以編輯並儲存 {0} ({1})。此操作會記錄在稽核記錄中，且對於已開啟的文件無法復原。</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>輸入 {0} 以確認</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>允許寫入 {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>在關閉之前，已允許寫入 {0}。</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>防寫模式(W)</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>作業系統 USB 防寫(U)</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>裝置(D)</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>檢查 HPA / DCO(H)</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>SMART 資訊(S)</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>裝置資訊面板(P)</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>加密資訊(Y)...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>開啟記憶體傾印(M)...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>切換防寫模式</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>防寫 阻止寫入 唯讀 證據 write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>允許寫入此文件</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>防寫 例外 write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>切換作業系統 USB 防寫</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>USB 儲存體 原則 防寫 登錄 usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>檢查 HPA 和 DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>隱藏區域 主機保護區 裝置組態覆蓋 hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>顯示 SMART 資訊</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>健康 磁碟 自我監控 nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>顯示加密資訊</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt 加密磁碟區 encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>切換裝置資訊</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>面板 hpa smart 裝置 panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>開啟記憶體傾印</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>當機傾印 迷你傾印 實體記憶體 ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>裝置資訊</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>啟動時一律開啟防寫模式</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>關閉時，應用程式啟動時會恢復為上次關閉時的模式狀態。</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>開啟磁碟時檢查 HPA / DCO</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>向磁碟傳送唯讀的 ATA 命令，如果發現隱藏區域則顯示通知。</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>要開啟作業系統 USB 防寫嗎？</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows 將阻止對此後連接的 USB 儲存裝置寫入資料（StorageDevicePolicies 的 WriteProtect 設定）。已連接的裝置在重新連接之前不受影響。內部 SATA 和 NVMe 磁碟不受保護。需要系統管理員權限。</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>要關閉作業系統 USB 防寫嗎？</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>該設定將恢復到開啟之前的狀態。已連接的 USB 儲存裝置在重新連接之前仍保持防寫。需要系統管理員權限。</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>變更設定</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>需要系統管理員權限。設定未變更。</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>無法變更設定（存取被拒；可能由群組原則管理）：{0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>無法變更設定：{0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>作業系統 USB 防寫已開啟。請重新連接 USB 儲存裝置使其生效。</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>作業系統 USB 防寫已關閉。</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>作業系統 USB 防寫仍處於開啟狀態</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>本應用程式關閉後，Windows 仍會繼續阻止對 USB 儲存裝置的寫入。結束前要將其關閉嗎？</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>關閉並結束</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>結束並保持開啟</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>變更作業系統 USB 防寫需要 Windows 系統管理員權限。</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>裝置</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>檢查 HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>讀取 SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>匯出 JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>匯出文字...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>請開啟實體磁碟，然後選擇「檢查 HPA / DCO」或「SMART 資訊」。</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — 擷取於 {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>尚未檢查 HPA / DCO。</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>NVMe 磁碟沒有 HPA 或 DCO；HPA / DCO 不適用。</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>命名空間大小：{0} 個區塊（每區塊 {1} 位元組）</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>命名空間容量：{0} 個區塊</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>無法在此裝置上檢查（命令無法透傳，例如透過 USB 轉接器或虛擬磁碟時）。</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>需要系統管理員權限。</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>命令 {0} 失敗（ATA 狀態 {1}，錯誤 {2}）。</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>最大 LBA（IDENTIFY DEVICE，28 位元）：{0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>最大 LBA（IDENTIFY DEVICE，48 位元）：{0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>原生最大 LBA（READ NATIVE MAX ADDRESS）：{0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>DCO 設定的最大 LBA（DEVICE CONFIGURATION IDENTIFY）：{0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>裝置不支援</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>裝置不支援</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA：存在，{0} 個磁區（{1}）</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA：無</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA：無法確定</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO：存在，{0} 個磁區（{1}）</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO：無</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO：無法確定</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>尚未讀取 SMART 資訊。</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>無法在此裝置上讀取 SMART 資訊（例如透過不支援該功能的 USB 轉接器時）。</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>此裝置上已停用 SMART。</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>SMART 資料的總和檢查碼不符；數值可能有誤。</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>型號：{0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>序號：{0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>韌體：{0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>容量：{0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>磁區大小：邏輯 {0} 位元組，實體 {1} 位元組</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>連接方式：{0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>轉速：{0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>不旋轉 (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM：{0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>支援</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>不支援</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>請開啟實體磁碟以使用此命令。</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>無法讀取裝置資訊：{0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} 存在隱藏區域：HPA {1} 個磁區，DCO {2} 個磁區。Windows 看到的容量小於磁碟的實際容量。</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>顯示詳細資料</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>裝置資訊已匯出到 {0}。</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>無法匯出裝置資訊：{0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>目前值</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>最差值</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>臨界值</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>原始值（Hex）</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>原始值（十進位）</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>狀態</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>未知</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>原始讀取錯誤率</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>傳輸量效能</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>主軸起轉時間</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>啟動/停止次數</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>重新配置磁區數</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>搜尋錯誤率</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>搜尋時間效能</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>通電時間（小時）</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>主軸起轉重試次數</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>校準重試次數</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>電源週期次數</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>可用保留空間</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>程式化失敗次數</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>清除失敗次數</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>平均抹寫次數</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>意外斷電次數</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>磨損範圍差值</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>已用保留區塊總數</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>程式化失敗總次數</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>清除失敗總次數</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>執行時壞區塊</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>端對端錯誤</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>回報的無法修正錯誤</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>命令逾時</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>高飛寫入</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>氣流溫度</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G 感應錯誤率</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>斷電磁頭縮回次數</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>載入/卸載週期次數</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>溫度</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>硬體 ECC 復原</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>重新配置事件次數</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>目前待處理磁區數</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>離線無法修正磁區數</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC 錯誤次數</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>多區域錯誤率</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD 剩餘壽命</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>剩餘耐用度</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>媒體磨損指標</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>良好區塊數</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>寫入 LBA 總數</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>讀取 LBA 總數</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>嚴重警告位元：{0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>溫度：{0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>可用備用空間：{0}%（臨界值 {1}%）</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>已使用百分比：{0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>讀取的資料：{0} 位元組</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>寫入的資料：{0} 位元組</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>電源週期次數：{0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>通電時間（小時）：{0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>非正常關機次數：{0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>媒體和資料完整性錯誤：{0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>擷取時間</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>裝置</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>型號</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>序號</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>韌體</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>容量（位元組）</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>磁區大小（邏輯 / 實體）</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>連接方式</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>最大 LBA（28 位元 / 48 位元 / 原生 / DCO）</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>無法在此裝置上檢查</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>無</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>存在（{0} 個磁區）</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>不適用 (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>名稱</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>目前值</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>最差值</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>臨界值</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>原始值</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>狀態</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>加密資訊</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>未找到加密磁碟區。</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>範圍 {0}：位移 {1}，{2} 位元組</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>類型：{0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>已加密的 APFS 磁碟區 (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage（可能已加密）</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>可能是已加密或已壓縮的資料（例如 VeraCrypt 或 TrueCrypt；沒有可用於辨識它們的簽章）</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>中繼資料版本：{0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>加密方法：{0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>磁碟區 GUID：{0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>建立時間：{0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>說明：{0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>加密狀態：{0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>未知</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>已解密</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>進行中</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>已完成</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>已暫停</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>目前已加密：{0} 位元組</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>金鑰保護裝置：{0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}，{1}，建立於 {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>明文金鑰</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>啟動金鑰</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM 和 PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>復原密碼</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>密碼</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>未知 (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID：{0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>金鑰插槽：{0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• 磁碟區 {0}：已加密</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• 磁碟區 {0}：未加密</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>前 64 KiB 的熵：每位元組 {0} 位元</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>警告：三個中繼資料區塊不一致。</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>警告：部分中繼資料區塊已損毀；僅顯示能夠讀取的項目。</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>檔案系統瀏覽器不會開啟加密磁碟區。</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows 已解除鎖定此 BitLocker 磁碟區 ({0})。如果將其作為邏輯磁碟區開啟，即可讀取 Windows 解密後的內容。</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>作為邏輯磁碟區開啟</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>記憶體傾印</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>無法讀取 {0} 的記憶體傾印格式。要以原始資料方式開啟嗎？</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>以原始資料方式開啟</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>無法開啟記憶體傾印：{0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>記憶體傾印：{0}，擷取於 {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>記憶體傾印：{0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>實體記憶體映像（原始）</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>完整記憶體傾印</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>核心記憶體傾印</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>完整記憶體傾印（點陣圖）</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>迷你傾印</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>記憶體傾印</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>由於防寫模式已開啟，無法寫入資料。</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>映像(I)</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>建立映像(C)...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>建立骨架映像(S)...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>開啟映像(O)...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>驗證映像(V)...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>映像資訊(N)</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>複製磁碟(L)...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>儲存磁區範圍(A)...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>還原磁區範圍(T)...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>重建 RAID(D)...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>建立映像</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>取得 磁碟映像 dd 原始 e01 證據 acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>建立骨架映像</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>骨架 稀疏 映像 中繼資料 skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>將映像作為磁碟開啟</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk 分段 原始 001 e01 vhd vhdx vmdk split raw 001</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>驗證映像</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>驗證 雜湊 md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>映像資訊</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 標頭 案件資訊 e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>複製磁碟</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>複製 拷貝 磁碟 磁區 clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>儲存磁區範圍</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>備份 mbr gpt 磁區 backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>還原磁區範圍</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>還原 復原 mbr gpt 磁區 restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>重建 RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod 等量 同位 raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>目前的文件不是磁碟映像。</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>此操作需要磁碟、磁碟區或磁碟映像文件。</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>請先開啟要用作來源的磁碟、映像或檔案。</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>已在缺少分段 ({0}) 的情況下開啟。這些範圍讀取時將顯示為錯誤。</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>無法讀取 {0} 映像（部分：{1}）。{2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>找不到差異磁碟的父磁碟：{0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>缺少分段</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>缺少以下分段：{0}。要使用現有分段開啟映像嗎？缺少的範圍讀取時將顯示為錯誤。</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>開啟現有分段</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>分割的原始格式</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>原始 (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>在 {0}（{1} 位元組）處，資料區塊的總和檢查碼不符。該範圍將顯示為讀取錯誤。</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>映像資訊</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>檔案</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} 位元組（{1} 個磁區）</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>磁區大小</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>取得時間</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>取得工具</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>裝置</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>資料區塊</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0}（每區塊 {1} 個磁區）</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>壓縮</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>已壓縮</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>未壓縮</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>已儲存的 {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>取得期間無法讀取的磁區</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>父磁碟</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>缺少的分段</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>案件編號</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>證據編號</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>鑑識人員</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>說明</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>備註</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>相符</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>不符</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>沒有參考值</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>因讀取錯誤而無法驗證</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>儲存在映像中</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>取得記錄</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>證據清單</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>輸入的值</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>取得時計算</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>來源磁碟</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>建立映像</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>建立骨架映像</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>防寫模式已關閉。建議在取得證據之前將其開啟。</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>開啟防寫模式</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>來源：{0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>僅選取範圍（擴展到磁區邊界）</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>要取得的範圍</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>整個磁碟</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>稀疏（不包括未配置區域）</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>骨架（僅磁碟分割表和檔案系統中繼資料）</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>同時包括書籤和多重選取的範圍</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>輸出</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>輸出</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>瀏覽...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>分割/分段大小（例如 100M、2G）</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>雜湊</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>讀取錯誤時的重試次數</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>無法讀取的磁區的填滿值（Hex）</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>讀取單位</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>完成後驗證</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>讀取錯誤</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>E01 資訊</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>壓縮</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>無</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>快速（zlib 等級 1）</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>最佳（zlib 等級 9）</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>請輸入輸出位置。</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>分割大小必須至少為 1 MiB（例如 100M）。</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>請輸入 0 到 100 之間的重試次數。</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>請以兩位 Hex 數字輸入填滿值（例如 00）。</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>請至少選擇一種雜湊。</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>輸出位於與來源相同的實體磁碟上。請選擇另一個磁碟。</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>輸出位於證據清單中的某個磁碟上。請選擇另一個磁碟。</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>輸出位置的檔案系統 ({0}) 允許的檔案最大為 {1} 位元組。請使用分割的原始格式，或使用較小分段大小的 E01。</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>輸出大約需要 {0} 位元組，但只有 {1} 位元組可用。</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} 已存在。要覆寫嗎？</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>覆寫</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>輸出位置的檔案系統是 {0}，不是 NTFS，因此排除的區域會以零寫入，映像不會變小。</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>建立映像：{0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>正在計算要包括的範圍</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>有 {0} 個分割區無法分析，已整體包括在內。</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>無法建立映像。{0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>無法讀取的磁區：{0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>映像已建立。{0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>驗證：{0}。</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>有 {0} 個磁區無法讀取，已用填滿值補上。</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>取得已中斷。迄今寫入的檔案已保留。</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>取得已中斷。迄今寫入的檔案已刪除。</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>來源已遺失。取得已停止。</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>開啟取得記錄</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>無法寫入輸出：{0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>重試</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>中止</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>取得已取消。要保留迄今寫入的檔案嗎？</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>保留</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>驗證映像</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>映像：{0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>用於比較的值（Hex，選填）</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>MD5、SHA-1 或 SHA-256 值</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>請輸入 32、40 或 64 位的 Hex 值。</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>同時重新讀取來源磁碟</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>驗證</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>驗證映像：{0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>驗證結果：{0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>因讀取錯誤而無法驗證：{0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>計算值：{0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}：{1}（{2}）</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>磁碟映像取得記錄</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>磁碟複製記錄</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>狀態</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>已完成</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>已中斷</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>來源已遺失</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>來源</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>路徑</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>型號</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>序號</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>容量</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>磁區大小</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>範圍</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>輸出</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>檔案</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>目標</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>開始時間</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>結束時間</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>已讀取的磁區</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>無法讀取的磁區</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>無</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>雜湊</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>包括的範圍</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>驗證</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>未驗證</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>應用程式版本</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>案件</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>取得的範圍</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>整個磁碟</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>稀疏映像（不包括未配置區域）</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>骨架映像（僅磁碟分割表和檔案系統中繼資料）</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>排除的區域以零儲存，因此此映像的雜湊與整個來源磁碟的雜湊不一致。</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>包括的範圍</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>訊息</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>複製磁碟</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>目標磁碟</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>磁碟 {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>磁碟 {0}：{1}，序號 {2}，{3} 位元組，磁區 {4} 位元組。磁碟區：{5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0}（{1}，{2}，{3} 位元組）</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>無</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>目標上的起始 LBA</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>用零填滿目標的其餘部分</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>用於驗證的雜湊</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>記錄資料夾（選填）</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>下一步</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>請選擇目標磁碟。</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>起始 LBA 超出了目標磁碟的範圍。</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>磁區大小不同的磁碟不能作為複製目標。</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>目標磁碟在證據清單中，不能被覆寫。</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>目標：{0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>要寫入的範圍：從 LBA {0} 開始，{1} 個磁區（{2} 位元組）</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>內容：{0} 的資料</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>這些磁碟區的所有內容都將遺失：
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>目標比來源小。只會寫入來源的前 {0} 位元組。</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>此操作無法復原。</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>複製到 {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>輸入「{0}」以確認</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>複製到 {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>如果現在停止，目標磁碟將只寫入了一部分。</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>繼續</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>無法鎖定磁碟區 {0}，因此未寫入任何內容。請關閉在其上開啟的檔案後重試。</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>複製失敗。{0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>已複製 {0} 位元組。驗證：{1}。</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>複製已停止。目標磁碟只寫入了一部分。</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>目標與來源是同一個磁碟。</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>磁區大小不同的磁碟不能作為複製目標。</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>防寫模式已開啟。</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>目標磁碟在證據清單中，不能被覆寫。</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows 正在使用目標磁碟上的某個磁碟區。</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>起始 LBA 超出了目標磁碟的範圍。</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>無法以寫入方式開啟目標磁碟。</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>儲存磁區範圍</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>還原磁區範圍</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>起始 LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>磁區數</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>磁區資料</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>該範圍超出了磁碟。</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>儲存磁區：{0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>已將 {0} 個磁區儲存到 {1}。</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>該範圍內有些磁區無法讀取，因此未儲存任何內容。</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>無法儲存磁區範圍。{0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>無法讀取資料檔案或其附屬檔案。{0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>資料檔案：{0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>儲存自：{0}，序號 {1}，{2} 位元組，磁區 {3} 位元組。起始 LBA {4}，{5} 個磁區。儲存時間：{6}。</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>寫入到：{0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>寫入前備份目前內容</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>下一步</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>資料檔案的 SHA-256 與附屬檔案不符，無法還原。</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>沒有附屬檔案。請輸入要寫入的起始 LBA。</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>目標的序號或容量與儲存資料時的磁碟不同。</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>目標：{0}。該範圍內的磁碟區：{1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>內容：{0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>寫入 {0} 個磁區</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>還原磁區：{0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>無法還原磁區範圍。{0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>已寫入 {0} 個磁區，並透過回讀確認。</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>寫入失敗。已寫入 {0} 個磁區；在 LBA {1} 處寫入失敗。您可以將備份檔案 {2} 寫回。</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>回讀的內容與資料檔案不符。</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>重建 RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>成員（依序）</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>上移</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>下移</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>新增檔案...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>缺少此成員</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[遺失]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>成員的資料起始位移</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>類型</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>等量大小</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>同位檢查配置</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>左對稱</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>左非對稱</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>右對稱</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>右非對稱</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>要使用的成員 (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>偵測（前 1 MiB）</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>偵測到 {0}（{1} 個分割區）</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>沒有磁碟分割表</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>檔案系統簽章：{0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>沒有檔案系統簽章</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>邏輯磁碟大小：{0} 位元組</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>使用此組態無法偵測。</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>各成員的大小不同。將使用最小的大小。</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>儲存組態...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>載入組態...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>RAID 組態</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>已將 RAID 組態儲存到 {0}。</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>無法儲存 RAID 組態。{0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>無法讀取 RAID 組態。{0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>無法開啟該邏輯磁碟。</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0}（{1} 個成員）</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>參數無效。</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>等量大小必須是 2 的次方，範圍為 512 B 到 16 MiB。</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>此類型的成員數量過少。</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>此類型不允許缺少成員。</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>缺少兩個或更多成員。無法開啟 RAID 5。</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>顯示分割區</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>分割區 磁碟 mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>在新索引標籤中開啟分割區</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>分割區 索引標籤 partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>移至分割區起始位置</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>分割區 跳轉 partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>從此處作為分割區起始位置開啟</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>分割區 此處 partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>掃描遺失的分割區</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>遺失 分割區 復原 掃描 lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>顯示檔案系統</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>檔案系統 瀏覽器 ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>在新索引標籤中開啟檔案</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>檔案 開啟 索引標籤 file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>匯出檔案</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>匯出 擷取 檔案 export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>尋找已刪除的檔案</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>已刪除 復原 取消刪除 deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>移至 MFT 記錄</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft 記錄 ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>移至叢集</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>叢集 區塊 跳轉 cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>使用此位置的檔案</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>叢集 擁有者 反向查詢 cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>顯示檔案的叢集</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>片段 叢集 醒目提示 fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>下一個片段</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>片段 下一個 fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>上一個片段</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>片段 上一個 fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>切換可用空間和鬆弛空間的醒目提示</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>鬆弛空間 未配置 醒目提示 slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>匯出未配置空間</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>未配置 可用 匯出 unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>匯出鬆弛空間</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>鬆弛空間 匯出 slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>在新索引標籤中開啟未配置空間</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>未配置 索引標籤 unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>分割區面板</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>面板 分割區 panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>檔案系統面板</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>面板 檔案系統 panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>片段面板</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>面板 片段 panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>鑑識結果面板</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>面板 結果 鑑識 panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>MFT 記錄編號</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>分割區和檔案系統</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>顯示分割區之間的小間隙</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>在分割區面板中列出小於 1 MiB 的未配置間隙。</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>在分割區索引標籤中顯示磁碟位移</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>關閉時，分割區索引標籤的位址從 0 開始。</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>列出 NTFS 替代資料流</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>具名資料流在檔案系統瀏覽器中顯示為 file.txt:stream。</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>顯示鑑識醒目提示的圖例</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>醒目提示開啟時，在 Hex 檢視右上角顯示圖例。</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>鑑識醒目提示的色彩</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>例如：unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0。留空則使用預設色彩。</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>分割區(T)</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>檔案系統(F)</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>顯示分割區(S)</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>在新索引標籤中開啟分割區(O)</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>移至分割區起始位置(G)</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>掃描遺失的分割區(L)...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>顯示瀏覽器(B)</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>在新索引標籤中開啟檔案(O)</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>匯出檔案(E)...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>尋找已刪除的檔案(D)</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>移至叢集(C)...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>使用此位置的檔案(W)</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>顯示檔案的叢集(L)</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>移至 MFT 記錄(M)...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>匯出未配置空間(U)...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>匯出鬆弛空間(K)...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>在新索引標籤中開啟未配置空間(N)</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>下一個片段(N)</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>上一個片段(P)</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>鑑識醒目提示(H)</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>分割區</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>檔案系統</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>片段</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>鑑識結果(7)</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>磁碟位置和叢集擁有者</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>分割區</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>檔案系統</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>片段</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>鑑識結果</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>正在分析分割區…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>尚未分析。請選擇「鑑識」&gt;「分割區」&gt;「顯示分割區」。</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>找不到磁碟分割表。</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} 個分割區，磁區大小 {1}，磁碟 ID {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>無法讀取的磁區 (LBA)：{0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> 序號 格式      類型                         名稱             起始 LBA      結束 LBA     磁區數     大小  起始位移   旗標        FS        狀態</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>分割區配置</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>類型 GUID：{0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>唯一 GUID：{0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>起始區塊 {0}，{1} 個區塊</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>位於 {0} 的表項目</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>移至分割區起始位置</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>選取分割區</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>在新索引標籤中開啟分割區</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>顯示表項目結構</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>顯示檔案系統</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>掃描遺失的分割區...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>游標不在任何分割區內。</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>找不到磁區大小為 {1} 位元組的 GPT，但找到了磁區大小為 {0} 位元組的 GPT。要以 {0} 位元組的磁區大小重新開啟嗎？</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>以 {0} 位元組的磁區大小重新開啟</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - 分割區 {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>邏輯</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>EBR 鏈在 LBA {1} 處（位於分割區 {0} 之後）循環回到了前面。鏈已停止。</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>邏輯分割區超過 256 個。其餘部分未讀取。</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>GPT 標頭的 CRC32 不符 (LBA {1})。</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>GPT 分割區項目陣列的 CRC32 不符 (LBA {1})。</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>主要 GPT 標頭與備份標頭 (LBA {1}) 不一致。</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>主要 GPT 標頭已損毀。清單是根據備份標頭建立的。</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>分割區 {0} 與 {2} 重疊。</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>分割區 {0} 指向磁碟之外 (LBA {1})。</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>混合 MBR：保護性 MBR 還包含其他項目。</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>有些磁區無法讀取（第一個：LBA {1}）。清單使用的是可讀取的磁區。</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Apple 分割區對應包含超過 256 個項目。</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>EFI 系統分割區</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft 保留分割區</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Windows 基本資料</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Windows 復原</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>LDM 中繼資料</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>LDM 資料</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Linux 檔案系統</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux 交換分割區</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple 開機</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS 開機</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>延伸分割區</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>延伸分割區 (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>隱藏的 FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>復原</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>隱藏的 FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>隱藏的 NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>隱藏的 FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM（動態磁碟）</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux 延伸</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT 保護性分割區</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>未配置</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>LVM2 實體磁碟區</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>掃描遺失的分割區</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>起始 LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>結束 LBA（不含）</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>掃描位置</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>1 MiB 邊界</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>磁柱邊界（63 個磁區）</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>每個磁區</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>逐磁區掃描大約需要 {0}（以 200 MB/s 計）。</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} 小時</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} 分鐘</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>尋找</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>GPT 標頭 / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>掃描</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>正在掃描遺失的分割區</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>遺失的分割區</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     起始 LBA         磁區數          大小  類型        可信度   重疊</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>與分割區 {0} 重疊</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>已取消。迄今的結果已保留。</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, other {找到 # 個候選項目。}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>無法讀取：LBA {0}，{1} 個磁區</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>找不到任何分割區候選項目。</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>逐磁區掃描</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>作為分割區開啟</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>顯示檔案系統</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>建立分割區表項目 (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>建立分割區表項目 (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>建立分割區表項目</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR 沒有足夠的空閒項目可容納所有候選項目。</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>該分割區無法寫入 MBR（超過 2 TiB）。請使用 GPT。</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT 沒有空閒的項目。</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>磁碟太小，無法容納 GPT。</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>此文件沒有開啟任何檔案系統。</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>請在檔案系統瀏覽器中選取一個檔案。</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>沒有醒目提示的檔案叢集。</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>僅適用於 NTFS。</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>無法讀取配置資訊，因此醒目提示無法使用。</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>該磁碟區已加密 (BitLocker)。檔案系統瀏覽器不會開啟它。</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>該磁碟區已加密 ({0})。檔案系統瀏覽器不會開啟它。</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>無法作為 {0} 開啟：{1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>選擇檔案系統</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>無法根據簽章偵測類型。請選擇要嘗試的類型。</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>類型</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>未配置 ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>沒有 MFT 記錄 {0}。</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>移至區塊</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>沒有檔案系統。請選擇「鑑識」&gt;「檔案系統」&gt;「顯示瀏覽器」。</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  序號 {2}  叢集 {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>根目錄</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>檔案</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>資料夾</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>片段</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>篩選（* 和 ?）</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>尋找檔案（Enter）</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>欄</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>要使用的 FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, other {各 FAT 有 # 個項目不同。}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>每叢集磁區數</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>重新分析</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>正在讀取…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>正在讀取… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} 個項目</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>無法讀取：{0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>（已損毀）</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>（時間不一致）</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>時間不一致：$STANDARD_INFORMATION 的時間早於 $FILE_NAME 的時間，或沒有小數部分。</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>已用 EFS 加密（僅原始資料）。</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>叢集鏈已遺失；資料按從第一個叢集開始的連續叢集讀取。</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>索引鬆弛項目</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>正在計數…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>邏輯 {0}  叢集 {1} ×{2}  磁碟上 {3}  {4} 位元組</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>邏輯 {0}  在中繼資料中  磁碟上 {3}  {4} 位元組</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>（已壓縮）</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>正在計算鬆弛空間位置</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>正在建立叢集對應</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>已略過 {0} 個中繼資料損毀的項目。</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>該位置不在叢集區域內。</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>叢集 {0}–{1} 的擁有者</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>類型                      路徑</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>檔案</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>中繼資料</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>已刪除的檔案（已取消配置）</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>{0} 的叢集鏈 ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   序號          叢集</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>名為 {0} 的檔案</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>          大小  路徑</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>正在尋找檔案：{0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, other {找到 # 個檔案。}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>正在尋找已刪除的檔案</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>正在尋找孤立檔案</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>在新索引標籤中開啟檔案</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>匯出檔案...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>移至中繼資料</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>顯示檔案的叢集</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>顯示 MFT 記錄</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>顯示 INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>顯示 $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>顯示目錄項目</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>顯示叢集鏈</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>複製路徑</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>將清單匯出為 CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>副檔名</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>已配置</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>建立時間 (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>建立時間（本地）</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>修改時間 (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>修改時間（本地）</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>存取時間 (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>存取時間（本地）</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>中繼資料變更時間 (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>中繼資料變更時間（本地）</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>屬性</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>檔案 ID</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>第一個叢集</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>片段數</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>狀態</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>路徑</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>原始路徑</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>復原</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>正常</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>已刪除</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>孤立</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>良好</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>部分被覆寫</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>已被覆寫</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>位置不明</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>常駐</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>MFT 記錄未使用</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>索引鬆弛空間</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>已刪除的目錄項目</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>已刪除的 inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>目錄項目鬆弛空間</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>修正值不符（更新序列）</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>簽章錯誤</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>叢集編號超出範圍</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>叢集鏈形成迴圈</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>叢集鏈指向了可用叢集</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>叢集鏈與檔案大小不符</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>資料執行清單無效</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>屬性無效</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>項目集總和檢查碼不符</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>讀取錯誤</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>層級過深</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>備份開機磁區不一致 ({0})。</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr 與 $MFT 不一致 ({0})。</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>BPB 的值不一致 ({0})。</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>各 FAT 不一致 ({0})。</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo 不符 ({0})。</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>exFAT 開機區域總和檢查碼不符 ({0})。</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>長檔名總和檢查碼不符 ({0})。</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>無法讀取配置資訊 ({0})。</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>該磁碟區已加密 ({0})。</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>已刪除的檔案</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>孤立檔案</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>未配置空間</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>磁碟區鬆弛空間</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>中繼資料</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>檔案資料</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM 鬆弛空間</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>磁碟機鬆弛空間</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>未配置</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>磁碟區鬆弛空間</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>分割區間隙</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>鑑識醒目提示圖例</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>大小 {0} 位元組，已配置 {1} 位元組</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>建立於 {0}，修改於 {1}，存取於 {2}，中繼資料變更於 {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>檔案 ID {0}，屬性 {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>復原：{0} ({1})。原始路徑：{2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>類型：{0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>磁碟區名稱：{0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>序號：{0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>叢集大小：{0} 位元組</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>叢集總數：{0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>可用叢集：{0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>建立時間：{0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>磁碟區起始位置 {0}，{1} 位元組</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>MFT 記錄</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>記錄位移</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>序號</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>硬連結數</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>旗標</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>已用位元組數</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>基底記錄</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>修正值</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI 建立時間</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI 修改時間</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT 變更時間</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI 存取時間</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>名稱</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>父層</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN 建立時間</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN 修改時間</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT 變更時間</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN 存取時間</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN 大小</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>時間不一致</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>內容</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>項目位移</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>第一個叢集</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>短檔名</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>鏈中的叢集數</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>資料長度</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>有效資料長度</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>分割區 {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>叢集 {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>區塊 {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>已刪除：{0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>未配置</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>鬆弛空間</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>尋找擁有者</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>磁碟 {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>磁碟：-（壓縮 / 稀疏 / 常駐）</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>叢集編號（{0}–{1}；cluster = 目前叢集）</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>叢集 {0} 超出範圍。</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>移至</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>保留資料夾結構</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>同時匯出替代資料流 (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>同時將鬆弛空間匯出為個別檔案</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>包括已刪除的檔案</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, other {已選取 # 個項目。}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>選擇資料夾...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>正在匯出檔案</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>已將 {0} 個檔案匯出到 {1}（export-manifest.csv）。</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>可用空間不足：需要 {0}，可用 {1}。</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>無法寫入：{0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>要匯出已被覆寫的檔案嗎？</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>這個已刪除檔案的叢集現在被其他檔案使用。匯出的內容可能屬於另一個檔案。</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>匯出</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>二進位檔案</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>建立對應檔案 (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>正在匯出未配置空間</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>正在匯出鬆弛空間</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>已將 {0} 寫入 {1}。</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>$LogFile 記錄</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      上一 LSN  Undo下一 LSN  類型     交易ID    Redo 操作                       Undo 操作                       MFT 記錄  長度</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>重新啟動頁面 {0}：目前 LSN {1}，用戶端：{2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>正在讀取 $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>清單</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>沒有結果。</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>將清單匯出為 CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>沒有醒目提示的檔案。請選擇「顯示檔案的叢集」。</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0}（{1} 個片段）</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  邏輯 {1}  磁碟上 {2}  {3} 位元組  叢集 {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>清除醒目提示</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>選取未配置空間</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>未配置 選取 搜尋 雕刻 unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>選取鬆弛空間</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>鬆弛空間 選取 搜尋 雕刻 slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>選取未配置空間(A)</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>選取鬆弛空間(S)</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>正在選取未配置空間</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>正在尋找未配置空間</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>正在選取鬆弛空間</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>沒有可選取的內容。</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>僅選取了前 1,000,000 個範圍。</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>顯示邏輯磁碟區</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>邏輯磁碟區 ldm 動態磁碟 lvm lvm2 等量 跨距 logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>移至 inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>inode 編號</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>顯示邏輯磁碟區(V)</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>移至 inode(I)...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>總和檢查碼不符</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>不支援的格式</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>ext 超級區塊總和檢查碼不符 ({0})。</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>群組描述元總和檢查碼不符（群組 {0}）。</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>此 ext 功能未被完全支援：{0}。</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>替代磁碟區標頭與主要磁碟區標頭不一致 ({0})。</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>APFS 物件的總和檢查碼不符（區塊 {0}）。已略過。</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>最新的 APFS 檢查點已損毀；改用較舊的檢查點 (xid {0})。</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>UDF 描述元標籤總和檢查碼不符（磁區 {0}）。</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>UDF 描述元 CRC 不符（磁區 {0}）。</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>不支援此 UDF 分割區類型：{0}。</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>該光碟有 {0} 個工作階段。目前顯示的是最後一個工作階段；可透過「工作階段」選擇其他工作階段。</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>僅適用於 ext2、ext3 和 ext4。</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>沒有 inode {0}。</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>此磁碟區已加密。不顯示檔案清單。</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>找不到 APFS 檢查點。</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>顯示 inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>顯示日誌</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>名稱</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660（基本）</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>工作階段</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>此檔案系統沒有日誌。</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>ext 日誌 (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     區塊          磁碟位移    類型             序列</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>區塊大小 {0}，{1} 個區塊，序列 {2}，起始 {3}（0 = 乾淨）。日誌不會被重播。</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>正在讀取 ext 日誌</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>描述元</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>提交</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>超級區塊 v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>超級區塊 v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>撤銷</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>顯示邏輯磁碟區</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>建立此範圍的映像...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>邏輯磁碟區</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>名稱                  類型          大小        配置                          狀態</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>正在讀取磁碟區中繼資料...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>在已開啟的磁碟和映像中找不到 LDM 或 LVM2 邏輯磁碟區。</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}：{1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>開啟邏輯磁碟區</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>指派成員...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>重新讀取</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>不支援此磁碟區類型：{0}。</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>無法開啟 {0}。缺少成員：{1}。請開啟這些磁碟或映像，或手動指派。</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) 是鏡像或 RAID-5 磁碟區。請使用 RAID 重建功能開啟。</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>指派成員</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>請為 {0} 的每個遺失成員選擇磁碟或映像。</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>（無）</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>開啟檔案...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>正常</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, other {缺少 # 個成員}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>不支援</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>RAID 重建</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>簡單</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>跨距</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>等量</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>鏡像</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>線性</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>不支援 ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} 群組 {1}，磁碟區 {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>成員 {0}：{1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>找不到</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>位移 {0} ({1})：{2}，位於 {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>位移 {0} ({1})：等量 {2}，跨 {3} 個成員</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>安全抹除選取範圍</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>抹除 清除 粉碎 覆寫 安全刪除 範圍 wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>安全抹除磁碟</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>抹除 清除 磁碟 磁碟機 覆寫 安全 wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>抹除可用空間</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>可用空間 未配置 抹除 清除 cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>抹除檔案鬆弛空間</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>鬆弛空間 ram 磁碟機 抹除 清除 slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>遮蔽檔案內容</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>遮蔽 去識別化 清除 遮蓋 redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>抹除(E)</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>抹除選取範圍(S)...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>抹除磁碟(D)...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>抹除可用空間(F)...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>抹除鬆弛空間(K)...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>遮蔽檔案內容(R)...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>遮蔽檔案內容...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>安全抹除選取範圍...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>從選取範圍中雕刻檔案...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>遮蔽</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>安全抹除</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>目標：{0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>起始位置</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>結束時回讀並驗證</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>抹除...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>該範圍超出了文件。</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>有未儲存的編輯</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>要抹除的資料有未儲存的編輯。請先儲存或放棄這些編輯，再進行抹除。</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>放棄</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>抹除資料</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>目標：{0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>磁碟 {0}：{1}，序號 {2}，{3} 位元組</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>磁碟區：{0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>範圍：起始 LBA {0}，{1} 個磁區，{2} 位元組</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>範圍：位移 {0}，{1} 位元組</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>該範圍已擴展到磁區邊界。</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>方法：{0}（{1, plural, other {# 次}}）</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>最後一次會被回讀並驗證。</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>預計時間：約 {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>此操作無法復原。原始資料無法復原。</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>在 SSD 和快閃記憶體媒體上，即使資料已被覆寫，平均抹寫也可能將原始資料保留在其他位置。</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>抹除期間這些磁碟區會被鎖定：{0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>資料直接寫入檔案，而非作為編輯。無法用復原來還原。</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>抹除 {0} 位元組</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>抹除 {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>磁碟 {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>要繼續，請輸入「{0}」。</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>確認</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>請選取要抹除的範圍。</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>無法直接抹除此文件。</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>請在索引標籤中開啟整個實體磁碟後再抹除。</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>此資料來源在證據清單中，不能寫入。</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows 正在使用此磁碟（系統、開機或分頁檔），因此無法抹除。</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>無法鎖定磁碟區 {0}，因此未抹除任何內容。</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>寫入被拒絕：{0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>抹除失敗：{0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>正在抹除 {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>第 {0} 次，共 {1} 次</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>正在驗證</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>要停止抹除嗎？已覆寫的部分保持已覆寫；其餘部分保留原始資料。</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>寫入錯誤</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>無法在位移 {0} 處寫入：{1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>略過並繼續</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>停止</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>抹除結果</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>已在 {1} 內抹除 {0} 位元組。</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>驗證成功。</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, other {驗證發現 # 個範圍不符：}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, other {有 # 個範圍無法寫入：}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>抹除已停止。位移 {0} 之前的資料已在第 {1} 次中被覆寫；其餘部分保留先前的內容。</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>驗證已停止。所有次數均已寫入。</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>在位移 {0} 處發生寫入錯誤後，抹除已停止。</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>略過的檔案：{0}（壓縮 {1}，稀疏 {2}，常駐 {3}，不一致 {4}）</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>抹除可用空間</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>方法</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>透過 Windows（已掛接的磁碟區）</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>直接寫入（此索引標籤中的檔案系統）</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>磁碟區</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>沒有可用的已掛接磁碟區。</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>要直接寫入，請先顯示此索引標籤的檔案系統。</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>磁碟區：{0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>要覆寫的可用空間：{0} 位元組</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>方法：透過 Windows（用暫存檔案填滿可用空間，結束時刪除）</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>方法：直接寫入未配置的叢集</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>執行期間，該磁碟區沒有可用空間。其他應用程式仍可運作，但無法儲存新資料。</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>如果檔案系統的配置資訊有誤，檔案可能會損毀。</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>抹除可用空間</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>檔案系統不一致 ({0})。請用 chkdsk 修復後重試。</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>直接寫入僅支援 NTFS、FAT12/16/32 和 exFAT。</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>請先儲存或放棄此索引標籤中的編輯。</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>無法刪除這些暫存檔案。請手動刪除：</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>已在 {1} 內覆寫 {0} 位元組的可用空間。</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>正在計算可用空間</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>抹除可用空間已停止。暫存檔案已刪除。</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>抹除鬆弛空間</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>檔案：{0}，要覆寫的鬆弛空間：{1} 位元組</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>抹除鬆弛空間</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>正在尋找檔案鬆弛空間</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>已在 {1} 內覆寫 {0} 位元組的鬆弛空間。</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>遮蔽檔案內容</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>檔案 ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>填充模式</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00（預設）</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>隨機</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Hex 位元組</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Hex 位元組</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>同時將名稱取代為等長的「_」</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>遮蔽記錄 (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>內容會作為一次編輯而變更。在儲存之前不會寫入任何內容；請使用「另存新檔」儲存為新映像。</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>遮蔽</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>正在尋找要遮蔽的資料</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, other {已遮蔽 # 個檔案}}（{1} 位元組）。請使用「另存新檔」儲存新映像。</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>沒有需要遮蔽的內容。</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>未遮蔽的檔案</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, other {有 # 個項目未被遮蔽：}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>資料夾</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>已刪除的項目</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>中繼資料已損毀</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>片段資訊已損毀</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>找不到常駐資料</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>檔案系統中繼資料</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>無法取代以下檔案的名稱：{0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>該文件是唯讀的。</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>要覆寫原始映像嗎？</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>此文件含有遮蔽內容。儲存會將它們寫入原始的 {0}，且無法復原。若要保留原始檔案，請使用「另存新檔」。</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>覆寫 {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>無法寫入遮蔽記錄：{0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>請以 Hex 位元組輸入填充模式（例如 00 或 A5 5A）。</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分鐘</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} 小時</value></data>
 </root>

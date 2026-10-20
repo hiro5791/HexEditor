@@ -78,6 +78,17 @@ public sealed partial class DocumentViewModel
                 lines.Add(Loc.Get("Tab_Pinned"));
             }
 
+            // メモリダンプの種類と取得日時 (ENG-36)、書き込み保護モードの例外 (FOR-01 の仕様 5)。
+            if (MemoryDump is { } dump)
+            {
+                lines.Add(MainWindow.MemoryDumpSummary(dump));
+            }
+
+            if (WriteBlockException)
+            {
+                lines.Add(Loc.Get("Tab_WriteBlockException"));
+            }
+
             return string.Join(Environment.NewLine, lines);
         }
     }

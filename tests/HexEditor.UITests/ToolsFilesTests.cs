@@ -72,9 +72,22 @@ public sealed class ToolsFilesTests
         await app.CommandAsync("Command_ChecksumCreate");
         await app.WaitForAsync("ChecksumCreateDialog");
         await app.UiaSetValueAsync("Sums_Targets", folder);
+        await app.WaitUntilAsync(async () => (await app.WaitForAsync("PrimaryButton")).IsEnabled, TimeSpan.FromSeconds(10), "the Create button");
         await app.SendAsync("dialogButton", new JsonObject { ["name"] = "PrimaryButton" });
         await app.WaitForAsync("ChecksumOverwriteDialog");
-        await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
+        // ダイアログの要素が出ても、ボタンはテンプレートが当たる次の配置まで作られない。ボタンが見つかるまで押し直す。
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
+                return true;
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Dialog button not found", StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the Cancel button of the overwrite dialog");
         await app.IdleAsync();
         Assert.Contains("# marker", File.ReadAllText(sums), StringComparison.Ordinal);
     });

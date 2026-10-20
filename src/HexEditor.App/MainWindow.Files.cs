@@ -1,6 +1,7 @@
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Expressions;
+using HexEditor.Core.Forensics.Images;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -90,6 +91,13 @@ public sealed partial class MainWindow
         {
             Task<DocumentViewModel?> decoding = OpenEncodedAsync(path, encoded, insertAt, readOnly);
             return decoding.IsCompleted ? decoding.Result : null;
+        }
+
+        // 分割 raw (.001)・E01・VHD・VHDX・VMDK は自動でディスクイメージとして開く (12 の FOR-21 の仕様 2)。
+        if (decode && ImageOpener.OpensAsImageAutomatically(path) && File.Exists(path))
+        {
+            Task<DocumentViewModel?> opening = OpenForensicImageAsync(path);
+            return opening.IsCompleted ? opening.Result : null;
         }
 
         // 同じファイルの範囲を開いている: 「同じデータを 2 つのタブで編集すると、後から保存した方が優先されます」と確かめる (ENG-13 の仕様 6)。

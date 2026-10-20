@@ -359,8 +359,15 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
     /// セクタ境界に揃っていない・範囲外の読み書きは ERROR_INVALID_PARAMETER (OS に渡さない)、読み取りのみで開いたハンドルへの書き込みは
     /// ERROR_ACCESS_DENIED、ボリューム以外のロックは ERROR_INVALID_PARAMETER、閉じるときはロックを解除する。
     /// </summary>
-    private sealed class Handle(string path, SafeFileHandle handle, bool writable, DeviceGeometry geometry) : IDeviceHandle
+    private sealed class Handle(string path, SafeFileHandle handle, bool writable, DeviceGeometry geometry) : IDeviceHandle, Info.IDeviceInfoSource
     {
+        /// <summary>読み取り専用のデバイス情報 (FOR-27、FOR-28)。<see cref="Info.Win32DeviceInfo"/> を参照。</summary>
+        public int QueryDeviceInfo(Elevation.DeviceInfoKind kind, out byte[] data)
+        {
+            data = [];
+            return _closed ? Win32Errors.InvalidHandle : Info.Win32DeviceInfo.Query(handle, Path, kind, out data);
+        }
+
         private const int Alignment = 4096;
         private readonly bool _isVolume = DevicePath.IsVolume(path);
         private volatile bool _closed;

@@ -674,6 +674,16 @@ public sealed partial class MinimapView : Grid
             }
         }
 
+        // ファイルの断片 (FOR-15 の仕様 6): 帯の左側に枠付きの印。
+        if (marks.FragmentBrush is { } fragmentBrush)
+        {
+            foreach ((long offset, long length) in marks.Fragments.Take(2000))
+            {
+                (double t, double b) = Span(offset, offset + length);
+                Place(ref used, Math.Max(0, left - band), t, band, Math.Max(3, b - t), fragmentBrush, "fragment", isLine: false);
+            }
+        }
+
         if (marks.ShowCursor)
         {
             Place(ref used, 0, Y(_editor.Cursor), ActualWidth, 1, marks.CursorBrush, "cursor", isLine: true);
@@ -1035,4 +1045,10 @@ internal sealed record MinimapMarks(
     Brush Selection,
     Brush SearchBrush,
     Brush ModifiedBrush,
-    Brush DifferenceBrush);
+    Brush DifferenceBrush)
+{
+    /// <summary>強調中のファイルの断片 (FOR-15 の仕様 6)。</summary>
+    public IReadOnlyList<(long Offset, long Length)> Fragments { get; init; } = [];
+
+    public Brush? FragmentBrush { get; init; }
+}

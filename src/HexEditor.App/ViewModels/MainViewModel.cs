@@ -152,6 +152,32 @@ public sealed partial class MainViewModel : ObservableObject
     /// <returns>保存した (変更がなく何もしなかった場合を含む) か。キャンセルなら false。</returns>
     public async Task<bool> SaveAsync(DocumentViewModel vm, string path, Func<SavePlan, Task<SavePlan?>>? confirm = null)
     {
+        try
+        {
+            bool saved = await SaveCoreAsync(vm, path, confirm);
+            SaveCompleted?.Invoke(vm, path, saved ? true : null, null);
+            return saved;
+        }
+        catch (OperationCanceledException)
+        {
+            SaveCompleted?.Invoke(vm, path, null, null);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            SaveCompleted?.Invoke(vm, path, false, ex.Message);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 保存を試みた結果 (どのウィンドウのものも。12 の FOR-04 の仕様 3「すべての書き込み操作 (保存…)」を監査ログに記録するため)。
+    /// 引数は、ドキュメント、保存先、結果 (true: 保存した、false: 失敗、null: キャンセル)、失敗の理由。変更がなく書かなかった場合も true。
+    /// </summary>
+    public static event Action<DocumentViewModel, string, bool?, string?>? SaveCompleted;
+
+    private async Task<bool> SaveCoreAsync(DocumentViewModel vm, string path, Func<SavePlan, Task<SavePlan?>>? confirm)
+    {
         Document doc = vm.Document;
         SavePlan? plan = SavePlanner.Plan(doc, path, new SaveSettings
         {
@@ -489,6 +515,8 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
+        // 開く処理の順序をログで確かめられるようにする (12 の FOR-01: 書き込み保護モードの有効化が最初のドキュメントを開く前。TC-FOR-01-10)。
+        AppLog.Info($"Document opened ({(Services.WriteBlockMode.IsEnabled ? "write protection mode" : "writable")})");
         return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recoveryData, Notifications = Notifications }, insertAt);
     }
 

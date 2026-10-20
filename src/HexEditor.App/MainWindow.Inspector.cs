@@ -500,6 +500,7 @@ public sealed partial class MainWindow
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
         AttachTemplates(view);
         AttachDisassemblyHighlights(view);
+        AttachImageHighlights(view);
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
 
         // スクロールバーの印 (VIEW-02 の仕様 9。設定でオン): その範囲から始まる最初のブックマークの色。木を引くので件数によらない。
@@ -524,10 +525,12 @@ public sealed partial class MainWindow
             ? [.. a.Bookmarks.Overlapping(at, at + 1).Where(a.Bookmarks.IsVisible).Select(BookmarkToolTip)]
             : [];
         AttachAnnotationLayers(view);
+        AttachFileSystemHighlights(view);
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
             ExtendHexViewDataMenu(menu);
+            ExtendHexViewImageMenu(view, menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewTemplateMenu(menu);
@@ -536,6 +539,9 @@ public sealed partial class MainWindow
             ExtendHexViewFilesMenu(menu);
             ExtendHexViewScriptMenu(menu);
             ExtendHexViewPluginMenu(menu);
+            ExtendHexViewForensicsMenu(menu);
+            ExtendHexViewWipeMenu(menu);
+            ExtendHexViewCarvingMenu(menu);
         });
     }
 

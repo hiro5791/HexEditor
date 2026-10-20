@@ -27,7 +27,8 @@ public sealed partial class MainWindow
             return header;
         }
 
-        string lockPrefix = header.StartsWith(DocumentViewModel.LockGlyph + " ", StringComparison.Ordinal) ? DocumentViewModel.LockGlyph + " " : string.Empty;
+        string lockPrefix = header.StartsWith(DocumentViewModel.LockGlyph + " ", StringComparison.Ordinal) ? DocumentViewModel.LockGlyph + " "
+            : header.StartsWith(DocumentViewModel.UnlockGlyph + " ", StringComparison.Ordinal) ? DocumentViewModel.UnlockGlyph + " " : string.Empty;
         string rest = header[lockPrefix.Length..];
         return rest.StartsWith("● ", StringComparison.Ordinal) ? lockPrefix + rest[2..] : header;
     }

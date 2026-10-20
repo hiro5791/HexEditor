@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using Microsoft.Win32.SafeHandles;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Tools.Files;
 
@@ -227,6 +228,7 @@ public static class AlternateStreams
     /// <summary>空のストリームを作る (同名のストリームがあれば作らない)。</summary>
     public static void Create(string file, string stream)
     {
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.AlternateStream, file);
         if (!IsValidName(stream))
         {
             throw new StreamException(StreamError.InvalidName, "使えない文字が含まれています。");
@@ -243,6 +245,7 @@ public static class AlternateStreams
     /// <summary>ストリームを削除する。メインのストリームは削除できない。</summary>
     public static void Delete(string file, string stream)
     {
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.AlternateStream, file);
         if (stream.Length == 0)
         {
             throw new StreamException(StreamError.DefaultStream, "メインのストリームは削除できません。");
@@ -258,6 +261,7 @@ public static class AlternateStreams
     /// <summary>名前を変える。新しい名前でコピーしてから元を削除する (NTFS にストリームの名前変更の API がないため)。</summary>
     public static void Rename(string file, string stream, string newName, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.AlternateStream, file);
         if (stream.Length == 0)
         {
             throw new StreamException(StreamError.DefaultStream, "メインのストリームは名前を変えられません。");
@@ -294,6 +298,7 @@ public static class AlternateStreams
     /// <summary>ストリームの内容をファイルに書き出す。</summary>
     public static void Export(string file, string stream, string destination, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureFileWrite(destination);
         using SafeFileHandle source = OpenHandle(file, stream, FileMode.Open, FileAccess.Read);
         using var output = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None, 1 << 16);
         CopyHandle(source, output, operation, cancellationToken);
@@ -303,6 +308,7 @@ public static class AlternateStreams
     public static void Import(string file, string stream, string source, LongRunningOperation? operation = null, CancellationToken cancellationToken = default,
         IVolumeInfoProvider? volumes = null)
     {
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.AlternateStream, file);
         if (stream.Length != 0 && !IsValidName(stream))
         {
             throw new StreamException(StreamError.InvalidName, "使えない文字が含まれています。");
@@ -334,6 +340,7 @@ public static class AlternateStreams
     /// <summary>ストリームの内容を別のストリームにコピーする。</summary>
     public static void Copy(string file, string stream, string toFile, string toStream, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
     {
+        WriteBlockGate.Current.EnsureOperation(BlockedOperation.AlternateStream, toFile);
         using SafeFileHandle source = OpenHandle(file, stream, FileMode.Open, FileAccess.Read);
         using SafeFileHandle target = OpenHandle(toFile, toStream, FileMode.CreateNew, FileAccess.Write);
         long length = RandomAccess.GetLength(source);

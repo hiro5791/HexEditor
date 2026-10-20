@@ -9,6 +9,8 @@ using static HexEditor.Core.Tests.Templates.TemplateTestSupport;
 namespace HexEditor.Core.Tests.Templates;
 
 /// <summary>エラー報告と部分結果 (TPL-27)、巨大ファイル・上限・キャンセル (TPL-28)、サンドボックス (TPL-37)。</summary>
+// ヒープ全体を測るテストを含むので、他のテストと並列に動かさない (CI の run 39272808288 で並列テストのヒープが混ざって失敗)
+[Collection(HexEditor.Core.Tests.Support.SerialCollection.Name)]
 public sealed class TemplateRobustnessTests
 {
     private static string Data(string name) => Path.Combine(TemplateFeatureTests.DataFolder, name);

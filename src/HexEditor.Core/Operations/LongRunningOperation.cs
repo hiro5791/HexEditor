@@ -166,6 +166,21 @@ public sealed class LongRunningOperation
         CancellationToken.ThrowIfCancellationRequested();
     }
 
+    /// <summary>
+    /// 進捗を報告するが、キャンセルされていても例外を投げない。<see cref="Progress{T}"/> のコールバックなど、処理の流れの外 (スレッドプール) で
+    /// 呼ばれる場所で使う: そこで投げると未処理の例外でアプリが落ちる。キャンセルは処理本体が <see cref="CancellationToken"/> で止まる。
+    /// </summary>
+    public void ReportQuietly(long processedBytes)
+    {
+        try
+        {
+            Report(processedBytes);
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
     public void SetTotal(long? totalBytes) => TotalBytes = totalBytes;
 
     /// <summary>検索の処理で、これまでに見つかった一致の数 (FIND-02 の仕様 2)。一致を数えない処理では null。</summary>
@@ -193,6 +208,23 @@ public sealed class LongRunningOperation
     {
         CanCancel = false;
         ProgressChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// 利用者がキャンセルを選んだときの確認 (false なら続ける)。ディスクのクローンのように、途中で止めると出力先が書きかけになる処理が設定する
+    /// (12 の FOR-24「中止する」「続ける」)。UI のキャンセルボタンは <see cref="RequestCancelAsync"/> を呼ぶ。
+    /// </summary>
+    public Func<Task<bool>>? ConfirmCancel { get; set; }
+
+    /// <summary>利用者の操作によるキャンセル: <see cref="ConfirmCancel"/> があれば確かめてから <see cref="Cancel"/>。</summary>
+    public async Task RequestCancelAsync()
+    {
+        if (ConfirmCancel is { } confirm && !await confirm().ConfigureAwait(true))
+        {
+            return;
+        }
+
+        Cancel();
     }
 
     /// <summary>キャンセルを要求する。処理は 200 ms 以内に止まる (ENG-09 の仕様 5)。キャンセルできない処理では何もしない。</summary>

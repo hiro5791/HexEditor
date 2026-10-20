@@ -1,6 +1,7 @@
 using HexEditor.Core.Scripting;
 using HexEditor.Core.Sources;
 using HexEditor.Sdk.Plugins;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Plugins;
 
@@ -89,6 +90,7 @@ public sealed class PluginByteSource : ByteSourceBase
             return;
         }
 
+        WriteBlockGate.Current.EnsurePluginWrite(Identity);
         byte[] copy = data.ToArray();
         _registration.Guard.InvokeOrThrow("Write", () => _source.Write(offset, copy));
     }

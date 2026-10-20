@@ -2136,6 +2136,7 @@ Podrobnosti byly zapsány do:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Okno {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(žádné karty)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Kopírovat cestu</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Znovu otevřít jako obraz disku</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Zobrazit v Průzkumníkovi</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Jen pro čtení</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Velikost: {0}</value></data>
@@ -6634,6 +6635,418 @@ Typ: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Sloupec komentářů</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Zobrazovat názvy symbolů, názvy cílů skoků a odkazované řetězce.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Disassemblace</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Forenzní analýza</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Forenzní analýza</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Zobrazení data a času</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Jak se zobrazují časy v forenzních seznamech a podrobnostech: UTC i místní čas, jen UTC, nebo jen místní čas. Časy se vždy zaznamenávají v UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC i místní čas</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Jen UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Jen místní čas</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Zapnout ochranu proti zápisu při otevření případu</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Když je vypnuto, program se zeptá, zda ji zapnout.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Zaznamenávat do protokolu auditu i procházení</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Zaznamenají se skoky, hledání a přidání záložek. Změny dat a důkazů se zaznamenávají vždy.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Zobrazovat miniatury vyříznutých obrázků</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Zobrazit malý náhled souborů JPEG, PNG, GIF a BMP ve výsledcích carvingu.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Obrázek loga zprávy</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Cesta k obrázku PNG, JPEG nebo SVG zobrazenému v horní části zpráv HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Text záhlaví zprávy</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Řádek textu pod nadpisem zpráv, například název vaší laboratoře.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Nový případ</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>vyšetřování důkazy vytvořit případ složka investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Otevřít případ</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>vyšetřování důkazy načíst případ složka investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Zavřít případ</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>vyšetřování dokončit investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Přidat důkaz</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>zaregistrovat obraz disku hash akvizice register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Vlastnosti případu</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>časové pásmo vyšetřovatel organizace time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Zobrazit protokol auditu</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>řetězec důkazní historie protokol chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Ověřit protokol auditu</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>manipulace řetězec hashů integrita kontrola tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Spravovat signatury carvingu</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>typy souborů hlavička patička magic definice file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Vyříznout soubory (carving)</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>obnova extrahovat smazané soubory skenování recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Vytvořit zprávu</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf export dokumentace export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Zobrazit nebo skrýt seznam důkazů</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>případ důkazy panel case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Zobrazit nebo skrýt protokol auditu</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>případ protokol auditu panel case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Zobrazit nebo skrýt výsledky carvingu</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>vyříznuté soubory panel výsledky carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Důkazy</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Protokol auditu</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Výsledky carvingu</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Forenzní analýza</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Případ</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Nový případ...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Otevřít případ...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Zavřít případ</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Přidat důkaz...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>Ů</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Vlastnosti případu...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Seznam důkazů</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Zobrazit protokol auditu</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Ověřit protokol auditu</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>Ě</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Vyříznout soubory...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Správa signatur...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Výsledky</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Vytvořit zprávu...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Případ: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>neplatný čas</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Případ je již otevřen. Nejprve jej zavřete.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Není otevřen žádný případ.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Nový případ</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Vlastnosti případu</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Číslo případu (povinné)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Název případu (povinný)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Vyšetřovatel</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Organizace</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Složka případu</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Procházet...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Časové pásmo</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Používá se pro čtení časů bez časového pásma, například časů souborů FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Vytvořit</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Případ „{0}“ byl vytvořen.</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Případ „{0}“ byl otevřen.</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Případ se nepodařilo vytvořit: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Číslo a název případu jsou povinné.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Soubor případu nelze přečíst (řádek {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Případ se nepodařilo otevřít: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Případ se nepodařilo uložit: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Zapnout pro tento případ ochranu proti zápisu?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Zapnout</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Ochrana proti zápisu byla pro tento případ zapnuta.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Přidat důkaz</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Přidání důkazu</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} bude přidán k případu. Zdroj dat se nezmění.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Vypočítat hashe nyní</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Tento zdroj dat je již zaregistrován jako {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Jako důkaz lze přidat pouze disky, svazky, soubory obrazů a soubory.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Hashování důkazu {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Hashe {0} byly zaznamenány.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Hash {0} nebyl vypočten. Důkaz zůstává v seznamu.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Data na posunu 0x{1} nelze přečíst, proto hash {0} nebyl zaznamenán.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Nevypočten</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>{0} bylo odebráno ze seznamu. Zdroj dat nebyl dotčen.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} není k dispozici.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Důkaz se nepodařilo otevřít: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} – {1}: položek: {2}</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Není otevřen žádný případ. Vytvořte nebo otevřete případ v nabídce Forenzní analýza.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Zatím nebyly přidány žádné důkazy.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Důkaz</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Cesta</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Kapacita (bajty)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hashe</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Ověření</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Přidáno (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Přidáno (místní)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Svazek</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Obraz</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Soubor</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Paměť</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Úspěšné</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Neúspěšné</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Neověřeno</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Otevřít (jen pro čtení)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Odebrat ze seznamu</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Kopírovat hashe</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Kopírovat cestu</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Vytvořit obraz...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Ověřit...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>Záznamů: {0}</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Není otevřen žádný případ. Protokol auditu patří k případu.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Zatím nebylo nic zaznamenáno.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Tento řádek není platný záznam. Protokol mohl být změněn.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Ověřit</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Exportovat do CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Exportovat do JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Protokol auditu je neporušený (zkontrolováno řádků: {0}).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Řetězec protokolu auditu je přerušen na řádku {0}. Protokol mohl být změněn.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>Č.</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Čas (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Čas (místní)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Uživatel</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Operace</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Důkaz</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Výsledek</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Úspěch</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Selhání</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Zrušeno</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Do protokolu auditu nelze zapisovat</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Operace, které zapisují data, jsou vypnuty, dokud nebude možné do protokolu znovu zapisovat. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Zkusit znovu</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Do protokolu auditu stále nelze zapisovat.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Do protokolu auditu nelze zapisovat, proto se operace neprovedla.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Do protokolu auditu nelze zapisovat, proto jsou operace zapisující data vypnuty.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Ověřování protokolu auditu</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Protokol auditu se nepodařilo ověřit: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Export protokolu auditu</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Protokol auditu byl exportován do {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Protokol auditu se nepodařilo exportovat: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Signatury carvingu</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Definice</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>vestavěné</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>zakázáno</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Přípona (bez tečky)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Hlavičky (bajty Hex, jedna na řádek; ?? je libovolný bajt, ? je libovolná číslice)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Posun hlavičky od začátku souboru</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Patička (bajty Hex, volitelné)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Kolik bajtů patičky zahrnout (prázdné = samotná patička)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Maximální velikost</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Minimální velikost</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Převzít velikost z hodnoty v hlavičce</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Hodnota velikosti: posun od začátku souboru</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Hodnota velikosti: šířka (bity)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Hodnota velikosti: pořadí bajtů</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Hodnota velikosti: číslo k přičtení</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Kontrola struktury (vestavěný název nebo šablona struktury)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Vestavěné kontroly: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Hledat hlavičku jen na začátku sektoru</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Použít tuto definici při skenování</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Nová</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Duplikovat</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Odstranit</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Importovat...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Exportovat...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Vyzkoušet tuto definici</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Nejprve v dokumentu vyberte oblast.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Zkouším...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Zkoušení definice carvingu</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Nalezeno ve výběru: {0}. První pozice:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Importováno definic: {0}.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Neimportováno definic: {0}:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Exportováno do {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Definice se nepodařilo importovat: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Definice se nepodařilo uložit: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Zkouška se nezdařila: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: zadejte číslo nebo velikost, například 4096, 0x1000 nebo 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Zadejte název.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Tento název se již používá.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Zadejte příponu.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Přípona obsahuje znaky, které nelze použít v názvu souboru.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Zadejte alespoň jednu hlavičku.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Hlavička není platná posloupnost bajtů Hex (lichý počet číslic nebo neplatné znaky).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Hlavička potřebuje alespoň jeden pevný bajt.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Posun hlavičky nemůže být záporný.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Patička není platná posloupnost bajtů Hex.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Počet bajtů k zahrnutí nemůže být záporný.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Maximální velikost musí být alespoň 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Minimální velikost nemůže být záporná.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Maximální velikost je menší než minimální.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Hodnota velikosti není platná.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Hodnota má špatný typ.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Vyříznutí souborů (carving)</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Spustit</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Rozsah</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Celý dokument</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Výběr</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Pouze nealokované místo</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Pouze slack</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Typy souborů</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Nehledat hlavičky uvnitř nalezeného souboru</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Zapsat vyříznuté soubory do složky</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Výstupní složka</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Vyřezávání souborů</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving dokončen: nalezeno souborů: {0}.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Carving byl zrušen. Nalezeno souborů: {0}; výsledky a manifest zůstávají zachovány.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving se zastavil, protože do výstupní složky nelze zapisovat. Nalezeno souborů: {0}.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving se nezdařil: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Výstupní složka je na disku, který se vyšetřuje. Vyberte složku na jiném disku.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Ve výstupní složce není dost volného místa. Potřeba: {0} bajtů. Volné: {1} bajtů.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Souborový systém výstupní složky omezuje soubor na {0} bajtů. Vyberte jinou složku.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Výstupní složku nelze použít.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Pro tento dokument nejsou k dispozici informace o alokaci.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Vyříznuté soubory nelze zapsat</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>Ve výstupní složce ({0}) došlo místo. Další soubor potřebuje {1} bajtů, volných je {2} bajtů. Uvolněte místo, vyberte jinou složku, nebo proces zastavte.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Do {0} nelze zapisovat: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Zkusit znovu</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Vybrat jinou složku...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving již běží.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Vyříznout soubory...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Otevřít složku</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Carving nebyl spuštěn. Zvolte Forenzní analýza, potom Carving a Vyříznout soubory.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Nebyly nalezeny žádné soubory.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>Souborů: {0}</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Náhled vyříznutého obrázku</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>Č.</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Posun</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Délka</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Délka určena podle</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Výstupní soubor</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Struktura</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Hodnota velikosti</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Patička</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Maximální velikost</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Typ: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Posun: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Délka: {0} bajtů</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Délka určena podle: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Vytvoření zprávy</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Vytvořit</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Obsah</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Disk: {0} (velikost sektoru {1} bajtů)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>Č.</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Schéma</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>Počáteční LBA</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Sektorů</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Velikost (bajty)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Souborový systém</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Šifrování</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Nealokováno</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Rozložení</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Dokument</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Posun svazku</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Popisek</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Sériové číslo</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Velikost clusteru (bajty)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Clustery</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Volné clustery</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Problémy</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Logické svazky: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Skupina</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Typ</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Velikost (bajty)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Uspořádání</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Členové</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Obraz</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Zdroj</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Pořízeno</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Hashe</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Protokol akvizice</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (jeden soubor, otevře se offline)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Všechny záznamy protokolu auditu</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Protokol auditu od (UTC, volitelné)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Protokol auditu do (UTC, volitelné)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Bajty výpisu Hex pro každou záložku (0 až 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Uložit do</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Období není platné datum a čas.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Délka výpisu Hex musí být od 0 do 4096 bajtů.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Vytváření zprávy</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Zprávu se nepodařilo vytvořit: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Vytvořeno: {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>PDF se nepodařilo vytvořit ({0}). Místo něj byl vytvořen {1}.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>Do PDF se dostanou jen první řádky dlouhých seznamů. Úplné seznamy najdete ve zprávě HTML nebo v souborech CSV.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Otevřít</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Otevřít složku</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Forenzní zpráva</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Číslo případu</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Název případu</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Vyšetřovatel</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Organizace</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Případ vytvořen</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Zpráva vytvořena</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Časové pásmo</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Vytvořil</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Strana</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>z</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Případ</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Titulní strana</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Důkazy</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Záznamy o akvizici</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Informace o zařízení</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Oddíly</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Souborové systémy</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Záložky</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Výsledky carvingu</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Protokol auditu</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Důkaz</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Cesta</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Sériové číslo</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Kapacita (bajty)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Sektorů</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Velikost sektoru</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hashe</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Ověření</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Přidáno (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Přidáno (místní)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Přidal</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Úspěšné</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Neúspěšné</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Neověřeno</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Nevypočten</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Disk</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Svazek</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Obraz</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Soubor</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Paměť</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Dokument</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Posun</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Komentář</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Výpis Hex</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>Č.</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Posun</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Délka</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Délka určena podle</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Výstupní soubor</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Nalezeno souborů</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>Č.</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Čas (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Čas (místní)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Uživatel</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Počítač</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Operace</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Důkaz</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Výsledek</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>úspěch</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>selhání</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>zrušeno</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Zobrazeno prvních {0} z {1} řádků. Úplný seznam je v připojeném souboru CSV nebo ve zprávě HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Zobrazeno prvních {0} řádků. Úplný seznam je ve zprávě HTML nebo v souboru CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Úplný seznam</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Nealokováno</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Žádná data.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>neplatný čas</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Zobrazit nebo skrýt panel disassemblace</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>disassembler assembler kód disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Disassemblovat</value></data>
@@ -8193,4 +8606,1264 @@ Spojení se nenaváže, pokud se nerozhodnete klíč nahradit.</value></data>
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Celá stránka</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Na šířku</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Vybrat složku...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Chráněno proti zápisu]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Ochrana proti zápisu</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Režim ochrany proti zápisu je zapnutý. Kliknutím jej vypnete.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Režim ochrany proti zápisu brání v zápisu jen této aplikaci. Nemůže zabránit zápisu ze strany Windows ani jiných aplikací (například zápisům, které souborový systém provádí při připojení svazku). Použijte také hardwarový blokátor zápisu nebo ochranu USB proti zápisu v systému.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Ochrana USB proti zápisu v systému...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Vypnout režim ochrany proti zápisu?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Otevřené dokumenty s důkazy: {0}. Po vypnutí režimu bude možné do těchto dokumentů zapisovat:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Nejsou otevřeny žádné dokumenty s důkazy. Po vypnutí režimu bude možné do otevřených dokumentů opět zapisovat.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Vypnout ochranu proti zápisu</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Zdroj dat se nepodařilo znovu otevřít pouze pro čtení. Zobrazují se jen již přečtená data.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Povolit zápis do tohoto dokumentu</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Zápis povolen (výjimka z režimu ochrany proti zápisu)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Režim ochrany proti zápisu je vypnutý.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Z režimu ochrany proti zápisu lze vyjmout jen dokumenty typu soubor.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Tento zdroj dat je zaregistrován jako důkaz, proto zápis nelze povolit.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Zápis do tohoto dokumentu je již povolen.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Povolit zápis do tohoto dokumentu?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Režim ochrany proti zápisu zůstane zapnutý, ale {0} ({1}) bude možné upravovat a ukládat, dokud jej nezavřete. Změna se zaznamená do protokolu auditu a u otevřeného dokumentu ji nelze vrátit zpět.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Pro potvrzení zadejte {0}</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Povolit zápis do {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Zápis do {0} je povolen do zavření dokumentu.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Režim ochrany proti zápisu</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>Ž</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Ochrana USB proti zápisu v systému</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Zařízení</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Zkontrolovat HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Informace SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Panel informací o zařízení</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Informace o šifrování...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>Š</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Otevřít výpis paměti...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Přepnout režim ochrany proti zápisu</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>blokátor zápisu ochrana jen pro čtení důkazy write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Povolit zápis do tohoto dokumentu</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>výjimka ochrana proti zápisu write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Přepnout ochranu USB proti zápisu v systému</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>usb úložiště zásady ochrana proti zápisu registr usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Zkontrolovat HPA a DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>skrytá oblast chráněná oblast konfigurace zařízení hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Zobrazit informace SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>stav disk autodiagnostika nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Zobrazit informace o šifrování</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt šifrovaný svazek encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Zobrazit nebo skrýt informace o zařízení</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>panel hpa smart zařízení panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Otevřít výpis paměti</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>havarijní výpis minidump fyzická paměť ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Informace o zařízení</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Při spuštění vždy zapnout režim ochrany proti zápisu</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Když je vypnuto, aplikace se spustí se stavem režimu, který byl při posledním zavření.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Kontrolovat HPA / DCO při otevření disku</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Odešle disku příkazy ATA pouze pro čtení a zobrazí oznámení, pokud najde skryté oblasti.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Zapnout ochranu USB proti zápisu v systému?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows bude blokovat zápis na úložná zařízení USB, která se připojí od tohoto okamžiku (nastavení StorageDevicePolicies WriteProtect). Již připojená zařízení to neovlivní, dokud je znovu nepřipojíte. Interní disky SATA a NVMe chráněny nejsou. Jsou vyžadována oprávnění správce.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Vypnout ochranu USB proti zápisu v systému?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Nastavení se vrátí do stavu před zapnutím. Již připojená úložná zařízení USB zůstanou chráněna proti zápisu, dokud je znovu nepřipojíte. Jsou vyžadována oprávnění správce.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Změnit nastavení</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Jsou vyžadována oprávnění správce. Nastavení nebylo změněno.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Nastavení se nepodařilo změnit (přístup byl odepřen; může být spravováno zásadami skupiny): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Nastavení se nepodařilo změnit: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Ochrana USB proti zápisu v systému je zapnuta. Aby se projevila, znovu připojte úložná zařízení USB.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Ochrana USB proti zápisu v systému je vypnuta.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Ochrana USB proti zápisu v systému je stále zapnuta</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows bude blokovat zápis na úložná zařízení USB i po zavření této aplikace. Vypnout ochranu před ukončením?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Vypnout a ukončit</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Ukončit a ponechat zapnuto</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Změna ochrany USB proti zápisu v systému vyžaduje oprávnění správce Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Zařízení</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Zkontrolovat HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Načíst SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Exportovat do JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Exportovat do textu...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Otevřete fyzický disk a zvolte Zkontrolovat HPA / DCO nebo Informace SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} – zachyceno {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>HPA / DCO nebyly zkontrolovány.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Disky NVMe nemají HPA ani DCO; HPA / DCO se na ně nevztahují.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Velikost jmenného prostoru: {0} bloků ({1} bajtů na blok)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Kapacita jmenného prostoru: {0} bloků</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Na tomto zařízení to nelze zkontrolovat (příkazy neprojdou, například přes adaptéry USB nebo na virtuálních discích).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Jsou vyžadována oprávnění správce.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Příkaz {0} selhal (stav ATA {1}, chyba {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>Maximální LBA (IDENTIFY DEVICE, 28 bitů): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>Maximální LBA (IDENTIFY DEVICE, 48 bitů): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>Nativní maximální LBA (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>Maximální LBA nastavené DCO (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>zařízení nepodporuje</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>zařízení nepodporuje</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: přítomna, sektorů: {0} ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: není</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: nelze určit</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: přítomno, sektorů: {0} ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: není</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: nelze určit</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Informace SMART nebyly načteny.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Informace SMART na tomto zařízení nelze načíst (například přes adaptér USB, který je nepodporuje).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART je na tomto zařízení vypnut.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Kontrolní součet dat SMART nesouhlasí; hodnoty mohou být chybné.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Model: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Sériové číslo: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Kapacita: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Velikost sektoru: {0} bajtů logický, {1} bajtů fyzický</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Připojení: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Rychlost otáčení: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>nerotuje (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>podporováno</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>nepodporováno</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Pro použití tohoto příkazu otevřete fyzický disk.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Informace o zařízení se nepodařilo načíst: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>Disk {0} má skryté oblasti: HPA {1} sektorů, DCO {2} sektorů. Kapacita, kterou vidí Windows, je menší než skutečná kapacita disku.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Zobrazit podrobnosti</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Informace o zařízení byly exportovány do {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Informace o zařízení se nepodařilo exportovat: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Aktuální</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Nejhorší</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Práh</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Surová (hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Surová (desítkově)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Stav</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Varování</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Neznámé</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Četnost chyb čtení</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Výkon přenosu</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Doba roztočení</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Počet spuštění a zastavení</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Počet přemapovaných sektorů</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Četnost chyb vystavení hlav</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Rychlost vystavení hlav</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Počet hodin provozu</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Počet opakovaných roztočení</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Počet opakovaných kalibrací</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Počet cyklů zapnutí napájení</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Dostupné rezervované místo</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Počet chyb programování</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Počet chyb mazání</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Počet operací vyrovnávání opotřebení</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Počet neočekávaných ztrát napájení</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Rozptyl opotřebení</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Celkem použitých rezervních bloků</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Celkem chyb programování</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Celkem chyb mazání</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Vadné bloky vzniklé za provozu</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>Chyba typu end-to-end</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Nahlášené neopravitelné chyby</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Počet vypršení časového limitu příkazů</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>Zápisy při zvýšené výšce letu hlav</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Teplota proudění vzduchu</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>Četnost chyb od otřesů (G-Sense)</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Počet nouzových zaparkování při ztrátě napájení</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Počet cyklů zavedení hlav</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Teplota</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Opraveno hardwarovým ECC</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Počet událostí přemapování</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Počet sektorů čekajících na přemapování</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Počet neopravitelných sektorů při offline kontrole</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>Počet chyb CRC UltraDMA</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Četnost víceúsekových chyb</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>Zbývající životnost SSD</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Zbývající výdrž</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Indikátor opotřebení média</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Počet dobrých bloků</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Celkem zapsaných LBA</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Celkem přečtených LBA</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Bity kritického varování: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Teplota: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Dostupná rezerva: {0} % (práh {1} %)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Využito: {0} %</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Přečtená data: {0} bajtů</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Zapsaná data: {0} bajtů</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Počet zapnutí napájení: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Hodiny provozu: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Nebezpečná vypnutí: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Chyby média a integrity dat: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Zachyceno</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Zařízení</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Sériové číslo</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Kapacita (bajty)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Velikost sektoru (logický / fyzický)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Připojení</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>Maximální LBA (28 bitů / 48 bitů / nativní / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Na tomto zařízení nelze zkontrolovat</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Žádná</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Přítomno (sektorů: {0})</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Netýká se (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Název</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Aktuální</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Nejhorší</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Práh</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Surová</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Stav</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Varování</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Informace o šifrování</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Nebyly nalezeny žádné šifrované svazky.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Rozsah {0}: posun {1}, {2} bajtů</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Typ: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Šifrovaný svazek APFS (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (možná šifrováno)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Možná šifrovaná nebo komprimovaná data (například VeraCrypt nebo TrueCrypt; neexistuje signatura, která by je identifikovala)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Verze metadat: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Metoda šifrování: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID svazku: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Vytvořeno: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Popis: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Stav šifrování: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>neznámý</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>dešifrováno</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>probíhá</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>dokončeno</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>pozastaveno</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Dosud zašifrováno: {0} bajtů</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Ochrany klíče: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, vytvořeno {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Čistý klíč</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Spouštěcí klíč</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM a PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Heslo pro obnovení</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Heslo</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Neznámé (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Sloty klíčů: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Svazek {0}: šifrován</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Svazek {0}: nešifrován</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropie prvních 64 KiB: {0} bitů na bajt</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Varování: tři bloky metadat se neshodují.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Varování: některé bloky metadat jsou poškozeny; zobrazeny jsou jen položky, které se podařilo přečíst.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Prohlížeč souborového systému šifrované svazky neotevírá.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows tento svazek BitLocker odemkla ({0}). Pokud jej otevřete jako logický svazek, můžete číst obsah, který Windows dešifruje.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Otevřít jako logický svazek</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Výpis paměti</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Formát výpisu paměti {0} se nepodařilo přečíst. Otevřít jako surový?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Otevřít jako surový</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Výpis paměti se nepodařilo otevřít: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Výpis paměti: {0}, pořízen {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Výpis paměti: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>obraz fyzické paměti (raw)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>úplný výpis paměti</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>výpis paměti jádra</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>úplný výpis paměti (bitmapa)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Výpis paměti</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Data nelze zapsat, protože je zapnut režim ochrany proti zápisu.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Obraz</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Vytvořit obraz...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Vytvořit kostrový obraz...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Otevřít obraz...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Ověřit obraz...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>Ě</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Informace o obrazu</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Klonovat disk...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Uložit rozsah sektorů...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>Ž</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Obnovit rozsah sektorů...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>Ů</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Rekonstruovat RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Vytvořit obraz</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>pořídit obraz disku dd raw e01 důkazy acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Vytvořit kostrový obraz</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>kostra řídký obraz metadata skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Otevřít obraz jako disk</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk dělený raw 001 split</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Ověřit obraz</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>ověření hash md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Informace o obrazu</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 hlavička informace o případu header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Klonovat disk</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>klon kopie disk sektor clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Uložit rozsah sektorů</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>záloha mbr gpt sektory backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Obnovit rozsah sektorů</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>obnovení mbr gpt sektory restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Rekonstruovat RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod prokládání parita stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Aktuální dokument není obraz disku.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Je potřeba dokument disku, svazku nebo obrazu disku.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Nejprve otevřete disk, obraz nebo soubor, který se má použít jako zdroj.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Otevřeno bez chybějících segmentů ({0}). Jejich rozsahy se čtou jako chyby.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Obraz {0} se nepodařilo přečíst (část: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Nadřazený disk rozdílového disku nebyl nalezen: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Chybí segmenty</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Chybí tyto segmenty: {0}. Otevřít obraz s dostupnými segmenty? Chybějící rozsahy se čtou jako chyby.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Otevřít dostupné segmenty</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Dělený raw</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Kontrolní součet bloku nesouhlasí na {0} ({1} bajtů). Rozsah se zobrazí jako chyba čtení.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Informace o obrazu</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Soubory</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Velikost</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} bajtů (sektorů: {1})</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Velikost sektoru</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Pořízeno</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Nástroj akvizice</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Zařízení</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Bloky</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} sektorů na blok)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Komprese</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Komprimováno</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Nekomprimováno</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>Uložený {0}</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Sektory nečitelné při akvizici</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Nadřazený disk</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Chybějící segmenty</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Číslo případu</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Číslo důkazu</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Zkoumající</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Poznámky</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Shoduje se</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Neshoduje se</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Žádná referenční hodnota</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Ověření není možné kvůli chybám čtení</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>uloženo v obrazu</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>protokol akvizice</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>seznam důkazů</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>zadaná hodnota</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>vypočteno při akvizici</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>zdrojový disk</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Vytvoření obrazu</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Vytvoření kostrového obrazu</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Režim ochrany proti zápisu je vypnutý. Před pořízením obrazu důkazů se doporučuje jej zapnout.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Zapnout režim ochrany proti zápisu</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Zdroj: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Pouze výběr (rozšířený na hranice sektorů)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Rozsahy k pořízení</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Celé</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Řídký (bez nealokovaných oblastí)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Kostra (jen tabulky oddílů a metadata souborových systémů)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Zahrnout také záložky a rozsahy vícenásobného výběru</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Výstup</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Výstup</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Procházet...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Velikost části / segmentu (například 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hashe</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Opakování při chybách čtení</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Hodnota pro vyplnění nečitelných sektorů (hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Jednotka čtení</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Ověřit po dokončení</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Chyby čtení</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Informace E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Komprese</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Žádná</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Rychlá (zlib, úroveň 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Nejlepší (zlib, úroveň 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Spustit</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Zadejte výstup.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Velikost části musí být alespoň 1 MiB (například 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Zadejte počet opakování od 0 do 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Zadejte hodnotu pro vyplnění jako dvě šestnáctkové číslice (například 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Vyberte alespoň jeden hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Výstup je na stejném fyzickém disku jako zdroj. Vyberte jiný disk.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Výstup je na disku ze seznamu důkazů. Vyberte jiný disk.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Souborový systém výstupu ({0}) povoluje soubory do {1} bajtů. Použijte dělený raw nebo E01 s menší velikostí segmentu.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Výstup potřebuje přibližně {0} bajtů, ale volných je jen {1} bajtů.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} již existuje. Přepsat?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Přepsat</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Souborový systém výstupu je {0}, nikoli NTFS, proto se vyloučené oblasti zapíší jako nuly a obraz se nezmenší.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Vytvoření obrazu: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Výpočet zahrnovaných rozsahů</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>Nepodařilo se analyzovat oddíly: {0}; jsou zahrnuty celé.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Obraz se nepodařilo vytvořit. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Nečitelné sektory: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Obraz byl vytvořen. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Ověření: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>Sektorů, které nebylo možné přečíst a byly vyplněny: {0}.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Akvizice byla přerušena. Dosud zapsané soubory byly zachovány.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Akvizice byla přerušena. Dosud zapsané soubory byly odstraněny.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Zdroj byl ztracen. Akvizice byla zastavena.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Otevřít protokol akvizice</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Výstup se nepodařilo zapsat: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Zkusit znovu</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Přerušit</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Akvizice byla zrušena. Zachovat dosud zapsané soubory?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Zachovat</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Odstranit</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Ověření obrazu</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Obraz: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Hodnota k porovnání (hex, volitelné)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Hodnota MD5, SHA-1 nebo SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Zadejte šestnáctkovou hodnotu o 32, 40 nebo 64 číslicích.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Znovu přečíst také zdrojový disk</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Ověřit</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Ověření obrazu: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Výsledek ověření: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Ověření není možné kvůli chybám čtení: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>vypočteno: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Protokol akvizice obrazu disku</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Protokol klonování disku</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Stav</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Dokončeno</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Přerušeno</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Zdroj byl ztracen</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Selhalo</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Zdroj</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Cesta</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Sériové číslo</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Kapacita</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Velikost sektoru</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Rozsah</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Výstup</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Soubory</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Cíl</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Zahájeno</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Ukončeno</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Přečtené sektory</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Nečitelné sektory</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>žádné</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hashe</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>zahrnuté rozsahy</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Ověření</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>neověřeno</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Verze aplikace</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Případ</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Pořízené rozsahy</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>celé</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>řídký obraz (nealokované oblasti nejsou zahrnuty)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>kostrový obraz (jen tabulky oddílů a metadata souborových systémů)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Vyloučené oblasti jsou uloženy jako nuly, proto hashe tohoto obrazu neodpovídají hashům celého zdrojového disku.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Zahrnuté rozsahy</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Zpráva</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Klonování disku</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Cílový disk</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Disk {0}: {1}, sériové číslo {2}, {3} bajtů, sektory po {4} bajtech. Svazky: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} bajtů)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>žádné</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>Počáteční LBA na cíli</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Zbytek cíle vyplnit nulami</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash pro ověření</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Složka protokolu (volitelné)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Další</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Vyberte cílový disk.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>Počáteční LBA je mimo cílový disk.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Disk s jinou velikostí sektoru nemůže být cílem klonování.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Cílový disk je v seznamu důkazů. Nelze jej přepsat.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Cíl: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Zapisovaný rozsah: od LBA {0}, sektorů: {1} ({2} bajtů)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Obsah: data {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Veškerý obsah těchto svazků bude ztracen:&#xA;{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Cíl je menší než zdroj. Zapíše se jen prvních {0} bajtů zdroje.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Tuto akci nelze vrátit zpět.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Klonovat na {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Pro potvrzení zadejte „{0}“</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Klonování na {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Pokud nyní zastavíte, cílový disk zůstane zapsán jen částečně.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Pokračovat</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Svazek {0} se nepodařilo zamknout, proto nebylo nic zapsáno. Zavřete soubory otevřené na něm a zkuste to znovu.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Klonování se nezdařilo. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Naklonováno bajtů: {0}. Ověření: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Klonování bylo zastaveno. Cílový disk je zapsán jen částečně.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Cíl je stejný disk jako zdroj.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Disk s jinou velikostí sektoru nemůže být cílem klonování.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Je zapnut režim ochrany proti zápisu.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Cílový disk je v seznamu důkazů. Nelze jej přepsat.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows používá svazek na cílovém disku.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>Počáteční LBA je mimo cílový disk.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Cílový disk se nepodařilo otevřít pro zápis.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Uložení rozsahu sektorů</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Obnovení rozsahu sektorů</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>Počáteční LBA</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Počet sektorů</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Data sektorů</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Rozsah je mimo disk.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Ukládání sektorů: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Uloženo sektorů: {0} do {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Některé sektory v rozsahu se nepodařilo přečíst, proto nebylo nic uloženo.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Rozsah sektorů se nepodařilo uložit. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Datový soubor nebo jeho doprovodný soubor se nepodařilo přečíst. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Datový soubor: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Uloženo z: {0}, sériové číslo {1}, {2} bajtů, sektory po {3} bajtech. Počáteční LBA {4}, sektorů: {5}. Uloženo {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Zapsat na: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Před zápisem zálohovat aktuální obsah</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Další</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 datového souboru nesouhlasí s doprovodným souborem. Obnovení není možné.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Doprovodný soubor chybí. Zadejte počáteční LBA, kam se má zapisovat.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Sériové číslo nebo kapacita cíle se liší od disku, ze kterého byla data uložena.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Cíl: {0}. Svazky v rozsahu: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Obsah: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Zapsat sektorů: {0}</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Obnovení sektorů: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Rozsah sektorů se nepodařilo obnovit. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Zapsáno sektorů: {0}; zápis byl potvrzen zpětným čtením.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Zápis se nezdařil. Zapsáno sektorů: {0}; zápis selhal na LBA {1}. Můžete zapsat zpět záložní soubor {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Obsah přečtený zpět nesouhlasí s datovým souborem.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Rekonstrukce RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Členové (v pořadí)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Nahoru</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Dolů</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Přidat soubor...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Tento člen chybí</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[chybí]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Posun začátku dat člena</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Typ</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Velikost pruhu</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Rozložení parity</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Levé symetrické</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Levé asymetrické</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Pravé symetrické</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Pravé asymetrické</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Použitý člen (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Detekce (první 1 MiB)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Zjištěno: {0} (oddílů: {1})</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Žádná tabulka oddílů</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Signatura souborového systému: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Žádná signatura souborového systému</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Velikost logického disku: {0} bajtů</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>S touto konfigurací nelze zjistit.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Členové mají různé velikosti. Použije se nejmenší velikost.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Uložit konfiguraci...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Načíst konfiguraci...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Konfigurace RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Konfigurace RAID byla uložena do {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Konfiguraci RAID se nepodařilo uložit. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Konfiguraci RAID se nepodařilo přečíst. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Logický disk se nepodařilo otevřít.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} (členů: {1})</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Parametry nejsou platné.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Velikost pruhu musí být mocnina dvou od 512 B do 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Pro tento typ je příliš málo členů.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Tento typ nemůže mít chybějícího člena.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Chybí dva nebo více členů. RAID 5 nelze otevřít.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Zobrazit oddíly</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>oddíly disk mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Otevřít oddíl na nové kartě</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>oddíl karta partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Přejít na začátek oddílu</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>oddíl skok partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Otevřít odtud jako začátek oddílu</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>oddíl zde partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Hledat ztracené oddíly</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>ztracený oddíl obnova hledání lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Zobrazit souborový systém</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>prohlížeč souborového systému ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Otevřít soubor na nové kartě</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>soubor otevřít karta file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Exportovat soubory</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>export extrahovat soubory export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Najít smazané soubory</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>smazané obnovit deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Přejít na záznam MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>záznam mft ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Přejít na cluster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>cluster blok skok cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Soubory používající tuto pozici</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>vlastník clusteru zpětné hledání cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Zobrazit clustery souboru</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>fragmenty clustery zvýraznění fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Další fragment</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>fragment další fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Předchozí fragment</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>fragment předchozí fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Přepnout zvýraznění volného místa a slacku</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack nealokované zvýraznění slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Exportovat nealokované místo</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>nealokované volné export unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Exportovat slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack export slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Otevřít nealokované místo na nové kartě</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>nealokované karta unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Panel oddílů</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>panel oddíly panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Panel souborového systému</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>panel souborový systém panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Panel fragmentů</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>panel fragmenty panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Panel forenzních výsledků</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>panel výsledky forenzní panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Číslo záznamu MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Oddíly a souborové systémy</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Zobrazovat malé mezery mezi oddíly</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Zobrazit v panelu oddílů nealokované mezery menší než 1 MiB.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Zobrazovat posuny na disku na kartách oddílů</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Když je vypnuto, adresy na kartě oddílu začínají od 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Zobrazovat alternativní datové proudy NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Pojmenované proudy se v prohlížeči souborového systému zobrazují jako file.txt:stream.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Zobrazovat legendu forenzního zvýraznění</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Zobrazí legendu v pravém horním rohu zobrazení Hex, dokud je zvýraznění zapnuto.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Barvy forenzního zvýraznění</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Například: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Ponechte prázdné pro výchozí barvy.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Oddíly</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Souborový systém</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Zobrazit oddíly</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Otevřít oddíl na nové kartě</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Přejít na začátek oddílu</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>Č</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Hledat ztracené oddíly...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Zobrazit prohlížeč</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Otevřít soubor na nové kartě</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Exportovat soubory...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Najít smazané soubory</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Přejít na cluster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Soubory používající tuto pozici</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>Ž</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Zobrazit clustery souboru</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Přejít na záznam MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Exportovat nealokované místo...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Exportovat slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Otevřít nealokované místo na nové kartě</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>Ě</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Další fragment</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>Š</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Předchozí fragment</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>Ř</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Forenzní zvýraznění</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Oddíly</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>Í</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Souborový systém</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Fragmenty</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Forenzní výsledky</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Pozice na disku a vlastník clusteru</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Oddíly</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Souborový systém</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Fragmenty</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Forenzní výsledky</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Analyzuji oddíly…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Neanalyzováno. Zvolte Forenzní analýza &gt; Oddíly &gt; Zobrazit oddíly.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Tabulka oddílů nebyla nalezena.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>Oddílů: {0}, velikost sektoru {1}, ID disku {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Nečitelné sektory (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> Č.   Formát    Typ                          Název          Počátek LBA    Konec LBA      Sektorů     Velik.  Posun začátku Příznaky     SS        Stav</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Rozložení oddílů</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Varování</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID typu: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>Jedinečný GUID: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Počáteční blok {0}, bloků: {1}</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Záznam tabulky na {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Přejít na začátek oddílu</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Vybrat oddíl</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Otevřít oddíl na nové kartě</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Zobrazit strukturu záznamu</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Zobrazit souborový systém</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Hledat ztracené oddíly...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Kurzor není v žádném oddílu.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>GPT se sektory po {1} bajtech nebyla nalezena, ale byla nalezena GPT se sektory po {0} bajtech. Znovu otevřít se sektory po {0} bajtech?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Znovu otevřít se sektory po {0} bajtech</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} – oddíl {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} – LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logický</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Řetězec EBR se zacyklí na LBA {1} (po oddílu {0}). Řetězec byl zastaven.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Více než 256 logických oddílů. Zbytek nebyl přečten.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 záhlaví GPT nesouhlasí (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 pole záznamů oddílů GPT nesouhlasí (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Primární záhlaví GPT a záložní záhlaví (LBA {1}) se liší.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Primární záhlaví GPT je poškozeno. Seznam byl sestaven ze záložního záhlaví.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Oddíly {0} a {2} se překrývají.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Oddíl {0} ukazuje mimo disk (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>Hybridní MBR: ochranný MBR obsahuje i jiné záznamy.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Některé sektory se nepodařilo přečíst (první: LBA {1}). Seznam používá čitelné sektory.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Mapa oddílů Apple má více než 256 záznamů.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Systémový EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Rezervováno Microsoftem</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Základní data Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Obnovení Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Metadata LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Data LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Souborový systém Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Odkládací oddíl Linux</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Domovský oddíl Linux</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Zaváděcí Apple</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>Zaváděcí BIOS</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Rozšířený</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Rozšířený (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>Skrytý FAT12</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Obnovení</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>Skrytý FAT16</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>Skrytý NTFS</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>Skrytý FAT32</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (dynamický disk)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Rozšířený Linux</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>Ochranný GPT</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Nealokováno</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Fyzický svazek LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Hledání ztracených oddílů</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>Počáteční LBA</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>Koncové LBA (nezahrnuto)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Pozice skenování</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Hranice po 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Hranice válců (63 sektorů)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Každý sektor</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Kontrola každého sektoru trvá přibližně {0} (při 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Hledat</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Záhlaví GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Skenovat</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Hledání ztracených oddílů</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Ztracené oddíly</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>   Počátek LBA         Sektorů        Velik.  Typ         Jist.   Překryvy</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Nízká</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Střední</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Vysoká</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>překrývá oddíl {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Zrušeno. Dosavadní výsledky zůstávají zachovány.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, one {Nalezen # kandidát.} few {Nalezeni # kandidáti.} many {Nalezeno # kandidáta.} other {Nalezeno # kandidátů.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Nečitelné: LBA {0}, sektorů: {1}</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Nebyli nalezeni žádní kandidáti na oddíly.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Skenovat každý sektor</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Otevřít jako oddíl</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Zobrazit souborový systém</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Vytvořit záznamy tabulky oddílů (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Vytvořit záznamy tabulky oddílů (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Vytvořit záznamy tabulky oddílů</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR nemá dostatek volných záznamů pro všechny kandidáty.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Oddíl nelze zapsat do MBR (přes 2 TiB). Použijte GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT nemá volný záznam.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Disk je pro GPT příliš malý.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Pro tento dokument není otevřen žádný souborový systém.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Vyberte soubor v prohlížeči souborového systému.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Nejsou zvýrazněny žádné clustery souboru.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Pouze pro NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Informace o alokaci nelze přečíst, proto zvýraznění není k dispozici.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Svazek je šifrován (BitLocker). Prohlížeč souborového systému jej neotevře.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Svazek je šifrován ({0}). Prohlížeč souborového systému jej neotevře.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Nelze otevřít jako {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Výběr souborového systému</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Typ se nepodařilo zjistit ze signatury. Vyberte typ, který se má vyzkoušet.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Typ</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Otevřít</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Nealokováno ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Záznam MFT {0} neexistuje.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Přejít na blok</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Žádný souborový systém. Zvolte Forenzní analýza &gt; Souborový systém &gt; Zobrazit prohlížeč.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  sériové číslo {2}  cluster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Kořen</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Soubory</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Složky</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Fragmenty</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Filtr (* a ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Najít soubory (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Sloupce</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>Použitá FAT</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, one {Tabulky FAT se liší v # záznamu.} few {Tabulky FAT se liší v # záznamech.} many {Tabulky FAT se liší v # záznamu.} other {Tabulky FAT se liší v # záznamech.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Sektorů na cluster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Analyzovat znovu</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Čtení…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Čtení… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>Položek: {0}</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Nelze přečíst: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(poškozeno)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(nesoulad času)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Nesoulad času: časy $STANDARD_INFORMATION jsou dřívější než časy $FILE_NAME nebo nemají zlomek sekundy.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Šifrováno pomocí EFS (jen nezpracovaná data).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Řetězec clusterů chybí; data se čtou jako souvislé clustery od prvního clusteru.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>záznam ve slacku indexu</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>počítám…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logický {0}  cluster {1} ×{2}  disk {3}  {4} bajtů</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logický {0}  v metadatech  disk {3}  {4} bajtů</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(komprimováno)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Výpočet pozic slacku</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Vytváření mapy clusterů</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Přeskočeno záznamů s poškozenými metadaty: {0}.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Pozice není v oblasti clusterů.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Vlastníci clusterů {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Druh                      Cesta</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Soubor</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Smazaný soubor (uvolněn)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Řetězec clusterů {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Index         Cluster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Soubory s názvem {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>        Velik.  Cesta</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Hledání souborů: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, one {Nalezen # soubor.} few {Nalezeny # soubory.} many {Nalezeno # souboru.} other {Nalezeno # souborů.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Hledání smazaných souborů</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Hledání osiřelých souborů</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Otevřít soubor na nové kartě</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Exportovat soubory...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Přejít na metadata</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Zobrazit clustery souboru</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Zobrazit záznam MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Zobrazit INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Zobrazit $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Zobrazit záznam adresáře</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Zobrazit řetězec clusterů</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Kopírovat cestu</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Exportovat seznam do CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Přípona</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Velikost</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Alokováno</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Vytvořeno (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Vytvořeno (místní)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Změněno (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Změněno (místní)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Přístup (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Přístup (místní)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Metadata změněna (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Metadata změněna (místní)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Atr.</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID souboru</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>První cluster</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Fragm.</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Stav</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Cesta</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Původní cesta</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Obnova</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Normální</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Smazaný</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Osiřelý</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Dobrá</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Částečně přepsáno</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Přepsáno</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Umístění neznámé</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Rezidentní</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Záznam MFT se nepoužívá</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack indexu</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Smazaný záznam adresáře</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>Smazaný inode</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack záznamu adresáře</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Nesoulad oprav (sekvence aktualizace)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Chybná signatura</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Číslo clusteru je mimo rozsah</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Řetězec clusterů je zacyklený</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Řetězec clusterů dosáhne volného clusteru</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Řetězec clusterů neodpovídá velikosti souboru</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Neplatný seznam datových běhů</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Neplatný atribut</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Kontrolní součet sady záznamů nesouhlasí</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Chyba čtení</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Příliš hluboko</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Záložní zaváděcí sektor se liší ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr se liší od $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Hodnoty BPB jsou nekonzistentní ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>Kopie FAT se liší ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo nesouhlasí ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Kontrolní součet zaváděcí oblasti exFAT nesouhlasí ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Kontrolní součet dlouhého názvu nesouhlasí ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Informace o alokaci nelze přečíst ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Svazek je šifrován ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Smazané soubory</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Osiřelé soubory</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Nealokované místo</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack svazku</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Metadata</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Data souborů</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>S</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>RAM slack</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Drive slack</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Nealokováno</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>N</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack svazku</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Mezera mezi oddíly</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>Z</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Legenda forenzního zvýraznění</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Velikost {0} bajtů, alokováno {1} bajtů</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Vytvořeno {0}, změněno {1}, přístup {2}, metadata změněna {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID souboru {0}, atributy {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Obnova: {0} ({1}). Původní cesta: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Typ: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Název svazku: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Sériové číslo: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Velikost clusteru: {0} bajtů</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Celkem clusterů: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Volných clusterů: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Vytvořeno: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Začátek svazku {0}, {1} bajtů</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Záznam MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Posun záznamu</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Pořadové číslo</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Pevné odkazy</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Příznaky</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Používané bajty</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Základní záznam</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Oprava (fixup)</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI vytvořeno</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI změněno</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT změněno</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI přístup</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Název</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Nadřazený</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN vytvořeno</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN změněno</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT změněno</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN přístup</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>Velikost $FN</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Nesoulad času</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Obsah</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Posun záznamu</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>První cluster</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Krátký název</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Clusterů v řetězci</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Délka dat</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Délka platných dat</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Oddíl {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Cluster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Blok {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Smazáno: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Nealokováno</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Najít vlastníka</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Disk: - (komprimováno / řídce / rezidentně)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Číslo clusteru ({0}–{1}; cluster = aktuální cluster)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Cluster {0} je mimo rozsah.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Přejít</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Zachovat strukturu složek</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Exportovat také alternativní datové proudy (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Exportovat také slack jako samostatné soubory</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Zahrnout smazané soubory</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, one {Vybrána # položka.} few {Vybrány # položky.} many {Vybrána # položky.} other {Vybráno # položek.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Vybrat složku...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Export souborů</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Exportováno souborů: {0} do {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Není dost volného místa: potřeba {0}, volné {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Nelze zapsat: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Exportovat přepsaný soubor?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Clustery tohoto smazaného souboru nyní používají jiné soubory. Exportovaný obsah může patřit jinému souboru.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Exportovat</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Binární soubor</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Vytvořit soubor mapy (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Export nealokovaného místa</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Export slacku</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>{0} zapsáno do {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Záznamy $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      Prev LSN  UndoNext LSN  Typ      Trans.ID  Redo                            Undo                          Zázn. MFT   Délka</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Restartovací stránka {0}: aktuální LSN {1}, klientů: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Čtení $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Seznam</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Žádné výsledky.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Exportovat seznam do CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Není zvýrazněn žádný soubor. Zvolte Zobrazit clustery souboru.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} (fragmentů: {1})</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>č. {0}  logický {1}  disk {2}  {3} bajtů  clustery {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Zrušit zvýraznění</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Vybrat nealokované místo</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>nealokované vybrat hledání carving unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Vybrat slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack vybrat hledání carving slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Vybrat nealokované místo</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Vybrat slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Výběr nealokovaného místa</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Hledání nealokovaného místa</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Výběr slacku</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Není co vybrat.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Vybráno bylo jen prvních 1 000 000 rozsahů.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Zobrazit logické svazky</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>logický svazek ldm dynamický disk lvm lvm2 prokládání spojení logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Přejít na inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 i-uzel</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Číslo inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Zobrazit logické svazky</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Přejít na inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Kontrolní součet nesouhlasí</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Nepodporovaný formát</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Kontrolní součet superbloku ext nesouhlasí ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Kontrolní součty deskriptorů skupin nesouhlasí (skupiny {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Tato funkce ext není plně podporována: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Alternativní záhlaví svazku se liší od primárního ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Kontrolní součet objektu APFS nesouhlasí (blok {0}). Objekt byl přeskočen.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Nejnovější kontrolní bod APFS je poškozen; použit starší (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Kontrolní součet značky deskriptoru UDF nesouhlasí (sektor {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC deskriptoru UDF nesouhlasí (sektor {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Tento typ oddílu UDF není podporován: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Disk má sezení: {0}. Zobrazeno je poslední sezení; jiné vyberete v poli Sezení.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>K dispozici jen pro ext2, ext3 a ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Inode {0} neexistuje.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Svazek je šifrován. Seznam souborů se nezobrazuje.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Nebyl nalezen žádný kontrolní bod APFS.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Zobrazit inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Zobrazit žurnál</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Názvy</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (základní)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Sezení</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Tento souborový systém nemá žurnál.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>Žurnál ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>      Blok    Posun na disku  Typ              Pořadí</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Velikost bloku {0}, bloků: {1}, pořadí {2}, začátek {3} (0 = čistý). Žurnál se nepřehrává.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Čtení žurnálu ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Deskriptor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Potvrzení</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblok v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblok v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Zrušení</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Zobrazit logické svazky</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Vytvořit obraz tohoto rozsahu...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Logické svazky</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Název                 Typ           Velikost    Uspořádání                    Stav</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Čtení metadat svazku...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>V otevřených discích a obrazech nebyl nalezen žádný logický svazek LDM ani LVM2.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Otevřít logický svazek</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Přiřadit členy...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Přečíst znovu</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Tento typ svazku není podporován: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>{0} nelze otevřít. Chybějící členové: {1}. Otevřete disky nebo obrazy, nebo je přiřaďte.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) je zrcadlený svazek nebo svazek RAID-5. Otevřete jej pomocí rekonstrukce RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Přiřazení členů</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Vyberte disk nebo obraz pro každého chybějícího člena {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(žádný)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Otevřít soubor...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, one {Chybí # člen} few {Chybí # členové} many {Chybí # člena} other {Chybí # členů}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Nepodporováno</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Rekonstrukce RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Jednoduchý</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Překlenutý</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Prokládaný</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Zrcadlený</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Lineární</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Nepodporováno ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} skupina {1}, svazek {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Člen {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>nenalezeno</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Posun {0} ({1}): {2} na {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Posun {0} ({1}): pruh {2} přes {3} členů</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Bezpečně vymazat výběr</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>vymazání skartace přepsání bezpečné smazání rozsah wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Bezpečně vymazat disk</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>vymazání disk přepsání bezpečně wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Vymazat volné místo</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>volné místo nealokované vymazání cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Vymazat slack souborů</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram disk vymazání slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Začernit obsah souborů</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>začernění vyčištění redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Vymazání</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Vymazat výběr...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>Ý</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Vymazat disk...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Vymazat volné místo...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>É</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Vymazat slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Začernit obsah souborů...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>Č</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Začernit obsah souborů...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Bezpečně vymazat výběr...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Vyříznout soubory z výběru (carving)...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Začernění</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Bezpečné vymazání</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Cíl: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Začátek</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Délka</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Na konci přečíst zpět a ověřit</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Vymazat...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Rozsah je mimo dokument.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Neuložené úpravy</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Data ke smazání mají neuložené úpravy. Před vymazáním je uložte nebo zahoďte.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Zahodit</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Vymazání dat</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Cíl: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Disk {0}: {1}, sériové číslo {2}, {3} bajtů</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Svazky: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Rozsah: počáteční LBA {0}, sektorů: {1}, bajtů: {2}</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Rozsah: posun {0}, bajtů: {1}</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Rozsah byl rozšířen na hranice sektorů.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Metoda: {0} ({1, plural, one {# průchod} few {# průchody} many {# průchodu} other {# průchodů}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Poslední průchod se přečte zpět a ověří.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Odhadovaný čas: přibližně {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Tuto akci nelze vrátit zpět. Původní data nelze obnovit.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>U SSD a flash médií může vyrovnávání opotřebení uchovat původní data jinde, i když byla přepsána.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Tyto svazky jsou během mazání zamčeny: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Data se zapisují přímo do souboru, ne jako úprava. Nelze je vrátit příkazem Zpět.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Vymazat bajtů: {0}</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Vymazat {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Disk {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Pro pokračování zadejte „{0}“.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Potvrzení</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Vyberte rozsah k vymazání.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Tento dokument nelze vymazat přímo.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Chcete-li vymazat fyzický disk, otevřete jej celý na kartě.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Tento zdroj dat je v seznamu důkazů a nelze do něj zapisovat.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows tento disk používá (systémový, zaváděcí nebo stránkovací soubor), proto jej nelze vymazat.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Svazek {0} se nepodařilo zamknout, proto nebylo nic vymazáno.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Zápis byl odmítnut: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Vymazání se nezdařilo: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Mazání {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Průchod {0} z {1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Ověřování</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Zastavit mazání? Již přepsaná část zůstane přepsaná; zbytek si ponechá původní data.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Chyba zápisu</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Nelze zapsat na posunu {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Přeskočit a pokračovat</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Výsledek vymazání</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Vymazáno bajtů: {0} za {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Ověření proběhlo úspěšně.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, one {Ověření našlo # rozsah, který nesouhlasí:} few {Ověření našlo # rozsahy, které nesouhlasí:} many {Ověření našlo # rozsahu, které nesouhlasí:} other {Ověření našlo # rozsahů, které nesouhlasí:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, one {# rozsah se nepodařilo zapsat:} few {# rozsahy se nepodařilo zapsat:} many {# rozsahu se nepodařilo zapsat:} other {# rozsahů se nepodařilo zapsat:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Mazání bylo zastaveno. Data do posunu {0} byla přepsána v průchodu {1}; zbytek si ponechal dřívější obsah.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Ověřování bylo zastaveno. Všechny průchody byly zapsány.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Mazání bylo zastaveno po chybě zápisu na posunu {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Přeskočeno souborů: {0} (komprimovaných {1}, řídkých {2}, rezidentních {3}, nekonzistentních {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Vymazání volného místa</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Metoda</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Přes Windows (připojený svazek)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Přímý zápis (souborový systém na této kartě)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Svazek</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Nelze použít žádný připojený svazek.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Pro přímý zápis nejprve zobrazte souborový systém této karty.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Svazek: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Volné místo k přepsání: {0} bajtů</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Metoda: přes Windows (dočasné soubory vyplní volné místo a na konci se odstraní)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Metoda: přímý zápis do nealokovaných clusterů</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Během této operace nemá svazek žádné volné místo. Ostatní aplikace dál fungují, ale nemohou ukládat nová data.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Pokud jsou informace o alokaci souborového systému chybné, soubory se mohou poškodit.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Vymazat volné místo</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Souborový systém není konzistentní ({0}). Opravte jej pomocí chkdsk a zkuste to znovu.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Přímý zápis podporuje jen NTFS, FAT12/16/32 a exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Nejprve uložte nebo zahoďte úpravy na této kartě.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Tyto dočasné soubory se nepodařilo odstranit. Odstraňte je ručně:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Přepsáno volného místa: {0} bajtů za {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Výpočet volného místa</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Vymazávání volného místa bylo zastaveno. Dočasné soubory byly odstraněny.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Vymazání slacku</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Souborů: {0}, slack k přepsání: {1} bajtů</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Vymazat slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Hledání slacku souborů</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Přepsáno slacku: {0} bajtů za {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Začernění obsahu souborů</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Soubory ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Vzor</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (výchozí)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Náhodný</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Bajty Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Bajty Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Také nahradit názvy znaky „_“ stejné délky</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Protokol začernění (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Obsah se změní jako úprava. Nic se nezapíše, dokud neuložíte; nový obraz uložíte pomocí Uložit jako.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Začernit</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Hledání dat k začernění</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, one {Začerněn # soubor} few {Začerněny # soubory} many {Začerněno # souboru} other {Začerněno # souborů}} ({1} bajtů). Nový obraz uložíte pomocí Uložit jako.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Nebylo co začernit.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Soubory nebyly začerněny</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, one {# položka nebyla začerněna:} few {# položky nebyly začerněny:} many {# položky nebylo začerněno:} other {# položek nebylo začerněno:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>složka</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>smazaná položka</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>metadata jsou poškozena</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>informace o fragmentech jsou poškozeny</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>rezidentní data nebyla nalezena</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>metadata souborového systému</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Názvy se nepodařilo nahradit u: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Dokument je jen pro čtení.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Přepsat původní obraz?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Tento dokument obsahuje začernění. Uložením se zapíší do původního {0} a nelze to vrátit zpět. Chcete-li zachovat originál, použijte Uložit jako.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Přepsat {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Protokol začernění se nepodařilo zapsat: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Zadejte vzor jako bajty Hex (například 00 nebo A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
 </root>

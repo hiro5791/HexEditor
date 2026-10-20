@@ -2,7 +2,7 @@
 
 この文書は、機能仕様書 [12-forensics.md](../../spec/12-forensics.md) (FOR) の受け入れ基準を確認するテストケースを定める。書式と用語は [00-test-strategy.md](../00-test-strategy.md) に従う。この領域はすべてフェーズ 5。
 
-- テストケースの数: 合計 123 件 (自動: 単体 21、自動: 結合 46、自動: UI 44、自動: 性能 2、半自動 3、手動 7)
+- テストケースの数: 合計 124 件 (自動: 単体 21、自動: 結合 47、自動: UI 44、自動: 性能 2、半自動 3、手動 7)
 - 手動・半自動の所要時間の合計 (目安): 39 分
 - 共通のテストデータは [test-data.md](../test-data.md)、このファイルで新しく定義したテストデータは末尾の「このファイルで使うテストデータ」を参照する。
 
@@ -46,6 +46,8 @@
 - メニューの項目がチェックされている。
 - 手順 4 の InfoBar が、OS や他のアプリの書き込みは防げないことと、ハードウェアの書き込み防止装置または FOR-02 の併用を勧める趣旨。
 - 手順 5 で、モードが有効のまま表示が出ている。
+
+**備考**: 自動テストは `WriteBlockUiTests`。ステータスバーの左端は、表示されている最初の項目が書き込み保護の項目であることで確かめる。錠のアイコンはタブの見出しの先頭の 🔒 (読み取り専用の印。EDIT-16 の仕様 6) で確かめる。
 
 ### TC-FOR-01-02 ハイコントラストテーマでの書き込み保護の表示
 
@@ -129,6 +131,8 @@
 - 手順 3 でファイルの SHA-256 と更新日時が記録と同じ。ドキュメントのオフセット 0 は `AA` で「変更あり」のまま。
 - 手順 4 の保存が成功し、`copy.bin` のオフセット 0 が `AA`。`evidence.bin` は変わらない。
 
+**備考**: 保存の拒否そのもの (どの保存の方式でも書き込み 0 回) は Core の単体テスト (`WriteBlockTests`) でも確かめる。
+
 ### TC-FOR-01-05 補助プロセスへの直接の書き込み要求の拒否
 
 | 項目 | 内容 |
@@ -157,6 +161,8 @@
 - 手順 2〜4 がすべて拒否の応答 (成功以外の状態) になる。
 - 手順 6 の SHA-256 が記録した値と一致する。
 
+**備考**: どの環境でも、補助プロセスの処理 (`PrivilegedOperations`) を偽のディスクに対してパイプの代わりの双方向ストリームで動かして同じ手順を確かめる (`WriteBlockTests`)。本物の補助プロセスと TD-VHDX-MBR での確認は CI のジョブ ui-privileged (`PrivilegedTests`。テスト用の命令が管理者のアプリから補助プロセスを直接起動する。開発者の PC ではスキップする)。
+
 ### TC-FOR-01-06 破壊的な操作のメニューの無効表示
 
 | 項目 | 内容 |
@@ -180,6 +186,8 @@
 
 - 手順 1、2 の項目がすべて無効で、ツールチップに「書き込み保護モードが有効です」が出る。
 - 手順 3 の「セクタ範囲を保存」は有効。
+
+**備考**: 自動テストは偽の物理ディスク (fakeDevices) で行う (仮想ディスクの接続は不要)。消去・墨塗り・クローン・復元のコマンドは、それぞれの機能の部品が書き込み保護で無効にするコマンドとして登録し (`ForensicsService.RegisterDestructiveCommands`)、各機能のテストでも無効表示を確かめる。パーティション表のエントリの作成はコマンドではなく失われたパーティションの結果の操作なので、同じ判定 (`WriteBlockGate` の `PartitionWrite`) で断ることを FOR-08 のテストで確かめる。
 
 ### TC-FOR-01-07 解除の確認ダイアログのキャンセル
 
@@ -232,6 +240,8 @@
 - 手順 3 の強い確認で、入力するまで実行ボタンが無効。
 - 手順 4 でタブのアイコンが開いた錠になり、読み取り専用が解除されている。
 
+**備考**: 自動テストは TD-VHDX-MBR の代わりに偽の物理ディスク (fakeDevices) を証拠に追加して行う (管理者権限・仮想ディスクの接続は不要)。
+
 ### TC-FOR-01-09 解除と例外の設定の監査ログ
 
 | 項目 | 内容 |
@@ -257,6 +267,8 @@
 
 - 手順 4 に、例外の設定、例外の解除、モードの解除の 3 行があり、それぞれに日時 (`2026-10-07T03:15:42.1234567Z` 形式)、操作者 (Windows のユーザー名)、対象が記録されている。
 - 手順 5 の `forensics-audit.log` に、有効化と解除の 2 行が同じ形式で記録されている。
+
+**備考**: 自動テストは Core の結合テスト (`WriteBlockTests`)。書き込み保護の切り替えと例外の記録 (`WriteBlockService`) を、固定した時計のケースの監査ログと設定フォルダの監査ログで確かめる。操作者は監査ログの各行の Windows のユーザー名。
 
 ### TC-FOR-01-10 --write-block での起動
 
@@ -342,6 +354,8 @@
 - 手順 3 で値が `0`。
 - 手順 4 で `WriteProtect` の値が存在しない。
 
+**備考**: どの環境でも、偽の保存先で切り替えの規則を確かめる (`UsbWriteProtectTests`)。実機のレジストリでの確認は CI のジョブ ui-privileged だけで行う (`PrivilegedTests`。テストの前後でキーを退避・復元する。開発者の PC ではスキップし、レジストリを書き換えない)。
+
 ### TC-FOR-02-03 有効のまま終了しようとしたときの選択
 
 | 項目 | 内容 |
@@ -366,6 +380,8 @@
 
 - 手順 2 で「OS の USB 書き込み保護が有効のままです」の趣旨と、「無効にして終了」「有効のまま終了」のボタンが出る。プロセスはまだ終了していない。
 - 手順 3 で値が元の状態に戻る。手順 4 で値が `1` のまま。
+
+**備考**: 自動テストはレジストリの代わりに偽の保存先 (フック usbWriteProtect の JSON ファイル) を使う (管理者権限・レジストリの書き換えは不要)。終了後の値はそのファイルで確かめる。
 
 ## FOR-03 ケースと証拠一覧
 
@@ -995,7 +1011,7 @@
 | テストデータ | TD-FOR-NTFS、TD-FOR-FAT32、TD-FOR-EXFAT |
 | 環境 | 管理者 (CI) |
 
-**前提**: 各イメージ (ボリュームのイメージ) の大きさのパーティションを 1 つ持つ VHDX を作り、パーティションにイメージの内容を書き込んでから、読み取り専用で接続してドライブ文字を割り当てる。テストコードが OS のファイル API で、全ファイルの相対パス・サイズ・更新日時 (UTC) の一覧を作る。
+**前提**: パーティションを 1 つ持つ固定サイズの VHD を作り、Windows でそのパーティションを NTFS・FAT32・exFAT にフォーマットして、TD-FOR-FILESET を OS のファイル API で書き込む (build/tests/New-FileSystemVhd.ps1)。テストコードが OS のファイル API で、全ファイルの相対パス・サイズ・更新日時 (UTC)・SHA-256 の一覧を作ってから VHD を切り離す。アプリはその VHD のファイル (固定サイズの VHD は生のディスクの後ろに 512 バイトのフッターが付いたもの) をディスクイメージとして開く。テスト用に生成したイメージ (TD-FOR-NTFS など) は Windows のドライバの検査を通ることを保証しないため、OS との比較には Windows がフォーマットしたボリュームを使う。TD-FOR-NTFS などと TD-FOR-FILESET の定義との一致は、単体テスト (FsTestImages) が確かめる。
 
 **手順**:
 
@@ -1042,7 +1058,7 @@
 | テストデータ | TD-FOR-NTFS、TD-FOR-FAT32、TD-FOR-EXFAT |
 | 環境 | 管理者 (CI) |
 
-**前提**: TC-FOR-09-01 と同じ方法で各イメージを接続し、OS 経由で各ファイルをコピーして SHA-256 を計算する。
+**前提**: TC-FOR-09-01 と同じ方法で VHD を作り、OS 経由で各ファイルの SHA-256 を計算する。
 
 **手順**:
 
@@ -1209,7 +1225,7 @@
 | テストデータ | TD-FOR-NTFS |
 | 環境 | 管理者 (CI) |
 
-**前提**: TD-FOR-NTFS の内容を書き込んだ VHDX を読み取り専用で接続し、OS 経由で `compressed.bin` をコピーして SHA-256 を計算する。
+**前提**: TC-FOR-09-01 と同じ方法で、`compressed.bin` に NTFS の圧縮属性を付けた (compact /c) VHD を作り、OS 経由で SHA-256 を計算する。単体テストは、TD-FOR-NTFS の `compressed.bin` (Windows の RtlCompressBuffer で LZNT1 に圧縮して作ったもの) の展開が TD-FOR-FILESET の内容と一致することを確かめる。
 
 **手順**:
 
@@ -1355,7 +1371,7 @@
 | テストデータ | TD-FOR-EXT2、TD-FOR-EXT3、TD-FOR-EXT4 |
 | 環境 | 標準 |
 
-**前提**: 各イメージの作成時に Linux でマウントして記録したマニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) を用意する。
+**前提**: マニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) は、テストデータの生成ツールが入れたファイルの定義 (TD-FOR-FILESET の削除するもの以外と `dir1` の 300 個のファイル) とする。Linux の mke2fs で作ったイメージと Linux で記録したマニフェストとの比較は、CI のジョブ fs-crosscheck (毎晩と手動の実行。build/tests/make-fs-crosscheck.sh と FileSystemCrossCheckTests) が行う。
 
 **手順**:
 
@@ -1425,7 +1441,7 @@
 | テストデータ | TD-FOR-APFS |
 | 環境 | 標準 |
 
-**前提**: TD-FOR-APFS の作成時に macOS でマウントして記録したマニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) を用意する。
+**前提**: マニフェスト (全ファイルのパス・サイズ・更新日時・SHA-256) は、テストデータの生成ツールがボリューム `Data` に入れたファイルの定義 (TD-FOR-FILESET の削除するもの以外) とする。macOS で作ったイメージは CI で作れない (macOS の diskutil はディスクイメージの作成に管理者のマウントを使う) ため、APFS は生成ツールのイメージだけで確かめる。
 
 **手順**:
 
@@ -2231,6 +2247,31 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 - 前後のチャンクは有効で、TD-MARKERS-1G と一致する。
 - ステータスバーと InfoBar でチャンクの不一致が知らされる。
 
+### TC-FOR-21-05 VHD・VHDX・VMDK を開く
+
+| 項目 | 内容 |
+| --- | --- |
+| 確認する基準 | FOR-21 の受け入れ基準 5 |
+| 種別 | 自動: 結合 |
+| 優先度 | 低 |
+| フェーズ | 5 |
+| テストデータ | テストコードが各形式の仕様のとおりに書く 8 MiB の仮想ディスク (1 MiB ごとの目印と、3 MiB〜3.5 MiB の乱数) |
+| 環境 | 標準 |
+
+**前提**: 同じ内容の固定・可変の VHD、可変・固定 (4 KiB セクタ) の VHDX、monolithicSparse・streamOptimized・記述ファイル (FLAT 2 つと ZERO) の VMDK と、5 MiB の位置の 1 セクタだけを変えた差分の VHD・VHDX・VMDK を作る。
+
+**手順**:
+
+1. 各ファイルを開き、長さと全体の内容、ブロックの境界をまたぐ読み込みの内容を取得する。
+2. 差分ディスクを開き、変えたセクタと親から読む位置の内容を取得する。
+3. 差分の VHD の親を消してから開き直す。
+
+**期待結果**:
+
+- 手順 1 の内容が元の内容と一致し、「イメージの情報」の種類 (fixed / dynamic / differencing、createType) が正しい。
+- 手順 2 で変えたセクタは差分の内容、それ以外は親の内容。
+- 手順 3 で親が見つからない旨のエラーになる。
+
 ## FOR-22 イメージの検証
 
 ### TC-FOR-22-01 取得直後のイメージの検証
@@ -2318,7 +2359,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-NTFS-10PCT |
 | 環境 | 標準 (出力先は NTFS) |
 
-**前提**: TD-FOR-NTFS-10PCT をディスクイメージとして開く。
+**前提**: TD-FOR-NTFS-10PCT をディスクイメージとして開く。Core の結合テストでは、同じ配置の最小の NTFS (ブートセクタ、$MFT、$MFTMirr、$LogFile、$Bitmap、$Boot、ファイルの $FILE_NAME と非常駐の $DATA) をテストコードが直接書いたものを使う (この PC ではフォーマットのツールを使わないため)。
 
 **手順**:
 
@@ -2342,7 +2383,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-NTFS-FAT32 |
 | 環境 | 標準 |
 
-**前提**: TD-FOR-NTFS-FAT32 をディスクイメージとして開く。
+**前提**: TD-FOR-NTFS-FAT32 をディスクイメージとして開く。Core の結合テストでは、同じパーティションの配置の最小の NTFS と FAT32 (クラスタ 1 KiB) をテストコードが直接書いたものを使う。ファイル一覧は MFT の $FILE_NAME と FAT32 のディレクトリのエントリから求める。
 
 **手順**:
 
@@ -2429,7 +2470,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 **期待結果**:
 
-- ロックできないため実行しない旨のメッセージが出て、使っているプロセス名 `TestTarget.exe` が示される。
+- ロックできないため実行しない旨のメッセージが出る (ボリュームを使っているプロセスの名前は、OS から分かる場合だけ示す。ボリュームのハンドルの持ち主は Windows の公開された API では求められないため、名前が出ないことは失敗としない)。
 - SHA-256 が記録と同じ。
 
 ### TC-FOR-24-03 書き込み保護モードではクローンが無効
@@ -2608,6 +2649,8 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 - 「このデバイスでは確認できません」と表示され、例外が記録されていない。アプリが動作を続ける。
 
+**備考**: 自動テストは仮想ディスクの代わりに、ATA パススルーに応答しない偽の物理ディスク (接続 Virtual) で行う (`WriteBlockUiTests`)。応答の読み込み・HPA / DCO の計算は Core の単体テスト (`DeviceInfoTests`) で、偽の SATA・NVMe のディスクを使って確かめる。
+
 ### TC-FOR-27-03 USB 接続のディスクでコマンドが通らない場合
 
 | 項目 | 内容 |
@@ -2720,6 +2763,8 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 - 暗号化方式が AES-XTS 128、キー保護機能の一覧にパスワードと回復パスワードの 2 つがある。
 - 手順 3 で「暗号化されています」と表示され、ブラウザが開かない。
 
+**備考**: TD-FOR-BITLOCKER-RAW は、BitLocker の機能を使わずに生成ツールが BitLocker の形式 (ボリュームヘッダと 3 つの FVE メタデータブロック) で組み立てたもの (下の表)。
+
 ### TC-FOR-29-02 ロック解除済みの BitLocker ボリュームを論理ボリュームとして開く
 
 | 項目 | 内容 |
@@ -2771,6 +2816,8 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 - 種類が LUKS2 と表示され、UUID が TD-FOR-LUKS2 の定義の値、キースロットの数が 1。
 
+**備考**: TD-FOR-LUKS2 は、cryptsetup を使わずに生成ツールが LUKS2 の形式 (主・副のヘッダと JSON の領域) で組み立てたもの (下の表)。
+
 ## FOR-30 範囲・ディスクの安全な消去
 
 ### TC-FOR-30-01 乱数で 1 回の消去
@@ -2784,7 +2831,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0x100000, 0x900000) を選択する。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0x100000, 0x900000) を選択する。自動テストは、TD-FOR-VHDX-PATTERN と同じ内容 (生のディスク) のイメージファイルを中身にした偽のディスク (fakeDevices) をディスク 1 として開く (UI のテスト: 確認ダイアログ・データ・監査ログ)。偽のディスクでのロックの順序は単体テストが確かめる。
 
 **手順**:
 
@@ -2811,7 +2858,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0, 32 MiB) を選択する。「遅いデータソース」で書き込みが 5 秒以上かかるようにする。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開き、範囲 [0, 32 MiB) を選択する。「遅いデータソース」で書き込みが 5 秒以上かかるようにする。自動テストは TC-FOR-30-01 と同じ偽のディスク (48 MiB) を使い、テスト用の命令で書き込みごとに 60 ms 待たせる。
 
 **手順**:
 
@@ -2835,7 +2882,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-PATTERN |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開く (ディスク番号 N)。ディスク全体の SHA-256 を記録する。
+**前提**: TD-FOR-VHDX-PATTERN を接続して物理ディスクとして開く (ディスク番号 N)。ディスク全体の SHA-256 を記録する。自動テストは TC-FOR-30-01 と同じ偽のディスク (N = 1) を使う。手順 3 の Enter は既定のボタン (キャンセル) を押すことと同じで、ダイアログが閉じるため、手順 4 は確認ダイアログを開き直して行う。
 
 **手順**:
 
@@ -2886,7 +2933,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を 2 つ用意し、それぞれ接続してドライブ文字を割り当てる (A、B)。テストコードが、ボリュームの未割り当て領域に ASCII の `WIPE-ME-0123456789` が残っていることを確認する。
+**前提**: TD-FOR-VHDX-DELETED を 2 つ用意し、それぞれ接続してドライブ文字を割り当てる (A、B)。テストコードが、ボリュームの未割り当て領域に ASCII の `WIPE-ME-0123456789` が残っていることを確認する。CI の管理者のテストは build/tests/New-WipeTestVhd.ps1 で Windows がフォーマットした固定サイズの VHD を作り、A は接続したボリュームに OS 経由で、B は切り離した VHD のファイルをディスクイメージとして開いて直接書き込みで消去する。単体テストは、同じ内容をテストデータの生成ツールが書いたディスクのイメージで、直接書き込みはイメージに、OS 経由はイメージの空き領域にファイルを割り当てる偽のボリュームに書いて確かめる。
 
 **手順**:
 
@@ -2912,7 +2959,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続し、全ファイルの SHA-256 と、`slack.txt` (100 バイト、スラックに `SLACK-REMNANT` が残っている) の末尾クラスタの位置を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続し、全ファイルの SHA-256 と、`slack.txt` (100 バイト、スラックに `SLACK-REMNANT` が残っている) の末尾クラスタの位置を記録する。直接書き込みのため、テストは VHD のファイルをディスクイメージとして開いて消去する (CI の管理者のテスト)。単体テストは TC-FOR-31-01 と同じイメージを使う。
 
 **手順**:
 
@@ -2938,7 +2985,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続してドライブ文字 `X:` を割り当て、ルートのファイルとフォルダの一覧を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続してドライブ文字 `X:` を割り当て、ルートのファイルとフォルダの一覧を記録する。CI の管理者のテストは書き込みごとに少し待たせて 30% を超えたところでキャンセルする。単体テストは TC-FOR-31-01 の偽のボリュームで確かめる。
 
 **手順**:
 
@@ -2962,7 +3009,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | テストデータ | TD-FOR-VHDX-DELETED |
 | 環境 | 管理者 (CI)、仮想ディスク |
 
-**前提**: TD-FOR-VHDX-DELETED を接続し、`fsutil dirty set X:` で dirty フラグを立てる。ボリューム全体の SHA-256 を記録する。
+**前提**: TD-FOR-VHDX-DELETED を接続し、`fsutil dirty set X:` で dirty フラグを立てる。ボリューム全体の SHA-256 を記録する。CI の管理者のテストは dirty フラグを立ててから切り離し、VHD のファイルをディスクイメージとして開いて実行する。単体テストは、$Volume の dirty フラグを立てて生成したイメージを使う。
 
 **手順**:
 
@@ -3002,7 +3049,7 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 - 手順 3 で、`photo.png` の名前・サイズ・日時が元のままで、内容がすべて `00`。
 - 手順 4 の SHA-256 がすべて記録と同じ。
-- `redaction-log.csv` に `photo.png` のパス・ファイル ID・上書きした範囲 (データの断片とスラック) が記録され、監査ログにも記録される。
+- `redaction-log.csv` に `photo.png` のパス・ファイル ID・上書きした範囲 (データの断片とスラック) が記録され、監査ログにも記録される。TD-FOR-NTFS の `photo.png` は小さいため MFT レコードに常駐し、上書きした範囲は MFT レコードの中の値 (常駐データ) になる。データの断片とスラックの記録は、常駐しない `small100.bin` を墨塗りして確かめる。
 
 ### TC-FOR-32-02 墨塗りの直後の Undo
 
@@ -3114,6 +3161,8 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 
 ファイルシステムのイメージに入れるファイルの組。「NTFS のみ」と書いたもの以外は、すべてのファイルシステムのイメージに入れる。
 
+TD-FOR-NTFS・TD-FOR-FAT*・TD-FOR-EXFAT・TD-FOR-EXT*・TD-FOR-HFSPLUS・TD-FOR-APFS*・TD-FOR-ISO-JRR・TD-FOR-UDF250・TD-FOR-LDM-*・TD-FOR-LVM-*・パーティション表のイメージは、テストデータの生成ツール (tools/HexEditor.TestData の FileSystemImages) がコードで書く (OS のフォーマッタ・FSCTL_MOVE_FILE は使わない)。断片の配置 (frag.bin の隙間)、切り詰めたファイル (small100.bin のクラスタの残り)、上書き (TD-FOR-NTFS-OVERWRITE の over1.bin・over2.bin のクラスタ)、削除 (使用中の印・ビットマップ・FAT を戻し、データは残す)、インデックススラック (dir1 の最後の INDX の使用領域の後ろに victim.txt のエントリ) は、生成ツールが直接その形に書く。NTFS の圧縮は Windows の RtlCompressBuffer (LZNT1) で作る。生成ツールはアプリの解析の実装を使わない。
+
 | 名前 | 内容 |
 | --- | --- |
 | `readme.txt` | TD-TEXT-ASCII (4 KiB)。更新日時は 2026-01-15T01:30:00Z (FAT・exFAT ではタイムゾーンなしの 2026-01-15 10:30:00 として記録する) |
@@ -3156,30 +3205,30 @@ FTK Imager で開けること (互換性の確認) は TC-FOR-20-06 で確認す
 | TD-FOR-FAT32-FATDIFF | 512 MiB (スパース) | TD-FOR-FAT32 の 2 つ目の FAT で、`data.bin` のクラスタチェーンの 2〜11 番目のクラスタのエントリ (10 個) を終端 (0x0FFFFFFF) にしたもの。1 つ目の FAT は変えない |
 | TD-FOR-FAT32-LOOP | 512 MiB (スパース) | TD-FOR-FAT32 の両方の FAT で、`frag.bin` のクラスタチェーンの 100 番目のクラスタのエントリを、チェーンの 1 番目のクラスタの番号にしたもの |
 | TD-FOR-EXFAT | 64 MiB | exFAT のボリュームのイメージ (クラスタ 4 KiB、ラベル `EXFAT`)。TD-FOR-FILESET を入れる |
-| TD-FOR-EXT2 | 64 MiB | ext2 のボリュームのイメージ。`mke2fs -t ext2 -b 4096 -U 00000000-0000-0000-0000-0000000000E2` (環境変数 `E2FSPROGS_FAKE_TIME=1767225600`) で作り、TD-FOR-FILESET (NTFS のみのものを除く) を入れる。生成時に Linux でマウントしてマニフェストを記録する |
-| TD-FOR-EXT3 | 64 MiB | TD-FOR-EXT2 と同じ方法で、`-t ext3`、UUID の末尾を `E3` にしたもの |
-| TD-FOR-EXT4 | 64 MiB | TD-FOR-EXT2 と同じ方法で、`-t ext4 -O 64bit,flex_bg,extent,metadata_csum`、UUID の末尾を `E4` にしたもの |
-| TD-FOR-HFSPLUS | 32 MiB | HFS+ のボリュームのイメージ (Linux の `mkfs.hfsplus -v HFSTEST`)。`forked.txt` のデータフォークに ASCII の `DATA-FORK` + LF、リソースフォーク (`forked.txt/..namedfork/rsrc`) に ASCII の `RSRC-FORK` + LF を書く |
-| TD-FOR-APFS | 64 MiB | 保管。macOS の `diskutil` で作った APFS のコンテナのイメージ。暗号化しないボリューム `Data` に TD-FOR-FILESET (NTFS のみのものを除く) を入れる。作成時に macOS でマウントしてマニフェストを記録する |
-| TD-FOR-APFS-ENC | 64 MiB | 保管。macOS で作った APFS のコンテナのイメージ。ボリューム `Secret` をパスワード `HexEditor-Test-01` で暗号化し、`readme.txt` を入れる |
-| TD-FOR-ISO-JRR | 約 1 MiB | `xorriso` で作る ISO 9660 のイメージ (Joliet と Rock Ridge あり)。ファイル: `日本語の名前.txt` (TD-TEXT-UTF8)、`MixedCase_Long_Name.txt` (TD-TEXT-ASCII)、`colon:name.txt` (ASCII の `colon` 5 バイト)。El Torito のブートカタログに、エミュレーションなし・4 セクタ (512 バイト単位) のブートイメージ `boot.img` (2,048 バイト。00, 01, …, FF を 8 回) を登録する |
-| TD-FOR-UDF250 | 64 MiB | `mkudffs --udfrev=0x0250 --media-type=bdr --label=UDFTEST` で作る UDF 2.50 のイメージ (メタデータパーティションあり)。`readme.txt`、`photo.png`、`data.bin` (TD-FOR-FILESET と同じ内容) を入れる |
+| TD-FOR-EXT2 | 64 MiB | ext2 のボリュームのイメージ。テストデータの生成ツール (ExtImageBuilder) が mke2fs と同じ配置の規則で直接書く (ブロック 4 KiB、グループあたり 4,096 ブロックで 4 グループ、inode 256 バイト、sparse_super、UUID 00000000-0000-0000-0000-0000000000E2、作成日時 2026-01-01T00:00:00Z)。TD-FOR-FILESET (NTFS のみのものを除く) と、`dir1` に `f001.txt`〜`f300.txt` (各 10 バイト、`file-001` + CRLF など) を入れる。`frag.bin` は 3 つの断片 (間に 64 KiB の空き) に分ける。`deleted.txt` は最後に削除する (前のエントリの rec_len に吸収させ、inode に dtime を書き、ビットマップを戻す。ext2 は位置情報を残す) |
+| TD-FOR-EXT3 | 64 MiB | TD-FOR-EXT2 と同じ方法で、ジャーナル (inode 8、1,024 ブロック、jbd2 のスーパーブロック v2 と、記述子・コミット・取り消しのブロックを持つ 2 つのトランザクション) を持ち、UUID の末尾を `E3` にしたもの。削除では位置情報を消す |
+| TD-FOR-EXT4 | 64 MiB | TD-FOR-EXT3 と同じ方法で、機能 `64bit`・`flex_bg`・`extent`・`metadata_csum` (と `huge_file`・`dir_nlink`・`extra_isize`) を持ち、UUID の末尾を `E4` にしたもの。グループ記述子は 64 バイト、ビットマップと inode テーブルはグループ 0 にまとめる。`dir1` は htree のディレクトリ。スーパーブロック・グループ記述子・inode・ディレクトリの末尾・エクステントのブロック・ビットマップの CRC32C は正しい値。使わないグループは BLOCK_UNINIT・INODE_UNINIT |
+| TD-FOR-HFSPLUS | 32 MiB | HFS+ のボリュームのイメージ。テストデータの生成ツール (HfsPlusImageBuilder) が直接書く (ブロック 4 KiB、ラベル `HFSTEST`、カタログのノード 8 KiB、ジャーナルあり)。`forked.txt` のデータフォークに ASCII の `DATA-FORK` + LF、リソースフォーク (`forked.txt/..namedfork/rsrc`) に ASCII の `RSRC-FORK` + LF を書く。ほかに TD-FOR-FILESET (削除するものを除く)、10 個の断片の `manyfrag.bin` (9 個目以降はエクステントオーバーフロー B 木)、UF_COMPRESSED の `compressed.txt`、同じ `iNode` を指すハードリンク `link1.txt`・`link2.txt` (内容 `HARDLINK-TARGET` + LF)、`dir1` に 40 個のファイルを入れる |
+| TD-FOR-APFS | 64 MiB | APFS のコンテナのイメージ。テストデータの生成ツール (ApfsImageBuilder) が Apple File System Reference の構造で直接書く (ブロック 4 KiB、Fletcher-64 のチェックサム、チェックポイント 2 つ (xid 1 と 2)、コンテナとボリュームのオブジェクトマップ、2 段のファイルシステムツリー、スナップショット 1 つ、空き領域マネージャ)。暗号化しないボリューム `Data` (役割 Data) に TD-FOR-FILESET (NTFS のみのものと削除するものを除く) を入れる |
+| TD-FOR-APFS-ENC | 64 MiB | TD-FOR-APFS と同じ生成ツールで、ボリューム `Secret` を暗号化されたボリューム (APFS_FS_UNENCRYPTED を立てない) にしたもの。ファイルシステムツリーのブロックは乱数 (暗号化されたものとして読まない) |
+| TD-FOR-ISO-JRR | 約 1 MiB | ISO 9660 のイメージ (Joliet と Rock Ridge あり)。テストデータの生成ツール (IsoImageBuilder) が直接書く (xorriso と同じく、Joliet では `:` を `_` に置き換え、基本の名前は大文字の 8.3 に `;1` を付ける。ディレクトリレコードの日時は +09:00)。ファイル: `日本語の名前.txt` (TD-TEXT-UTF8)、`MixedCase_Long_Name.txt` (TD-TEXT-ASCII)、`colon:name.txt` (ASCII の `colon` 5 バイト)。El Torito のブートカタログに、エミュレーションなし・4 セクタ (512 バイト単位) のブートイメージ `boot.img` (2,048 バイト。00, 01, …, FF を 8 回) を登録する。xorriso で作ったイメージとの比較は CI のジョブ fs-crosscheck が行う |
+| TD-FOR-UDF250 | 64 MiB | UDF 2.50 のイメージ (メタデータパーティションあり、ラベル `UDFTEST`)。テストデータの生成ツール (UdfImageBuilder) が直接書く (ボリューム認識シーケンス、アンカー 2 つ、主と予備のボリューム記述子シーケンス、空き領域のビットマップ、拡張ファイルエントリ、タグのチェックサムと CRC)。`readme.txt`、`photo.png`、`data.bin` (TD-FOR-FILESET と同じ内容) を入れる。Linux はメタデータパーティションに書けないため、mkudffs で作った UDF 2.01 のイメージとの比較を CI のジョブ fs-crosscheck が行う |
 | TD-FOR-JPEG | 約 1 KiB | 32×32 画素のグレースケールの横方向のグラデーションを、生成ツールに同梱する固定のエンコーダ設定 (品質 75、ベースライン) で JPEG にしたもの |
 | TD-FOR-PDF | 約 1 KiB | 生成ツールがバイト単位で固定の内容を書く PDF 1.4 (1 ページ、テキスト `HexEditor`、xref と `%%EOF` を持つ) |
 | TD-FOR-CARVE | 8 MiB | すべて 00 のデータの、オフセット 0x100000 に TD-FOR-JPEG、0x200000 に TD-PNG、0x300000 に TD-FOR-PDF、0x400000 に TD-ZIP を置いたもの |
 | TD-FOR-CARVE-FS | 64 MiB | NTFS のボリュームのイメージ。`container.bin` (00 × 4 KiB + TD-FOR-JPEG + 00 × 4 KiB) を入れる。さらに TD-FOR-JPEG だけを入れた `tmp.jpg` を作って削除し、JPEG を未割り当て領域に残す |
 | TD-FOR-SIG-MIXED | 約 1 KiB | カービングの定義の JSON。5 つの定義: `good1` (ヘッダー `CA FE BA BE`、拡張子 `class`、最大サイズ 1 MiB)、`good2` (ヘッダー `25 50 44 46`、フッター `25 25 45 4F 46`、拡張子 `pdf`)、`bad-empty` (ヘッダーが空)、`bad-hex` (ヘッダー `ZZ 01`)、`bad-size` (最大サイズ 1 KiB、最小サイズ 2 KiB) |
 | TD-FOR-E01-FTK | 約 20 MiB | 保管。FTK Imager 4.7 で TD-FOR-NTFS-FAT32 を入力元として作った E01 (圧縮「速い」、ケース番号 `C-FTK`、証拠番号 `E-FTK`) |
-| TD-FOR-E01-1T | 約 4 GiB | 1 TiB のデータを libewf (`ewfacquirestream`、圧縮 best) で E01 にしたもの。データは 00 で、1 GiB ごとの位置 (2^31、2^32 を含む) に目印 (TD-MARKERS-1G と同じ規則) を置く。末尾 4 KiB は 00。生成に時間がかかるため、CI では生成結果をキャッシュする |
+| TD-FOR-E01-1T | 約 130 MiB | 1 TiB の E01 (1 つのセグメント、EnCase 6 の形、圧縮 best)。データは 00 で、1 GiB ごとの位置 (2^31、2^32 を含む) に目印 (TD-MARKERS-1G と同じ規則) を置く。末尾 4 KiB は 00。生成ツールが構造を直接書く: 0 だけのチャンクは、各 sectors セクションの中の 1 つの圧縮データを table のエントリが共有する (開く処理が読む table の数は実際の 1 TiB の E01 と同じ) |
 | TD-FOR-RAID-SRC | 128 MiB | セクタ 512 バイトの raw のディスクイメージ。GPT で Windows 基本データのパーティション 1 つ (LBA 2,048〜末尾 − 34) を持ち、パーティションの中に種 0x5A1D の乱数を書く |
 | TD-FOR-RAID5-M0、TD-FOR-RAID5-M1、TD-FOR-RAID5-M2 | 各 64 MiB | TD-FOR-RAID-SRC を 3 台構成の RAID 5 (左対称。Linux md の left-symmetric と同じ配置、ストライプサイズ 64 KiB、データ開始オフセット 0) に分けたメンバー。パリティは XOR |
 | TD-FOR-RAID0-M0、TD-FOR-RAID0-M1 | 各 64 MiB | TD-FOR-RAID-SRC を 2 台構成の RAID 0 (ストライプサイズ 64 KiB) に分けたメンバー |
-| TD-FOR-LDM-STRIPE-A、TD-FOR-LDM-STRIPE-B | 各 64 MiB | 2 つの 64 MiB の VHDX を diskpart で動的ディスク (MBR) にし、2 台にまたがるストライプのボリューム (NTFS、ラベル `STRIPE`、`readme.txt` を入れる) を作ってから、各ディスクの全体を raw で書き出したもの |
-| TD-FOR-LDM-STRIPE-VOL | 約 60 MiB | TD-FOR-LDM-STRIPE-A・B の作成時に、OS からストライプのボリューム (`\\.\X:`) の全体を raw で書き出したもの |
-| TD-FOR-LVM-LINEAR-A、TD-FOR-LVM-LINEAR-B | 各 32 MiB | Linux で 2 つのループデバイスを PV にし、VG `vg0` と、2 つの PV の全体を使う linear の LV `lv0` を作り、`lv0` に種 0x1F の乱数を書いてから、各 PV の全体を書き出したもの |
-| TD-FOR-LVM-LINEAR-LV | 約 56 MiB | TD-FOR-LVM-LINEAR-A・B の作成時に `/dev/vg0/lv0` の全体を書き出したもの |
-| TD-FOR-LUKS2 | 32 MiB | `cryptsetup luksFormat --type luks2 --uuid 12345678-1234-1234-1234-123456789abc --pbkdf pbkdf2` (キー `HexEditor-Test-01`、キースロット 1 つ) で作ったイメージ |
+| TD-FOR-LDM-STRIPE-A、TD-FOR-LDM-STRIPE-B | 各 64 MiB | 2 台の動的ディスク (MBR の種類 42、論理ディスクの開始 LBA 63、データベースは末尾の 1 MiB) のイメージ。テストデータの生成ツール (LogicalVolumeImages) が Linux の ldm.c と同じ配置で PRIVHEAD (LBA 6 とデータベースの中の写し)・TOCBLOCK・VMDB・VBLK (ディスクグループ、ディスク 2 つ、ボリューム `Volume1`、ストライプのコンポーネント (64 KiB)、パーティション 2 つ) を書き、TD-FOR-LDM-STRIPE-VOL を 64 KiB ずつ交互に置く。ディスク GUID は A が 4C444D41-0000-4000-8000-0000000000A1、B が 4C444D42-0000-4000-8000-0000000000B2 |
+| TD-FOR-LDM-STRIPE-VOL | 60 MiB | 2 台にまたがるストライプのボリュームの内容。テストデータの生成ツールが NTFS (ラベル `STRIPE`、`readme.txt` を入れる) で書いたもの |
+| TD-FOR-LVM-LINEAR-A、TD-FOR-LVM-LINEAR-B | 各 32 MiB | LVM2 の 2 つの PV のイメージ。テストデータの生成ツール (LogicalVolumeImages) が、ラベル (セクタ 1)、PV ヘッダー、メタデータ領域 (4 KiB 目から) と calc_crc のチェックサム、テキストのメタデータ (VG `vg0`、エクステント 4 MiB、PV の先頭のエクステントは 1 MiB 目、LV `lv0` は 2 つの PV の全体を使う linear のセグメント 2 つ) を書き、TD-FOR-LVM-LINEAR-LV の内容を置く。lvm2 で作ったイメージとの比較は CI のジョブ fs-crosscheck が行う |
+| TD-FOR-LVM-LINEAR-LV | 56 MiB | `lv0` の内容 (種 0x1F の乱数、14 エクステント) |
+| TD-FOR-LUKS2 | 32 MiB | `cryptsetup luksFormat --type luks2 --uuid 12345678-1234-1234-1234-123456789abc --pbkdf pbkdf2` (キースロット 1 つ) と同じ配置の LUKS2 のヘッダ (主・副の 2 つ、ヘッダの大きさ 16 KiB、JSON の領域に aes-xts-plain64 のセグメントとキースロット 1 つ) を生成ツールが組み立て、残りを 00 にしたもの (スパース。cryptsetup は使わない) |
 | TD-FOR-BITLOCKER | 64 MiB | 保管。Windows 11 Pro で作った VHDX。GPT で NTFS のパーティション 1 つを持ち、`inside.txt` (ASCII の `INSIDE`) を入れてから、BitLocker (AES-XTS 128、パスワード `HexEditor-Test-01` と回復パスワードの 2 つの保護機能) で全体を暗号化したもの |
-| TD-FOR-BITLOCKER-RAW | 64 MiB | TD-FOR-BITLOCKER のディスクの内容を raw で書き出したもの (保管した VHDX から生成ツールが作る) |
-| TD-FOR-VHDX-PATTERN | 64 MiB | 動的 VHDX。パーティション表なし。全セクタを ASCII の `ORIGDATA` の繰り返しで埋める |
-| TD-FOR-VHDX-DELETED | 256 MiB | 動的 VHDX。GPT で NTFS のパーティション 1 つ (クラスタ 4 KiB)。ファイル: `keep.txt` (TD-TEXT-ASCII)、`slack.txt` (ASCII の `SLACK-REMNANT` の繰り返し 4 KiB を書いてから 100 バイトに切り詰めたもの。スラックに `SLACK-REMNANT` が残る)、`tiny.txt` (10 バイト、常駐)。さらに `wipe.bin` (ASCII の `WIPE-ME-0123456789` の繰り返し 1 MiB) を作って削除し、内容を未割り当て領域に残す |
+| TD-FOR-BITLOCKER-RAW | 64 MiB | GPT のディスク (基本データのパーティション 1 つ、1 MiB から) のパーティションに、BitLocker の形式のボリュームヘッダ (`-FVE-FS-`) と 3 つの FVE メタデータブロック (版 2、AES-XTS 128、キー保護機能はパスワードと回復パスワード、説明 `HEXTEST-PC E: 2026/10/01`) を生成ツールが組み立てたもの。中身は 00 (スパース。BitLocker の機能は使わない。TD-FOR-BITLOCKER の手動のテストとは別) |
+| TD-FOR-VHDX-PATTERN | 64 MiB | 動的 VHDX。パーティション表なし。全セクタを ASCII の `ORIGDATA` の繰り返しで埋める。生のディスクの内容は生成ツール (tools/HexEditor.TestData の WipeImages) が書く |
+| TD-FOR-VHDX-DELETED | 256 MiB | 動的 VHDX。GPT で NTFS のパーティション 1 つ (クラスタ 4 KiB)。ファイル: `keep.txt` (TD-TEXT-ASCII)、`slack.txt` (ASCII の `SLACK-REMNANT` の繰り返し 4 KiB を書いてから 100 バイトに切り詰めたもの。スラックに `SLACK-REMNANT` が残る)、`tiny.txt` (10 バイト、常駐)。さらに `wipe.bin` (ASCII の `WIPE-ME-0123456789` の繰り返し 1 MiB) を作って削除し、内容を未割り当て領域に残す。CI の管理者のテストは build/tests/New-WipeTestVhd.ps1 で Windows がフォーマットした固定サイズの VHD (ラベル `HEXWIPE`) として作る。単体テストは、同じファイルを生成ツール (WipeImages) が書いた生のディスク (NTFS のボリュームは 250 MiB) を使う |

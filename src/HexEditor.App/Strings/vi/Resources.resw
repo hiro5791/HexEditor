@@ -2136,6 +2136,7 @@ Chi tiết đã được ghi vào:
   <data name="Tab_WindowItem" xml:space="preserve"><value>Cửa sổ {0}: {1}</value></data>
   <data name="Tab_WindowEmpty" xml:space="preserve"><value>(không có tab)</value></data>
   <data name="Tab_CopyPath" xml:space="preserve"><value>Sao chép đường dẫn</value></data>
+  <data name="Tab_ReopenAsDiskImage" xml:space="preserve"><value>Mở lại dưới dạng ảnh đĩa</value></data>
   <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Hiện trong Explorer</value></data>
   <data name="Tab_ReadOnly" xml:space="preserve"><value>Chỉ đọc</value></data>
   <data name="Tab_ToolTipSize" xml:space="preserve"><value>Kích thước: {0}</value></data>
@@ -6634,6 +6635,418 @@ Kiểu: {4}</value></data>
   <data name="Set_disassembly_comments" xml:space="preserve"><value>Cột chú thích</value></data>
   <data name="SetDesc_disassembly_comments" xml:space="preserve"><value>Hiển thị tên ký hiệu, tên đích nhánh và chuỗi được tham chiếu.</value></data>
   <data name="CmdCategory_disassembly" xml:space="preserve"><value>Dịch ngược</value></data>
+  <data name="SetCategory_forensics" xml:space="preserve"><value>Pháp y số</value></data>
+  <data name="CmdCategory_forensics" xml:space="preserve"><value>Pháp y số</value></data>
+  <data name="Set_forensics_time_display" xml:space="preserve"><value>Hiển thị ngày giờ</value></data>
+  <data name="SetDesc_forensics_time_display" xml:space="preserve"><value>Cách hiển thị thời gian trong danh sách và chi tiết pháp y số: UTC và giờ địa phương, chỉ UTC hoặc chỉ giờ địa phương. Thời gian luôn được ghi theo UTC.</value></data>
+  <data name="SetOpt_forensics_time_display_both" xml:space="preserve"><value>UTC và giờ địa phương</value></data>
+  <data name="SetOpt_forensics_time_display_utc" xml:space="preserve"><value>Chỉ UTC</value></data>
+  <data name="SetOpt_forensics_time_display_local" xml:space="preserve"><value>Chỉ giờ địa phương</value></data>
+  <data name="Set_forensics_case_autoWriteBlock" xml:space="preserve"><value>Bật chế độ chống ghi khi mở vụ việc</value></data>
+  <data name="SetDesc_forensics_case_autoWriteBlock" xml:space="preserve"><value>Khi tắt, ứng dụng sẽ hỏi có bật hay không.</value></data>
+  <data name="Set_forensics_audit_logBrowsing" xml:space="preserve"><value>Ghi cả thao tác duyệt vào nhật ký kiểm tra</value></data>
+  <data name="SetDesc_forensics_audit_logBrowsing" xml:space="preserve"><value>Ghi lại các lần chuyển đến vị trí, tìm kiếm và thêm dấu trang. Các thay đổi đối với dữ liệu và bằng chứng luôn được ghi lại.</value></data>
+  <data name="Set_forensics_carving_thumbnails" xml:space="preserve"><value>Hiển thị hình thu nhỏ của ảnh đã carve</value></data>
+  <data name="SetDesc_forensics_carving_thumbnails" xml:space="preserve"><value>Hiển thị bản xem trước nhỏ của tệp JPEG, PNG, GIF và BMP trong kết quả carving.</value></data>
+  <data name="Set_forensics_report_logo" xml:space="preserve"><value>Ảnh logo của báo cáo</value></data>
+  <data name="SetDesc_forensics_report_logo" xml:space="preserve"><value>Đường dẫn của ảnh PNG, JPEG hoặc SVG hiển thị ở đầu báo cáo HTML.</value></data>
+  <data name="Set_forensics_report_header" xml:space="preserve"><value>Văn bản tiêu đề đầu của báo cáo</value></data>
+  <data name="SetDesc_forensics_report_header" xml:space="preserve"><value>Một dòng văn bản hiển thị dưới tiêu đề báo cáo, chẳng hạn tên phòng thí nghiệm của bạn.</value></data>
+  <data name="Cmd_forensics_case_new" xml:space="preserve"><value>Vụ việc mới</value></data>
+  <data name="CmdAlias_forensics_case_new" xml:space="preserve"><value>điều tra bằng chứng tạo vụ việc thư mục investigation evidence create case folder</value></data>
+  <data name="Cmd_forensics_case_open" xml:space="preserve"><value>Mở vụ việc</value></data>
+  <data name="CmdAlias_forensics_case_open" xml:space="preserve"><value>điều tra bằng chứng tải vụ việc thư mục investigation evidence load case folder</value></data>
+  <data name="Cmd_forensics_case_close" xml:space="preserve"><value>Đóng vụ việc</value></data>
+  <data name="CmdAlias_forensics_case_close" xml:space="preserve"><value>điều tra kết thúc investigation finish</value></data>
+  <data name="Cmd_forensics_case_addEvidence" xml:space="preserve"><value>Thêm bằng chứng</value></data>
+  <data name="CmdAlias_forensics_case_addEvidence" xml:space="preserve"><value>đăng ký ảnh đĩa hash thu thập register disk image hash acquisition</value></data>
+  <data name="Cmd_forensics_case_properties" xml:space="preserve"><value>Thuộc tính vụ việc</value></data>
+  <data name="CmdAlias_forensics_case_properties" xml:space="preserve"><value>múi giờ điều tra viên đơn vị time zone investigator organization</value></data>
+  <data name="Cmd_forensics_audit_show" xml:space="preserve"><value>Hiển thị nhật ký kiểm tra</value></data>
+  <data name="CmdAlias_forensics_audit_show" xml:space="preserve"><value>chuỗi lưu giữ bằng chứng lịch sử nhật ký chain of custody history log</value></data>
+  <data name="Cmd_forensics_audit_verify" xml:space="preserve"><value>Xác minh nhật ký kiểm tra</value></data>
+  <data name="CmdAlias_forensics_audit_verify" xml:space="preserve"><value>giả mạo chuỗi hash toàn vẹn kiểm tra tamper hash chain integrity check</value></data>
+  <data name="Cmd_forensics_carving_signatures" xml:space="preserve"><value>Quản lý chữ ký carving</value></data>
+  <data name="CmdAlias_forensics_carving_signatures" xml:space="preserve"><value>loại tệp phần đầu phần cuối magic định nghĩa file types header footer magic definitions</value></data>
+  <data name="Cmd_forensics_carving_run" xml:space="preserve"><value>Carve tệp</value></data>
+  <data name="CmdAlias_forensics_carving_run" xml:space="preserve"><value>khôi phục trích xuất tệp đã xóa quét recover extract deleted files scan</value></data>
+  <data name="Cmd_forensics_report_create" xml:space="preserve"><value>Tạo báo cáo</value></data>
+  <data name="CmdAlias_forensics_report_create" xml:space="preserve"><value>html pdf xuất tài liệu export documentation</value></data>
+  <data name="Cmd_view_panel_evidence" xml:space="preserve"><value>Hiện hoặc ẩn danh sách bằng chứng</value></data>
+  <data name="CmdAlias_view_panel_evidence" xml:space="preserve"><value>vụ việc bằng chứng bảng case evidence panel</value></data>
+  <data name="Cmd_view_panel_auditLog" xml:space="preserve"><value>Hiện hoặc ẩn nhật ký kiểm tra</value></data>
+  <data name="CmdAlias_view_panel_auditLog" xml:space="preserve"><value>vụ việc kiểm tra nhật ký bảng case audit log panel</value></data>
+  <data name="Cmd_view_panel_carving" xml:space="preserve"><value>Hiện hoặc ẩn kết quả carving</value></data>
+  <data name="CmdAlias_view_panel_carving" xml:space="preserve"><value>tệp đã carve bảng kết quả carved files panel results</value></data>
+  <data name="Panel_Evidence_Title" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="Panel_AuditLog_Title" xml:space="preserve"><value>Nhật ký kiểm tra</value></data>
+  <data name="Panel_Carving_Title" xml:space="preserve"><value>Kết quả carving</value></data>
+  <data name="Menu_Forensics.Title" xml:space="preserve"><value>Pháp y số</value></data>
+  <data name="Menu_Forensics.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_Case.Text" xml:space="preserve"><value>Vụ việc</value></data>
+  <data name="Menu_Forensics_Case.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Case_New.Text" xml:space="preserve"><value>Vụ việc mới...</value></data>
+  <data name="Menu_Forensics_Case_New.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_Case_Open.Text" xml:space="preserve"><value>Mở vụ việc...</value></data>
+  <data name="Menu_Forensics_Case_Open.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_Case_Close.Text" xml:space="preserve"><value>Đóng vụ việc</value></data>
+  <data name="Menu_Forensics_Case_Close.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.Text" xml:space="preserve"><value>Thêm bằng chứng...</value></data>
+  <data name="Menu_Forensics_Case_AddEvidence.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Case_Properties.Text" xml:space="preserve"><value>Thuộc tính vụ việc...</value></data>
+  <data name="Menu_Forensics_Case_Properties.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_Case_Evidence.Text" xml:space="preserve"><value>Danh sách bằng chứng</value></data>
+  <data name="Menu_Forensics_Case_Evidence.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.Text" xml:space="preserve"><value>Hiển thị nhật ký kiểm tra</value></data>
+  <data name="Menu_Forensics_Case_AuditShow.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.Text" xml:space="preserve"><value>Xác minh nhật ký kiểm tra</value></data>
+  <data name="Menu_Forensics_Case_AuditVerify.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_Carving.Text" xml:space="preserve"><value>Carving</value></data>
+  <data name="Menu_Forensics_Carving.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Forensics_Carving_Run.Text" xml:space="preserve"><value>Carve tệp...</value></data>
+  <data name="Menu_Forensics_Carving_Run.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.Text" xml:space="preserve"><value>Quản lý chữ ký...</value></data>
+  <data name="Menu_Forensics_Carving_Signatures.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Forensics_Carving_Results.Text" xml:space="preserve"><value>Kết quả</value></data>
+  <data name="Menu_Forensics_Carving_Results.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Report.Text" xml:space="preserve"><value>Tạo báo cáo...</value></data>
+  <data name="Menu_Forensics_Report.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Status_Case" xml:space="preserve"><value>Vụ việc: {0}</value></data>
+  <data name="Time_Invalid" xml:space="preserve"><value>thời gian không hợp lệ</value></data>
+  <data name="Forensics_CaseAlreadyOpen" xml:space="preserve"><value>Đã có một vụ việc đang mở. Hãy đóng vụ việc đó trước.</value></data>
+  <data name="Forensics_NoCase" xml:space="preserve"><value>Không có vụ việc nào đang mở.</value></data>
+  <data name="Case_New_Title" xml:space="preserve"><value>Vụ việc mới</value></data>
+  <data name="Case_Properties_Title" xml:space="preserve"><value>Thuộc tính vụ việc</value></data>
+  <data name="Case_Number" xml:space="preserve"><value>Số vụ việc (bắt buộc)</value></data>
+  <data name="Case_Name" xml:space="preserve"><value>Tên vụ việc (bắt buộc)</value></data>
+  <data name="Case_Investigator" xml:space="preserve"><value>Điều tra viên</value></data>
+  <data name="Case_Organization" xml:space="preserve"><value>Đơn vị</value></data>
+  <data name="Case_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Case_Folder" xml:space="preserve"><value>Thư mục vụ việc</value></data>
+  <data name="Case_Browse" xml:space="preserve"><value>Duyệt...</value></data>
+  <data name="Case_TimeZone" xml:space="preserve"><value>Múi giờ</value></data>
+  <data name="Case_TimeZoneNote" xml:space="preserve"><value>Dùng để đọc các thời gian không có múi giờ, chẳng hạn thời gian tệp FAT.</value></data>
+  <data name="Case_Create" xml:space="preserve"><value>Tạo</value></data>
+  <data name="Case_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Case_Created" xml:space="preserve"><value>Đã tạo vụ việc "{0}".</value></data>
+  <data name="Case_Opened" xml:space="preserve"><value>Đã mở vụ việc "{0}".</value></data>
+  <data name="Case_Error_Create" xml:space="preserve"><value>Không thể tạo vụ việc: {0}</value></data>
+  <data name="Case_Error_Required" xml:space="preserve"><value>Cần nhập số vụ việc và tên vụ việc.</value></data>
+  <data name="Case_Error_File" xml:space="preserve"><value>Không thể đọc tệp vụ việc (dòng {0}): {1}</value></data>
+  <data name="Case_Error_Open" xml:space="preserve"><value>Không thể mở vụ việc: {0}</value></data>
+  <data name="Case_Error_Save" xml:space="preserve"><value>Không thể lưu vụ việc: {0}</value></data>
+  <data name="Case_WriteBlockSuggest" xml:space="preserve"><value>Bật chế độ chống ghi cho vụ việc này?</value></data>
+  <data name="Case_WriteBlockEnable" xml:space="preserve"><value>Bật</value></data>
+  <data name="Case_WriteBlockEnabled" xml:space="preserve"><value>Đã bật chế độ chống ghi cho vụ việc này.</value></data>
+  <data name="Evidence_Add" xml:space="preserve"><value>Thêm bằng chứng</value></data>
+  <data name="Evidence_Add_Title" xml:space="preserve"><value>Thêm bằng chứng</value></data>
+  <data name="Evidence_AddInfo" xml:space="preserve"><value>{0} sẽ được thêm vào vụ việc. Nguồn dữ liệu không bị thay đổi.</value></data>
+  <data name="Evidence_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Evidence_Compute" xml:space="preserve"><value>Tính hash ngay</value></data>
+  <data name="Evidence_Duplicate" xml:space="preserve"><value>Nguồn dữ liệu này đã được đăng ký là {0}.</value></data>
+  <data name="Evidence_NotRegistrable" xml:space="preserve"><value>Chỉ có thể thêm đĩa, volume, tệp ảnh đĩa và tệp làm bằng chứng.</value></data>
+  <data name="Evidence_HashOperation" xml:space="preserve"><value>Đang tính hash cho bằng chứng {0}</value></data>
+  <data name="Evidence_HashDone" xml:space="preserve"><value>Đã ghi hash của {0}.</value></data>
+  <data name="Evidence_HashCancelled" xml:space="preserve"><value>Chưa tính hash của {0}. Bằng chứng vẫn nằm trong danh sách.</value></data>
+  <data name="Evidence_HashUnreadable" xml:space="preserve"><value>Không đọc được dữ liệu tại độ lệch 0x{1} nên chưa ghi hash của {0}.</value></data>
+  <data name="Evidence_HashNotComputed" xml:space="preserve"><value>Chưa tính</value></data>
+  <data name="Evidence_Removed" xml:space="preserve"><value>Đã gỡ {0} khỏi danh sách. Nguồn dữ liệu không bị đụng đến.</value></data>
+  <data name="Evidence_NotPresent" xml:space="preserve"><value>{0} không khả dụng.</value></data>
+  <data name="Evidence_OpenFailed" xml:space="preserve"><value>Không thể mở bằng chứng: {0}</value></data>
+  <data name="Evidence_Summary" xml:space="preserve"><value>{0} - {1}: {2} mục</value></data>
+  <data name="Evidence_NoCase" xml:space="preserve"><value>Không có vụ việc nào đang mở. Hãy tạo hoặc mở vụ việc từ menu Pháp y số.</value></data>
+  <data name="Evidence_None" xml:space="preserve"><value>Chưa thêm bằng chứng nào.</value></data>
+  <data name="Evidence_Col_Id" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="Evidence_Col_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Evidence_Col_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Evidence_Col_Path" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="Evidence_Col_Capacity" xml:space="preserve"><value>Dung lượng (byte)</value></data>
+  <data name="Evidence_Col_Hash" xml:space="preserve"><value>Hash</value></data>
+  <data name="Evidence_Col_Verification" xml:space="preserve"><value>Xác minh</value></data>
+  <data name="Evidence_Col_AddedUtc" xml:space="preserve"><value>Thời gian thêm (UTC)</value></data>
+  <data name="Evidence_Col_AddedLocal" xml:space="preserve"><value>Thời gian thêm (địa phương)</value></data>
+  <data name="Evidence_Kind_PhysicalDisk" xml:space="preserve"><value>Đĩa</value></data>
+  <data name="Evidence_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Evidence_Kind_ImageFile" xml:space="preserve"><value>Ảnh đĩa</value></data>
+  <data name="Evidence_Kind_File" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Evidence_Kind_Memory" xml:space="preserve"><value>Bộ nhớ</value></data>
+  <data name="Evidence_Verification_passed" xml:space="preserve"><value>Đạt</value></data>
+  <data name="Evidence_Verification_failed" xml:space="preserve"><value>Không đạt</value></data>
+  <data name="Evidence_Verification_none" xml:space="preserve"><value>Chưa xác minh</value></data>
+  <data name="Evidence_Menu_Open" xml:space="preserve"><value>Mở (chỉ đọc)</value></data>
+  <data name="Evidence_Menu_Remove" xml:space="preserve"><value>Gỡ khỏi danh sách</value></data>
+  <data name="Evidence_Menu_CopyHash" xml:space="preserve"><value>Sao chép hash</value></data>
+  <data name="Evidence_Menu_CopyPath" xml:space="preserve"><value>Sao chép đường dẫn</value></data>
+  <data name="Evidence_Menu_CreateImage" xml:space="preserve"><value>Tạo ảnh đĩa...</value></data>
+  <data name="Evidence_Menu_Verify" xml:space="preserve"><value>Xác minh...</value></data>
+  <data name="AuditLog_Summary" xml:space="preserve"><value>{0} mục</value></data>
+  <data name="AuditLog_NoCase" xml:space="preserve"><value>Không có vụ việc nào đang mở. Nhật ký kiểm tra thuộc về một vụ việc.</value></data>
+  <data name="AuditLog_None" xml:space="preserve"><value>Chưa có gì được ghi lại.</value></data>
+  <data name="AuditLog_Malformed" xml:space="preserve"><value>(Dòng này không phải là một mục hợp lệ. Nhật ký có thể đã bị sửa đổi.)</value></data>
+  <data name="AuditLog_Verify" xml:space="preserve"><value>Xác minh</value></data>
+  <data name="AuditLog_ExportCsv" xml:space="preserve"><value>Xuất CSV</value></data>
+  <data name="AuditLog_ExportJson" xml:space="preserve"><value>Xuất JSON</value></data>
+  <data name="AuditLog_VerifyOk" xml:space="preserve"><value>Nhật ký kiểm tra còn nguyên vẹn (đã kiểm tra {0} dòng).</value></data>
+  <data name="AuditLog_VerifyBroken" xml:space="preserve"><value>Chuỗi của nhật ký kiểm tra bị đứt tại dòng {0}. Nhật ký có thể đã bị sửa đổi.</value></data>
+  <data name="AuditLog_Col_Seq" xml:space="preserve"><value>STT</value></data>
+  <data name="AuditLog_Col_TimeUtc" xml:space="preserve"><value>Thời gian (UTC)</value></data>
+  <data name="AuditLog_Col_TimeLocal" xml:space="preserve"><value>Thời gian (địa phương)</value></data>
+  <data name="AuditLog_Col_User" xml:space="preserve"><value>Người dùng</value></data>
+  <data name="AuditLog_Col_Operation" xml:space="preserve"><value>Thao tác</value></data>
+  <data name="AuditLog_Col_Evidence" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="AuditLog_Col_Result" xml:space="preserve"><value>Kết quả</value></data>
+  <data name="AuditLog_Col_Message" xml:space="preserve"><value>Chi tiết</value></data>
+  <data name="AuditLog_Result_success" xml:space="preserve"><value>Thành công</value></data>
+  <data name="AuditLog_Result_failure" xml:space="preserve"><value>Thất bại</value></data>
+  <data name="AuditLog_Result_cancelled" xml:space="preserve"><value>Đã hủy</value></data>
+  <data name="Audit_Fault_Title" xml:space="preserve"><value>Không thể ghi vào nhật ký kiểm tra</value></data>
+  <data name="Audit_Fault_Message" xml:space="preserve"><value>Các thao tác ghi dữ liệu sẽ bị tắt cho đến khi có thể ghi lại nhật ký. {0}</value></data>
+  <data name="Audit_Fault_Retry" xml:space="preserve"><value>Thử lại</value></data>
+  <data name="Audit_Fault_StillFailing" xml:space="preserve"><value>Vẫn không thể ghi vào nhật ký kiểm tra.</value></data>
+  <data name="Audit_Fault_Blocked" xml:space="preserve"><value>Không thể ghi vào nhật ký kiểm tra nên thao tác chưa được thực hiện.</value></data>
+  <data name="Audit_WritesDisabled" xml:space="preserve"><value>Không thể ghi vào nhật ký kiểm tra nên các thao tác ghi dữ liệu đã bị tắt.</value></data>
+  <data name="Audit_VerifyOperation" xml:space="preserve"><value>Đang xác minh nhật ký kiểm tra</value></data>
+  <data name="Audit_VerifyFailed" xml:space="preserve"><value>Không thể xác minh nhật ký kiểm tra: {0}</value></data>
+  <data name="Audit_ExportOperation" xml:space="preserve"><value>Đang xuất nhật ký kiểm tra</value></data>
+  <data name="Audit_Exported" xml:space="preserve"><value>Đã xuất nhật ký kiểm tra ra {0}.</value></data>
+  <data name="Audit_ExportFailed" xml:space="preserve"><value>Không thể xuất nhật ký kiểm tra: {0}</value></data>
+  <data name="Sig_Title" xml:space="preserve"><value>Chữ ký carving</value></data>
+  <data name="Sig_List" xml:space="preserve"><value>Định nghĩa</value></data>
+  <data name="Sig_BuiltIn" xml:space="preserve"><value>có sẵn</value></data>
+  <data name="Sig_Disabled" xml:space="preserve"><value>đã tắt</value></data>
+  <data name="Sig_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Sig_Extension" xml:space="preserve"><value>Phần mở rộng (không có dấu chấm)</value></data>
+  <data name="Sig_Headers" xml:space="preserve"><value>Phần đầu (byte Hex, mỗi dòng một mục; ?? là byte bất kỳ, ? là chữ số bất kỳ)</value></data>
+  <data name="Sig_HeaderOffset" xml:space="preserve"><value>Độ lệch của phần đầu so với đầu tệp</value></data>
+  <data name="Sig_Footer" xml:space="preserve"><value>Phần cuối (byte Hex, tùy chọn)</value></data>
+  <data name="Sig_FooterInclude" xml:space="preserve"><value>Số byte lấy từ phần cuối (để trống = chính phần cuối)</value></data>
+  <data name="Sig_MaxSize" xml:space="preserve"><value>Kích thước tối đa</value></data>
+  <data name="Sig_MinSize" xml:space="preserve"><value>Kích thước tối thiểu</value></data>
+  <data name="Sig_UseSizeField" xml:space="preserve"><value>Lấy kích thước từ một giá trị trong phần đầu</value></data>
+  <data name="Sig_SizeOffset" xml:space="preserve"><value>Giá trị kích thước: độ lệch so với đầu tệp</value></data>
+  <data name="Sig_SizeBits" xml:space="preserve"><value>Giá trị kích thước: độ rộng (bit)</value></data>
+  <data name="Sig_SizeEndian" xml:space="preserve"><value>Giá trị kích thước: thứ tự byte</value></data>
+  <data name="Sig_SizeAdd" xml:space="preserve"><value>Giá trị kích thước: số cần cộng thêm</value></data>
+  <data name="Sig_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="Sig_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Sig_Structure" xml:space="preserve"><value>Kiểm tra cấu trúc (tên có sẵn hoặc mẫu cấu trúc)</value></data>
+  <data name="Sig_StructureHint" xml:space="preserve"><value>Kiểm tra có sẵn: {0}</value></data>
+  <data name="Sig_Aligned" xml:space="preserve"><value>Chỉ tìm phần đầu ở đầu sector</value></data>
+  <data name="Sig_Enabled" xml:space="preserve"><value>Dùng định nghĩa này khi quét</value></data>
+  <data name="Sig_New" xml:space="preserve"><value>Mới</value></data>
+  <data name="Sig_Duplicate" xml:space="preserve"><value>Nhân bản</value></data>
+  <data name="Sig_Delete" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Sig_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Sig_Import" xml:space="preserve"><value>Nhập...</value></data>
+  <data name="Sig_Export" xml:space="preserve"><value>Xuất...</value></data>
+  <data name="Sig_Try" xml:space="preserve"><value>Thử định nghĩa này</value></data>
+  <data name="Sig_Try_NeedSelection" xml:space="preserve"><value>Hãy chọn một vùng trong tài liệu trước.</value></data>
+  <data name="Sig_Trying" xml:space="preserve"><value>Đang thử...</value></data>
+  <data name="Sig_TryOperation" xml:space="preserve"><value>Đang thử định nghĩa carving</value></data>
+  <data name="Sig_TryResult" xml:space="preserve"><value>Tìm thấy {0} trong vùng chọn. Các vị trí đầu tiên:</value></data>
+  <data name="Sig_Imported" xml:space="preserve"><value>Đã nhập {0} định nghĩa.</value></data>
+  <data name="Sig_Rejected" xml:space="preserve"><value>Có {0} định nghĩa chưa được nhập:</value></data>
+  <data name="Sig_Exported" xml:space="preserve"><value>Đã xuất ra {0}.</value></data>
+  <data name="Sig_Error_Import" xml:space="preserve"><value>Không thể nhập định nghĩa: {0}</value></data>
+  <data name="Sig_Error_Save" xml:space="preserve"><value>Không thể lưu định nghĩa: {0}</value></data>
+  <data name="Sig_Error_Try" xml:space="preserve"><value>Thử không thành công: {0}</value></data>
+  <data name="Sig_Error_Number" xml:space="preserve"><value>{0}: hãy nhập một số hoặc kích thước như 4096, 0x1000 hay 1M.</value></data>
+  <data name="Sig_Error_NameEmpty" xml:space="preserve"><value>Hãy nhập tên.</value></data>
+  <data name="Sig_Error_NameInUse" xml:space="preserve"><value>Tên này đã được dùng.</value></data>
+  <data name="Sig_Error_ExtensionEmpty" xml:space="preserve"><value>Hãy nhập phần mở rộng.</value></data>
+  <data name="Sig_Error_ExtensionInvalid" xml:space="preserve"><value>Phần mở rộng có ký tự không dùng được trong tên tệp.</value></data>
+  <data name="Sig_Error_HeaderEmpty" xml:space="preserve"><value>Hãy nhập ít nhất một phần đầu.</value></data>
+  <data name="Sig_Error_HeaderFormat" xml:space="preserve"><value>Phần đầu không phải là chuỗi byte Hex hợp lệ (số chữ số lẻ hoặc có ký tự không hợp lệ).</value></data>
+  <data name="Sig_Error_HeaderNoFixedByte" xml:space="preserve"><value>Phần đầu cần có ít nhất một byte cố định.</value></data>
+  <data name="Sig_Error_HeaderOffsetNegative" xml:space="preserve"><value>Độ lệch của phần đầu không được âm.</value></data>
+  <data name="Sig_Error_FooterFormat" xml:space="preserve"><value>Phần cuối không phải là chuỗi byte Hex hợp lệ.</value></data>
+  <data name="Sig_Error_FooterIncludeNegative" xml:space="preserve"><value>Số byte cần lấy không được âm.</value></data>
+  <data name="Sig_Error_MaxSizeInvalid" xml:space="preserve"><value>Kích thước tối đa phải ít nhất là 1.</value></data>
+  <data name="Sig_Error_MinSizeInvalid" xml:space="preserve"><value>Kích thước tối thiểu không được âm.</value></data>
+  <data name="Sig_Error_MaxSizeBelowMin" xml:space="preserve"><value>Kích thước tối đa nhỏ hơn kích thước tối thiểu.</value></data>
+  <data name="Sig_Error_SizeFieldInvalid" xml:space="preserve"><value>Giá trị kích thước không hợp lệ.</value></data>
+  <data name="Sig_Error_Format" xml:space="preserve"><value>Có giá trị sai kiểu.</value></data>
+  <data name="Carve_Title" xml:space="preserve"><value>Carve tệp</value></data>
+  <data name="Carve_Start" xml:space="preserve"><value>Bắt đầu</value></data>
+  <data name="Carve_Scope" xml:space="preserve"><value>Phạm vi</value></data>
+  <data name="Carve_Scope_Whole" xml:space="preserve"><value>Toàn bộ tài liệu</value></data>
+  <data name="Carve_Scope_Selection" xml:space="preserve"><value>Vùng chọn</value></data>
+  <data name="Carve_Scope_Unallocated" xml:space="preserve"><value>Chỉ vùng chưa cấp phát</value></data>
+  <data name="Carve_Scope_Slack" xml:space="preserve"><value>Chỉ vùng slack</value></data>
+  <data name="Carve_Signatures" xml:space="preserve"><value>Loại tệp</value></data>
+  <data name="Carve_SkipInside" xml:space="preserve"><value>Không tìm phần đầu bên trong tệp đã tìm thấy</value></data>
+  <data name="Carve_Export" xml:space="preserve"><value>Ghi các tệp đã carve vào một thư mục</value></data>
+  <data name="Carve_Output" xml:space="preserve"><value>Thư mục đầu ra</value></data>
+  <data name="Carve_Operation" xml:space="preserve"><value>Đang carve tệp</value></data>
+  <data name="Carve_Done" xml:space="preserve"><value>Carving hoàn tất: tìm thấy {0} tệp.</value></data>
+  <data name="Carve_Cancelled" xml:space="preserve"><value>Đã hủy carving. Đã tìm thấy {0} tệp; kết quả và tệp kê khai (manifest) được giữ lại.</value></data>
+  <data name="Carve_Aborted" xml:space="preserve"><value>Carving đã dừng vì không ghi được vào thư mục đầu ra. Đã tìm thấy {0} tệp.</value></data>
+  <data name="Carve_Failed" xml:space="preserve"><value>Carving không thành công: {0}</value></data>
+  <data name="Carve_Error_SameDisk" xml:space="preserve"><value>Thư mục đầu ra nằm trên đĩa đang được điều tra. Hãy chọn thư mục trên đĩa khác.</value></data>
+  <data name="Carve_Error_Space" xml:space="preserve"><value>Thư mục đầu ra không đủ dung lượng trống. Cần: {0} byte. Còn trống: {1} byte.</value></data>
+  <data name="Carve_Error_FileSize" xml:space="preserve"><value>Hệ thống tệp của thư mục đầu ra giới hạn mỗi tệp ở {0} byte. Hãy chọn thư mục khác.</value></data>
+  <data name="Carve_Error_Folder" xml:space="preserve"><value>Không thể dùng thư mục đầu ra này.</value></data>
+  <data name="Carve_Error_NoAllocation" xml:space="preserve"><value>Không có thông tin cấp phát cho tài liệu này.</value></data>
+  <data name="Carve_Problem_Title" xml:space="preserve"><value>Không thể ghi các tệp đã carve</value></data>
+  <data name="Carve_Problem_Space" xml:space="preserve"><value>Thư mục đầu ra ({0}) đã hết dung lượng. Tệp tiếp theo cần {1} byte nhưng chỉ còn trống {2} byte. Hãy giải phóng dung lượng, chọn thư mục khác hoặc dừng.</value></data>
+  <data name="Carve_Problem_Write" xml:space="preserve"><value>Không thể ghi vào {0}: {1}</value></data>
+  <data name="Carve_Problem_Retry" xml:space="preserve"><value>Thử lại</value></data>
+  <data name="Carve_Problem_Change" xml:space="preserve"><value>Chọn thư mục khác...</value></data>
+  <data name="Carve_Problem_Stop" xml:space="preserve"><value>Dừng</value></data>
+  <data name="Carving_AlreadyRunning" xml:space="preserve"><value>Carving đang chạy.</value></data>
+  <data name="Carving_Run" xml:space="preserve"><value>Carve tệp...</value></data>
+  <data name="Carving_OpenFolder" xml:space="preserve"><value>Mở thư mục</value></data>
+  <data name="Carving_None" xml:space="preserve"><value>Chưa chạy carving. Hãy chọn Pháp y số, rồi Carving, rồi Carve tệp.</value></data>
+  <data name="Carving_NoResults" xml:space="preserve"><value>Không tìm thấy tệp nào.</value></data>
+  <data name="Carving_Summary" xml:space="preserve"><value>{0} tệp</value></data>
+  <data name="Carving_ThumbnailName" xml:space="preserve"><value>Xem trước ảnh đã carve</value></data>
+  <data name="Carving_Col_Number" xml:space="preserve"><value>STT</value></data>
+  <data name="Carving_Col_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Carving_Col_Offset" xml:space="preserve"><value>Độ lệch</value></data>
+  <data name="Carving_Col_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Carving_Col_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="Carving_Col_Method" xml:space="preserve"><value>Độ dài được xác định bởi</value></data>
+  <data name="Carving_Col_Output" xml:space="preserve"><value>Tệp đầu ra</value></data>
+  <data name="Carving_Method_Structure" xml:space="preserve"><value>Cấu trúc</value></data>
+  <data name="Carving_Method_SizeField" xml:space="preserve"><value>Giá trị kích thước</value></data>
+  <data name="Carving_Method_Footer" xml:space="preserve"><value>Phần cuối</value></data>
+  <data name="Carving_Method_MaxSize" xml:space="preserve"><value>Kích thước tối đa</value></data>
+  <data name="Carving_Detail_Type" xml:space="preserve"><value>Loại: {0}</value></data>
+  <data name="Carving_Detail_Offset" xml:space="preserve"><value>Độ lệch: 0x{0} ({1})</value></data>
+  <data name="Carving_Detail_Length" xml:space="preserve"><value>Độ dài: {0} byte</value></data>
+  <data name="Carving_Detail_Method" xml:space="preserve"><value>Độ dài được xác định bởi: {0}</value></data>
+  <data name="Report_DialogTitle" xml:space="preserve"><value>Tạo báo cáo</value></data>
+  <data name="Report_Create" xml:space="preserve"><value>Tạo</value></data>
+  <data name="Report_Sections" xml:space="preserve"><value>Nội dung</value></data>
+  <data name="Report_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="Report_Part_Document" xml:space="preserve"><value>Đĩa: {0} (kích thước sector {1} byte)</value></data>
+  <data name="Report_Part_Number" xml:space="preserve"><value>STT</value></data>
+  <data name="Report_Part_Scheme" xml:space="preserve"><value>Sơ đồ</value></data>
+  <data name="Report_Part_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Report_Part_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Report_Part_StartLba" xml:space="preserve"><value>LBA bắt đầu</value></data>
+  <data name="Report_Part_Sectors" xml:space="preserve"><value>Số sector</value></data>
+  <data name="Report_Part_Size" xml:space="preserve"><value>Kích thước (byte)</value></data>
+  <data name="Report_Part_FileSystem" xml:space="preserve"><value>Hệ thống tệp</value></data>
+  <data name="Report_Part_Encryption" xml:space="preserve"><value>Mã hóa</value></data>
+  <data name="Report_Part_Unallocated" xml:space="preserve"><value>Chưa cấp phát</value></data>
+  <data name="Report_Part_Diagram" xml:space="preserve"><value>Bố cục</value></data>
+  <data name="Report_Fs_Document" xml:space="preserve"><value>Tài liệu</value></data>
+  <data name="Report_Fs_Offset" xml:space="preserve"><value>Độ lệch của volume</value></data>
+  <data name="Report_Fs_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Report_Fs_Label" xml:space="preserve"><value>Nhãn</value></data>
+  <data name="Report_Fs_Serial" xml:space="preserve"><value>Số sê-ri</value></data>
+  <data name="Report_Fs_ClusterSize" xml:space="preserve"><value>Kích thước cluster (byte)</value></data>
+  <data name="Report_Fs_Clusters" xml:space="preserve"><value>Số cluster</value></data>
+  <data name="Report_Fs_FreeClusters" xml:space="preserve"><value>Số cluster trống</value></data>
+  <data name="Report_Fs_Issues" xml:space="preserve"><value>Vấn đề</value></data>
+  <data name="Report_Lv_Title" xml:space="preserve"><value>Volume logic: {0}</value></data>
+  <data name="Report_Lv_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Report_Lv_Group" xml:space="preserve"><value>Nhóm</value></data>
+  <data name="Report_Lv_Kind" xml:space="preserve"><value>Loại</value></data>
+  <data name="Report_Lv_Size" xml:space="preserve"><value>Kích thước (byte)</value></data>
+  <data name="Report_Lv_Layout" xml:space="preserve"><value>Bố cục</value></data>
+  <data name="Report_Lv_Members" xml:space="preserve"><value>Thành viên</value></data>
+  <data name="Report_Acq_Image" xml:space="preserve"><value>Ảnh đĩa</value></data>
+  <data name="Report_Acq_Source" xml:space="preserve"><value>Nguồn</value></data>
+  <data name="Report_Acq_Time" xml:space="preserve"><value>Thời điểm thu thập</value></data>
+  <data name="Report_Acq_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Report_Acq_Log" xml:space="preserve"><value>Nhật ký thu thập</value></data>
+  <data name="Report_Format_Html" xml:space="preserve"><value>HTML (một tệp, mở được khi ngoại tuyến)</value></data>
+  <data name="Report_Format_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="Report_Paper_A4" xml:space="preserve"><value>A4</value></data>
+  <data name="Report_Paper_Letter" xml:space="preserve"><value>Letter</value></data>
+  <data name="Report_AuditAll" xml:space="preserve"><value>Tất cả mục nhật ký kiểm tra</value></data>
+  <data name="Report_AuditFrom" xml:space="preserve"><value>Nhật ký kiểm tra từ (UTC, tùy chọn)</value></data>
+  <data name="Report_AuditTo" xml:space="preserve"><value>Nhật ký kiểm tra đến (UTC, tùy chọn)</value></data>
+  <data name="Report_Dump" xml:space="preserve"><value>Số byte Hex dump cho mỗi dấu trang (0 đến 4096)</value></data>
+  <data name="Report_Folder" xml:space="preserve"><value>Lưu vào</value></data>
+  <data name="Report_Error_Period" xml:space="preserve"><value>Khoảng thời gian không phải là ngày giờ hợp lệ.</value></data>
+  <data name="Report_Error_Dump" xml:space="preserve"><value>Độ dài Hex dump phải nằm trong khoảng 0 đến 4096 byte.</value></data>
+  <data name="Report_Operation" xml:space="preserve"><value>Đang tạo báo cáo</value></data>
+  <data name="Report_Failed" xml:space="preserve"><value>Không thể tạo báo cáo: {0}</value></data>
+  <data name="Report_Done" xml:space="preserve"><value>Đã tạo {0}. SHA-256: {1}</value></data>
+  <data name="Report_PdfFailed" xml:space="preserve"><value>Không thể tạo PDF ({0}). Đã tạo {1} thay thế.</value></data>
+  <data name="Report_PdfTruncated" xml:space="preserve"><value>PDF chỉ chứa những dòng đầu của các danh sách dài. Hãy dùng báo cáo HTML hoặc các tệp CSV để xem danh sách đầy đủ.</value></data>
+  <data name="Report_Open" xml:space="preserve"><value>Mở</value></data>
+  <data name="Report_OpenFolder" xml:space="preserve"><value>Mở thư mục</value></data>
+  <data name="Report_Title" xml:space="preserve"><value>Báo cáo pháp y số</value></data>
+  <data name="Report_CaseNumber" xml:space="preserve"><value>Số vụ việc</value></data>
+  <data name="Report_CaseName" xml:space="preserve"><value>Tên vụ việc</value></data>
+  <data name="Report_Investigator" xml:space="preserve"><value>Điều tra viên</value></data>
+  <data name="Report_Organization" xml:space="preserve"><value>Đơn vị</value></data>
+  <data name="Report_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Report_CreatedAt" xml:space="preserve"><value>Thời điểm tạo vụ việc</value></data>
+  <data name="Report_GeneratedAt" xml:space="preserve"><value>Thời điểm tạo báo cáo</value></data>
+  <data name="Report_TimeZone" xml:space="preserve"><value>Múi giờ</value></data>
+  <data name="Report_GeneratedBy" xml:space="preserve"><value>Người tạo</value></data>
+  <data name="Report_Page" xml:space="preserve"><value>Trang</value></data>
+  <data name="Report_Of" xml:space="preserve"><value>/</value></data>
+  <data name="Report_Case" xml:space="preserve"><value>Vụ việc</value></data>
+  <data name="Report_Section_cover" xml:space="preserve"><value>Trang bìa</value></data>
+  <data name="Report_Section_evidence" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="Report_Section_acquisition" xml:space="preserve"><value>Hồ sơ thu thập</value></data>
+  <data name="Report_Section_device" xml:space="preserve"><value>Thông tin thiết bị</value></data>
+  <data name="Report_Section_partitions" xml:space="preserve"><value>Phân vùng</value></data>
+  <data name="Report_Section_filesystem" xml:space="preserve"><value>Hệ thống tệp</value></data>
+  <data name="Report_Section_bookmarks" xml:space="preserve"><value>Dấu trang</value></data>
+  <data name="Report_Section_carving" xml:space="preserve"><value>Kết quả carving</value></data>
+  <data name="Report_Section_audit" xml:space="preserve"><value>Nhật ký kiểm tra</value></data>
+  <data name="Report_Evidence_Id" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="Report_Evidence_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Report_Evidence_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Report_Evidence_Path" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="Report_Evidence_Model" xml:space="preserve"><value>Kiểu máy</value></data>
+  <data name="Report_Evidence_Serial" xml:space="preserve"><value>Số sê-ri</value></data>
+  <data name="Report_Evidence_Capacity" xml:space="preserve"><value>Dung lượng (byte)</value></data>
+  <data name="Report_Evidence_Sectors" xml:space="preserve"><value>Số sector</value></data>
+  <data name="Report_Evidence_SectorSize" xml:space="preserve"><value>Kích thước sector</value></data>
+  <data name="Report_Evidence_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Report_Evidence_Verification" xml:space="preserve"><value>Xác minh</value></data>
+  <data name="Report_Evidence_Added" xml:space="preserve"><value>Thời gian thêm (UTC)</value></data>
+  <data name="Report_Evidence_AddedLocal" xml:space="preserve"><value>Thời gian thêm (địa phương)</value></data>
+  <data name="Report_Evidence_AddedBy" xml:space="preserve"><value>Người thêm</value></data>
+  <data name="Report_Verification_passed" xml:space="preserve"><value>Đạt</value></data>
+  <data name="Report_Verification_failed" xml:space="preserve"><value>Không đạt</value></data>
+  <data name="Report_Verification_none" xml:space="preserve"><value>Chưa xác minh</value></data>
+  <data name="Report_Hash_NotComputed" xml:space="preserve"><value>Chưa tính</value></data>
+  <data name="Report_Kind_PhysicalDisk" xml:space="preserve"><value>Đĩa</value></data>
+  <data name="Report_Kind_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Report_Kind_ImageFile" xml:space="preserve"><value>Ảnh đĩa</value></data>
+  <data name="Report_Kind_File" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Report_Kind_Memory" xml:space="preserve"><value>Bộ nhớ</value></data>
+  <data name="Report_Bookmark_Document" xml:space="preserve"><value>Tài liệu</value></data>
+  <data name="Report_Bookmark_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Report_Bookmark_Offset" xml:space="preserve"><value>Độ lệch</value></data>
+  <data name="Report_Bookmark_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Bookmark_Comment" xml:space="preserve"><value>Ghi chú</value></data>
+  <data name="Report_Bookmark_Dump" xml:space="preserve"><value>Hex dump</value></data>
+  <data name="Report_Carving_Number" xml:space="preserve"><value>STT</value></data>
+  <data name="Report_Carving_Type" xml:space="preserve"><value>Loại</value></data>
+  <data name="Report_Carving_Offset" xml:space="preserve"><value>Độ lệch</value></data>
+  <data name="Report_Carving_Lba" xml:space="preserve"><value>LBA</value></data>
+  <data name="Report_Carving_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="Report_Carving_Method" xml:space="preserve"><value>Độ dài được xác định bởi</value></data>
+  <data name="Report_Carving_Output" xml:space="preserve"><value>Tệp đầu ra</value></data>
+  <data name="Report_Carving_Total" xml:space="preserve"><value>Tệp đã tìm thấy</value></data>
+  <data name="Report_Audit_Seq" xml:space="preserve"><value>STT</value></data>
+  <data name="Report_Audit_TimeUtc" xml:space="preserve"><value>Thời gian (UTC)</value></data>
+  <data name="Report_Audit_TimeLocal" xml:space="preserve"><value>Thời gian (địa phương)</value></data>
+  <data name="Report_Audit_User" xml:space="preserve"><value>Người dùng</value></data>
+  <data name="Report_Audit_Computer" xml:space="preserve"><value>Máy tính</value></data>
+  <data name="Report_Audit_Operation" xml:space="preserve"><value>Thao tác</value></data>
+  <data name="Report_Audit_Evidence" xml:space="preserve"><value>Bằng chứng</value></data>
+  <data name="Report_Audit_Result" xml:space="preserve"><value>Kết quả</value></data>
+  <data name="Report_Audit_Message" xml:space="preserve"><value>Chi tiết</value></data>
+  <data name="Report_Result_success" xml:space="preserve"><value>thành công</value></data>
+  <data name="Report_Result_failure" xml:space="preserve"><value>thất bại</value></data>
+  <data name="Report_Result_cancelled" xml:space="preserve"><value>đã hủy</value></data>
+  <data name="Report_Truncated" xml:space="preserve"><value>Hiển thị {0} dòng đầu trong tổng số {1} dòng. Danh sách đầy đủ có trong tệp CSV đính kèm hoặc báo cáo HTML.</value></data>
+  <data name="Report_TruncatedPdf" xml:space="preserve"><value>Chỉ hiển thị {0} dòng đầu. Danh sách đầy đủ có trong báo cáo HTML hoặc tệp CSV.</value></data>
+  <data name="Report_Attachment" xml:space="preserve"><value>Danh sách đầy đủ</value></data>
+  <data name="Report_Diagram_Free" xml:space="preserve"><value>Chưa cấp phát</value></data>
+  <data name="Report_NoData" xml:space="preserve"><value>Không có dữ liệu.</value></data>
+  <data name="Report_InvalidTime" xml:space="preserve"><value>thời gian không hợp lệ</value></data>
   <data name="Cmd_view_panel_disassembly" xml:space="preserve"><value>Bật/tắt bảng dịch ngược</value></data>
   <data name="CmdAlias_view_panel_disassembly" xml:space="preserve"><value>dịch ngược hợp ngữ mã disassembler assembly code</value></data>
   <data name="Cmd_analysis_disassemble" xml:space="preserve"><value>Dịch ngược</value></data>
@@ -8193,4 +8606,1265 @@ Kết nối sẽ không được thực hiện trừ khi bạn chọn thay khóa
   <data name="Print_Zoom_FitPage" xml:space="preserve"><value>Cả trang</value></data>
   <data name="Print_Zoom_FitWidth" xml:space="preserve"><value>Vừa chiều rộng</value></data>
   <data name="Ads_ChooseFolder" xml:space="preserve"><value>Chọn thư mục...</value></data>
+  <data name="Title_WriteBlock" xml:space="preserve"><value>[Chống ghi]</value></data>
+  <data name="Status_WriteBlock" xml:space="preserve"><value>Chống ghi</value></data>
+  <data name="Status_WriteBlock_ToolTip" xml:space="preserve"><value>Chế độ chống ghi đang bật. Nhấp để tắt.</value></data>
+  <data name="WriteBlock_FirstNotice" xml:space="preserve"><value>Chế độ chống ghi chỉ ngăn ứng dụng này ghi. Nó không ngăn được Windows hoặc các ứng dụng khác ghi (ví dụ các lần ghi mà hệ thống tệp thực hiện khi gắn volume). Hãy dùng thêm thiết bị chặn ghi phần cứng hoặc tính năng chống ghi USB của hệ điều hành.</value></data>
+  <data name="WriteBlock_FirstNotice_Usb" xml:space="preserve"><value>Chống ghi USB của hệ điều hành...</value></data>
+  <data name="WriteBlock_Disable_Title" xml:space="preserve"><value>Tắt chế độ chống ghi?</value></data>
+  <data name="WriteBlock_Disable_Body" xml:space="preserve"><value>Tài liệu bằng chứng đang mở: {0}. Sau khi tắt chế độ này, các tài liệu đó có thể bị ghi:</value></data>
+  <data name="WriteBlock_Disable_NoEvidence" xml:space="preserve"><value>Không có tài liệu bằng chứng nào đang mở. Sau khi tắt chế độ này, các tài liệu đang mở có thể được ghi trở lại.</value></data>
+  <data name="WriteBlock_Disable_Button" xml:space="preserve"><value>Tắt chống ghi</value></data>
+  <data name="WriteBlock_ReopenFailed" xml:space="preserve"><value>Không thể mở lại nguồn dữ liệu ở chế độ chỉ đọc. Chỉ hiển thị dữ liệu đã đọc.</value></data>
+  <data name="Tab_AllowWriting" xml:space="preserve"><value>Cho phép ghi vào tài liệu này</value></data>
+  <data name="Tab_WriteBlockException" xml:space="preserve"><value>Cho phép ghi (ngoại lệ của chế độ chống ghi)</value></data>
+  <data name="WriteBlock_Allow_NotEnabled" xml:space="preserve"><value>Chế độ chống ghi đang tắt.</value></data>
+  <data name="WriteBlock_Allow_FilesOnly" xml:space="preserve"><value>Chỉ tài liệu dạng tệp mới có thể được đặt làm ngoại lệ của chế độ chống ghi.</value></data>
+  <data name="WriteBlock_Allow_Evidence" xml:space="preserve"><value>Nguồn dữ liệu này đã được đăng ký làm bằng chứng nên không thể cho phép ghi.</value></data>
+  <data name="WriteBlock_Allow_Already" xml:space="preserve"><value>Tài liệu này đã được cho phép ghi.</value></data>
+  <data name="WriteBlock_Allow_Title" xml:space="preserve"><value>Cho phép ghi vào tài liệu này?</value></data>
+  <data name="WriteBlock_Allow_Body" xml:space="preserve"><value>Chế độ chống ghi vẫn bật, nhưng {0} ({1}) có thể được chỉnh sửa và lưu cho đến khi bạn đóng nó. Việc này được ghi vào nhật ký kiểm tra và không thể hoàn tác đối với tài liệu đang mở.</value></data>
+  <data name="WriteBlock_Allow_Type" xml:space="preserve"><value>Nhập {0} để xác nhận</value></data>
+  <data name="WriteBlock_Allow_Button" xml:space="preserve"><value>Cho phép ghi vào {0}</value></data>
+  <data name="WriteBlock_Allowed" xml:space="preserve"><value>Đã cho phép ghi vào {0} cho đến khi đóng.</value></data>
+  <data name="Menu_Forensics_WriteBlock.Text" xml:space="preserve"><value>Chế độ chống ghi</value></data>
+  <data name="Menu_Forensics_WriteBlock.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.Text" xml:space="preserve"><value>Chống ghi USB của hệ điều hành</value></data>
+  <data name="Menu_Forensics_UsbWriteProtect.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Forensics_Device.Text" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="Menu_Forensics_Device.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Device_Hpa.Text" xml:space="preserve"><value>Kiểm tra HPA / DCO</value></data>
+  <data name="Menu_Forensics_Device_Hpa.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Device_Smart.Text" xml:space="preserve"><value>Thông tin SMART</value></data>
+  <data name="Menu_Forensics_Device_Smart.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_Device_Panel.Text" xml:space="preserve"><value>Bảng thông tin thiết bị</value></data>
+  <data name="Menu_Forensics_Device_Panel.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_Encryption.Text" xml:space="preserve"><value>Thông tin mã hóa...</value></data>
+  <data name="Menu_Forensics_Encryption.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_MemoryDump.Text" xml:space="preserve"><value>Mở bản dump bộ nhớ...</value></data>
+  <data name="Menu_Forensics_MemoryDump.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_forensics_writeBlock" xml:space="preserve"><value>Bật/tắt chế độ chống ghi</value></data>
+  <data name="CmdAlias_forensics_writeBlock" xml:space="preserve"><value>chống ghi chặn ghi chỉ đọc bằng chứng write block protect read-only evidence</value></data>
+  <data name="Cmd_forensics_writeBlock_allowDocument" xml:space="preserve"><value>Cho phép ghi vào tài liệu này</value></data>
+  <data name="CmdAlias_forensics_writeBlock_allowDocument" xml:space="preserve"><value>chống ghi ngoại lệ write block exception</value></data>
+  <data name="Cmd_forensics_usbWriteProtect" xml:space="preserve"><value>Bật/tắt chống ghi USB của hệ điều hành</value></data>
+  <data name="CmdAlias_forensics_usbWriteProtect" xml:space="preserve"><value>USB lưu trữ chính sách chống ghi registry usb storage policy write protect registry</value></data>
+  <data name="Cmd_forensics_device_hpaDco" xml:space="preserve"><value>Kiểm tra HPA và DCO</value></data>
+  <data name="CmdAlias_forensics_device_hpaDco" xml:space="preserve"><value>vùng ẩn vùng bảo vệ máy chủ lớp phủ cấu hình thiết bị hidden area host protected device configuration overlay</value></data>
+  <data name="Cmd_forensics_device_smart" xml:space="preserve"><value>Hiển thị thông tin SMART</value></data>
+  <data name="CmdAlias_forensics_device_smart" xml:space="preserve"><value>tình trạng đĩa tự giám sát nvme health disk self monitoring nvme</value></data>
+  <data name="Cmd_forensics_encryption_info" xml:space="preserve"><value>Hiển thị thông tin mã hóa</value></data>
+  <data name="CmdAlias_forensics_encryption_info" xml:space="preserve"><value>bitlocker luks filevault veracrypt volume được mã hóa encrypted volume</value></data>
+  <data name="Cmd_view_panel_deviceInfo" xml:space="preserve"><value>Bật/tắt thông tin thiết bị</value></data>
+  <data name="CmdAlias_view_panel_deviceInfo" xml:space="preserve"><value>bảng hpa smart thiết bị panel hpa smart device</value></data>
+  <data name="Cmd_file_openMemoryDump" xml:space="preserve"><value>Mở bản dump bộ nhớ</value></data>
+  <data name="CmdAlias_file_openMemoryDump" xml:space="preserve"><value>crash dump minidump bộ nhớ vật lý ram crash dump minidump physical memory ram</value></data>
+  <data name="Panel_DeviceInfo_Title" xml:space="preserve"><value>Thông tin thiết bị</value></data>
+  <data name="Set_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Luôn bật chế độ chống ghi khi khởi động</value></data>
+  <data name="SetDesc_forensics_writeBlock_alwaysOnStartup" xml:space="preserve"><value>Khi tắt, ứng dụng khởi động với chế độ ở trạng thái lần đóng gần nhất.</value></data>
+  <data name="Set_forensics_device_autoHpaCheck" xml:space="preserve"><value>Kiểm tra HPA / DCO khi mở đĩa</value></data>
+  <data name="SetDesc_forensics_device_autoHpaCheck" xml:space="preserve"><value>Gửi các lệnh ATA chỉ đọc tới đĩa và hiển thị thông báo nếu phát hiện vùng ẩn.</value></data>
+  <data name="UsbProtect_EnableTitle" xml:space="preserve"><value>Bật chống ghi USB của hệ điều hành?</value></data>
+  <data name="UsbProtect_EnableBody" xml:space="preserve"><value>Windows sẽ chặn việc ghi vào các thiết bị lưu trữ USB được kết nối từ bây giờ (thiết lập WriteProtect của StorageDevicePolicies). Các thiết bị đã kết nối không bị ảnh hưởng cho đến khi bạn kết nối lại. Đĩa SATA và NVMe bên trong không được bảo vệ. Cần quyền quản trị viên.</value></data>
+  <data name="UsbProtect_DisableTitle" xml:space="preserve"><value>Tắt chống ghi USB của hệ điều hành?</value></data>
+  <data name="UsbProtect_DisableBody" xml:space="preserve"><value>Thiết lập sẽ trở về trạng thái trước khi bạn bật. Các thiết bị lưu trữ USB đã kết nối vẫn được chống ghi cho đến khi bạn kết nối lại. Cần quyền quản trị viên.</value></data>
+  <data name="UsbProtect_Change" xml:space="preserve"><value>Đổi thiết lập</value></data>
+  <data name="UsbProtect_NeedsAdmin" xml:space="preserve"><value>Cần quyền quản trị viên. Thiết lập chưa được thay đổi.</value></data>
+  <data name="UsbProtect_Denied" xml:space="preserve"><value>Không thể đổi thiết lập (bị từ chối truy cập; có thể do Chính sách nhóm quản lý): {0}</value></data>
+  <data name="UsbProtect_Failed" xml:space="preserve"><value>Không thể đổi thiết lập: {0}</value></data>
+  <data name="UsbProtect_Enabled" xml:space="preserve"><value>Đã bật chống ghi USB của hệ điều hành. Hãy kết nối lại các thiết bị lưu trữ USB để có hiệu lực.</value></data>
+  <data name="UsbProtect_Disabled" xml:space="preserve"><value>Đã tắt chống ghi USB của hệ điều hành.</value></data>
+  <data name="UsbProtect_ExitTitle" xml:space="preserve"><value>Chống ghi USB của hệ điều hành vẫn đang bật</value></data>
+  <data name="UsbProtect_ExitBody" xml:space="preserve"><value>Windows vẫn tiếp tục chặn ghi vào thiết bị lưu trữ USB sau khi ứng dụng này đóng. Tắt trước khi thoát?</value></data>
+  <data name="UsbProtect_ExitDisable" xml:space="preserve"><value>Tắt và thoát</value></data>
+  <data name="UsbProtect_ExitKeep" xml:space="preserve"><value>Thoát và giữ bật</value></data>
+  <data name="AdminGuide_UsbProtect" xml:space="preserve"><value>Đổi tính năng chống ghi USB của hệ điều hành cần quyền quản trị viên Windows.</value></data>
+  <data name="DeviceInfo_Tab_Hpa" xml:space="preserve"><value>HPA / DCO</value></data>
+  <data name="DeviceInfo_Tab_Smart" xml:space="preserve"><value>SMART</value></data>
+  <data name="DeviceInfo_Tab_Identity" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="DeviceInfo_CheckHpa" xml:space="preserve"><value>Kiểm tra HPA / DCO</value></data>
+  <data name="DeviceInfo_ReadSmart" xml:space="preserve"><value>Đọc SMART</value></data>
+  <data name="DeviceInfo_ExportJson" xml:space="preserve"><value>Xuất JSON...</value></data>
+  <data name="DeviceInfo_ExportText" xml:space="preserve"><value>Xuất văn bản...</value></data>
+  <data name="DeviceInfo_Empty" xml:space="preserve"><value>Hãy mở một đĩa vật lý rồi chọn Kiểm tra HPA / DCO hoặc Thông tin SMART.</value></data>
+  <data name="DeviceInfo_HeaderText" xml:space="preserve"><value>{0} — ghi lúc {1}</value></data>
+  <data name="DeviceInfo_HpaNotChecked" xml:space="preserve"><value>Chưa kiểm tra HPA / DCO.</value></data>
+  <data name="DeviceInfo_NvmeNoHpa" xml:space="preserve"><value>Đĩa NVMe không có HPA hoặc DCO; HPA / DCO không áp dụng.</value></data>
+  <data name="DeviceInfo_NamespaceSize" xml:space="preserve"><value>Kích thước namespace: {0} khối ({1} byte mỗi khối)</value></data>
+  <data name="DeviceInfo_NamespaceCapacity" xml:space="preserve"><value>Dung lượng namespace: {0} khối</value></data>
+  <data name="DeviceInfo_NotSupported" xml:space="preserve"><value>Không thể kiểm tra trên thiết bị này (các lệnh không đi qua được, ví dụ với bộ chuyển đổi USB hoặc đĩa ảo).</value></data>
+  <data name="DeviceInfo_NeedsAdmin" xml:space="preserve"><value>Cần quyền quản trị viên.</value></data>
+  <data name="DeviceInfo_CommandFailed" xml:space="preserve"><value>Lệnh {0} không thành công (trạng thái ATA {1}, lỗi {2}).</value></data>
+  <data name="DeviceInfo_MaxLba28" xml:space="preserve"><value>LBA tối đa (IDENTIFY DEVICE, 28 bit): {0}</value></data>
+  <data name="DeviceInfo_MaxLba48" xml:space="preserve"><value>LBA tối đa (IDENTIFY DEVICE, 48 bit): {0}</value></data>
+  <data name="DeviceInfo_NativeMax" xml:space="preserve"><value>LBA tối đa gốc (READ NATIVE MAX ADDRESS): {0}</value></data>
+  <data name="DeviceInfo_DcoMax" xml:space="preserve"><value>LBA tối đa do DCO đặt (DEVICE CONFIGURATION IDENTIFY): {0}</value></data>
+  <data name="DeviceInfo_HpaUnsupported" xml:space="preserve"><value>thiết bị không hỗ trợ</value></data>
+  <data name="DeviceInfo_DcoUnsupported" xml:space="preserve"><value>thiết bị không hỗ trợ</value></data>
+  <data name="DeviceInfo_HpaPresent" xml:space="preserve"><value>HPA: có, {0} sector ({1})</value></data>
+  <data name="DeviceInfo_HpaAbsent" xml:space="preserve"><value>HPA: không có</value></data>
+  <data name="DeviceInfo_HpaUnknown" xml:space="preserve"><value>HPA: không xác định được</value></data>
+  <data name="DeviceInfo_DcoPresent" xml:space="preserve"><value>DCO: có, {0} sector ({1})</value></data>
+  <data name="DeviceInfo_DcoAbsent" xml:space="preserve"><value>DCO: không có</value></data>
+  <data name="DeviceInfo_DcoUnknown" xml:space="preserve"><value>DCO: không xác định được</value></data>
+  <data name="DeviceInfo_SmartNotRead" xml:space="preserve"><value>Chưa đọc thông tin SMART.</value></data>
+  <data name="DeviceInfo_SmartNotSupported" xml:space="preserve"><value>Không thể đọc thông tin SMART trên thiết bị này (ví dụ qua bộ chuyển đổi USB không hỗ trợ).</value></data>
+  <data name="DeviceInfo_SmartDisabled" xml:space="preserve"><value>SMART đang bị tắt trên thiết bị này.</value></data>
+  <data name="DeviceInfo_SmartChecksum" xml:space="preserve"><value>Checksum của dữ liệu SMART không khớp; các giá trị có thể sai.</value></data>
+  <data name="DeviceInfo_Model" xml:space="preserve"><value>Kiểu máy: {0}</value></data>
+  <data name="DeviceInfo_Serial" xml:space="preserve"><value>Số sê-ri: {0}</value></data>
+  <data name="DeviceInfo_Firmware" xml:space="preserve"><value>Firmware: {0}</value></data>
+  <data name="DeviceInfo_Capacity" xml:space="preserve"><value>Dung lượng: {0}</value></data>
+  <data name="DeviceInfo_SectorSize" xml:space="preserve"><value>Kích thước sector: logic {0} byte, vật lý {1} byte</value></data>
+  <data name="DeviceInfo_Bus" xml:space="preserve"><value>Kết nối: {0}</value></data>
+  <data name="DeviceInfo_Rotation" xml:space="preserve"><value>Tốc độ quay: {0}</value></data>
+  <data name="DeviceInfo_Rotation_Ssd" xml:space="preserve"><value>không quay (SSD)</value></data>
+  <data name="DeviceInfo_Trim" xml:space="preserve"><value>TRIM: {0}</value></data>
+  <data name="DeviceInfo_Trim_Yes" xml:space="preserve"><value>được hỗ trợ</value></data>
+  <data name="DeviceInfo_Trim_No" xml:space="preserve"><value>không được hỗ trợ</value></data>
+  <data name="DeviceInfo_DiskOnly" xml:space="preserve"><value>Hãy mở một đĩa vật lý để dùng lệnh này.</value></data>
+  <data name="DeviceInfo_Failed" xml:space="preserve"><value>Không thể đọc thông tin thiết bị: {0}</value></data>
+  <data name="DeviceInfo_HiddenAreaNotice" xml:space="preserve"><value>{0} có vùng ẩn: HPA {1} sector, DCO {2} sector. Dung lượng Windows nhìn thấy nhỏ hơn dung lượng thực của đĩa.</value></data>
+  <data name="DeviceInfo_ShowPanel" xml:space="preserve"><value>Hiện chi tiết</value></data>
+  <data name="DeviceInfo_Exported" xml:space="preserve"><value>Đã xuất thông tin thiết bị ra {0}.</value></data>
+  <data name="DeviceInfo_ExportFailed" xml:space="preserve"><value>Không thể xuất thông tin thiết bị: {0}</value></data>
+  <data name="Smart_Col_Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Smart_Col_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Smart_Col_Current" xml:space="preserve"><value>Hiện tại</value></data>
+  <data name="Smart_Col_Worst" xml:space="preserve"><value>Tệ nhất</value></data>
+  <data name="Smart_Col_Threshold" xml:space="preserve"><value>Ngưỡng</value></data>
+  <data name="Smart_Col_RawHex" xml:space="preserve"><value>Giá trị thô (Hex)</value></data>
+  <data name="Smart_Col_RawDec" xml:space="preserve"><value>Giá trị thô (thập phân)</value></data>
+  <data name="Smart_Col_Status" xml:space="preserve"><value>Trạng thái</value></data>
+  <data name="Smart_Status_Ok" xml:space="preserve"><value>Tốt</value></data>
+  <data name="Smart_Status_Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="Smart_Attr_Unknown" xml:space="preserve"><value>Không rõ</value></data>
+  <data name="Smart_Attr_1" xml:space="preserve"><value>Raw Read Error Rate</value></data>
+  <data name="Smart_Attr_2" xml:space="preserve"><value>Throughput Performance</value></data>
+  <data name="Smart_Attr_3" xml:space="preserve"><value>Spin-Up Time</value></data>
+  <data name="Smart_Attr_4" xml:space="preserve"><value>Start/Stop Count</value></data>
+  <data name="Smart_Attr_5" xml:space="preserve"><value>Reallocated Sectors Count</value></data>
+  <data name="Smart_Attr_7" xml:space="preserve"><value>Seek Error Rate</value></data>
+  <data name="Smart_Attr_8" xml:space="preserve"><value>Seek Time Performance</value></data>
+  <data name="Smart_Attr_9" xml:space="preserve"><value>Power-On Hours</value></data>
+  <data name="Smart_Attr_10" xml:space="preserve"><value>Spin Retry Count</value></data>
+  <data name="Smart_Attr_11" xml:space="preserve"><value>Calibration Retry Count</value></data>
+  <data name="Smart_Attr_12" xml:space="preserve"><value>Power Cycle Count</value></data>
+  <data name="Smart_Attr_170" xml:space="preserve"><value>Available Reserved Space</value></data>
+  <data name="Smart_Attr_171" xml:space="preserve"><value>Program Fail Count</value></data>
+  <data name="Smart_Attr_172" xml:space="preserve"><value>Erase Fail Count</value></data>
+  <data name="Smart_Attr_173" xml:space="preserve"><value>Wear Leveling Count</value></data>
+  <data name="Smart_Attr_174" xml:space="preserve"><value>Unexpected Power Loss Count</value></data>
+  <data name="Smart_Attr_177" xml:space="preserve"><value>Wear Range Delta</value></data>
+  <data name="Smart_Attr_179" xml:space="preserve"><value>Used Reserved Block Count Total</value></data>
+  <data name="Smart_Attr_181" xml:space="preserve"><value>Program Fail Count Total</value></data>
+  <data name="Smart_Attr_182" xml:space="preserve"><value>Erase Fail Count Total</value></data>
+  <data name="Smart_Attr_183" xml:space="preserve"><value>Runtime Bad Block</value></data>
+  <data name="Smart_Attr_184" xml:space="preserve"><value>End-to-End Error</value></data>
+  <data name="Smart_Attr_187" xml:space="preserve"><value>Reported Uncorrectable Errors</value></data>
+  <data name="Smart_Attr_188" xml:space="preserve"><value>Command Timeout</value></data>
+  <data name="Smart_Attr_189" xml:space="preserve"><value>High Fly Writes</value></data>
+  <data name="Smart_Attr_190" xml:space="preserve"><value>Airflow Temperature</value></data>
+  <data name="Smart_Attr_191" xml:space="preserve"><value>G-Sense Error Rate</value></data>
+  <data name="Smart_Attr_192" xml:space="preserve"><value>Power-off Retract Count</value></data>
+  <data name="Smart_Attr_193" xml:space="preserve"><value>Load Cycle Count</value></data>
+  <data name="Smart_Attr_194" xml:space="preserve"><value>Nhiệt độ</value></data>
+  <data name="Smart_Attr_195" xml:space="preserve"><value>Hardware ECC Recovered</value></data>
+  <data name="Smart_Attr_196" xml:space="preserve"><value>Reallocation Event Count</value></data>
+  <data name="Smart_Attr_197" xml:space="preserve"><value>Current Pending Sector Count</value></data>
+  <data name="Smart_Attr_198" xml:space="preserve"><value>Offline Uncorrectable Sector Count</value></data>
+  <data name="Smart_Attr_199" xml:space="preserve"><value>UltraDMA CRC Error Count</value></data>
+  <data name="Smart_Attr_200" xml:space="preserve"><value>Multi-Zone Error Rate</value></data>
+  <data name="Smart_Attr_231" xml:space="preserve"><value>SSD Life Left</value></data>
+  <data name="Smart_Attr_232" xml:space="preserve"><value>Endurance Remaining</value></data>
+  <data name="Smart_Attr_233" xml:space="preserve"><value>Media Wearout Indicator</value></data>
+  <data name="Smart_Attr_235" xml:space="preserve"><value>Good Block Count</value></data>
+  <data name="Smart_Attr_241" xml:space="preserve"><value>Total LBAs Written</value></data>
+  <data name="Smart_Attr_242" xml:space="preserve"><value>Total LBAs Read</value></data>
+  <data name="Nvme_CriticalWarning" xml:space="preserve"><value>Các bit cảnh báo nghiêm trọng: {0}</value></data>
+  <data name="Nvme_Temperature" xml:space="preserve"><value>Nhiệt độ: {0} °C</value></data>
+  <data name="Nvme_AvailableSpare" xml:space="preserve"><value>Dự phòng khả dụng: {0}% (ngưỡng {1}%)</value></data>
+  <data name="Nvme_PercentageUsed" xml:space="preserve"><value>Phần trăm đã dùng: {0}%</value></data>
+  <data name="Nvme_DataRead" xml:space="preserve"><value>Dữ liệu đã đọc: {0} byte</value></data>
+  <data name="Nvme_DataWritten" xml:space="preserve"><value>Dữ liệu đã ghi: {0} byte</value></data>
+  <data name="Nvme_PowerCycles" xml:space="preserve"><value>Số chu kỳ nguồn: {0}</value></data>
+  <data name="Nvme_PowerOnHours" xml:space="preserve"><value>Số giờ bật nguồn: {0}</value></data>
+  <data name="Nvme_UnsafeShutdowns" xml:space="preserve"><value>Số lần tắt nguồn không an toàn: {0}</value></data>
+  <data name="Nvme_MediaErrors" xml:space="preserve"><value>Lỗi phương tiện và toàn vẹn dữ liệu: {0}</value></data>
+  <data name="DeviceReport_Captured" xml:space="preserve"><value>Thời điểm ghi</value></data>
+  <data name="DeviceReport_Device" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="DeviceReport_Model" xml:space="preserve"><value>Kiểu máy</value></data>
+  <data name="DeviceReport_Serial" xml:space="preserve"><value>Số sê-ri</value></data>
+  <data name="DeviceReport_Firmware" xml:space="preserve"><value>Firmware</value></data>
+  <data name="DeviceReport_Capacity" xml:space="preserve"><value>Dung lượng (byte)</value></data>
+  <data name="DeviceReport_SectorSize" xml:space="preserve"><value>Kích thước sector (logic / vật lý)</value></data>
+  <data name="DeviceReport_Bus" xml:space="preserve"><value>Kết nối</value></data>
+  <data name="DeviceReport_Hpa" xml:space="preserve"><value>HPA</value></data>
+  <data name="DeviceReport_Dco" xml:space="preserve"><value>DCO</value></data>
+  <data name="DeviceReport_MaxLba" xml:space="preserve"><value>LBA tối đa (28 bit / 48 bit / gốc / DCO)</value></data>
+  <data name="DeviceReport_NotSupported" xml:space="preserve"><value>Không thể kiểm tra trên thiết bị này</value></data>
+  <data name="DeviceReport_None" xml:space="preserve"><value>Không có</value></data>
+  <data name="DeviceReport_Present" xml:space="preserve"><value>Có ({0} sector)</value></data>
+  <data name="DeviceReport_NotApplicable" xml:space="preserve"><value>Không áp dụng (NVMe)</value></data>
+  <data name="DeviceReport_SmartId" xml:space="preserve"><value>ID</value></data>
+  <data name="DeviceReport_SmartName" xml:space="preserve"><value>Tên</value></data>
+  <data name="DeviceReport_SmartCurrent" xml:space="preserve"><value>Hiện tại</value></data>
+  <data name="DeviceReport_SmartWorst" xml:space="preserve"><value>Tệ nhất</value></data>
+  <data name="DeviceReport_SmartThreshold" xml:space="preserve"><value>Ngưỡng</value></data>
+  <data name="DeviceReport_SmartRaw" xml:space="preserve"><value>Giá trị thô</value></data>
+  <data name="DeviceReport_SmartStatus" xml:space="preserve"><value>Trạng thái</value></data>
+  <data name="DeviceReport_Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="DeviceReport_Ok" xml:space="preserve"><value>Tốt</value></data>
+  <data name="Encryption_Title" xml:space="preserve"><value>Thông tin mã hóa</value></data>
+  <data name="Encryption_None" xml:space="preserve"><value>Không tìm thấy volume nào được mã hóa.</value></data>
+  <data name="Encryption_Range" xml:space="preserve"><value>Vùng {0}: độ lệch {1}, {2} byte</value></data>
+  <data name="Encryption_Kind" xml:space="preserve"><value>Loại: {0}</value></data>
+  <data name="Encryption_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="Encryption_Kind_BitLockerToGo" xml:space="preserve"><value>BitLocker To Go</value></data>
+  <data name="Encryption_Kind_Luks1" xml:space="preserve"><value>LUKS1</value></data>
+  <data name="Encryption_Kind_Luks2" xml:space="preserve"><value>LUKS2</value></data>
+  <data name="Encryption_Kind_ApfsEncrypted" xml:space="preserve"><value>Volume APFS được mã hóa (FileVault 2)</value></data>
+  <data name="Encryption_Kind_CoreStorage" xml:space="preserve"><value>Core Storage (có thể đã mã hóa)</value></data>
+  <data name="Encryption_Kind_PossiblyEncrypted" xml:space="preserve"><value>Có thể là dữ liệu đã mã hóa hoặc nén (ví dụ VeraCrypt hoặc TrueCrypt; không có chữ ký để nhận dạng chúng)</value></data>
+  <data name="Encryption_Version" xml:space="preserve"><value>Phiên bản siêu dữ liệu: {0}</value></data>
+  <data name="Encryption_Method" xml:space="preserve"><value>Phương pháp mã hóa: {0}</value></data>
+  <data name="Encryption_VolumeId" xml:space="preserve"><value>GUID của volume: {0}</value></data>
+  <data name="Encryption_Created" xml:space="preserve"><value>Tạo lúc: {0}</value></data>
+  <data name="Encryption_Description" xml:space="preserve"><value>Mô tả: {0}</value></data>
+  <data name="Encryption_State" xml:space="preserve"><value>Trạng thái mã hóa: {0}</value></data>
+  <data name="Encryption_State_Unknown" xml:space="preserve"><value>không rõ</value></data>
+  <data name="Encryption_State_Decrypted" xml:space="preserve"><value>đã giải mã</value></data>
+  <data name="Encryption_State_InProgress" xml:space="preserve"><value>đang tiến hành</value></data>
+  <data name="Encryption_State_Encrypted" xml:space="preserve"><value>đã hoàn tất</value></data>
+  <data name="Encryption_State_Paused" xml:space="preserve"><value>đã tạm dừng</value></data>
+  <data name="Encryption_Encrypted" xml:space="preserve"><value>Đã mã hóa đến nay: {0} byte</value></data>
+  <data name="Encryption_Protectors" xml:space="preserve"><value>Trình bảo vệ khóa: {0}</value></data>
+  <data name="Encryption_Protector" xml:space="preserve"><value>• {0}, {1}, tạo lúc {2}</value></data>
+  <data name="Encryption_Protector_0000" xml:space="preserve"><value>Khóa không mã hóa</value></data>
+  <data name="Encryption_Protector_0100" xml:space="preserve"><value>TPM</value></data>
+  <data name="Encryption_Protector_0200" xml:space="preserve"><value>Khóa khởi động</value></data>
+  <data name="Encryption_Protector_0500" xml:space="preserve"><value>TPM và PIN</value></data>
+  <data name="Encryption_Protector_0800" xml:space="preserve"><value>Mật khẩu khôi phục</value></data>
+  <data name="Encryption_Protector_2000" xml:space="preserve"><value>Mật khẩu</value></data>
+  <data name="Encryption_Protector_Unknown" xml:space="preserve"><value>Không rõ (0x{0})</value></data>
+  <data name="Encryption_Uuid" xml:space="preserve"><value>UUID: {0}</value></data>
+  <data name="Encryption_KeySlots" xml:space="preserve"><value>Khe khóa: {0}</value></data>
+  <data name="Encryption_ApfsEncrypted" xml:space="preserve"><value>• Volume {0}: đã mã hóa</value></data>
+  <data name="Encryption_ApfsPlain" xml:space="preserve"><value>• Volume {0}: không mã hóa</value></data>
+  <data name="Encryption_Entropy" xml:space="preserve"><value>Entropy của 64 KiB đầu: {0} bit mỗi byte</value></data>
+  <data name="Encryption_Warning_metadataMismatch" xml:space="preserve"><value>Cảnh báo: ba khối siêu dữ liệu không khớp nhau.</value></data>
+  <data name="Encryption_Warning_metadataDamaged" xml:space="preserve"><value>Cảnh báo: một số khối siêu dữ liệu bị hỏng; chỉ hiển thị các mục đọc được.</value></data>
+  <data name="Encryption_NoBrowser" xml:space="preserve"><value>Trình duyệt hệ thống tệp không mở volume được mã hóa.</value></data>
+  <data name="Encryption_UnlockedGuide" xml:space="preserve"><value>Windows đã mở khóa volume BitLocker này ({0}). Nếu bạn mở nó dưới dạng volume logic, bạn có thể đọc nội dung mà Windows đã giải mã.</value></data>
+  <data name="Encryption_OpenLogical" xml:space="preserve"><value>Mở dưới dạng volume logic</value></data>
+  <data name="MemoryDump_FormatErrorTitle" xml:space="preserve"><value>Bản dump bộ nhớ</value></data>
+  <data name="MemoryDump_FormatError" xml:space="preserve"><value>Không đọc được định dạng bản dump bộ nhớ của {0}. Mở dưới dạng thô?</value></data>
+  <data name="MemoryDump_OpenRaw" xml:space="preserve"><value>Mở dưới dạng thô</value></data>
+  <data name="MemoryDump_OpenFailed" xml:space="preserve"><value>Không thể mở bản dump bộ nhớ: {0}</value></data>
+  <data name="MemoryDump_Opened" xml:space="preserve"><value>Bản dump bộ nhớ: {0}, ghi lúc {1}</value></data>
+  <data name="MemoryDump_OpenedNoTime" xml:space="preserve"><value>Bản dump bộ nhớ: {0}</value></data>
+  <data name="MemoryDump_Kind_Raw" xml:space="preserve"><value>ảnh bộ nhớ vật lý (thô)</value></data>
+  <data name="MemoryDump_Kind_CompleteDump" xml:space="preserve"><value>bản dump bộ nhớ đầy đủ</value></data>
+  <data name="MemoryDump_Kind_KernelDump" xml:space="preserve"><value>bản dump bộ nhớ kernel</value></data>
+  <data name="MemoryDump_Kind_BitmapCompleteDump" xml:space="preserve"><value>bản dump bộ nhớ đầy đủ (bitmap)</value></data>
+  <data name="MemoryDump_Kind_Minidump" xml:space="preserve"><value>minidump</value></data>
+  <data name="OpenAdv_Format_memorydump" xml:space="preserve"><value>Bản dump bộ nhớ</value></data>
+  <data name="WriteBlock_Refused" xml:space="preserve"><value>Không thể ghi dữ liệu vì chế độ chống ghi đang bật.</value></data>
+  <data name="Menu_Forensics_Image.Text" xml:space="preserve"><value>Ảnh đĩa</value></data>
+  <data name="Menu_Forensics_Image.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_ImageCreate.Text" xml:space="preserve"><value>Tạo ảnh đĩa...</value></data>
+  <data name="Menu_Forensics_ImageCreate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.Text" xml:space="preserve"><value>Tạo ảnh đĩa khung...</value></data>
+  <data name="Menu_Forensics_ImageSkeleton.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Forensics_ImageOpen.Text" xml:space="preserve"><value>Mở ảnh đĩa...</value></data>
+  <data name="Menu_Forensics_ImageOpen.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_ImageVerify.Text" xml:space="preserve"><value>Xác minh ảnh đĩa...</value></data>
+  <data name="Menu_Forensics_ImageVerify.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_ImageInfo.Text" xml:space="preserve"><value>Thông tin ảnh đĩa</value></data>
+  <data name="Menu_Forensics_ImageInfo.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_DiskClone.Text" xml:space="preserve"><value>Nhân bản đĩa...</value></data>
+  <data name="Menu_Forensics_DiskClone.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_SectorsSave.Text" xml:space="preserve"><value>Lưu vùng sector...</value></data>
+  <data name="Menu_Forensics_SectorsSave.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Forensics_SectorsRestore.Text" xml:space="preserve"><value>Khôi phục vùng sector...</value></data>
+  <data name="Menu_Forensics_SectorsRestore.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Forensics_Raid.Text" xml:space="preserve"><value>Dựng lại RAID...</value></data>
+  <data name="Menu_Forensics_Raid.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Cmd_forensics_image_create" xml:space="preserve"><value>Tạo ảnh đĩa</value></data>
+  <data name="CmdAlias_forensics_image_create" xml:space="preserve"><value>thu thập ảnh đĩa dd thô e01 bằng chứng acquire disk image dd raw e01 evidence</value></data>
+  <data name="Cmd_forensics_image_skeleton" xml:space="preserve"><value>Tạo ảnh đĩa khung</value></data>
+  <data name="CmdAlias_forensics_image_skeleton" xml:space="preserve"><value>khung thưa ảnh siêu dữ liệu skeleton sparse image metadata</value></data>
+  <data name="Cmd_forensics_image_open" xml:space="preserve"><value>Mở ảnh đĩa như một đĩa</value></data>
+  <data name="CmdAlias_forensics_image_open" xml:space="preserve"><value>e01 vhd vhdx vmdk phân đoạn thô 001 e01 vhd vhdx vmdk split raw 001</value></data>
+  <data name="Cmd_forensics_image_verify" xml:space="preserve"><value>Xác minh ảnh đĩa</value></data>
+  <data name="CmdAlias_forensics_image_verify" xml:space="preserve"><value>xác minh hash md5 sha verify hash md5 sha</value></data>
+  <data name="Cmd_forensics_image_info" xml:space="preserve"><value>Thông tin ảnh đĩa</value></data>
+  <data name="CmdAlias_forensics_image_info" xml:space="preserve"><value>e01 phần đầu thông tin vụ việc e01 header case information</value></data>
+  <data name="Cmd_forensics_disk_clone" xml:space="preserve"><value>Nhân bản đĩa</value></data>
+  <data name="CmdAlias_forensics_disk_clone" xml:space="preserve"><value>nhân bản sao chép đĩa sector clone copy disk sector</value></data>
+  <data name="Cmd_forensics_sectors_save" xml:space="preserve"><value>Lưu vùng sector</value></data>
+  <data name="CmdAlias_forensics_sectors_save" xml:space="preserve"><value>sao lưu mbr gpt sector backup mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_sectors_restore" xml:space="preserve"><value>Khôi phục vùng sector</value></data>
+  <data name="CmdAlias_forensics_sectors_restore" xml:space="preserve"><value>khôi phục mbr gpt sector restore mbr gpt sectors</value></data>
+  <data name="Cmd_forensics_raid_reconstruct" xml:space="preserve"><value>Dựng lại RAID</value></data>
+  <data name="CmdAlias_forensics_raid_reconstruct" xml:space="preserve"><value>raid jbod sọc chẵn lẻ raid jbod stripe parity</value></data>
+  <data name="Img_NotImage" xml:space="preserve"><value>Tài liệu hiện tại không phải là ảnh đĩa.</value></data>
+  <data name="Img_NeedsDisk" xml:space="preserve"><value>Thao tác này cần tài liệu đĩa, volume hoặc ảnh đĩa.</value></data>
+  <data name="Img_NeedsSource" xml:space="preserve"><value>Hãy mở đĩa, ảnh đĩa hoặc tệp để dùng làm nguồn trước.</value></data>
+  <data name="Img_OpenedPartial" xml:space="preserve"><value>Đã mở mà không có các phân đoạn bị thiếu ({0}). Các vùng đó sẽ đọc ra lỗi.</value></data>
+  <data name="Img_FormatError" xml:space="preserve"><value>Không đọc được ảnh đĩa {0} (phần: {1}). {2}</value></data>
+  <data name="Img_ParentNotFound" xml:space="preserve"><value>Không tìm thấy đĩa cha của đĩa chênh lệch: {0}</value></data>
+  <data name="Img_MissingSegmentsTitle" xml:space="preserve"><value>Thiếu các phân đoạn</value></data>
+  <data name="Img_MissingSegments" xml:space="preserve"><value>Thiếu các phân đoạn sau: {0}. Mở ảnh đĩa với các phân đoạn hiện có? Các vùng bị thiếu sẽ đọc ra lỗi.</value></data>
+  <data name="Img_OpenAvailable" xml:space="preserve"><value>Mở các phân đoạn hiện có</value></data>
+  <data name="Img_Format_SplitRaw" xml:space="preserve"><value>Raw chia nhỏ</value></data>
+  <data name="Img_Format_Raw" xml:space="preserve"><value>Raw (dd)</value></data>
+  <data name="Img_ChunkCorrupt" xml:space="preserve"><value>Checksum của một chunk không khớp tại {0} ({1} byte). Vùng này được hiển thị là lỗi đọc.</value></data>
+  <data name="Img_InfoTitle" xml:space="preserve"><value>Thông tin ảnh đĩa</value></data>
+  <data name="Img_Info_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="Img_Info_Files" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Img_Info_Size" xml:space="preserve"><value>Kích thước</value></data>
+  <data name="Img_Info_SizeValue" xml:space="preserve"><value>{0} byte ({1} sector)</value></data>
+  <data name="Img_Info_SectorSize" xml:space="preserve"><value>Kích thước sector</value></data>
+  <data name="Img_Info_Acquired" xml:space="preserve"><value>Thời điểm thu thập</value></data>
+  <data name="Img_Info_Tool" xml:space="preserve"><value>Công cụ thu thập</value></data>
+  <data name="Img_Info_Device" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="Img_Info_Chunks" xml:space="preserve"><value>Chunk</value></data>
+  <data name="Img_Info_ChunksValue" xml:space="preserve"><value>{0} ({1} sector mỗi chunk)</value></data>
+  <data name="Img_Info_Compression" xml:space="preserve"><value>Nén</value></data>
+  <data name="Img_Info_Compressed" xml:space="preserve"><value>Đã nén</value></data>
+  <data name="Img_Info_NotCompressed" xml:space="preserve"><value>Không nén</value></data>
+  <data name="Img_Info_StoredHash" xml:space="preserve"><value>{0} đã lưu</value></data>
+  <data name="Img_Info_Errors" xml:space="preserve"><value>Sector không đọc được trong khi thu thập</value></data>
+  <data name="Img_Info_Parent" xml:space="preserve"><value>Đĩa cha</value></data>
+  <data name="Img_Info_Missing" xml:space="preserve"><value>Phân đoạn bị thiếu</value></data>
+  <data name="Img_SectorRange" xml:space="preserve"><value>LBA {0} + {1}</value></data>
+  <data name="Img_Case_Number" xml:space="preserve"><value>Số vụ việc</value></data>
+  <data name="Img_Case_Evidence" xml:space="preserve"><value>Số bằng chứng</value></data>
+  <data name="Img_Case_Examiner" xml:space="preserve"><value>Người giám định</value></data>
+  <data name="Img_Case_Description" xml:space="preserve"><value>Mô tả</value></data>
+  <data name="Img_Case_Notes" xml:space="preserve"><value>Ghi chú</value></data>
+  <data name="Img_Verdict_Match" xml:space="preserve"><value>Khớp</value></data>
+  <data name="Img_Verdict_Mismatch" xml:space="preserve"><value>Không khớp</value></data>
+  <data name="Img_Verdict_NoReference" xml:space="preserve"><value>Không có giá trị tham chiếu</value></data>
+  <data name="Img_Verdict_ReadError" xml:space="preserve"><value>Không thể xác minh do lỗi đọc</value></data>
+  <data name="Img_RefSource_Stored" xml:space="preserve"><value>lưu trong ảnh đĩa</value></data>
+  <data name="Img_RefSource_AcquisitionLog" xml:space="preserve"><value>nhật ký thu thập</value></data>
+  <data name="Img_RefSource_Evidence" xml:space="preserve"><value>danh sách bằng chứng</value></data>
+  <data name="Img_RefSource_User" xml:space="preserve"><value>giá trị đã nhập</value></data>
+  <data name="Img_RefSource_Acquisition" xml:space="preserve"><value>tính trong lúc thu thập</value></data>
+  <data name="Img_RefSource_SourceDisk" xml:space="preserve"><value>đĩa nguồn</value></data>
+  <data name="Img_CreateTitle" xml:space="preserve"><value>Tạo ảnh đĩa</value></data>
+  <data name="Img_SkeletonTitle" xml:space="preserve"><value>Tạo ảnh đĩa khung</value></data>
+  <data name="Img_SuggestWriteBlock" xml:space="preserve"><value>Chế độ chống ghi đang tắt. Nên bật trước khi thu thập bằng chứng.</value></data>
+  <data name="Img_EnableWriteBlock" xml:space="preserve"><value>Bật chế độ chống ghi</value></data>
+  <data name="Img_SourceLabel" xml:space="preserve"><value>Nguồn: {0}</value></data>
+  <data name="Img_SelectionOnly" xml:space="preserve"><value>Chỉ vùng chọn (mở rộng đến ranh giới sector)</value></data>
+  <data name="Img_ScopeHeader" xml:space="preserve"><value>Vùng cần thu thập</value></data>
+  <data name="Img_Scope_Full" xml:space="preserve"><value>Toàn bộ</value></data>
+  <data name="Img_Scope_Sparse" xml:space="preserve"><value>Thưa (bỏ qua vùng chưa cấp phát)</value></data>
+  <data name="Img_Scope_Skeleton" xml:space="preserve"><value>Khung (chỉ bảng phân vùng và siêu dữ liệu hệ thống tệp)</value></data>
+  <data name="Img_IncludeMarked" xml:space="preserve"><value>Bao gồm cả dấu trang và các vùng chọn nhiều vùng</value></data>
+  <data name="Img_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="Img_Output" xml:space="preserve"><value>Đầu ra</value></data>
+  <data name="Img_OutputHeader" xml:space="preserve"><value>Đầu ra</value></data>
+  <data name="Img_Browse" xml:space="preserve"><value>Duyệt...</value></data>
+  <data name="Img_SplitSize" xml:space="preserve"><value>Kích thước chia/phân đoạn (ví dụ 100M, 2G)</value></data>
+  <data name="Img_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="Img_Retries" xml:space="preserve"><value>Số lần thử lại khi lỗi đọc</value></data>
+  <data name="Img_Fill" xml:space="preserve"><value>Giá trị lấp cho sector không đọc được (Hex)</value></data>
+  <data name="Img_ReadUnit" xml:space="preserve"><value>Đơn vị đọc</value></data>
+  <data name="Img_VerifyAfter" xml:space="preserve"><value>Xác minh sau khi hoàn tất</value></data>
+  <data name="Img_ErrorsHeader" xml:space="preserve"><value>Lỗi đọc</value></data>
+  <data name="Img_E01Header" xml:space="preserve"><value>Thông tin E01</value></data>
+  <data name="Img_Compression" xml:space="preserve"><value>Nén</value></data>
+  <data name="Img_Compression_None" xml:space="preserve"><value>Không</value></data>
+  <data name="Img_Compression_Fast" xml:space="preserve"><value>Nhanh (zlib mức 1)</value></data>
+  <data name="Img_Compression_Best" xml:space="preserve"><value>Tốt nhất (zlib mức 9)</value></data>
+  <data name="Img_Start" xml:space="preserve"><value>Bắt đầu</value></data>
+  <data name="Img_NeedsOutput" xml:space="preserve"><value>Hãy nhập đầu ra.</value></data>
+  <data name="Img_SplitSizeInvalid" xml:space="preserve"><value>Kích thước chia phải từ 1 MiB trở lên (ví dụ 100M).</value></data>
+  <data name="Img_RetriesInvalid" xml:space="preserve"><value>Hãy nhập số lần thử lại từ 0 đến 100.</value></data>
+  <data name="Img_FillInvalid" xml:space="preserve"><value>Hãy nhập giá trị lấp bằng hai chữ số Hex (ví dụ 00).</value></data>
+  <data name="Img_NeedsHash" xml:space="preserve"><value>Hãy chọn ít nhất một loại hash.</value></data>
+  <data name="Img_Output_SameDisk" xml:space="preserve"><value>Đầu ra nằm trên cùng đĩa vật lý với nguồn. Hãy chọn đĩa khác.</value></data>
+  <data name="Img_Output_EvidenceDisk" xml:space="preserve"><value>Đầu ra nằm trên một đĩa trong danh sách bằng chứng. Hãy chọn đĩa khác.</value></data>
+  <data name="Img_Output_FileTooLarge" xml:space="preserve"><value>Hệ thống tệp của đầu ra ({0}) cho phép tệp tối đa {1} byte. Hãy dùng Raw chia nhỏ hoặc E01 với kích thước phân đoạn nhỏ hơn.</value></data>
+  <data name="Img_Output_Space" xml:space="preserve"><value>Đầu ra cần khoảng {0} byte nhưng chỉ còn trống {1} byte.</value></data>
+  <data name="Img_OverwriteConfirm" xml:space="preserve"><value>{0} đã tồn tại. Ghi đè?</value></data>
+  <data name="Img_Overwrite" xml:space="preserve"><value>Ghi đè</value></data>
+  <data name="Img_NotNtfsZeros" xml:space="preserve"><value>Hệ thống tệp của đầu ra là {0}, không phải NTFS, nên các vùng bị loại trừ được ghi bằng số 0 và ảnh đĩa không nhỏ đi.</value></data>
+  <data name="Img_OperationName" xml:space="preserve"><value>Tạo ảnh đĩa: {0}</value></data>
+  <data name="Img_PlanningRanges" xml:space="preserve"><value>Đang tính các vùng cần đưa vào</value></data>
+  <data name="Img_WholePartitions" xml:space="preserve"><value>Có {0} phân vùng không phân tích được và được đưa vào toàn bộ.</value></data>
+  <data name="Img_CreateFailed" xml:space="preserve"><value>Không thể tạo ảnh đĩa. {0}</value></data>
+  <data name="Img_DetailBadSectors" xml:space="preserve"><value>Sector không đọc được: {0}</value></data>
+  <data name="Img_Done" xml:space="preserve"><value>Đã tạo ảnh đĩa. {0}</value></data>
+  <data name="Img_DoneVerified" xml:space="preserve"><value>Xác minh: {0}.</value></data>
+  <data name="Img_BadSectorsWarning" xml:space="preserve"><value>Có {0} sector không đọc được và đã được lấp đầy.</value></data>
+  <data name="Img_CancelledKept" xml:space="preserve"><value>Quá trình thu thập đã bị gián đoạn. Các tệp đã ghi được giữ lại.</value></data>
+  <data name="Img_CancelledDeleted" xml:space="preserve"><value>Quá trình thu thập đã bị gián đoạn. Các tệp đã ghi đã bị xóa.</value></data>
+  <data name="Img_SourceLost" xml:space="preserve"><value>Đã mất nguồn. Quá trình thu thập đã dừng.</value></data>
+  <data name="Img_OpenLog" xml:space="preserve"><value>Mở nhật ký thu thập</value></data>
+  <data name="Img_WriteError" xml:space="preserve"><value>Không thể ghi đầu ra: {0}</value></data>
+  <data name="Img_Retry" xml:space="preserve"><value>Thử lại</value></data>
+  <data name="Img_Abort" xml:space="preserve"><value>Hủy bỏ</value></data>
+  <data name="Img_KeepPartial" xml:space="preserve"><value>Quá trình thu thập đã bị hủy. Giữ lại các tệp đã ghi?</value></data>
+  <data name="Img_Keep" xml:space="preserve"><value>Giữ lại</value></data>
+  <data name="Img_Delete" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Img_VerifyTitle" xml:space="preserve"><value>Xác minh ảnh đĩa</value></data>
+  <data name="Img_VerifyTarget" xml:space="preserve"><value>Ảnh đĩa: {0}</value></data>
+  <data name="Img_VerifyExpected" xml:space="preserve"><value>Giá trị để so sánh (Hex, tùy chọn)</value></data>
+  <data name="Img_VerifyExpectedHint" xml:space="preserve"><value>Giá trị MD5, SHA-1 hoặc SHA-256</value></data>
+  <data name="Img_VerifyExpectedInvalid" xml:space="preserve"><value>Hãy nhập giá trị Hex gồm 32, 40 hoặc 64 chữ số.</value></data>
+  <data name="Img_VerifyReread" xml:space="preserve"><value>Đọc lại cả đĩa nguồn</value></data>
+  <data name="Img_VerifyStart" xml:space="preserve"><value>Xác minh</value></data>
+  <data name="Img_VerifyOperation" xml:space="preserve"><value>Xác minh ảnh đĩa: {0}</value></data>
+  <data name="Img_VerifyResultTitle" xml:space="preserve"><value>Kết quả xác minh: {0}</value></data>
+  <data name="Img_VerifyReadErrors" xml:space="preserve"><value>Không thể xác minh do lỗi đọc: {0}</value></data>
+  <data name="Img_VerifyComputed" xml:space="preserve"><value>đã tính: {0}</value></data>
+  <data name="Img_VerifyReference" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="ImgLog_Title" xml:space="preserve"><value>Nhật ký thu thập ảnh đĩa</value></data>
+  <data name="ImgLog_CloneTitle" xml:space="preserve"><value>Nhật ký nhân bản đĩa</value></data>
+  <data name="ImgLog_Status" xml:space="preserve"><value>Trạng thái</value></data>
+  <data name="ImgLog_Completed" xml:space="preserve"><value>Đã hoàn tất</value></data>
+  <data name="ImgLog_Cancelled" xml:space="preserve"><value>Bị gián đoạn</value></data>
+  <data name="ImgLog_SourceLost" xml:space="preserve"><value>Mất nguồn</value></data>
+  <data name="ImgLog_Failed" xml:space="preserve"><value>Thất bại</value></data>
+  <data name="ImgLog_Source" xml:space="preserve"><value>Nguồn</value></data>
+  <data name="ImgLog_Path" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="ImgLog_Model" xml:space="preserve"><value>Kiểu máy</value></data>
+  <data name="ImgLog_Serial" xml:space="preserve"><value>Số sê-ri</value></data>
+  <data name="ImgLog_Capacity" xml:space="preserve"><value>Dung lượng</value></data>
+  <data name="ImgLog_SectorSize" xml:space="preserve"><value>Kích thước sector</value></data>
+  <data name="ImgLog_Range" xml:space="preserve"><value>Vùng</value></data>
+  <data name="ImgLog_Output" xml:space="preserve"><value>Đầu ra</value></data>
+  <data name="ImgLog_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="ImgLog_Files" xml:space="preserve"><value>Tệp</value></data>
+  <data name="ImgLog_Target" xml:space="preserve"><value>Đích</value></data>
+  <data name="ImgLog_Started" xml:space="preserve"><value>Bắt đầu</value></data>
+  <data name="ImgLog_Ended" xml:space="preserve"><value>Kết thúc</value></data>
+  <data name="ImgLog_SectorsRead" xml:space="preserve"><value>Sector đã đọc</value></data>
+  <data name="ImgLog_Unreadable" xml:space="preserve"><value>Sector không đọc được</value></data>
+  <data name="ImgLog_None" xml:space="preserve"><value>không có</value></data>
+  <data name="ImgLog_Hashes" xml:space="preserve"><value>Hash</value></data>
+  <data name="ImgLog_IncludedHashes" xml:space="preserve"><value>vùng được đưa vào</value></data>
+  <data name="ImgLog_Verification" xml:space="preserve"><value>Xác minh</value></data>
+  <data name="ImgLog_NotVerified" xml:space="preserve"><value>chưa xác minh</value></data>
+  <data name="ImgLog_AppVersion" xml:space="preserve"><value>Phiên bản ứng dụng</value></data>
+  <data name="ImgLog_Case" xml:space="preserve"><value>Vụ việc</value></data>
+  <data name="ImgLog_Scope" xml:space="preserve"><value>Vùng đã thu thập</value></data>
+  <data name="ImgLog_ScopeFull" xml:space="preserve"><value>toàn bộ</value></data>
+  <data name="ImgLog_ScopeSparse" xml:space="preserve"><value>ảnh đĩa thưa (không gồm vùng chưa cấp phát)</value></data>
+  <data name="ImgLog_ScopeSkeleton" xml:space="preserve"><value>ảnh đĩa khung (chỉ bảng phân vùng và siêu dữ liệu hệ thống tệp)</value></data>
+  <data name="ImgLog_ScopeNote" xml:space="preserve"><value>Các vùng bị loại trừ được lưu bằng số 0 nên hash của ảnh đĩa này không khớp với hash của toàn bộ đĩa nguồn.</value></data>
+  <data name="ImgLog_RangesFile" xml:space="preserve"><value>Vùng được đưa vào</value></data>
+  <data name="ImgLog_Message" xml:space="preserve"><value>Thông báo</value></data>
+  <data name="ImgClone_Title" xml:space="preserve"><value>Nhân bản đĩa</value></data>
+  <data name="ImgClone_Target" xml:space="preserve"><value>Đĩa đích</value></data>
+  <data name="ImgClone_DiskName" xml:space="preserve"><value>Đĩa {0}</value></data>
+  <data name="ImgClone_DiskLine" xml:space="preserve"><value>Đĩa {0}: {1}, số sê-ri {2}, {3} byte, sector {4} byte. Volume: {5}</value></data>
+  <data name="ImgClone_VolumeLine" xml:space="preserve"><value>{0} ({1}, {2}, {3} byte)</value></data>
+  <data name="ImgClone_NoVolumes" xml:space="preserve"><value>không có</value></data>
+  <data name="ImgClone_StartLba" xml:space="preserve"><value>LBA bắt đầu trên đích</value></data>
+  <data name="ImgClone_ZeroFill" xml:space="preserve"><value>Lấp phần còn lại của đích bằng số 0</value></data>
+  <data name="ImgClone_Hash" xml:space="preserve"><value>Hash dùng để xác minh</value></data>
+  <data name="ImgClone_LogFolder" xml:space="preserve"><value>Thư mục nhật ký (tùy chọn)</value></data>
+  <data name="ImgClone_Next" xml:space="preserve"><value>Tiếp theo</value></data>
+  <data name="ImgClone_ChooseTarget" xml:space="preserve"><value>Hãy chọn đĩa đích.</value></data>
+  <data name="ImgClone_StartInvalid" xml:space="preserve"><value>LBA bắt đầu nằm ngoài đĩa đích.</value></data>
+  <data name="ImgClone_SectorSizeMismatch" xml:space="preserve"><value>Đĩa có kích thước sector khác không thể làm đĩa đích của nhân bản.</value></data>
+  <data name="ImgClone_TargetIsEvidence" xml:space="preserve"><value>Đĩa đích nằm trong danh sách bằng chứng. Không thể ghi đè.</value></data>
+  <data name="ImgClone_ConfirmTarget" xml:space="preserve"><value>Đích: {0}</value></data>
+  <data name="ImgClone_ConfirmRange" xml:space="preserve"><value>Vùng sẽ ghi: từ LBA {0}, {1} sector ({2} byte)</value></data>
+  <data name="ImgClone_ConfirmContent" xml:space="preserve"><value>Nội dung: dữ liệu của {0}</value></data>
+  <data name="ImgClone_ConfirmVolumes" xml:space="preserve"><value>Toàn bộ nội dung của các volume sau sẽ bị mất:
+{0}</value></data>
+  <data name="ImgClone_Truncated" xml:space="preserve"><value>Đích nhỏ hơn nguồn. Chỉ {0} byte đầu của nguồn được ghi.</value></data>
+  <data name="ImgClone_Irreversible" xml:space="preserve"><value>Không thể hoàn tác thao tác này.</value></data>
+  <data name="ImgClone_Execute" xml:space="preserve"><value>Nhân bản sang {0}</value></data>
+  <data name="Img_StrongConfirmPrompt" xml:space="preserve"><value>Nhập "{0}" để xác nhận</value></data>
+  <data name="ImgClone_Operation" xml:space="preserve"><value>Nhân bản sang {0}</value></data>
+  <data name="ImgClone_CancelConfirm" xml:space="preserve"><value>Nếu dừng bây giờ, đĩa đích sẽ chỉ được ghi một phần.</value></data>
+  <data name="ImgClone_Stop" xml:space="preserve"><value>Dừng</value></data>
+  <data name="ImgClone_Continue" xml:space="preserve"><value>Tiếp tục</value></data>
+  <data name="ImgClone_LockFailed" xml:space="preserve"><value>Không khóa được volume {0} nên chưa ghi gì. Hãy đóng các tệp đang mở trên đó rồi thử lại.</value></data>
+  <data name="ImgClone_Failed" xml:space="preserve"><value>Nhân bản không thành công. {0}</value></data>
+  <data name="ImgClone_Done" xml:space="preserve"><value>Đã nhân bản {0} byte. Xác minh: {1}.</value></data>
+  <data name="ImgClone_Cancelled" xml:space="preserve"><value>Đã dừng nhân bản. Đĩa đích chỉ được ghi một phần.</value></data>
+  <data name="ImgClone_Problem_SameDevice" xml:space="preserve"><value>Đích là cùng đĩa với nguồn.</value></data>
+  <data name="ImgClone_Problem_SectorSizeMismatch" xml:space="preserve"><value>Đĩa có kích thước sector khác không thể làm đĩa đích của nhân bản.</value></data>
+  <data name="ImgClone_Problem_WriteBlocked" xml:space="preserve"><value>Chế độ chống ghi đang bật.</value></data>
+  <data name="ImgClone_Problem_TargetIsEvidence" xml:space="preserve"><value>Đĩa đích nằm trong danh sách bằng chứng. Không thể ghi đè.</value></data>
+  <data name="ImgClone_Problem_TargetInUseByWindows" xml:space="preserve"><value>Windows đang dùng một volume trên đĩa đích.</value></data>
+  <data name="ImgClone_Problem_StartOutside" xml:space="preserve"><value>LBA bắt đầu nằm ngoài đĩa đích.</value></data>
+  <data name="ImgClone_Problem_TargetNotWritable" xml:space="preserve"><value>Không thể mở đĩa đích để ghi.</value></data>
+  <data name="ImgSectors_SaveTitle" xml:space="preserve"><value>Lưu vùng sector</value></data>
+  <data name="ImgSectors_RestoreTitle" xml:space="preserve"><value>Khôi phục vùng sector</value></data>
+  <data name="ImgSectors_StartLba" xml:space="preserve"><value>LBA bắt đầu</value></data>
+  <data name="ImgSectors_Count" xml:space="preserve"><value>Số sector</value></data>
+  <data name="ImgSectors_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="ImgSectors_FileType" xml:space="preserve"><value>Dữ liệu sector</value></data>
+  <data name="ImgSectors_RangeInvalid" xml:space="preserve"><value>Vùng nằm ngoài đĩa.</value></data>
+  <data name="ImgSectors_SaveOperation" xml:space="preserve"><value>Lưu sector: {0}</value></data>
+  <data name="ImgSectors_Saved" xml:space="preserve"><value>Đã lưu {0} sector vào {1}.</value></data>
+  <data name="ImgSectors_Unreadable" xml:space="preserve"><value>Một số sector trong vùng không đọc được nên chưa lưu gì.</value></data>
+  <data name="ImgSectors_SaveFailed" xml:space="preserve"><value>Không thể lưu vùng sector. {0}</value></data>
+  <data name="ImgSectors_ReadFailed" xml:space="preserve"><value>Không đọc được tệp dữ liệu hoặc tệp sidecar của nó. {0}</value></data>
+  <data name="ImgSectors_DataFile" xml:space="preserve"><value>Tệp dữ liệu: {0}</value></data>
+  <data name="ImgSectors_SidecarInfo" xml:space="preserve"><value>Lưu từ: {0}, số sê-ri {1}, {2} byte, sector {3} byte. LBA bắt đầu {4}, {5} sector. Lưu lúc {6}.</value></data>
+  <data name="ImgSectors_TargetDisk" xml:space="preserve"><value>Ghi vào: {0}</value></data>
+  <data name="ImgSectors_Backup" xml:space="preserve"><value>Sao lưu nội dung hiện tại trước khi ghi</value></data>
+  <data name="ImgSectors_Next" xml:space="preserve"><value>Tiếp theo</value></data>
+  <data name="ImgSectors_HashMismatch" xml:space="preserve"><value>SHA-256 của tệp dữ liệu không khớp với tệp sidecar. Không thể khôi phục.</value></data>
+  <data name="ImgSectors_NeedsStart" xml:space="preserve"><value>Không có tệp sidecar. Hãy nhập LBA bắt đầu để ghi.</value></data>
+  <data name="ImgSectors_OtherDisk" xml:space="preserve"><value>Số sê-ri hoặc dung lượng của đích khác với đĩa đã lưu dữ liệu.</value></data>
+  <data name="ImgSectors_ConfirmTarget" xml:space="preserve"><value>Đích: {0}. Volume trong vùng: {1}</value></data>
+  <data name="ImgSectors_ConfirmContent" xml:space="preserve"><value>Nội dung: {0}</value></data>
+  <data name="ImgSectors_Write" xml:space="preserve"><value>Ghi {0} sector</value></data>
+  <data name="ImgSectors_RestoreOperation" xml:space="preserve"><value>Khôi phục sector: {0}</value></data>
+  <data name="ImgSectors_RestoreFailed" xml:space="preserve"><value>Không thể khôi phục vùng sector. {0}</value></data>
+  <data name="ImgSectors_Restored" xml:space="preserve"><value>Đã ghi {0} sector và xác nhận bằng cách đọc lại.</value></data>
+  <data name="ImgSectors_WriteFailedAt" xml:space="preserve"><value>Ghi không thành công. Đã ghi {0} sector; lỗi tại LBA {1}. Bạn có thể ghi lại tệp sao lưu {2}.</value></data>
+  <data name="ImgSectors_VerifyFailed" xml:space="preserve"><value>Nội dung đọc lại không khớp với tệp dữ liệu.</value></data>
+  <data name="ImgRaid_Title" xml:space="preserve"><value>Dựng lại RAID</value></data>
+  <data name="ImgRaid_Members" xml:space="preserve"><value>Thành viên (theo thứ tự)</value></data>
+  <data name="ImgRaid_MoveUp" xml:space="preserve"><value>Lên</value></data>
+  <data name="ImgRaid_MoveDown" xml:space="preserve"><value>Xuống</value></data>
+  <data name="ImgRaid_AddFile" xml:space="preserve"><value>Thêm tệp...</value></data>
+  <data name="ImgRaid_Remove" xml:space="preserve"><value>Gỡ</value></data>
+  <data name="ImgRaid_MemberMissing" xml:space="preserve"><value>Thiếu thành viên này</value></data>
+  <data name="ImgRaid_MissingMark" xml:space="preserve"><value>[thiếu]</value></data>
+  <data name="ImgRaid_DataOffset" xml:space="preserve"><value>Độ lệch bắt đầu dữ liệu của thành viên</value></data>
+  <data name="ImgRaid_Level" xml:space="preserve"><value>Loại</value></data>
+  <data name="ImgRaid_StripeSize" xml:space="preserve"><value>Kích thước sọc</value></data>
+  <data name="ImgRaid_Layout" xml:space="preserve"><value>Bố cục chẵn lẻ</value></data>
+  <data name="ImgRaid_Layout_LeftSymmetric" xml:space="preserve"><value>Đối xứng trái</value></data>
+  <data name="ImgRaid_Layout_LeftAsymmetric" xml:space="preserve"><value>Bất đối xứng trái</value></data>
+  <data name="ImgRaid_Layout_RightSymmetric" xml:space="preserve"><value>Đối xứng phải</value></data>
+  <data name="ImgRaid_Layout_RightAsymmetric" xml:space="preserve"><value>Bất đối xứng phải</value></data>
+  <data name="ImgRaid_UseMember" xml:space="preserve"><value>Thành viên sẽ dùng (RAID 1)</value></data>
+  <data name="ImgRaid_DetectionHeader" xml:space="preserve"><value>Phát hiện (1 MiB đầu)</value></data>
+  <data name="ImgRaid_TableDetected" xml:space="preserve"><value>Phát hiện {0} ({1} phân vùng)</value></data>
+  <data name="ImgRaid_NoTable" xml:space="preserve"><value>Không có bảng phân vùng</value></data>
+  <data name="ImgRaid_FsDetected" xml:space="preserve"><value>Chữ ký hệ thống tệp: {0}</value></data>
+  <data name="ImgRaid_NoFs" xml:space="preserve"><value>Không có chữ ký hệ thống tệp</value></data>
+  <data name="ImgRaid_Size" xml:space="preserve"><value>Kích thước đĩa logic: {0} byte</value></data>
+  <data name="ImgRaid_NoDetection" xml:space="preserve"><value>Không thể phát hiện với cấu hình này.</value></data>
+  <data name="ImgRaid_SizesDiffer" xml:space="preserve"><value>Các thành viên có kích thước khác nhau. Kích thước nhỏ nhất sẽ được dùng.</value></data>
+  <data name="ImgRaid_SaveConfig" xml:space="preserve"><value>Lưu cấu hình...</value></data>
+  <data name="ImgRaid_LoadConfig" xml:space="preserve"><value>Tải cấu hình...</value></data>
+  <data name="ImgRaid_FileType" xml:space="preserve"><value>Cấu hình RAID</value></data>
+  <data name="ImgRaid_Saved" xml:space="preserve"><value>Đã lưu cấu hình RAID vào {0}.</value></data>
+  <data name="ImgRaid_SaveFailed" xml:space="preserve"><value>Không thể lưu cấu hình RAID. {0}</value></data>
+  <data name="ImgRaid_LoadFailed" xml:space="preserve"><value>Không thể đọc cấu hình RAID. {0}</value></data>
+  <data name="ImgRaid_CannotOpen" xml:space="preserve"><value>Không thể mở đĩa logic.</value></data>
+  <data name="ImgRaid_DocumentName" xml:space="preserve"><value>{0} ({1} thành viên)</value></data>
+  <data name="ImgRaid_Problem_InvalidParameters" xml:space="preserve"><value>Tham số không hợp lệ.</value></data>
+  <data name="ImgRaid_Problem_InvalidStripeSize" xml:space="preserve"><value>Kích thước sọc phải là lũy thừa của hai, từ 512 B đến 16 MiB.</value></data>
+  <data name="ImgRaid_Problem_TooFewMembers" xml:space="preserve"><value>Số thành viên quá ít cho loại này.</value></data>
+  <data name="ImgRaid_Problem_MissingNotAllowed" xml:space="preserve"><value>Loại này không được phép thiếu thành viên.</value></data>
+  <data name="ImgRaid_Problem_TooManyMissing" xml:space="preserve"><value>Thiếu hai thành viên trở lên. Không thể mở RAID 5.</value></data>
+  <data name="Cmd_forensics_partitions_show" xml:space="preserve"><value>Hiển thị phân vùng</value></data>
+  <data name="CmdAlias_forensics_partitions_show" xml:space="preserve"><value>phân vùng đĩa mbr gpt partitions disk mbr gpt</value></data>
+  <data name="Cmd_forensics_partitions_openInNewTab" xml:space="preserve"><value>Mở phân vùng trong tab mới</value></data>
+  <data name="CmdAlias_forensics_partitions_openInNewTab" xml:space="preserve"><value>phân vùng tab partition tab</value></data>
+  <data name="Cmd_forensics_partitions_goToStart" xml:space="preserve"><value>Đi tới đầu phân vùng</value></data>
+  <data name="CmdAlias_forensics_partitions_goToStart" xml:space="preserve"><value>phân vùng nhảy partition jump</value></data>
+  <data name="Cmd_forensics_partitions_openHere" xml:space="preserve"><value>Mở từ đây coi như đầu phân vùng</value></data>
+  <data name="CmdAlias_forensics_partitions_openHere" xml:space="preserve"><value>phân vùng tại đây partition here</value></data>
+  <data name="Cmd_forensics_partitions_scan" xml:space="preserve"><value>Quét phân vùng bị mất</value></data>
+  <data name="CmdAlias_forensics_partitions_scan" xml:space="preserve"><value>mất phân vùng khôi phục quét lost partition recover scan</value></data>
+  <data name="Cmd_forensics_fs_show" xml:space="preserve"><value>Hiển thị hệ thống tệp</value></data>
+  <data name="CmdAlias_forensics_fs_show" xml:space="preserve"><value>hệ thống tệp trình duyệt ntfs fat exfat file system browser ntfs fat exfat</value></data>
+  <data name="Cmd_forensics_fs_openFile" xml:space="preserve"><value>Mở tệp trong tab mới</value></data>
+  <data name="CmdAlias_forensics_fs_openFile" xml:space="preserve"><value>tệp mở tab file open tab</value></data>
+  <data name="Cmd_forensics_fs_exportFiles" xml:space="preserve"><value>Xuất tệp</value></data>
+  <data name="CmdAlias_forensics_fs_exportFiles" xml:space="preserve"><value>xuất trích xuất tệp export extract files</value></data>
+  <data name="Cmd_forensics_fs_findDeleted" xml:space="preserve"><value>Tìm tệp đã xóa</value></data>
+  <data name="CmdAlias_forensics_fs_findDeleted" xml:space="preserve"><value>đã xóa khôi phục hoàn tác xóa deleted undelete recover</value></data>
+  <data name="Cmd_forensics_fs_goToMftRecord" xml:space="preserve"><value>Đi tới bản ghi MFT</value></data>
+  <data name="CmdAlias_forensics_fs_goToMftRecord" xml:space="preserve"><value>mft bản ghi ntfs mft record ntfs</value></data>
+  <data name="Cmd_forensics_fs_goToCluster" xml:space="preserve"><value>Đi tới cluster</value></data>
+  <data name="CmdAlias_forensics_fs_goToCluster" xml:space="preserve"><value>cluster khối nhảy cluster block jump</value></data>
+  <data name="Cmd_forensics_fs_whoUsesThis" xml:space="preserve"><value>Các tệp dùng vị trí này</value></data>
+  <data name="CmdAlias_forensics_fs_whoUsesThis" xml:space="preserve"><value>cluster chủ sở hữu tra ngược cluster owner reverse</value></data>
+  <data name="Cmd_forensics_fs_showFileClusters" xml:space="preserve"><value>Hiển thị các cluster của tệp</value></data>
+  <data name="CmdAlias_forensics_fs_showFileClusters" xml:space="preserve"><value>mảnh cluster tô sáng fragments clusters highlight</value></data>
+  <data name="Cmd_forensics_fs_nextFragment" xml:space="preserve"><value>Mảnh tiếp theo</value></data>
+  <data name="CmdAlias_forensics_fs_nextFragment" xml:space="preserve"><value>mảnh tiếp theo fragment next</value></data>
+  <data name="Cmd_forensics_fs_previousFragment" xml:space="preserve"><value>Mảnh trước</value></data>
+  <data name="CmdAlias_forensics_fs_previousFragment" xml:space="preserve"><value>mảnh trước fragment previous</value></data>
+  <data name="Cmd_forensics_fs_toggleHighlight" xml:space="preserve"><value>Bật/tắt tô sáng vùng trống và vùng slack</value></data>
+  <data name="CmdAlias_forensics_fs_toggleHighlight" xml:space="preserve"><value>slack chưa cấp phát tô sáng slack unallocated highlight</value></data>
+  <data name="Cmd_forensics_fs_exportUnallocated" xml:space="preserve"><value>Xuất vùng chưa cấp phát</value></data>
+  <data name="CmdAlias_forensics_fs_exportUnallocated" xml:space="preserve"><value>chưa cấp phát trống xuất unallocated free export</value></data>
+  <data name="Cmd_forensics_fs_exportSlack" xml:space="preserve"><value>Xuất vùng slack</value></data>
+  <data name="CmdAlias_forensics_fs_exportSlack" xml:space="preserve"><value>slack xuất slack export</value></data>
+  <data name="Cmd_forensics_fs_openUnallocated" xml:space="preserve"><value>Mở vùng chưa cấp phát trong tab mới</value></data>
+  <data name="CmdAlias_forensics_fs_openUnallocated" xml:space="preserve"><value>chưa cấp phát tab unallocated tab</value></data>
+  <data name="Cmd_view_panel_partitions" xml:space="preserve"><value>Bảng phân vùng</value></data>
+  <data name="CmdAlias_view_panel_partitions" xml:space="preserve"><value>bảng phân vùng panel partitions</value></data>
+  <data name="Cmd_view_panel_fileSystem" xml:space="preserve"><value>Bảng hệ thống tệp</value></data>
+  <data name="CmdAlias_view_panel_fileSystem" xml:space="preserve"><value>bảng hệ thống tệp panel file system</value></data>
+  <data name="Cmd_view_panel_fragments" xml:space="preserve"><value>Bảng mảnh</value></data>
+  <data name="CmdAlias_view_panel_fragments" xml:space="preserve"><value>bảng mảnh panel fragments</value></data>
+  <data name="Cmd_view_panel_forensicResults" xml:space="preserve"><value>Bảng kết quả pháp y số</value></data>
+  <data name="CmdAlias_view_panel_forensicResults" xml:space="preserve"><value>bảng kết quả pháp y panel results forensic</value></data>
+  <data name="CmdArg_forensics_fs_goToMftRecord" xml:space="preserve"><value>Số bản ghi MFT</value></data>
+  <data name="SetGroup_fileSystems" xml:space="preserve"><value>Phân vùng và hệ thống tệp</value></data>
+  <data name="Set_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Hiện các khoảng trống nhỏ giữa các phân vùng</value></data>
+  <data name="SetDesc_forensics_partitions_showSmallGaps" xml:space="preserve"><value>Liệt kê trong bảng phân vùng các khoảng chưa cấp phát nhỏ hơn 1 MiB.</value></data>
+  <data name="Set_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Hiện độ lệch đĩa trong tab phân vùng</value></data>
+  <data name="SetDesc_forensics_partitions_absoluteOffsets" xml:space="preserve"><value>Khi tắt, tab phân vùng bắt đầu địa chỉ từ 0.</value></data>
+  <data name="Set_forensics_fileSystem_showStreams" xml:space="preserve"><value>Liệt kê luồng dữ liệu thay thế của NTFS</value></data>
+  <data name="SetDesc_forensics_fileSystem_showStreams" xml:space="preserve"><value>Các luồng có tên xuất hiện dưới dạng file.txt:stream trong trình duyệt hệ thống tệp.</value></data>
+  <data name="Set_forensics_highlight_legend" xml:space="preserve"><value>Hiện chú giải của tô sáng pháp y số</value></data>
+  <data name="SetDesc_forensics_highlight_legend" xml:space="preserve"><value>Hiện chú giải ở góc trên bên phải của chế độ xem Hex khi tô sáng đang bật.</value></data>
+  <data name="Set_forensics_highlight_colors" xml:space="preserve"><value>Màu của tô sáng pháp y số</value></data>
+  <data name="SetDesc_forensics_highlight_colors" xml:space="preserve"><value>Ví dụ: unallocated=#80C080; ramSlack=#E0C060; driveSlack=#E08060; metadata=#8090E0. Để trống để dùng màu mặc định.</value></data>
+  <data name="Menu_Forensics_Partitions.Text" xml:space="preserve"><value>Phân vùng</value></data>
+  <data name="Menu_Forensics_Partitions.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Forensics_FileSystem.Text" xml:space="preserve"><value>Hệ thống tệp</value></data>
+  <data name="Menu_Forensics_FileSystem.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_PartitionsShow.Text" xml:space="preserve"><value>Hiển thị phân vùng</value></data>
+  <data name="Menu_Forensics_PartitionsShow.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.Text" xml:space="preserve"><value>Mở phân vùng trong tab mới</value></data>
+  <data name="Menu_Forensics_PartitionsOpen.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.Text" xml:space="preserve"><value>Đi tới đầu phân vùng</value></data>
+  <data name="Menu_Forensics_PartitionsGoTo.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_PartitionsScan.Text" xml:space="preserve"><value>Quét phân vùng bị mất...</value></data>
+  <data name="Menu_Forensics_PartitionsScan.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Forensics_FsShow.Text" xml:space="preserve"><value>Hiển thị trình duyệt</value></data>
+  <data name="Menu_Forensics_FsShow.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Forensics_FsOpenFile.Text" xml:space="preserve"><value>Mở tệp trong tab mới</value></data>
+  <data name="Menu_Forensics_FsOpenFile.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Forensics_FsExport.Text" xml:space="preserve"><value>Xuất tệp...</value></data>
+  <data name="Menu_Forensics_FsExport.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_FsDeleted.Text" xml:space="preserve"><value>Tìm tệp đã xóa</value></data>
+  <data name="Menu_Forensics_FsDeleted.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.Text" xml:space="preserve"><value>Đi tới cluster...</value></data>
+  <data name="Menu_Forensics_FsGoToCluster.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_FsWhoUses.Text" xml:space="preserve"><value>Các tệp dùng vị trí này</value></data>
+  <data name="Menu_Forensics_FsWhoUses.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Forensics_FsClusters.Text" xml:space="preserve"><value>Hiển thị các cluster của tệp</value></data>
+  <data name="Menu_Forensics_FsClusters.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Forensics_FsMft.Text" xml:space="preserve"><value>Đi tới bản ghi MFT...</value></data>
+  <data name="Menu_Forensics_FsMft.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.Text" xml:space="preserve"><value>Xuất vùng chưa cấp phát...</value></data>
+  <data name="Menu_Forensics_FsExportUnallocated.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Forensics_FsExportSlack.Text" xml:space="preserve"><value>Xuất vùng slack...</value></data>
+  <data name="Menu_Forensics_FsExportSlack.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.Text" xml:space="preserve"><value>Mở vùng chưa cấp phát trong tab mới</value></data>
+  <data name="Menu_Forensics_FsOpenUnallocated.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_NextFragment.Text" xml:space="preserve"><value>Mảnh tiếp theo</value></data>
+  <data name="Menu_Go_NextFragment.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_PreviousFragment.Text" xml:space="preserve"><value>Mảnh trước</value></data>
+  <data name="Menu_Go_PreviousFragment.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_ForensicHighlight.Text" xml:space="preserve"><value>Tô sáng pháp y số</value></data>
+  <data name="Menu_View_ForensicHighlight.AccessKey" xml:space="preserve"><value>0</value></data>
+  <data name="Menu_View_PartitionsPanel.Text" xml:space="preserve"><value>Phân vùng</value></data>
+  <data name="Menu_View_PartitionsPanel.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="Menu_View_FileSystemPanel.Text" xml:space="preserve"><value>Hệ thống tệp</value></data>
+  <data name="Menu_View_FileSystemPanel.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Menu_View_FragmentsPanel.Text" xml:space="preserve"><value>Mảnh</value></data>
+  <data name="Menu_View_FragmentsPanel.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Menu_View_ForensicResultsPanel.Text" xml:space="preserve"><value>Kết quả pháp y số</value></data>
+  <data name="Menu_View_ForensicResultsPanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Status_Item_Forensic" xml:space="preserve"><value>Vị trí trên đĩa và chủ sở hữu cluster</value></data>
+  <data name="Panel_Partitions_Title" xml:space="preserve"><value>Phân vùng</value></data>
+  <data name="Panel_FileSystem_Title" xml:space="preserve"><value>Hệ thống tệp</value></data>
+  <data name="Panel_Fragments_Title" xml:space="preserve"><value>Mảnh</value></data>
+  <data name="Panel_ForensicResults_Title" xml:space="preserve"><value>Kết quả pháp y số</value></data>
+  <data name="Part_Analyzing" xml:space="preserve"><value>Đang phân tích phân vùng…</value></data>
+  <data name="Part_NotAnalyzed" xml:space="preserve"><value>Chưa phân tích. Hãy chọn Pháp y số &gt; Phân vùng &gt; Hiển thị phân vùng.</value></data>
+  <data name="Part_NoTable" xml:space="preserve"><value>Không tìm thấy bảng phân vùng.</value></data>
+  <data name="Part_Summary" xml:space="preserve"><value>{0} phân vùng, kích thước sector {1}, ID đĩa {2}</value></data>
+  <data name="Part_Unreadable" xml:space="preserve"><value>Sector không đọc được (LBA): {0}</value></data>
+  <data name="Part_Header" xml:space="preserve"><value> STT  Định dạng Loại                        Tên              LBA đầu        LBA cuối     Sector        Cỡ    Độ lệch đầu  Cờ          FS        T.thái</value></data>
+  <data name="Part_LayoutName" xml:space="preserve"><value>Bố cục phân vùng</value></data>
+  <data name="Part_State_Ok" xml:space="preserve"><value>Tốt</value></data>
+  <data name="Part_State_Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="Part_Detail_TypeGuid" xml:space="preserve"><value>GUID loại: {0}</value></data>
+  <data name="Part_Detail_UniqueGuid" xml:space="preserve"><value>GUID duy nhất: {0}</value></data>
+  <data name="Part_Detail_Blocks" xml:space="preserve"><value>Khối bắt đầu {0}, {1} khối</value></data>
+  <data name="Part_Detail_Entry" xml:space="preserve"><value>Mục bảng tại {0}</value></data>
+  <data name="Part_Menu_GoToStart" xml:space="preserve"><value>Đi tới đầu phân vùng</value></data>
+  <data name="Part_Menu_Select" xml:space="preserve"><value>Chọn phân vùng</value></data>
+  <data name="Part_Menu_OpenInNewTab" xml:space="preserve"><value>Mở phân vùng trong tab mới</value></data>
+  <data name="Part_Menu_ShowStructure" xml:space="preserve"><value>Hiển thị cấu trúc của mục</value></data>
+  <data name="Part_Menu_ShowFileSystem" xml:space="preserve"><value>Hiển thị hệ thống tệp</value></data>
+  <data name="Part_Menu_Scan" xml:space="preserve"><value>Quét phân vùng bị mất...</value></data>
+  <data name="Part_NoPartitionAtCursor" xml:space="preserve"><value>Con trỏ không nằm trong phân vùng nào.</value></data>
+  <data name="Part_SuggestSector" xml:space="preserve"><value>Không tìm thấy GPT với sector {1} byte, nhưng tìm thấy với sector {0} byte. Mở lại với sector {0} byte?</value></data>
+  <data name="Part_ReopenWithSector" xml:space="preserve"><value>Mở lại với sector {0} byte</value></data>
+  <data name="Part_TabName" xml:space="preserve"><value>{0} - Phân vùng {1}</value></data>
+  <data name="Part_TabNameAt" xml:space="preserve"><value>{0} - LBA {1}</value></data>
+  <data name="Part_Scheme_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="Part_Scheme_Logical" xml:space="preserve"><value>Logic</value></data>
+  <data name="Part_Scheme_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="Part_Scheme_Apm" xml:space="preserve"><value>APM</value></data>
+  <data name="Part_Scheme_Bsd" xml:space="preserve"><value>BSD</value></data>
+  <data name="Part_Scheme_Ldm" xml:space="preserve"><value>LDM</value></data>
+  <data name="Part_Scheme_Lvm" xml:space="preserve"><value>LVM2</value></data>
+  <data name="Part_Scheme_Unallocated" xml:space="preserve"><value>-</value></data>
+  <data name="PartIssue_EbrLoop" xml:space="preserve"><value>Chuỗi EBR vòng ngược lại tại LBA {1} (sau phân vùng {0}). Chuỗi đã bị dừng.</value></data>
+  <data name="PartIssue_LogicalLimit" xml:space="preserve"><value>Có hơn 256 phân vùng logic. Phần còn lại chưa được đọc.</value></data>
+  <data name="PartIssue_GptHeaderCrc" xml:space="preserve"><value>CRC32 của phần đầu GPT không khớp (LBA {1}).</value></data>
+  <data name="PartIssue_GptEntriesCrc" xml:space="preserve"><value>CRC32 của mảng mục phân vùng GPT không khớp (LBA {1}).</value></data>
+  <data name="PartIssue_GptBackupMismatch" xml:space="preserve"><value>Phần đầu GPT chính và phần đầu sao lưu (LBA {1}) khác nhau.</value></data>
+  <data name="PartIssue_GptPrimaryInvalid" xml:space="preserve"><value>Phần đầu GPT chính bị hỏng. Danh sách được tạo từ phần đầu sao lưu.</value></data>
+  <data name="PartIssue_Overlap" xml:space="preserve"><value>Phân vùng {0} và {2} chồng lấn nhau.</value></data>
+  <data name="PartIssue_OutOfRange" xml:space="preserve"><value>Phân vùng {0} trỏ ra ngoài đĩa (LBA {1}).</value></data>
+  <data name="PartIssue_HybridMbr" xml:space="preserve"><value>MBR lai: MBR bảo vệ còn có các mục khác.</value></data>
+  <data name="PartIssue_ReadError" xml:space="preserve"><value>Một số sector không đọc được (đầu tiên: LBA {1}). Danh sách dùng các sector đọc được.</value></data>
+  <data name="PartIssue_ApmLimit" xml:space="preserve"><value>Bản đồ phân vùng Apple có hơn 256 mục.</value></data>
+  <data name="PartType_EfiSystem" xml:space="preserve"><value>Hệ thống EFI</value></data>
+  <data name="PartType_MicrosoftReserved" xml:space="preserve"><value>Microsoft dành riêng</value></data>
+  <data name="PartType_WindowsBasicData" xml:space="preserve"><value>Dữ liệu cơ bản của Windows</value></data>
+  <data name="PartType_WindowsRecovery" xml:space="preserve"><value>Khôi phục Windows</value></data>
+  <data name="PartType_LdmMetadata" xml:space="preserve"><value>Siêu dữ liệu LDM</value></data>
+  <data name="PartType_LdmData" xml:space="preserve"><value>Dữ liệu LDM</value></data>
+  <data name="PartType_LinuxFileSystem" xml:space="preserve"><value>Hệ thống tệp Linux</value></data>
+  <data name="PartType_LinuxLvm" xml:space="preserve"><value>Linux LVM</value></data>
+  <data name="PartType_LinuxSwap" xml:space="preserve"><value>Linux swap</value></data>
+  <data name="PartType_LinuxRaid" xml:space="preserve"><value>Linux RAID</value></data>
+  <data name="PartType_LinuxHome" xml:space="preserve"><value>Linux home</value></data>
+  <data name="PartType_AppleApfs" xml:space="preserve"><value>Apple APFS</value></data>
+  <data name="PartType_AppleHfsPlus" xml:space="preserve"><value>Apple HFS+</value></data>
+  <data name="PartType_AppleBoot" xml:space="preserve"><value>Apple boot</value></data>
+  <data name="PartType_BiosBoot" xml:space="preserve"><value>BIOS boot</value></data>
+  <data name="PartType_FreeBsdUfs" xml:space="preserve"><value>FreeBSD UFS</value></data>
+  <data name="PartType_Fat12" xml:space="preserve"><value>FAT12</value></data>
+  <data name="PartType_Fat16Small" xml:space="preserve"><value>FAT16 (&lt; 32 MB)</value></data>
+  <data name="PartType_Extended" xml:space="preserve"><value>Extended</value></data>
+  <data name="PartType_Fat16" xml:space="preserve"><value>FAT16</value></data>
+  <data name="PartType_NtfsExFat" xml:space="preserve"><value>NTFS / exFAT</value></data>
+  <data name="PartType_Fat32Chs" xml:space="preserve"><value>FAT32 (CHS)</value></data>
+  <data name="PartType_Fat32Lba" xml:space="preserve"><value>FAT32 (LBA)</value></data>
+  <data name="PartType_Fat16Lba" xml:space="preserve"><value>FAT16 (LBA)</value></data>
+  <data name="PartType_ExtendedLba" xml:space="preserve"><value>Extended (LBA)</value></data>
+  <data name="PartType_HiddenFat12" xml:space="preserve"><value>FAT12 ẩn</value></data>
+  <data name="PartType_Recovery" xml:space="preserve"><value>Khôi phục</value></data>
+  <data name="PartType_HiddenFat16" xml:space="preserve"><value>FAT16 ẩn</value></data>
+  <data name="PartType_HiddenNtfs" xml:space="preserve"><value>NTFS ẩn</value></data>
+  <data name="PartType_HiddenFat32" xml:space="preserve"><value>FAT32 ẩn</value></data>
+  <data name="PartType_Ldm" xml:space="preserve"><value>LDM (đĩa động)</value></data>
+  <data name="PartType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="PartType_LinuxExtended" xml:space="preserve"><value>Linux extended</value></data>
+  <data name="PartType_FreeBsd" xml:space="preserve"><value>FreeBSD</value></data>
+  <data name="PartType_OpenBsd" xml:space="preserve"><value>OpenBSD</value></data>
+  <data name="PartType_AppleUfs" xml:space="preserve"><value>Apple UFS</value></data>
+  <data name="PartType_NetBsd" xml:space="preserve"><value>NetBSD</value></data>
+  <data name="PartType_AppleHfs" xml:space="preserve"><value>Apple HFS</value></data>
+  <data name="PartType_GptProtective" xml:space="preserve"><value>GPT bảo vệ</value></data>
+  <data name="PartType_Unallocated" xml:space="preserve"><value>Chưa cấp phát</value></data>
+  <data name="PartType_Lvm2PhysicalVolume" xml:space="preserve"><value>Volume vật lý LVM2</value></data>
+  <data name="LostScan_Title" xml:space="preserve"><value>Quét phân vùng bị mất</value></data>
+  <data name="LostScan_StartLba" xml:space="preserve"><value>LBA bắt đầu</value></data>
+  <data name="LostScan_EndLba" xml:space="preserve"><value>LBA kết thúc (không gồm)</value></data>
+  <data name="LostScan_Intervals" xml:space="preserve"><value>Vị trí quét</value></data>
+  <data name="LostScan_IntervalMiB" xml:space="preserve"><value>Ranh giới 1 MiB</value></data>
+  <data name="LostScan_IntervalCylinder" xml:space="preserve"><value>Ranh giới cylinder (63 sector)</value></data>
+  <data name="LostScan_IntervalEvery" xml:space="preserve"><value>Mọi sector</value></data>
+  <data name="LostScan_EveryEstimate" xml:space="preserve"><value>Quét mọi sector mất khoảng {0} (ở 200 MB/s).</value></data>
+  <data name="LostScan_Hours" xml:space="preserve"><value>{0} giờ</value></data>
+  <data name="LostScan_Minutes" xml:space="preserve"><value>{0} phút</value></data>
+  <data name="LostScan_Kinds" xml:space="preserve"><value>Tìm</value></data>
+  <data name="LostScan_Kind_Ntfs" xml:space="preserve"><value>NTFS</value></data>
+  <data name="LostScan_Kind_Fat" xml:space="preserve"><value>FAT12/16/32</value></data>
+  <data name="LostScan_Kind_ExFat" xml:space="preserve"><value>exFAT</value></data>
+  <data name="LostScan_Kind_Ext" xml:space="preserve"><value>ext2/3/4</value></data>
+  <data name="LostScan_Kind_Hfs" xml:space="preserve"><value>HFS+ / HFSX</value></data>
+  <data name="LostScan_Kind_Apfs" xml:space="preserve"><value>APFS</value></data>
+  <data name="LostScan_Kind_IsoUdf" xml:space="preserve"><value>ISO 9660 / UDF</value></data>
+  <data name="LostScan_Kind_LvmLdm" xml:space="preserve"><value>LVM2 / LDM</value></data>
+  <data name="LostScan_Kind_BitLocker" xml:space="preserve"><value>BitLocker</value></data>
+  <data name="LostScan_Kind_GptEbr" xml:space="preserve"><value>Phần đầu GPT / EBR</value></data>
+  <data name="LostScan_Run" xml:space="preserve"><value>Quét</value></data>
+  <data name="LostScan_OperationName" xml:space="preserve"><value>Đang quét phân vùng bị mất</value></data>
+  <data name="LostScan_ListTitle" xml:space="preserve"><value>Phân vùng bị mất</value></data>
+  <data name="LostScan_Header" xml:space="preserve"><value>     LBA đầu           Sector         Cỡ  Loại        Độ tin   Chồng lấn</value></data>
+  <data name="LostScan_Confidence_Low" xml:space="preserve"><value>Thấp</value></data>
+  <data name="LostScan_Confidence_Medium" xml:space="preserve"><value>Trung bình</value></data>
+  <data name="LostScan_Confidence_High" xml:space="preserve"><value>Cao</value></data>
+  <data name="LostScan_Overlaps" xml:space="preserve"><value>chồng lấn với phân vùng {0}</value></data>
+  <data name="LostScan_Cancelled" xml:space="preserve"><value>Đã hủy. Kết quả đến nay được giữ lại.</value></data>
+  <data name="LostScan_Done" xml:space="preserve"><value>{0, plural, other {Đã tìm thấy # ứng viên.}}</value></data>
+  <data name="LostScan_Unreadable" xml:space="preserve"><value>Không đọc được: LBA {0}, {1} sector</value></data>
+  <data name="LostScan_NoneFound" xml:space="preserve"><value>Không tìm thấy ứng viên phân vùng nào.</value></data>
+  <data name="LostScan_RescanEvery" xml:space="preserve"><value>Quét mọi sector</value></data>
+  <data name="LostScan_Menu_Open" xml:space="preserve"><value>Mở dưới dạng phân vùng</value></data>
+  <data name="LostScan_Menu_ShowFs" xml:space="preserve"><value>Hiển thị hệ thống tệp</value></data>
+  <data name="LostScan_Menu_CreateMbr" xml:space="preserve"><value>Tạo mục bảng phân vùng (MBR)</value></data>
+  <data name="LostScan_Menu_CreateGpt" xml:space="preserve"><value>Tạo mục bảng phân vùng (GPT)</value></data>
+  <data name="LostScan_CreateEntries" xml:space="preserve"><value>Tạo mục bảng phân vùng</value></data>
+  <data name="LostScan_EntryError_NoFreeSlot" xml:space="preserve"><value>MBR không còn mục trống cho tất cả ứng viên.</value></data>
+  <data name="LostScan_EntryError_TooLargeForMbr" xml:space="preserve"><value>Không thể ghi phân vùng này vào MBR (trên 2 TiB). Hãy dùng GPT.</value></data>
+  <data name="LostScan_EntryError_NoFreeGptEntry" xml:space="preserve"><value>GPT không còn mục trống.</value></data>
+  <data name="LostScan_EntryError_DiskTooSmall" xml:space="preserve"><value>Đĩa quá nhỏ cho GPT.</value></data>
+  <data name="Fs_NoFileSystem" xml:space="preserve"><value>Tài liệu này không có hệ thống tệp nào đang mở.</value></data>
+  <data name="Fs_NoEntry" xml:space="preserve"><value>Hãy chọn một tệp trong trình duyệt hệ thống tệp.</value></data>
+  <data name="Fs_NoFragments" xml:space="preserve"><value>Không có cluster của tệp nào đang được tô sáng.</value></data>
+  <data name="Fs_NtfsOnly" xml:space="preserve"><value>Chỉ dành cho NTFS.</value></data>
+  <data name="Fs_HighlightUnavailable" xml:space="preserve"><value>Không đọc được thông tin cấp phát nên không thể tô sáng.</value></data>
+  <data name="Fs_Encrypted" xml:space="preserve"><value>Volume đã được mã hóa (BitLocker). Trình duyệt hệ thống tệp không mở nó.</value></data>
+  <data name="Fs_EncryptedKind" xml:space="preserve"><value>Volume đã được mã hóa ({0}). Trình duyệt hệ thống tệp không mở nó.</value></data>
+  <data name="Fs_OpenFailed" xml:space="preserve"><value>Không thể mở dưới dạng {0}: {1}</value></data>
+  <data name="Fs_ChooseKind_Title" xml:space="preserve"><value>Chọn hệ thống tệp</value></data>
+  <data name="Fs_ChooseKind_Body" xml:space="preserve"><value>Không phát hiện được loại từ chữ ký. Hãy chọn loại để thử.</value></data>
+  <data name="Fs_ChooseKind_Label" xml:space="preserve"><value>Loại</value></data>
+  <data name="Fs_ChooseKind_Open" xml:space="preserve"><value>Mở</value></data>
+  <data name="Fs_FileTabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fs_UnallocatedTabName" xml:space="preserve"><value>Chưa cấp phát ({0})</value></data>
+  <data name="Fs_MftRecordOutOfRange" xml:space="preserve"><value>Không có bản ghi MFT {0}.</value></data>
+  <data name="Fs_GoToBlock" xml:space="preserve"><value>Đi tới khối</value></data>
+  <data name="Fs_NotOpened" xml:space="preserve"><value>Không có hệ thống tệp. Hãy chọn Pháp y số &gt; Hệ thống tệp &gt; Hiển thị trình duyệt.</value></data>
+  <data name="Fs_TitleText" xml:space="preserve"><value>{0}  {1}  số sê-ri {2}  cluster {3}</value></data>
+  <data name="Fs_Root" xml:space="preserve"><value>Gốc</value></data>
+  <data name="Fs_ListName" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Fs_TreeName" xml:space="preserve"><value>Thư mục</value></data>
+  <data name="Fs_FragmentsName" xml:space="preserve"><value>Mảnh</value></data>
+  <data name="Fs_Filter" xml:space="preserve"><value>Lọc (* và ?)</value></data>
+  <data name="Fs_Search" xml:space="preserve"><value>Tìm tệp (Enter)</value></data>
+  <data name="Fs_Columns" xml:space="preserve"><value>Cột</value></data>
+  <data name="Fs_FatChoice" xml:space="preserve"><value>FAT sẽ dùng</value></data>
+  <data name="Fs_FatN" xml:space="preserve"><value>FAT {0}</value></data>
+  <data name="Fs_FatDifferences" xml:space="preserve"><value>{0, plural, other {Các FAT khác nhau ở # mục.}}</value></data>
+  <data name="Fs_OverrideSpc" xml:space="preserve"><value>Sector mỗi cluster</value></data>
+  <data name="Fs_Reanalyze" xml:space="preserve"><value>Phân tích lại</value></data>
+  <data name="Fs_Loading" xml:space="preserve"><value>Đang đọc…</value></data>
+  <data name="Fs_LoadingCount" xml:space="preserve"><value>Đang đọc… {0}</value></data>
+  <data name="Fs_Count" xml:space="preserve"><value>{0} mục</value></data>
+  <data name="Fs_ListError" xml:space="preserve"><value>Không thể đọc: {0}</value></data>
+  <data name="Fs_Corrupt" xml:space="preserve"><value>(bị hỏng)</value></data>
+  <data name="Fs_TimeMismatch" xml:space="preserve"><value>(thời gian không khớp)</value></data>
+  <data name="Fs_TimeMismatchDetail" xml:space="preserve"><value>Thời gian không khớp: thời gian $STANDARD_INFORMATION sớm hơn thời gian $FILE_NAME hoặc không có phần thập phân.</value></data>
+  <data name="Fs_EfsEncrypted" xml:space="preserve"><value>Được mã hóa bằng EFS (chỉ dữ liệu thô).</value></data>
+  <data name="Fs_AssumedContiguous" xml:space="preserve"><value>Chuỗi cluster đã mất; dữ liệu được đọc như các cluster liên tiếp từ cluster đầu tiên.</value></data>
+  <data name="Fs_IndexSlack" xml:space="preserve"><value>mục slack của chỉ mục</value></data>
+  <data name="Fs_Counting" xml:space="preserve"><value>đang đếm…</value></data>
+  <data name="Fs_Fragment" xml:space="preserve"><value>Logic {0}  cluster {1} ×{2}  trên đĩa {3}  {4} byte</value></data>
+  <data name="Fs_FragmentResident" xml:space="preserve"><value>Logic {0}  trong siêu dữ liệu  trên đĩa {3}  {4} byte</value></data>
+  <data name="Fs_FragmentCompressed" xml:space="preserve"><value>(đã nén)</value></data>
+  <data name="Fs_ComputingSlack" xml:space="preserve"><value>Đang tính vị trí slack</value></data>
+  <data name="Fs_BuildingOwners" xml:space="preserve"><value>Đang tạo bản đồ cluster</value></data>
+  <data name="Fs_OwnersSkipped" xml:space="preserve"><value>Đã bỏ qua {0} mục có siêu dữ liệu bị hỏng.</value></data>
+  <data name="Fs_NotInClusters" xml:space="preserve"><value>Vị trí này không nằm trong vùng cluster.</value></data>
+  <data name="Fs_OwnersTitle" xml:space="preserve"><value>Chủ sở hữu của cluster {0}–{1}</value></data>
+  <data name="Fs_OwnersHeader" xml:space="preserve"><value>Loại                      Đường dẫn</value></data>
+  <data name="Fs_OwnerKind_File" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Fs_OwnerKind_Metadata" xml:space="preserve"><value>Siêu dữ liệu</value></data>
+  <data name="Fs_OwnerKind_Deleted" xml:space="preserve"><value>Tệp đã xóa (đã giải phóng cấp phát)</value></data>
+  <data name="Fs_ChainTitle" xml:space="preserve"><value>Chuỗi cluster của {0} ({1})</value></data>
+  <data name="Fs_ChainHeader" xml:space="preserve"><value>   Thứ tự       Cluster</value></data>
+  <data name="Fs_SearchTitle" xml:space="preserve"><value>Các tệp có tên {0}</value></data>
+  <data name="Fs_SearchHeader" xml:space="preserve"><value>          Cỡ  Đường dẫn</value></data>
+  <data name="Fs_SearchOperation" xml:space="preserve"><value>Đang tìm tệp: {0}</value></data>
+  <data name="Fs_SearchDone" xml:space="preserve"><value>{0, plural, other {Đã tìm thấy # tệp.}}</value></data>
+  <data name="Fs_ScanDeleted" xml:space="preserve"><value>Đang tìm tệp đã xóa</value></data>
+  <data name="Fs_ScanOrphans" xml:space="preserve"><value>Đang tìm tệp mồ côi</value></data>
+  <data name="Fs_Menu_OpenFile" xml:space="preserve"><value>Mở tệp trong tab mới</value></data>
+  <data name="Fs_Menu_Export" xml:space="preserve"><value>Xuất tệp...</value></data>
+  <data name="Fs_Menu_GoToMetadata" xml:space="preserve"><value>Đi tới siêu dữ liệu</value></data>
+  <data name="Fs_Menu_ShowClusters" xml:space="preserve"><value>Hiển thị các cluster của tệp</value></data>
+  <data name="Fs_Menu_MftRecord" xml:space="preserve"><value>Hiển thị bản ghi MFT</value></data>
+  <data name="Fs_Menu_Indx" xml:space="preserve"><value>Hiển thị INDX</value></data>
+  <data name="Fs_Menu_LogFile" xml:space="preserve"><value>Hiển thị $LogFile</value></data>
+  <data name="Fs_Menu_DirectoryEntry" xml:space="preserve"><value>Hiển thị mục thư mục</value></data>
+  <data name="Fs_Menu_ClusterChain" xml:space="preserve"><value>Hiển thị chuỗi cluster</value></data>
+  <data name="Fs_Menu_CopyPath" xml:space="preserve"><value>Sao chép đường dẫn</value></data>
+  <data name="Fs_Menu_ExportList" xml:space="preserve"><value>Xuất danh sách ra CSV / JSON...</value></data>
+  <data name="FsColumn_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="FsColumn_Extension" xml:space="preserve"><value>Phần mở rộng</value></data>
+  <data name="FsColumn_Size" xml:space="preserve"><value>Kích thước</value></data>
+  <data name="FsColumn_AllocatedSize" xml:space="preserve"><value>Đã cấp phát</value></data>
+  <data name="FsColumn_Created" xml:space="preserve"><value>Thời gian tạo (UTC)</value></data>
+  <data name="FsColumn_CreatedLocal" xml:space="preserve"><value>Thời gian tạo (địa phương)</value></data>
+  <data name="FsColumn_Modified" xml:space="preserve"><value>Thời gian sửa (UTC)</value></data>
+  <data name="FsColumn_ModifiedLocal" xml:space="preserve"><value>Thời gian sửa (địa phương)</value></data>
+  <data name="FsColumn_Accessed" xml:space="preserve"><value>Thời gian truy cập (UTC)</value></data>
+  <data name="FsColumn_AccessedLocal" xml:space="preserve"><value>Thời gian truy cập (địa phương)</value></data>
+  <data name="FsColumn_Changed" xml:space="preserve"><value>Thời gian đổi siêu dữ liệu (UTC)</value></data>
+  <data name="FsColumn_ChangedLocal" xml:space="preserve"><value>Thời gian đổi siêu dữ liệu (địa phương)</value></data>
+  <data name="FsColumn_Attributes" xml:space="preserve"><value>Thuộc tính</value></data>
+  <data name="FsColumn_FileId" xml:space="preserve"><value>ID tệp</value></data>
+  <data name="FsColumn_FirstCluster" xml:space="preserve"><value>Cluster đầu</value></data>
+  <data name="FsColumn_Fragments" xml:space="preserve"><value>Số mảnh</value></data>
+  <data name="FsColumn_State" xml:space="preserve"><value>Trạng thái</value></data>
+  <data name="FsColumn_Path" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="FsColumn_OriginalPath" xml:space="preserve"><value>Đường dẫn gốc</value></data>
+  <data name="FsColumn_Recovery" xml:space="preserve"><value>Khôi phục</value></data>
+  <data name="FsState_Normal" xml:space="preserve"><value>Bình thường</value></data>
+  <data name="FsState_Deleted" xml:space="preserve"><value>Đã xóa</value></data>
+  <data name="FsState_Orphan" xml:space="preserve"><value>Mồ côi</value></data>
+  <data name="FsRecovery_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRecovery_Good" xml:space="preserve"><value>Tốt</value></data>
+  <data name="FsRecovery_PartiallyOverwritten" xml:space="preserve"><value>Bị ghi đè một phần</value></data>
+  <data name="FsRecovery_Overwritten" xml:space="preserve"><value>Đã bị ghi đè</value></data>
+  <data name="FsRecovery_Unknown" xml:space="preserve"><value>Không rõ vị trí</value></data>
+  <data name="FsRecovery_Resident" xml:space="preserve"><value>Resident</value></data>
+  <data name="FsDeleted_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsDeleted_MftRecord" xml:space="preserve"><value>Bản ghi MFT không dùng</value></data>
+  <data name="FsDeleted_IndexSlack" xml:space="preserve"><value>Slack của chỉ mục</value></data>
+  <data name="FsDeleted_DirectoryEntry" xml:space="preserve"><value>Mục thư mục đã xóa</value></data>
+  <data name="FsDeleted_Inode" xml:space="preserve"><value>inode đã xóa</value></data>
+  <data name="FsDeleted_DirectorySlack" xml:space="preserve"><value>Slack của mục thư mục</value></data>
+  <data name="FsCorrupt_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsCorrupt_FixupMismatch" xml:space="preserve"><value>Fixup không khớp (chuỗi cập nhật)</value></data>
+  <data name="FsCorrupt_BadSignature" xml:space="preserve"><value>Chữ ký sai</value></data>
+  <data name="FsCorrupt_ClusterOutOfRange" xml:space="preserve"><value>Số cluster nằm ngoài phạm vi</value></data>
+  <data name="FsCorrupt_ChainLoop" xml:space="preserve"><value>Chuỗi cluster bị lặp vòng</value></data>
+  <data name="FsCorrupt_ChainFreeCluster" xml:space="preserve"><value>Chuỗi cluster dẫn tới một cluster trống</value></data>
+  <data name="FsCorrupt_ChainLengthMismatch" xml:space="preserve"><value>Chuỗi cluster không khớp với kích thước tệp</value></data>
+  <data name="FsCorrupt_BadRunList" xml:space="preserve"><value>Danh sách data run không hợp lệ</value></data>
+  <data name="FsCorrupt_BadAttribute" xml:space="preserve"><value>Thuộc tính không hợp lệ</value></data>
+  <data name="FsCorrupt_BadEntrySet" xml:space="preserve"><value>Checksum của tập mục không khớp</value></data>
+  <data name="FsCorrupt_ReadError" xml:space="preserve"><value>Lỗi đọc</value></data>
+  <data name="FsCorrupt_DepthLimit" xml:space="preserve"><value>Quá sâu</value></data>
+  <data name="FsIssue_BootSectorBackupMismatch" xml:space="preserve"><value>Sector khởi động sao lưu khác nhau ({0}).</value></data>
+  <data name="FsIssue_MftMirrorMismatch" xml:space="preserve"><value>$MFTMirr khác $MFT ({0}).</value></data>
+  <data name="FsIssue_BpbInconsistent" xml:space="preserve"><value>Các giá trị BPB không nhất quán ({0}).</value></data>
+  <data name="FsIssue_FatCopiesDiffer" xml:space="preserve"><value>Các FAT khác nhau ({0}).</value></data>
+  <data name="FsIssue_FsInfoMismatch" xml:space="preserve"><value>FSInfo không khớp ({0}).</value></data>
+  <data name="FsIssue_ExFatBootChecksum" xml:space="preserve"><value>Checksum của vùng khởi động exFAT không khớp ({0}).</value></data>
+  <data name="FsIssue_LfnChecksum" xml:space="preserve"><value>Checksum của tên dài không khớp ({0}).</value></data>
+  <data name="FsIssue_AllocationUnreadable" xml:space="preserve"><value>Không đọc được thông tin cấp phát ({0}).</value></data>
+  <data name="FsIssue_Encrypted" xml:space="preserve"><value>Volume đã được mã hóa ({0}).</value></data>
+  <data name="FsFolder_Metadata" xml:space="preserve"><value>$Metadata</value></data>
+  <data name="FsFolder_Deleted" xml:space="preserve"><value>Tệp đã xóa</value></data>
+  <data name="FsFolder_Orphans" xml:space="preserve"><value>Tệp mồ côi</value></data>
+  <data name="FsFolder_Unallocated" xml:space="preserve"><value>Vùng chưa cấp phát</value></data>
+  <data name="FsFolder_VolumeSlack" xml:space="preserve"><value>Slack của volume</value></data>
+  <data name="FsRegion_Metadata" xml:space="preserve"><value>Siêu dữ liệu</value></data>
+  <data name="FsRegion_Letter_Metadata" xml:space="preserve"><value>M</value></data>
+  <data name="FsRegion_FileData" xml:space="preserve"><value>Dữ liệu tệp</value></data>
+  <data name="FsRegion_Letter_FileData" xml:space="preserve"><value>F</value></data>
+  <data name="FsRegion_RamSlack" xml:space="preserve"><value>Slack RAM</value></data>
+  <data name="FsRegion_Letter_RamSlack" xml:space="preserve"><value>R</value></data>
+  <data name="FsRegion_DriveSlack" xml:space="preserve"><value>Slack ổ đĩa</value></data>
+  <data name="FsRegion_Letter_DriveSlack" xml:space="preserve"><value>D</value></data>
+  <data name="FsRegion_Unallocated" xml:space="preserve"><value>Chưa cấp phát</value></data>
+  <data name="FsRegion_Letter_Unallocated" xml:space="preserve"><value>U</value></data>
+  <data name="FsRegion_VolumeSlack" xml:space="preserve"><value>Slack của volume</value></data>
+  <data name="FsRegion_Letter_VolumeSlack" xml:space="preserve"><value>V</value></data>
+  <data name="FsRegion_PartitionGap" xml:space="preserve"><value>Khoảng trống giữa phân vùng</value></data>
+  <data name="FsRegion_Letter_PartitionGap" xml:space="preserve"><value>G</value></data>
+  <data name="FsRegion_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Letter_None" xml:space="preserve"><value>-</value></data>
+  <data name="FsRegion_Legend" xml:space="preserve"><value>Chú giải tô sáng pháp y số</value></data>
+  <data name="FsDetail_Size" xml:space="preserve"><value>Kích thước {0} byte, đã cấp phát {1} byte</value></data>
+  <data name="FsDetail_Times" xml:space="preserve"><value>Tạo lúc {0}, sửa lúc {1}, truy cập lúc {2}, đổi siêu dữ liệu lúc {3}</value></data>
+  <data name="FsDetail_Id" xml:space="preserve"><value>ID tệp {0}, thuộc tính {1}</value></data>
+  <data name="FsDetail_Deleted" xml:space="preserve"><value>Khôi phục: {0} ({1}). Đường dẫn gốc: {2}</value></data>
+  <data name="FsSummary_Type" xml:space="preserve"><value>Loại: {0}</value></data>
+  <data name="FsSummary_Label" xml:space="preserve"><value>Tên volume: {0}</value></data>
+  <data name="FsSummary_Serial" xml:space="preserve"><value>Số sê-ri: {0}</value></data>
+  <data name="FsSummary_ClusterSize" xml:space="preserve"><value>Kích thước cluster: {0} byte</value></data>
+  <data name="FsSummary_Clusters" xml:space="preserve"><value>Tổng số cluster: {0}</value></data>
+  <data name="FsSummary_Free" xml:space="preserve"><value>Cluster trống: {0}</value></data>
+  <data name="FsSummary_Created" xml:space="preserve"><value>Tạo lúc: {0}</value></data>
+  <data name="FsSummary_Volume" xml:space="preserve"><value>Volume bắt đầu {0}, {1} byte</value></data>
+  <data name="FsField_MftRecord" xml:space="preserve"><value>Bản ghi MFT</value></data>
+  <data name="FsField_RecordOffset" xml:space="preserve"><value>Độ lệch bản ghi</value></data>
+  <data name="FsField_SequenceNumber" xml:space="preserve"><value>Số thứ tự</value></data>
+  <data name="FsField_HardLinkCount" xml:space="preserve"><value>Số liên kết cứng</value></data>
+  <data name="FsField_RecordFlags" xml:space="preserve"><value>Cờ</value></data>
+  <data name="FsField_BytesInUse" xml:space="preserve"><value>Byte đang dùng</value></data>
+  <data name="FsField_BaseRecord" xml:space="preserve"><value>Bản ghi cơ sở</value></data>
+  <data name="FsField_Fixup" xml:space="preserve"><value>Fixup</value></data>
+  <data name="FsField_SiCreated" xml:space="preserve"><value>$SI tạo</value></data>
+  <data name="FsField_SiModified" xml:space="preserve"><value>$SI sửa</value></data>
+  <data name="FsField_SiMftModified" xml:space="preserve"><value>$SI MFT đổi</value></data>
+  <data name="FsField_SiAccessed" xml:space="preserve"><value>$SI truy cập</value></data>
+  <data name="FsField_FnName" xml:space="preserve"><value>Tên</value></data>
+  <data name="FsField_FnParent" xml:space="preserve"><value>Cha</value></data>
+  <data name="FsField_FnCreated" xml:space="preserve"><value>$FN tạo</value></data>
+  <data name="FsField_FnModified" xml:space="preserve"><value>$FN sửa</value></data>
+  <data name="FsField_FnMftModified" xml:space="preserve"><value>$FN MFT đổi</value></data>
+  <data name="FsField_FnAccessed" xml:space="preserve"><value>$FN truy cập</value></data>
+  <data name="FsField_FnRealSize" xml:space="preserve"><value>$FN kích thước</value></data>
+  <data name="FsField_TimeMismatch" xml:space="preserve"><value>Thời gian không khớp</value></data>
+  <data name="FsField_StreamContent" xml:space="preserve"><value>Nội dung</value></data>
+  <data name="FsField_EntryOffset" xml:space="preserve"><value>Độ lệch mục</value></data>
+  <data name="FsField_FirstCluster" xml:space="preserve"><value>Cluster đầu</value></data>
+  <data name="FsField_ShortName" xml:space="preserve"><value>Tên ngắn</value></data>
+  <data name="FsField_ChainClusters" xml:space="preserve"><value>Số cluster trong chuỗi</value></data>
+  <data name="FsField_NoFatChain" xml:space="preserve"><value>NoFatChain</value></data>
+  <data name="FsField_DataLength" xml:space="preserve"><value>Độ dài dữ liệu</value></data>
+  <data name="FsField_ValidDataLength" xml:space="preserve"><value>Độ dài dữ liệu hợp lệ</value></data>
+  <data name="FsStatus_Lba" xml:space="preserve"><value>LBA {0}</value></data>
+  <data name="FsStatus_Partition" xml:space="preserve"><value>Phân vùng {0}</value></data>
+  <data name="FsStatus_Cluster" xml:space="preserve"><value>Cluster {0} + {1}</value></data>
+  <data name="FsStatus_Block" xml:space="preserve"><value>Khối {0} + {1}</value></data>
+  <data name="FsStatus_Owner" xml:space="preserve"><value>{0}</value></data>
+  <data name="FsStatus_OwnerDeleted" xml:space="preserve"><value>Đã xóa: {0}</value></data>
+  <data name="FsStatus_Unallocated" xml:space="preserve"><value>Chưa cấp phát</value></data>
+  <data name="FsStatus_Slack" xml:space="preserve"><value>Slack</value></data>
+  <data name="FsStatus_FindOwner" xml:space="preserve"><value>Tìm chủ sở hữu</value></data>
+  <data name="FsStatus_DiskOffset" xml:space="preserve"><value>Đĩa {0}</value></data>
+  <data name="FsStatus_NoDiskOffset" xml:space="preserve"><value>Đĩa: - (nén / thưa / resident)</value></data>
+  <data name="GoToCluster_Label" xml:space="preserve"><value>Số cluster ({0}–{1}; cluster = cluster hiện tại)</value></data>
+  <data name="GoToCluster_OutOfRange" xml:space="preserve"><value>Cluster {0} nằm ngoài phạm vi.</value></data>
+  <data name="GoToCluster_Go" xml:space="preserve"><value>Đi tới</value></data>
+  <data name="FsExport_KeepStructure" xml:space="preserve"><value>Giữ cấu trúc thư mục</value></data>
+  <data name="FsExport_Streams" xml:space="preserve"><value>Xuất cả luồng dữ liệu thay thế (name_stream)</value></data>
+  <data name="FsExport_Slack" xml:space="preserve"><value>Xuất cả slack thành các tệp riêng</value></data>
+  <data name="FsExport_Deleted" xml:space="preserve"><value>Bao gồm tệp đã xóa</value></data>
+  <data name="FsExport_Count" xml:space="preserve"><value>{0, plural, other {Đã chọn # mục.}}</value></data>
+  <data name="FsExport_ChooseFolder" xml:space="preserve"><value>Chọn thư mục...</value></data>
+  <data name="FsExport_OperationName" xml:space="preserve"><value>Đang xuất tệp</value></data>
+  <data name="FsExport_Done" xml:space="preserve"><value>Đã xuất {0} tệp ra {1} (export-manifest.csv).</value></data>
+  <data name="FsExport_NoSpace" xml:space="preserve"><value>Không đủ dung lượng trống: cần {0}, còn {1}.</value></data>
+  <data name="FsExport_Failed" xml:space="preserve"><value>Không thể ghi: {0}</value></data>
+  <data name="FsExport_OverwrittenTitle" xml:space="preserve"><value>Xuất tệp đã bị ghi đè?</value></data>
+  <data name="FsExport_OverwrittenBody" xml:space="preserve"><value>Các cluster của tệp đã xóa này hiện được tệp khác dùng. Nội dung xuất ra có thể thuộc về tệp khác.</value></data>
+  <data name="FsExport_Export" xml:space="preserve"><value>Xuất</value></data>
+  <data name="FsExtract_FileType" xml:space="preserve"><value>Tệp nhị phân</value></data>
+  <data name="FsExtract_Map" xml:space="preserve"><value>Tạo tệp bản đồ (.map.csv)</value></data>
+  <data name="FsExtract_UnallocatedOperation" xml:space="preserve"><value>Đang xuất vùng chưa cấp phát</value></data>
+  <data name="FsExtract_SlackOperation" xml:space="preserve"><value>Đang xuất slack</value></data>
+  <data name="FsExtract_Done" xml:space="preserve"><value>Đã ghi {0} vào {1}.</value></data>
+  <data name="LogFile_Title" xml:space="preserve"><value>Bản ghi $LogFile</value></data>
+  <data name="LogFile_Header" xml:space="preserve"><value>         LSN      LSN trước  Undo LSN kế  Loại     ID giao dịch  Redo                            Undo                            Bản ghi MFT  Dài</value></data>
+  <data name="LogFile_Restart" xml:space="preserve"><value>Trang khởi động lại {0}: LSN hiện tại {1}, máy khách: {2}</value></data>
+  <data name="LogFile_OperationName" xml:space="preserve"><value>Đang đọc $LogFile</value></data>
+  <data name="ForensicResults_Kind" xml:space="preserve"><value>Danh sách</value></data>
+  <data name="ForensicResults_Empty" xml:space="preserve"><value>Không có kết quả.</value></data>
+  <data name="ForensicResults_Export" xml:space="preserve"><value>Xuất danh sách ra CSV / JSON...</value></data>
+  <data name="Fragments_None" xml:space="preserve"><value>Chưa có tệp nào được tô sáng. Hãy chọn Hiển thị các cluster của tệp.</value></data>
+  <data name="Fragments_Title" xml:space="preserve"><value>{0} ({1} mảnh)</value></data>
+  <data name="Fragments_Row" xml:space="preserve"><value>#{0}  logic {1}  trên đĩa {2}  {3} byte  cluster {4}</value></data>
+  <data name="Fragments_Clear" xml:space="preserve"><value>Xóa tô sáng</value></data>
+  <data name="Cmd_forensics_fs_selectUnallocated" xml:space="preserve"><value>Chọn vùng chưa cấp phát</value></data>
+  <data name="CmdAlias_forensics_fs_selectUnallocated" xml:space="preserve"><value>chưa cấp phát chọn tìm kiếm carve unallocated select search carve</value></data>
+  <data name="Cmd_forensics_fs_selectSlack" xml:space="preserve"><value>Chọn vùng slack</value></data>
+  <data name="CmdAlias_forensics_fs_selectSlack" xml:space="preserve"><value>slack chọn tìm kiếm carve slack select search carve</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.Text" xml:space="preserve"><value>Chọn vùng chưa cấp phát</value></data>
+  <data name="Menu_Forensics_FsSelectUnallocated.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.Text" xml:space="preserve"><value>Chọn vùng slack</value></data>
+  <data name="Menu_Forensics_FsSelectSlack.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Fs_SelectingUnallocated" xml:space="preserve"><value>Đang chọn vùng chưa cấp phát</value></data>
+  <data name="Fs_FindingUnallocated" xml:space="preserve"><value>Đang tìm vùng chưa cấp phát</value></data>
+  <data name="Fs_SelectingSlack" xml:space="preserve"><value>Đang chọn vùng slack</value></data>
+  <data name="Fs_NothingToSelect" xml:space="preserve"><value>Không có gì để chọn.</value></data>
+  <data name="Fs_SelectionTruncated" xml:space="preserve"><value>Chỉ chọn 1,000,000 vùng đầu tiên.</value></data>
+  <data name="Cmd_forensics_partitions_logicalVolumes" xml:space="preserve"><value>Hiển thị volume logic</value></data>
+  <data name="CmdAlias_forensics_partitions_logicalVolumes" xml:space="preserve"><value>volume logic ldm đĩa động lvm lvm2 sọc span logical volume ldm dynamic disk lvm lvm2 stripe span</value></data>
+  <data name="Cmd_forensics_fs_goToInode" xml:space="preserve"><value>Đi tới inode</value></data>
+  <data name="CmdAlias_forensics_fs_goToInode" xml:space="preserve"><value>inode ext ext2 ext3 ext4 inode ext ext2 ext3 ext4</value></data>
+  <data name="CmdArg_forensics_fs_goToInode" xml:space="preserve"><value>Số inode</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.Text" xml:space="preserve"><value>Hiển thị volume logic</value></data>
+  <data name="Menu_Forensics_PartitionsLogical.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Forensics_FsInode.Text" xml:space="preserve"><value>Đi tới inode...</value></data>
+  <data name="Menu_Forensics_FsInode.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="FsCorrupt_ChecksumMismatch" xml:space="preserve"><value>Checksum không khớp</value></data>
+  <data name="FsCorrupt_Unsupported" xml:space="preserve"><value>Định dạng không được hỗ trợ</value></data>
+  <data name="FsIssue_ExtSuperblockChecksum" xml:space="preserve"><value>Checksum của superblock ext không khớp ({0}).</value></data>
+  <data name="FsIssue_ExtGroupDescriptorChecksum" xml:space="preserve"><value>Checksum của group descriptor không khớp (nhóm {0}).</value></data>
+  <data name="FsIssue_ExtUnsupportedFeature" xml:space="preserve"><value>Tính năng ext này chưa được hỗ trợ đầy đủ: {0}.</value></data>
+  <data name="FsIssue_HfsAlternateHeaderMismatch" xml:space="preserve"><value>Phần đầu volume dự phòng khác phần đầu chính ({0}).</value></data>
+  <data name="FsIssue_ApfsChecksum" xml:space="preserve"><value>Checksum của một đối tượng APFS không khớp (khối {0}). Đã bỏ qua.</value></data>
+  <data name="FsIssue_ApfsOlderCheckpoint" xml:space="preserve"><value>Checkpoint APFS mới nhất bị hỏng; dùng checkpoint cũ hơn (xid {0}).</value></data>
+  <data name="FsIssue_UdfTagChecksum" xml:space="preserve"><value>Checksum của thẻ descriptor UDF không khớp (sector {0}).</value></data>
+  <data name="FsIssue_UdfDescriptorCrc" xml:space="preserve"><value>CRC của descriptor UDF không khớp (sector {0}).</value></data>
+  <data name="FsIssue_UdfUnsupportedPartition" xml:space="preserve"><value>Không hỗ trợ loại phân vùng UDF này: {0}.</value></data>
+  <data name="FsIssue_IsoMultiSession" xml:space="preserve"><value>Đĩa có {0} phiên. Đang hiển thị phiên cuối; chọn phiên khác bằng Phiên.</value></data>
+  <data name="Fs_ExtOnly" xml:space="preserve"><value>Chỉ dùng được cho ext2, ext3 và ext4.</value></data>
+  <data name="Fs_InodeOutOfRange" xml:space="preserve"><value>Không có inode {0}.</value></data>
+  <data name="Fs_FolderEncrypted" xml:space="preserve"><value>Volume này đã được mã hóa. Không hiển thị danh sách tệp.</value></data>
+  <data name="Fs_ApfsNoCheckpoint" xml:space="preserve"><value>Không tìm thấy checkpoint APFS.</value></data>
+  <data name="Fs_Menu_Inode" xml:space="preserve"><value>Hiển thị inode</value></data>
+  <data name="Fs_Menu_Journal" xml:space="preserve"><value>Hiển thị journal</value></data>
+  <data name="FsChoice_NameKind" xml:space="preserve"><value>Tên</value></data>
+  <data name="FsChoice_NameKind_Joliet" xml:space="preserve"><value>Joliet</value></data>
+  <data name="FsChoice_NameKind_RockRidge" xml:space="preserve"><value>Rock Ridge</value></data>
+  <data name="FsChoice_NameKind_Basic" xml:space="preserve"><value>ISO 9660 (cơ bản)</value></data>
+  <data name="FsChoice_Session" xml:space="preserve"><value>Phiên</value></data>
+  <data name="FsChoice_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="FsChoice_Format_Udf" xml:space="preserve"><value>UDF</value></data>
+  <data name="FsChoice_Format_Iso9660" xml:space="preserve"><value>ISO 9660</value></data>
+  <data name="ExtJournal_None" xml:space="preserve"><value>Hệ thống tệp này không có journal.</value></data>
+  <data name="ExtJournal_Title" xml:space="preserve"><value>Journal ext (jbd2)</value></data>
+  <data name="ExtJournal_Header" xml:space="preserve"><value>     Khối          Độ lệch đĩa  Loại             Thứ tự</value></data>
+  <data name="ExtJournal_Status" xml:space="preserve"><value>Kích thước khối {0}, {1} khối, thứ tự {2}, bắt đầu {3} (0 = sạch). Journal không được phát lại.</value></data>
+  <data name="ExtJournal_OperationName" xml:space="preserve"><value>Đang đọc journal ext</value></data>
+  <data name="ExtJournal_Type_Descriptor" xml:space="preserve"><value>Descriptor</value></data>
+  <data name="ExtJournal_Type_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="ExtJournal_Type_SuperblockV1" xml:space="preserve"><value>Superblock v1</value></data>
+  <data name="ExtJournal_Type_SuperblockV2" xml:space="preserve"><value>Superblock v2</value></data>
+  <data name="ExtJournal_Type_Revoke" xml:space="preserve"><value>Revoke</value></data>
+  <data name="Part_Menu_LogicalVolumes" xml:space="preserve"><value>Hiển thị volume logic</value></data>
+  <data name="Part_Menu_CreateImage" xml:space="preserve"><value>Tạo ảnh đĩa của vùng này...</value></data>
+  <data name="Lv_Title" xml:space="preserve"><value>Volume logic</value></data>
+  <data name="Lv_Header" xml:space="preserve"><value>Tên                   Loại          Cỡ          Bố cục                        Trạng thái</value></data>
+  <data name="Lv_Analyzing" xml:space="preserve"><value>Đang đọc siêu dữ liệu volume...</value></data>
+  <data name="Lv_NoneFound" xml:space="preserve"><value>Không tìm thấy volume logic LDM hoặc LVM2 nào trong các đĩa và ảnh đĩa đang mở.</value></data>
+  <data name="Lv_Issue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Lv_Menu_Open" xml:space="preserve"><value>Mở volume logic</value></data>
+  <data name="Lv_Menu_Assign" xml:space="preserve"><value>Gán thành viên...</value></data>
+  <data name="Lv_Menu_Refresh" xml:space="preserve"><value>Đọc lại</value></data>
+  <data name="Lv_Unsupported" xml:space="preserve"><value>Không hỗ trợ loại volume này: {0}.</value></data>
+  <data name="Lv_MissingMembers" xml:space="preserve"><value>Không thể mở {0}. Thiếu thành viên: {1}. Hãy mở các đĩa hoặc ảnh đĩa đó, hoặc gán chúng.</value></data>
+  <data name="Lv_NeedsRaid" xml:space="preserve"><value>{0} ({1}) là volume mirror hoặc RAID-5. Hãy mở bằng tính năng dựng lại RAID.</value></data>
+  <data name="Lv_TabName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Lv_AssignTitle" xml:space="preserve"><value>Gán thành viên</value></data>
+  <data name="Lv_AssignBody" xml:space="preserve"><value>Hãy chọn đĩa hoặc ảnh đĩa cho từng thành viên bị thiếu của {0}.</value></data>
+  <data name="Lv_AssignNone" xml:space="preserve"><value>(không có)</value></data>
+  <data name="Lv_AssignFile" xml:space="preserve"><value>Mở tệp...</value></data>
+  <data name="Lv_State_Ok" xml:space="preserve"><value>Tốt</value></data>
+  <data name="Lv_State_Missing" xml:space="preserve"><value>{0, plural, other {Thiếu # thành viên}}</value></data>
+  <data name="Lv_State_Unsupported" xml:space="preserve"><value>Không hỗ trợ</value></data>
+  <data name="Lv_State_Raid" xml:space="preserve"><value>Dựng lại RAID</value></data>
+  <data name="LvKind_Simple" xml:space="preserve"><value>Đơn giản</value></data>
+  <data name="LvKind_Spanned" xml:space="preserve"><value>Span</value></data>
+  <data name="LvKind_Striped" xml:space="preserve"><value>Sọc</value></data>
+  <data name="LvKind_Mirror" xml:space="preserve"><value>Mirror</value></data>
+  <data name="LvKind_Raid5" xml:space="preserve"><value>RAID-5</value></data>
+  <data name="LvKind_Linear" xml:space="preserve"><value>Tuyến tính</value></data>
+  <data name="LvKind_Unsupported" xml:space="preserve"><value>Không hỗ trợ ({0})</value></data>
+  <data name="Lv_Detail_Group" xml:space="preserve"><value>{0} nhóm {1}, volume {2}</value></data>
+  <data name="Lv_Detail_Member" xml:space="preserve"><value>Thành viên {0}: {1}</value></data>
+  <data name="Lv_Detail_Missing" xml:space="preserve"><value>không tìm thấy</value></data>
+  <data name="Lv_Detail_Piece" xml:space="preserve"><value>Độ lệch {0} ({1}): {2} tại {3}</value></data>
+  <data name="Lv_Detail_Stripes" xml:space="preserve"><value>Độ lệch {0} ({1}): sọc {2} trên {3} thành viên</value></data>
+  <data name="Cmd_forensics_wipe_selection" xml:space="preserve"><value>Xóa an toàn vùng chọn</value></data>
+  <data name="CmdAlias_forensics_wipe_selection" xml:space="preserve"><value>xóa sạch xóa hủy ghi đè xóa an toàn vùng wipe erase shred overwrite secure delete range</value></data>
+  <data name="Cmd_forensics_wipe_disk" xml:space="preserve"><value>Xóa an toàn đĩa</value></data>
+  <data name="CmdAlias_forensics_wipe_disk" xml:space="preserve"><value>xóa sạch xóa đĩa ổ đĩa ghi đè an toàn wipe erase disk drive overwrite secure</value></data>
+  <data name="Cmd_forensics_wipe_freeSpace" xml:space="preserve"><value>Xóa sạch dung lượng trống</value></data>
+  <data name="CmdAlias_forensics_wipe_freeSpace" xml:space="preserve"><value>dung lượng trống chưa cấp phát xóa sạch xóa cipher free space unallocated wipe erase cipher</value></data>
+  <data name="Cmd_forensics_wipe_slack" xml:space="preserve"><value>Xóa sạch slack của tệp</value></data>
+  <data name="CmdAlias_forensics_wipe_slack" xml:space="preserve"><value>slack ram ổ đĩa xóa sạch xóa slack ram drive wipe erase</value></data>
+  <data name="Cmd_forensics_fs_redact" xml:space="preserve"><value>Che nội dung tệp</value></data>
+  <data name="CmdAlias_forensics_fs_redact" xml:space="preserve"><value>che ẩn làm sạch xóa trắng redact sanitize blank black out</value></data>
+  <data name="Menu_Forensics_Wipe.Text" xml:space="preserve"><value>Xóa sạch</value></data>
+  <data name="Menu_Forensics_Wipe.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_WipeSelection.Text" xml:space="preserve"><value>Xóa vùng chọn...</value></data>
+  <data name="Menu_Forensics_WipeSelection.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Forensics_WipeDisk.Text" xml:space="preserve"><value>Xóa đĩa...</value></data>
+  <data name="Menu_Forensics_WipeDisk.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.Text" xml:space="preserve"><value>Xóa sạch dung lượng trống...</value></data>
+  <data name="Menu_Forensics_WipeFreeSpace.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Forensics_WipeSlack.Text" xml:space="preserve"><value>Xóa sạch slack...</value></data>
+  <data name="Menu_Forensics_WipeSlack.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Forensics_FsRedact.Text" xml:space="preserve"><value>Che nội dung tệp...</value></data>
+  <data name="Menu_Forensics_FsRedact.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Fs_Menu_Redact" xml:space="preserve"><value>Che nội dung tệp...</value></data>
+  <data name="HexViewMenu_WipeSelection" xml:space="preserve"><value>Xóa an toàn vùng chọn...</value></data>
+  <data name="HexViewMenu_CarveSelection" xml:space="preserve"><value>Carve tệp từ vùng chọn...</value></data>
+  <data name="EditOp_Redact" xml:space="preserve"><value>Che nội dung</value></data>
+  <data name="Wipe_Title" xml:space="preserve"><value>Xóa an toàn</value></data>
+  <data name="Wipe_Target" xml:space="preserve"><value>Đích: {0}</value></data>
+  <data name="Wipe_Start" xml:space="preserve"><value>Bắt đầu</value></data>
+  <data name="Wipe_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="Wipe_Verify" xml:space="preserve"><value>Đọc lại và xác minh ở cuối</value></data>
+  <data name="Wipe_Next" xml:space="preserve"><value>Xóa...</value></data>
+  <data name="Wipe_Error_Range" xml:space="preserve"><value>Vùng nằm ngoài tài liệu.</value></data>
+  <data name="Wipe_Unsaved_Title" xml:space="preserve"><value>Có chỉnh sửa chưa lưu</value></data>
+  <data name="Wipe_Unsaved_Body" xml:space="preserve"><value>Dữ liệu cần xóa có chỉnh sửa chưa lưu. Hãy lưu hoặc bỏ chúng trước khi xóa.</value></data>
+  <data name="Wipe_Unsaved_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Wipe_Unsaved_Discard" xml:space="preserve"><value>Bỏ</value></data>
+  <data name="Wipe_Confirm_Title" xml:space="preserve"><value>Xóa dữ liệu</value></data>
+  <data name="Wipe_Confirm_Target" xml:space="preserve"><value>Đích: {0}</value></data>
+  <data name="Wipe_Confirm_Disk" xml:space="preserve"><value>Đĩa {0}: {1}, số sê-ri {2}, {3} byte</value></data>
+  <data name="Wipe_Confirm_Volumes" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="Wipe_Confirm_Range" xml:space="preserve"><value>Vùng: LBA bắt đầu {0}, {1} sector, {2} byte</value></data>
+  <data name="Wipe_Confirm_RangeFile" xml:space="preserve"><value>Vùng: độ lệch {0}, {1} byte</value></data>
+  <data name="Wipe_Confirm_Widened" xml:space="preserve"><value>Vùng đã được mở rộng đến ranh giới sector.</value></data>
+  <data name="Wipe_Confirm_Method" xml:space="preserve"><value>Phương pháp: {0} ({1, plural, other {# lượt}})</value></data>
+  <data name="Wipe_Confirm_Verify" xml:space="preserve"><value>Lượt cuối sẽ được đọc lại và xác minh.</value></data>
+  <data name="Wipe_Confirm_Estimate" xml:space="preserve"><value>Thời gian ước tính: khoảng {0}</value></data>
+  <data name="Wipe_Confirm_Irreversible" xml:space="preserve"><value>Không thể hoàn tác. Không thể khôi phục dữ liệu gốc.</value></data>
+  <data name="Wipe_Confirm_Ssd" xml:space="preserve"><value>Trên SSD và phương tiện flash, ngay cả sau khi ghi đè, cơ chế wear leveling vẫn có thể giữ dữ liệu gốc ở nơi khác.</value></data>
+  <data name="Wipe_Confirm_Lock" xml:space="preserve"><value>Các volume này bị khóa trong khi xóa: {0}</value></data>
+  <data name="Wipe_Confirm_Direct" xml:space="preserve"><value>Dữ liệu được ghi trực tiếp vào tệp, không phải dưới dạng chỉnh sửa. Không thể hoàn tác bằng Hoàn tác.</value></data>
+  <data name="Wipe_Confirm_Bytes" xml:space="preserve"><value>Xóa {0} byte</value></data>
+  <data name="Wipe_Confirm_DiskButton" xml:space="preserve"><value>Xóa {0}</value></data>
+  <data name="Wipe_DiskName" xml:space="preserve"><value>Đĩa {0}</value></data>
+  <data name="Wipe_Strong_Prompt" xml:space="preserve"><value>Để tiếp tục, hãy nhập “{0}”.</value></data>
+  <data name="Wipe_Strong_Field" xml:space="preserve"><value>Xác nhận</value></data>
+  <data name="Wipe_NoSelection" xml:space="preserve"><value>Hãy chọn vùng cần xóa.</value></data>
+  <data name="Wipe_Unsupported" xml:space="preserve"><value>Không thể xóa trực tiếp tài liệu này.</value></data>
+  <data name="Wipe_NotDisk" xml:space="preserve"><value>Hãy mở toàn bộ đĩa vật lý trong một tab để xóa.</value></data>
+  <data name="Wipe_Evidence" xml:space="preserve"><value>Nguồn dữ liệu này nằm trong danh sách bằng chứng nên không thể ghi.</value></data>
+  <data name="Wipe_SystemDisk" xml:space="preserve"><value>Windows đang dùng đĩa này (hệ thống, khởi động hoặc tệp hoán trang) nên không thể xóa.</value></data>
+  <data name="Wipe_LockFailed" xml:space="preserve"><value>Không khóa được volume {0} nên chưa xóa gì.</value></data>
+  <data name="Wipe_Refused_Policy" xml:space="preserve"><value>Việc ghi bị từ chối: {0}</value></data>
+  <data name="Wipe_Failed" xml:space="preserve"><value>Xóa không thành công: {0}</value></data>
+  <data name="Wipe_Operation" xml:space="preserve"><value>Đang xóa {0}</value></data>
+  <data name="Wipe_Progress_Pass" xml:space="preserve"><value>Lượt {0}/{1}</value></data>
+  <data name="Wipe_Progress_Verify" xml:space="preserve"><value>Đang xác minh</value></data>
+  <data name="Wipe_CancelConfirm" xml:space="preserve"><value>Dừng xóa? Phần đã ghi đè vẫn giữ trạng thái đã ghi đè; phần còn lại giữ dữ liệu gốc.</value></data>
+  <data name="Wipe_WriteError_Title" xml:space="preserve"><value>Lỗi ghi</value></data>
+  <data name="Wipe_WriteError_Body" xml:space="preserve"><value>Không thể ghi tại độ lệch {0}: {1}</value></data>
+  <data name="Wipe_WriteError_Continue" xml:space="preserve"><value>Bỏ qua và tiếp tục</value></data>
+  <data name="Wipe_WriteError_Abort" xml:space="preserve"><value>Dừng</value></data>
+  <data name="Wipe_Result_Title" xml:space="preserve"><value>Kết quả xóa</value></data>
+  <data name="Wipe_Result_Done" xml:space="preserve"><value>Đã xóa {0} byte trong {1}.</value></data>
+  <data name="Wipe_Result_Verified" xml:space="preserve"><value>Xác minh thành công.</value></data>
+  <data name="Wipe_Result_Mismatch" xml:space="preserve"><value>{0, plural, other {Quá trình xác minh thấy # vùng không khớp:}}</value></data>
+  <data name="Wipe_Result_Unwritten" xml:space="preserve"><value>{0, plural, other {Không ghi được # vùng:}}</value></data>
+  <data name="Wipe_Result_Cancelled" xml:space="preserve"><value>Đã dừng xóa. Dữ liệu đến độ lệch {0} đã bị ghi đè ở lượt {1}; phần còn lại giữ nội dung trước đó.</value></data>
+  <data name="Wipe_Result_CancelledVerify" xml:space="preserve"><value>Đã dừng xác minh. Tất cả các lượt đã được ghi.</value></data>
+  <data name="Wipe_Result_Aborted" xml:space="preserve"><value>Đã dừng xóa sau lỗi ghi tại độ lệch {0}.</value></data>
+  <data name="Wipe_Result_Skipped" xml:space="preserve"><value>Tệp bị bỏ qua: {0} (nén {1}, thưa {2}, resident {3}, không nhất quán {4})</value></data>
+  <data name="WipeFree_Title" xml:space="preserve"><value>Xóa sạch dung lượng trống</value></data>
+  <data name="WipeFree_HowTo" xml:space="preserve"><value>Phương pháp</value></data>
+  <data name="WipeFree_Os" xml:space="preserve"><value>Qua Windows (volume đã gắn)</value></data>
+  <data name="WipeFree_Direct" xml:space="preserve"><value>Ghi trực tiếp (hệ thống tệp trong tab này)</value></data>
+  <data name="WipeFree_Volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="WipeFree_NoVolumes" xml:space="preserve"><value>Không có volume đã gắn nào dùng được.</value></data>
+  <data name="WipeFree_NoSession" xml:space="preserve"><value>Để ghi trực tiếp, hãy hiển thị hệ thống tệp của tab này trước.</value></data>
+  <data name="WipeFree_Confirm_Volume" xml:space="preserve"><value>Volume: {0}</value></data>
+  <data name="WipeFree_Confirm_Bytes" xml:space="preserve"><value>Dung lượng trống sẽ ghi đè: {0} byte</value></data>
+  <data name="WipeFree_Confirm_HowOs" xml:space="preserve"><value>Phương pháp: qua Windows (tệp tạm lấp đầy dung lượng trống và bị xóa ở cuối)</value></data>
+  <data name="WipeFree_Confirm_HowDirect" xml:space="preserve"><value>Phương pháp: ghi trực tiếp vào các cluster chưa cấp phát</value></data>
+  <data name="WipeFree_Confirm_OsNote" xml:space="preserve"><value>Trong khi chạy, volume không còn dung lượng trống. Các ứng dụng khác vẫn hoạt động nhưng không lưu được dữ liệu mới.</value></data>
+  <data name="WipeFree_Confirm_DirectNote" xml:space="preserve"><value>Nếu thông tin cấp phát của hệ thống tệp sai, các tệp có thể bị hỏng.</value></data>
+  <data name="WipeFree_Button" xml:space="preserve"><value>Xóa sạch dung lượng trống</value></data>
+  <data name="WipeFree_Inconsistent" xml:space="preserve"><value>Hệ thống tệp không nhất quán ({0}). Hãy sửa bằng chkdsk rồi thử lại.</value></data>
+  <data name="WipeFree_Unsupported" xml:space="preserve"><value>Ghi trực tiếp chỉ hỗ trợ NTFS, FAT12/16/32 và exFAT.</value></data>
+  <data name="WipeFree_UnsavedEdits" xml:space="preserve"><value>Hãy lưu hoặc bỏ các chỉnh sửa trong tab này trước.</value></data>
+  <data name="WipeFree_Leftovers" xml:space="preserve"><value>Không xóa được các tệp tạm này. Hãy xóa thủ công:</value></data>
+  <data name="WipeFree_Result" xml:space="preserve"><value>Đã ghi đè {0} byte dung lượng trống trong {1}.</value></data>
+  <data name="WipeFree_Calculating" xml:space="preserve"><value>Đang tính dung lượng trống</value></data>
+  <data name="WipeFree_Cancelled" xml:space="preserve"><value>Đã dừng xóa sạch dung lượng trống. Các tệp tạm đã bị xóa.</value></data>
+  <data name="WipeSlack_Title" xml:space="preserve"><value>Xóa sạch slack</value></data>
+  <data name="WipeSlack_Confirm_Files" xml:space="preserve"><value>Tệp: {0}, slack sẽ ghi đè: {1} byte</value></data>
+  <data name="WipeSlack_Button" xml:space="preserve"><value>Xóa sạch slack</value></data>
+  <data name="WipeSlack_Planning" xml:space="preserve"><value>Đang tìm slack của tệp</value></data>
+  <data name="WipeSlack_Result" xml:space="preserve"><value>Đã ghi đè {0} byte slack trong {1}.</value></data>
+  <data name="Redact_Title" xml:space="preserve"><value>Che nội dung tệp</value></data>
+  <data name="Redact_Files" xml:space="preserve"><value>Tệp ({0})</value></data>
+  <data name="Redact_Pattern" xml:space="preserve"><value>Mẫu</value></data>
+  <data name="Redact_Pattern_Zero" xml:space="preserve"><value>00 (mặc định)</value></data>
+  <data name="Redact_Pattern_Random" xml:space="preserve"><value>Ngẫu nhiên</value></data>
+  <data name="Redact_Pattern_Custom" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_PatternField" xml:space="preserve"><value>Byte Hex</value></data>
+  <data name="Redact_Names" xml:space="preserve"><value>Thay cả tên bằng “_” có cùng độ dài</value></data>
+  <data name="Redact_Log" xml:space="preserve"><value>Nhật ký che nội dung (CSV)</value></data>
+  <data name="Redact_Note" xml:space="preserve"><value>Nội dung thay đổi dưới dạng một chỉnh sửa. Chưa có gì được ghi cho đến khi bạn lưu; dùng Lưu thành để lưu ảnh đĩa mới.</value></data>
+  <data name="Redact_Run" xml:space="preserve"><value>Che</value></data>
+  <data name="Redact_Planning" xml:space="preserve"><value>Đang tìm dữ liệu cần che</value></data>
+  <data name="Redact_Done" xml:space="preserve"><value>{0, plural, other {Đã che # tệp}} ({1} byte). Dùng Lưu thành để lưu ảnh đĩa mới.</value></data>
+  <data name="Redact_Nothing" xml:space="preserve"><value>Không có gì để che.</value></data>
+  <data name="Redact_Excluded_Title" xml:space="preserve"><value>Tệp chưa được che</value></data>
+  <data name="Redact_Excluded_Body" xml:space="preserve"><value>{0, plural, other {# mục chưa được che:}}</value></data>
+  <data name="Redact_Reason_Directory" xml:space="preserve"><value>thư mục</value></data>
+  <data name="Redact_Reason_Deleted" xml:space="preserve"><value>mục đã xóa</value></data>
+  <data name="Redact_Reason_Corrupt" xml:space="preserve"><value>siêu dữ liệu bị hỏng</value></data>
+  <data name="Redact_Reason_BadFragments" xml:space="preserve"><value>thông tin mảnh bị hỏng</value></data>
+  <data name="Redact_Reason_ResidentNotFound" xml:space="preserve"><value>không tìm thấy dữ liệu resident</value></data>
+  <data name="Redact_Reason_Metadata" xml:space="preserve"><value>siêu dữ liệu hệ thống tệp</value></data>
+  <data name="Redact_Warnings" xml:space="preserve"><value>Không thay được tên của: {0}</value></data>
+  <data name="Redact_ReadOnly" xml:space="preserve"><value>Tài liệu ở chế độ chỉ đọc.</value></data>
+  <data name="Redact_SaveConfirm_Title" xml:space="preserve"><value>Ghi đè ảnh đĩa gốc?</value></data>
+  <data name="Redact_SaveConfirm_Body" xml:space="preserve"><value>Tài liệu này có nội dung đã che. Lưu sẽ ghi chúng vào {0} gốc và không thể hoàn tác. Để giữ bản gốc, hãy dùng Lưu thành.</value></data>
+  <data name="Redact_SaveConfirm_Primary" xml:space="preserve"><value>Ghi đè {0}</value></data>
+  <data name="Redact_LogFailed" xml:space="preserve"><value>Không thể ghi nhật ký che nội dung: {0}</value></data>
+  <data name="Redact_Error_Pattern" xml:space="preserve"><value>Hãy nhập mẫu dưới dạng byte Hex (ví dụ 00 hoặc A5 5A).</value></data>
+  <data name="Wipe_Seconds" xml:space="preserve"><value>{0} giây</value></data>
+  <data name="Wipe_Minutes" xml:space="preserve"><value>{0} phút</value></data>
+  <data name="Wipe_Hours" xml:space="preserve"><value>{0} giờ</value></data>
 </root>

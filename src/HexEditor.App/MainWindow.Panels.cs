@@ -185,7 +185,9 @@ public sealed partial class MainWindow
             return;
         }
 
-        if (IsPanelShown(id) && !focus)
+        // 前回の配置を戻して「表示中」になっていても、ドキュメントが必要なパネルは、ドキュメントがない間は中身が作られない。
+        // その場合は中身ができるまで配置し直す (さもないと、ドキュメントを開いてもパネルが空のまま)。
+        if (IsPanelShown(id) && !focus && (_panelContents.ContainsKey(id) || !reg.RequiresDocument))
         {
             return;
         }

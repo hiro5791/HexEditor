@@ -30,6 +30,9 @@ public static partial class CrashReporter
     /// <summary>異常終了の直前に未保存の編集内容を書き出す処理 (App が設定する)。引数は打ち切るまでの時間。</summary>
     public static Action<TimeSpan>? WriteRecovery { get; set; }
 
+    /// <summary>異常終了の直前に復旧用データを書く時間の上限 (PKG-30。テストは混んだ CI のために延ばせる)。</summary>
+    public static TimeSpan RecoveryBudget { get; set; } = TimeSpan.FromSeconds(2);
+
     public static string Folder => _folder;
 
     public static void Initialize(IAppEnvironment environment)
@@ -53,7 +56,7 @@ public static partial class CrashReporter
 
         try
         {
-            WriteRecovery?.Invoke(TimeSpan.FromSeconds(2));
+            WriteRecovery?.Invoke(RecoveryBudget);
         }
         catch (Exception)
         {

@@ -26,7 +26,7 @@ The work appears in the processing center. If you cancel, the file that was bein
 
 - On SSDs, USB flash drives and SD cards, wear leveling can keep the original data somewhere else even after overwriting.
 - Copies can remain in volume shadow copies, backups, synced folders such as OneDrive, compressed, encrypted or deduplicated files, and copy-on-write file systems such as ReFS.
-- Free space and slack space are not wiped.
+- Free space and slack space are not wiped. To wipe them, see [secure wipe](secure-wipe.md).
 
 ## What cannot be deleted {#rules}
 

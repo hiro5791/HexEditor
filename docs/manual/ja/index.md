@@ -9,6 +9,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [はじめに](getting-started.md)
 - [ファイル・ディスク・プロセスを開く](opening-files.md)
 - [リモートのデータソース](remote-sources.md)
+- [メモリダンプ](memory-dumps.md)
 - [Hex ビュー](hex-view.md)
 - [編集](editing.md)
 - [選択とクリップボード](selection-clipboard.md)
@@ -28,7 +29,13 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [フォルダの比較](folder-compare.md)
 - [ファイルの分割・結合・インターリーブ](split-join.md)
 - [安全な削除](secure-delete.md)
+- [ディスクイメージとクローン](disk-images.md)
 - [NTFS の代替データストリーム](alternate-streams.md)
+- [ケース、証拠、監査ログ](forensics-cases.md)
+- [書き込み保護](write-protection.md)
+- [デバイス情報と暗号化されたボリューム](device-information.md)
+- [ファイルの切り出し (カービング)](carving.md)
+- [フォレンジックのレポート](forensic-reports.md)
 - [データ演算](data-operations.md)
 - [変換ビュー](transform-view.md)
 - [パッチ](patches.md)
@@ -50,6 +57,13 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [自動化 API リファレンス](api-reference.md)
 - [HexEditor のプラグイン SDK](api-plugins.md)
 - [コマンドライン (hexed)](command-line.md)
+
+## フォレンジック {#forensics}
+
+- [パーティション](partitions.md)
+- [ファイルシステム](file-systems.md)
+- [安全な消去](secure-wipe.md)
+- [墨塗り](redaction.md)
 
 ## 設定とヘルプ {#settings-and-help}
 

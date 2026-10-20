@@ -2,6 +2,7 @@ using HexEditor.Core.Devices;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Processes;
 
@@ -42,6 +43,8 @@ public static class ProcessWrite
     /// <param name="confirmProtectChange">読み取り専用のページへの書き込みの確認 (保護属性を渡す)。承認したら true。</param>
     public static ProcessWriteResult Execute(Document document, ProcessMemoryByteSource memory, Func<uint, bool>? confirmProtectChange = null)
     {
+        // 書き込み保護モード (FOR-01): 保護属性の変更も含めて書き込まない。
+        WriteBlockGate.Current.EnsureProcessWrite(memory.Pid);
         DocumentSnapshot snapshot = document.DataSnapshot;
         AddBuffer addBuffer = document.AddBuffer;
         var written = new List<SavedRange>();

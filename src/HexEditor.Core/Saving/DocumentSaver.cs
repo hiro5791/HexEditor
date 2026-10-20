@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Saving;
 
@@ -74,6 +75,7 @@ public static class DocumentSaver
     {
         backupOutcome = null;
         string target = ResolveTarget(Path.GetFullPath(targetPath));
+        WriteBlockGate.Current.EnsureFileSave(target, (snapshot.Storage.Source as FileByteSource)?.Path);
         string folder = Path.GetDirectoryName(target)!;
         VolumeInfo? volume = (volumes ?? SystemVolumeInfoProvider.Instance).GetVolume(folder);
 

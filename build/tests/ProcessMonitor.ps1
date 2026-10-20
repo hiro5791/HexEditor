@@ -22,11 +22,23 @@ function Get-ProcessMonitor([Parameter(Mandatory)][string]$Folder) {
 function Start-ProcessMonitor([Parameter(Mandatory)][string]$Exe, [Parameter(Mandatory)][string]$BackingFile) {
     Start-Process $Exe -ArgumentList "/AcceptEula /Quiet /Minimized /BackingFile `"$BackingFile`""
     $deadline = (Get-Date).AddSeconds(60)
+    $started = $false
     while ((Get-Date) -lt $deadline) {
-        if ((Test-Path $BackingFile) -and (Get-Item $BackingFile).Length -gt 0) { Start-Sleep -Seconds 2; return }
+        if ((Test-Path $BackingFile) -and (Get-Item $BackingFile).Length -gt 0) { $started = $true; break }
         Start-Sleep -Milliseconds 500
     }
-    throw 'Process Monitor did not start recording.'
+    if (-not $started) { throw 'Process Monitor did not start recording.' }
+    # The backing file exists before the driver is capturing. Prove that events are recorded: generate registry reads
+    # (reg.exe query only reads) until the file grows.
+    $size = (Get-Item $BackingFile).Length
+    while ((Get-Date) -lt $deadline) {
+        & reg.exe query 'HKCU\Software' | Out-Null
+        Start-Sleep -Milliseconds 700
+        $now = (Get-Item $BackingFile).Length
+        if ($now -gt $size) { Start-Sleep -Seconds 2; return }
+        $size = $now
+    }
+    Write-Host 'Process Monitor: the backing file did not grow during the start probe; continuing (the caller checks the recording).'
 }
 
 # Registry writes. RegCreateKey also opens existing keys (RegCreateKeyEx), so it counts only when it created a key
@@ -45,7 +57,21 @@ function Stop-ProcessMonitor {
         [Parameter(Mandatory)][string]$ProcessPattern
     )
     Start-Process $Exe -ArgumentList '/AcceptEula /Terminate' -Wait
-    Start-Sleep -Seconds 2
+    # Wait until the backing file is closed and its size has settled (the last events are flushed on termination).
+    $last = -1L
+    $stable = 0
+    $deadline = (Get-Date).AddSeconds(60)
+    while ((Get-Date) -lt $deadline -and $stable -lt 3) {
+        Start-Sleep -Seconds 1
+        $length = (Get-Item $BackingFile).Length
+        try {
+            $stream = [System.IO.File]::Open($BackingFile, 'Open', 'Read', 'None')
+            $stream.Dispose()
+            $free = $true
+        } catch { $free = $false }
+        if ($free -and $length -eq $last) { $stable++ } else { $stable = 0 }
+        $last = $length
+    }
     $csv = [System.IO.Path]::ChangeExtension($BackingFile, '.csv')
     Start-Process $Exe -ArgumentList "/AcceptEula /Quiet /OpenLog `"$BackingFile`" /SaveAs `"$csv`"" -Wait
     if (-not (Test-Path $csv)) { throw 'Process Monitor did not export the log.' }
@@ -58,7 +84,10 @@ function Read-RegistryWrites([Parameter(Mandatory)][string]$Csv, [Parameter(Mand
     $columns = $null
     $rows = New-Object System.Collections.Generic.List[object]
     $processes = New-Object 'System.Collections.Generic.HashSet[string]'
+    $total = 0
+    $lines = 0
     foreach ($line in [System.IO.File]::ReadLines($Csv)) {
+        $lines++
         # Remove only the outer quotes (Trim('"') would also eat the quotes of an empty last field).
         $text = $line.TrimStart([char]0xFEFF).Trim()
         if ($text.Length -ge 2 -and $text.StartsWith('"') -and $text.EndsWith('"')) { $text = $text.Substring(1, $text.Length - 2) }
@@ -75,6 +104,7 @@ function Read-RegistryWrites([Parameter(Mandatory)][string]$Csv, [Parameter(Mand
         if ($fields.Count -lt $columns.Count) { continue }
         $operation = $fields[$columns['Operation']]
         if (-not $operation -or -not $operation.StartsWith('Reg')) { continue }
+        $total++
         $process = $fields[$columns['Process Name']]
         if ($process -notmatch $ProcessPattern) { continue }
         [void]$processes.Add($process)
@@ -85,6 +115,6 @@ function Read-RegistryWrites([Parameter(Mandatory)][string]$Csv, [Parameter(Mand
             $rows.Add([pscustomobject]@{ Process = $process; Operation = $operation; Path = $fields[$columns['Path']]; Result = $result; Detail = $detail })
         }
     }
-    Write-Host "Process Monitor: registry events of $(@($processes) -join ', '); $($rows.Count) writes."
+    Write-Host "Process Monitor: registry events of $(@($processes) -join ', '); $($rows.Count) writes. (registry events of all processes: $total; CSV lines: $lines)"
     [pscustomobject]@{ Processes = @($processes); Writes = $rows.ToArray() }
 }

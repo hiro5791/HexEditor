@@ -80,6 +80,7 @@ public sealed record VirtualSourceSpec(
 /// {
 ///   "noActivate": true,                         // ウィンドウを前面に出さない (既定 true)
 ///   "recoveryIntervalSeconds": 2,               // 復旧用データの保存間隔 (ENG-27。既定は 60 秒)
+///   "crashRecoveryBudgetSeconds": 30,           // 異常終了の直前に復旧用データを書く時間の上限 (PKG-30。既定は 2 秒。混んだ CI 用)
 ///   "frozenTime": "2026-01-02T03:04:05Z",       // 時刻の固定
 ///   "fileSources": [ { "match": "*.bin", "delayMs": 500, "delayFromOffset": 65536,
 ///                      "readErrors": [ { "offset": "0x1000", "length": 512 } ] } ],
@@ -114,6 +115,9 @@ public sealed record TestHookSettings
     public bool SuggestDiskImage { get; init; }
 
     public TimeSpan? RecoveryInterval { get; init; }
+
+    /// <summary>異常終了の直前に復旧用データを書く時間の上限の上書き (null なら既定の 2 秒)。</summary>
+    public TimeSpan? CrashRecoveryBudget { get; init; }
 
     public DateTimeOffset? FrozenTime { get; init; }
 
@@ -171,6 +175,14 @@ public sealed record TestHookSettings
     /// <summary>偽のプロセスの定義ファイル (JSON。ENG-32 の UI テスト用)。null なら本物のプロセス。</summary>
     public string? FakeProcesses { get; init; }
 
+    /// <summary>OS の USB 書き込み保護 (FOR-02) の値を置く JSON ファイル。null ならメモリ上の偽物 (どちらでも実機のレジストリには触れない)。</summary>
+    public string? UsbWriteProtect { get; init; }
+
+    /// <summary>
+    /// 実機のレジストリの経路を使う (FOR-02 の TC-FOR-02-02。CI の管理者のランナーでだけ効く。<see cref="TestHooks.IsCiPrivilegedRunner"/>)。
+    /// </summary>
+    public bool RealUsbWriteProtect { get; init; }
+
     /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
     public IReadOnlyList<string>? OpenPicker { get; init; }
 
@@ -220,6 +232,7 @@ public sealed record TestHookSettings
             NoActivate = root["noActivate"]?.GetValue<bool>() ?? true,
             SuggestDiskImage = root["suggestDiskImage"]?.GetValue<bool>() ?? false,
             RecoveryInterval = root["recoveryIntervalSeconds"] is { } s ? TimeSpan.FromSeconds(ReadDouble(s)) : null,
+            CrashRecoveryBudget = root["crashRecoveryBudgetSeconds"] is { } b ? TimeSpan.FromSeconds(ReadDouble(b)) : null,
             FrozenTime = root["frozenTime"] is { } t ? DateTimeOffset.Parse(t.GetValue<string>(), CultureInfo.InvariantCulture) : null,
             FileSources = root["fileSources"]?.AsArray().Select(n => new FileSourceSpec(
                 n!["match"]?.GetValue<string>() ?? "*",
@@ -243,6 +256,8 @@ public sealed record TestHookSettings
             TimeZone = root["timeZone"]?.GetValue<string>(),
             FakeDevices = root["fakeDevices"]?.GetValue<string>(),
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
+            UsbWriteProtect = root["usbWriteProtect"]?.GetValue<string>(),
+            RealUsbWriteProtect = root["realUsbWriteProtect"]?.GetValue<bool>() ?? false,
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             PrintToFile = root["printToFile"]?.GetValue<string>(),

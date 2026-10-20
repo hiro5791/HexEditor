@@ -30,7 +30,7 @@ public sealed class ToolsFileOpsTests
     }
 
     private static async Task WaitForFilesAsync(string folder, string pattern, int count) =>
-        await WaitAsync(() => Directory.Exists(folder) && Directory.GetFiles(folder, pattern).Length == count, $"{count} files {pattern}");
+        await WaitAsync(() => Directory.Exists(folder) && Directory.GetFiles(folder, pattern).Count(f => !f.EndsWith(".~part", StringComparison.Ordinal)) == count, $"{count} files {pattern}");
 
     private static async Task WaitAsync(Func<bool> condition, string what)
     {

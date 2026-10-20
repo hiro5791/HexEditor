@@ -472,7 +472,9 @@ public sealed partial class MainWindow
             ],
             .. CompareTabMenuEntries(doc),
             .. DeviceTabMenuEntries(doc),
+            .. ImageTabMenuEntries(doc),
             .. AdsTabMenuEntries(doc),
+            .. WriteBlockTabMenuEntries(doc),
         ];
     }
 }

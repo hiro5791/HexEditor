@@ -270,6 +270,9 @@
                         <MenuFlyoutItem x:Uid="Menu_Go_NextSector" cmd:CommandUi.Id="go.nextSector" AutomationProperties.AutomationId="Command_GoNextSector" />
                         <MenuFlyoutItem x:Uid="Menu_Go_PreviousSector" cmd:CommandUi.Id="go.previousSector" AutomationProperties.AutomationId="Command_GoPreviousSector" />
                         <MenuFlyoutItem x:Uid="Menu_Go_ToSector" cmd:CommandUi.Id="go.toSector" AutomationProperties.AutomationId="Command_GoToSector" />
+                        <!--  ファイルの断片 (12 の FOR-15 の仕様 5。強調の表示中だけ出す)  -->
+                        <MenuFlyoutItem x:Name="GoNextFragmentItem" x:Uid="Menu_Go_NextFragment" cmd:CommandUi.Id="forensics.fs.nextFragment" AutomationProperties.AutomationId="Command_GoNextFragment" Visibility="Collapsed" />
+                        <MenuFlyoutItem x:Name="GoPreviousFragmentItem" x:Uid="Menu_Go_PreviousFragment" cmd:CommandUi.Id="forensics.fs.previousFragment" AutomationProperties.AutomationId="Command_GoPreviousFragment" Visibility="Collapsed" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_View">
                         <MenuFlyoutSubItem x:Uid="Menu_View_Theme" AutomationProperties.AutomationId="Command_Theme">
@@ -302,6 +305,8 @@
                         <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateColoring" cmd:CommandUi.Id="templates.toggleColoring" AutomationProperties.AutomationId="Command_TemplateColoring" />
                         <!--  比較のレイアウト (左右 / 上下。ANA-04 の「呼び出し」)  -->
                         <ToggleMenuFlyoutItem x:Uid="Menu_View_CompareStacked" cmd:CommandUi.Id="compare.layout" AutomationProperties.AutomationId="Command_CompareLayout" />
+                        <!--  フォレンジックの強調 (12 の FOR-16)  -->
+                        <ToggleMenuFlyoutItem x:Uid="Menu_View_ForensicHighlight" cmd:CommandUi.Id="forensics.fs.toggleHighlight" AutomationProperties.AutomationId="Command_ForensicHighlight" />
                         <MenuFlyoutSeparator />
                         <!--  パネルの表示切り替え (UI-01 の仕様 6、UI-04、UI-05)。  -->
                         <MenuFlyoutSubItem x:Uid="Menu_View_Panels" AutomationProperties.AutomationId="Command_Panels">
@@ -328,6 +333,10 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_MemoryMapPanel" cmd:CommandUi.Id="view.panel.memoryMap" AutomationProperties.AutomationId="Command_ToggleMemoryMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PacketsPanel" cmd:CommandUi.Id="view.panel.packets" AutomationProperties.AutomationId="Command_TogglePackets" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_PartitionsPanel" cmd:CommandUi.Id="view.panel.partitions" AutomationProperties.AutomationId="Command_TogglePartitions" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FileSystemPanel" cmd:CommandUi.Id="view.panel.fileSystem" AutomationProperties.AutomationId="Command_ToggleFileSystem" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FragmentsPanel" cmd:CommandUi.Id="view.panel.fragments" AutomationProperties.AutomationId="Command_ToggleFragments" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ForensicResultsPanel" cmd:CommandUi.Id="view.panel.forensicResults" AutomationProperties.AutomationId="Command_ToggleForensicResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ScriptsPanel" cmd:CommandUi.Id="view.panel.scripts" AutomationProperties.AutomationId="Command_ToggleScripts" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_OutputPanel" cmd:CommandUi.Id="view.panel.output" AutomationProperties.AutomationId="Command_ToggleOutput" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />
@@ -455,6 +464,88 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
+                    <!--  フォレンジック (12): ケースと監査ログ、書き込み保護とデバイス、イメージ、パーティションとファイルシステム、カービング、消去、レポート  -->
+                    <MenuBarItem x:Uid="Menu_Forensics" x:Name="ForensicsMenu" AutomationProperties.AutomationId="Menu_Forensics">
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Case" AutomationProperties.AutomationId="Menu_Forensics_Case">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_New" cmd:CommandUi.Id="forensics.case.new" AutomationProperties.AutomationId="Command_CaseNew" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Open" cmd:CommandUi.Id="forensics.case.open" AutomationProperties.AutomationId="Command_CaseOpen" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Close" cmd:CommandUi.Id="forensics.case.close" AutomationProperties.AutomationId="Command_CaseClose" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AddEvidence" cmd:CommandUi.Id="forensics.case.addEvidence" AutomationProperties.AutomationId="Command_CaseAddEvidence" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Properties" cmd:CommandUi.Id="forensics.case.properties" AutomationProperties.AutomationId="Command_CaseProperties" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_Evidence" cmd:CommandUi.Id="view.panel.evidence" AutomationProperties.AutomationId="Command_PanelEvidence" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditShow" cmd:CommandUi.Id="forensics.audit.show" AutomationProperties.AutomationId="Command_AuditShow" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Case_AuditVerify" cmd:CommandUi.Id="forensics.audit.verify" AutomationProperties.AutomationId="Command_AuditVerify" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_WriteBlock" cmd:CommandUi.Id="forensics.writeBlock" AutomationProperties.AutomationId="Command_WriteBlock" />
+                        <ToggleMenuFlyoutItem x:Uid="Menu_Forensics_UsbWriteProtect" cmd:CommandUi.Id="forensics.usbWriteProtect" AutomationProperties.AutomationId="Command_UsbWriteProtect" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Device" AutomationProperties.AutomationId="Menu_Forensics_Device">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Hpa" cmd:CommandUi.Id="forensics.device.hpaDco" AutomationProperties.AutomationId="Command_DeviceHpaDco" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Smart" cmd:CommandUi.Id="forensics.device.smart" AutomationProperties.AutomationId="Command_DeviceSmart" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Device_Panel" cmd:CommandUi.Id="view.panel.deviceInfo" AutomationProperties.AutomationId="Command_PanelDeviceInfo" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_Encryption" cmd:CommandUi.Id="forensics.encryption.info" AutomationProperties.AutomationId="Command_EncryptionInfo" />
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_MemoryDump" cmd:CommandUi.Id="file.openMemoryDump" AutomationProperties.AutomationId="Command_OpenMemoryDump" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Image" AutomationProperties.AutomationId="Menu_Forensics_Image">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageCreate" cmd:CommandUi.Id="forensics.image.create" AutomationProperties.AutomationId="Command_ImageCreate" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageSkeleton" cmd:CommandUi.Id="forensics.image.skeleton" AutomationProperties.AutomationId="Command_ImageSkeleton" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageOpen" cmd:CommandUi.Id="forensics.image.open" AutomationProperties.AutomationId="Command_ImageOpen" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageVerify" cmd:CommandUi.Id="forensics.image.verify" AutomationProperties.AutomationId="Command_ImageVerify" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_ImageInfo" cmd:CommandUi.Id="forensics.image.info" AutomationProperties.AutomationId="Command_ImageInfo" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_DiskClone" cmd:CommandUi.Id="forensics.disk.clone" AutomationProperties.AutomationId="Command_DiskClone" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_SectorsSave" cmd:CommandUi.Id="forensics.sectors.save" AutomationProperties.AutomationId="Command_SectorsSave" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_SectorsRestore" cmd:CommandUi.Id="forensics.sectors.restore" AutomationProperties.AutomationId="Command_SectorsRestore" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Raid" cmd:CommandUi.Id="forensics.raid.reconstruct" AutomationProperties.AutomationId="Command_RaidReconstruct" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Partitions" AutomationProperties.AutomationId="Menu_Forensics_Partitions">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsShow" cmd:CommandUi.Id="forensics.partitions.show" AutomationProperties.AutomationId="Command_PartitionsShow" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsOpen" cmd:CommandUi.Id="forensics.partitions.openInNewTab" AutomationProperties.AutomationId="Command_PartitionsOpen" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsGoTo" cmd:CommandUi.Id="forensics.partitions.goToStart" AutomationProperties.AutomationId="Command_PartitionsGoTo" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsScan" cmd:CommandUi.Id="forensics.partitions.scan" AutomationProperties.AutomationId="Command_PartitionsScan" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_PartitionsLogical" cmd:CommandUi.Id="forensics.partitions.logicalVolumes" AutomationProperties.AutomationId="Command_PartitionsLogical" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_FileSystem" AutomationProperties.AutomationId="Menu_Forensics_FileSystem">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsShow" cmd:CommandUi.Id="forensics.fs.show" AutomationProperties.AutomationId="Command_FsShow" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsOpenFile" cmd:CommandUi.Id="forensics.fs.openFile" AutomationProperties.AutomationId="Command_FsOpenFile" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsExport" cmd:CommandUi.Id="forensics.fs.exportFiles" AutomationProperties.AutomationId="Command_FsExport" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsDeleted" cmd:CommandUi.Id="forensics.fs.findDeleted" AutomationProperties.AutomationId="Command_FsDeleted" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Name="ForensicsGoToClusterItem" x:Uid="Menu_Forensics_FsGoToCluster" cmd:CommandUi.Id="forensics.fs.goToCluster" AutomationProperties.AutomationId="Command_FsGoToCluster" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsWhoUses" cmd:CommandUi.Id="forensics.fs.whoUsesThis" AutomationProperties.AutomationId="Command_FsWhoUses" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsClusters" cmd:CommandUi.Id="forensics.fs.showFileClusters" AutomationProperties.AutomationId="Command_FsClusters" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsMft" cmd:CommandUi.Id="forensics.fs.goToMftRecord" AutomationProperties.AutomationId="Command_FsMft" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsInode" cmd:CommandUi.Id="forensics.fs.goToInode" AutomationProperties.AutomationId="Command_FsInode" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportUnallocated" cmd:CommandUi.Id="forensics.fs.exportUnallocated" AutomationProperties.AutomationId="Command_FsExportUnallocated" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsExportSlack" cmd:CommandUi.Id="forensics.fs.exportSlack" AutomationProperties.AutomationId="Command_FsExportSlack" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsOpenUnallocated" cmd:CommandUi.Id="forensics.fs.openUnallocated" AutomationProperties.AutomationId="Command_FsOpenUnallocated" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectUnallocated" cmd:CommandUi.Id="forensics.fs.selectUnallocated" AutomationProperties.AutomationId="Command_FsSelectUnallocated" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsSelectSlack" cmd:CommandUi.Id="forensics.fs.selectSlack" AutomationProperties.AutomationId="Command_FsSelectSlack" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_FsRedact" cmd:CommandUi.Id="forensics.fs.redact" AutomationProperties.AutomationId="Command_FsRedact" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Carving" AutomationProperties.AutomationId="Menu_Forensics_Carving">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Run" cmd:CommandUi.Id="forensics.carving.run" AutomationProperties.AutomationId="Command_CarvingRun" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Signatures" cmd:CommandUi.Id="forensics.carving.signatures" AutomationProperties.AutomationId="Command_CarvingSignatures" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_Carving_Results" cmd:CommandUi.Id="view.panel.carving" AutomationProperties.AutomationId="Command_PanelCarving" />
+                        </MenuFlyoutSubItem>
+                        <!--  消去 (FOR-30・FOR-31)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Forensics_Wipe" AutomationProperties.AutomationId="Menu_Forensics_Wipe">
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeSelection" cmd:CommandUi.Id="forensics.wipe.selection" AutomationProperties.AutomationId="Command_WipeSelection" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeDisk" cmd:CommandUi.Id="forensics.wipe.disk" AutomationProperties.AutomationId="Command_WipeDisk" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeFreeSpace" cmd:CommandUi.Id="forensics.wipe.freeSpace" AutomationProperties.AutomationId="Command_WipeFreeSpace" />
+                            <MenuFlyoutItem x:Uid="Menu_Forensics_WipeSlack" cmd:CommandUi.Id="forensics.wipe.slack" AutomationProperties.AutomationId="Command_WipeSlack" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Forensics_Report" cmd:CommandUi.Id="forensics.report.create" AutomationProperties.AutomationId="Command_ReportCreate" />
+                    </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">
                         <MenuFlyoutItem x:Uid="Menu_Help_CommandPalette" cmd:CommandUi.Id="help.commandPalette" AutomationProperties.AutomationId="Command_CommandPalette" />
                         <MenuFlyoutItem x:Uid="Menu_Help_Shortcuts" cmd:CommandUi.Id="help.shortcuts" AutomationProperties.AutomationId="Command_Shortcuts" />
@@ -500,6 +591,8 @@
         <!--  更新の InfoBar (PKG-22) とアプリ全体の通知。更新の通知はボタンが 3 つまであるため通知の一覧とは別に置く。  -->
         <StackPanel Grid.Row="2">
             <controls:UpdateBar x:Name="UpdateBar" />
+            <!--  監査ログに書けない (12 の FOR-04 の「エラー」): 閉じられない InfoBar を出し続け、書き込みを伴う操作を無効にする。  -->
+            <InfoBar x:Name="AuditFaultBar" AutomationProperties.AutomationId="AuditFaultBar" IsClosable="False" IsOpen="False" Severity="Error" />
             <controls:NotificationHost
                 x:Name="WindowNotifications"
                 AutomationProperties.AutomationId="WindowNotifications"
@@ -755,6 +848,15 @@
                 Orientation="Horizontal"
                 TabFocusNavigation="Once"
                 XYFocusKeyboardNavigation="Enabled">
+                <!--  書き込み保護モード (12 の FOR-01 の仕様 3): 左端に錠のアイコンと文字で示す (色だけに頼らない)。有効な間は隠せない。クリックで切り替える。  -->
+                <Button x:Name="StatusWriteBlock" AutomationProperties.AutomationId="Status_WriteBlock" Click="StatusWriteBlock_Click" Style="{StaticResource StatusItemStyle}" Tag="writeblock" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon AutomationProperties.AccessibilityView="Raw" FontSize="14" Glyph="&#xE72E;" />
+                        <TextBlock x:Name="StatusWriteBlockText" FontWeight="SemiBold" />
+                    </StackPanel>
+                </Button>
+                <!--  開いているケースの名前 (12 の FOR-03 の仕様 3)。ケースを開いている間は必ず出す (隠せない項目)。  -->
+                <Button x:Name="StatusCase" AutomationProperties.AutomationId="Status_Case" Click="StatusCase_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="case" Visibility="Collapsed" />
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.StatusDocument.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.StatusDocument.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
                 <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.StatusDocument.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.StatusDocument.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
@@ -785,6 +887,8 @@
                 </Button>
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.StatusDocument.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
                 <!--  同期 (VIEW-39 の仕様 6): 同期スクロール中だけ表示する。クリックで同期のモードのメニュー。  -->
+                <!--  LBA・パーティション・クラスタ・持ち主 (12 の FOR-06 の仕様 9、FOR-15 の仕様 1)。「調べる」のときは押すと逆引き表を作る  -->
+                <Button x:Name="StatusForensic" AutomationProperties.AutomationId="Status_Forensic" Click="StatusForensic_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="forensic" />
                 <Button x:Name="StatusSync" AutomationProperties.AutomationId="Status_Sync" Click="StatusSync_Click" Style="{StaticResource StatusItemStyle}" Tag="sync" />
                 <Button x:Name="StatusOperations" AutomationProperties.AutomationId="Status_Operations" Style="{StaticResource StatusItemStyle}" Tag="operations">
                     <StackPanel Orientation="Horizontal" Spacing="8">

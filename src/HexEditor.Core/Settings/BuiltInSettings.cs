@@ -282,6 +282,13 @@ public static class BuiltInSettings
         new(DeviceSettings.MemoryMapRefreshKey, SettingCategories.Advanced, SettingKind.Int, 5) { Min = 0, Max = 60, Order = 123, Group = "devices" },
         new(DeviceSettings.SuggestDiskImageKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 11 },
 
+        // パーティションとファイルシステム (12 の FOR-06 の仕様 4・6、FOR-10 の仕様 5、FOR-16 の仕様 2)。
+        new("forensics.partitions.showSmallGaps", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 100, Group = "fileSystems" },
+        new("forensics.partitions.absoluteOffsets", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 101, Group = "fileSystems" },
+        new("forensics.fileSystem.showStreams", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 102, Group = "fileSystems" },
+        new("forensics.highlight.legend", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 103, Group = "fileSystems" },
+        new("forensics.highlight.colors", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 104, Group = "fileSystems" },
+
         // リモートのデータソース (ENG-40〜ENG-42)。
         new(Remote.RemoteSettings.GdbTimeoutKey, SettingCategories.Files, SettingKind.Int, 5) { Min = 1, Max = 120, Order = 12 },
         new(Remote.RemoteSettings.SftpConfirmPartialWriteKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 13 },
@@ -368,6 +375,18 @@ public static class BuiltInSettings
         new(Disassembly.DisasmSettings.AddressColumnKey, SettingCategories.Disassembly, SettingKind.Choice, "virtual") { Options = ["virtual", "offset", "both"], Order = 90 },
         new(Disassembly.DisasmSettings.BranchLinesKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 100 },
         new(Disassembly.DisasmSettings.CommentsKey, SettingCategories.Disassembly, SettingKind.Bool, true) { Order = 110 },
+
+        // ---- フォレンジック: 日時の表示 (12 の FOR-05)、ケース (FOR-03)、監査ログ (FOR-04)、カービング (FOR-19)、レポート (FOR-33) ----
+        new(Forensics.Time.ForensicTimeContext.SettingKey, SettingCategories.Forensics, SettingKind.Choice, "both") { Options = ["both", "utc", "local"], Order = 10 },
+        new("forensics.case.autoWriteBlock", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 20 },
+        new("forensics.audit.logBrowsing", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 30 },
+        new("forensics.carving.thumbnails", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 40 },
+        new("forensics.report.logo", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 50 },
+        new("forensics.report.header", SettingCategories.Forensics, SettingKind.String, string.Empty) { Order = 60 },
+
+        // 書き込み保護モード (FOR-01 の仕様 1) とディスクを開いたときの HPA / DCO の自動確認 (FOR-27)。
+        new("forensics.writeBlock.alwaysOnStartup", SettingCategories.Forensics, SettingKind.Bool, false) { Order = 5 },
+        new("forensics.device.autoHpaCheck", SettingCategories.Forensics, SettingKind.Bool, true) { Order = 70 },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },

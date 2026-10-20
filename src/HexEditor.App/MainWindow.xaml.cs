@@ -189,6 +189,18 @@ public sealed partial class MainWindow : Window
             title += " " + Loc.Get("Title_SafeMode");
         }
 
+        // 書き込み保護モード (12 の FOR-01 の仕様 3)。
+        if (WriteBlockMode.IsEnabled)
+        {
+            title += " " + Loc.Get("Title_WriteBlock");
+        }
+
+        // 開いているケースの名前 (12 の FOR-03 の仕様 3)。
+        if (ForensicsService.Cases.CurrentCase is { } openCase)
+        {
+            title += $" [{openCase.Info.Name}]";
+        }
+
         Title = title;
         WindowTitle.Text = title;
     }
@@ -292,6 +304,12 @@ public sealed partial class MainWindow : Window
             return await SaveSftpAsync(doc);
         }
 
+        // 墨塗りしたドキュメントを元のイメージ・ディスクに保存するときは確かめる (12 の FOR-32 の仕様 2)。
+        if (!saveAs && doc.IsDevice && !await ConfirmRedactedInPlaceSaveAsync(doc))
+        {
+            return false;
+        }
+
         // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
         if (!saveAs && doc.IsDevice)
         {
@@ -393,6 +411,12 @@ public sealed partial class MainWindow : Window
             return false;
         }
 
+        // 墨塗りしたドキュメントを元のイメージに上書きするときは確かめる (12 の FOR-32 の仕様 2)。
+        if (string.Equals(path, doc.FilePath, StringComparison.OrdinalIgnoreCase) && !await ConfirmRedactedInPlaceSaveAsync(doc))
+        {
+            return false;
+        }
+
         try
         {
             _saveElsewhereRequested = false;
@@ -407,6 +431,12 @@ public sealed partial class MainWindow : Window
         }
         catch (OperationCanceledException)
         {
+            return false;
+        }
+        catch (Core.Forensics.WriteBlock.WriteBlockedException)
+        {
+            // 書き込み保護モード (12 の FOR-01 の「エラー」): 「書き込み保護モードのため書き込めません」。
+            ShowNotice(Loc.Get("WriteBlock_Refused"), InfoBarSeverity.Error, doc);
             return false;
         }
         catch (InsufficientSpaceException ex)

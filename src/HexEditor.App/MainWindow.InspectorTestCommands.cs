@@ -17,6 +17,7 @@ namespace HexEditor.App;
 /// <item><c>inspector</c>: パネルの状態 (表示・起点・エンディアンの表示・格納される値・行の一覧)。</item>
 /// <item><c>panelKey</c>: フォーカスのあるパネルの要素にキーを渡す (パネルにフォーカスがなければ <c>key</c> と同じ)。</item>
 /// <item><c>inspectorSelect</c> / <c>inspectorHover</c>: 行を選ぶ (フォーカスも移す) / マウスを重ねたのと同じ。</item>
+/// <item><c>inspectorEditBoxMode</c>: 入力欄がフォーカスを受け取れない状態を再現する。</item>
 /// <item><c>highlights</c>: Hex ビューに描いた強調と目印 (層 3・層 7)。</item>
 /// <item><c>bookmarks</c>: ブックマークと一覧の行。<c>bookmarksAdd</c>: まとめて付ける (性能のテスト)。</item>
 /// <item><c>bookmarkEdit</c> / <c>bookmarkEditor</c> / <c>bookmarkLink</c>: 編集のフライアウトを開く・状態を読む・リンクを押す。</item>
@@ -41,6 +42,7 @@ public sealed partial class MainWindow
         "bookmarksSelect" => TestBookmarksSelect(request),
         "setHighContrast" => TestSetHighContrast(request),
         "inspectorLatencyResult" => _latencyResult ?? new JsonObject { ["pending"] = true },
+        "inspectorEditBoxMode" => TestInspectorEditBoxMode(request),
         "bookmarksSummary" => TestBookmarksSummary(),
         "bookmarkColumns" => TestBookmarkColumns(request),
         "appSubscriptions" => TestAppSubscriptions(),
@@ -94,6 +96,16 @@ public sealed partial class MainWindow
     }
 
     private JsonObject? _latencyResult;
+
+    /// <summary>
+    /// {mode}: 入力欄が開いたときの、混んでいるときの状態を再現する (<c>noFocus</c>: 入力欄がフォーカスを受け取れない、
+    /// <c>lateDataContext</c>: 入力欄の DataContext が届かず Loaded ではフォーカスを受け取れない、null: 通常どおり)。
+    /// </summary>
+    private static JsonObject TestInspectorEditBoxMode(JsonObject request)
+    {
+        InspectorPanel.TestEditBoxMode = request["mode"]?.GetValue<string>();
+        return new JsonObject { ["mode"] = InspectorPanel.TestEditBoxMode };
+    }
 
     private JsonObject TestInspectorState()
     {

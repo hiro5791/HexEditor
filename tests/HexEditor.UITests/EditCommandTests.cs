@@ -323,6 +323,31 @@ public sealed class EditCommandTests
         Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-EDIT-16-04")]
+    public Task Write_protection_mode_offers_no_allow_editing() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: 書き込み保護モード (FOR-01) を有効にし、TD-SEQ-1M を開いた状態。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("tcWriteBlock", ToolsCalcTests.Args("enable"));
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["readOnly"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the read-only state");
+
+        // 1・2. 入力すると「読み取り専用」の InfoBar が出て、「編集を許可する」はない。
+        await app.GoToAsync(0x10);
+        await app.TypeAsync("4");
+        await app.IdleAsync();
+        // (書き込み保護モードの初回の案内の InfoBar には別のボタンがあるので、読み取り専用の InfoBar のボタンを見る。)
+        JsonNode readOnly = (await app.StateAsync())["notifications"]!.AsArray()
+            .First(n => n!["message"]!.GetValue<string>().Contains("read-only", StringComparison.OrdinalIgnoreCase))!;
+        Assert.DoesNotContain(readOnly["actions"]!.AsArray(), a => a!.GetValue<string>().Contains("Allow editing", StringComparison.OrdinalIgnoreCase));
+
+        // 3・4. 鍵のアイコンを押しても読み取り専用のままで、データは変わらない。
+        await app.CommandAsync("Status_Mode");
+        await app.IdleAsync();
+        Assert.True((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
+        Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
+    });
+
     // ---- EDIT-26 ----
 
     [Fact]

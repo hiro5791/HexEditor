@@ -3,6 +3,7 @@ using System.Text.Json;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
+using HexEditor.Core.Forensics.WriteBlock;
 
 namespace HexEditor.Core.Devices;
 
@@ -133,6 +134,8 @@ public static class DiskWrite
     public static IReadOnlyList<Saving.SavedRange> Execute(DiskWritePlan plan, DocumentSnapshot snapshot, string journalDirectory,
         Func<VolumeDeviceInfo, bool>? confirmDismount = null, LongRunningOperation? operation = null, bool journal = true)
     {
+        // 書き込み保護モード (FOR-01): ロックの前に拒否する (ボリュームのロック・ディスマウントもしない)。
+        WriteBlockGate.Current.EnsureDeviceWrite(plan.Source.Path);
         if (plan.IsBlocked)
         {
             throw new DiskWriteBlockedException(plan.BlockedVolumes[0].Name);
@@ -293,6 +296,39 @@ public static class DiskWrite
 
     /// <summary>ロックしたボリューム。<see cref="Owned"/> なら、ロックのために開いたハンドル (解除の後に閉じる)。</summary>
     private readonly record struct VolumeLock(IDeviceHandle Handle, bool Owned);
+
+    /// <summary>
+    /// ボリュームをまとめてロックし、Dispose で解除する (12 の FOR-24 の仕様 5・FOR-25 の仕様 5: 処理が終わるまでロックを保持する)。
+    /// 1 つでもロックできなければ、それまでのロックを解除して <see cref="VolumeLockException"/>。
+    /// </summary>
+    public static IDisposable LockVolumes(DeviceByteSource target, IEnumerable<VolumeDeviceInfo> volumes, Func<VolumeDeviceInfo, bool>? confirmDismount = null)
+    {
+        var locks = new List<VolumeLock>();
+        try
+        {
+            foreach (VolumeDeviceInfo volume in volumes)
+            {
+                if (volume.IsInUseByWindows)
+                {
+                    throw new DiskWriteBlockedException(volume.Name);
+                }
+
+                locks.Add(LockVolume(target, volume, confirmDismount));
+            }
+        }
+        catch
+        {
+            UnlockAll(locks);
+            throw;
+        }
+
+        return new LockSet(locks);
+    }
+
+    private sealed class LockSet(List<VolumeLock> locks) : IDisposable
+    {
+        public void Dispose() => UnlockAll(locks);
+    }
 
     private static VolumeLock LockVolume(DeviceByteSource source, VolumeDeviceInfo volume, Func<VolumeDeviceInfo, bool>? confirmDismount)
     {
