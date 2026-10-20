@@ -642,9 +642,9 @@ public sealed class InspectorTests
         await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "uint16" });
         await PanelKeyAsync(app, "Enter");
         await app.WaitUntilAsync(async () => (await app.ElementAsync("Inspector_Edit"))["focusState"]?.GetValue<string>() is { } state && state != "Unfocused",
-            TimeSpan.FromSeconds(5), "the input box to take focus");
+            UiTest.Scaled(TimeSpan.FromSeconds(5)), "the input box to take focus");
         await app.UiaSetValueAsync("Inspector_Edit", "0x1234");
-        await app.WaitUntilAsync(async () => (await RowAsync(app, "uint16"))["editText"]?.GetValue<string>() == "0x1234", TimeSpan.FromSeconds(5),
+        await app.WaitUntilAsync(async () => (await RowAsync(app, "uint16"))["editText"]?.GetValue<string>() == "0x1234", UiTest.Scaled(TimeSpan.FromSeconds(5)),
             "the typed value in the row");
         Assert.Equal("inspector", (await PanelKeyAsync(app, "Enter"))["handledBy"]!.GetValue<string>());
         await WaitForRowsAsync(app);
