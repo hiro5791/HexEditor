@@ -289,7 +289,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         {
             VirtualKey.Enter => Activate(Vm.Selected, edit: true),
             VirtualKey.Space => Activate(Vm.Selected, edit: false),
-            VirtualKey.Escape => HandleArrayEscape(),
+            VirtualKey.Escape => HandleRowEscape(),
             _ => false,
         };
     }
@@ -305,6 +305,10 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
                 Vm.ToggleGroup(item);
                 FocusItem(item);
                 return true;
+            case { Kind: InspectorItemKind.Row, IsEditing: true } when edit:
+                // 入力欄が開いたまま、フォーカスが行にある (入力欄がまだフォーカスを受け取れていない): 入力を最初からやり直すと入れた値が
+                // 消えるので、入力欄の Enter と同じく確定する。
+                return HandleEditKey(item, EditBox(item), VirtualKey.Enter);
             case { Kind: InspectorItemKind.Row } when edit:
                 return Vm.BeginEdit(item);
             case { IsBinary: true }:
@@ -317,6 +321,10 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
                 return false;
         }
     }
+
+    /// <summary>行の Esc: 入力欄が開いたままフォーカスが行にあれば入力を取り消す。なければ配列モードを終える (INSP-21)。</summary>
+    private bool HandleRowEscape() =>
+        Vm.EditingItem is { } editing ? HandleEditKey(editing, EditBox(editing), VirtualKey.Escape) : HandleArrayEscape();
 
     private void FocusItem(InspectorItemViewModel item)
     {
@@ -378,7 +386,17 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         if (sender is TextBox box)
         {
             AutomationProperties.SetName(box, Loc.Get("Inspector_Edit_Name"));
-            bool focused = box.Focus(FocusState.Programmatic);
+#if HEX_TEST_HOOKS
+            if (TestEditBoxMode == "lateDataContext")
+            {
+                // 混んでいるときの状態を再現する: 行の DataContext がまだ入力欄に届いておらず、Loaded の時点ではフォーカスを受け取れない。
+                box.DataContext = null;
+                box.SelectAll();
+                FocusWhenReady(box);
+                return;
+            }
+#endif
+            bool focused = TryFocusEditBox(box);
             box.SelectAll();
             if (!focused)
             {
@@ -389,9 +407,10 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
     /// <summary>
     /// 入力欄 (x:Load で一覧の行の中に作る) は、Loaded の時点ではまだフォーカスを受け取れないことがある (混んでいるときに起きる)。
-    /// そのままでは入力欄が開いているのにフォーカスが行 (ListViewItem) に残り、打った文字が入らず、Enter が入力を最初からやり直す
-    /// (入れた値が消える)。受け取れるようになるまで、少しの間 (最大 2 秒) フォーカスを置き直す。行の外へフォーカスを移した
-    /// (ほかの操作を始めた) とき・入力をやめたときは置かない。
+    /// そのままでは入力欄が開いているのにフォーカスが行 (ListViewItem) に残り、打った文字が入らない。受け取れるようになるまで、少しの間
+    /// (最大 2 秒) フォーカスを置き直す。行の外へフォーカスを移した (ほかの操作を始めた) とき・入力をやめたときは置かない。
+    /// そのころは入力欄の DataContext (行) がまだ届いていないことがあるので、行は <see cref="EditItem"/> で求める
+    /// (DataContext で判定すると、置き直さずにやめてしまう)。
     /// </summary>
     private void FocusWhenReady(TextBox box)
     {
@@ -400,14 +419,75 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         long deadline = Environment.TickCount64 + 2000;
         timer.Tick += (t, _) =>
         {
-            bool stop = !box.IsLoaded || box.DataContext is not InspectorItemViewModel { IsEditing: true } item || XamlRoot is null
-                || !IsFocusOnRow(item) || box.Focus(FocusState.Programmatic) || Environment.TickCount64 > deadline;
+            bool stop = !box.IsLoaded || EditItem(box) is not { IsEditing: true } item || XamlRoot is null
+                || !IsFocusOnRow(item) || TryFocusEditBox(box) || Environment.TickCount64 > deadline;
             if (stop)
             {
                 t.Stop();
             }
         };
         timer.Start();
+    }
+
+    private static bool TryFocusEditBox(TextBox box)
+    {
+#if HEX_TEST_HOOKS
+        if (TestEditBoxMode == "noFocus")
+        {
+            // 入力欄がフォーカスを受け取れないまま (フォーカスが行に残る) の状態を再現する。
+            return false;
+        }
+#endif
+        return box.Focus(FocusState.Programmatic);
+    }
+
+#if HEX_TEST_HOOKS
+    /// <summary>
+    /// テスト用: 入力欄が開いたときの、混んでいるときの状態を再現する (<c>noFocus</c>: フォーカスを受け取れない、<c>lateDataContext</c>:
+    /// DataContext が届かず Loaded ではフォーカスを受け取れない)。null なら通常どおり。
+    /// </summary>
+    internal static string? TestEditBoxMode { get; set; }
+#endif
+
+    /// <summary>
+    /// 入力欄の行。DataContext がまだ届いていなければ、入力中の行 (入力中の行は 1 つだけ)。ただし、その行の入れ物の中にある (表示中の)
+    /// 入力欄に限る (閉じた入力欄の遅れて届いたイベントで、次に開いた入力を取り消さない)。
+    /// </summary>
+    private InspectorItemViewModel? EditItem(TextBox box)
+    {
+        if (box.DataContext is InspectorItemViewModel item)
+        {
+            return item;
+        }
+
+        return Vm.EditingItem is { } editing && box.IsLoaded && RowsList.ContainerFromItem(editing) is DependencyObject container && IsInside(box, container)
+            ? editing : null;
+    }
+
+    /// <summary>行の入力欄 (開いていなければ null)。</summary>
+    private TextBox? EditBox(InspectorItemViewModel item)
+    {
+        if (RowsList.ContainerFromItem(item) is not DependencyObject container)
+        {
+            return null;
+        }
+
+        var stack = new Stack<DependencyObject>([container]);
+        while (stack.Count > 0)
+        {
+            DependencyObject node = stack.Pop();
+            if (node is TextBox box && AutomationProperties.GetAutomationId(box) == "Inspector_Edit")
+            {
+                return box;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(node); i++)
+            {
+                stack.Push(VisualTreeHelper.GetChild(node, i));
+            }
+        }
+
+        return null;
     }
 
     /// <summary>フォーカスが、行の入れ物 (ListViewItem) かその中にあるか (どこにもないときも含む)。</summary>
@@ -423,7 +503,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
     private void Edit_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (sender is TextBox { DataContext: InspectorItemViewModel item } box)
+        if (sender is TextBox box && EditItem(box) is { } item)
         {
             Vm.UpdateEdit(item, box.Text);
             ShowError(box, item.HasError);
@@ -444,14 +524,17 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
     private void Edit_KeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (sender is TextBox { DataContext: InspectorItemViewModel item } box)
+        if (sender is TextBox box && EditItem(box) is { } item)
         {
             e.Handled = HandleEditKey(item, box, e.Key);
         }
     }
 
-    /// <summary>入力欄のキー: Enter で確定 (不正なら入力欄のまま)、Esc で取り消す。</summary>
-    internal bool HandleEditKey(InspectorItemViewModel item, TextBox box, VirtualKey key)
+    /// <summary>
+    /// 入力欄のキー: Enter で確定 (不正なら入力欄のまま。入力欄にフォーカスを置く)、Esc で取り消す。入力欄が開いたままフォーカスが行に
+    /// あるときの Enter・Esc も同じ (<paramref name="box"/> は見つからなければ null)。
+    /// </summary>
+    internal bool HandleEditKey(InspectorItemViewModel item, TextBox? box, VirtualKey key)
     {
         switch (key)
         {
@@ -460,9 +543,10 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
                 {
                     FocusItem(item);
                 }
-                else
+                else if (box is not null)
                 {
                     ShowError(box, true);
+                    TryFocusEditBox(box);
                 }
 
                 return true;
@@ -478,7 +562,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
     private void Edit_LostFocus(object sender, RoutedEventArgs e)
     {
         // フォーカスが外れたら取り消す (INSP-17 の仕様 1)。確定した後は入力中ではないので何もしない。
-        if (sender is TextBox { DataContext: InspectorItemViewModel { IsEditing: true } })
+        if (sender is TextBox box && EditItem(box) is { IsEditing: true })
         {
             Vm.CancelEdit();
         }
@@ -663,7 +747,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
         switch (focused)
         {
-            case TextBox { DataContext: InspectorItemViewModel item } box when IsInside(box, RowsList):
+            case TextBox box when IsInside(box, RowsList) && EditItem(box) is { } item:
                 return HandleEditKey(item, box, key);
             case Button { Tag: InspectorBitViewModel bit } button:
                 if (key is VirtualKey.Space or VirtualKey.Enter)
@@ -692,7 +776,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
             case ListViewItem when key is VirtualKey.Enter or VirtualKey.Space:
                 return Activate(Vm.Selected, edit: key == VirtualKey.Enter);
             case ListViewItem when key == VirtualKey.Escape:
-                return HandleArrayEscape();
+                return HandleRowEscape();
             case ListViewItem when key is VirtualKey.Application || key == VirtualKey.F10 && shift:
                 _menuTarget = Vm.Selected;
                 RowMenu.ShowAt(RowsList.ContainerFromItem(Vm.Selected) as FrameworkElement ?? RowsList);

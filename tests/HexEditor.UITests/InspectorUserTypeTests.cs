@@ -152,18 +152,7 @@ public sealed class InspectorUserTypeTests
 
         // 3・4: #0000FF に書き換えると 0x2〜0x3 が 1F 00 になり、Ctrl+Z で E0 07 に戻る。
         string type = row["id"]!.GetValue<string>()["Inspector_Row_".Length..];
-        // カーソル移動の遅れた再評価が編集を取り消すことがある (移動したので設計どおり)。編集中であることを確かめてから Enter を押す。
-        for (int attempt = 0; attempt < 5; attempt++)
-        {
-            await InspectorTests.BeginEditAsync(app, type, "#0000FF");
-            await app.IdleAsync();
-            JsonObject before = await InspectorTests.RowAsync(app, type);
-            if (before["editing"]!.GetValue<bool>() && before["editText"]!.GetValue<string>() == "#0000FF")
-            {
-                break;
-            }
-        }
-
+        await InspectorTests.BeginEditAsync(app, type, "#0000FF");
         JsonObject enter = await InspectorTests.PanelKeyAsync(app, "Enter");
         await app.IdleAsync();
         JsonObject edited = await InspectorTests.RowAsync(app, type);

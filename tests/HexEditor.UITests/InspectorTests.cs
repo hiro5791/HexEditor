@@ -630,6 +630,46 @@ public sealed class InspectorTests
         Assert.Equal(0, (await app.DocumentAsync())["undoCount"]!.GetValue<int>());
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-17-07")]
+    public Task An_input_box_that_cannot_take_focus_at_once_keeps_the_typed_value() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await StartAsync(ctx);
+        await GoAsync(app, 0x80);
+
+        // 1・2: 入力欄の DataContext (行) が遅れて届き、Loaded ではフォーカスを受け取れなくても、入力欄にフォーカスが移り、入れた値で確定する。
+        await app.SendAsync("inspectorEditBoxMode", new JsonObject { ["mode"] = "lateDataContext" });
+        await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "uint16" });
+        await PanelKeyAsync(app, "Enter");
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("Inspector_Edit"))["focusState"]?.GetValue<string>() is { } state && state != "Unfocused",
+            TimeSpan.FromSeconds(5), "the input box to take focus");
+        await app.UiaSetValueAsync("Inspector_Edit", "0x1234");
+        await app.WaitUntilAsync(async () => (await RowAsync(app, "uint16"))["editText"]?.GetValue<string>() == "0x1234", TimeSpan.FromSeconds(5),
+            "the typed value in the row");
+        Assert.Equal("inspector", (await PanelKeyAsync(app, "Enter"))["handledBy"]!.GetValue<string>());
+        await WaitForRowsAsync(app);
+        Assert.Equal(Convert.FromHexString("3412"), await app.BytesAsync(0x80, 2));
+
+        // 3・4: 入力欄がフォーカスを受け取れないまま (フォーカスが行に残る) 値を入れて Enter を押すと、入力をやり直さずに入れた値で確定する。
+        await app.SendAsync("inspectorEditBoxMode", new JsonObject { ["mode"] = "noFocus" });
+        await BeginEditAsync(app, "uint16", "0x5678");
+        Assert.Equal("Unfocused", (await app.ElementAsync("Inspector_Edit"))["focusState"]!.GetValue<string>());
+        Assert.Equal("0x5678", (await RowAsync(app, "uint16"))["editText"]!.GetValue<string>());
+        JsonObject enter = await PanelKeyAsync(app, "Enter");
+        Assert.Equal("inspector", enter["handledBy"]!.GetValue<string>());
+        await WaitForRowsAsync(app);
+        Assert.False((await RowAsync(app, "uint16"))["editing"]!.GetValue<bool>());
+        Assert.Equal(Convert.FromHexString("7856"), await app.BytesAsync(0x80, 2));
+
+        // 5: 同じ状態で Esc を押すと取り消す。
+        await BeginEditAsync(app, "uint16", "0x9999");
+        await PanelKeyAsync(app, "Escape");
+        await app.IdleAsync();
+        Assert.False((await RowAsync(app, "uint16"))["editing"]!.GetValue<bool>());
+        Assert.Equal(Convert.FromHexString("7856"), await app.BytesAsync(0x80, 2));
+        await app.SendAsync("inspectorEditBoxMode", new JsonObject { ["mode"] = null });
+    });
+
     // ---- INSP-18 ----
 
     [Fact]

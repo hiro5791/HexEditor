@@ -682,12 +682,20 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     private byte[]? _editBytes;
 
-    /// <summary>行の値の入力を始める。書き換えられない行・読み取り専用では始めない。</summary>
+    /// <summary>
+    /// 行の値の入力を始める。書き換えられない行・読み取り専用では始めない。すでに入力中の行は、入力を最初からやり直さない
+    /// (入れた値を今の値で上書きしない)。
+    /// </summary>
     public bool BeginEdit(InspectorItemViewModel item)
     {
         if (item.Kind != InspectorItemKind.Row || ReadOnly || _document is null)
         {
             return false;
+        }
+
+        if (item.IsEditing)
+        {
+            return true;
         }
 
         if (IsUserRow(item))
@@ -762,6 +770,9 @@ public sealed partial class InspectorViewModel : ObservableObject
         Refresh();
         return true;
     }
+
+    /// <summary>入力中の行 (なければ null)。</summary>
+    public InspectorItemViewModel? EditingItem => Items.FirstOrDefault(i => i.IsEditing);
 
     /// <summary>入力を取り消す (Esc、フォーカスが外れた)。</summary>
     public void CancelEdit()
