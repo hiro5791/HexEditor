@@ -20,17 +20,34 @@ public sealed record FileStamp(long Length, DateTime LastWriteTimeUtc, string Fi
         return new FileStamp(length, DateTime.MinValue, string.Empty);
     }
 
-    /// <summary>パスのファイルを開いて読む。開けなければ null。</summary>
+    /// <summary>
+    /// パスのファイルを開いて読む。開けなければ null。ファイルがない (FileNotFound・DirectoryNotFound) ときはすぐ null にするが、
+    /// 共有違反・アクセス拒否は置き換え (File.Replace・名前の変更) の途中の一時的な状態のことがある: 短く試し直してから null にする
+    /// (削除として誤って知らせない)。
+    /// </summary>
     public static FileStamp? FromPath(string path)
     {
-        try
+        const int Attempts = 10;
+        for (int attempt = 1; ; attempt++)
         {
-            using SafeFileHandle handle = File.OpenHandle(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            return FromHandle(handle);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            return null;
+            try
+            {
+                using SafeFileHandle handle = File.OpenHandle(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                return FromHandle(handle);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+            {
+                return null;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                if (attempt >= Attempts)
+                {
+                    return null;
+                }
+
+                Thread.Sleep(50);
+            }
         }
     }
 
