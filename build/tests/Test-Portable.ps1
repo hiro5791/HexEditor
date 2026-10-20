@@ -237,22 +237,33 @@ if ($TestZip) {
         $backing = Join-Path $WorkDir 'reg\events.pml'
         if ($env:GITHUB_ACTIONS) {
             $procmon = Get-ProcessMonitor (Join-Path $WorkDir 'procmon')
-            Start-ProcessMonitor $procmon $backing
         } else {
             Add-TestNote 'TC-PKG-06-01: Process Monitor runs only on CI runners; here only the export of HKCU\Software before and after was compared.'
         }
         $recorded = $null
-        try {
-            $a = Start-WithFile (Join-Path $app 'HexEditor.exe') $file
+        # A capture that saw no event of HexEditor.exe at all did not work (the driver started late, or the log was cut):
+        # run the whole scenario again, up to 3 times. A capture that saw HexEditor.exe is judged as it is.
+        $attempts = if ($procmon) { 3 } else { 1 }
+        for ($attempt = 1; $attempt -le $attempts; $attempt++) {
+            if ($procmon) {
+                if (Test-Path $backing) { Remove-Item $backing -Force }
+                Start-ProcessMonitor $procmon $backing
+            }
+            [void](Copy-TestData $TestDataDir 'TD-SEQ-1M' $file)
             try {
-                Edit-Bytes $a 0 'FF'
-                $r = Send-TestCommand $a 'key' @{ key = 'S'; ctrl = $true }
-                Assert-True ($r.handledBy -eq 'menu:Command_Save') "Ctrl+S was handled by $($r.handledBy)"
-                [void](Send-TestCommand $a 'idle')
-                Wait-Until { -not (Get-TestState $a).document.modified } 30 'the save'
-            } finally { Stop-TestApp $a }
-        } finally {
-            if ($procmon) { $recorded = Stop-ProcessMonitor $procmon $backing '(?i)^HexEditor\.exe$' }
+                $a = Start-WithFile (Join-Path $app 'HexEditor.exe') $file
+                try {
+                    Edit-Bytes $a 0 'FF'
+                    $r = Send-TestCommand $a 'key' @{ key = 'S'; ctrl = $true }
+                    Assert-True ($r.handledBy -eq 'menu:Command_Save') "Ctrl+S was handled by $($r.handledBy)"
+                    [void](Send-TestCommand $a 'idle')
+                    Wait-Until { -not (Get-TestState $a).document.modified } 30 'the save'
+                } finally { Stop-TestApp $a }
+            } finally {
+                if ($procmon) { $recorded = Stop-ProcessMonitor $procmon $backing '(?i)^HexEditor\.exe$' }
+            }
+            if (-not $procmon -or $recorded.Processes.Count -gt 0) { break }
+            Write-Host "TC-PKG-06-01: attempt $attempt recorded no registry events of HexEditor.exe; trying again."
         }
         Assert-True ([System.IO.File]::ReadAllBytes($file)[0] -eq 0xFF) 'the file was not saved'
 

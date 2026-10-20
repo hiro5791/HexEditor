@@ -324,14 +324,51 @@ public sealed partial class MainWindow
         };
         AutomationProperties.SetAutomationId(dialog, automationId);
         confirm.TextChanged += (_, _) => dialog.IsPrimaryButtonEnabled = string.Equals(confirm.Text.Trim(), targetName, StringComparison.Ordinal);
+        // 既定のフォーカスは「キャンセル」(閉じるボタン)。ボタンはテンプレートの部品で、開いた直後にはまだ見つからないことがあるため、
+        // 見つかるまで少し後で試し直す。
+        bool FocusCancel()
+        {
+            Button? close = ImgFindDescendant<Button>(dialog, "CloseButton");
+            if (close is null)
+            {
+                foreach (Microsoft.UI.Xaml.Controls.Primitives.Popup popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot))
+                {
+                    if (popup.Child is { } child && ImgFindDescendant<Button>(child, "CloseButton") is { } found)
+                    {
+                        close = found;
+                        break;
+                    }
+                }
+            }
+
+            if (close is not null && close.Focus(FocusState.Programmatic))
+            {
+                LastImgStrongConfirmInitialFocus = close.Name;
+                return true;
+            }
+
+            return false;
+        }
+
         dialog.Opened += (_, _) =>
         {
-            // 既定のフォーカスは「キャンセル」(閉じるボタン)。
-            if (ImgFindDescendant<Button>(dialog, "CloseButton") is { } close)
+            if (FocusCancel())
             {
-                close.Focus(FocusState.Programmatic);
-                LastImgStrongConfirmInitialFocus = close.Name;
+                return;
             }
+
+            // 50 ms ごとに 3 秒まで試し直す。
+            Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            int ticks = 0;
+            timer.Tick += (_, _) =>
+            {
+                if (FocusCancel() || ++ticks >= 60)
+                {
+                    timer.Stop();
+                }
+            };
+            timer.Start();
         };
         LastImgStrongConfirmDialog = dialog;
         LastImgStrongConfirmInitialFocus = null;
