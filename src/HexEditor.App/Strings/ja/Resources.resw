@@ -9876,4 +9876,58 @@ SHA-256 のフィンガープリント: {2}
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} 時間</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>開始がドキュメントの外です。</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>レコード長は {0}〜{1} バイトで入力してください。</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>レコードが 4 個以上入る範囲を選んでください。</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>{0} バイト以上の範囲を選んでください。</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>読めたレコードが {0} 個だけです。4 個以上必要です。</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>{0} レコードのすべてで 00。</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>{1} レコードのすべてで同じ値 {0}。</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>{1} レコードのすべてで同じ値 {0}。</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% が ASCII の文字列 (最大 {1} 文字)。</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% が UTF-16 の文字列 (最大 {1} 文字)。</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>{1} レコードのうち {0} で、値 = {2} + {3} × レコード番号。</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% が {1}〜{2} の UNIX 時刻 (秒)。</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% が {1}〜{2} の 64 bit の UNIX 時刻 (秒)。</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% が {1}〜{2} の Windows の FILETIME。</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% が {1}〜{2} の MS-DOS の日時。</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>値はすべてドキュメントの長さ ({0}) 未満で、{1}% が {2} の倍数、レコード番号の順に増える。</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>00 でない値はすべてドキュメントの長さ ({0}) 未満で、{1}% が互いに異なる。</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>連続したレコードの {0}% で、次のレコードの {1} との差と一致する。</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>すべてのレコードで {0} + 値がドキュメントの中に収まる。</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% が妥当な浮動小数点の値 (異なる値 {1} 個)。</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} 個のビット: {1}。</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} 種類の値: {1}。</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>値は {0}〜{1} で、どの規則にも当たらない。</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>すべてのバイトのエントロピーが {0:0.0} ビット以上 (乱数に近い)。</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>どの規則にも当たらない {0} バイト。</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>浮動小数点としては {0}% だけが妥当な値。</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>日時としては {0}% だけが 1980〜2100 年。</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>連番としては {0}% だけが並びに合う。</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>文字列としては {0}% だけが印字可能な文字で始まる。</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>埋め草には名前を付けられません。</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>「{0}」は名前として使えません。英字・数字・_ を使い、数字で始めないでください。</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>「{0}」は予約語か型の名前です。</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>「{0}」という名前のフィールドがすでにあります。</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>テンプレートの推定 (TPL-38) で作った下書きです。推定なので、確かめてから使ってください。</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>元: {0}、範囲 {1}〜{2}、レコード長 {3}、レコード {4} 個、{5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>推定したレコード ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (確度 {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>埋め草</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>マジック</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>定数</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>連番</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>日時</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>文字列</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>文字列 (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>フラグ</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>列挙</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>整数</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>低</value></data>
 </root>
