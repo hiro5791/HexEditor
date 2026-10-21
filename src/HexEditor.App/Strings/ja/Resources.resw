@@ -9876,4 +9876,54 @@ SHA-256 のフィンガープリント: {2}
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} 時間</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>形式の構造</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>埋め込まれたファイル</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>圧縮</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>暗号化・乱数</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>埋め草</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>繰り返しのレコード</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>標本による推定</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>定数 {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>テキスト ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>繰り返しのレコード ({0} バイト)</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>標本</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>走査</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>構造</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>区間の中央の 4 KiB の標本による推定です (区間 {0} 個、区間の長さ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} が {0} バイト続いています。</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0} バイトを読み込めませんでした。</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>エントロピー {0} ビット / バイト、カイ二乗の p 値 {1}。</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>エントロピー {0} ビット / バイト。</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>ブロックごとに分類しました (ブロック {0} 個、ブロックの大きさ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{0} から {1} バイト。</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>テンプレート "{0}" でパターン {1} を {2}〜{3} ({4} バイト) に置きました。</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{0} に {1} のシグネチャがあります。</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>テンプレート "{0}" で {1}〜{2} ({3} バイト) を解析できました。</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>テンプレート "{0}" の解析に失敗しました ({1})。</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>カービングの定義 "{1}" で長さを {0} バイトと決めました ({2})。</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>構造の検証</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>サイズの取得</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>フッター</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>終わりが不明です。次の領域の始まりの {0} まで ({1} バイト) とみなしました。</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>{1} の {0} のストリームを展開でき、チェック値が一致しました (圧縮 {2} バイト、展開後 {3} バイト)。</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>ずらし {0} バイトで {1} が一致します (ずらし 1〜{2} の平均は {3})。</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>シグネチャと統計に基づく推定で、誤りがありえます。</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>変換ビュー: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>ドキュメント: {0} ({1})、{2} バイト</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>範囲: {0}〜{1} ({2} バイト)</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>すべての段階が終わっています。</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>まだ終わっていない段階があります (残りは標本による推定です)。</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>種類ごとのバイト数:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>領域 ({0} 個):</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>ほか {0} 件</value></data>
 </root>

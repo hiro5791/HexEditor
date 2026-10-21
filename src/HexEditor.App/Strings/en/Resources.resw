@@ -9876,4 +9876,54 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Format structure</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Embedded file</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Compressed</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Encrypted or random</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Zero</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Padding</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Repeating records</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Binary</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Unreadable</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Estimated from samples</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Zero</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Constant {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Text ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Repeating records ({0, plural, one {# byte} other {# bytes}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>High</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Low</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Sample</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Scan</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Structure</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Estimated from samples: the middle 4 KiB of each of {0, plural, one {# interval} other {# intervals}} of {1} bytes.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# byte} other {# consecutive bytes}} of {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# byte} other {# bytes}} could not be read.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropy {0} bits/byte, chi-square p-value {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropy {0} bits/byte.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Classified block by block ({0, plural, one {# block} other {# blocks}} of {1} bytes).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# byte} other {# bytes}} from {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Template "{0}" placed the pattern {1} at {2}–{3} ({4, plural, one {# byte} other {# bytes}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{1} signature at {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Template "{0}" parsed {1}–{2} ({3, plural, one {# byte} other {# bytes}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Template "{0}" could not parse the data ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>The carving definition "{1}" gave a length of {0, plural, one {# byte} other {# bytes}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>structure check</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>size field</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>footer</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>maximum size</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>The end is unknown; the region is assumed to end before the next region at {0} ({1, plural, one {# byte} other {# bytes}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>The {0} stream at {1} was decompressed and its checksum matches ({2, plural, one {# byte} other {# bytes}} compressed, {3} bytes decompressed).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>With a shift of {0} bytes, {1} of the bytes match (average for shifts 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>This map is an estimate based on signatures and statistics, and it can be wrong.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Transform view: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Document: {0} ({1}), {2, plural, one {# byte} other {# bytes}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Range: {0}–{1} ({2, plural, one {# byte} other {# bytes}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>All stages are complete.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Not all stages are complete (the rest is estimated from samples).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Bytes by kind:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# byte} other {# bytes}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# region} other {# regions}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>and {0, plural, one {# more region} other {# more regions}}</value></data>
 </root>

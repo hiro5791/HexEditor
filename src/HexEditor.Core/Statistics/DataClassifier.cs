@@ -103,6 +103,12 @@ public sealed class ClassificationResult
     /// <summary>判定に使ったファイル形式の名前 (ANA-17 の仕様 7。使わなかったら null)。</summary>
     public string? FileTypeName { get; init; }
 
+    /// <summary>分類したデータ (開始時点のスナップショット)。結果を使い回せるかの判定に使う (ANA-33 の仕様 5)。</summary>
+    public DocumentSnapshot? Snapshot { get; init; }
+
+    /// <summary>判定に使ったしきい値。</summary>
+    public ClassThresholds? Thresholds { get; init; }
+
     /// <summary>分類ごとのバイト数 (帯の割合)。</summary>
     public long BytesOf(DataClass c) => Regions.Where(r => r.Class == c).Sum(r => r.Length);
 
@@ -187,6 +193,24 @@ public static class DataClassifier
         Remembered?.Invoke(null, document);
     }
 
+    /// <summary>
+    /// 記録した最新の結果が、<paramref name="snapshot"/> の <paramref name="request"/> の分類としてそのまま使えるなら、それを返す (データを読み直さない。
+    /// ファイルマップの全体の走査の分類を、統計パネルの「分類」タブが使う。ANA-33 の仕様 5)。同じデータ・同じ範囲・同じブロックの大きさ・
+    /// 同じしきい値で、最後まで分類した結果だけを使う。
+    /// </summary>
+    public static ClassificationResult? Reusable(Document document, DocumentSnapshot snapshot, ClassifyRequest request)
+    {
+        if (LatestFor(document) is not { Completed: true } r || !ReferenceEquals(r.Snapshot, snapshot) || r.Thresholds != request.Thresholds)
+        {
+            return null;
+        }
+
+        int blockSize = (int)StatMath.CeilPowerOfTwo(Math.Clamp(request.BlockSize, ClassifyRequest.MinBlockSize, ClassifyRequest.MaxBlockSize),
+            ClassifyRequest.MinBlockSize);
+        IReadOnlyList<HashRange> ranges = HashEngine.Normalize(request.Ranges, snapshot.Length);
+        return r.BlockSize == blockSize && ranges.SequenceEqual(r.Ranges.Ranges) ? r : null;
+    }
+
     /// <summary>最新の結果が変わった (ミニマップの「分類」レイヤを描き直す)。購読した側は不要になったら外す。</summary>
     public static event EventHandler<Document>? Remembered;
 
@@ -194,7 +218,14 @@ public static class DataClassifier
     /// 分類する。キャンセルした場合は、処理済みの範囲の結果を持つ結果を返す (<see cref="ClassificationResult.Completed"/> が false)。
     /// </summary>
     public static ClassificationResult Classify(DocumentSnapshot snapshot, ClassifyRequest request, LongRunningOperation? operation = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) => Classify(snapshot, request, operation, cancellationToken, hooks: null);
+
+    /// <summary>
+    /// 分類する (ファイルマップ (ANA-33) の全体の走査が使う形)。<paramref name="hooks"/> で、読み込みの単位、読み込みごとの処理 (同じ 1 回の
+    /// 読み込みで、埋め込まれた形式の探索などを行う)、ブロックごとの p 値の記録を指定する。
+    /// </summary>
+    internal static ClassificationResult Classify(DocumentSnapshot snapshot, ClassifyRequest request, LongRunningOperation? operation,
+        CancellationToken cancellationToken, ClassifyHooks? hooks)
     {
         CancellationToken token = operation?.CancellationToken ?? cancellationToken;
         int blockSize = (int)StatMath.CeilPowerOfTwo(Math.Clamp(request.BlockSize, ClassifyRequest.MinBlockSize, ClassifyRequest.MaxBlockSize),
@@ -205,8 +236,20 @@ public static class DataClassifier
         var classes = new DataClass[count];
         var entropy = new Half[count];
         var confidence = new Confidence[count];
+        byte[]? pValues = hooks?.CollectPValues == true ? new byte[count] : null;
         var signatures = new List<SignatureHit>();
-        var scanner = new RangeScanner(snapshot, ranges, Math.Max(RangeScanner.DefaultChunkSize, blockSize), token);
+        int chunkSize = hooks?.ChunkSize is int size and > 0 ? Math.Max(size, blockSize) / blockSize * blockSize : Math.Max(RangeScanner.DefaultChunkSize, blockSize);
+        var scanner = new RangeScanner(snapshot, ranges, chunkSize, token);
+        if (hooks is not null)
+        {
+            hooks.BlockSize = blockSize;
+            hooks.Classes = classes;
+            hooks.Entropy = entropy;
+            hooks.Confidence = confidence;
+            hooks.PValues = pValues;
+            hooks.Ranges = ranges;
+        }
+
         operation?.SetTotal(length);
         long processed = 0;
         bool completed = true;
@@ -219,15 +262,34 @@ public static class DataClassifier
             {
                 token.ThrowIfCancellationRequested();
                 FindSignatures(snapshot, ranges, chunk, signatures, token);
-                ClassifyChunk(chunk, blockSize, request.Thresholds, classes, entropy, confidence, pending, ref pendingFill, ref pendingBad);
+                ClassifyChunk(chunk, blockSize, request.Thresholds, classes, entropy, confidence, pValues, pending, ref pendingFill, ref pendingBad);
+                hooks?.OnChunk?.Invoke(chunk);
                 processed += chunk.Length;
-                operation?.Report(processed);
+                if (hooks is not null)
+                {
+                    // 分類が済んだブロックの終わり (途中のブロックは次の読み込みで埋まる)。
+                    hooks.Classified = processed - pendingFill;
+                }
+
+                if (hooks?.Report is { } report)
+                {
+                    report(processed);
+                }
+                else
+                {
+                    operation?.Report(processed);
+                }
             }
 
             if (pendingFill > 0)
             {
                 int index = (int)((length - pendingFill) / blockSize);
-                ClassifyBlock(pending.AsSpan(0, pendingFill), pendingBad, request.Thresholds, out classes[index], out entropy[index], out confidence[index]);
+                ClassifyBlock(pending.AsSpan(0, pendingFill), pendingBad, request.Thresholds, out classes[index], out entropy[index], out confidence[index], out double p);
+                StoreP(pValues, index, p);
+                if (hooks is not null)
+                {
+                    hooks.Classified = length;
+                }
             }
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested)
@@ -276,6 +338,8 @@ public static class DataClassifier
 
         return new ClassificationResult
         {
+            Snapshot = snapshot,
+            Thresholds = request.Thresholds,
             FileTypeName = fileType,
             Ranges = ranges,
             BlockSize = blockSize,
@@ -288,8 +352,20 @@ public static class DataClassifier
         };
     }
 
+    /// <summary>p 値を 1 バイト (0〜254) にして記録する (ファイルマップの根拠の文に使う。p 値を求めなかったブロックは 255)。</summary>
+    private static void StoreP(byte[]? pValues, int index, double p)
+    {
+        if (pValues is not null)
+        {
+            pValues[index] = double.IsNaN(p) ? (byte)255 : (byte)Math.Clamp(Math.Round(p * 254), 0, 254);
+        }
+    }
+
+    /// <summary>記録した p 値 (<see cref="StoreP"/>) を戻す。求めなかったブロックは NaN。</summary>
+    internal static double LoadP(byte stored) => stored == 255 ? double.NaN : stored / 254.0;
+
     private static void ClassifyChunk(ScanChunk chunk, int blockSize, ClassThresholds t, DataClass[] classes, Half[] entropy, Confidence[] confidence,
-        byte[] pending, ref int pendingFill, ref int pendingBad)
+        byte[]? pValues, byte[] pending, ref int pendingFill, ref int pendingBad)
     {
         int at = 0;
         long logical = chunk.Logical;
@@ -306,7 +382,8 @@ public static class DataClassifier
             if (pendingFill == blockSize)
             {
                 int index = (int)((logical + take - blockSize) / blockSize);
-                ClassifyBlock(pending, pendingBad, t, out classes[index], out entropy[index], out confidence[index]);
+                ClassifyBlock(pending, pendingBad, t, out classes[index], out entropy[index], out confidence[index], out double p);
+                StoreP(pValues, index, p);
                 pendingFill = 0;
                 pendingBad = 0;
             }
@@ -324,7 +401,8 @@ public static class DataClassifier
             int offset = startAt + (k * blockSize);
             int index = (int)((logical + offset) / blockSize);
             int bad = badMask is null ? 0 : badMask.AsSpan(offset, blockSize).Count(true);
-            ClassifyBlock(chunk.Buffer.AsSpan(offset, blockSize), bad, t, out classes[index], out entropy[index], out confidence[index]);
+            ClassifyBlock(chunk.Buffer.AsSpan(offset, blockSize), bad, t, out classes[index], out entropy[index], out confidence[index], out double p);
+            StoreP(pValues, index, p);
         });
 
         at += full * blockSize;
@@ -350,8 +428,13 @@ public static class DataClassifier
 
     /// <summary>1 ブロックの分類 (ANA-16 の仕様 2 の順に判定する)。</summary>
     internal static void ClassifyBlock(ReadOnlySpan<byte> block, int bad, ClassThresholds t, out DataClass result, out Half blockEntropy,
-        out Confidence conf)
+        out Confidence conf) => ClassifyBlock(block, bad, t, out result, out blockEntropy, out conf, out _);
+
+    /// <summary>1 ブロックの分類。<paramref name="pValue"/> はカイ二乗の p 値 (求めなかった分類 (定数・テキスト) では NaN)。</summary>
+    internal static void ClassifyBlock(ReadOnlySpan<byte> block, int bad, ClassThresholds t, out DataClass result, out Half blockEntropy,
+        out Confidence conf, out double pValue)
     {
+        pValue = double.NaN;
         if (bad > 0)
         {
             result = DataClass.Unreadable;
@@ -401,6 +484,7 @@ public static class DataClassifier
         }
 
         double p = StatMath.ChiSquarePValue(StatMath.ChiSquareUniform(counts, n), 255);
+        pValue = p;
         if (h >= t.EncryptedEntropy && p >= t.PValueLow && p <= t.PValueHigh)
         {
             result = DataClass.Encrypted;
@@ -813,5 +897,46 @@ public static class DataClassifier
         public override void SetLength(long value) => throw new NotSupportedException();
 
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+}
+
+/// <summary>
+/// 分類の走査の拡張 (ファイルマップ (ANA-33 の仕様 2 の 2) が、同じ 1 回の読み込みで分類と探索を行うために使う)。分類の配列は走査の間も
+/// 読める (<see cref="Classified"/> より前のブロックは分類が済んでいる。ならし (仕様 3 の補足) は最後に行う)。
+/// </summary>
+internal sealed class ClassifyHooks
+{
+    /// <summary>読み込みの単位 (ブロックの大きさの倍数に切り下げる)。0 は既定 (4 MiB)。</summary>
+    public int ChunkSize { get; init; }
+
+    /// <summary>読み込みごとに、分類の後で呼ぶ (読み込みのスレッドで呼ぶ。バッファは呼び出しの間だけ使える)。</summary>
+    public Action<ScanChunk>? OnChunk { get; init; }
+
+    /// <summary>進捗の報告 (処理済みの論理位置)。null なら処理の <see cref="LongRunningOperation.Report"/>。</summary>
+    public Action<long>? Report { get; init; }
+
+    /// <summary>ブロックごとの p 値を記録する (<see cref="PValues"/>)。</summary>
+    public bool CollectPValues { get; init; }
+
+    public int BlockSize { get; internal set; }
+
+    public LogicalRanges? Ranges { get; internal set; }
+
+    public DataClass[]? Classes { get; internal set; }
+
+    public Half[]? Entropy { get; internal set; }
+
+    public Confidence[]? Confidence { get; internal set; }
+
+    /// <summary>ブロックごとの p 値 (<see cref="DataClassifier.LoadP"/> で戻す)。</summary>
+    public byte[]? PValues { get; internal set; }
+
+    private long _classified;
+
+    /// <summary>分類が済んだ範囲の終わり (論理位置)。</summary>
+    public long Classified
+    {
+        get => Interlocked.Read(ref _classified);
+        internal set => Interlocked.Exchange(ref _classified, value);
     }
 }
