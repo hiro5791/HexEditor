@@ -73,7 +73,8 @@ public sealed partial class MainWindow
             ?? await HandleImageTestCommandsAsync(cmd, request)
             ?? await HandleFileSystemTestCommandsAsync(cmd, request)
             ?? await HandleFileSystemMoreTestCommandsAsync(cmd, request)
-            ?? await HandleWipeTestCommandsAsync(cmd, request),
+            ?? await HandleWipeTestCommandsAsync(cmd, request)
+            ?? await HandleTemplateInferenceTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

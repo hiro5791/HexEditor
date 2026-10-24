@@ -574,7 +574,7 @@ public sealed partial class TemplateInferencePanel : UserControl, ICodeEditorKey
         UpdateRowMenu();
     }
 
-    private void UpdateRowMenu()
+    internal void UpdateRowMenu()
     {
         _rowMenu.Items.Clear();
         int index = _table.SelectedIndex;
@@ -774,7 +774,9 @@ public sealed partial class TemplateInferencePanel : UserControl, ICodeEditorKey
     /// </summary>
     public bool HandleEditorKey(VirtualKey key, bool ctrl, bool shift, bool alt)
     {
-        if (!ctrl || alt || _session is not { } s || XamlRoot is null || FocusManager.GetFocusedElement(XamlRoot) is TextBox)
+        // 入力欄 (パネルの中のもの) では入力欄の取り消しにする
+        if (!ctrl || alt || _session is not { } s || XamlRoot is null
+            || (FocusManager.GetFocusedElement(XamlRoot) is TextBox box && Contains(box)))
         {
             return false;
         }
@@ -793,6 +795,19 @@ public sealed partial class TemplateInferencePanel : UserControl, ICodeEditorKey
     }
 
     // ───────────── 部品 ─────────────
+
+    private bool Contains(DependencyObject node)
+    {
+        for (DependencyObject? n = node; n is not null; n = VisualTreeHelper.GetParent(n))
+        {
+            if (ReferenceEquals(n, this))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private static void AddField(Panel parent, TextBox box, string key)
     {

@@ -166,8 +166,23 @@ public sealed partial class MainWindow : ITemplateInferenceHost
         ShowPanel(TemplateInferencePanelId, focus: false);
         InferencePanel.Bind(s);
 
-        // 範囲が条件を満たしていれば、ボタンを押さなくても推定を始める (TPL-40 の仕様 2)
+        // 範囲が条件を満たしていれば、ボタンを押さなくても推定を始める (TPL-40 の仕様 2)。キーボードで続けられるよう、結果の表にフォーカスを移す。
         await RunInferenceAsync();
+        // (右クリックメニューを閉じたときの Hex ビューへのフォーカスの戻りより後に移す)
+        DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+        {
+            if (ReferenceEquals(s, _inferenceSession) && s.Result is { } result)
+            {
+                if (result.HasFields)
+                {
+                    InferencePanel.FocusTable();
+                }
+                else if (result.NotFound)
+                {
+                    InferencePanel.FocusRecordLength();
+                }
+            }
+        });
     }
 
     // ───────────── 推定 (TPL-38・TPL-39) ─────────────
@@ -398,6 +413,7 @@ public sealed partial class MainWindow : ITemplateInferenceHost
 
         TemplateEditorPage page = OpenNewTemplateEditor(draft);
         page.SetSuggestedPath(Path.Combine(TemplateService.DefaultUserFolder, InferredFileName(InferenceDocumentName(s))));
+        page.MarkUnsaved();
         page.SelectTarget(doc);
     }
 
