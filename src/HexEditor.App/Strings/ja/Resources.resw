@@ -9902,10 +9902,10 @@ SHA-256 のフィンガープリント: {2}
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>こうぞうのさぶんのひょうじきりかえ</value></data>
   <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>構造の差分(8)</value></data>
   <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>8</value></data>
-  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>構造で比較(T)</value></data>
-  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>T</value></data>
-  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ(M)...</value></data>
-  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>構造で比較(R)</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ(H)...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Compare_Dialog_Structure" xml:space="preserve"><value>構造でも比較する</value></data>
   <data name="Compare_StructDialog_Title" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ</value></data>
   <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>比較</value></data>
