@@ -9901,7 +9901,7 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Toggle structure differences</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel</value></data>
   <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Structure differences</value></data>
-  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>8</value></data>
   <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Compare structure</value></data>
   <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Choose template for structure compare...</value></data>
@@ -10028,4 +10028,5 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="StructRule_Content" xml:space="preserve"><value>Content</value></data>
   <data name="StructRule_Index" xml:space="preserve"><value>Position</value></data>
   <data name="StructRule_KeyField" xml:space="preserve"><value>Key field</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Filtering...</value></data>
 </root>

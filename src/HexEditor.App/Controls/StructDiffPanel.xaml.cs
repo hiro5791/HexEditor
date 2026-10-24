@@ -220,10 +220,34 @@ public sealed partial class StructDiffPanel : UserControl
         Rebuild(r, CurrentFilter);
     }
 
-    private void Rebuild(StructCompareResult r, StructDiffFilter filter)
+    private int _rebuildNumber;
+
+    /// <summary>差分がこの件数を超える結果は、表示の計算をバックグラウンドで行う (UI を止めない。ANA-32 の「巨大ファイル」)。</summary>
+    private const long BackgroundRebuildThreshold = 100_000;
+
+    private async void Rebuild(StructCompareResult r, StructDiffFilter filter)
     {
+        int number = ++_rebuildNumber;
         StructDiffNode? selected = (Tree.SelectedItem as StructDiffRowViewModel)?.Node ?? _session?.StructCurrent;
-        View.Rebuild(r, filter);
+        if (r.DiffCount > BackgroundRebuildThreshold)
+        {
+            IsBusy = true;
+            BusyText.Text = Loc.Get("StructDiff_Busy");
+            BusyText.Visibility = Visibility.Visible;
+            await Task.Run(() => View.Rebuild(r, filter));
+            if (number != _rebuildNumber)
+            {
+                return;
+            }
+
+            IsBusy = false;
+            BusyText.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            View.Rebuild(r, filter);
+        }
+
         _rows.Reset(View.RowCount);
         if (selected is not null && View.RowOf(selected) is int row and >= 0)
         {
@@ -432,44 +456,73 @@ public sealed partial class StructDiffPanel : UserControl
 
     private void Tree_KeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (Tree.SelectedItem is not StructDiffRowViewModel row)
+        bool ctrl = Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Control).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+        if (e.Key is not (VirtualKey.Up or VirtualKey.Down) && HandleKey(e.Key, ctrl, shift: false))
         {
-            return;
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// ツリー表のキー (ANA-32 の仕様 10、TPL-21 の仕様 7 と同じ): ↑ / ↓ で行の移動、→ / ← で開閉 (閉じた行の ← は親へ)、Enter で Hex ビューの範囲を
+    /// 選ぶ、Ctrl+C で行をコピー、Shift+F10 で右クリックメニュー。処理したら true (テスト用の命令からも呼ぶ。↑ / ↓ は一覧が自分で処理する)。
+    /// </summary>
+    public bool HandleKey(VirtualKey key, bool ctrl, bool shift)
+    {
+        if (key is VirtualKey.Down or VirtualKey.Up)
+        {
+            int next = Math.Clamp(Tree.SelectedIndex + (key == VirtualKey.Down ? 1 : -1), 0, Math.Max(0, _rows.Count - 1));
+            if (_rows.Count > 0)
+            {
+                Tree.SelectedIndex = next;
+                FocusSelected();
+            }
+
+            return true;
         }
 
-        bool ctrl = Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Control).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
-        switch (e.Key)
+        if (Tree.SelectedItem is not StructDiffRowViewModel row)
+        {
+            return false;
+        }
+
+        switch (key)
         {
             case VirtualKey.Right when row.Row.HasChildren && !row.Row.IsExpanded:
             case VirtualKey.Left when row.Row.HasChildren && row.Row.IsExpanded:
                 Toggle(row);
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Left when row.Node?.Parent is { Parent: not null } parent && View.RowOf(parent) is int p and >= 0:
                 Tree.SelectedIndex = p;
                 FocusSelected();
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Enter when row.Node is { } node:
                 Activate(node);
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.C when ctrl:
                 Host?.CopyText(RowText(row));
-                e.Handled = true;
-                break;
+                return true;
+            case VirtualKey.F10 when shift:
+            case VirtualKey.Application:
+                return ShowMenu(null);
         }
+
+        return false;
     }
 
     /// <summary>「行をコピー」(タブ区切り)。</summary>
     internal static string RowText(StructDiffRowViewModel row) => string.Join('\t',
         row.KindText, row.Node?.DisplayPath ?? row.Name, row.LeftValue, row.RightValue, row.TypeText, row.LeftOffset, row.RightOffset, row.SizeText, row.MatchText);
 
-    private void Tree_ContextRequested(UIElement sender, ContextRequestedEventArgs args)
+    private void Tree_ContextRequested(UIElement sender, ContextRequestedEventArgs args) =>
+        args.Handled = ShowMenu(args.TryGetPosition(Tree, out Windows.Foundation.Point point) ? point : null);
+
+    /// <summary>右クリックメニュー (ANA-32 の仕様 6) を開く。開いたら true。</summary>
+    public bool ShowMenu(Windows.Foundation.Point? at)
     {
         if (Tree.SelectedItem is not StructDiffRowViewModel { Node: { } node } row || _session is not { } session || Host is not { } host)
         {
-            return;
+            return false;
         }
 
         var menu = new MenuFlyout();
@@ -501,7 +554,7 @@ public sealed partial class StructDiffPanel : UserControl
         Add("TreeLeft", "StructDiffMenu_TreeLeft", () => _ = host.ShowInResultTreeAsync(session, node, right: false), node.HasLeft && session.Left.Owner is not null);
         Add("TreeRight", "StructDiffMenu_TreeRight", () => _ = host.ShowInResultTreeAsync(session, node, right: true), node.HasRight && session.Right.Owner is not null);
         _lastMenu = menu;
-        if (args.TryGetPosition(Tree, out Windows.Foundation.Point point))
+        if (at is { } point)
         {
             menu.ShowAt(Tree, point);
         }
@@ -510,8 +563,54 @@ public sealed partial class StructDiffPanel : UserControl
             menu.ShowAt(Tree.ContainerFromItem(row) as FrameworkElement ?? Tree);
         }
 
-        args.Handled = true;
+        return true;
     }
+
+    /// <summary>ツリー表にフォーカスを移す (F6 の領域の移動と、テスト用の命令)。</summary>
+    public void FocusTree()
+    {
+        if (Tree.SelectedIndex < 0 && _rows.Count > 0)
+        {
+            Tree.SelectedIndex = 0;
+        }
+
+        Tree.Focus(FocusState.Programmatic);
+        FocusSelected();
+    }
+
+    /// <summary>「エクスポート...」を押す (テスト用の命令)。</summary>
+    internal void ClickExport() => Export_Click(ExportButton, new RoutedEventArgs());
+
+    /// <summary>種類の絞り込み (テスト用の命令)。</summary>
+    internal void SetFilter(StructDiffFilterKinds kinds, string text, bool includePadding, bool showSame)
+    {
+        foreach (ToggleButton t in _kindToggles)
+        {
+            t.IsChecked = kinds.HasFlag((StructDiffFilterKinds)t.Tag);
+        }
+
+        PaddingToggle.IsChecked = includePadding;
+        SameToggle.IsChecked = showSame;
+        _filterDelay?.Cancel();
+        FilterBox.Text = text;
+        _filterDelay?.Cancel();
+        ApplyFilter();
+    }
+
+    /// <summary>表示している行 (テスト用の命令)。</summary>
+    internal IReadOnlyList<StructDiffRowViewModel> RowsForTest() => [.. Enumerable.Range(0, _rows.Count).Select(i => (StructDiffRowViewModel)_rows[i]!)];
+
+    internal int SelectedRowIndex => Tree.SelectedIndex;
+
+    internal string ReasonForTest => ReasonArea.Visibility == Visibility.Visible ? ReasonText.Text : string.Empty;
+
+    internal bool ChooseVisible => ReasonArea.Visibility == Visibility.Visible && ChooseTemplateButton.Visibility == Visibility.Visible;
+
+    internal bool RaiseVisible => ReasonArea.Visibility == Visibility.Visible && RaiseLimitButton.Visibility == Visibility.Visible;
+
+    internal string HeadingForTest => HeadingText.Text;
+
+    internal string SummaryForTest => SummaryText.Text;
 
     private MenuFlyout? _lastMenu;
 

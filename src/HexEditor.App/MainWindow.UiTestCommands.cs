@@ -57,6 +57,7 @@ public sealed partial class MainWindow
             ?? await HandleAnnotationTestCommandsAsync(cmd, request)
             ?? await HandleFormatTestCommandAsync(cmd, request)
             ?? await HandleCompareTestCommandsAsync(cmd, request)
+            ?? await HandleStructCompareTestCommandsAsync(cmd, request)
             ?? await HandleDeviceTestCommandsAsync(cmd, request)
             ?? HandleScriptTestCommand(cmd, request)
             ?? await HandleScriptUiTestCommandAsync(cmd, request)
