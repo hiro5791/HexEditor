@@ -9926,4 +9926,92 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# byte} other {# bytes}} ({2})</value></data>
   <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# region} other {# regions}}:</value></data>
   <data name="FileMap_Omitted" xml:space="preserve"><value>and {0, plural, one {# more region} other {# more regions}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Create file map</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Rebuild file map</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Show file map</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Export file map</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Apply templates to found files</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Toggle file map panel</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>File Map</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>File Map</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>File Map</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>File map</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Create file map</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>File map</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Export file map</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>File map: templates for embedded files</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>When a file map finds embedded files that a template can parse, suggest applying the templates. Templates are never applied automatically.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Suggest</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Do nothing</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Overview (samples)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Full scan</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Structure analysis</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>No file map yet. Create one to see what is where in the document.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Done: {0} regions.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Stopped ({1}% scanned): {0} regions. The rest is estimated from samples.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>The results are for the content before editing.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>The file map could not be created: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Create a file map with Analysis &gt; File Map, or with Create above.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {# more embedded format candidate was} other {# more embedded format candidates were}} not kept.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Rebuild</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Export</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Text report...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>File map progress</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Show the whole map</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Show as table</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>File map band: structure lane and content lane</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Scroll the file map band</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Legend</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# byte} other {# bytes}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>File map regions</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Show kind</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>All kinds</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Listed rows to bookmarks</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Listed rows to multi-selection</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>End (inclusive)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Kind</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Label</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Confidence</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Stage</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Select a region in the band or the list.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# byte} other {# bytes}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, starts at {2}, {3, plural, one {# byte} other {# bytes}}, confidence {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Confidence: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Stage: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Template: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Select range</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Add bookmark</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Apply template "{0}"</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Open in new tab</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Decompress from here...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Infer template...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Extract strings...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Save as file...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Template inference is not available.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>There is no file map for this document.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>The file map has no embedded files with a template.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# embedded file was} other {# embedded files were}} found. Apply templates?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Apply</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Show list</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Applied templates to {0, plural, one {# embedded file} other {# embedded files}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Applied templates to {0} embedded files. {1, plural, one {# file was} other {# files were}} not applied because a document can have at most {2} applications.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Exported the file map to {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>The file map could not be exported: {0}</value></data>
 </root>

@@ -1216,7 +1216,11 @@ public sealed partial class MainWindow
     /// 選ぶ小さなダイアログを先に出す。マルチ選択の「範囲ごとに別ファイル」は、保存先にあるファイルの上書きをまとめて確かめる。一時ファイルに書いてから
     /// 置き換える (仕様 3)。
     /// </summary>
-    private async Task SaveSelectionAsync()
+    private Task SaveSelectionAsync() => SaveSelectionAsync(null, null);
+
+    /// <param name="preset">範囲を決めて開く (ファイルマップの「ファイルとして保存...」。ANA-34 の仕様 6)。</param>
+    /// <param name="extension">保存の既定の拡張子 (例: <c>.png</c>)。</param>
+    internal async Task SaveSelectionAsync((long Offset, long Length)? preset, string? extension)
     {
         if (Vm.Selected is not { } doc)
         {
@@ -1224,7 +1228,7 @@ public sealed partial class MainWindow
         }
 
         EditorState editor = doc.Editor;
-        IReadOnlyList<(long Offset, long Length)> ranges = editor.HasSelection ? SelectionRangeList(editor) : [];
+        IReadOnlyList<(long Offset, long Length)> ranges = preset is { } p ? [p] : editor.HasSelection ? SelectionRangeList(editor) : [];
         string? perRangePattern = null;
         if (ranges.Count != 1)
         {
@@ -1239,12 +1243,12 @@ public sealed partial class MainWindow
         (long first, long firstLength) = ranges[0];
         string suggested = perRangePattern is not null && RangeFileNames.ExpandAll(perRangePattern, doc.DisplayName, ranges) is { } names
             ? names[0]
-            : Path.GetFileNameWithoutExtension(doc.DisplayName) + $"_{first:X}-{first + firstLength - 1:X}.bin";
+            : Path.GetFileNameWithoutExtension(doc.DisplayName) + $"_{first:X}-{first + firstLength - 1:X}" + (extension ?? ".bin");
         string? path;
         if (!TestHooks.TrySavePicker(suggested, out path))
         {
             var picker = new FileSavePicker(WindowId) { SuggestedFileName = suggested, SettingsIdentifier = "HexEditor.SaveSelection" };
-            picker.FileTypeChoices.Add(Loc.Get("FileType_All"), [".bin"]);
+            picker.FileTypeChoices.Add(Loc.Get("FileType_All"), [extension ?? ".bin"]);
             path = (await picker.PickSaveFileAsync())?.Path;
         }
 

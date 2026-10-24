@@ -40,6 +40,9 @@ public sealed record FileMapRequest
     /// </summary>
     public ClassificationResult? Existing { get; init; }
 
+    /// <summary>変換ビューの説明 (変換ビューのデータに対して作るとき。結果の <see cref="FileMapResult.TransformDescription"/> になる)。</summary>
+    public string? TransformDescription { get; init; }
+
     /// <summary>途中の結果を画面に出す間隔 (06 の 0.3 の 0.5 秒)。</summary>
     public TimeSpan PublishInterval { get; init; } = TimeSpan.FromSeconds(0.5);
 }
@@ -507,6 +510,7 @@ public static partial class FileMapBuilder
                 OmittedRegions = omitted,
                 OmittedCandidates = _embedded.Omitted,
                 EvaluatedEmbedded = structure?.EvaluatedEmbedded ?? 0,
+                TransformDescription = _request.TransformDescription,
             };
         }
 

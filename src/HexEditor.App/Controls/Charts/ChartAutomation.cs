@@ -265,6 +265,67 @@ internal static class ChartSupport
                 }
 
                 break;
+            case "Pattern_Grid":
+                // 格子 (横線と縦線)。ファイルマップの形式の構造 (ANA-34 の仕様 3)。
+                for (double y = r.Y + (step / 2); y < bottom; y += step)
+                {
+                    Line(r.X, y, right, y);
+                }
+
+                for (double x = r.X + (step / 2); x < right; x += step)
+                {
+                    Line(x, r.Y, x, bottom);
+                }
+
+                break;
+            case "Pattern_BackDiagonal":
+                // 右下がりの斜線。
+                for (double d = -r.Height; d < r.Width; d += step)
+                {
+                    double x1 = r.X + Math.Max(0, d);
+                    double y1 = r.Y + Math.Max(0, -d);
+                    double t = Math.Min(right - x1, bottom - y1);
+                    Line(x1, y1, x1 + t, y1 + t);
+                }
+
+                break;
+            case "Pattern_Zigzag":
+                // ジグザグの横線。
+                for (double y = r.Y + (step / 2); y < bottom; y += step)
+                {
+                    for (double x = r.X; x < right; x += step)
+                    {
+                        double x2 = Math.Min(right, x + (step / 2));
+                        double x3 = Math.Min(right, x + step);
+                        Line(x, y, x2, Math.Max(r.Y, y - (step / 3)));
+                        Line(x2, Math.Max(r.Y, y - (step / 3)), x3, y);
+                    }
+                }
+
+                break;
+            case "Pattern_Frame":
+                // 内側の枠と中央の線 (埋め込まれたファイル)。
+                if (r.Width >= 3 && r.Height >= 3)
+                {
+                    Line(r.X + 1, r.Y + 1, right - 1, r.Y + 1);
+                    Line(r.X + 1, bottom - 1, right - 1, bottom - 1);
+                    Line(r.X + 1, r.Y + 1, r.X + 1, bottom - 1);
+                    Line(right - 1, r.Y + 1, right - 1, bottom - 1);
+                    Line(r.X + 1, r.Y + (r.Height / 2), right - 1, r.Y + (r.Height / 2));
+                }
+
+                break;
+            case "Pattern_SparseDots":
+                // 間隔の広い点 (標本による推定の部分)。
+                for (double y = r.Y + step; y < bottom; y += step * 2)
+                {
+                    for (double x = r.X + step; x < right; x += step * 2)
+                    {
+                        group.Children.Add(new EllipseGeometry { Center = new Point(x, y), RadiusX = 1.2, RadiusY = 1.2 });
+                    }
+                }
+
+                break;
             case "Pattern_Checker":
                 for (double y = r.Y; y < bottom; y += step)
                 {
