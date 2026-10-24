@@ -578,6 +578,15 @@ public sealed partial class StructDiffPanel : UserControl
         FocusSelected();
     }
 
+    /// <summary>行が見えるようにツリー表を動かす (テスト用の命令)。</summary>
+    internal void ScrollToRow(int row)
+    {
+        if (row >= 0 && row < _rows.Count)
+        {
+            Tree.ScrollIntoView(_rows[row]);
+        }
+    }
+
     /// <summary>「エクスポート...」を押す (テスト用の命令)。</summary>
     internal void ClickExport() => Export_Click(ExportButton, new RoutedEventArgs());
 

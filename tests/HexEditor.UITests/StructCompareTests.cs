@@ -282,4 +282,72 @@ public sealed class StructCompareTests
         Assert.Contains("Changed", AppSession.NameOf(element));
         Assert.Empty(ViewMiscTests.UnnamedInteractiveElements(app, "structure differences panel"));
     });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ANA-32-12")]
+    [Trait(UiTest.Category, "Nightly")]
+    public Task Hundred_thousand_diffs_keep_the_ui_responsive() => UiTestContext.RunAsync(async ctx =>
+    {
+        string a = ctx.TestData("TD-ANA-STRUCT-ARR100K-A");
+        string b = ctx.TestData("TD-ANA-STRUCT-ARR100K-B");
+        string items = ctx.TestData("TD-ANA-STRUCT-ARR-HXT");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [a, b] });
+        await app.SendAsync("compareOpen", new JsonObject { ["left"] = a, ["right"] = b, ["method"] = "simple" }, UiTest.Scaled(TimeSpan.FromSeconds(60)));
+        await app.SendAsync("compareWait", null, Wait);
+        JsonObject state = await app.SendAsync("structTemplate", new JsonObject { ["path"] = items, ["rows"] = false, ["timeoutSeconds"] = 600 }, UiTest.Scaled(TimeSpan.FromMinutes(10)));
+        Assert.Equal(100_000, L(state["diffCount"]));
+        await app.SendAsync("panelShow", new JsonObject { ["id"] = "structDiffs" });
+        await app.SendAsync("compareFocus", new JsonObject { ["right"] = false });
+
+        // 手順 4 の計測: キー (← / →) から Hex ビューの画面の更新までを診断の記録で計る。
+        await app.SendAsync("keyMeasured", new JsonObject { ["key"] = "Right" });
+        await app.IdleAsync();
+        string log = Path.Combine(ctx.Root, $"diagnostics-{Guid.NewGuid():N}.csv");
+        await app.SendAsync("diagnostics", new JsonObject { ["enabled"] = true, ["logPath"] = log });
+        int keys = 0;
+        async Task KeyAsync()
+        {
+            await app.SendAsync("keyMeasured", new JsonObject { ["key"] = keys++ % 2 == 0 ? "Right" : "Left" });
+            await Task.Delay(50);
+        }
+
+        // 1. 一覧を PageDown 100 回分スクロールする (1 回 = 25 行)。
+        for (int i = 1; i <= 100; i++)
+        {
+            await app.SendAsync("structScroll", new JsonObject { ["row"] = i * 25 });
+            if (i % 10 == 0)
+            {
+                await KeyAsync();
+            }
+        }
+
+        // 2. 文字列 items[9 で絞り込む (500 ms 以内)。
+        Task<JsonObject> filtering = app.SendAsync("structFilter", new JsonObject { ["text"] = "items[9", ["rows"] = false }, UiTest.Scaled(TimeSpan.FromSeconds(60)));
+        while (!filtering.IsCompleted)
+        {
+            await KeyAsync();
+        }
+
+        JsonObject filtered = await filtering;
+        TimeBudget.Limit(filtered["filterMs"]!.GetValue<double>() <= 500, $"filter: {filtered["filterMs"]} ms (limit 500 ms)");
+
+        // 3. 絞り込みを消し、すべての差分を CSV に書き出す (100,001 行)。
+        await app.SendAsync("structFilter", new JsonObject { ["text"] = string.Empty, ["rows"] = false }, UiTest.Scaled(TimeSpan.FromSeconds(60)));
+        string csv = Path.Combine(ctx.Root, "all.csv");
+        Task<JsonObject> export = app.SendAsync("structExport", new JsonObject { ["path"] = csv, ["format"] = "csv", ["all"] = true }, UiTest.Scaled(TimeSpan.FromMinutes(5)));
+        while (!export.IsCompleted)
+        {
+            await KeyAsync();
+        }
+
+        await export;
+        await app.SendAsync("diagnostics", new JsonObject { ["enabled"] = false });
+        Assert.Equal(100_001, File.ReadLines(csv).Count());
+
+        IReadOnlyList<double> latencies = FrameLog.Read(log).KeyToFrame();
+        Assert.NotEmpty(latencies);
+        string shown = string.Join(", ", latencies.Select(x => x.ToString("F1")));
+        TimeBudget.Limit(latencies.All(l => l <= 50), $"key to frame: {shown} ms (limit 50 ms)");
+        Assert.All(latencies, l => Assert.True(l <= 500, $"key to frame: {shown} ms"));
+    }, UiTest.Scaled(TimeSpan.FromMinutes(20)));
 }

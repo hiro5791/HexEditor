@@ -1235,8 +1235,8 @@ public static class StructComparer
             if (midA > 0 && midB > 0)
             {
                 var eq = new HashEq(ha, hb, prefix);
-                int maxD = Math.Min(midA + midB, 20_000);
-                List<MyersDiff.Match>? found = MyersDiff.Matches(eq, midA, midB, maxD, Stopwatch.GetTimestamp() + (Stopwatch.Frequency * 5), _token);
+                int maxD = Math.Min(midA + midB, 4096);
+                List<MyersDiff.Match>? found = MyersDiff.Matches(eq, midA, midB, maxD, Stopwatch.GetTimestamp() + (Stopwatch.Frequency * 2), _token);
                 if (found is not null)
                 {
                     matches.AddRange(found.Select(m => (m.A + prefix, m.B + prefix, m.Length)));

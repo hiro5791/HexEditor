@@ -19,7 +19,8 @@ public sealed partial class MainWindow
         switch (cmd)
         {
             case "structState":
-                return TestStructState();
+                return request["rows"]?.GetValue<bool>() == false
+                    ? new JsonObject { ["rowCount"] = StructPanel.View.RowCount, ["diffCount"] = CurrentCompare?.StructResult?.DiffCount } : TestStructState();
             case "structWait":
                 return await TestStructWaitAsync(request);
             case "structTemplate":
@@ -71,10 +72,15 @@ public sealed partial class MainWindow
                     kinds |= Enum.Parse<StructDiffFilterKinds>(k!.GetValue<string>(), ignoreCase: true);
                 }
 
+                var filterWatch = System.Diagnostics.Stopwatch.StartNew();
                 StructPanel.SetFilter(request["kinds"] is null ? StructDiffFilterKinds.All : kinds, request["text"]?.GetValue<string>() ?? string.Empty,
                     request["padding"]?.GetValue<bool>() ?? false, request["same"]?.GetValue<bool>() ?? false);
                 await WaitUntilForTestAsync(() => !StructPanel.IsBusy, TimeSpan.FromSeconds(30));
-                return TestStructState();
+                filterWatch.Stop();
+                JsonObject filtered = request["rows"]?.GetValue<bool>() == false ? new JsonObject { ["rowCount"] = StructPanel.View.RowCount } : TestStructState();
+                filtered["filterMs"] = filterWatch.Elapsed.TotalMilliseconds;
+                filtered["rowCount"] = StructPanel.View.RowCount;
+                return filtered;
             case "structMenu":
                 // 右クリックメニューを開き、{item} があれば押す
                 bool opened = StructPanel.ShowMenu(null);
@@ -148,6 +154,10 @@ public sealed partial class MainWindow
                 }
 
                 return new JsonObject { ["open"] = exportOpen };
+            case "structScroll":
+                // ツリー表を {row} の行まで動かす (PageDown の代わり。行を選ばずに表示だけを動かす)
+                StructPanel.ScrollToRow((int)request["row"]!.GetValue<long>());
+                return new JsonObject { ["rowCount"] = StructPanel.View.RowCount };
             case "structNavigate":
                 if (CurrentCompare is { } nav)
                 {
@@ -179,7 +189,8 @@ public sealed partial class MainWindow
             && (r.Choice.IsNone || r.Outside is not null || c.Result?.State != Core.Compare.CompareState.Completed)
             && StructPanel.View.Result is var shown && (r.Choice.IsNone || ReferenceEquals(shown, r)) && !StructPanel.IsBusy, limit);
         StructPanel.Update();
-        return TestStructState();
+        return request["rows"]?.GetValue<bool>() == false
+            ? new JsonObject { ["rowCount"] = StructPanel.View.RowCount, ["diffCount"] = CurrentCompare?.StructResult?.DiffCount } : TestStructState();
     }
 
     private JsonObject TestStructState()
