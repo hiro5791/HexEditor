@@ -9869,4 +9869,414 @@ La connexion n'est pas établie sauf si vous choisissez de remplacer la clé.</v
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Le début se trouve en dehors du document.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Saisissez une longueur d'enregistrement de {0} à {1} octets.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Sélectionnez une plage contenant au moins 4 enregistrements.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Sélectionnez une plage d'au moins {0} octets.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Seuls {0, plural, one {# enregistrement a} other {# enregistrements ont}} pu être lus. Il en faut au moins 4.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 dans les {0} enregistrements.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>La même valeur {0} dans les {1} enregistrements.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>La même valeur {0} dans les {1} enregistrements.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0} % sont des chaînes ASCII (jusqu'à {1} caractères).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0} % sont des chaînes UTF-16 (jusqu'à {1} caractères).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>Dans {0} enregistrements sur {1}, valeur = {2} + {3} × numéro d'enregistrement.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0} % sont des heures UNIX (secondes) de {1} à {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0} % sont des heures UNIX 64 bits (secondes) de {1} à {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0} % sont des valeurs FILETIME Windows de {1} à {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0} % sont des dates et heures MS-DOS de {1} à {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Toutes les valeurs sont inférieures à la longueur du document ({0}), {1} % sont des multiples de {2} et elles augmentent avec le numéro d'enregistrement.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Toutes les valeurs non nulles sont inférieures à la longueur du document ({0}) et {1} % d'entre elles sont différentes.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>Dans {0} % des enregistrements consécutifs, la valeur est égale à la différence avec {1} de l'enregistrement suivant.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + valeur reste dans le document pour chaque enregistrement.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0} % sont des valeurs à virgule flottante plausibles ({1} valeurs différentes).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} bits : {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} valeurs différentes : {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Valeurs de {0} à {1} ; aucune règle ne correspond.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Chaque octet a une entropie de {0:0.0} bits ou plus (proche de l'aléatoire).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} octets qui ne correspondent à aucune règle.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>En virgule flottante, seuls {0} % sont des valeurs plausibles.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>En tant que date, seuls {0} % sont compris entre 1980 et 2100.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>En tant que compteur, seuls {0} % suivent la séquence.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>En tant que chaîne, seuls {0} % commencent par un caractère imprimable.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>Le remplissage n'a pas de nom.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>« {0} » n'est pas un nom valide. Utilisez des lettres, des chiffres et _, et ne commencez pas par un chiffre.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>« {0} » est un mot réservé ou un nom de type.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Un autre champ porte déjà le nom « {0} ».</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Brouillon créé par la déduction de modèle (TPL-38). C'est une supposition : vérifiez-le avant de l'utiliser.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Source : {0}, plage {1}–{2}, longueur d'enregistrement {3}, {4, plural, one {# enregistrement} other {# enregistrements}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Enregistrements déduits ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (confiance {1}) : {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Remplissage</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Nombre magique</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Constante</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Compteur</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Date et heure</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Décalage</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Longueur</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Virgule flottante</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Chaîne</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Chaîne (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Indicateurs</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Énumération</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Entier</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Inconnu</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>élevée</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>moyenne</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>faible</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Déduction de modèle</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Déduire un modèle à partir de la sélection...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Déduction de modèle</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Déduire un modèle à partir de la sélection...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Déduire un modèle avec cette longueur</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Déduire à partir de la sélection</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>déduire deviner structure infer guess structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Déduire à nouveau</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>redéduire relancer reinfer rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Appliquer le brouillon déduit</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>appliquer brouillon apply draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Ouvrir le brouillon déduit dans l'éditeur</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>modifier brouillon edit draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Afficher le volet de déduction</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>déduction volet inference panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Volet de déduction de modèle</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>déduction inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Début</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Longueur</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Longueur d'enregistrement</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Enregistrements</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Toute la plage</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Boutisme</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Petit-boutiste</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Gros-boutiste</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Déduire</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Déduire à nouveau</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Longueurs d'enregistrement possibles</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} octets · score {1} · {2, plural, one {# enregistrement} other {# enregistrements}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Champs</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Brouillon (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Appliquer</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Ouvrir dans l'éditeur</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Copier</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Brouillon copié.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Ouvrez un document pour déduire un modèle.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Déduisez d'abord un modèle.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Saisissez le début sous forme de nombre ou d'expression.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Saisissez la longueur sous forme de nombre ou d'expression.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Saisissez le nombre d'enregistrements, ou laissez vide pour toute la plage.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Déduction en cours...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Déduction de modèle</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Aucun enregistrement de longueur fixe n'a été trouvé. Saisissez la longueur d'enregistrement.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Les enregistrements de longueur variable (dont la taille dépend d'un champ de longueur) ne peuvent pas être déduits.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Longueur d'enregistrement {0}, {1, plural, one {# enregistrement} other {# enregistrements}} ({2} utilisés pour la déduction).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Petit-boutiste.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Gros-boutiste.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# enregistrement n'a pas pu être lu et a été ignoré} other {# enregistrements n'ont pas pu être lus et ont été ignorés}}.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, one {Le dernier octet ne tient pas} other {Les # derniers octets ne tiennent pas}} dans un enregistrement.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Erreur interne : le brouillon contient des erreurs de syntaxe ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, confiance {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>sans nom</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(avertissement : confiance faible)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(modifié à la main)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>modifié</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Possibilités : {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Renommer</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Fusionner avec le champ précédent</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Fractionner...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Fractionner après ce nombre d'octets (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Comparer aussi la structure</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>Lors de la comparaison de fichiers, compare aussi les structures trouvées par un modèle de structure (champ par champ). Le modèle est choisi automatiquement lorsque les deux côtés correspondent au même modèle.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Comparaison de structure : inclure les motifs masqués</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Compare aussi les motifs marqués comme masqués dans le modèle.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Comparaison de structure : nombre maximal de champs</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Arrête la comparaison de structure après avoir comparé ce nombre de champs de chaque côté (de 10 000 à 10 000 000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Comparaison de structure : appariement des tableaux</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Détermine comment les éléments de tableau sont appariés, par modèle et par tableau. Modifiez-le avec « Méthode d'appariement... » dans le volet Différences de structure.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Comparaison : comparer la structure</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure champ modèle différence structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Comparaison : choisir le modèle pour la comparaison de structure</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure modèle choisir structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Comparaison : naviguer entre les différences de structure</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>suivante précédente structure cible next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Comparaison : afficher les différences de structure</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure différences volet structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Comparaison : différence de structure suivante</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure champ suivant structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Comparaison : différence de structure précédente</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure champ précédent structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Comparaison : exporter les différences de structure</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure exporter rapport structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Afficher ou masquer les différences de structure</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure différences volet structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Différences de structure</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Comparer la structure</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Choisir le modèle pour la comparaison de structure...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Comparer aussi la structure</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Choisir le modèle pour la comparaison de structure</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Comparer</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Décalage de début à gauche</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Décalage de début à droite</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Comparaison de structure</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Différences de structure</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Choisir un modèle</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} champs comparés</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Modèle : {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>La comparaison de structure n'est pas disponible pour les instantanés de mémoire de processus.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Aller aux données de gauche</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Aller aux données de droite</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Copier le chemin</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Copier la ligne</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Copier les valeurs de gauche et de droite</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Ajouter un signet à gauche</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Ajouter un signet à droite</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Méthode d'appariement...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Afficher dans l'arborescence de gauche</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Afficher dans l'arborescence de droite</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Comparaison de structure : {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Arrêtée avant la fin (annulée)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>réduit</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>développé</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Nom</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Genre</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Valeur de gauche</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Valeur de droite</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Décalage gauche</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Décalage droit</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Taille</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Appariement</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, gauche {2}, droite {3}, gauche {4}, droite {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>La comparaison de structure est désactivée. Activez « Comparer aussi la structure » dans la barre d'outils de l'onglet de comparaison.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>En attente de la comparaison...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Ouvrez un onglet de comparaison pour voir les différences de structure.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Terminé en {0} s</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Comparaison en cours : {0} champs</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Arrêtée à la limite de champs</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>La comparaison de structure a échoué : {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Le nombre de champs a atteint la limite ({0}) ; seule une partie a été comparée.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Afficher : {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Modèle : {0} ({1}), gauche {2} / droite {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Choisi par vous.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Le même modèle est appliqué des deux côtés.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Le nombre magique des deux côtés correspondait.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Différences de structure</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Modifié</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Ajouté</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Supprimé</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Déplacé</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Déplacé et modifié</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Type modifié</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Analyse impossible</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Identique</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Gauche : {0} erreurs, {1} avertissements</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Droite : {0} erreurs, {1} avertissements</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Sortie du modèle (gauche)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Sortie du modèle (droite)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Aucune erreur ni avertissement.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Clé : {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Contenu</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(apparié par position car il y a beaucoup d'éléments)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Aucune différence de structure.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Il n'y a aucun résultat de comparaison de structure.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Aucune différence de structure</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Retour à la première différence de structure</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Retour à la dernière différence de structure</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Aucun modèle n'a été choisi pour la comparaison de structure (les deux côtés doivent correspondre au même modèle d'après le nombre magique). Seule la comparaison d'octets a été effectuée.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>Le modèle contient une erreur de syntaxe : {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Le fichier de modèle est introuvable : {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Différences en dehors de la structure</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} différences, {1} octets</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(hors plage)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(remplissage)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>erreur de modèle</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Non comparé en raison de la limite</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Non comparé car trop profond</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Champs comparés : gauche {0}, droite {1}. {2}. En dehors de la structure : {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Choisir un modèle...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Modifier le modèle</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Relever la limite et comparer à nouveau</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Exporter...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Filtrer par nom, chemin ou valeur</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtre</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Inclure le remplissage</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Afficher les champs identiques</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Résumé</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Différences de structure</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Exporter les différences de structure</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Rapport texte</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Lignes</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Lignes affichées (après filtrage)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Toutes les différences</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Décalages</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Décimal</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Hexadécimal</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Enregistrer...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Exporter les différences de structure</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(gauche {0}, droite {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Modèle : {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Décalages de début : gauche {0}, droite {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Champs comparés : gauche {0}, droite {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Différences en dehors de la structure : {0}, {1} octets</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Erreurs et avertissements du modèle : gauche {0} / {1}, droite {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Durée : {0} s</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Méthode d'appariement</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Tableau : {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Méthode</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Automatique</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Clé</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Contenu</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Champ clé</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Filtrage en cours...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Structure du format</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Fichier incorporé</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Compressé</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Chiffré ou aléatoire</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Texte</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Zéro</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Remplissage</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Enregistrements répétés</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Binaire</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Illisible</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Estimé à partir d'échantillons</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Zéro</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Constante {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Texte ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Enregistrements répétés ({0, plural, one {# octet} other {# octets}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Élevée</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Moyenne</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Faible</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Échantillon</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Analyse</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Structure</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Estimé à partir d'échantillons : les 4 Kio centraux de chacun des {0, plural, one {# intervalle} other {# intervalles}} de {1} octets.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# octet} other {# octets consécutifs}} de valeur {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# octet n'a pas pu être lu} other {# octets n'ont pas pu être lus}}.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropie {0} bits/octet, valeur p du khi-deux {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropie {0} bits/octet.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Classé bloc par bloc ({0, plural, one {# bloc} other {# blocs}} de {1} octets).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# octet} other {# octets}} à partir de {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Le modèle « {0} » a placé le motif {1} à {2}–{3} ({4, plural, one {# octet} other {# octets}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>Signature {1} à {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Le modèle « {0} » a analysé {1}–{2} ({3, plural, one {# octet} other {# octets}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Le modèle « {0} » n'a pas pu analyser les données ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>La définition de carving « {1} » a donné une longueur de {0, plural, one {# octet} other {# octets}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>vérification de structure</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>champ de taille</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>pied de fichier</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>taille maximale</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>La fin est inconnue ; on suppose que la région se termine avant la région suivante à {0} ({1, plural, one {# octet} other {# octets}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>Le flux {0} à {1} a été décompressé et sa somme de contrôle correspond ({2, plural, one {# octet} other {# octets}} compressés, {3} octets décompressés).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>Avec un décalage de {0} octets, {1} des octets correspondent (moyenne pour les décalages 1–{2} : {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Cette carte est une estimation fondée sur des signatures et des statistiques ; elle peut être fausse.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Vue transformée : {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Document : {0} ({1}), {2, plural, one {# octet} other {# octets}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Plage : {0}–{1} ({2, plural, one {# octet} other {# octets}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Toutes les étapes sont terminées.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Toutes les étapes ne sont pas terminées (le reste est estimé à partir d'échantillons).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Octets par genre :</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0} : {1, plural, one {# octet} other {# octets}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# région} other {# régions}} :</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>et {0, plural, one {# autre région} other {# autres régions}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Créer la carte du fichier</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>carte fichier aperçu régions disposition file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Recréer la carte du fichier</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>carte fichier recréer actualiser file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Afficher la carte du fichier</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>carte fichier volet file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Exporter la carte du fichier</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>carte fichier exporter rapport file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Appliquer les modèles aux fichiers trouvés</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>carte fichier fichiers incorporés modèles file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Afficher ou masquer le volet de la carte du fichier</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>carte fichier volet file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Carte du fichier</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Carte du fichier</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Carte du fichier</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Carte du fichier</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Créer la carte du fichier</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Carte du fichier</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Exporter la carte du fichier</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Carte du fichier : modèles pour les fichiers incorporés</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Quand une carte du fichier trouve des fichiers incorporés qu'un modèle peut analyser, propose d'appliquer les modèles. Les modèles ne sont jamais appliqués automatiquement.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Proposer</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Ne rien faire</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Aperçu (échantillons)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Analyse complète</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Analyse de la structure</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Pas encore de carte du fichier. Créez-en une pour voir ce qui se trouve où dans le document.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0} : {1} %</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Terminé : {0} régions.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Arrêtée ({1} % analysé) : {0} régions. Le reste est estimé à partir d'échantillons.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Les résultats correspondent au contenu avant la modification.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>La carte du fichier n'a pas pu être créée : {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Créez une carte du fichier avec Analyse &gt; Carte du fichier, ou avec Créer ci-dessus.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {# autre candidat de format incorporé n'a pas été conservé} other {# autres candidats de format incorporé n'ont pas été conservés}}.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Créer</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Recréer</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Annuler</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Exporter</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Rapport texte...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Progression de la carte du fichier</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Zoom avant</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Zoom arrière</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Afficher toute la carte</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Afficher sous forme de tableau</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Bande de la carte du fichier : voie de structure et voie de contenu</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Faire défiler la bande de la carte du fichier</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Légende</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0} : {1, plural, one {# octet} other {# octets}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Régions de la carte du fichier</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Afficher le genre</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Tous les genres</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Lignes listées vers les signets</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Lignes listées vers la sélection multiple</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Début</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Fin (incluse)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Longueur</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Genre</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Libellé</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Confiance</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Étape</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Sélectionnez une région dans la bande ou dans la liste.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# octet} other {# octets}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, commence à {2}, {3, plural, one {# octet} other {# octets}}, confiance {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Confiance : {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Étape : {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Modèle : {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Sélectionner la plage</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Ajouter un signet</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Appliquer le modèle « {0} »</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Ouvrir dans un nouvel onglet</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Décompresser à partir d'ici...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Déduire un modèle...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Extraire les chaînes...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Enregistrer en tant que fichier...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>La déduction de modèle n'est pas disponible.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Il n'y a pas de carte du fichier pour ce document.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>La carte du fichier ne contient aucun fichier incorporé avec un modèle.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# fichier incorporé a été trouvé} other {# fichiers incorporés ont été trouvés}}. Appliquer les modèles ?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Appliquer</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Afficher la liste</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Modèles appliqués à {0, plural, one {# fichier incorporé} other {# fichiers incorporés}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Modèles appliqués à {0} fichiers incorporés. {1, plural, one {# fichier n'a pas été traité} other {# fichiers n'ont pas été traités}} car un document ne peut avoir que {2} applications au maximum.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>La carte du fichier a été exportée vers {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>La carte du fichier n'a pas pu être exportée : {0}</value></data>
 </root>

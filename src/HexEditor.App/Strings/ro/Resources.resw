@@ -9866,4 +9866,414 @@ Conexiunea nu se stabilește decât dacă alegeți să înlocuiți cheia.</value
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Începutul este în afara documentului.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Introduceți o lungime a înregistrării de la {0} la {1} octeți.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Selectați un interval care conține cel puțin 4 înregistrări.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Selectați un interval de cel puțin {0} octeți.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>S-au putut citi doar {0, plural, one {# înregistrare} few {# înregistrări} other {# de înregistrări}}. Sunt necesare cel puțin 4.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 în toate cele {0} înregistrări.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Aceeași valoare {0} în toate cele {1} înregistrări.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Aceeași valoare {0} în toate cele {1} înregistrări.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% sunt șiruri ASCII (până la {1} caractere).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% sunt șiruri UTF-16 (până la {1} caractere).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>În {0} din {1} înregistrări, valoare = {2} + {3} × numărul înregistrării.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% sunt momente UNIX (în secunde) de la {1} la {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% sunt momente UNIX pe 64 de biți (în secunde) de la {1} la {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% sunt valori FILETIME Windows de la {1} la {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% sunt date și ore MS-DOS de la {1} la {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Toate valorile sunt mai mici decât lungimea documentului ({0}), {1}% sunt multipli ai lui {2} și cresc odată cu numărul înregistrării.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Toate valorile nenule sunt mai mici decât lungimea documentului ({0}), iar {1}% dintre ele sunt diferite.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>În {0}% dintre înregistrările consecutive, valoarea este egală cu diferența față de {1} al înregistrării următoare.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + valoare rămâne în interiorul documentului în fiecare înregistrare.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% sunt valori în virgulă mobilă plauzibile ({1} valori diferite).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} biți: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} valori diferite: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Valori de la {0} la {1}; nicio regulă nu se potrivește.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Fiecare octet are o entropie de {0:0.0} biți sau mai mult (aproape aleatoare).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} octeți care nu se potrivesc cu nicio regulă.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Ca virgulă mobilă, doar {0}% sunt valori plauzibile.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Ca dată, doar {0}% se află între 1980 și 2100.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Ca contor, doar {0}% urmează secvența.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Ca șir, doar {0}% încep cu un caracter imprimabil.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>Completarea nu are nume.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>„{0}” nu este un nume valid. Folosiți litere, cifre și _ și nu începeți cu o cifră.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>„{0}” este un cuvânt rezervat sau un nume de tip.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Alt câmp se numește deja „{0}”.</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Ciornă creată prin deducerea șablonului (TPL-38). Este o presupunere, deci verificați-o înainte de a o folosi.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Sursă: {0}, interval {1}–{2}, lungimea înregistrării {3}, {4, plural, one {# înregistrare} few {# înregistrări} other {# de înregistrări}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Înregistrări deduse ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (încredere: {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Completare</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Număr magic</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Constantă</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Contor</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Dată și oră</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Deplasament</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Virgulă mobilă</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Șir</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Șir (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Indicatori</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Enumerare</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Număr întreg</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Necunoscut</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>ridicată</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>medie</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>scăzută</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Deducere șablon</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Deduce șablonul din selecție...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Deducere șablon</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Deduce șablonul din selecție...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Deduce un șablon cu această lungime</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Deduce din selecție</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>deducere ghicire structură infer guess structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Deduce din nou</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>rededucere repetare reinfer rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Aplică ciorna dedusă</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>aplică ciornă apply draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Deschide ciorna dedusă în editor</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>editare ciornă edit draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Afișează panoul de deducere</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>deducere panou inference panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Panou de deducere a șablonului</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>deducere inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Început</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Lungimea înregistrării</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Înregistrări</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Tot intervalul</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Ordinea octeților</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Deduce</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Deduce din nou</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Lungimi posibile ale înregistrării</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} octeți · scor {1} · {2, plural, one {# înregistrare} few {# înregistrări} other {# de înregistrări}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Câmpuri</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Ciornă (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Aplică</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Deschide în editor</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Copiază</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Ciorna a fost copiată.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Deschideți un document pentru a deduce un șablon.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Deduceți mai întâi un șablon.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Introduceți începutul ca număr sau expresie.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Introduceți lungimea ca număr sau expresie.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Introduceți numărul de înregistrări sau lăsați gol pentru tot intervalul.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Se deduce...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Deducere șablon</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Nu s-au găsit înregistrări cu lungime fixă. Introduceți lungimea înregistrării.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Înregistrările cu lungime variabilă (a căror dimensiune depinde de un câmp de lungime) nu pot fi deduse.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Lungimea înregistrării {0}, {1, plural, one {# înregistrare} few {# înregistrări} other {# de înregistrări}} ({2} folosite pentru deducere).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little-endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big-endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# înregistrare nu a putut fi citită și a fost omisă} few {# înregistrări nu au putut fi citite și au fost omise} other {# de înregistrări nu au putut fi citite și au fost omise}}.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, one {Ultimul # octet nu încape} few {Ultimii # octeți nu încap} other {Ultimii # de octeți nu încap}} într-o înregistrare.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Eroare internă: ciorna are erori de sintaxă ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, încredere: {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>fără nume</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(avertisment: încredere scăzută)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(modificat manual)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>modificat</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Candidați: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Redenumește</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Îmbină cu câmpul anterior</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Împarte...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Împarte după atâția octeți (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Compară și structura</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>La compararea fișierelor, compară și structurile găsite de un șablon de structură (câmp cu câmp). Șablonul este ales automat când ambele părți se potrivesc cu același șablon.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Comparare structură: include modelele ascunse</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Compară și modelele marcate ca ascunse în șablon.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Comparare structură: număr maxim de câmpuri</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Oprește compararea structurii după compararea acestui număr de câmpuri pe fiecare parte (de la 10.000 la 10.000.000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Comparare structură: asocierea tablourilor</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Cum sunt asociate elementele tablourilor, pentru fiecare șablon și tablou. Modificați cu „Metodă de asociere...” în panoul Diferențe de structură.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Comparare: compară structura</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structură câmp șablon diferență structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Comparare: alege șablonul pentru compararea structurii</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structură șablon alege structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Comparare: deplasare între diferențele de structură</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>următoarea anterioară structură țintă next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Comparare: afișează diferențele de structură</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structură diferențe panou structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Comparare: următoarea diferență de structură</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structură următorul câmp structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Comparare: diferența de structură anterioară</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structură câmpul anterior structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Comparare: exportă diferențele de structură</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structură export raport structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Afișează sau ascunde diferențele de structură</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structură diferențe panou structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Diferențe de structură</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Compară structura</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Alege șablonul pentru compararea structurii...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Compară și structura</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Alege șablonul pentru compararea structurii</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Compară</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Deplasament de început stânga</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Deplasament de început dreapta</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Comparare structură</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Diferențe de structură</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Alege șablonul</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} câmpuri comparate</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Șablon: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Compararea structurii nu este disponibilă pentru instantaneele memoriei proceselor.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Salt la datele din stânga</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Salt la datele din dreapta</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Copiază calea</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Copiază rândul</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Copiază valorile din stânga și din dreapta</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Adaugă marcaj în stânga</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Adaugă marcaj în dreapta</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Metodă de asociere...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Afișează în arborele de rezultate din stânga</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Afișează în arborele de rezultate din dreapta</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Comparare structură: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Oprit la jumătate (anulat)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>restrâns</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>extins</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Nume</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Fel</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Valoare stânga</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Valoare dreapta</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Tip</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Deplasament stânga</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Deplasament dreapta</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Dimensiune</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Asociere</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, stânga {2}, dreapta {3}, stânga {4}, dreapta {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>Compararea structurii este dezactivată. Activați „Compară și structura” în bara de instrumente a filei de comparare.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Se așteaptă compararea...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Deschideți o filă de comparare pentru a vedea diferențele de structură.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Terminat în {0} s</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Se compară: {0} câmpuri</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Oprit la limita de câmpuri</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>Compararea structurii a eșuat: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Numărul de câmpuri a atins limita ({0}), așa că a fost comparată doar o parte.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Afișează {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Șablon: {0} ({1}), stânga {2} / dreapta {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Ales de dumneavoastră.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Ambele părți au același șablon aplicat.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Numărul magic al ambelor părți s-a potrivit.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Diferențe de structură</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Modificat</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Adăugat</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Eliminat</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Mutat</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Mutat și modificat</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Tip modificat</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Nu poate fi analizat</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Identic</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Stânga: {0} erori, {1} avertismente</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Dreapta: {0} erori, {1} avertismente</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Ieșirea șablonului (stânga)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Ieșirea șablonului (dreapta)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Nicio eroare sau avertisment.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Cheie: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Conținut</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Poziție</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(asociat după poziție, deoarece sunt multe elemente)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Nu există diferențe de structură.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Nu există rezultat al comparării structurii.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Nicio diferență de structură</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>S-a revenit la prima diferență de structură</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>S-a revenit la ultima diferență de structură</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Nu a fost ales niciun șablon pentru compararea structurii (ambele părți trebuie să se potrivească cu același șablon după numărul magic). S-a făcut doar compararea octeților.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>Șablonul are o eroare de sintaxă: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Fișierul șablon nu a fost găsit: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Diferențe în afara structurii</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} diferențe, {1} octeți</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(în afara intervalului)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(completare)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>eroare de șablon</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Necomparat din cauza limitei</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Necomparat deoarece este prea adânc</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Câmpuri comparate: stânga {0}, dreapta {1}. {2}. În afara structurii: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Alege șablonul...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Editare șablon</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Mărește limita și compară din nou</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Exportă...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Filtrează după nume, cale sau valoare</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtru</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Include completarea</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Afișează câmpurile care se potrivesc</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Rezumat</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Diferențe de structură</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Exportă diferențele de structură</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Raport text</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Rânduri</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Rânduri afișate (după filtrare)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Toate diferențele</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Deplasamente</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Zecimal</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Hexazecimal</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Salvează...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Exportă diferențele de structură</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(stânga {0}, dreapta {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Șablon: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Deplasamente de început: stânga {0}, dreapta {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Câmpuri comparate: stânga {0}, dreapta {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Diferențe în afara structurii: {0}, {1} octeți</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Erori și avertismente ale șablonului: stânga {0} / {1}, dreapta {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Timp scurs: {0} s</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Metodă de asociere</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Tablou: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Metodă</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Automat</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Cheie</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Conținut</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Poziție</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Câmp cheie</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Se filtrează...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Structura formatului</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Fișier încorporat</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Comprimat</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Criptat sau aleator</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Zero</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Completare</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Înregistrări repetate</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Binar</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Ilizibil</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Estimat din eșantioane</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Zero</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Constantă {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Text ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Înregistrări repetate ({0, plural, one {# octet} few {# octeți} other {# de octeți}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Ridicată</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Medie</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Scăzută</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Eșantion</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Scanare</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Structură</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Estimat din eșantioane: cei 4 KiB din mijloc ai fiecăruia dintre {0, plural, one {# interval} few {# intervale} other {# de intervale}} de {1} octeți.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# octet} few {# octeți consecutivi} other {# de octeți consecutivi}} cu valoarea {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# octet nu a putut fi citit} few {# octeți nu au putut fi citiți} other {# de octeți nu au putut fi citiți}}.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropie {0} biți/octet, valoarea p chi-pătrat {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropie {0} biți/octet.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Clasificat bloc cu bloc ({0, plural, one {# bloc} few {# blocuri} other {# de blocuri}} de {1} octeți).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# octet} few {# octeți} other {# de octeți}} începând de la {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Șablonul „{0}” a plasat modelul {1} la {2}–{3} ({4, plural, one {# octet} few {# octeți} other {# de octeți}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>Semnătura {1} la {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Șablonul „{0}” a analizat {1}–{2} ({3, plural, one {# octet} few {# octeți} other {# de octeți}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Șablonul „{0}” nu a putut analiza datele ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>Definiția de carving „{1}” a dat o lungime de {0, plural, one {# octet} few {# octeți} other {# de octeți}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>verificarea structurii</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>câmp de dimensiune</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>subsol</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>dimensiune maximă</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>Sfârșitul este necunoscut; se presupune că regiunea se termină înaintea următoarei regiuni de la {0} ({1, plural, one {# octet} few {# octeți} other {# de octeți}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>Fluxul {0} de la {1} a fost decomprimat, iar suma sa de control se potrivește ({2, plural, one {# octet} few {# octeți} other {# de octeți}} comprimați, {3} octeți decomprimați).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>Cu o deplasare de {0} octeți, {1} dintre octeți se potrivesc (media pentru deplasările 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Această hartă este o estimare bazată pe semnături și statistici și poate fi greșită.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Vizualizare transformată: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Document: {0} ({1}), {2, plural, one {# octet} few {# octeți} other {# de octeți}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Interval: {0}–{1} ({2, plural, one {# octet} few {# octeți} other {# de octeți}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Toate etapele sunt complete.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Nu toate etapele sunt complete (restul este estimat din eșantioane).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Octeți pe fel:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# octet} few {# octeți} other {# de octeți}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# regiune} few {# regiuni} other {# de regiuni}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>și încă {0, plural, one {# regiune} few {# regiuni} other {# de regiuni}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Creează harta fișierului</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>hartă fișier prezentare regiuni aspect file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Recreează harta fișierului</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>hartă fișier recreare reîmprospătare file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Afișează harta fișierului</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>hartă fișier panou file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Exportă harta fișierului</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>hartă fișier export raport file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Aplică șabloane fișierelor găsite</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>hartă fișier fișiere încorporate șabloane file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Afișează sau ascunde panoul hărții fișierului</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>hartă fișier panou file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Harta fișierului</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Harta fișierului</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Harta fișierului</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Harta fișierului</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Creează harta fișierului</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Harta fișierului</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Exportă harta fișierului</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Harta fișierului: șabloane pentru fișiere încorporate</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Când o hartă a fișierului găsește fișiere încorporate pe care un șablon le poate analiza, sugerează aplicarea șabloanelor. Șabloanele nu sunt niciodată aplicate automat.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Sugerează</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Nu face nimic</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Prezentare (eșantioane)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Scanare completă</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Analiza structurii</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Încă nu există o hartă a fișierului. Creați una pentru a vedea ce se află unde în document.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Terminat: {0} regiuni.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Oprit ({1}% scanat): {0} regiuni. Restul este estimat din eșantioane.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Rezultatele sunt pentru conținutul de dinainte de editare.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>Harta fișierului nu a putut fi creată: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Creați o hartă a fișierului din Analiză &gt; Harta fișierului sau cu Creează de mai sus.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {Încă # candidat de format încorporat nu a fost păstrat} few {Încă # candidați de format încorporat nu au fost păstrați} other {Încă # de candidați de format încorporat nu au fost păstrați}}.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Creează</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Recreează</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Anulează</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Exportă</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Raport text...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Progresul hărții fișierului</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Mărire</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Micșorare</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Afișează întreaga hartă</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Afișează ca tabel</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Banda hărții fișierului: banda structurii și banda conținutului</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Derulează banda hărții fișierului</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Legendă</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# octet} few {# octeți} other {# de octeți}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Regiunile hărții fișierului</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Afișează felul</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Toate felurile</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Rândurile listate în marcaje</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Rândurile listate în selecția multiplă</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Început</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Sfârșit (inclusiv)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Lungime</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Fel</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Etichetă</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Încredere</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Etapă</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Selectați o regiune în bandă sau în listă.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# octet} few {# octeți} other {# de octeți}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, începe la {2}, {3, plural, one {# octet} few {# octeți} other {# de octeți}}, încredere: {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Încredere: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Etapă: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Șablon: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Selectează intervalul</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Adaugă marcaj</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Aplică șablonul „{0}”</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Deschide într-o filă nouă</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Decomprimă de aici...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Deduce șablonul...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Extrage șirurile...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Salvează ca fișier...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Deducerea șablonului nu este disponibilă.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Nu există o hartă a fișierului pentru acest document.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>Harta fișierului nu are fișiere încorporate cu șablon.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {A fost găsit # fișier încorporat} few {Au fost găsite # fișiere încorporate} other {Au fost găsite # de fișiere încorporate}}. Aplicați șabloanele?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Aplică</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Afișează lista</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Șabloane aplicate la {0, plural, one {# fișier încorporat} few {# fișiere încorporate} other {# de fișiere încorporate}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Șabloane aplicate la {0} fișiere încorporate. {1, plural, one {# fișier nu a fost aplicat} few {# fișiere nu au fost aplicate} other {# de fișiere nu au fost aplicate}}, deoarece un document poate avea cel mult {2} aplicări.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Harta fișierului a fost exportată în {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>Harta fișierului nu a putut fi exportată: {0}</value></data>
 </root>

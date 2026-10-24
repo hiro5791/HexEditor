@@ -9869,4 +9869,414 @@ Die Verbindung wird nur hergestellt, wenn Sie den Schlüssel ersetzen.</value></
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} Min.</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} Std.</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Der Anfang liegt außerhalb des Dokuments.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Geben Sie eine Datensatzlänge von {0} bis {1} Byte ein.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Wählen Sie einen Bereich mit mindestens 4 Datensätzen aus.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Wählen Sie einen Bereich von mindestens {0} Byte aus.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Nur {0, plural, one {# Datensatz} other {# Datensätze}} konnten gelesen werden. Es sind mindestens 4 nötig.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 in allen {0} Datensätzen.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Derselbe Wert {0} in allen {1} Datensätzen.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Derselbe Wert {0} in allen {1} Datensätzen.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0} % sind ASCII-Zeichenfolgen (bis zu {1} Zeichen).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0} % sind UTF-16-Zeichenfolgen (bis zu {1} Zeichen).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>In {0} von {1} Datensätzen gilt: Wert = {2} + {3} × Datensatznummer.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0} % sind UNIX-Zeiten (Sekunden) von {1} bis {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0} % sind 64-Bit-UNIX-Zeiten (Sekunden) von {1} bis {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0} % sind Windows-FILETIME-Werte von {1} bis {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0} % sind MS-DOS-Datums- und Zeitangaben von {1} bis {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Alle Werte liegen unter der Dokumentlänge ({0}), {1} % sind Vielfache von {2} und sie steigen mit der Datensatznummer an.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Alle Werte ungleich null liegen unter der Dokumentlänge ({0}) und {1} % davon sind verschieden.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>In {0} % der aufeinanderfolgenden Datensätze entspricht der Wert der Differenz zu {1} des nächsten Datensatzes.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + Wert bleibt in jedem Datensatz innerhalb des Dokuments.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0} % sind plausible Gleitkommawerte ({1} verschiedene Werte).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} Bits: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} verschiedene Werte: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Werte von {0} bis {1}; keine Regel passt.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Jedes Byte hat eine Entropie von {0:0.0} Bit oder mehr (nahezu zufällig).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} Byte, auf die keine Regel passt.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Als Gleitkommazahl sind nur {0} % plausible Werte.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Als Datum liegen nur {0} % zwischen 1980 und 2100.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Als Zähler folgen nur {0} % der Folge.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Als Zeichenfolge beginnen nur {0} % mit einem druckbaren Zeichen.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>Padding hat keinen Namen.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>„{0}“ ist kein gültiger Name. Verwenden Sie Buchstaben, Ziffern und _ und beginnen Sie nicht mit einer Ziffer.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>„{0}“ ist ein reserviertes Wort oder ein Typname.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Ein anderes Feld heißt bereits „{0}“.</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Entwurf aus der Vorlagenableitung (TPL-38). Er ist eine Vermutung, prüfen Sie ihn also, bevor Sie ihn verwenden.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Quelle: {0}, Bereich {1}–{2}, Datensatzlänge {3}, {4, plural, one {# Datensatz} other {# Datensätze}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Abgeleitete Datensätze ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (Zuverlässigkeit {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Padding</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Magic</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Konstante</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Zähler</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Datum und Uhrzeit</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Länge</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Gleitkomma</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Zeichenfolge</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Zeichenfolge (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Flags</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Aufzählung</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Ganzzahl</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Unbekannt</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>hoch</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>mittel</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>niedrig</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Vorlagenableitung</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Vorlage aus Auswahl ableiten...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Vorlagenableitung</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Vorlage aus Auswahl ableiten...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Vorlage mit dieser Länge ableiten</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Aus Auswahl ableiten</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>ableiten vermuten struktur infer guess structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Erneut ableiten</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>neu ableiten wiederholen reinfer rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Abgeleiteten Entwurf anwenden</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>anwenden entwurf apply draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Abgeleiteten Entwurf im Editor öffnen</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>bearbeiten entwurf edit draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Ableitungsbereich anzeigen</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>ableitung bereich inference panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Bereich „Vorlagenableitung“</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>ableitung inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Anfang</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Länge</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Datensatzlänge</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Automatisch</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Datensätze</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Gesamter Bereich</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Bytereihenfolge</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Automatisch</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little-Endian</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big-Endian</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Ableiten</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Erneut ableiten</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Kandidaten für die Datensatzlänge</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} Byte · Wertung {1} · {2, plural, one {# Datensatz} other {# Datensätze}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Felder</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Entwurf (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Anwenden</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Im Editor öffnen</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Kopieren</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Entwurf kopiert.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Öffnen Sie ein Dokument, um eine Vorlage abzuleiten.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Leiten Sie zuerst eine Vorlage ab.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Geben Sie den Anfang als Zahl oder Ausdruck ein.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Geben Sie die Länge als Zahl oder Ausdruck ein.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Geben Sie die Anzahl der Datensätze ein oder lassen Sie das Feld für den gesamten Bereich leer.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Ableitung läuft...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Vorlagenableitung</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Es wurden keine Datensätze fester Länge gefunden. Geben Sie die Datensatzlänge ein.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Datensätze variabler Länge (deren Größe von einem Längenfeld abhängt) lassen sich nicht ableiten.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Datensatzlänge {0}, {1, plural, one {# Datensatz} other {# Datensätze}} ({2} für die Ableitung verwendet).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little-Endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big-Endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# Datensatz konnte nicht gelesen werden und wurde ausgelassen} other {# Datensätze konnten nicht gelesen werden und wurden ausgelassen}}.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, one {Das letzte # Byte passt} other {Die letzten # Byte passen}} nicht in einen Datensatz.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Interner Fehler: Der Entwurf enthält Syntaxfehler ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, Zuverlässigkeit {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>ohne Namen</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(Warnung: geringe Zuverlässigkeit)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(von Hand geändert)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>geändert</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Kandidaten: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Umbenennen</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Mit vorherigem Feld zusammenführen</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Teilen...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Nach dieser Anzahl Byte teilen (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Struktur auch vergleichen</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>Beim Vergleichen von Dateien auch die Strukturen vergleichen, die eine Strukturvorlage findet (Feld für Feld). Die Vorlage wird automatisch gewählt, wenn beide Seiten zur selben Vorlage passen.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Strukturvergleich: versteckte Muster einbeziehen</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Vergleicht auch Muster, die in der Vorlage als versteckt markiert sind.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Strukturvergleich: maximale Feldanzahl</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Beendet den Strukturvergleich, nachdem auf jeder Seite so viele Felder verglichen wurden (10.000 bis 10.000.000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Strukturvergleich: Array-Zuordnung</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Legt fest, wie Array-Elemente zugeordnet werden, je Vorlage und Array. Ändern Sie dies mit „Zuordnungsmethode...“ im Bereich „Strukturunterschiede“.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Vergleich: Struktur vergleichen</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>struktur feld vorlage unterschied structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Vergleich: Vorlage für Strukturvergleich wählen</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>struktur vorlage wählen structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Vergleich: zwischen Strukturunterschieden wechseln</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>nächster vorheriger struktur ziel next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Vergleich: Strukturunterschiede anzeigen</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>struktur unterschiede bereich structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Vergleich: nächster Strukturunterschied</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>struktur nächstes feld structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Vergleich: vorheriger Strukturunterschied</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>struktur vorheriges feld structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Vergleich: Strukturunterschiede exportieren</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>struktur export bericht structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Strukturunterschiede ein/aus</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>struktur unterschiede bereich structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Strukturunterschiede</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Struktur vergleichen</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Vorlage für Strukturvergleich wählen...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Struktur auch vergleichen</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Vorlage für Strukturvergleich wählen</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Vergleichen</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Startoffset links</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Startoffset rechts</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Strukturvergleich</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Strukturunterschiede</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Vorlage wählen</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} Felder verglichen</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Vorlage: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Der Strukturvergleich ist für Prozessspeicher-Snapshots nicht verfügbar.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Zu linken Daten gehen</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Zu rechten Daten gehen</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Pfad kopieren</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Zeile kopieren</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Linken und rechten Wert kopieren</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Lesezeichen links hinzufügen</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Lesezeichen rechts hinzufügen</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Zuordnungsmethode...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Im linken Ergebnisbaum anzeigen</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Im rechten Ergebnisbaum anzeigen</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Strukturvergleich: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Vorzeitig beendet (abgebrochen)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>eingeklappt</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>ausgeklappt</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Art</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Linker Wert</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Rechter Wert</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Linker Offset</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Rechter Offset</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Größe</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Zuordnung</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, links {2}, rechts {3}, links {4}, rechts {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>Der Strukturvergleich ist aus. Aktivieren Sie „Struktur auch vergleichen“ in der Symbolleiste der Vergleichsregisterkarte.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Warten auf den Vergleich...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Öffnen Sie eine Vergleichsregisterkarte, um Strukturunterschiede zu sehen.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Fertig in {0} s</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Vergleich läuft: {0} Felder</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Bei der Feldgrenze beendet</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>Der Strukturvergleich ist fehlgeschlagen: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Die Anzahl der Felder hat die Grenze ({0}) erreicht, daher wurde nur ein Teil verglichen.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>{0} anzeigen</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Vorlage: {0} ({1}), links {2} / rechts {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Von Ihnen gewählt.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Auf beiden Seiten ist dieselbe Vorlage angewendet.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Das Magic beider Seiten stimmte überein.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Strukturunterschiede</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Geändert</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Hinzugefügt</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Entfernt</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Verschoben</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Verschoben und geändert</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Typ geändert</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Nicht analysierbar</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Gleich</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Links: {0} Fehler, {1} Warnungen</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Rechts: {0} Fehler, {1} Warnungen</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Vorlagenausgabe (links)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Vorlagenausgabe (rechts)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Keine Fehler oder Warnungen.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Schlüssel: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Inhalt</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(nach Position zugeordnet, da es viele Elemente gibt)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Keine Strukturunterschiede.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Es gibt kein Ergebnis des Strukturvergleichs.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Keine Strukturunterschiede</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Zurück zum ersten Strukturunterschied</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Zurück zum letzten Strukturunterschied</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Für den Strukturvergleich wurde keine Vorlage gewählt (beide Seiten müssen anhand des Magic zur selben Vorlage passen). Es wurde nur der Bytevergleich durchgeführt.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>Die Vorlage enthält einen Syntaxfehler: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Die Vorlagendatei wurde nicht gefunden: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Unterschiede außerhalb der Struktur</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} Unterschiede, {1} Byte</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(außerhalb des Bereichs)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(Padding)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>Vorlagenfehler</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Wegen der Grenze nicht verglichen</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Wegen zu großer Tiefe nicht verglichen</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Verglichene Felder: links {0}, rechts {1}. {2}. Außerhalb der Struktur: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Vorlage wählen...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Vorlage bearbeiten</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Grenze erhöhen und erneut vergleichen</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Exportieren...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Nach Name, Pfad oder Wert filtern</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filter</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Padding einbeziehen</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Übereinstimmende Felder anzeigen</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Zusammenfassung</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Strukturunterschiede</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Strukturunterschiede exportieren</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Textbericht</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Zeilen</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Angezeigte Zeilen (nach dem Filtern)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Alle Unterschiede</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Offsets</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Dezimal</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Hexadezimal</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Speichern...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Strukturunterschiede exportieren</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(links {0}, rechts {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Vorlage: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Startoffsets: links {0}, rechts {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Verglichene Felder: links {0}, rechts {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Unterschiede außerhalb der Struktur: {0}, {1} Byte</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Vorlagenfehler und -warnungen: links {0} / {1}, rechts {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Verstrichene Zeit: {0} s</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Zuordnungsmethode</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Array: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Methode</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Automatisch</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Schlüssel</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Inhalt</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Schlüsselfeld</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Filterung läuft...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Formatstruktur</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Eingebettete Datei</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Komprimiert</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Verschlüsselt oder zufällig</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Null</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Padding</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Wiederholte Datensätze</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Binär</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Nicht lesbar</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Anhand von Stichproben geschätzt</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Null</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Konstante {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Text ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Wiederholte Datensätze ({0, plural, one {# Byte} other {# Byte}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Hoch</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Mittel</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Niedrig</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Stichprobe</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Scan</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Struktur</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Anhand von Stichproben geschätzt: die mittleren 4 KiB von {0, plural, one {# Intervall} other {# Intervallen}} zu je {1} Byte.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# Byte} other {# aufeinanderfolgende Byte}} mit dem Wert {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# Byte} other {# Byte}} konnten nicht gelesen werden.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropie {0} Bit/Byte, Chi-Quadrat-p-Wert {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropie {0} Bit/Byte.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Blockweise klassifiziert ({0, plural, one {# Block} other {# Blöcke}} zu je {1} Byte).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# Byte} other {# Byte}} ab {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Die Vorlage „{0}“ hat das Muster {1} bei {2}–{3} platziert ({4, plural, one {# Byte} other {# Byte}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{1}-Signatur bei {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Die Vorlage „{0}“ hat {1}–{2} analysiert ({3, plural, one {# Byte} other {# Byte}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Die Vorlage „{0}“ konnte die Daten nicht analysieren ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>Die Carving-Definition „{1}“ ergab eine Länge von {0, plural, one {# Byte} other {# Byte}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>Strukturprüfung</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>Größenfeld</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>Footer</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>maximale Größe</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>Das Ende ist unbekannt; es wird angenommen, dass die Region vor der nächsten Region bei {0} endet ({1, plural, one {# Byte} other {# Byte}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>Der {0}-Datenstrom bei {1} wurde dekomprimiert und seine Prüfsumme stimmt ({2, plural, one {# Byte} other {# Byte}} komprimiert, {3} Byte dekomprimiert).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>Bei einer Verschiebung um {0} Byte stimmen {1} der Bytes überein (Durchschnitt für Verschiebungen 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Diese Karte ist eine Schätzung auf Grundlage von Signaturen und Statistiken und kann falsch sein.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Transformationsansicht: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Dokument: {0} ({1}), {2, plural, one {# Byte} other {# Byte}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Bereich: {0}–{1} ({2, plural, one {# Byte} other {# Byte}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Alle Phasen sind abgeschlossen.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Nicht alle Phasen sind abgeschlossen (der Rest wird anhand von Stichproben geschätzt).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Byte nach Art:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# Byte} other {# Byte}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# Region} other {# Regionen}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>und {0, plural, one {# weitere Region} other {# weitere Regionen}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Dateikarte erstellen</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>dateikarte übersicht regionen aufbau file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Dateikarte neu erstellen</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>dateikarte neu erstellen aktualisieren file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Dateikarte anzeigen</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>dateikarte bereich file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Dateikarte exportieren</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>dateikarte export bericht file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Vorlagen auf gefundene Dateien anwenden</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>dateikarte eingebettete dateien vorlagen file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Bereich „Dateikarte“ ein/aus</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>dateikarte bereich file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Dateikarte</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Dateikarte</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Dateikarte</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Dateikarte</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Dateikarte erstellen</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Dateikarte</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Dateikarte exportieren</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Dateikarte: Vorlagen für eingebettete Dateien</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Wenn eine Dateikarte eingebettete Dateien findet, die eine Vorlage analysieren kann, wird vorgeschlagen, die Vorlagen anzuwenden. Vorlagen werden nie automatisch angewendet.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Vorschlagen</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Nichts tun</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Übersicht (Stichproben)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Vollständiger Scan</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Strukturanalyse</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Noch keine Dateikarte. Erstellen Sie eine, um zu sehen, was wo im Dokument liegt.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1} %</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Fertig: {0} Regionen.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Beendet ({1} % gescannt): {0} Regionen. Der Rest wird anhand von Stichproben geschätzt.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Die Ergebnisse gelten für den Inhalt vor der Bearbeitung.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>Die Dateikarte konnte nicht erstellt werden: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Erstellen Sie eine Dateikarte über Analyse &gt; Dateikarte oder mit „Erstellen“ oben.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {# weiterer Kandidat für ein eingebettetes Format wurde} other {# weitere Kandidaten für eingebettete Formate wurden}} nicht beibehalten.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Erstellen</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Neu erstellen</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Exportieren</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Textbericht...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Fortschritt der Dateikarte</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Vergrößern</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Verkleinern</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Gesamte Karte anzeigen</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Als Tabelle anzeigen</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Dateikartenband: Strukturspur und Inhaltsspur</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Dateikartenband scrollen</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Legende</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# Byte} other {# Byte}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Regionen der Dateikarte</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Art anzeigen</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Alle Arten</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Aufgelistete Zeilen als Lesezeichen</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Aufgelistete Zeilen als Mehrfachauswahl</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Anfang</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Ende (einschließlich)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Länge</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Art</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Bezeichnung</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Zuverlässigkeit</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Phase</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Wählen Sie eine Region im Band oder in der Liste aus.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# Byte} other {# Byte}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, beginnt bei {2}, {3, plural, one {# Byte} other {# Byte}}, Zuverlässigkeit {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Zuverlässigkeit: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Phase: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Vorlage: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Bereich auswählen</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Lesezeichen hinzufügen</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Vorlage „{0}“ anwenden</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>In neuer Registerkarte öffnen</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Ab hier dekomprimieren...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Vorlage ableiten...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Zeichenfolgen extrahieren...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Als Datei speichern...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Die Vorlagenableitung ist nicht verfügbar.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Für dieses Dokument gibt es keine Dateikarte.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>Die Dateikarte enthält keine eingebetteten Dateien mit einer Vorlage.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# eingebettete Datei wurde} other {# eingebettete Dateien wurden}} gefunden. Vorlagen anwenden?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Anwenden</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Liste anzeigen</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Vorlagen auf {0, plural, one {# eingebettete Datei} other {# eingebettete Dateien}} angewendet.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Vorlagen auf {0} eingebettete Dateien angewendet. {1, plural, one {# Datei wurde} other {# Dateien wurden}} nicht angewendet, weil ein Dokument höchstens {2} Anwendungen haben kann.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Die Dateikarte wurde nach {0} exportiert.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>Die Dateikarte konnte nicht exportiert werden: {0}</value></data>
 </root>

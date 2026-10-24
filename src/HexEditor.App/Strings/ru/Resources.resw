@@ -9866,4 +9866,414 @@
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} с</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} мин</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} ч</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Начало находится за пределами документа.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Введите длину записи от {0} до {1} байт.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Выделите диапазон, содержащий не менее 4 записей.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Выделите диапазон длиной не менее {0} байт.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Удалось прочитать только {0, plural, one {# запись} few {# записи} many {# записей} other {# записи}}. Нужно не менее 4.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 во всех {0} записях.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Одно и то же значение {0} во всех {1} записях.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Одно и то же значение {0} во всех {1} записях.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% — строки ASCII (до {1} символов).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% — строки UTF-16 (до {1} символов).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>В {0} из {1} записей значение = {2} + {3} × номер записи.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% — время UNIX (в секундах) от {1} до {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% — 64-разрядное время UNIX (в секундах) от {1} до {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% — значения Windows FILETIME от {1} до {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% — дата и время MS-DOS от {1} до {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Все значения меньше длины документа ({0}), {1}% кратны {2} и растут с номером записи.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Все ненулевые значения меньше длины документа ({0}), и {1}% из них различны.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>В {0}% последовательных записей значение равно разности с {1} следующей записи.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + значение остается в пределах документа в каждой записи.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% — правдоподобные числа с плавающей запятой ({1} различных значений).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} бит: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>Разных значений — {0}: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Значения от {0} до {1}; ни одно правило не подошло.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Энтропия каждого байта — {0:0.0} бита или больше (почти случайные данные).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} байт, не подходящих ни под одно правило.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Как числа с плавающей запятой, правдоподобны только {0}% значений.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Как дата, только {0}% значений лежат между 1980 и 2100 годом.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Как счетчик, только {0}% значений следуют последовательности.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Как строка, только {0}% значений начинаются с печатного символа.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>У заполнения нет имени.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>«{0}» — недопустимое имя. Используйте буквы, цифры и _, и не начинайте имя с цифры.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>«{0}» — зарезервированное слово или имя типа.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Другое поле уже называется «{0}».</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Черновик создан функцией определения шаблона (TPL-38). Это предположение, поэтому проверьте его перед использованием.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Источник: {0}, диапазон {1}–{2}, длина записи {3}, {4, plural, one {# запись} few {# записи} many {# записей} other {# записи}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Определенные записи ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (достоверность: {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Заполнение</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Магическое число</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Константа</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Счетчик</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Дата и время</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Смещение</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Число с плавающей запятой</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Строка</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Строка (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Флаги</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Перечисление</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Целое число</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Неизвестно</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>высокая</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>средняя</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>низкая</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Определение шаблона</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Определить шаблон по выделению...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Определение шаблона</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Определить шаблон по выделению...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Определить шаблон с такой длиной</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Определить по выделению</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>определить угадать структура infer guess structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Определить снова</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>повторить заново reinfer rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Применить определенный черновик</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>применить черновик apply draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Открыть определенный черновик в редакторе</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>изменить черновик edit draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Показать панель определения</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>определение панель inference panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Панель определения шаблона</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>определение inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Начало</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Длина записи</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Авто</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Записи</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Весь диапазон</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Порядок байтов</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Авто</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Определить</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Определить снова</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Варианты длины записи</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} байт · оценка {1} · {2, plural, one {# запись} few {# записи} many {# записей} other {# записи}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Поля</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Черновик (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Применить</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Открыть в редакторе</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Копировать</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Черновик скопирован.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Откройте документ, чтобы определить шаблон.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Сначала определите шаблон.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Введите начало в виде числа или выражения.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Введите длину в виде числа или выражения.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Введите число записей или оставьте поле пустым для всего диапазона.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Определение...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Определение шаблона</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Записи фиксированной длины не найдены. Введите длину записи.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Записи переменной длины (размер которых зависит от поля длины) определить нельзя.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Длина записи {0}, {1, plural, one {# запись} few {# записи} many {# записей} other {# записи}} (для определения использовано {2}).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little-endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big-endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# запись не удалось прочитать, она пропущена} few {# записи не удалось прочитать, они пропущены} many {# записей не удалось прочитать, они пропущены} other {# записи не удалось прочитать, они пропущены}}.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, one {Последний # байт не помещается} few {Последние # байта не помещаются} many {Последние # байт не помещаются} other {Последнего # байта не помещается}} в запись.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Внутренняя ошибка: в черновике есть синтаксические ошибки ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, достоверность: {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>без имени</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(предупреждение: низкая достоверность)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(изменено вручную)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>изменено</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Варианты: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Переименовать</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Объединить с предыдущим полем</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Разделить...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Разделить после такого числа байт (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Сравнивать также структуру</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>При сравнении файлов также сравнивает структуры, найденные шаблоном структуры (поле за полем). Шаблон выбирается автоматически, если обе стороны подходят под один и тот же шаблон.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Сравнение структуры: учитывать скрытые шаблоны</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Сравнивает также шаблоны, помеченные в шаблоне как скрытые.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Сравнение структуры: максимум полей</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Останавливает сравнение структуры после сравнения такого числа полей с каждой стороны (от 10 000 до 10 000 000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Сравнение структуры: сопоставление массивов</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Определяет, как сопоставляются элементы массивов, отдельно для каждого шаблона и массива. Изменяется командой «Способ сопоставления...» на панели «Различия структуры».</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Сравнение: сравнить структуру</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>структура поле шаблон различие structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Сравнение: выбрать шаблон для сравнения структуры</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>структура шаблон выбрать structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Сравнение: переход между различиями структуры</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>следующее предыдущее структура цель next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Сравнение: показать различия структуры</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>структура различия панель structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Сравнение: следующее различие структуры</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>структура следующее поле structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Сравнение: предыдущее различие структуры</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>структура предыдущее поле structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Сравнение: экспортировать различия структуры</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>структура экспорт отчет structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Показать или скрыть различия структуры</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>структура различия панель structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Различия структуры</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Сравнить структуру</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Выбрать шаблон для сравнения структуры...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Сравнивать также структуру</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Выбрать шаблон для сравнения структуры</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Сравнить</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Начальное смещение слева</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Начальное смещение справа</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Сравнение структуры</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Различия структуры</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Выбрать шаблон</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>Сравнено полей: {0}</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Шаблон: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Сравнение структуры недоступно для снимков памяти процесса.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Перейти к данным слева</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Перейти к данным справа</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Копировать путь</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Копировать строку</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Копировать значения слева и справа</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Добавить закладку слева</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Добавить закладку справа</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Способ сопоставления...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Показать в левом дереве результатов</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Показать в правом дереве результатов</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Сравнение структуры: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Остановлено на полпути (отменено)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>свернуто</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>развернуто</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Вид</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Значение слева</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Значение справа</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Смещение слева</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Смещение справа</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Размер</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Сопоставление</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, слева {2}, справа {3}, слева {4}, справа {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>Сравнение структуры выключено. Включите «Сравнивать также структуру» на панели инструментов вкладки сравнения.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Ожидание сравнения...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Откройте вкладку сравнения, чтобы увидеть различия структуры.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Готово за {0} с</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Сравнение: полей — {0}</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Остановлено на лимите полей</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>Не удалось сравнить структуру: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Число полей достигло лимита ({0}), поэтому сравнена только часть.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Показать: {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Шаблон: {0} ({1}), слева {2} / справа {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Выбрано вами.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>С обеих сторон применен один и тот же шаблон.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Магические числа обеих сторон совпали.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Различия структуры</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Изменено</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Добавлено</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Удалено</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Перемещено</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Перемещено и изменено</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Тип изменен</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Не удается разобрать</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Совпадает</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Слева: ошибок — {0}, предупреждений — {1}</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Справа: ошибок — {0}, предупреждений — {1}</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Вывод шаблона (слева)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Вывод шаблона (справа)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Нет ошибок и предупреждений.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Ключ: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Содержимое</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Позиция</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(сопоставлено по позиции, так как элементов много)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Различий структуры нет.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Результата сравнения структуры нет.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Различий структуры нет</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Возврат к первому различию структуры</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Возврат к последнему различию структуры</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Для сравнения структуры не выбран шаблон (обе стороны должны подходить под один и тот же шаблон по магическому числу). Выполнено только побайтовое сравнение.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>В шаблоне есть синтаксическая ошибка: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Файл шаблона не найден: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Различия вне структуры</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>Различий: {0}, байт: {1}</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(вне диапазона)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(заполнение)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>ошибка шаблона</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Не сравнивалось из-за лимита</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Не сравнивалось: слишком большая глубина</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Сравнено полей: слева {0}, справа {1}. {2}. Вне структуры: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Выбрать шаблон...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Изменить шаблон</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Увеличить лимит и сравнить снова</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Экспорт...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Фильтр по имени, пути или значению</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Фильтр</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Включить заполнение</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Показать совпадающие поля</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Сводка</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Различия структуры</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Экспорт различий структуры</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Текстовый отчет</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Строки</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Показанные строки (после фильтрации)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Все различия</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Смещения</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Десятичные</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Шестнадцатеричные</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Сохранить...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Экспорт различий структуры</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(слева {0}, справа {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Шаблон: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Начальные смещения: слева {0}, справа {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Сравнено полей: слева {0}, справа {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Различия вне структуры: {0}, байт: {1}</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Ошибки и предупреждения шаблона: слева {0} / {1}, справа {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Прошло: {0} с</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Способ сопоставления</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Массив: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Способ</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Автоматически</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Ключ</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Содержимое</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Позиция</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Поле ключа</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Фильтрация...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Структура формата</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Встроенный файл</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Сжатые</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Зашифрованные или случайные</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Текст</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Нули</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Заполнение</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Повторяющиеся записи</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Двоичные</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Нечитаемые</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Оценено по выборкам</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Нули</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Константа {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Текст ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Повторяющиеся записи ({0, plural, one {# байт} few {# байта} many {# байт} other {# байта}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Высокая</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Средняя</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Низкая</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Выборка</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Сканирование</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Структура</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Оценено по выборкам: средние 4 КиБ из каждого из {0, plural, one {# интервала} few {# интервалов} many {# интервалов} other {# интервала}} по {1} байт.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# байт} few {# последовательных байта} many {# последовательных байт} other {# последовательного байта}} со значением {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {Не удалось прочитать # байт} few {Не удалось прочитать # байта} many {Не удалось прочитать # байт} other {Не удалось прочитать # байта}}.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Энтропия {0} бит/байт, p-значение критерия хи-квадрат {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Энтропия {0} бит/байт.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Классифицировано блок за блоком ({0, plural, one {# блок} few {# блока} many {# блоков} other {# блока}} по {1} байт).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# байт} few {# байта} many {# байт} other {# байта}} начиная с {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Шаблон «{0}» разместил образец {1} в {2}–{3} ({4, plural, one {# байт} few {# байта} many {# байт} other {# байта}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>Сигнатура {1} в {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Шаблон «{0}» разобрал {1}–{2} ({3, plural, one {# байт} few {# байта} many {# байт} other {# байта}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Шаблон «{0}» не смог разобрать данные ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>Определение карвинга «{1}» дало длину {0, plural, one {# байт} few {# байта} many {# байт} other {# байта}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>проверка структуры</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>поле размера</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>окончание</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>максимальный размер</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>Конец неизвестен; считается, что область заканчивается перед следующей областью в {0} ({1, plural, one {# байт} few {# байта} many {# байт} other {# байта}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>Поток {0} в {1} распакован, его контрольная сумма совпадает ({2, plural, one {# байт} few {# байта} many {# байт} other {# байта}} в сжатом виде, {3} байт после распаковки).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>При сдвиге на {0} байт совпадает {1} байт (в среднем для сдвигов 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Эта карта — оценка на основе сигнатур и статистики, она может быть неверной.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Преобразованное представление: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Документ: {0} ({1}), {2, plural, one {# байт} few {# байта} many {# байт} other {# байта}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Диапазон: {0}–{1} ({2, plural, one {# байт} few {# байта} many {# байт} other {# байта}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Все этапы завершены.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Не все этапы завершены (остальное оценено по выборкам).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Байты по видам:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# байт} few {# байта} many {# байт} other {# байта}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# область} few {# области} many {# областей} other {# области}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>и еще {0, plural, one {# область} few {# области} many {# областей} other {# области}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Создать карту файла</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>карта файла обзор области структура file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Пересоздать карту файла</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>карта файла пересоздать обновить file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Показать карту файла</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>карта файла панель file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Экспортировать карту файла</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>карта файла экспорт отчет file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Применить шаблоны к найденным файлам</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>карта файла встроенные файлы шаблоны file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Показать или скрыть панель карты файла</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>карта файла панель file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Карта файла</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Карта файла</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Карта файла</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Карта файла</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Создать карту файла</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Карта файла</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Экспортировать карту файла</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Карта файла: шаблоны для встроенных файлов</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Если карта файла находит встроенные файлы, которые может разобрать шаблон, предлагает применить шаблоны. Шаблоны никогда не применяются автоматически.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Предлагать</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Ничего не делать</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Обзор (выборки)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Полное сканирование</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Анализ структуры</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Карты файла пока нет. Создайте ее, чтобы увидеть, что и где находится в документе.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Готово: областей — {0}.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Остановлено (просканировано {1}%): областей — {0}. Остальное оценено по выборкам.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Результаты относятся к содержимому до правки.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>Не удалось создать карту файла: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Создайте карту файла командой «Анализ &gt; Карта файла» или кнопкой «Создать» выше.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {Еще # кандидат во встроенные форматы не сохранен} few {Еще # кандидата во встроенные форматы не сохранены} many {Еще # кандидатов во встроенные форматы не сохранены} other {Еще # кандидата во встроенные форматы не сохранены}}.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Создать</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Пересоздать</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Экспорт</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Текстовый отчет...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Ход создания карты файла</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Увеличить</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Уменьшить</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Показать всю карту</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Показать в виде таблицы</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Лента карты файла: дорожка структуры и дорожка содержимого</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Прокрутить ленту карты файла</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Условные обозначения</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# байт} few {# байта} many {# байт} other {# байта}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Области карты файла</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Показать вид</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Все виды</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Перечисленные строки в закладки</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Перечисленные строки в множественное выделение</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Начало</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Конец (включительно)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Длина</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Вид</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Метка</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Достоверность</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Этап</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Выберите область на ленте или в списке.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# байт} few {# байта} many {# байт} other {# байта}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, начинается в {2}, {3, plural, one {# байт} few {# байта} many {# байт} other {# байта}}, достоверность: {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Достоверность: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Этап: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Шаблон: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Выделить диапазон</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Добавить закладку</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Применить шаблон «{0}»</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Открыть в новой вкладке</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Распаковать отсюда...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Определить шаблон...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Извлечь строки...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Сохранить как файл...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Определение шаблона недоступно.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Для этого документа нет карты файла.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>В карте файла нет встроенных файлов с шаблоном.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {Найден # встроенный файл} few {Найдено # встроенных файла} many {Найдено # встроенных файлов} other {Найдено # встроенного файла}}. Применить шаблоны?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Применить</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Показать список</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Шаблоны применены к {0, plural, one {# встроенному файлу} few {# встроенным файлам} many {# встроенным файлам} other {# встроенного файла}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Шаблоны применены к {0} встроенным файлам. {1, plural, one {# файл не применен} few {# файла не применены} many {# файлов не применены} other {# файла не применены}}, так как в документе может быть не более {2} применений.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Карта файла экспортирована в {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>Не удалось экспортировать карту файла: {0}</value></data>
 </root>
