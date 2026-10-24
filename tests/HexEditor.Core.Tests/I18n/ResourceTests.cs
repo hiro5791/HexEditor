@@ -46,7 +46,12 @@ public sealed class ResourceTests
 
                 // スクリプトの処理センター・Undo の名前 (ScriptTexts) と許可の説明 (Script_Permission_<許可>) のキーは Core にある。
                 .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Scripting/ScriptEnvironment.cs"))
-                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Scripting/ScriptPermissions.cs")).Select(File.ReadAllText),
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Scripting/ScriptPermissions.cs"))
+
+                // ファイルマップのラベル・根拠の文・レポートのキーは Core にある (FileMapMessage)。
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/FileMap/FileMapModel.cs"))
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/FileMap/FileMapStructure.cs"))
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/FileMap/FileMapExport.cs")).Select(File.ReadAllText),
             AppFiles("*.xaml").Select(File.ReadAllText)).ToList();
         Assert.True(errors.Count == 0, string.Join(Environment.NewLine, errors));
     }

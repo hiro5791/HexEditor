@@ -96,7 +96,7 @@ public sealed partial class FileMapBand : UserControl
     public const double RulerHeight = 18;
     private const double PixelsPerBlockMax = 8;
 
-    private readonly Canvas _canvas = new() { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent), FlowDirection = FlowDirection.LeftToRight };
+    private readonly Canvas _canvas = new() { Background = (Brush)Application.Current.Resources["SubtleFillColorTransparentBrush"], FlowDirection = FlowDirection.LeftToRight };
     private readonly ScrollBar _scroll = new() { Orientation = Orientation.Horizontal, IndicatorMode = ScrollingIndicatorMode.MouseIndicator, Minimum = 0 };
     private readonly Rectangle _viewport = new() { StrokeThickness = 1.5, IsHitTestVisible = false };
     private readonly Rectangle _cursor = new() { Width = 2, IsHitTestVisible = false };
