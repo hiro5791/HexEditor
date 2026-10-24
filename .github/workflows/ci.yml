@@ -775,7 +775,7 @@ jobs:
       - name: Test coverage
         shell: pwsh
         run: |
-          dotnet run --project tools/TestCoverage -c Release -- --results results --output test-coverage.md --enforce-phase 5
+          dotnet run --project tools/TestCoverage -c Release -- --results results --output test-coverage.md --enforce-phase 6
           $code = $LASTEXITCODE
           Get-Content test-coverage.md -TotalCount 30 | Add-Content $env:GITHUB_STEP_SUMMARY
           exit $code
