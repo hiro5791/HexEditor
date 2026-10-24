@@ -43,6 +43,7 @@
     "reference-tools",
     "templates",
     "template-library",
+    "template-inference",
     "template-error-codes",
     "scripting",
     "macros",

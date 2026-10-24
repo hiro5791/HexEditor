@@ -342,6 +342,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplatesPanel" cmd:CommandUi.Id="view.panel.templates" AutomationProperties.AutomationId="Command_ToggleTemplates" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateOutputPanel" cmd:CommandUi.Id="view.panel.templateOutput" AutomationProperties.AutomationId="Command_ToggleTemplateOutput" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateInferencePanel" cmd:CommandUi.Id="view.panel.templateInference" AutomationProperties.AutomationId="Command_ToggleTemplateInference" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
@@ -404,6 +405,8 @@
                             <MenuFlyoutItem x:Uid="Menu_Templates_FollowType" cmd:CommandUi.Id="templates.followType" AutomationProperties.AutomationId="Command_TemplateFollowType" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_ApplyKaitai" cmd:CommandUi.Id="templates.applyKaitai" AutomationProperties.AutomationId="Command_TemplateApplyKaitai" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_FindCandidates" cmd:CommandUi.Id="templates.findCandidates" AutomationProperties.AutomationId="Command_TemplateFindCandidates" />
+                            <!--  テンプレートの推定 (TPL-38〜TPL-40)  -->
+                            <MenuFlyoutItem x:Uid="Menu_Templates_Infer" cmd:CommandUi.Id="templates.infer" AutomationProperties.AutomationId="Command_TemplateInfer" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Rerun" cmd:CommandUi.Id="templates.rerun" AutomationProperties.AutomationId="Command_TemplateRerun" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Remove" cmd:CommandUi.Id="templates.remove" AutomationProperties.AutomationId="Command_TemplateRemove" />

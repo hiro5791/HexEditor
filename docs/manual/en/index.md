@@ -49,6 +49,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 
 - [Structure templates](templates.md)
 - [Template standard library](template-library.md)
+- [Template inference](template-inference.md)
 - [Template error codes](template-error-codes.md)
 - [Scripts](scripting.md)
 - [Macros](macros.md)

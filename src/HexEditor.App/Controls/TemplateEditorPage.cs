@@ -673,6 +673,20 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         return true;
     }
 
+    /// <summary>保存先の既定 (未保存の新しいタブのまま。テンプレートの推定の「エディタで開く」。TPL-40 の仕様 6)。</summary>
+    public void SetSuggestedPath(string path)
+    {
+        Path = path;
+        TitleChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>内容を未保存にする (保存していない新しい内容。テンプレートの推定の下書き)。</summary>
+    public void MarkUnsaved()
+    {
+        _savedText = string.Empty;
+        TitleChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>名前を付けて保存したのと同じにする (新規作成・複製の保存先)。</summary>
     public void SetPath(string path)
     {
@@ -722,6 +736,9 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     }
 
     /// <summary>対象のドキュメントを選ぶ (テスト用の命令)。</summary>
+    /// <summary>対象のドキュメントの名前 (テスト用の命令)。</summary>
+    internal string? TargetName => Target?.DisplayName;
+
     public void SelectTarget(ViewModels.DocumentViewModel doc)
     {
         RefreshTargets();

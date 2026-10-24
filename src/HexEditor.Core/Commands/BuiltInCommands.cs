@@ -554,9 +554,17 @@ public static class BuiltInCommands
         new("templates.visualize", "templates") { Condition = "documentOpen" },
         new("templates.online.browse", "templates"),
         new("templates.online.checkUpdates", "templates"),
+
+        // テンプレートの推定 (TPL-38〜TPL-40)。templates.infer はファイルマップ (ANA-34) からも引数 start・length・recordLength 付きで呼ぶ。
+        new("templates.infer", "templates") { Condition = "documentOpen" },
+        new("templates.inferAgain", "templates") { Condition = "documentOpen" },
+        new("templates.inferApply", "templates") { Condition = "documentOpen" },
+        new("templates.inferOpenEditor", "templates") { Condition = "documentOpen" },
+        new("templates.showInference", "templates"),
         new("view.panel.templates", "view"),
         new("view.panel.templateVisualizer", "view"),
         new("view.panel.templateOutput", "view"),
+        new("view.panel.templateInference", "view"),
 
         // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----
         new("codeEditor.run", "codeEditor") { DefaultBindings = [K("F5", KeyScope.CodeEditor)] },

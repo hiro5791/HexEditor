@@ -828,6 +828,7 @@ public sealed partial class MainWindow
             })]),
             ["fullScreen"] = IsFullScreen,
             ["activePage"] = ActiveToolPage,
+            ["target"] = page.TargetName,
         };
     }
 }
