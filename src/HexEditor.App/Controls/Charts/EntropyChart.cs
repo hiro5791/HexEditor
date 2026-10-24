@@ -378,7 +378,8 @@ public sealed partial class EntropyChart : UserControl, IChartItems
             {
                 if (i - run >= 2)
                 {
-                    hatch.Children.Add(ChartSupport.Pattern("Pattern_Diagonal", RectOf(b, run, i), 8));
+                    // 模様は平らに足す (GeometryGroup の入れ子は WinUI の描画を 0xC000027B で落とす)。
+                    ChartSupport.AddPattern(hatch, "Pattern_Diagonal", RectOf(b, run, i), 8);
                 }
 
                 run = -1;
@@ -386,7 +387,7 @@ public sealed partial class EntropyChart : UserControl, IChartItems
 
             if (i <= last && b.State[i] == BlockState.Unreadable)
             {
-                unreadable.Children.Add(ChartSupport.Pattern("Pattern_Cross", RectOf(b, i, i + 1), 4));
+                ChartSupport.AddPattern(unreadable, "Pattern_Cross", RectOf(b, i, i + 1), 4);
             }
         }
 

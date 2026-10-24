@@ -797,18 +797,7 @@ public sealed partial class FileMapBand : UserControl
     }
 
     /// <summary>模様の形を <paramref name="target"/> に平らに足す (GeometryGroup を入れ子にしない。入れ子が多いと描画が失敗するため)。</summary>
-    private static void AddPattern(GeometryGroup target, string pattern, Rect rect, double step)
-    {
-        if (ChartSupport.Pattern(pattern, rect, step) is GeometryGroup group)
-        {
-            Geometry[] parts = [.. group.Children];
-            group.Children.Clear();
-            foreach (Geometry part in parts)
-            {
-                target.Children.Add(part);
-            }
-        }
-    }
+    private static void AddPattern(GeometryGroup target, string pattern, Rect rect, double step) => ChartSupport.AddPattern(target, pattern, rect, step);
 
     /// <summary>オフセットの目盛り (地域設定によらない 16 進)。</summary>
     private void DrawRuler(FileMapResult map, double width)
