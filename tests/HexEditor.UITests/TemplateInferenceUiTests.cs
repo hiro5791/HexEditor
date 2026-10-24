@@ -250,6 +250,14 @@ public sealed class TemplateInferenceUiTests
 
         Assert.Equal(4, state["rows"]![state["selectedRow"]!.GetValue<int>()]!["offset"]!.GetValue<int>());
 
+        // ナレーター (TPL-40 の仕様 8): 行の名前に「オフセット、名前、型、種類、確度」。パネルの操作できる部品にはすべて名前がある。
+        await app.IdleAsync();
+        string rowName = AppSession.NameOf(await app.WaitForAsync("TplInfer_Row_04"));
+        Assert.Contains("0x04", rowName, StringComparison.Ordinal);
+        Assert.Contains("counter_04", rowName, StringComparison.Ordinal);
+        Assert.Contains("confidence", rowName, StringComparison.Ordinal);
+        Assert.DoesNotContain(ViewMiscTests.UnnamedInteractiveElements(app, "template inference"), m => m.Contains("TplInfer", StringComparison.Ordinal));
+
         // 4. Shift+F10 で右クリックメニューを開き、「名前を変更」で index にして Enter
         Assert.True((await InferAsync(app, "key", new JsonObject { ["key"] = "F10", ["shift"] = true }))["rowMenuOpen"]!.GetValue<bool>());
         Assert.True((await InferAsync(app, "menuInvoke", new JsonObject { ["id"] = "TplInfer_Menu_Rename" }))["renameOpen"]!.GetValue<bool>());

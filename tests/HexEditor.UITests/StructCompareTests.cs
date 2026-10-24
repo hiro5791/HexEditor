@@ -219,21 +219,18 @@ public sealed class StructCompareTests
         (AppSession app, _) = await PngAsync(ctx);
         await app.SendAsync("compareFocus", new JsonObject { ["right"] = false });
 
-        // 1. F6 で構造の差分パネルにフォーカスが移るまで繰り返す。
+        // 1. F6 で構造の差分パネルにフォーカスが移るまで繰り返す (下のパネルの見出し → 中身のツリー表。代わりの操作は使わない)。
         JsonObject state = await app.SendAsync("structState");
-        for (int i = 0; i < 12 && !state["treeFocused"]!.GetValue<bool>(); i++)
+        var visited = new List<string>();
+        for (int i = 0; i < 24 && !state["treeRowFocused"]!.GetValue<bool>(); i++)
         {
-            await app.KeyAsync("F6");
+            JsonObject f6 = await app.KeyAsync("F6");
+            await app.IdleAsync();
             state = await app.SendAsync("structState");
+            visited.Add($"{f6["handledBy"]}:{state["focusedId"]}");
         }
 
-        if (!state["treeFocused"]!.GetValue<bool>())
-        {
-            // F6 の領域の並びに下のパネルのタブが入っていない場合: パネルのツリー表に移す (パネルのタブを選ぶ操作)
-            state = await app.SendAsync("structFocus");
-        }
-
-        Assert.True(state["treeFocused"]!.GetValue<bool>());
+        Assert.True(state["treeRowFocused"]!.GetValue<bool>(), "F6 did not reach the structure differences tree: " + string.Join(", ", visited));
 
         // 2. ↓ を 2 回、← で chunks を閉じ、→ で開く。
         await app.SendAsync("structRow", new JsonObject { ["row"] = 0 });
@@ -257,10 +254,24 @@ public sealed class StructCompareTests
         // 4. Shift+F10 で右クリックメニューを開き、Esc で閉じる。
         JsonObject key = await app.SendAsync("structKey", new JsonObject { ["key"] = "F10", ["shift"] = true });
         Assert.True(key["handled"]!.GetValue<bool>());
-        JsonObject menu = await app.SendAsync("structMenu", new JsonObject { ["close"] = true });
+        await app.IdleAsync();
+        JsonObject menu = await app.SendAsync("structMenuClose");
+        Assert.True(menu["menuOpen"]!.GetValue<bool>());
         Assert.Contains("StructDiffMenu_CopyPath", menu["menuItems"]!.AsArray().Select(i => S(i)));
 
-        // 5. 「エクスポート...」で画面が開く。
+        // 5. ツールバーの「エクスポート...」に Tab (Shift+Tab) で移り、画面が開く (メニューを閉じたときのフォーカスの戻りを待ってから)。
+        await app.IdleAsync();
+        state = await app.SendAsync("structState");
+        var tabbed = new List<string>();
+        for (int i = 0; i < 30 && S(state["focusedId"]) != "StructDiff_Export"; i++)
+        {
+            state = await app.SendAsync("structTab", new JsonObject { ["shift"] = true });
+            await app.IdleAsync();
+            state = await app.SendAsync("structState");
+            tabbed.Add(S(state["focusedId"]));
+        }
+
+        Assert.True(S(state["focusedId"]) == "StructDiff_Export", "Shift+Tab did not reach Export: " + string.Join(", ", tabbed));
         Assert.True((await app.SendAsync("structExportDialog"))["open"]!.GetValue<bool>());
     });
 

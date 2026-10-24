@@ -255,7 +255,7 @@ public sealed partial class FileMapPanel : UserControl, IPanelContent
 
     private FileMapResult? Map => _window.CurrentFileMap;
 
-    public bool FocusContent() => (_table.Count > 0 ? _table : (Control)_create).Focus(FocusState.Programmatic);
+    public bool FocusContent() => (_table.Count > 0 ? _table : (Control)_create).Focus(FocusState.Keyboard);
 
     /// <summary>状態と結果を表示し直す (結果・選択・並べ替えが変わったとき)。</summary>
     public void Refresh()

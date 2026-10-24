@@ -46,7 +46,7 @@ public interface IStructDiffHost
 /// 構造の差分パネル (ANA-32)。構造の比較 (ANA-31) の結果を、結果ツリー (TPL-21) と同じ形のツリー表 (仮想化した一覧) で表示する。
 /// 差分のある葉とその祖先だけを表示し、種類・文字列で絞り込める。表示するのは最後に使った比較タブの結果。
 /// </summary>
-public sealed partial class StructDiffPanel : UserControl
+public sealed partial class StructDiffPanel : UserControl, Panels.IPanelContent
 {
     private static readonly (StructDiffFilterKinds Kind, StructDiffKind Sample, string Key)[] KindFilters =
     [
@@ -155,6 +155,31 @@ public sealed partial class StructDiffPanel : UserControl
 
     /// <summary>ツリー表にフォーカスがあるか (Alt+F5 を構造の差分の移動にする。ANA-32 の「呼び出し」)。</summary>
     public bool HasTreeFocus => XamlRoot is { } root && FocusManager.GetFocusedElement(root) is DependencyObject d && IsInside(d);
+
+    /// <summary>フォーカスがツリー表 (行) にあるか (テスト用の命令。<see cref="HasTreeFocus"/> はパネルのどこか)。</summary>
+    internal bool TreeContainsFocus => XamlRoot is { } root && FocusManager.GetFocusedElement(root) is DependencyObject d && IsWithin(d, Tree);
+
+    /// <summary>フォーカスのある要素の AutomationId (なければ型の名前。パネルの外も。テスト用の命令)。</summary>
+    internal string? FocusedAutomationId => XamlRoot is { } root && FocusManager.GetFocusedElement(root) is DependencyObject d
+        ? AutomationProperties.GetAutomationId(d) is { Length: > 0 } id ? id : d.GetType().Name
+        : null;
+
+    /// <summary>Tab / Shift+Tab と同じくパネルの中で次 / 前の部品へフォーカスを移す (テスト用の命令)。</summary>
+    internal bool MoveFocusForTest(bool forward) =>
+        FocusManager.TryMoveFocus(forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous, new FindNextElementOptions { SearchRoot = XamlRoot.Content });
+
+    private static bool IsWithin(DependencyObject d, DependencyObject root)
+    {
+        for (DependencyObject? p = d; p is not null; p = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(p))
+        {
+            if (ReferenceEquals(p, root))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private bool IsInside(DependencyObject d)
     {
@@ -415,7 +440,7 @@ public sealed partial class StructDiffPanel : UserControl
         {
             if (index >= 0 && Tree.ContainerFromIndex(index) is ListViewItem item)
             {
-                item.Focus(FocusState.Programmatic);
+                item.Focus(FocusState.Keyboard);
             }
         });
     }
@@ -574,8 +599,23 @@ public sealed partial class StructDiffPanel : UserControl
             Tree.SelectedIndex = 0;
         }
 
-        Tree.Focus(FocusState.Programmatic);
+        Tree.Focus(FocusState.Keyboard);
         FocusSelected();
+    }
+
+    /// <summary>
+    /// F6 の領域の移動 (UI-52) で下のパネルの中身に来たとき: 行があればツリー表 (TC-ANA-32-08 の手順 1)、なければツールバーの最初の部品
+    /// (理由と「テンプレートを選ぶ...」のある状態など)。
+    /// </summary>
+    public bool FocusContent()
+    {
+        if (_rows.Count > 0 && Tree.Visibility == Visibility.Visible)
+        {
+            FocusTree();
+            return true;
+        }
+
+        return FocusManager.FindFirstFocusableElement(this) is Control first && first.Focus(FocusState.Keyboard);
     }
 
     /// <summary>行が見えるようにツリー表を動かす (テスト用の命令)。</summary>
