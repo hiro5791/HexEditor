@@ -9869,4 +9869,414 @@
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} ث</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} دقیقه</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} ساعت</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>شروع خارج از سند است.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>طول رکورد را بین {0} تا {1} بایت وارد کنید.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>بازه‌ای انتخاب کنید که دست‌کم 4 رکورد داشته باشد.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>بازه‌ای دست‌کم {0} بایتی انتخاب کنید.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>فقط {0, plural, one {# رکورد} other {# رکورد}} خوانده شد. دست‌کم 4 رکورد لازم است.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>در هر {0} رکورد، 00.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>مقدار یکسان {0} در هر {1} رکورد.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>مقدار یکسان {0} در هر {1} رکورد.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% رشتهٔ ASCII هستند (حداکثر {1} نویسه).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% رشتهٔ UTF-16 هستند (حداکثر {1} نویسه).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>در {0} رکورد از {1} رکورد، مقدار = {2} + {3} × شمارهٔ رکورد.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% زمان UNIX (ثانیه) از {1} تا {2} هستند.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% زمان UNIX 64 بیتی (ثانیه) از {1} تا {2} هستند.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% مقدار FILETIME ویندوز از {1} تا {2} هستند.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% تاریخ و زمان MS-DOS از {1} تا {2} هستند.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>همهٔ مقدارها کوچک‌تر از طول سند ({0}) هستند، {1}% مضرب {2} هستند و با شمارهٔ رکورد افزایش می‌یابند.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>همهٔ مقدارهای غیرصفر کوچک‌تر از طول سند ({0}) هستند و {1}% از آن‌ها متفاوت‌اند.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>در {0}% از رکوردهای پشت‌سرهم، برابر است با اختلاف تا {1} رکورد بعدی.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>در هر رکورد، {0} + مقدار در محدودهٔ سند می‌ماند.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% مقدار ممیز شناور معقول هستند ({1} مقدار متفاوت).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} بیت: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} مقدار متفاوت: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>مقدارها از {0} تا {1}؛ هیچ قاعده‌ای مطابقت نداشت.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>آنتروپی هر بایت {0:0.0} بیت یا بیشتر است (نزدیک به تصادفی).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} بایت که با هیچ قاعده‌ای مطابقت ندارند.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>به‌عنوان ممیز شناور، فقط {0}% مقدار معقول هستند.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>به‌عنوان تاریخ، فقط {0}% بین 1980 و 2100 هستند.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>به‌عنوان شمارنده، فقط {0}% از دنباله پیروی می‌کنند.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>به‌عنوان رشته، فقط {0}% با نویسهٔ قابل چاپ شروع می‌شوند.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>پدینگ نام ندارد.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>«{0}» نام معتبری نیست. از حرف، رقم و _ استفاده کنید و با رقم شروع نکنید.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>«{0}» کلمهٔ رزروشده یا نام نوع است.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>فیلد دیگری از قبل «{0}» نام دارد.</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>پیش‌نویسی که با استنتاج الگو ساخته شده است (TPL-38). این فقط یک حدس است؛ پیش از استفاده آن را بررسی کنید.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>منبع: {0}، بازهٔ {1}–{2}، طول رکورد {3}، {4, plural, one {# رکورد} other {# رکورد}}، {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>رکوردهای استنتاج‌شده ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (اطمینان {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>پدینگ</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>عدد جادویی</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>ثابت</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>شمارنده</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>تاریخ و زمان</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>آفست</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>ممیز شناور</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>رشته</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>رشته (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>پرچم‌ها</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>شمارشی</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>عدد صحیح</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>ناشناخته</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>زیاد</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>متوسط</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>کم</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>استنتاج الگو</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>استنتاج الگو از انتخاب...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>استنتاج الگو</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>استنتاج الگو از انتخاب...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>استنتاج الگو با این طول</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>استنتاج از انتخاب</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;استنتاج;حدس;ساختار</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>استنتاج دوباره</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;استنتاج دوباره;اجرای دوباره</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>اعمال پیش‌نویس استنتاج‌شده</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;اعمال;پیش‌نویس</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>باز کردن پیش‌نویس استنتاج‌شده در ویرایشگر</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;ویرایش;پیش‌نویس</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>نمایش پنل استنتاج</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;استنتاج;پنل</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>پنل استنتاج الگو</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;استنتاج</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>شروع</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>طول رکورد</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>خودکار</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>رکوردها</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>کل بازه</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>ترتیب بایت</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>خودکار</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>استنتاج</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>استنتاج دوباره</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>نامزدهای طول رکورد</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} بایت · امتیاز {1} · {2, plural, one {# رکورد} other {# رکورد}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>فیلدها</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>پیش‌نویس (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>اعمال</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>باز کردن در ویرایشگر</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>رونوشت</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>پیش‌نویس رونوشت شد.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>برای استنتاج الگو یک سند باز کنید.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>ابتدا یک الگو استنتاج کنید.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>شروع را به‌صورت عدد یا عبارت وارد کنید.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>طول را به‌صورت عدد یا عبارت وارد کنید.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>تعداد رکوردها را وارد کنید یا برای کل بازه خالی بگذارید.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>در حال استنتاج...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>استنتاج الگو</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>رکوردی با طول ثابت پیدا نشد. طول رکورد را وارد کنید.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>استنتاج رکوردهای با طول متغیر (که اندازه‌شان به یک فیلد طول بستگی دارد) ممکن نیست.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>طول رکورد {0}، {1, plural, one {# رکورد} other {# رکورد}} ({2} مورد برای استنتاج به کار رفت).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# رکورد} other {# رکورد}} خوانده نشد و کنار گذاشته شد.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, one {# بایت} other {# بایت}} آخر در یک رکورد جا نمی‌شود.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>خطای داخلی: پیش‌نویس خطای نحوی دارد ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}، {1}، {2}، {3}، اطمینان {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>بدون نام</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(هشدار: اطمینان کم)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(با دست تغییر یافته)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>تغییر یافته</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>نامزدها: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>تغییر نام</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>ادغام با فیلد قبلی</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>تقسیم...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>تقسیم پس از این تعداد بایت (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>مقایسهٔ ساختار هم</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>هنگام مقایسهٔ فایل‌ها، ساختارهایی که یک الگوی ساختار پیدا می‌کند هم (فیلد به فیلد) مقایسه می‌شوند. وقتی هر دو طرف با یک الگو مطابقت داشته باشند، الگو خودکار انتخاب می‌شود.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>مقایسهٔ ساختار: شامل الگوهای پنهان</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>الگوهایی را هم که در الگو پنهان علامت خورده‌اند مقایسه کن.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>مقایسهٔ ساختار: حداکثر فیلدها</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>مقایسهٔ ساختار را پس از مقایسهٔ این تعداد فیلد در هر طرف متوقف کن (از 10,000 تا 10,000,000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>مقایسهٔ ساختار: تطبیق آرایه</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>روش تطبیق عناصر آرایه، برای هر الگو و آرایه. آن را با «روش تطبیق...» در پنل تفاوت‌های ساختار تغییر دهید.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>مقایسه: مقایسهٔ ساختار</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff ساختار فیلد الگو تفاوت</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>مقایسه: انتخاب الگو برای مقایسهٔ ساختار</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose ساختار الگو انتخاب</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>مقایسه: جابه‌جایی بین تفاوت‌های ساختار</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target بعدی قبلی ساختار هدف</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>مقایسه: نمایش تفاوت‌های ساختار</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel تفاوت‌های ساختار پنل</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>مقایسه: تفاوت ساختار بعدی</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field ساختار بعدی فیلد</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>مقایسه: تفاوت ساختار قبلی</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field ساختار قبلی فیلد</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>مقایسه: صادر کردن تفاوت‌های ساختار</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report ساختار صادر کردن گزارش</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>تغییر وضعیت تفاوت‌های ساختار</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel تفاوت‌های ساختار پنل</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>تفاوت‌های ساختار</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>مقایسهٔ ساختار</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>انتخاب الگو برای مقایسهٔ ساختار...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>گ</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>مقایسهٔ ساختار هم</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>انتخاب الگو برای مقایسهٔ ساختار</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>مقایسه</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>آفست شروع چپ</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>آفست شروع راست</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>مقایسهٔ ساختار</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>تفاوت‌های ساختار</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>انتخاب الگو</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} فیلد مقایسه شد</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>الگو: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>مقایسهٔ ساختار برای تصاویر لحظه‌ای حافظهٔ پردازش در دسترس نیست.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>رفتن به داده‌های چپ</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>رفتن به داده‌های راست</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>رونوشت مسیر</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>رونوشت ردیف</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>رونوشت مقدارهای چپ و راست</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>افزودن نشانک در چپ</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>افزودن نشانک در راست</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>روش تطبیق...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>نمایش در درخت نتایج چپ</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>نمایش در درخت نتایج راست</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>مقایسهٔ ساختار: {0}، {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>در میانه متوقف شد (لغو شد)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>جمع‌شده</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>بازشده</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>نام</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>گونه</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>مقدار چپ</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>مقدار راست</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>نوع</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>آفست چپ</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>آفست راست</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>اندازه</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>تطبیق</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}، {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}، {1}، چپ {2}، راست {3}، چپ {4}، راست {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>، </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>مقایسهٔ ساختار خاموش است. «مقایسهٔ ساختار هم» را در نوار ابزار زبانهٔ مقایسه روشن کنید.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>در انتظار مقایسه...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>برای دیدن تفاوت‌های ساختار، یک زبانهٔ مقایسه باز کنید.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>در {0} ثانیه انجام شد</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>در حال مقایسه: {0} فیلد</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>در حد مجاز فیلدها متوقف شد</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>مقایسهٔ ساختار ناموفق بود: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>تعداد فیلدها به حد مجاز ({0}) رسید، بنابراین فقط بخشی مقایسه شد.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>نمایش {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>الگو: {0} ({1})، چپ {2} / راست {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>توسط شما انتخاب شده است.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>روی هر دو طرف الگوی یکسانی اعمال شده است.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>عدد جادویی هر دو طرف مطابقت داشت.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>تفاوت‌های ساختار</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>تغییر یافته</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>افزوده‌شده</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>حذف‌شده</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>جابه‌جاشده</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>جابه‌جا و تغییر یافته</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>نوع تغییر کرده</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>قابل تجزیه نیست</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>یکسان</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>چپ: {0} خطا، {1} هشدار</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>راست: {0} خطا، {1} هشدار</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>خروجی الگو (چپ)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>خروجی الگو (راست)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>بدون خطا یا هشدار.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>کلید: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>محتوا</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>موقعیت</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(به‌دلیل زیاد بودن عناصر، بر اساس موقعیت تطبیق داده شد)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>تفاوت ساختاری وجود ندارد.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>نتیجهٔ مقایسهٔ ساختار وجود ندارد.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>بدون تفاوت ساختاری</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>به اولین تفاوت ساختار بازگشت</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>به آخرین تفاوت ساختار بازگشت</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>برای مقایسهٔ ساختار الگویی انتخاب نشد (هر دو طرف باید بر اساس عدد جادویی با یک الگو مطابقت داشته باشند). فقط مقایسهٔ بایتی انجام شد.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>الگو خطای نحوی دارد: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>فایل الگو پیدا نشد: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>تفاوت‌های خارج از ساختار</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} تفاوت، {1} بایت</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(خارج از بازه)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(پدینگ)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>خطای الگو</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>به‌دلیل حد مجاز مقایسه نشد</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>به‌دلیل عمق زیاد مقایسه نشد</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>فیلدهای مقایسه‌شده: چپ {0}، راست {1}. {2}. خارج از ساختار: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>انتخاب الگو...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>ویرایش الگو</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>افزایش حد مجاز و مقایسهٔ دوباره</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>صادر کردن...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>فیلتر بر اساس نام، مسیر یا مقدار</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>فیلتر</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>شامل پدینگ</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>نمایش فیلدهای مطابق</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>خلاصه</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>تفاوت‌های ساختار</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>صادر کردن تفاوت‌های ساختار</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>قالب</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>گزارش متنی</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>ردیف‌ها</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>ردیف‌های نمایش‌داده‌شده (پس از فیلتر)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>همهٔ تفاوت‌ها</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>آفست‌ها</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>دهدهی</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>هگزادسیمال</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>ذخیره...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>صادر کردن تفاوت‌های ساختار</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(چپ {0}، راست {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>الگو: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>آفست‌های شروع: چپ {0}، راست {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>فیلدهای مقایسه‌شده: چپ {0}، راست {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>تفاوت‌های خارج از ساختار: {0}، {1} بایت</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>خطاها و هشدارهای الگو: چپ {0} / {1}، راست {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>زمان سپری‌شده: {0} ثانیه</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>روش تطبیق</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>آرایه: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>روش</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>خودکار</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>کلید</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>محتوا</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>موقعیت</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>فیلد کلید</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>در حال فیلتر...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>ساختار قالب فایل</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>فایل نهفته</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>فشرده</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>رمزنگاری‌شده یا تصادفی</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>متن</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>صفر</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>پدینگ</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>رکوردهای تکراری</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>دودویی</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>ناخوانا</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>برآورد از نمونه‌ها</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>صفر</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>ثابت {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>متن ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>رکوردهای تکراری ({0, plural, one {# بایت} other {# بایت}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>زیاد</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>متوسط</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>کم</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>نمونه</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>پویش</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>ساختار</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>برآورد از نمونه‌ها: 4 KiB میانی هر یک از {0, plural, one {# بازه} other {# بازه}} به اندازهٔ {1} بایت.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# بایت} other {# بایت}} پشت‌سرهم از {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# بایت} other {# بایت}} خوانده نشد.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>آنتروپی {0} بیت/بایت، مقدار p آزمون کای‌دو {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>آنتروپی {0} بیت/بایت.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>بلوک به بلوک دسته‌بندی شد ({0, plural, one {# بلوک} other {# بلوک}} به اندازهٔ {1} بایت).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# بایت} other {# بایت}} از {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>الگوی «{0}» الگوی {1} را در {2}–{3} قرار داد ({4, plural, one {# بایت} other {# بایت}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>امضای {1} در {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>الگوی «{0}» بخش {1}–{2} را تجزیه کرد ({3, plural, one {# بایت} other {# بایت}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>الگوی «{0}» نتوانست داده را تجزیه کند ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>تعریف carving «{1}» طولی برابر {0, plural, one {# بایت} other {# بایت}} داد ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>بررسی ساختار</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>فیلد اندازه</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>پایانه</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>حداکثر اندازه</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>پایان نامعلوم است؛ فرض می‌شود ناحیه پیش از ناحیهٔ بعدی در {0} پایان می‌یابد ({1, plural, one {# بایت} other {# بایت}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>جریان {0} در {1} از حالت فشرده خارج شد و جمع کنترلی مطابقت دارد ({2, plural, one {# بایت} other {# بایت}} فشرده، {3} بایت پس از خارج‌کردن از فشرده‌سازی).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>با جابه‌جایی {0} بایت، {1} از بایت‌ها مطابقت دارند (میانگین جابه‌جایی‌های 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>این نقشه برآوردی بر پایهٔ امضاها و آمار است و ممکن است اشتباه باشد.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>نمای تبدیل: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>سند: {0} ({1})، {2, plural, one {# بایت} other {# بایت}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>بازه: {0}–{1} ({2, plural, one {# بایت} other {# بایت}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>همهٔ مرحله‌ها کامل شده‌اند.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>همهٔ مرحله‌ها کامل نشده‌اند (بقیه از نمونه‌ها برآورد می‌شود).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>بایت‌ها بر اساس گونه:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# بایت} other {# بایت}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# ناحیه} other {# ناحیه}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>و {0, plural, one {# ناحیه} other {# ناحیه}} دیگر</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>ایجاد نقشهٔ فایل</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout نقشهٔ فایل نمای کلی ناحیه چیدمان</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>ساخت دوبارهٔ نقشهٔ فایل</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh نقشهٔ فایل ساخت دوباره تازه‌سازی</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>نمایش نقشهٔ فایل</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel نقشهٔ فایل پنل</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>صادر کردن نقشهٔ فایل</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report نقشهٔ فایل صادر کردن گزارش</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>اعمال الگوها بر فایل‌های پیدا‌شده</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates نقشهٔ فایل فایل‌های نهفته الگوها</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>تغییر وضعیت پنل نقشهٔ فایل</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel نقشهٔ فایل پنل</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>نقشهٔ فایل</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>نقشهٔ فایل</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>نقشهٔ فایل</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>نقشهٔ فایل</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>ایجاد نقشهٔ فایل</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>نقشهٔ فایل</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>صادر کردن نقشهٔ فایل</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>نقشهٔ فایل: الگوها برای فایل‌های نهفته</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>وقتی نقشهٔ فایل فایل‌های نهفته‌ای را پیدا کند که یک الگو بتواند تجزیه‌شان کند، اعمال الگوها را پیشنهاد می‌دهد. الگوها هرگز خودکار اعمال نمی‌شوند.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>پیشنهاد</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>کاری نکن</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>نمای کلی (نمونه‌ها)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>پویش کامل</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>تحلیل ساختار</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>هنوز نقشهٔ فایلی وجود ندارد. یکی بسازید تا ببینید چه چیزی در سند کجاست.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>انجام شد: {0, plural, one {# ناحیه} other {# ناحیه}}.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>متوقف شد ({1}% پویش شد): {0, plural, one {# ناحیه} other {# ناحیه}}. بقیه از نمونه‌ها برآورد می‌شود.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>نتایج مربوط به محتوای پیش از ویرایش است.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>نقشهٔ فایل ساخته نشد: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>نقشهٔ فایل را از تحلیل &gt; نقشهٔ فایل یا با دکمهٔ ایجاد در بالا بسازید.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {# نامزد قالب نهفتهٔ دیگر} other {# نامزد قالب نهفتهٔ دیگر}} نگه داشته نشد.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>ایجاد</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>ساخت دوباره</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>لغو</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>صادر کردن</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>گزارش متنی...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>پیشرفت نقشهٔ فایل</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>بزرگ‌نمایی</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>کوچک‌نمایی</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>نمایش کل نقشه</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>نمایش به‌صورت جدول</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>نوار نقشهٔ فایل: مسیر ساختار و مسیر محتوا</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>پیمایش نوار نقشهٔ فایل</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>راهنمای رنگ</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# بایت} other {# بایت}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>ناحیه‌های نقشهٔ فایل</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>نمایش گونه</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>همهٔ گونه‌ها</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>ردیف‌های فهرست‌شده به نشانک</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>ردیف‌های فهرست‌شده به انتخاب چندگانه</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>شروع</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>پایان (شامل)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>گونه</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>برچسب</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>اطمینان</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>مرحله</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>یک ناحیه را در نوار یا فهرست انتخاب کنید.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# بایت} other {# بایت}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}، {1}، شروع از {2}، {3, plural, one {# بایت} other {# بایت}}، اطمینان {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>اطمینان: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>مرحله: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>الگو: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>انتخاب بازه</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>افزودن نشانک</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>اعمال الگوی «{0}»</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>باز کردن در زبانهٔ جدید</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>خارج کردن از فشرده‌سازی از اینجا...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>استنتاج الگو...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>استخراج رشته‌ها...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>ذخیره به‌عنوان فایل...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>استنتاج الگو در دسترس نیست.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>برای این سند نقشهٔ فایل وجود ندارد.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>نقشهٔ فایل فایل نهفته‌ای که الگو داشته باشد ندارد.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# فایل نهفته} other {# فایل نهفته}} پیدا شد. الگوها اعمال شوند؟</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>اعمال</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>نمایش فهرست</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>الگوها بر {0, plural, one {# فایل نهفته} other {# فایل نهفته}} اعمال شد.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>الگوها بر {0} فایل نهفته اعمال شد. {1, plural, one {# فایل} other {# فایل}} اعمال نشد، زیرا یک سند حداکثر {2} اعمال می‌تواند داشته باشد.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>نقشهٔ فایل در {0} صادر شد.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>نقشهٔ فایل صادر نشد: {0}</value></data>
 </root>
