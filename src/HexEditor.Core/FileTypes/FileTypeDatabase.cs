@@ -115,19 +115,58 @@ public sealed record BytesCondition(MagicOffset Offset, byte[] Value, bool[] Wil
         }
 
         int window = Value.Length + Math.Max(0, Search);
-        byte[] buffer = new byte[window];
-        int read = data.Read(at, buffer);
-        for (int shift = 0; shift + Value.Length <= read && shift <= Math.Max(0, Search); shift++)
+        if (window <= 256)
         {
-            if (MatchesAt(buffer.AsSpan(shift)))
+            Span<byte> small = stackalloc byte[window];
+            return Find(small[..data.Read(at, small)], at, matches, ref score);
+        }
+
+        // 探す範囲の広い条件 (ZIP を元にした形式の search 65000 など) は、埋め込まれた形式の探索で一致ごとに呼ばれるため、配列を借りて
+        // 固定のバイト列はベクトル化した IndexOf で探す (1 バイトずつ比べると、一致の多いデータで走査が終わらない)。
+        byte[] buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(window);
+        try
+        {
+            return Find(buffer.AsSpan(0, data.Read(at, buffer.AsSpan(0, window))), at, matches, ref score);
+        }
+        finally
+        {
+            System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+        }
+    }
+
+    private bool Find(ReadOnlySpan<byte> read, long at, List<(long Offset, int Length)> matches, ref int score)
+    {
+        int last = Math.Min(read.Length - Value.Length, Math.Max(0, Search));
+        if (last < 0)
+        {
+            return false;
+        }
+
+        int shift = -1;
+        if (!IgnoreCase && Array.IndexOf(Wildcard, true) < 0)
+        {
+            shift = read[..(last + Value.Length)].IndexOf(Value);
+        }
+        else
+        {
+            for (int s = 0; s <= last; s++)
             {
-                matches.Add((at + shift, Value.Length));
-                score += FixedCount;
-                return true;
+                if (MatchesAt(read[s..]))
+                {
+                    shift = s;
+                    break;
+                }
             }
         }
 
-        return false;
+        if (shift < 0)
+        {
+            return false;
+        }
+
+        matches.Add((at + shift, Value.Length));
+        score += FixedCount;
+        return true;
     }
 
     private bool MatchesAt(ReadOnlySpan<byte> s)

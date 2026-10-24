@@ -196,11 +196,19 @@ internal sealed class EmbeddedScanner
     private readonly List<(FileFormat? Format, CarvingSignature? Carving, HexMaskPattern? Header, int AnchorLength)> _patterns = [];
     private readonly Dictionary<long, EmbeddedCandidate> _candidates = [];
     private readonly int _maxAnchor;
+    private readonly List<(long, int)> _matches = [];
     private int _state;
     private long _prevEnd = -1;
 
-    public EmbeddedScanner(DocumentSnapshot snapshot, FileTypeDatabase database, IReadOnlyList<CarvingSignature> carving, long targetStart, CancellationToken token)
+    // シグネチャデータベースの項目の条件を確かめるために読むバイト数の、走査全体の上限。ZIP を元にした形式には、先頭の 64 KB で文字列を探す
+    // 条件 (search) が多く、シグネチャだけを敷き詰めたデータでは「一致の数 × 数百 KB」を読むことになるため (走査が終わらない)。
+    // 使い切ったら、データベースの項目の一致は候補にしない (件数は Omitted に数える)。カービングのヘッダの確認は固定の長さなので続ける。
+    private long _verifyBudget;
+
+    public EmbeddedScanner(DocumentSnapshot snapshot, FileTypeDatabase database, IReadOnlyList<CarvingSignature> carving, long targetStart, CancellationToken token,
+        long targetLength = 0)
     {
+        _verifyBudget = Math.Max(VerifyBudgetMinimum, targetLength);
         _snapshot = snapshot;
         _targetStart = targetStart;
         _token = token;
@@ -233,7 +241,10 @@ internal sealed class EmbeddedScanner
         _maxAnchor = anchors.Count > 0 ? anchors.Max(a => a.Length) : 1;
     }
 
-    /// <summary>上限を超えて持たなかった候補の数。</summary>
+    /// <summary>データベースの項目の条件を確かめるために読むバイト数の、全体の上限の最小 (対象の長さとこの大きい方)。</summary>
+    public const long VerifyBudgetMinimum = 64L << 20;
+
+    /// <summary>上限を超えて持たなかった候補の数 (確かめる読み取りの上限を超えて確かめなかった一致を含む)。</summary>
     public long Omitted { get; private set; }
 
     public IReadOnlyCollection<EmbeddedCandidate> Candidates => _candidates.Values;
@@ -296,10 +307,18 @@ internal sealed class EmbeddedScanner
         int confidence = 0;
         if (format is not null)
         {
-            var data = new SnapshotMagicData(_snapshot, fileStart, HeadTailMagicData.Window);
-            var matches = new List<(long, int)>();
+            if (_verifyBudget <= 0)
+            {
+                Omitted++;
+                return;
+            }
+
+            var data = new CountingMagicData(new SnapshotMagicData(_snapshot, fileStart, HeadTailMagicData.Window));
+            _matches.Clear();
             int score = 0;
-            if (!format.Match.Evaluate(data, matches, ref score))
+            bool matched = format.Match.Evaluate(data, _matches, ref score);
+            _verifyBudget -= Math.Max(1, data.BytesRead);
+            if (!matched)
             {
                 return;
             }
@@ -335,6 +354,21 @@ internal sealed class EmbeddedScanner
         }
 
         c.Carving ??= sig;
+    }
+}
+
+/// <summary>読んだバイト数を数える (シグネチャの条件の確認の上限)。</summary>
+internal sealed class CountingMagicData(IMagicData inner) : IMagicData
+{
+    public long BytesRead { get; private set; }
+
+    public long Length => inner.Length;
+
+    public int Read(long offset, Span<byte> destination)
+    {
+        int n = inner.Read(offset, destination);
+        BytesRead += Math.Max(n, 0);
+        return n;
     }
 }
 

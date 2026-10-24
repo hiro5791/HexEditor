@@ -148,7 +148,7 @@ public static partial class FileMapBuilder
             _length = Math.Clamp(range.Length, 0, snapshot.Length - _start);
             _blockSize = BlockSizeFor(_length);
             _interval = SampleIntervalFor(_length);
-            _embedded = new EmbeddedScanner(snapshot, request.Database, request.CarvingSignatures, _start, token);
+            _embedded = new EmbeddedScanner(snapshot, request.Database, request.CarvingSignatures, _start, token, _length);
         }
 
         private long End => _start + _length;

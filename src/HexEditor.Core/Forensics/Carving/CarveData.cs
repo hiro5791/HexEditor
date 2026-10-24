@@ -47,17 +47,28 @@ public sealed class MemoryCarveData(byte[] data) : ICarveData
 /// </summary>
 public sealed class ByteWindow
 {
-    private const int BlockSize = 64 * 1024;
+    /// <summary>キャッシュの単位 (<see cref="ByteWindow(ICarveData, long, long, CancellationToken, byte[])"/> に渡す作業用の配列の最小の長さ)。</summary>
+    public const int BlockSize = 64 * 1024;
 
     private readonly ICarveData _data;
     private readonly CancellationToken _cancellationToken;
-    private readonly byte[] _block = new byte[BlockSize];
+    private readonly byte[] _block;
     private long _blockStart = -1;
     private int _blockLength;
     private long _budget;
 
     public ByteWindow(ICarveData data, long limit, long budget, CancellationToken cancellationToken = default)
+        : this(data, limit, budget, cancellationToken, null)
     {
+    }
+
+    /// <summary>
+    /// 作業用の配列 <paramref name="buffer"/> (<see cref="BlockSize"/> 以上。null なら新しく作る) を使う窓。多くの位置を順に検証するとき
+    /// (ファイルマップの埋め込まれたファイルの候補など) に、窓ごとに 64 KiB を確保しないため。同時に 2 つの窓で同じ配列を使わないこと。
+    /// </summary>
+    public ByteWindow(ICarveData data, long limit, long budget, CancellationToken cancellationToken, byte[]? buffer)
+    {
+        _block = buffer is { Length: >= BlockSize } ? buffer : new byte[BlockSize];
         _data = data;
         Limit = Math.Min(limit, data.Length);
         _budget = budget;
@@ -66,6 +77,9 @@ public sealed class ByteWindow
 
     /// <summary>これより先は読まない (絶対位置)。</summary>
     public long Limit { get; }
+
+    /// <summary>残りの読み取りの回数 (上限を超えたら 0 以下)。</summary>
+    public long RemainingBudget => _budget;
 
     internal ICarveData Data => _data;
 
