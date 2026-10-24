@@ -9876,4 +9876,156 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} s</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Compare structure too</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>When comparing files, also compare the structures found by a structure template (field by field). The template is chosen automatically when both sides match the same template.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Structure compare: include hidden patterns</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Also compare patterns marked hidden in the template.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Structure compare: maximum fields</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Stop the structure compare after comparing this many fields on each side (10,000 to 10,000,000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Structure compare: array matching</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>How array elements are matched, per template and array. Change it with "Matching method..." in the Structure differences panel.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Compare: compare structure</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Compare: choose template for structure compare</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Compare: move between structure differences</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Compare: show structure differences</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Compare: next structure difference</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Compare: previous structure difference</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Compare: export structure differences</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Toggle structure differences</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Structure differences</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Compare structure</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Choose template for structure compare...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Compare structure too</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Choose template for structure compare</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Compare</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Left start offset</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Right start offset</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Structure compare</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Structure differences</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Choose template</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} fields compared</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Template: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Structure compare is not available for process memory snapshots.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Go to left data</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Go to right data</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Copy row</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Copy left and right values</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Add bookmark on left</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Add bookmark on right</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Matching method...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Show in left result tree</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Show in right result tree</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Structure compare: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Stopped partway (cancelled)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>collapsed</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>expanded</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Kind</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Left value</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Right value</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Left offset</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Right offset</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Matching</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, left {2}, right {3}, left {4}, right {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>Structure compare is off. Turn on "Compare structure" in the compare tab toolbar.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Waiting for the comparison...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Open a compare tab to see structure differences.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Done in {0} s</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Comparing: {0} fields</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Stopped at the field limit</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>The structure compare failed: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>The number of fields reached the limit ({0}), so only part was compared.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Show {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Template: {0} ({1}), left {2} / right {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Chosen by you.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Both sides have the same template applied.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>The magic of both sides matched.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Structure differences</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Changed</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Added</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Removed</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Moved</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Moved and changed</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Type changed</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Cannot parse</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Same</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Left: {0} errors, {1} warnings</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Right: {0} errors, {1} warnings</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Template output (left)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Template output (right)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>No errors or warnings.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Key: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Content</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(matched by position because there are many elements)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>No structure differences.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>There is no structure compare result.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>No structure differences</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Returned to the first structure difference</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Returned to the last structure difference</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>No template was chosen for the structure compare (both sides must match the same template by magic). Only the byte compare was done.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>The template has a syntax error: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>The template file was not found: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Differences outside the structure</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} differences, {1} bytes</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(outside range)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(padding)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>template error</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Not compared because of the limit</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Not compared because it is too deep</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Fields compared: left {0}, right {1}. {2}. Outside the structure: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Choose template...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Edit template</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Raise limit and compare again</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Export...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Filter by name, path or value</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filter</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Include padding</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Show matching fields</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Summary</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Structure differences</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Export structure differences</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Text report</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Rows</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Shown rows (after filtering)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>All differences</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Offsets</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Decimal</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Hexadecimal</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Save...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Export structure differences</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(left {0}, right {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Template: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Start offsets: left {0}, right {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Fields compared: left {0}, right {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Differences outside the structure: {0}, {1} bytes</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Template errors and warnings: left {0} / {1}, right {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Elapsed: {0} s</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Matching method</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Array: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Method</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Automatic</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Key</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Content</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Position</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Key field</value></data>
 </root>

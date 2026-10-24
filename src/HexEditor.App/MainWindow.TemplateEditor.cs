@@ -272,6 +272,9 @@ public sealed partial class MainWindow : ITemplateEditorHost
             {
                 DocumentTemplates.Find(doc.Document)?.TemplateSaved(path);
             }
+
+            // 構造の比較 (ANA-31 の仕様 9)
+            w.StructTemplateSaved(path);
         }
 
         // インスペクタ用テンプレート (TPL-29) として登録したファイルなら、ユーザー定義型の行を更新する

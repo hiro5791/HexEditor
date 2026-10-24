@@ -20,7 +20,7 @@ if (std::pe::rich_start() >= 0) {
     std::pe::RichHeader rich @ std::pe::rich_start();
 }
 std::pe::NtHeaders     nt @ header.e_lfanew;
-std::pe::SectionHeader sections[nt.FileHeader.NumberOfSections] @ header.e_lfanew + 24 + nt.FileHeader.SizeOfOptionalHeader;
+std::pe::SectionHeader sections[nt.FileHeader.NumberOfSections] @ header.e_lfanew + 24 + nt.FileHeader.SizeOfOptionalHeader [[diff_key("Name")]];
 
 // データディレクトリが指す構造 (番号は IMAGE_DIRECTORY_ENTRY_*)
 if (std::pe::dir_rva(0) != 0) {

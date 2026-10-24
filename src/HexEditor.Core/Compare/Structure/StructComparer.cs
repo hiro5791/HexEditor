@@ -30,6 +30,9 @@ public sealed record StructCompareOptions
 
     public ITemplateExtensionHost? Extensions { get; init; }
 
+    /// <summary>セクションの一時ファイルを置くフォルダ (null なら既定)。</summary>
+    public string? TempDirectory { get; init; }
+
     /// <summary>設定「テンプレートの上限の最大値」(TPL-17 の仕様 4。通常の適用と同じ)。</summary>
     public TemplateLimits MaximumLimits { get; init; } = TemplateLimits.DefaultMaximum;
 
@@ -120,6 +123,7 @@ public static class StructComparer
                 DefaultEncoding = options.DefaultEncoding,
                 Extensions = options.Extensions,
                 MaximumLimits = options.MaximumLimits,
+                TempDirectory = options.TempDirectory ?? Path.Combine(Path.GetTempPath(), "HexEditor", "templates"),
             };
 
             TemplateResult l = TemplateEngine.Apply(program, left.Data, Apply(left.Start));

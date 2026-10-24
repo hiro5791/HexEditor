@@ -9876,4 +9876,156 @@ SHA-256 のフィンガープリント: {2}
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} 時間</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>構造でも比較する</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>ファイルを比較するときに、構造体テンプレートで解析した構造もフィールドの単位で比べます。テンプレートは、左右が同じテンプレートに一致するときに自動で選ばれます。</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>構造の比較: 隠したパターンも比べる</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>テンプレートで hidden を付けたパターンも比べます。</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>構造の比較: フィールドの数の上限</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>左右それぞれ、この数のフィールドを比べたら構造の比較を止めます (10,000〜10,000,000)。</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>構造の比較: 配列の対応付け</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>テンプレートと配列ごとの、要素の対応付けの方法。構造の差分パネルの「対応付けの方法...」で変えます。</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較: 構造で比較</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>こうぞうでひかく</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比較: 構造の比較に使うテンプレートを選ぶ</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>こうぞうのひかくにつかうてんぷれーとをえらぶ</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比較: 移動の対象を構造にする</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>いどうのたいしょうをこうぞうにする</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比較: 構造の差分を表示</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをひょうじ</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比較: 次の構造の差分</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>つぎのこうぞうのさぶん</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比較: 前の構造の差分</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>まえのこうぞうのさぶん</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比較: 構造の差分をエクスポート</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをえくすぽーと</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>構造の差分の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>こうぞうのさぶんのひょうじきりかえ</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>構造の差分(W)</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>構造で比較(T)</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ(M)...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>構造でも比較する</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>比較</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>左の開始オフセット</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>右の開始オフセット</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>構造の比較</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>テンプレートを選ぶ</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>比べたフィールド: {0}</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>テンプレート: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>プロセスメモリのスナップショットでは、構造の比較は使えません。</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>左のデータへ移動</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>右のデータへ移動</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>行をコピー</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>左右の値をコピー</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>左にブックマークを追加</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>右にブックマークを追加</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>対応付けの方法...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>左の結果ツリーで表示</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>右の結果ツリーで表示</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>構造の比較: {0}、{1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>途中で中止</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>閉じている</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>開いている</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>左の値</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>右の値</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>型</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>左オフセット</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>右オフセット</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>対応付け</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}、{1}、左 {2}、右 {3}、左 {4}、右 {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>、</value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>構造の比較はオフです。比較タブのツールバーの「構造で比較」でオンにできます。</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>比較を待っています...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>比較タブを開くと、構造の差分を表示します。</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>完了 ({0} 秒)</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>比較中: {0} フィールド</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>上限のため途中まで</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>構造の比較に失敗しました: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>フィールドの数が上限 ({0}) に達したため、途中まで比べました。</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>{0} を表示</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>テンプレート: {0} ({1})、左 {2} / 右 {3}。{4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>選んだテンプレートです。</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>左右に同じテンプレートの適用があるため。</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>両方のマジックが一致したため。</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>変更</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>追加</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>削除</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>移動</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>移動・変更</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>型の変更</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>解析できない</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>一致</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>左: エラー {0}、警告 {1}</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>右: エラー {0}、警告 {1}</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>テンプレートの出力 (左)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>テンプレートの出力 (右)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>エラー・警告はありません。</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>キー: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>内容</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(要素が多いため位置で対応付けました)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>構造の差分はありません。</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>構造の比較の結果がありません。</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>構造の差分はありません</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>先頭の構造の差分に戻りました</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>末尾の構造の差分に戻りました</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>構造の比較に使うテンプレートが決まりませんでした (左右が同じテンプレートのマジックに一致する必要があります)。バイトの比較だけを行いました。</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>テンプレートに構文エラーがあります: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>テンプレートのファイルが見つかりません: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>構造の外の差分</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} 件、{1} バイト</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(範囲外)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(埋め草)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>テンプレートのエラー</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>上限のため比べていません</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>深すぎるため比べていません</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>比べたフィールド: 左 {0}、右 {1}。{2}。構造の外の差分: {3}。{4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>テンプレートを選ぶ...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>テンプレートを編集</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>上限を上げて再比較</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>名前・パス・値で絞り込み</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>埋め草を含める</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>一致したフィールドも表示</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>要約</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>構造の差分をエクスポート</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>テキストのレポート</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>対象</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>表示中の行 (絞り込みの後)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>すべての差分</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>オフセット</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>10 進</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>保存...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>構造の差分のエクスポート</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(左 {0}、右 {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>テンプレート: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>開始オフセット: 左 {0}、右 {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>比べたフィールド: 左 {0}、右 {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>構造の外の差分: {0} 件、{1} バイト</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>テンプレートのエラー・警告: 左 {0} / {1}、右 {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>かかった時間: {0} 秒</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>対応付けの方法</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>配列: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>方法</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>キー</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>内容</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>キーのフィールド</value></data>
 </root>

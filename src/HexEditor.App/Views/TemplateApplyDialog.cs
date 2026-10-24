@@ -62,11 +62,18 @@ public sealed class TemplateApplyDialog
     private readonly RadioButtons _kind;
     private readonly ComboBox _type;
     private readonly List<TemplatePickItem> _all;
+    private readonly TextBox? _rightOffset;
+    private readonly long _rightLength;
 
+    /// <summary>
+    /// <paramref name="compareRightOffset"/> を渡すと、構造の比較に使うテンプレートを選ぶ画面 (06 の ANA-31 の「画面」) にする: 左右の開始オフセットの欄を出し、
+    /// エンディアンと種類の欄は出さない。<paramref name="startOffset"/> と <paramref name="documentLength"/> は左のもの。
+    /// </summary>
     public TemplateApplyDialog(XamlRoot root, long startOffset, long documentLength, bool documentBigEndian, TemplateApplyKind kind = TemplateApplyKind.Fixed,
-        bool kaitaiOnly = false)
+        bool kaitaiOnly = false, long? compareRightOffset = null, long compareRightLength = 0)
     {
         DocumentLength = documentLength;
+        _rightLength = compareRightLength;
         IReadOnlyList<string> recent = TemplateService.Recent;
         IReadOnlyList<TemplateCatalogEntry> entries = TemplateService.Catalog.Entries;
         _all = [];
@@ -135,6 +142,25 @@ public sealed class TemplateApplyDialog
         Grid.SetColumn(_type, 1);
         options.Children.Add(_type);
 
+        if (compareRightOffset is { } rightStart)
+        {
+            _offset.Header = Loc.Get("Compare_StructDialog_LeftOffset");
+            _rightOffset = new TextBox
+            {
+                Header = Loc.Get("Compare_StructDialog_RightOffset"),
+                Text = "0x" + rightStart.ToString("X", CultureInfo.InvariantCulture),
+                FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Cascadia Mono, Consolas"),
+                FlowDirection = FlowDirection.LeftToRight,
+            };
+            AutomationProperties.SetAutomationId(_rightOffset, "TplApply_RightOffset");
+            _rightOffset.TextChanged += (_, _) => Validate();
+            options.Children.Remove(_endian);
+            options.Children.Remove(_kind);
+            options.Children.Remove(_type);
+            Grid.SetColumn(_rightOffset, 1);
+            options.Children.Add(_rightOffset);
+        }
+
         var content = new StackPanel { Spacing = 8, MinWidth = 520 };
         content.Children.Add(_search);
         content.Children.Add(_list);
@@ -143,9 +169,9 @@ public sealed class TemplateApplyDialog
         _dialog = new ContentDialog
         {
             XamlRoot = root,
-            Title = Loc.Get(kaitaiOnly ? "TplApply_TitleKaitai" : "TplApply_Title"),
+            Title = Loc.Get(compareRightOffset is not null ? "Compare_StructDialog_Title" : kaitaiOnly ? "TplApply_TitleKaitai" : "TplApply_Title"),
             Content = new ScrollViewer { Content = content, VerticalScrollBarVisibility = ScrollBarVisibility.Auto },
-            PrimaryButtonText = Loc.Get("TplApply_Apply"),
+            PrimaryButtonText = Loc.Get(compareRightOffset is not null ? "Compare_StructDialog_Ok" : "TplApply_Apply"),
             CloseButtonText = Loc.Get("Common_Cancel"),
             DefaultButton = ContentDialogButton.Primary,
         };
@@ -177,6 +203,9 @@ public sealed class TemplateApplyDialog
     public TemplateApplicationInfo? Result { get; private set; }
 
     public long DocumentLength { get; }
+
+    /// <summary>構造の比較の画面で選んだ右の開始オフセット (「選ぶ」を押したとき)。</summary>
+    public long RightStart { get; private set; }
 
     /// <summary>選択画面の一覧 (テスト用)。</summary>
     internal IReadOnlyList<TemplatePickItem> Items => [.. _list.Items.OfType<TemplatePickItem>()];
@@ -240,9 +269,16 @@ public sealed class TemplateApplyDialog
             && offset >= 0 && offset <= DocumentLength;
     }
 
+    private bool TryRightOffset(out long offset)
+    {
+        offset = 0;
+        return _rightOffset is null || (ExpressionEvaluator.TryEvaluate(_rightOffset.Text, new NoContext(_rightLength), out offset, out _, DefaultRadix.Hexadecimal)
+            && offset >= 0 && offset <= _rightLength);
+    }
+
     private void Validate()
     {
-        bool offsetOk = TryOffset(out long offset);
+        bool offsetOk = TryOffset(out long offset) && TryRightOffset(out _);
         _offsetResult.Text = offsetOk ? "= " + offset.ToString("N0", CultureInfo.CurrentCulture) + " (0x" + offset.ToString("X", CultureInfo.InvariantCulture) + ")"
             : Loc.Get("TplApply_BadOffset");
         _dialog.IsPrimaryButtonEnabled = offsetOk && _list.SelectedItem is TemplatePickItem && (_kind.SelectedIndex == 0 || _type.SelectedItem is string);
@@ -250,11 +286,12 @@ public sealed class TemplateApplyDialog
 
     private TemplateApplicationInfo? Build()
     {
-        if (_list.SelectedItem is not TemplatePickItem item || !TryOffset(out long offset))
+        if (_list.SelectedItem is not TemplatePickItem item || !TryOffset(out long offset) || !TryRightOffset(out long right))
         {
             return null;
         }
 
+        RightStart = right;
         bool follow = _kind.SelectedIndex == 1;
         return new TemplateApplicationInfo
         {
