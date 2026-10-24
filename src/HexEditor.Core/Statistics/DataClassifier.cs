@@ -166,6 +166,12 @@ public static class DataClassifier
     /// <summary>展開してストリームの終わりを確かめる長さの上限 (圧縮されたデータの長さ)。</summary>
     public const long MaxVerifyLength = 256L * 1024 * 1024;
 
+    /// <summary>
+    /// 一覧に持つシグネチャの数の上限 (2^20)。シグネチャだけを敷き詰めたデータ (ZIP のローカルヘッダの繰り返しなど) で、一覧がデータの長さに
+    /// 比例して増えないため (ANA-16 の仕様 4 の注記)。超えた後ろのシグネチャは一覧に加えない。
+    /// </summary>
+    public const int MaxSignatureHits = 1 << 20;
+
     /// <summary>ストリームの終わりを確かめる単位 (この精度で終わりが分かる)。</summary>
     private const int VerifyStep = 512;
 
@@ -667,7 +673,7 @@ public static class DataClassifier
         ReadOnlySpan<byte> span = chunk.Span;
         int at = 0;
         Span<byte> head = stackalloc byte[32];
-        while (at < span.Length)
+        while (at < span.Length && hits.Count < MaxSignatureHits)
         {
             int found = span[at..].IndexOfAny(FirstBytes);
             if (found < 0)
@@ -777,24 +783,33 @@ public static class DataClassifier
             }
 
             using var inflate = new DeflateStream(source, CompressionMode.Decompress, leaveOpen: true);
-            byte[] sink = new byte[64 * 1024];
-            long produced = 0;
-            while (source.Position - offset < MaxVerifyLength)
+
+            // 展開先は借りる (シグネチャの多いデータでは確かめる回数が多く、毎回 64 KiB を確保すると確保の量がデータの長さに比例して大きくなる)。
+            byte[] sink = System.Buffers.ArrayPool<byte>.Shared.Rent(64 * 1024);
+            try
             {
-                token.ThrowIfCancellationRequested();
-                int n = inflate.Read(sink, 0, sink.Length);
-                if (n == 0)
+                long produced = 0;
+                while (source.Position - offset < MaxVerifyLength)
                 {
-                    // 終わり: 読んだ位置が終わりの 512 バイト以内。gzip は 8 バイト、zlib は 4 バイトの末尾を加える。
-                    return produced < 16
-                        ? null
-                        : source.Position - offset + (kind == StreamKind.Gzip ? 8 : 4);
+                    token.ThrowIfCancellationRequested();
+                    int n = inflate.Read(sink, 0, 64 * 1024);
+                    if (n == 0)
+                    {
+                        // 終わり: 読んだ位置が終わりの 512 バイト以内。gzip は 8 バイト、zlib は 4 バイトの末尾を加える。
+                        return produced < 16
+                            ? null
+                            : source.Position - offset + (kind == StreamKind.Gzip ? 8 : 4);
+                    }
+
+                    produced += n;
                 }
 
-                produced += n;
+                return source.Position - offset;
             }
-
-            return source.Position - offset;
+            finally
+            {
+                System.Buffers.ArrayPool<byte>.Shared.Return(sink);
+            }
         }
         catch (InvalidDataException)
         {

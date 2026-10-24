@@ -24,6 +24,9 @@ public static partial class FileMapBuilder
 
     public const int MaxRecordRegions = 64;
 
+    /// <summary>カービングの定義の長さを決める読み取りの、全体の上限の最小 (対象の長さの 4 倍とこの大きい方)。</summary>
+    public const long CarveBudgetMinimum = 256L << 20;
+
     /// <summary>自己相関を求める長さ (領域の先頭 256 KiB)。</summary>
     public const int RecordWindow = 256 * 1024;
 
@@ -36,6 +39,16 @@ public static partial class FileMapBuilder
         private sealed class StructureStage(Builder build)
         {
             private readonly ViewCarveData _carveData = new(build._snapshot);
+
+            // 候補ごとに確保しない作業用の配列 (埋め込まれた形式の候補は最大 100,000 個。候補ごとに 64 KiB × 3 を確保すると、
+            // シグネチャの多いデータで数 GB になる)。
+            private readonly byte[] _headBytes = new byte[TemplateMatchInput.WindowBytes];
+            private readonly byte[] _tailBytes = new byte[TemplateMatchInput.WindowBytes];
+            private readonly byte[] _windowBuffer = new byte[ByteWindow.BlockSize];
+
+            // カービングの定義の長さを決めるための読み取りの、すべての候補を合わせた上限 (読むバイト数)。シグネチャだけを敷き詰めたデータで、
+            // 候補ごとにフッターを末尾まで探すと「候補の数 × 長さ」になるため。使い切ったら、長さは確度の低い方法 (次の領域まで) で決める。
+            private long _carveBudget = Math.Max(CarveBudgetMinimum, 4 * (build.End - build._start));
 
             public List<FileMapRegion> Regions { get; } = [];
 
@@ -240,12 +253,10 @@ public static partial class FileMapBuilder
             private TemplateCandidate? TemplateFor(TemplateCatalog catalog, long offset, long length, string? mime)
             {
                 int head = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
-                byte[] headBytes = new byte[head];
-                byte[] tailBytes = new byte[head];
-                build._snapshot.Read(offset, headBytes);
-                build._snapshot.Read(offset + length - head, tailBytes);
+                build._snapshot.Read(offset, _headBytes.AsSpan(0, head));
+                build._snapshot.Read(offset + length - head, _tailBytes.AsSpan(0, head));
                 string? extension = offset == build._start && build._request.FileName is { } file ? Path.GetExtension(file).TrimStart('.') : null;
-                var input = new TemplateMatchInput(length, headBytes, tailBytes, string.IsNullOrEmpty(extension) ? null : extension, mime);
+                var input = new TemplateMatchInput(length, _headBytes.AsMemory(0, head), _tailBytes.AsMemory(0, head), string.IsNullOrEmpty(extension) ? null : extension, mime);
                 try
                 {
                     return catalog.Detect(input).FirstOrDefault(c => c.Match.Magic);
@@ -428,11 +439,23 @@ public static partial class FileMapBuilder
                     return null;
                 }
 
-                long budget = Math.Min(512L << 20, (64L << 20) | ((limit - start) * 16));
-                var window = new ByteWindow(_carveData, limit, budget, build._token);
+                if (_carveBudget <= 0)
+                {
+                    return null;
+                }
+
+                long budget = Math.Min(_carveBudget, Math.Min(512L << 20, (64L << 20) | ((limit - start) * 16)));
+                var window = new ByteWindow(_carveData, limit, budget, build._token, _windowBuffer);
                 if (sig.Structure is { Length: > 0 } structure)
                 {
-                    return StructureValidators.Find(structure)?.Measure(window, start) is long m && m >= Math.Max(1, sig.MinSize) ? m : null;
+                    try
+                    {
+                        return StructureValidators.Find(structure)?.Measure(window, start) is long m && m >= Math.Max(1, sig.MinSize) ? m : null;
+                    }
+                    finally
+                    {
+                        _carveBudget -= budget - Math.Max(0, window.RemainingBudget);
+                    }
                 }
 
                 if (sig.SizeField is { } rule)
@@ -448,7 +471,9 @@ public static partial class FileMapBuilder
 
                 if (sig.ParsedFooter() is { } footer)
                 {
-                    long at = ByteSearch.Find(_carveData, start + 1, limit, footer, build._token);
+                    long searchEnd = Math.Min(limit, start + 1 + _carveBudget);
+                    long at = ByteSearch.Find(_carveData, start + 1, searchEnd, footer, build._token);
+                    _carveBudget -= (at >= 0 ? at : searchEnd) - start;
                     return at >= 0 ? Math.Min(at - start + sig.FooterIncludeLength(footer), limit - start) : null;
                 }
 

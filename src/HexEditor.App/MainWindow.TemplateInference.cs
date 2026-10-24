@@ -249,8 +249,9 @@ public sealed partial class MainWindow : ITemplateInferenceHost
         {
             result = await Vm.Operations.RunAsync(Loc.Get("TplInfer_OperationName"), Core.Operations.OperationKind.ReadOnly, doc.Document, null, op =>
             {
-                using var linked = CancellationTokenSource.CreateLinkedTokenSource(op.CancellationToken, cts.Token);
-                return Task.FromResult(TemplateInference.Run(snapshot, request, linked.Token));
+                // 入力を変えて取り消したときも処理センターでは「キャンセル」にする (処理の取り消しにつなぐ。「失敗」にしない)
+                using CancellationTokenRegistration link = cts.Token.Register(op.Cancel);
+                return Task.FromResult(TemplateInference.Run(snapshot, request, op.CancellationToken));
             });
         }
         catch (OperationCanceledException)

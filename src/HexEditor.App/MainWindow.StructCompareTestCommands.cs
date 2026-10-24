@@ -59,6 +59,11 @@ public sealed partial class MainWindow
                 }
 
                 return TestStructState();
+            case "structTab":
+                // Tab / Shift+Tab (パネルの中のフォーカスの移動。TC-ANA-32-08 の手順 5)
+                StructPanel.MoveFocusForTest(!(request["shift"]?.GetValue<bool>() ?? false));
+                await Task.Yield();
+                return TestStructState();
             case "structKey":
                 bool handled = StructPanel.HandleKey(Enum.Parse<VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true),
                     request["ctrl"]?.GetValue<bool>() ?? false, request["shift"]?.GetValue<bool>() ?? false);
@@ -81,6 +86,17 @@ public sealed partial class MainWindow
                 filtered["filterMs"] = filterWatch.Elapsed.TotalMilliseconds;
                 filtered["rowCount"] = StructPanel.View.RowCount;
                 return filtered;
+            case "structMenuClose":
+                // 開いている右クリックメニュー (Shift+F10 で開いたもの) の項目を読み、閉じる (Esc と同じ)
+                JsonObject closeState = TestStructState();
+                if (StructPanel.LastMenu is { } open)
+                {
+                    closeState["menuOpen"] = open.IsOpen;
+                    closeState["menuItems"] = new JsonArray([.. open.Items.OfType<MenuFlyoutItem>().Select(i => (JsonNode?)AutomationProperties.GetAutomationId(i))]);
+                    open.Hide();
+                }
+
+                return closeState;
             case "structMenu":
                 // 右クリックメニューを開き、{item} があれば押す
                 bool opened = StructPanel.ShowMenu(null);
@@ -255,6 +271,8 @@ public sealed partial class MainWindow
             ["raiseVisible"] = StructPanel.RaiseVisible,
             ["panelShown"] = IsPanelShown(StructDiffsPanelId),
             ["treeFocused"] = StructPanel.HasTreeFocus,
+            ["treeRowFocused"] = StructPanel.TreeContainsFocus,
+            ["focusedId"] = StructPanel.FocusedAutomationId,
             ["selectedRow"] = StructPanel.SelectedRowIndex,
             ["current"] = c?.StructCurrent?.DisplayPath,
             ["left"] = Editor(c?.Left),

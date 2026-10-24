@@ -212,14 +212,46 @@ internal static class ChartSupport
     public static Windows.UI.Color Color(string key, FrameworkElement scope) =>
         Brush(key, scope) is SolidColorBrush s ? s.Color : default;
 
+    /// <summary>1 回の模様で作る形の数の上限 (大きすぎる矩形・細かすぎる間隔で描画の要素が際限なく増えないため)。</summary>
+    public const int MaxPatternShapes = 20_000;
+
     /// <summary>
     /// 模様の形 (リソース名 Pattern_*): 斜線、交差、点、横線、縦線、市松、なし。<paramref name="r"/> の中を <paramref name="step"/> の間隔で描く。
+    /// 返す <see cref="GeometryGroup"/> の子は線・矩形・楕円だけ。複数の矩形の模様を 1 つの Path にまとめるときは、この戻り値を別の
+    /// GeometryGroup の子にせず (入れ子の GeometryGroup は WinUI の描画を 0xC000027B で落とす)、<see cref="AddPattern"/> で平らに足す。
     /// </summary>
-    public static Geometry Pattern(string pattern, Rect r, double step = 6)
+    public static GeometryGroup Pattern(string pattern, Rect r, double step = 6)
     {
         var group = new GeometryGroup();
+        AddPattern(group, pattern, r, step);
+        return group;
+    }
+
+    /// <summary>
+    /// 模様の形を <paramref name="target"/> の子として平らに足す (GeometryGroup を入れ子にしない。入れ子の GeometryGroup は、数が多いと
+    /// WinUI の描画が stowed exception (0xC000027B) でプロセスごと落ちる。フェーズ 6 の監査)。矩形が空・無限・NaN のとき、間隔が 1 未満の
+    /// ときは何も足さない。
+    /// </summary>
+    public static void AddPattern(GeometryGroup target, string pattern, Rect r, double step = 6)
+    {
+        if (!double.IsFinite(r.X) || !double.IsFinite(r.Y) || !double.IsFinite(r.Width) || !double.IsFinite(r.Height) || r.Width <= 0 || r.Height <= 0
+            || !double.IsFinite(step) || step < 1)
+        {
+            return;
+        }
+
+        GeometryCollection children = target.Children;
+        int budget = MaxPatternShapes;
+        void Add(Geometry g)
+        {
+            if (budget-- > 0)
+            {
+                children.Add(g);
+            }
+        }
+
         void Line(double x1, double y1, double x2, double y2) =>
-            group.Children.Add(new LineGeometry { StartPoint = new Point(x1, y1), EndPoint = new Point(x2, y2) });
+            Add(new LineGeometry { StartPoint = new Point(x1, y1), EndPoint = new Point(x2, y2) });
         double right = r.X + r.Width;
         double bottom = r.Y + r.Height;
         switch (pattern)
@@ -260,7 +292,7 @@ internal static class ChartSupport
                 {
                     for (double x = r.X + (step / 2); x < right; x += step)
                     {
-                        group.Children.Add(new EllipseGeometry { Center = new Point(x, y), RadiusX = 1, RadiusY = 1 });
+                        Add(new EllipseGeometry { Center = new Point(x, y), RadiusX = 1, RadiusY = 1 });
                     }
                 }
 
@@ -321,7 +353,7 @@ internal static class ChartSupport
                 {
                     for (double x = r.X + step; x < right; x += step * 2)
                     {
-                        group.Children.Add(new RectangleGeometry { Rect = new Rect(x - 1, y - 1, 2, 2) });
+                        Add(new RectangleGeometry { Rect = new Rect(x - 1, y - 1, 2, 2) });
                     }
                 }
 
@@ -331,14 +363,12 @@ internal static class ChartSupport
                 {
                     for (double x = r.X + ((int)((y - r.Y) / step) % 2 * step); x < right; x += step * 2)
                     {
-                        group.Children.Add(new RectangleGeometry { Rect = new Rect(x, y, Math.Min(step, right - x), Math.Min(step, bottom - y)) });
+                        Add(new RectangleGeometry { Rect = new Rect(x, y, Math.Min(step, right - x), Math.Min(step, bottom - y)) });
                     }
                 }
 
                 break;
         }
-
-        return group;
     }
 
     /// <summary>ツールチップの文字列を設定する (同じなら何もしない)。</summary>
