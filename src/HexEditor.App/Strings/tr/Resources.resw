@@ -9869,4 +9869,414 @@ Anahtarı değiştirmeyi seçmedikçe bağlantı kurulmaz.</value></data>
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} sn</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} dk</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} sa</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Başlangıç belgenin dışında.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>{0} ile {1} bayt arasında bir kayıt uzunluğu girin.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>En az 4 kayıt içeren bir aralık seçin.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>En az {0} baytlık bir aralık seçin.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Yalnızca {0, plural, one {# kayıt} other {# kayıt}} okunabildi. En az 4 kayıt gerekli.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>Tüm {0} kayıtta 00.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Tüm {1} kayıtta aynı değer: {0}.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Tüm {1} kayıtta aynı değer: {0}.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>%{0} ASCII dizesi (en fazla {1} karakter).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>%{0} UTF-16 dizesi (en fazla {1} karakter).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>{1} kaydın {0} tanesinde değer = {2} + {3} × kayıt numarası.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>%{0} değer, {1} ile {2} arasında UNIX zamanı (saniye).</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>%{0} değer, {1} ile {2} arasında 64 bit UNIX zamanı (saniye).</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>%{0} değer, {1} ile {2} arasında Windows FILETIME değeri.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>%{0} değer, {1} ile {2} arasında MS-DOS tarih ve saati.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Tüm değerler belge uzunluğunun ({0}) altında, %{1} değer {2} katı ve kayıt numarasıyla birlikte artıyor.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Sıfır olmayan tüm değerler belge uzunluğunun ({0}) altında ve bunların %{1} kadarı birbirinden farklı.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>Ardışık kayıtların %{0} kadarında, sonraki kaydın {1} değerine olan farka eşit.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>Her kayıtta {0} + değer belgenin içinde kalıyor.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>%{0} değer makul kayan nokta değeri ({1} farklı değer).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} bit: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} farklı değer: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>{0} ile {1} arasında değerler; hiçbir kural eşleşmedi.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Her baytın entropisi {0:0.0} bit veya daha yüksek (rastgeleye yakın).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>Hiçbir kuralla eşleşmeyen {0} bayt.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Kayan nokta olarak bakıldığında yalnızca %{0} makul değer.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Tarih olarak bakıldığında yalnızca %{0} değer 1980 ile 2100 arasında.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Sayaç olarak bakıldığında yalnızca %{0} değer diziyi izliyor.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Dize olarak bakıldığında yalnızca %{0} değer yazdırılabilir bir karakterle başlıyor.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>Dolgunun adı olmaz.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>"{0}" geçerli bir ad değil. Harf, rakam ve _ kullanın; rakamla başlamayın.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>"{0}" ayrılmış bir sözcük veya tür adı.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Başka bir alanın adı zaten "{0}".</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Şablon çıkarımıyla hazırlanan taslak (TPL-38). Bu bir tahmindir, kullanmadan önce kontrol edin.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Kaynak: {0}, aralık {1}–{2}, kayıt uzunluğu {3}, {4, plural, one {# kayıt} other {# kayıt}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Çıkarılan kayıtlar ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (güven: {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Dolgu</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Sihirli değer</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Sabit</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Sayaç</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Tarih ve saat</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Ofset</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Kayan nokta</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Dize</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Dize (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Bayraklar</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Sabit listesi</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Tamsayı</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Bilinmiyor</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>yüksek</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>orta</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>düşük</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Şablon çıkarımı</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Seçimden şablon çıkar...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Şablon çıkarımı</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Seçimden şablon çıkar...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Bu uzunlukta şablon çıkar</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Seçimden çıkar</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;çıkar;tahmin;yapı</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Yeniden çıkar</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;yeniden çıkar;yeniden çalıştır</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Çıkarılan taslağı uygula</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;uygula;taslak</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Çıkarılan taslağı düzenleyicide aç</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;düzenle;taslak</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Çıkarım panelini göster</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;çıkarım;panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Şablon çıkarımı paneli</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;çıkarım</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Kayıt uzunluğu</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Kayıtlar</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Tüm aralık</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Bayt sırası</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Çıkar</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Yeniden çıkar</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Kayıt uzunluğu adayları</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} bayt · puan {1} · {2, plural, one {# kayıt} other {# kayıt}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Alanlar</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Taslak (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Uygula</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Düzenleyicide aç</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Kopyala</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Taslak kopyalandı.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Şablon çıkarmak için bir belge açın.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Önce bir şablon çıkarın.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Başlangıcı sayı veya ifade olarak girin.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Uzunluğu sayı veya ifade olarak girin.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Kayıt sayısını girin veya tüm aralık için boş bırakın.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Çıkarılıyor...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Şablon çıkarımı</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Sabit uzunlukta kayıt bulunamadı. Kayıt uzunluğunu girin.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Değişken uzunluklu kayıtlar (boyutu bir uzunluk alanına bağlı olanlar) için çıkarım yapılamaz.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Kayıt uzunluğu {0}, {1, plural, one {# kayıt} other {# kayıt}} (çıkarımda {2} kayıt kullanıldı).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# kayıt} other {# kayıt}} okunamadı ve dışarıda bırakıldı.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>Son {0, plural, one {# bayt} other {# bayt}} bir kayda sığmıyor.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>İç hata: taslakta sözdizimi hataları var ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, güven: {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>adsız</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(uyarı: düşük güven)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(elle değiştirildi)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>değiştirildi</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Adaylar: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Yeniden adlandır</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Önceki alanla birleştir</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Böl...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Bu kadar bayttan sonra böl (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>Yapıyı da karşılaştır</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>Dosyalar karşılaştırılırken, bir yapı şablonuyla bulunan yapılar da (alan alan) karşılaştırılır. Her iki taraf da aynı şablonla eşleşirse şablon otomatik seçilir.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Yapı karşılaştırması: gizli desenleri dahil et</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>Şablonda gizli olarak işaretlenen desenleri de karşılaştır.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Yapı karşılaştırması: en fazla alan</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Her tarafta bu kadar alan karşılaştırıldıktan sonra yapı karşılaştırmasını durdur (10.000 ile 10.000.000 arası).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Yapı karşılaştırması: dizi eşleştirme</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Dizi öğelerinin nasıl eşleştirileceği; şablon ve dizi başına ayarlanır. Yapı farkları panelindeki "Eşleştirme yöntemi..." ile değiştirin.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Karşılaştır: yapıyı karşılaştır</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff yapı alan şablon fark</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Karşılaştır: yapı karşılaştırması için şablon seç</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose yapı şablon seç</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Karşılaştır: yapı farkları arasında git</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target sonraki önceki yapı hedef</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Karşılaştır: yapı farklarını göster</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel yapı farkları panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Karşılaştır: sonraki yapı farkı</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field yapı sonraki alan</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Karşılaştır: önceki yapı farkı</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field yapı önceki alan</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Karşılaştır: yapı farklarını dışarı aktar</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report yapı dışarı aktar rapor</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Yapı farklarını aç/kapat</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel yapı farkları panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Yapı farkları</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Yapıyı karşılaştır</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Yapı karşılaştırması için şablon seç...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>Yapıyı da karşılaştır</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Yapı karşılaştırması için şablon seç</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Karşılaştır</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Sol başlangıç ofseti</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Sağ başlangıç ofseti</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Yapı karşılaştırması</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Yapı farkları</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Şablon seç</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>{0} alan karşılaştırıldı</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Şablon: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Yapı karşılaştırması işlem belleği anlık görüntüleri için kullanılamaz.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Soldaki verilere git</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Sağdaki verilere git</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Yolu kopyala</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Satırı kopyala</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Sol ve sağ değerleri kopyala</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Sola yer işareti ekle</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Sağa yer işareti ekle</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Eşleştirme yöntemi...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Sol sonuç ağacında göster</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Sağ sonuç ağacında göster</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Yapı karşılaştırması: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Yarıda durduruldu (iptal edildi)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>daraltıldı</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>genişletildi</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Çeşit</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Sol değer</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Sağ değer</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Sol ofset</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Sağ ofset</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Eşleştirme</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, sol {2}, sağ {3}, sol {4}, sağ {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>Yapı karşılaştırması kapalı. Karşılaştırma sekmesinin araç çubuğunda "Yapıyı da karşılaştır" seçeneğini açın.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Karşılaştırma bekleniyor...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Yapı farklarını görmek için bir karşılaştırma sekmesi açın.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>{0} sn içinde tamamlandı</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Karşılaştırılıyor: {0} alan</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Alan sınırında durduruldu</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>Yapı karşılaştırması başarısız oldu: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Alan sayısı sınıra ({0}) ulaştı; bu yüzden yalnızca bir bölümü karşılaştırıldı.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>{0} göster</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Şablon: {0} ({1}), sol {2} / sağ {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Sizin tarafınızdan seçildi.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Her iki tarafta da aynı şablon uygulanmış.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Her iki tarafın sihirli değeri eşleşti.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Yapı farkları</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Değişti</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Eklendi</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Kaldırıldı</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Taşındı</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Taşındı ve değişti</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Tür değişti</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Ayrıştırılamıyor</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Aynı</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Sol: {0} hata, {1} uyarı</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Sağ: {0} hata, {1} uyarı</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Şablon çıktısı (sol)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Şablon çıktısı (sağ)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Hata veya uyarı yok.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Anahtar: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>İçerik</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Konum</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(çok sayıda öğe olduğu için konuma göre eşleştirildi)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Yapı farkı yok.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Yapı karşılaştırması sonucu yok.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Yapı farkı yok</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>İlk yapı farkına dönüldü</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Son yapı farkına dönüldü</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Yapı karşılaştırması için şablon seçilmedi (her iki taraf da sihirli değerle aynı şablonla eşleşmelidir). Yalnızca bayt karşılaştırması yapıldı.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>Şablonda sözdizimi hatası var: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Şablon dosyası bulunamadı: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Yapının dışındaki farklar</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} fark, {1} bayt</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(aralığın dışında)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(dolgu)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>şablon hatası</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Sınır nedeniyle karşılaştırılmadı</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Çok derin olduğu için karşılaştırılmadı</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Karşılaştırılan alanlar: sol {0}, sağ {1}. {2}. Yapının dışında: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Şablon seç...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Şablonu düzenle</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Sınırı yükselt ve yeniden karşılaştır</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Dışarı aktar...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Ada, yola veya değere göre filtrele</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtre</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Dolguyu dahil et</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Eşleşen alanları göster</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Özet</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Yapı farkları</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Yapı farklarını dışarı aktar</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Biçim</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Metin raporu</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Satırlar</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Gösterilen satırlar (filtrelemeden sonra)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Tüm farklar</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Ofsetler</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Ondalık</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Onaltılık</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Kaydet...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Yapı farklarını dışarı aktar</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(sol {0}, sağ {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Şablon: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Başlangıç ofsetleri: sol {0}, sağ {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Karşılaştırılan alanlar: sol {0}, sağ {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Yapının dışındaki farklar: {0}, {1} bayt</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Şablon hataları ve uyarıları: sol {0} / {1}, sağ {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Geçen süre: {0} sn</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Eşleştirme yöntemi</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Dizi: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Yöntem</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Anahtar</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>İçerik</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Konum</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Anahtar alanı</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Filtreleniyor...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Biçim yapısı</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Gömülü dosya</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Sıkıştırılmış</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Şifrelenmiş veya rastgele</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Metin</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Sıfır</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Dolgu</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Yinelenen kayıtlar</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>İkili</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Okunamıyor</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Örneklerden tahmin edildi</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Sıfır</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Sabit {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Metin ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Yinelenen kayıtlar ({0, plural, one {# bayt} other {# bayt}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Yüksek</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Orta</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Düşük</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Örnek</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Tarama</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Yapı</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Örneklerden tahmin edildi: {1} baytlık {0, plural, one {# aralığın} other {# aralığın}} her birinin ortasındaki 4 KiB.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} değerinin {0, plural, one {# ardışık baytı} other {# ardışık baytı}}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# bayt} other {# bayt}} okunamadı.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropi {0} bit/bayt, ki-kare p değeri {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropi {0} bit/bayt.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Blok blok sınıflandırıldı ({1} baytlık {0, plural, one {# blok} other {# blok}}).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{0} konumundan itibaren {1, plural, one {# bayt} other {# bayt}}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>"{0}" şablonu {1} desenini {2}–{3} konumuna yerleştirdi ({4, plural, one {# bayt} other {# bayt}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{0} konumunda {1} imzası.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>"{0}" şablonu {1}–{2} aralığını ayrıştırdı ({3, plural, one {# bayt} other {# bayt}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>"{0}" şablonu veriyi ayrıştıramadı ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>"{1}" carving tanımı {0, plural, one {# bayt} other {# bayt}} uzunluk verdi ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>yapı denetimi</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>boyut alanı</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>alt bilgi</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>en büyük boyut</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>Bitiş bilinmiyor; bölgenin, {0} konumundaki sonraki bölgeden önce bittiği varsayılıyor ({1, plural, one {# bayt} other {# bayt}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>{1} konumundaki {0} akışı açıldı ve sağlama toplamı eşleşiyor ({2, plural, one {# bayt} other {# bayt}} sıkıştırılmış, {3} bayt açılmış).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>{0} baytlık kaydırmada baytların {1} kadarı eşleşiyor (1–{2} kaydırmalarının ortalaması: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Bu harita imzalara ve istatistiklere dayanan bir tahmindir ve yanlış olabilir.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Dönüştürme görünümü: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Belge: {0} ({1}), {2, plural, one {# bayt} other {# bayt}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Aralık: {0}–{1} ({2, plural, one {# bayt} other {# bayt}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Tüm aşamalar tamamlandı.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Tüm aşamalar tamamlanmadı (kalanı örneklerden tahmin ediliyor).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Türe göre baytlar:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# bayt} other {# bayt}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# bölge} other {# bölge}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>ve {0, plural, one {# bölge} other {# bölge}} daha</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Dosya haritası oluştur</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout dosya haritası genel bakış bölgeler düzen</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Dosya haritasını yeniden oluştur</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh dosya haritası yeniden oluştur yenile</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Dosya haritasını göster</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel dosya haritası panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Dosya haritasını dışarı aktar</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report dosya haritası dışarı aktar rapor</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Bulunan dosyalara şablon uygula</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates dosya haritası gömülü dosyalar şablonlar</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Dosya haritası panelini aç/kapat</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel dosya haritası panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Dosya Haritası</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Dosya Haritası</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Dosya Haritası</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Dosya haritası</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Dosya haritası oluştur</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Dosya haritası</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Dosya haritasını dışarı aktar</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Dosya haritası: gömülü dosyalar için şablonlar</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Dosya haritası, bir şablonun ayrıştırabildiği gömülü dosyalar bulduğunda şablon uygulamayı önerir. Şablonlar hiçbir zaman otomatik uygulanmaz.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Öner</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Hiçbir şey yapma</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Genel bakış (örnekler)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Tam tarama</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Yapı çözümlemesi</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Henüz dosya haritası yok. Belgede neyin nerede olduğunu görmek için bir tane oluşturun.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: %{1}</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Tamamlandı: {0} bölge.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Durduruldu (%{1} tarandı): {0} bölge. Kalanı örneklerden tahmin ediliyor.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Sonuçlar düzenlemeden önceki içerik için.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>Dosya haritası oluşturulamadı: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Dosya haritasını Çözümle &gt; Dosya Haritası ile veya yukarıdaki Oluştur ile oluşturun.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {# gömülü biçim adayı} other {# gömülü biçim adayı}} tutulmadı.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Oluştur</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Yeniden oluştur</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Dışarı aktar</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Metin raporu...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Dosya haritası ilerlemesi</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Yakınlaştır</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Uzaklaştır</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Haritanın tamamını göster</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Tablo olarak göster</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Dosya haritası şeridi: yapı şeridi ve içerik şeridi</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Dosya haritası şeridini kaydır</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Gösterge</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# bayt} other {# bayt}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Dosya haritası bölgeleri</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Türü göster</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Tüm türler</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Listelenen satırları yer işaretlerine ekle</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Listelenen satırları çoklu seçime ekle</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Bitiş (dahil)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Uzunluk</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Tür</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Etiket</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Güven</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Aşama</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Şeritten veya listeden bir bölge seçin.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# bayt} other {# bayt}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, başlangıç {2}, {3, plural, one {# bayt} other {# bayt}}, güven: {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Güven: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Aşama: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Şablon: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Aralığı seç</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Yer işareti ekle</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>"{0}" şablonunu uygula</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Yeni sekmede aç</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Buradan itibaren sıkıştırmayı aç...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Şablon çıkar...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Dizeleri ayıkla...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Dosya olarak kaydet...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Şablon çıkarımı kullanılamıyor.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Bu belge için dosya haritası yok.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>Dosya haritasında şablonu olan gömülü dosya yok.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# gömülü dosya} other {# gömülü dosya}} bulundu. Şablonlar uygulansın mı?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Uygula</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Listeyi göster</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>{0, plural, one {# gömülü dosyaya} other {# gömülü dosyaya}} şablon uygulandı.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>{0} gömülü dosyaya şablon uygulandı. Bir belgede en fazla {2} uygulama olabileceğinden {1, plural, one {# dosya} other {# dosya}} uygulanmadı.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Dosya haritası {0} konumuna dışarı aktarıldı.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>Dosya haritası dışarı aktarılamadı: {0}</value></data>
 </root>

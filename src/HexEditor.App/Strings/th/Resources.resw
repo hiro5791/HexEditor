@@ -9867,4 +9867,414 @@
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} วินาที</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} ชั่วโมง</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>ตำแหน่งเริ่มต้นอยู่นอกเอกสาร</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>ป้อนความยาวเรคคอร์ดตั้งแต่ {0} ถึง {1} ไบต์</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>เลือกช่วงที่มีเรคคอร์ดอย่างน้อย 4 รายการ</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>เลือกช่วงอย่างน้อย {0} ไบต์</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>อ่านได้เพียง {0, plural, other {# เรคคอร์ด}} ต้องมีอย่างน้อย 4 เรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>เป็น 00 ในทั้ง {0} เรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>ค่าเดียวกัน {0} ในทั้ง {1} เรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>ค่าเดียวกัน {0} ในทั้ง {1} เรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% เป็นสตริง ASCII (ยาวสุด {1} อักขระ)</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% เป็นสตริง UTF-16 (ยาวสุด {1} อักขระ)</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>ใน {0} จาก {1} เรคคอร์ด ค่า = {2} + {3} × หมายเลขเรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% เป็นเวลา UNIX (วินาที) ตั้งแต่ {1} ถึง {2}</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% เป็นเวลา UNIX 64 บิต (วินาที) ตั้งแต่ {1} ถึง {2}</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% เป็นค่า Windows FILETIME ตั้งแต่ {1} ถึง {2}</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% เป็นวันที่และเวลาแบบ MS-DOS ตั้งแต่ {1} ถึง {2}</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>ทุกค่าน้อยกว่าความยาวเอกสาร ({0}) โดย {1}% เป็นพหุคูณของ {2} และเพิ่มขึ้นตามหมายเลขเรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>ทุกค่าที่ไม่ใช่ศูนย์น้อยกว่าความยาวเอกสาร ({0}) และ {1}% ของค่าเหล่านั้นไม่ซ้ำกัน</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>ใน {0}% ของเรคคอร์ดที่ต่อเนื่องกัน เท่ากับผลต่างจาก {1} ของเรคคอร์ดถัดไป</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + ค่า อยู่ภายในเอกสารในทุกเรคคอร์ด</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% เป็นค่าทศนิยมที่สมเหตุสมผล ({1} ค่าที่แตกต่างกัน)</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} บิต: {1}</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} ค่าที่แตกต่างกัน: {1}</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>ค่าตั้งแต่ {0} ถึง {1} ไม่ตรงกับกฎใดเลย</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>ทุกไบต์มีเอนโทรปี {0:0.0} บิตขึ้นไป (ใกล้เคียงข้อมูลสุ่ม)</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} ไบต์ที่ไม่ตรงกับกฎใดเลย</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>ถ้าเป็นเลขทศนิยม มีเพียง {0}% ที่เป็นค่าที่สมเหตุสมผล</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>ถ้าเป็นวันที่ มีเพียง {0}% ที่อยู่ระหว่างปี 1980 ถึง 2100</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>ถ้าเป็นตัวนับ มีเพียง {0}% ที่เป็นไปตามลำดับ</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>ถ้าเป็นสตริง มีเพียง {0}% ที่ขึ้นต้นด้วยอักขระที่พิมพ์ได้</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>แพดดิงไม่มีชื่อ</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>"{0}" ไม่ใช่ชื่อที่ถูกต้อง ใช้ตัวอักษร ตัวเลข และ _ และห้ามขึ้นต้นด้วยตัวเลข</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>"{0}" เป็นคำสงวนหรือชื่อชนิดข้อมูล</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>มีฟิลด์อื่นใช้ชื่อ "{0}" อยู่แล้ว</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>ฉบับร่างที่สร้างจากการอนุมานเทมเพลต (TPL-38) เป็นเพียงการคาดเดา โปรดตรวจสอบก่อนใช้งาน</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>ที่มา: {0} ช่วง {1}–{2} ความยาวเรคคอร์ด {3} {4, plural, other {# เรคคอร์ด}} {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>เรคคอร์ดที่อนุมานได้ ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (ความเชื่อมั่น{1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>แพดดิง</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>หมายเลข magic</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>ค่าคงที่</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>ตัวนับ</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>วันที่และเวลา</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>เลขทศนิยม</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>สตริง</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>สตริง (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>แฟล็ก</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>เอนัม</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>จำนวนเต็ม</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>ไม่ทราบ</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>สูง</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>ปานกลาง</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>ต่ำ</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>การอนุมานเทมเพลต</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>อนุมานเทมเพลตจากส่วนที่เลือก(I)...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>การอนุมานเทมเพลต(1)</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>อนุมานเทมเพลตจากส่วนที่เลือก...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>อนุมานเทมเพลตจากความยาวนี้</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>อนุมานจากส่วนที่เลือก</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;อนุมาน;คาดเดา;โครงสร้าง</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>อนุมานอีกครั้ง</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;อนุมานอีกครั้ง;เรียกใช้ใหม่</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>ใช้ฉบับร่างที่อนุมานได้</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;ใช้;ฉบับร่าง</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>เปิดฉบับร่างที่อนุมานได้ในตัวแก้ไข</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;แก้ไข;ฉบับร่าง</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>แสดงแผงการอนุมาน</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;อนุมาน;แผง</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>แผงการอนุมานเทมเพลต</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;อนุมาน</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>เริ่มต้น</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>ความยาวเรคคอร์ด</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>เรคคอร์ด</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>ทั้งช่วง</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>ลำดับไบต์</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>อนุมาน</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>อนุมานอีกครั้ง</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>ตัวเลือกความยาวเรคคอร์ด</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} ไบต์ · คะแนน {1} · {2, plural, other {# เรคคอร์ด}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>ฟิลด์</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>ฉบับร่าง (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>เปิดในตัวแก้ไข</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>คัดลอก</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>คัดลอกฉบับร่างแล้ว</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>เปิดเอกสารเพื่ออนุมานเทมเพลต</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>อนุมานเทมเพลตก่อน</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>ป้อนตำแหน่งเริ่มต้นเป็นตัวเลขหรือนิพจน์</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>ป้อนความยาวเป็นตัวเลขหรือนิพจน์</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>ป้อนจำนวนเรคคอร์ด หรือเว้นว่างไว้เพื่อใช้ทั้งช่วง</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>กำลังอนุมาน...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>การอนุมานเทมเพลต</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>ไม่พบเรคคอร์ดที่มีความยาวคงที่ ป้อนความยาวเรคคอร์ด</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>ไม่สามารถอนุมานเรคคอร์ดความยาวผันแปร (ที่ขนาดขึ้นกับฟิลด์ความยาว) ได้</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>ความยาวเรคคอร์ด {0} {1, plural, other {# เรคคอร์ด}} (ใช้ {2} เรคคอร์ดในการอนุมาน)</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, other {# เรคคอร์ด}}อ่านไม่ได้และถูกตัดออก</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, other {# ไบต์}}สุดท้ายไม่พอสำหรับเรคคอร์ดหนึ่งรายการ</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>ข้อผิดพลาดภายใน: ฉบับร่างมีข้อผิดพลาดทางไวยากรณ์ ({0})</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, ความเชื่อมั่น{4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>ไม่มีชื่อ</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(คำเตือน: ความเชื่อมั่นต่ำ)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(แก้ไขด้วยตนเอง)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>แก้ไขแล้ว</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>ตัวเลือก: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>เปลี่ยนชื่อ</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>รวมกับฟิลด์ก่อนหน้า</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>แยก...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>แยกหลังจากจำนวนไบต์นี้ (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>เปรียบเทียบโครงสร้างด้วย</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>เมื่อเปรียบเทียบไฟล์ จะเปรียบเทียบโครงสร้างที่พบโดยเทมเพลตโครงสร้างด้วย (ทีละฟิลด์) เทมเพลตจะถูกเลือกโดยอัตโนมัติเมื่อทั้งสองฝั่งตรงกับเทมเพลตเดียวกัน</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>เปรียบเทียบโครงสร้าง: รวมแพตเทิร์นที่ซ่อน</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>เปรียบเทียบแพตเทิร์นที่ทำเครื่องหมายว่าซ่อนในเทมเพลตด้วย</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>เปรียบเทียบโครงสร้าง: จำนวนฟิลด์สูงสุด</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>หยุดการเปรียบเทียบโครงสร้างหลังจากเปรียบเทียบฟิลด์ในแต่ละฝั่งครบตามจำนวนนี้ (10,000 ถึง 10,000,000)</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>เปรียบเทียบโครงสร้าง: การจับคู่อาร์เรย์</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>วิธีจับคู่สมาชิกของอาร์เรย์ กำหนดแยกตามเทมเพลตและอาร์เรย์ เปลี่ยนได้ที่ "วิธีจับคู่..." ในแผงความแตกต่างของโครงสร้าง</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>เปรียบเทียบ: เปรียบเทียบโครงสร้าง</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff โครงสร้าง ฟิลด์ เทมเพลต ความแตกต่าง</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>เปรียบเทียบ: เลือกเทมเพลตสำหรับเปรียบเทียบโครงสร้าง</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose โครงสร้าง เทมเพลต เลือก</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>เปรียบเทียบ: ย้ายระหว่างความแตกต่างของโครงสร้าง</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target ถัดไป ก่อนหน้า โครงสร้าง เป้าหมาย</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>เปรียบเทียบ: แสดงความแตกต่างของโครงสร้าง</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel ความแตกต่างของโครงสร้าง แผง</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>เปรียบเทียบ: ความแตกต่างของโครงสร้างถัดไป</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field โครงสร้าง ถัดไป ฟิลด์</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>เปรียบเทียบ: ความแตกต่างของโครงสร้างก่อนหน้า</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field โครงสร้าง ก่อนหน้า ฟิลด์</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>เปรียบเทียบ: ส่งออกความแตกต่างของโครงสร้าง</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report โครงสร้าง ส่งออก รายงาน</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>สลับการแสดงความแตกต่างของโครงสร้าง</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel ความแตกต่างของโครงสร้าง แผง</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>ความแตกต่างของโครงสร้าง(9)</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>เปรียบเทียบโครงสร้าง(R)</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>เลือกเทมเพลตสำหรับเปรียบเทียบโครงสร้าง(H)...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>เปรียบเทียบโครงสร้างด้วย</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>เลือกเทมเพลตสำหรับเปรียบเทียบโครงสร้าง</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>เปรียบเทียบ</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>ออฟเซ็ตเริ่มต้นฝั่งซ้าย</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>ออฟเซ็ตเริ่มต้นฝั่งขวา</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>การเปรียบเทียบโครงสร้าง</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>ความแตกต่างของโครงสร้าง</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>เลือกเทมเพลต</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>เปรียบเทียบแล้ว {0} ฟิลด์</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>เทมเพลต: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>ไม่สามารถเปรียบเทียบโครงสร้างสำหรับสแนปช็อตหน่วยความจำของโพรเซสได้</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>ไปที่ข้อมูลฝั่งซ้าย</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>ไปที่ข้อมูลฝั่งขวา</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>คัดลอกพาธ</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>คัดลอกแถว</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>คัดลอกค่าฝั่งซ้ายและขวา</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>เพิ่มบุ๊กมาร์กทางซ้าย</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>เพิ่มบุ๊กมาร์กทางขวา</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>วิธีจับคู่...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>แสดงในแผนผังผลลัพธ์ฝั่งซ้าย</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>แสดงในแผนผังผลลัพธ์ฝั่งขวา</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>เปรียบเทียบโครงสร้าง: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>หยุดกลางคัน (ยกเลิก)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>ย่ออยู่</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>ขยายอยู่</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>ค่าฝั่งซ้าย</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>ค่าฝั่งขวา</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>ชนิดข้อมูล</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>ออฟเซ็ตฝั่งซ้าย</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>ออฟเซ็ตฝั่งขวา</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>การจับคู่</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, ซ้าย {2}, ขวา {3}, ซ้าย {4}, ขวา {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>การเปรียบเทียบโครงสร้างปิดอยู่ เปิด "เปรียบเทียบโครงสร้างด้วย" ในแถบเครื่องมือของแท็บเปรียบเทียบ</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>กำลังรอการเปรียบเทียบ...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>เปิดแท็บเปรียบเทียบเพื่อดูความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>เสร็จใน {0} วินาที</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>กำลังเปรียบเทียบ: {0} ฟิลด์</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>หยุดที่ขีดจำกัดจำนวนฟิลด์</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>การเปรียบเทียบโครงสร้างล้มเหลว: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>จำนวนฟิลด์ถึงขีดจำกัด ({0}) จึงเปรียบเทียบเพียงบางส่วน</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>แสดง{0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>เทมเพลต: {0} ({1}) ซ้าย {2} / ขวา {3} {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>คุณเลือกเอง</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>ทั้งสองฝั่งใช้เทมเพลตเดียวกัน</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>หมายเลข magic ของทั้งสองฝั่งตรงกัน</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>ความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>เปลี่ยนแปลง</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>ลบ</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>ย้าย</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>ย้ายและเปลี่ยนแปลง</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>ชนิดเปลี่ยน</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>แยกวิเคราะห์ไม่ได้</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>เหมือนกัน</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>ซ้าย: ข้อผิดพลาด {0} คำเตือน {1}</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>ขวา: ข้อผิดพลาด {0} คำเตือน {1}</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>เอาต์พุตของเทมเพลต (ซ้าย)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>เอาต์พุตของเทมเพลต (ขวา)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>ไม่มีข้อผิดพลาดหรือคำเตือน</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>คีย์: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>เนื้อหา</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>ตำแหน่ง</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(จับคู่ตามตำแหน่งเพราะมีสมาชิกจำนวนมาก)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>ไม่มีความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>ไม่มีผลการเปรียบเทียบโครงสร้าง</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>ไม่มีความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>กลับไปที่ความแตกต่างของโครงสร้างแรกแล้ว</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>กลับไปที่ความแตกต่างของโครงสร้างสุดท้ายแล้ว</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>ไม่ได้เลือกเทมเพลตสำหรับเปรียบเทียบโครงสร้าง (ทั้งสองฝั่งต้องตรงกับเทมเพลตเดียวกันด้วยหมายเลข magic) เปรียบเทียบเฉพาะระดับไบต์เท่านั้น</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>เทมเพลตมีข้อผิดพลาดทางไวยากรณ์: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>ไม่พบไฟล์เทมเพลต: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>ความแตกต่างนอกโครงสร้าง</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>ความแตกต่าง {0} จุด {1} ไบต์</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(นอกช่วง)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(แพดดิง)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>ข้อผิดพลาดของเทมเพลต</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>ไม่ได้เปรียบเทียบเพราะถึงขีดจำกัด</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>ไม่ได้เปรียบเทียบเพราะซ้อนลึกเกินไป</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>ฟิลด์ที่เปรียบเทียบ: ซ้าย {0} ขวา {1} {2} นอกโครงสร้าง: {3} {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>เลือกเทมเพลต...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>แก้ไขเทมเพลต</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>เพิ่มขีดจำกัดแล้วเปรียบเทียบอีกครั้ง</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>ส่งออก...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>กรองตามชื่อ พาธ หรือค่า</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>กรอง</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>รวมแพดดิง</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>แสดงฟิลด์ที่ตรงกัน</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>สรุป</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>ความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>ส่งออกความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>รูปแบบ</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>รายงานแบบข้อความ</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>แถว</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>แถวที่แสดง (หลังการกรอง)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>ความแตกต่างทั้งหมด</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>ออฟเซ็ต</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>ฐานสิบ</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>ฐานสิบหก</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>บันทึก...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>ส่งออกความแตกต่างของโครงสร้าง</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(ซ้าย {0}, ขวา {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>เทมเพลต: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>ออฟเซ็ตเริ่มต้น: ซ้าย {0}, ขวา {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>ฟิลด์ที่เปรียบเทียบ: ซ้าย {0}, ขวา {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>ความแตกต่างนอกโครงสร้าง: {0}, {1} ไบต์</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>ข้อผิดพลาดและคำเตือนของเทมเพลต: ซ้าย {0} / {1}, ขวา {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>เวลาที่ใช้: {0} วินาที</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>วิธีจับคู่</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>อาร์เรย์: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>วิธี</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>คีย์</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>เนื้อหา</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>ตำแหน่ง</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>ฟิลด์คีย์</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>กำลังกรอง...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>โครงสร้างของรูปแบบ</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>ไฟล์ที่ฝังอยู่</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>บีบอัด</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>เข้ารหัสหรือสุ่ม</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>ศูนย์</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>แพดดิง</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>เรคคอร์ดที่ซ้ำกัน</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>ไบนารี</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>อ่านไม่ได้</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>ประมาณจากตัวอย่าง</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>ศูนย์</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>ค่าคงที่ {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>ข้อความ ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>เรคคอร์ดที่ซ้ำกัน ({0, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>สูง</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>ปานกลาง</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>ต่ำ</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>ตัวอย่าง</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>สแกน</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>โครงสร้าง</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>ประมาณจากตัวอย่าง: 4 KiB ตรงกลางของแต่ละ {0, plural, other {# ช่วง}} ช่วงละ {1} ไบต์</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} ต่อเนื่องกัน {0, plural, other {# ไบต์}}</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>อ่าน {0, plural, other {# ไบต์}}ไม่ได้</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>เอนโทรปี {0} บิต/ไบต์ ค่า p ของไคสแควร์ {1}</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>เอนโทรปี {0} บิต/ไบต์</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>จัดประเภททีละบล็อก ({0, plural, other {# บล็อก}} บล็อกละ {1} ไบต์)</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, other {# ไบต์}}ตั้งแต่ {0}</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>เทมเพลต "{0}" วางแพตเทิร์น {1} ที่ {2}–{3} ({4, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>ซิกเนเจอร์ {1} ที่ {0}</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>เทมเพลต "{0}" แยกวิเคราะห์ {1}–{2} ได้ ({3, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>เทมเพลต "{0}" แยกวิเคราะห์ข้อมูลไม่ได้ ({1})</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>คำนิยามคาร์วิง "{1}" ให้ความยาว {0, plural, other {# ไบต์}} ({2})</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>การตรวจสอบโครงสร้าง</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>ฟิลด์ขนาด</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>ส่วนท้าย</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>ขนาดสูงสุด</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>ไม่ทราบจุดสิ้นสุด สมมติว่าส่วนนี้สิ้นสุดก่อนส่วนถัดไปที่ {0} ({1, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>สตรีม {0} ที่ {1} ถูกขยายแล้วและผลรวมตรวจสอบตรงกัน (บีบอัด {2, plural, other {# ไบต์}} ขยายแล้ว {3} ไบต์)</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>เมื่อเลื่อน {0} ไบต์ จะมี {1} ของไบต์ที่ตรงกัน (ค่าเฉลี่ยของการเลื่อน 1–{2}: {3})</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>แผนที่นี้เป็นเพียงการประมาณจากซิกเนเจอร์และสถิติ จึงอาจผิดพลาดได้</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>มุมมองที่แปลง: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>เอกสาร: {0} ({1}) {2, plural, other {# ไบต์}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>ช่วง: {0}–{1} ({2, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>ทุกขั้นตอนเสร็จสมบูรณ์</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>ยังไม่เสร็จทุกขั้นตอน (ส่วนที่เหลือประมาณจากตัวอย่าง)</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>จำนวนไบต์ตามชนิด:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, other {# ไบต์}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, other {# ส่วน}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>และอีก {0, plural, other {# ส่วน}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>สร้างแผนที่ไฟล์</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout แผนที่ไฟล์ ภาพรวม ส่วน เลย์เอาต์</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>สร้างแผนที่ไฟล์ใหม่</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh แผนที่ไฟล์ สร้างใหม่ รีเฟรช</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>แสดงแผนที่ไฟล์</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel แผนที่ไฟล์ แผง</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>ส่งออกแผนที่ไฟล์</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report แผนที่ไฟล์ ส่งออก รายงาน</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>ใช้เทมเพลตกับไฟล์ที่พบ</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates แผนที่ไฟล์ ไฟล์ที่ฝังอยู่ เทมเพลต</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>สลับแผงแผนที่ไฟล์</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel แผนที่ไฟล์ แผง</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>แผนที่ไฟล์</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>แผนที่ไฟล์</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>แผนที่ไฟล์</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>แผนที่ไฟล์</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>สร้างแผนที่ไฟล์</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>แผนที่ไฟล์</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>ส่งออกแผนที่ไฟล์</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>แผนที่ไฟล์: เทมเพลตสำหรับไฟล์ที่ฝังอยู่</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>เมื่อแผนที่ไฟล์พบไฟล์ที่ฝังอยู่ซึ่งเทมเพลตแยกวิเคราะห์ได้ จะแนะนำให้ใช้เทมเพลต เทมเพลตจะไม่ถูกใช้โดยอัตโนมัติ</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>แนะนำ</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>ไม่ทำอะไร</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>ภาพรวม (ตัวอย่าง)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>สแกนทั้งหมด</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>วิเคราะห์โครงสร้าง</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>ยังไม่มีแผนที่ไฟล์ สร้างขึ้นมาเพื่อดูว่าอะไรอยู่ตรงไหนในเอกสาร</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>เสร็จแล้ว: {0} ส่วน</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>หยุดแล้ว (สแกนแล้ว {1}%): {0} ส่วน ส่วนที่เหลือประมาณจากตัวอย่าง</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>ผลลัพธ์เป็นของเนื้อหาก่อนการแก้ไข</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>สร้างแผนที่ไฟล์ไม่ได้: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>สร้างแผนที่ไฟล์ได้ด้วย วิเคราะห์ &gt; แผนที่ไฟล์ หรือปุ่มสร้างด้านบน</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, other {# รูปแบบที่ฝังอยู่ที่เป็นไปได้}}ไม่ถูกเก็บไว้</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>สร้างใหม่</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>รายงานแบบข้อความ...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>ความคืบหน้าของแผนที่ไฟล์</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>ขยาย</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>ย่อ</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>แสดงแผนที่ทั้งหมด</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>แสดงเป็นตาราง</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>แถบแผนที่ไฟล์: เลนโครงสร้างและเลนเนื้อหา</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>เลื่อนแถบแผนที่ไฟล์</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>คำอธิบายสัญลักษณ์</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, other {# ไบต์}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>ส่วนของแผนที่ไฟล์</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>แสดงชนิด</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>ทุกชนิด</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>เพิ่มแถวที่แสดงเป็นบุ๊กมาร์ก</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>เพิ่มแถวที่แสดงเป็นการเลือกหลายรายการ</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>เริ่มต้น</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>สิ้นสุด (รวม)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>ป้ายชื่อ</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>ความเชื่อมั่น</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>ขั้นตอน</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>เลือกส่วนในแถบหรือรายการ</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, other {# ไบต์}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, เริ่มที่ {2}, {3, plural, other {# ไบต์}}, ความเชื่อมั่น{4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>ความเชื่อมั่น: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>ขั้นตอน: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>เทมเพลต: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>เลือกช่วง</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>เพิ่มบุ๊กมาร์ก</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>ใช้เทมเพลต "{0}"</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>เปิดในแท็บใหม่</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>ขยายข้อมูลจากตรงนี้...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>อนุมานเทมเพลต...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>แยกสตริง...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>บันทึกเป็นไฟล์...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>ไม่สามารถใช้การอนุมานเทมเพลตได้</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>เอกสารนี้ไม่มีแผนที่ไฟล์</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>แผนที่ไฟล์ไม่มีไฟล์ที่ฝังอยู่ที่มีเทมเพลต</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>พบ {0, plural, other {# ไฟล์ที่ฝังอยู่}} ต้องการใช้เทมเพลตหรือไม่</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>ใช้</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>แสดงรายการ</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>ใช้เทมเพลตกับ {0, plural, other {# ไฟล์ที่ฝังอยู่}}แล้ว</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>ใช้เทมเพลตกับไฟล์ที่ฝังอยู่ {0} ไฟล์แล้ว {1, plural, other {# ไฟล์}}ไม่ได้ใช้ เพราะเอกสารหนึ่งมีการใช้เทมเพลตได้สูงสุด {2} รายการ</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>ส่งออกแผนที่ไฟล์ไปยัง {0} แล้ว</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>ส่งออกแผนที่ไฟล์ไม่ได้: {0}</value></data>
 </root>
