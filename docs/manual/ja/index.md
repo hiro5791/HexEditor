@@ -49,6 +49,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 
 - [構造体テンプレート](templates.md)
 - [テンプレートの標準ライブラリ](template-library.md)
+- [テンプレートの推定](template-inference.md)
 - [テンプレートのエラーのコード](template-error-codes.md)
 - [スクリプト](scripting.md)
 - [マクロ](macros.md)
