@@ -195,6 +195,7 @@ internal sealed class EmbeddedScanner
     private readonly FileTypeDetector.AhoCorasick? _automaton;
     private readonly List<(FileFormat? Format, CarvingSignature? Carving, HexMaskPattern? Header, int AnchorLength)> _patterns = [];
     private readonly Dictionary<long, EmbeddedCandidate> _candidates = [];
+    private readonly int _maxAnchor;
     private int _state;
     private long _prevEnd = -1;
 
@@ -229,6 +230,7 @@ internal sealed class EmbeddedScanner
         }
 
         _automaton = anchors.Count > 0 ? new FileTypeDetector.AhoCorasick(anchors) : null;
+        _maxAnchor = anchors.Count > 0 ? anchors.Max(a => a.Length) : 1;
     }
 
     /// <summary>上限を超えて持たなかった候補の数。</summary>
@@ -254,22 +256,38 @@ internal sealed class EmbeddedScanner
             _state = 0;
         }
 
-        _state = _automaton.Feed(_state, span, (i, state) =>
+        // 同じ値だけの部分 (ゼロの埋め草など) は、表の状態が最長のパターンの長さで決まるので、先頭の分だけを読んで残りを飛ばす
+        // (スパースな巨大ファイルでも走査を遅くしない)。
+        const int Slice = 64 * 1024;
+        for (int at = 0; at < span.Length; at += Slice)
         {
-            foreach (int p in _automaton.Outputs(state))
+            ReadOnlySpan<byte> part = span.Slice(at, Math.Min(Slice, span.Length - at));
+            long partOffset = offset + at;
+            if (part.Length > _maxAnchor * 2 && part.IndexOfAnyExcept(part[0]) < 0)
             {
-                (FileFormat? format, CarvingSignature? sig, HexMaskPattern? header, int anchor) = _patterns[p];
-                long headerAt = offset + i - anchor + 1;
-                long fileStart = headerAt - (sig?.HeaderOffset ?? 0);
-                if (fileStart <= _targetStart)
-                {
-                    continue;
-                }
-
-                Verify(fileStart, headerAt, format, sig, header);
+                part = part[.._maxAnchor];
             }
-        });
+
+            _state = _automaton.Feed(_state, part, (i, state) => OnMatch(partOffset, i, state));
+        }
+
         _prevEnd = offset + span.Length;
+    }
+
+    private void OnMatch(long offset, int i, int state)
+    {
+        foreach (int p in _automaton!.Outputs(state))
+        {
+            (FileFormat? format, CarvingSignature? sig, HexMaskPattern? header, int anchor) = _patterns[p];
+            long headerAt = offset + i - anchor + 1;
+            long fileStart = headerAt - (sig?.HeaderOffset ?? 0);
+            if (fileStart <= _targetStart)
+            {
+                continue;
+            }
+
+            Verify(fileStart, headerAt, format, sig, header);
+        }
     }
 
     private void Verify(long fileStart, long headerAt, FileFormat? format, CarvingSignature? sig, HexMaskPattern? header)
