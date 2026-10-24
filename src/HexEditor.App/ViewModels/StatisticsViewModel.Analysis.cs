@@ -171,6 +171,11 @@ public sealed partial class StatisticsViewModel
 
     public void ShowRecords(PeriodRowViewModel row) => ShowRecordView?.Invoke(row.Candidate.Period);
 
+    public bool CanInferTemplate => InferTemplate is not null;
+
+    /// <summary>「この長さでテンプレートを推定」(ANA-15 の仕様 4、07 の TPL-38)。</summary>
+    public void InferTemplateOf(PeriodRowViewModel row) => InferTemplate?.Invoke(row.Candidate.Period);
+
     // ---- 暗号化・圧縮データの検出 (ANA-16) ----
 
     [ObservableProperty]

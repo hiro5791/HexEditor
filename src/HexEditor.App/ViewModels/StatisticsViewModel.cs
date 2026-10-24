@@ -111,6 +111,9 @@ public sealed partial class StatisticsViewModel : ObservableObject
     /// <summary>その長さでレコード表示にする (02 の VIEW-18、F2-16)。null なら「この長さでレコード表示」を無効にする。</summary>
     public Action<long>? ShowRecordView { get; set; }
 
+    /// <summary>その長さでテンプレートの推定 (07 の TPL-38、フェーズ 6) を開く。null なら「この長さでテンプレートを推定」を無効にする。</summary>
+    public Action<long>? InferTemplate { get; set; }
+
     /// <summary>03 の展開機能 (F4-04) を開始オフセットと形式を指定して開く。null なら「ここから展開...」を無効にする (フェーズ 4)。</summary>
     public Func<long, string, Task>? OpenDecompress { get; set; }
 

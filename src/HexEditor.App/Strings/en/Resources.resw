@@ -9930,4 +9930,69 @@ The connection is not made unless you choose to replace the key.</value></data>
   <data name="TplInfer_Confidence_High" xml:space="preserve"><value>high</value></data>
   <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>medium</value></data>
   <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>low</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Template inference</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Infer template from selection...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Template inference</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Infer template from selection...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Infer a template with this length</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Infer from selection</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Infer again</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Apply the inferred draft</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Open the inferred draft in the editor</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Show the inference panel</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Template inference panel</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Record length</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Records</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Whole range</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Endianness</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Infer</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Infer again</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Record length candidates</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} bytes · score {1} · {2, plural, one {# record} other {# records}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Fields</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Draft (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Open in editor</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Copied the draft.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Open a document to infer a template.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Infer a template first.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Enter the start as a number or an expression.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Enter the length as a number or an expression.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Enter the number of records, or leave it empty for the whole range.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Inferring...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Template inference</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>No fixed-length records were found. Enter the record length.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Variable-length records (whose size depends on a length field) cannot be inferred.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Record length {0}, {1, plural, one {# record} other {# records}} ({2} used for the inference).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# record} other {# records}} could not be read and were left out.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>The last {0, plural, one {# byte does} other {# bytes do}} not fit in a record.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Internal error: the draft has syntax errors ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, {4} confidence</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>no name</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(warning: low confidence)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(changed by hand)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>changed</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Candidates: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Rename</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Merge with previous field</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Split...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Split after this many bytes (1–{0})</value></data>
 </root>

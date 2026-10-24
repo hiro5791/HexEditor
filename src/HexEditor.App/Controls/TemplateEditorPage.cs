@@ -673,6 +673,13 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         return true;
     }
 
+    /// <summary>保存先の既定 (未保存の新しいタブのまま。テンプレートの推定の「エディタで開く」。TPL-40 の仕様 6)。</summary>
+    public void SetSuggestedPath(string path)
+    {
+        Path = path;
+        TitleChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>名前を付けて保存したのと同じにする (新規作成・複製の保存先)。</summary>
     public void SetPath(string path)
     {

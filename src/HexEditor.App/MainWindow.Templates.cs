@@ -53,6 +53,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
 
         Views.TemplateSettingsSection.Register();
         RegisterTemplateVisualizerPanel();
+        RegisterTemplateInferencePanel();
         Views.OnlineTemplateSection.Register();
 
         // コマンドラインの --template (AUTO-37)
@@ -156,6 +157,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         Commands.Register("view.panel.templates", () => TogglePanel(TemplatesPanelId), () => Toggle(IsPanelShown(TemplatesPanelId)));
         Commands.Register("view.panel.templateOutput", () => TogglePanel(TemplateOutputPanelId), () => Toggle(IsPanelShown(TemplateOutputPanelId)));
         RegisterTemplateEditorCommands();
+        RegisterTemplateInferenceCommands();
 
         Vm.PropertyChanged += (_, e) =>
         {
@@ -1201,8 +1203,11 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
     // ───────────── Hex ビュー (TPL-23・TPL-26・TPL-32) ─────────────
 
     /// <summary>Hex ビューに追従の適用の枠線とデバッガの <c>$</c> の印を付ける (VIEW-17 の層 3)。</summary>
-    private void AttachTemplates(HexView view) =>
+    private void AttachTemplates(HexView view)
+    {
         view.SetHighlightSource("templateFocus", (start, end) => TemplateFocusHighlights(view, start, end));
+        AttachTemplateInference(view);
+    }
 
     private static readonly double[] FollowDash = [4, 2];
 
@@ -1249,6 +1254,8 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
             menu.Items.Add(apply);
             menu.Items.Add(brk);
         }
+
+        ExtendHexViewInferenceMenu(menu);
 
         foreach (MenuFlyoutItemBase item in menu.Items)
         {

@@ -73,6 +73,9 @@ public sealed class TemplateInferenceSession
     /// <summary>「適用」で加えた適用 (もう一度「適用」すると置き換える)。</summary>
     public TemplateApplicationEntry? Applied { get; set; }
 
+    /// <summary>Hex ビューのプレビューを消している (「適用」した後。表を変えるか推定し直すと戻す)。</summary>
+    public bool PreviewHidden { get; set; }
+
     /// <summary>推定の内部エラー (下書きの構文エラー) の記録。</summary>
     public string? InternalError { get; set; }
 

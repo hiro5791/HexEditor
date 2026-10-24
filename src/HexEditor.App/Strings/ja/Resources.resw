@@ -9930,4 +9930,69 @@ SHA-256 のフィンガープリント: {2}
   <data name="TplInfer_Confidence_High" xml:space="preserve"><value>高</value></data>
   <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>中</value></data>
   <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>テンプレートの推定</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>選択範囲からテンプレートを推定...(I)</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>テンプレートの推定(8)</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>選択範囲からテンプレートを推定...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>この長さでテンプレートを推定</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>選択範囲から推定</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>すいてい;てんぷれーと;せんたくはんい</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>推定し直す</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>すいていしなおす</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>推定した下書きを適用</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>てきよう;したがき</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>推定した下書きをエディタで開く</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>えでぃた;したがき</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>推定のパネルを表示</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>すいてい;ぱねる</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>テンプレートの推定のパネル</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>すいてい</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>レコード長</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>レコードの数</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>範囲いっぱい</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>リトル</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>ビッグ</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>推定</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>推定し直す</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>レコード長の候補</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} バイト · 得点 {1} · レコード {2} 個</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>フィールド</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>下書き (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>エディタで開く</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>下書きをコピーしました。</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>テンプレートを推定するドキュメントを開いてください。</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>先にテンプレートを推定してください。</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>開始を数値か入力式で入力してください。</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>長さを数値か入力式で入力してください。</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>レコードの数を入力してください (空欄なら範囲いっぱい)。</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>推定しています...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>テンプレートの推定</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>固定長のレコードが見つかりませんでした。レコード長を入力してください。</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>可変長のレコード (長さのフィールドで大きさが変わるもの) は推定できません。</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>レコード長 {0}、レコード {1} 個 (推定に {2} 個を使用)。</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>リトルエンディアン。</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>ビッグエンディアン。</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>読めなかったレコード {0} 個を除きました。</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>末尾の {0} バイトはレコードに入りません。</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>内部エラー: 下書きに構文エラーがあります ({0})。</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}、{1}、{2}、{3}、確度 {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>名前なし</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(注意: 確度 低)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(手で変更)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>手で変更</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>候補: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>型</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>前のフィールドと結合</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>分割...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>分ける位置 (先頭からのバイト数、1〜{0})</value></data>
 </root>

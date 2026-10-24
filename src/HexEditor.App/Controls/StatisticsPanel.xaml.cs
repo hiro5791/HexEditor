@@ -316,6 +316,10 @@ public sealed partial class StatisticsPanel : UserControl, IPanelContent
         AutomationProperties.SetAutomationId(records, "Stats_Menu_RecordView");
         records.Click += (_, _) => ViewModel.ShowRecords(row);
         menu.Items.Add(records);
+        var infer = new MenuFlyoutItem { Text = Loc.Get("Stats_Menu_InferTemplate"), IsEnabled = ViewModel.CanInferTemplate && row.Candidate.Period <= Core.Templates.Inference.TemplateInferenceRequest.MaxRecordLength };
+        AutomationProperties.SetAutomationId(infer, "Stats_Menu_InferTemplate");
+        infer.Click += (_, _) => ViewModel.InferTemplateOf(row);
+        menu.Items.Add(infer);
         return menu;
     }
 
