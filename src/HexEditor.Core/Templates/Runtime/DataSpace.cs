@@ -114,6 +114,30 @@ public sealed class TemplateSection : IDisposable
 
     internal TemplateNode? DisplayNode { get; set; }
 
+    /// <summary>
+    /// セクションを作った元のデータのドキュメントの中の範囲 (展開・変換・コピーの元。構造を理解した比較の差分の範囲に使う。06 の ANA-31 の
+    /// 仕様 5 の 6)。元がセクションなら、そのセクションの元の範囲。分からなければ null。
+    /// </summary>
+    public (long Offset, long Length)? SourceRange { get; private set; }
+
+    internal void NoteSource(Runtime.Space source, long offset, long length)
+    {
+        (long Offset, long Length)? range = source.Section is { } inner ? inner.SourceRange : (offset, length);
+        if (range is not { } r)
+        {
+            return;
+        }
+
+        if (SourceRange is { } old)
+        {
+            long start = Math.Min(old.Offset, r.Offset);
+            long end = Math.Max(old.Offset + old.Length, r.Offset + r.Length);
+            r = (start, end - start);
+        }
+
+        SourceRange = r;
+    }
+
     internal int Index { get; set; }
 
     private readonly object _lock = new();
