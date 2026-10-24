@@ -321,7 +321,7 @@ internal static class ChartSupport
                 {
                     for (double x = r.X + step; x < right; x += step * 2)
                     {
-                        group.Children.Add(new EllipseGeometry { Center = new Point(x, y), RadiusX = 1.2, RadiusY = 1.2 });
+                        group.Children.Add(new RectangleGeometry { Rect = new Rect(x - 1, y - 1, 2, 2) });
                     }
                 }
 

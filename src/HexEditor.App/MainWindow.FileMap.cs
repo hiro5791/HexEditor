@@ -120,7 +120,15 @@ public sealed partial class MainWindow
         DispatcherQueue.TryEnqueue(() =>
         {
             _fileMapRefreshQueued = false;
-            RefreshFileMapUi();
+            try
+            {
+                RefreshFileMapUi();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Warning("File map UI: " + ex);
+                throw;
+            }
         });
     }
 
@@ -213,6 +221,11 @@ public sealed partial class MainWindow
                     state.Result = r;
                     op.CancellationToken.ThrowIfCancellationRequested();
                     return Task.FromResult(r);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    AppLog.Warning("File map build: " + ex);
+                    throw;
                 }
                 finally
                 {
@@ -387,7 +400,7 @@ public sealed partial class MainWindow
 
         FileMapRegion r = map.Regions[region];
         editor.GoTo(r.Offset);
-        editor.Select(r.Offset, Math.Min(r.Length, editor.Document.Length - r.Offset));
+        editor.Select(r.Offset, Math.Min(r.Length, editor.Document.Length - r.Offset), cursorAtStart: true);
         FileMapSelect(region, fromBand: true);
     }
 
@@ -466,10 +479,15 @@ public sealed partial class MainWindow
 
         if (r.Kind == FileMapKind.Records)
         {
-            bool available = Commands.HasHandler(TemplateInferCommand);
+            bool available = Commands.HasHandler(TemplateInferCommand) || FileMapInferProbeEnabled;
             actions.Add(new("InferTemplate", Loc.Get("FileMap_Act_InferTemplate"), async () =>
             {
                 FileMapLastInferRequest = (r.Offset, r.Length, r.Extra);
+                if (!Commands.HasHandler(TemplateInferCommand))
+                {
+                    return;
+                }
+
                 using (CommandArgs.Begin(new Dictionary<string, object?> { ["start"] = r.Offset, ["length"] = r.Length, ["recordLength"] = r.Extra }))
                 {
                     await Commands.ExecuteAsync(TemplateInferCommand);
@@ -495,6 +513,12 @@ public sealed partial class MainWindow
 
         return actions;
     }
+
+    /// <summary>テスト用: テンプレートの推定のコマンドがないビルドでも、要求を記録するために操作を有効にする。</summary>
+    internal bool FileMapInferProbeEnabled { get; set; }
+
+    /// <summary>最後に出したファイルマップの通知の文 (テスト用)。</summary>
+    internal string? LastFileMapNotice { get; private set; }
 
     /// <summary>テンプレートの推定に渡した値 (テスト用)。</summary>
     internal (long Start, long Length, int RecordLength)? FileMapLastInferRequest { get; private set; }
@@ -598,8 +622,9 @@ public sealed partial class MainWindow
             ShowPanel(TemplatesPanelId, focus: false);
         }
 
-        ShowNotice(skipped > 0 ? Loc.Format("FileMap_TemplatesLimit", applied, skipped, TemplateApplicationSet.MaxApplications)
-            : Loc.Format("FileMap_TemplatesApplied", applied), skipped > 0 ? InfoBarSeverity.Warning : InfoBarSeverity.Success, doc);
+        LastFileMapNotice = skipped > 0 ? Loc.Format("FileMap_TemplatesLimit", applied, skipped, TemplateApplicationSet.MaxApplications)
+            : Loc.Format("FileMap_TemplatesApplied", applied);
+        ShowNotice(LastFileMapNotice, skipped > 0 ? InfoBarSeverity.Warning : InfoBarSeverity.Success, doc);
     }
 
     // ---- エクスポート (ANA-34 の仕様 9) ----

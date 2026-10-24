@@ -24,6 +24,11 @@ public enum VirtualContent
 
     /// <summary>種から計算する乱数列 (<see cref="GeneratedData.FillRandom"/>)。</summary>
     Random,
+
+    /// <summary>
+    /// 4 KiB のブロック b が、b が偶数なら 00、奇数なら種 (Seed + b) の乱数 (TD-ANA-MAP-ALT-4G。ファイルマップの内容のレーンの領域がブロックごとに変わる)。
+    /// </summary>
+    AlternatingBlocks,
 }
 
 /// <summary>
@@ -98,6 +103,26 @@ public sealed class VirtualByteSource : ByteSourceBase
                     long p = offset + i;
                     BinaryPrimitives.WriteInt64LittleEndian(word, p & ~7L);
                     target[i] = word[(int)(p & 7)];
+                }
+
+                break;
+            case VirtualContent.AlternatingBlocks:
+                for (int done = 0; done < target.Length;)
+                {
+                    long at = offset + done;
+                    long block = at / 4096;
+                    int inBlock = (int)(at % 4096);
+                    int n = Math.Min(target.Length - done, 4096 - inBlock);
+                    if (block % 2 == 0)
+                    {
+                        target.Slice(done, n).Clear();
+                    }
+                    else
+                    {
+                        GeneratedData.FillRandom(Seed + (ulong)block, inBlock, target.Slice(done, n));
+                    }
+
+                    done += n;
                 }
 
                 break;

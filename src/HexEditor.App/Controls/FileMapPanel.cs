@@ -116,6 +116,7 @@ public sealed partial class FileMapPanel : UserControl, IPanelContent
         _band.RegionActivated += (_, region) => _window.FileMapSelectRange(region);
         _band.SelectionChanged += (_, _) => SyncFromBand();
         _band.ContextMenuRequested += (_, e) => ShowMenu(e.Region, _band, e.At);
+        _band.EditorChanged += (_, _) => UpdateStale();
 
         AutomationProperties.SetAutomationId(_legend, "FileMap_Legend");
         AutomationProperties.SetName(_legend, Loc.Get("FileMap_Legend"));
@@ -215,7 +216,14 @@ public sealed partial class FileMapPanel : UserControl, IPanelContent
         Content = root;
         AutomationProperties.SetAutomationId(this, "FileMapPanel");
 
-        SizeChanged += (_, e) => Arrange(e.NewSize.Width < 800);
+        SizeChanged += (_, e) =>
+        {
+            // 幅が 800 px の境を越えたときだけ並べ替える (毎回並べ替えると配置が繰り返される)。
+            if ((e.NewSize.Width < 800) != _narrow)
+            {
+                Arrange(e.NewSize.Width < 800);
+            }
+        };
         Arrange(narrow: false);
         Loaded += (_, _) =>
         {
@@ -314,6 +322,14 @@ public sealed partial class FileMapPanel : UserControl, IPanelContent
         {
             _syncing = false;
         }
+    }
+
+    /// <summary>作った後に編集されたら「結果は編集前の内容のものです」と「作り直す」を出す (ANA-33 の仕様 6)。</summary>
+    private void UpdateStale()
+    {
+        FileMapState? state = _window.CurrentFileMapState;
+        bool stale = state is not null && _window.FileMapEditor is { } editor && state.IsStale(editor.Document);
+        _stale.Visibility = stale ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private static string StatusOf(FileMapState? state)

@@ -148,12 +148,7 @@ public sealed partial class FileMapBand : UserControl
         KeyDown += OnKeyDown;
         GotFocus += (_, _) =>
         {
-            // Tab でフォーカスを受け取ったら、カーソル位置を含む内容のレーンの領域を選ぶ (仕様 4)。
-            if (SelectedRegion < 0 && _map is { } map && _editor is { } editor)
-            {
-                Select(map.ContentAt(Math.Clamp(editor.Cursor, map.Start, Math.Max(map.Start, map.End - 1))));
-            }
-
+            SelectAtCursor();
             Redraw();
         };
         LostFocus += (_, _) => Redraw();
@@ -178,6 +173,18 @@ public sealed partial class FileMapBand : UserControl
         _cursor.SetValue(Canvas.ZIndexProperty, 11);
         _focus.SetValue(Canvas.ZIndexProperty, 12);
     }
+
+    /// <summary>Tab でフォーカスを受け取ったとき: カーソル位置を含む内容のレーンの領域を選ぶ (仕様 4。選んでいる領域があればそのまま)。</summary>
+    internal void SelectAtCursor()
+    {
+        if (SelectedRegion < 0 && _map is { } map && _editor is { } editor)
+        {
+            Select(map.ContentAt(Math.Clamp(editor.Cursor, map.Start, Math.Max(map.Start, map.End - 1))));
+        }
+    }
+
+    /// <summary>Hex ビューの表示・カーソル・内容が変わった (パネルが「編集前の内容」の表示を更新する)。</summary>
+    public event EventHandler? EditorChanged;
 
     /// <summary>クリックした位置へ移動する (オフセット)。</summary>
     public event EventHandler<long>? NavigateRequested;
@@ -272,7 +279,11 @@ public sealed partial class FileMapBand : UserControl
         }
     }
 
-    private void Editor_Changed(object? sender, EventArgs e) => QueueRedraw();
+    private void Editor_Changed(object? sender, EventArgs e)
+    {
+        QueueRedraw();
+        EditorChanged?.Invoke(this, EventArgs.Empty);
+    }
 
     // ---- 拡大・縮小とスクロール ----
 
@@ -509,6 +520,19 @@ public sealed partial class FileMapBand : UserControl
         }
     }
 
+    /// <summary>選んでいる領域の右クリックメニューを開く (Shift+F10・アプリケーションキーと同じ。テスト用の命令からも呼ぶ)。</summary>
+    internal bool OpenContextMenu()
+    {
+        if (SelectedRegion < 0)
+        {
+            return false;
+        }
+
+        Rect r = RegionBounds(SelectedRegion);
+        ContextMenuRequested?.Invoke(this, (SelectedRegion, new Point(Math.Max(0, r.X) + 4, r.Y + 4)));
+        return true;
+    }
+
     private void OnKeyDown(object sender, KeyRoutedEventArgs e)
     {
         if (HandleKey(e.Key))
@@ -569,6 +593,19 @@ public sealed partial class FileMapBand : UserControl
     internal (int Count, double LastMs) DrawStats { get; private set; }
 
     public void Redraw()
+    {
+        try
+        {
+            RedrawCore();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warning("File map band: " + ex);
+            throw;
+        }
+    }
+
+    private void RedrawCore()
     {
         long started = System.Diagnostics.Stopwatch.GetTimestamp();
         _canvas.Children.Clear();
@@ -640,6 +677,7 @@ public sealed partial class FileMapBand : UserControl
 
         var fills = new Dictionary<(FileMapKind, bool), GeometryGroup>();
         var marks = new Dictionary<(FileMapKind, bool), GeometryGroup>();
+        var sampleDots = new GeometryGroup();
         double top = LaneTop(FileMapLane.Content);
         int start = -1;
         (FileMapKind Kind, bool Sample) current = default;
@@ -658,10 +696,17 @@ public sealed partial class FileMapBand : UserControl
             }
 
             fill.Children.Add(new RectangleGeometry { Rect = rect });
-            marks[current].Children.Add(ChartSupport.Pattern(FileMapVisuals.PatternOf(current.Kind), rect, 6));
+            AddPattern(marks[current], FileMapVisuals.PatternOf(current.Kind), rect, 6);
             if (current.Sample)
             {
-                marks[current].Children.Add(ChartSupport.Pattern(FileMapVisuals.SamplePattern, rect, 4));
+                // 標本による推定の部分の点の模様 (1 つの Path にまとめる)。
+                for (double y = rect.Y + 4; y < rect.Bottom; y += 8)
+                {
+                    for (double x = rect.X + 4; x < rect.Right; x += 8)
+                    {
+                        sampleDots.Children.Add(new RectangleGeometry { Rect = new Rect(x - 1, y - 1, 2, 2) });
+                    }
+                }
             }
 
             string key = FileMapWords.Kind(current.Kind) + (current.Sample ? ".sample" : string.Empty);
@@ -705,6 +750,11 @@ public sealed partial class FileMapBand : UserControl
             _canvas.Children.Add(new Path { Data = fill, Fill = ChartSupport.Brush(FileMapVisuals.FillKey(kind, hc), this), Opacity = sample && !hc ? 0.45 : 1 });
             _canvas.Children.Add(new Path { Data = marks[(kind, sample)], Stroke = patternBrush, Fill = patternBrush, StrokeThickness = 1, Opacity = sample ? 0.7 : 1 });
         }
+
+        if (sampleDots.Children.Count > 0)
+        {
+            _canvas.Children.Add(new Path { Data = sampleDots, Fill = patternBrush });
+        }
     }
 
     /// <summary>構造のレーン: どれかの領域があれば描く (入れ子は少し内側に)。</summary>
@@ -731,7 +781,7 @@ public sealed partial class FileMapBand : UserControl
             }
 
             g.Fill.Children.Add(new RectangleGeometry { Rect = rect });
-            g.Marks.Children.Add(ChartSupport.Pattern(FileMapVisuals.PatternOf(r.Kind), rect, 6));
+            AddPattern(g.Marks, FileMapVisuals.PatternOf(r.Kind), rect, 6);
             outlines.Children.Add(new RectangleGeometry { Rect = rect });
             string key = FileMapWords.Kind(r.Kind);
             DrawnRects[key] = DrawnRects.GetValueOrDefault(key) + 1;
@@ -744,6 +794,20 @@ public sealed partial class FileMapBand : UserControl
         }
 
         _canvas.Children.Add(new Path { Data = outlines, Stroke = border, StrokeThickness = 1 });
+    }
+
+    /// <summary>模様の形を <paramref name="target"/> に平らに足す (GeometryGroup を入れ子にしない。入れ子が多いと描画が失敗するため)。</summary>
+    private static void AddPattern(GeometryGroup target, string pattern, Rect rect, double step)
+    {
+        if (ChartSupport.Pattern(pattern, rect, step) is GeometryGroup group)
+        {
+            Geometry[] parts = [.. group.Children];
+            group.Children.Clear();
+            foreach (Geometry part in parts)
+            {
+                target.Children.Add(part);
+            }
+        }
     }
 
     /// <summary>オフセットの目盛り (地域設定によらない 16 進)。</summary>
