@@ -479,7 +479,7 @@ public sealed partial class MainWindow
 
         if (r.Kind == FileMapKind.Records)
         {
-            bool available = Commands.HasHandler(TemplateInferCommand) || FileMapInferProbeEnabled;
+            bool available = Commands.HasHandler(TemplateInferCommand);
             actions.Add(new("InferTemplate", Loc.Get("FileMap_Act_InferTemplate"), async () =>
             {
                 FileMapLastInferRequest = (r.Offset, r.Length, r.Extra);
@@ -513,9 +513,6 @@ public sealed partial class MainWindow
 
         return actions;
     }
-
-    /// <summary>テスト用: テンプレートの推定のコマンドがないビルドでも、要求を記録するために操作を有効にする。</summary>
-    internal bool FileMapInferProbeEnabled { get; set; }
 
     /// <summary>最後に出したファイルマップの通知の文 (テスト用)。</summary>
     internal string? LastFileMapNotice { get; private set; }

@@ -222,7 +222,8 @@ public sealed partial class Coverage
         md.AppendLine();
         md.AppendLine("| フェーズ | 機能 | 受け入れ基準 | テストケースのない基準 | テストケース | 自動 | 自動テストあり | 自動テストのない「自動」 | 手動・半自動 | 失敗 |");
         md.AppendLine("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |");
-        foreach (int phase in Enumerable.Range(0, 6))
+        // 文書にあるフェーズをすべて並べる (0 から最大のフェーズまで。新しいフェーズが増えても直さなくてよい)
+        foreach (int phase in Enumerable.Range(0, 1 + Math.Max(Features.Max(f => f.Phase ?? 0), Cases.Max(c => c.Phase))))
         {
             var features = Features.Where(f => f.Phase == phase).ToList();
             var criteria = Criteria.Where(c => c.Feature.Phase == phase).ToList();

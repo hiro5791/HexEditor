@@ -192,8 +192,6 @@ public sealed class FileMapUiTests
     {
         (AppSession app, JsonObject state) = await MixAsync(ctx);
 
-        // テンプレートの推定 (TPL-38) がつながっていないビルドでは、コマンドの代わりに要求を記録する。
-        await MapAsync(app, "installInferProbe", regions: false);
         JsonObject records = Region(state, "records");
         await MapAsync(app, "run", new JsonObject { ["region"] = Index(records), ["id"] = "InferTemplate" }, regions: false);
         await app.WaitUntilAsync(async () => (await MapAsync(app, "state", regions: false))["lastInfer"] is JsonObject, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the inference request");
@@ -201,6 +199,13 @@ public sealed class FileMapUiTests
         Assert.Equal(0x260000, L(s["lastInfer"]!["start"]));
         Assert.Equal(L(records["length"]), L(s["lastInfer"]!["length"]));
         Assert.Equal(64, L(s["lastInfer"]!["recordLength"]));
+
+        // 推定のパネルが開き、範囲とレコード長が入っている (TPL-40)。
+        JsonObject infer = await app.SendAsync("tplInfer", new JsonObject { ["action"] = "state" }, TimeSpan.FromSeconds(60));
+        Assert.True(infer["shown"]!.GetValue<bool>());
+        Assert.Equal(0x260000, Convert.ToInt64(infer["start"]!.GetValue<string>(), 16));
+        Assert.Equal(L(records["length"]), Convert.ToInt64(infer["length"]!.GetValue<string>(), 16));
+        Assert.Equal("64", infer["recordLengthText"]!.GetValue<string>());
     });
 
     [Fact]
@@ -223,7 +228,6 @@ public sealed class FileMapUiTests
     public Task Region_menus_show_only_usable_items() => UiTestContext.RunAsync(async ctx =>
     {
         (AppSession app, JsonObject state) = await MixAsync(ctx);
-        await MapAsync(app, "installInferProbe", regions: false);
         var expected = new Dictionary<string, string[]>
         {
             ["structure"] = ["Select", "Bookmark", "ApplyTemplate"],

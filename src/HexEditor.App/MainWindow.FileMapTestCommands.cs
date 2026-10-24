@@ -138,10 +138,6 @@ public sealed partial class MainWindow
                 _fileMapPanel?.Refresh();
                 _fileMapPanel?.Band.Redraw();
                 break;
-            case "installInferProbe":
-                // テンプレートの推定 (TPL-38) のコマンドがないビルドで、コマンドの代わりに要求を記録する (FileMapLastInferRequest)。
-                FileMapInferProbeEnabled = true;
-                break;
         }
 
         await Task.Yield();

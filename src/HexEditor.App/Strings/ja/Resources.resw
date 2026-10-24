@@ -9934,7 +9934,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>選択範囲からテンプレートを推定...(I)</value></data>
   <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>テンプレートの推定(8)</value></data>
-  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
   <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>選択範囲からテンプレートを推定...</value></data>
   <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>この長さでテンプレートを推定</value></data>
   <data name="Cmd_templates_infer" xml:space="preserve"><value>選択範囲から推定</value></data>
@@ -10020,7 +10020,7 @@ SHA-256 のフィンガープリント: {2}
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>構造の差分の表示切り替え</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>こうぞうのさぶんのひょうじきりかえ</value></data>
   <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>構造の差分(8)</value></data>
-  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
   <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>構造で比較(R)</value></data>
   <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ(H)...</value></data>
