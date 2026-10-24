@@ -419,7 +419,9 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         long deadline = Environment.TickCount64 + 2000;
         timer.Tick += (t, _) =>
         {
-            bool stop = !box.IsLoaded || EditItem(box) is not { IsEditing: true } item || XamlRoot is null
+            // 行の特定が一時的にできない (混んでいて行のコンテナが作り直されている) 間は、編集中の行 (Vm.EditingItem) で判断して続ける。
+            InspectorItemViewModel? current = EditItem(box) ?? Vm.EditingItem;
+            bool stop = !box.IsLoaded || current is not { IsEditing: true } item || XamlRoot is null
                 || !IsFocusOnRow(item) || TryFocusEditBox(box) || Environment.TickCount64 > deadline;
             if (stop)
             {
@@ -498,7 +500,8 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
             return true;
         }
 
-        return RowsList.ContainerFromItem(item) is DependencyObject container && IsInside(focused, container);
+        // 行のコンテナがまだ求められない間は、フォーカスが行の外にあるとは言えない (置き直しをやめない)。
+        return RowsList.ContainerFromItem(item) is not DependencyObject container || IsInside(focused, container);
     }
 
     private void Edit_TextChanged(object sender, TextChangedEventArgs e)
