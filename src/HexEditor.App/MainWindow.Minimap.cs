@@ -18,7 +18,7 @@ public sealed partial class MainWindow
     internal const string MinimapExactKey = "view.minimap.exact";
     private const string MinimapHiddenMarksKey = "view.minimap.hiddenMarks";
 
-    private static readonly string[] MinimapMarkKinds = ["viewport", "cursor", "selection", "search", "bookmark", "modified", "difference", "classification"];
+    private static readonly string[] MinimapMarkKinds = ["viewport", "cursor", "selection", "search", "bookmark", "modified", "difference", "classification", "fileMap"];
 
     private bool MinimapVisible => App.Settings.GetBool(MinimapVisibleKey, false);
 
@@ -144,6 +144,7 @@ public sealed partial class MainWindow
         view.HiddenMinimapMarks = new HashSet<string>(App.Settings.GetString(MinimapHiddenMarksKey, string.Empty)
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
         view.MinimapMenuOpening = BuildMinimapMenu;
+        view.MinimapFileMapInvoked = FileMapFromMinimap;
         view.MinimapExactRunner = RunExactMinimap;
         view.MinimapExact = App.Settings.GetBool(MinimapExactKey, false);
         view.MinimapWidthCommitted -= HexView_MinimapWidthCommitted;
@@ -220,6 +221,13 @@ public sealed partial class MainWindow
             menu.Items.Add(item);
         }
 
+        menu.Items.Add(new MenuFlyoutSeparator());
+
+        // 「ファイルマップを作成」(ANA-33 の「呼び出し」)。
+        var fileMap = new MenuFlyoutItem { Text = Loc.Get("Minimap_CreateFileMap") };
+        AutomationProperties.SetAutomationId(fileMap, "MinimapMenu_CreateFileMap");
+        fileMap.Click += (_, _) => _ = Commands.ExecuteAsync("analysis.fileMap");
+        menu.Items.Add(fileMap);
         menu.Items.Add(new MenuFlyoutSeparator());
         var exact = new ToggleMenuFlyoutItem { Text = Loc.Get("Menu_View_MinimapExact/Text"), IsChecked = App.Settings.GetBool(MinimapExactKey, false) };
         AutomationProperties.SetAutomationId(exact, "MinimapMenu_Exact");

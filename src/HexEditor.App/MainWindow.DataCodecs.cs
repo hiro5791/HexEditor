@@ -296,6 +296,24 @@ public sealed partial class MainWindow
 
     private sealed record DecompressRequest(CompressionFormat? Format, bool NewTab);
 
+    /// <summary>
+    /// 「ここから展開...」(ANA-16 の仕様 5・ANA-34 の仕様 6): 範囲 [start, start + length) を選択し、形式を入れた状態で展開の画面を開く。
+    /// </summary>
+    internal Task DecompressFromAsync(long start, long length, CompressionFormat? format)
+    {
+        if (Vm.Selected is not { } doc)
+        {
+            return Task.CompletedTask;
+        }
+
+        doc.Editor.Select(start, Math.Max(1, Math.Min(length, doc.Document.Length - start)));
+        _decompressPreset = format;
+        return DecompressAsync(null);
+    }
+
+    /// <summary>次に開く展開の画面の形式 (「ここから展開...」)。</summary>
+    private CompressionFormat? _decompressPreset;
+
     /// <param name="undetected">自動判別できなかったときに、形式の選択を求めて開き直す (仕様 3)。</param>
     private async Task DecompressAsync(DecompressRequest? undetected)
     {
@@ -450,12 +468,20 @@ public sealed partial class MainWindow
             dialog.IsPrimaryButtonEnabled = format.SelectedIndex >= 0 && (format.SelectedIndex == 0 || FormatAvailable(formats[format.SelectedIndex - 1]));
         }
 
+        if (_decompressPreset is { } preset && formats.IndexOf(preset) is int presetIndex and >= 0)
+        {
+            format.SelectedIndex = presetIndex + 1;
+        }
+
+        _decompressPreset = null;
         format.SelectionChanged += (_, _) => Update();
         Update();
         _codecDialogState = () => new JsonObject
         {
             ["open"] = true,
             ["kind"] = "decompress",
+            ["start"] = start,
+            ["length"] = length,
             ["format"] = format.SelectedIndex switch { < 0 => null, 0 => "Auto", int i => formats[i - 1].ToString() },
             ["detection"] = detection.Text,
             ["autoEnabled"] = format.Items[0] is ComboBoxItem a && a.IsEnabled,

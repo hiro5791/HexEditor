@@ -72,6 +72,21 @@ public sealed class VirtualTable : UserControl
             }
         };
         _body.RightTapped += OnBodyRightTapped;
+        ContextRequested += (_, e) =>
+        {
+            // キーボード (Shift+F10・アプリケーションキー) の右クリックメニュー: 選んでいる行のメニューを行の位置に出す。
+            if (BuildContextMenu is { } build && !e.TryGetPosition(_body, out Windows.Foundation.Point _))
+            {
+                var menu = new MenuFlyout();
+                build(_selected, menu);
+                if (menu.Items.Count > 0)
+                {
+                    double y = _selected >= _top ? (_selected - _top) * RowHeight : 0;
+                    menu.ShowAt(_body, new Windows.Foundation.Point(16, Math.Max(0, y) + (RowHeight / 2)));
+                    e.Handled = true;
+                }
+            }
+        };
         GotFocus += (_, _) => Layout();
         LostFocus += (_, _) => Layout();
     }
@@ -102,6 +117,12 @@ public sealed class VirtualTable : UserControl
 
     public event EventHandler<long>? DeleteRequested;
 
+    /// <summary>列の見出しを押した (並べ替え)。購読する場合は <see cref="SetColumns"/> の前に <see cref="SortableHeaders"/> を true にする。</summary>
+    public event EventHandler<int>? HeaderInvoked;
+
+    /// <summary>列の見出しをボタンにする (押すと <see cref="HeaderInvoked"/>)。</summary>
+    public bool SortableHeaders { get; set; }
+
     public void SetColumns(IReadOnlyList<VirtualColumn> columns)
     {
         _columns = columns;
@@ -119,8 +140,19 @@ public sealed class VirtualTable : UserControl
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
             AutomationProperties.SetAutomationId(text, $"{_automationId}_Header{i}");
-            Grid.SetColumn(text, i);
-            _header.Children.Add(text);
+            FrameworkElement cell = text;
+            if (SortableHeaders)
+            {
+                int column = i;
+                var button = new HyperlinkButton { Content = columns[i].Header, Padding = new Thickness(8, 0, 8, 0), FontWeight = Microsoft.UI.Text.FontWeights.SemiBold };
+                AutomationProperties.SetAutomationId(button, $"{_automationId}_Header{i}");
+                AutomationProperties.SetName(button, Services.Loc.Format("ToolTable_SortBy", columns[i].Header));
+                button.Click += (_, _) => HeaderInvoked?.Invoke(this, column);
+                cell = button;
+            }
+
+            Grid.SetColumn(cell, i);
+            _header.Children.Add(cell);
         }
 
         _rows.Clear();

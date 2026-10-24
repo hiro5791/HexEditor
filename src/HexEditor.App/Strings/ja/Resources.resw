@@ -10148,4 +10148,142 @@ SHA-256 のフィンガープリント: {2}
   <data name="StructRule_Index" xml:space="preserve"><value>位置</value></data>
   <data name="StructRule_KeyField" xml:space="preserve"><value>キーのフィールド</value></data>
   <data name="StructDiff_Busy" xml:space="preserve"><value>絞り込み中...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>形式の構造</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>埋め込まれたファイル</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>圧縮</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>暗号化・乱数</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>埋め草</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>繰り返しのレコード</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>標本による推定</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>定数 {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>テキスト ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>繰り返しのレコード ({0} バイト)</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>標本</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>走査</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>構造</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>区間の中央の 4 KiB の標本による推定です (区間 {0} 個、区間の長さ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} が {0} バイト続いています。</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0} バイトを読み込めませんでした。</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>エントロピー {0} ビット / バイト、カイ二乗の p 値 {1}。</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>エントロピー {0} ビット / バイト。</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>ブロックごとに分類しました (ブロック {0} 個、ブロックの大きさ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{0} から {1} バイト。</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>テンプレート "{0}" でパターン {1} を {2}〜{3} ({4} バイト) に置きました。</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{0} に {1} のシグネチャがあります。</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>テンプレート "{0}" で {1}〜{2} ({3} バイト) を解析できました。</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>テンプレート "{0}" の解析に失敗しました ({1})。</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>カービングの定義 "{1}" で長さを {0} バイトと決めました ({2})。</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>構造の検証</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>サイズの取得</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>フッター</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>終わりが不明です。次の領域の始まりの {0} まで ({1} バイト) とみなしました。</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>{1} の {0} のストリームを展開でき、チェック値が一致しました (圧縮 {2} バイト、展開後 {3} バイト)。</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>ずらし {0} バイトで {1} が一致します (ずらし 1〜{2} の平均は {3})。</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>シグネチャと統計に基づく推定で、誤りがありえます。</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>変換ビュー: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>ドキュメント: {0} ({1})、{2} バイト</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>範囲: {0}〜{1} ({2} バイト)</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>すべての段階が終わっています。</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>まだ終わっていない段階があります (残りは標本による推定です)。</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>種類ごとのバイト数:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>領域 ({0} 個):</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>ほか {0} 件</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>ファイルマップを作成</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>ふぁいるまっぷ みとりず りょういき</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>ファイルマップを作り直す</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>ふぁいるまっぷをつくりなおす</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>ファイルマップを表示</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>ふぁいるまっぷをひょうじ</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>ファイルマップをエクスポート</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>ふぁいるまっぷをえくすぽーと</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>見つかったファイルにテンプレートを適用</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>みつかったふぁいるにてんぷれーとをてきよう</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>ファイルマップパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>ふぁいるまっぷぱねる</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>ファイルマップを作成</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>ファイルマップの作成</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>ファイルマップのエクスポート</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>ファイルマップ: 埋め込まれたファイルのテンプレート</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>ファイルマップで、テンプレートで解析できる埋め込まれたファイルが見つかったときに、テンプレートの適用を提案します。自動では適用しません。</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>提案する</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>しない</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>概観 (標本)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>全体の走査</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>構造の解析</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>ファイルマップはまだありません。作成すると、ドキュメントのどこに何があるかを表示します。</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>完了: 領域 {0} 個。</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>途中で中止 ({1}% まで走査): 領域 {0} 個。残りは標本による推定です。</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>結果は編集前の内容のものです。</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>ファイルマップを作成できませんでした: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>解析 &gt; ファイルマップ、または上の「作成」でファイルマップを作ります。</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>ほか {0} 件の埋め込まれた形式の候補は持っていません。</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>作り直す</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>テキストのレポート...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>ファイルマップの進捗</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>拡大</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>縮小</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>全体を表示</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>表で表示</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>ファイルマップの帯 (構造のレーンと内容のレーン)</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>ファイルマップの帯のスクロール</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>凡例</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>ファイルマップの領域</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>表示する種類</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>すべての種類</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>一覧の行をブックマークに</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>一覧の行をマルチ選択に</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>終了 (含む)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>ラベル</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>確度</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>段階</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>帯か一覧で領域を選んでください。</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}、{1}、開始 {2}、{3} バイト、確度 {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>確度: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>段階: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>テンプレート: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>範囲を選択</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>ブックマークに追加</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>テンプレート "{0}" を適用</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>新しいタブで開く</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>ここから展開...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>テンプレートを推定...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>文字列を抽出...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>ファイルとして保存...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>テンプレートの推定を使えません。</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>このドキュメントのファイルマップがありません。</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>ファイルマップに、テンプレートの決まった埋め込まれたファイルがありません。</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>埋め込まれたファイルが {0} 個見つかりました。テンプレートを適用しますか?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>適用</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>一覧を表示</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>埋め込まれたファイル {0} 個にテンプレートを適用しました。</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>埋め込まれたファイル {0} 個にテンプレートを適用しました。適用の数の上限 ({2} 個) に達したため、{1} 個は適用していません。</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>ファイルマップを {0} に書き出しました。</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>ファイルマップを書き出せませんでした: {0}</value></data>
 </root>

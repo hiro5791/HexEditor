@@ -343,8 +343,18 @@ public sealed class FileTypeDetector(FileTypeDatabase database, IEnumerable<IFil
         _automaton = new AhoCorasick(_anchored.Select(f => f.Anchor!).ToList());
     }
 
+    /// <summary>埋め込まれた形式の探索に使う項目 (先頭の固定のバイト列が 4 バイト以上あるもの。ファイルマップ (ANA-33) も使う)。</summary>
+    internal IReadOnlyList<FileFormat> AnchoredFormats
+    {
+        get
+        {
+            BuildAutomaton();
+            return _anchored!;
+        }
+    }
+
     /// <summary>多数のバイト列を同時に探す (状態遷移を 256 通りの表で持つ)。</summary>
-    private sealed class AhoCorasick
+    internal sealed class AhoCorasick
     {
         private readonly List<int[]> _next = [];
         private readonly List<List<int>> _outputs = [];
@@ -402,11 +412,43 @@ public sealed class FileTypeDetector(FileTypeDatabase database, IEnumerable<IFil
                     }
                 }
             }
+
+            // 走査で使う平らな表 (状態 × 256)。
+            _table = new int[_next.Count * 256];
+            _hasOutput = new bool[_next.Count];
+            for (int st = 0; st < _next.Count; st++)
+            {
+                _next[st].CopyTo(_table, st * 256);
+                _hasOutput[st] = _outputs[st].Count > 0;
+            }
         }
 
-        public int Next(int state, byte b) => _next[state][b];
+        private readonly int[] _table;
+        private readonly bool[] _hasOutput;
 
-        public bool HasOutput(int state) => _outputs[state].Count > 0;
+        public int Next(int state, byte b) => _table[(state << 8) | b];
+
+        public bool HasOutput(int state) => _hasOutput[state];
+
+        /// <summary>
+        /// <paramref name="data"/> を読み進め、出力のある状態になった位置 (data の中の位置) ごとに <paramref name="visit"/> を呼ぶ。
+        /// 状態は <paramref name="state"/> で続きから始め、終わりの状態を返す。
+        /// </summary>
+        public int Feed(int state, ReadOnlySpan<byte> data, Action<int, int> visit)
+        {
+            int[] table = _table;
+            bool[] has = _hasOutput;
+            for (int i = 0; i < data.Length; i++)
+            {
+                state = table[(state << 8) | data[i]];
+                if (has[state])
+                {
+                    visit(i, state);
+                }
+            }
+
+            return state;
+        }
 
         public IReadOnlyList<int> Outputs(int state) => _outputs[state];
 

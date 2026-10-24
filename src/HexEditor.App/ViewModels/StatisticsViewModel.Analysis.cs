@@ -284,6 +284,17 @@ public sealed partial class StatisticsViewModel
             FileType = FileTypeOf?.Invoke(doc.Document),
         };
         DocumentSnapshot snapshot = doc.Document.Current;
+
+        // ファイルマップ (ANA-33 の仕様 5) などで同じ条件の分類がすでにあれば、データを読み直さずにそれを使う。
+        if (DataClassifier.Reusable(doc.Document, snapshot, request) is { } reused)
+        {
+            _classifiedSnapshot = snapshot;
+            ClassificationStale = false;
+            ClassifyStatus = string.Empty;
+            ApplyClassification(reused);
+            return;
+        }
+
         IsClassifying = true;
         ClassifyStatus = string.Empty;
         try

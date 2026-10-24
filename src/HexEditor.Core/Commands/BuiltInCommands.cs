@@ -336,6 +336,7 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.statistics", "view"),
         new("view.panel.fileType", "view"),
+        new("view.panel.fileMap", "view"),
         new("view.panel.disassembly", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
@@ -514,6 +515,13 @@ public static class BuiltInCommands
         new("analysis.fileType", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.here", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.embedded", "analysis") { Condition = "documentOpen" },
+
+        // ファイルマップ (ANA-33・ANA-34)。ショートカットは既定なし。
+        new("analysis.fileMap", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.rebuild", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.show", "analysis"),
+        new("analysis.fileMap.export", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.applyTemplates", "analysis") { Condition = "documentOpen" },
         // カスタム CRC (ANA-20)、一致するアルゴリズムを探す (ANA-21 の仕様 5)、カーソル位置に書き込む (ANA-22 の仕様 3)。
         new("analysis.hash.customCrc", "analysis"),
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },

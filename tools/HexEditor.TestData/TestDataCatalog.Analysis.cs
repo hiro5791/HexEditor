@@ -179,6 +179,19 @@ public static partial class TestDataCatalog
     /// <summary>固定の種で単語表から作った 4 MiB の英文を gzip で圧縮したもの。</summary>
     private static byte[] GzipEnglish()
     {
+        byte[] plain = EnglishText();
+        using var output = new MemoryStream();
+        using (var gzip = new GZipStream(output, CompressionLevel.Optimal, leaveOpen: true))
+        {
+            gzip.Write(plain);
+        }
+
+        return output.ToArray();
+    }
+
+    /// <summary>TD-ANA-CLASSES の (3) の英文 (圧縮する前のもの。固定の種で単語表から作った 4 MiB の ASCII)。</summary>
+    public static byte[] EnglishText()
+    {
         string[] words = EnglishWords;
         var text = new StringBuilder((int)(4 * MiB) + 64);
         ulong state = 0x0E5E;
@@ -200,14 +213,7 @@ public static partial class TestDataCatalog
             }
         }
 
-        byte[] plain = Encoding.ASCII.GetBytes(text.ToString(0, (int)(4 * MiB)));
-        using var output = new MemoryStream();
-        using (var gzip = new GZipStream(output, CompressionLevel.Optimal, leaveOpen: true))
-        {
-            gzip.Write(plain);
-        }
-
-        return output.ToArray();
+        return Encoding.ASCII.GetBytes(text.ToString(0, (int)(4 * MiB)));
     }
 
     /// <summary>TD-ANA-CRYPT-10M の先頭 1 MiB を固定の鍵で AES-256-CBC (PKCS#7) で暗号化したもの。</summary>

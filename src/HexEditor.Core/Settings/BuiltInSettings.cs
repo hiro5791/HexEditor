@@ -272,6 +272,9 @@ public static class BuiltInSettings
         new("compare.structure.includeHidden", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 119, Group = "analysis" },
         new("compare.structure.maxFields", SettingCategories.Advanced, SettingKind.Int, 1_000_000) { Min = 10_000, Max = 10_000_000, Order = 120, Group = "analysis" },
         new(HexEditor.Core.Compare.Structure.StructArrayRules.SettingKey, SettingCategories.Advanced, SettingKind.List, new JsonArray()) { Order = 121, ShowInPage = false },
+
+        // ファイルマップ (ANA-34 の仕様 7): 埋め込まれたファイルのテンプレートは提案するだけ (自動では適用しない。利用者の決定 2026-10-21)。
+        new("fileMap.applyTemplatesToEmbedded", SettingCategories.Advanced, SettingKind.Choice, "suggest") { Options = ["suggest", "none"], Order = 122, Group = "analysis" },
         // ディスク・プロセス (ENG-28 の仕様 5・6、ENG-32 の仕様 3、ENG-33 の仕様 6)。
         new(DeviceSettings.HelperTimeoutKey, SettingCategories.Advanced, SettingKind.Int, 30)
         {

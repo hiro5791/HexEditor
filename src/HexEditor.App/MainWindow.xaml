@@ -323,6 +323,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_VisualizerPanel" cmd:CommandUi.Id="view.panel.visualizer" AutomationProperties.AutomationId="Command_ToggleVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateVisualizer" cmd:CommandUi.Id="view.panel.templateVisualizer" AutomationProperties.AutomationId="Command_ToggleTemplateVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FileMap" cmd:CommandUi.Id="view.panel.fileMap" AutomationProperties.AutomationId="Command_PanelFileMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Disassembly" cmd:CommandUi.Id="view.panel.disassembly" AutomationProperties.AutomationId="Command_PanelDisassembly" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
@@ -398,6 +399,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_FileMap" cmd:CommandUi.Id="analysis.fileMap" AutomationProperties.AutomationId="Command_FileMap" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
                         <!--  逆アセンブル (ANA-23) とデマングル (ANA-30)  -->
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Disassemble" cmd:CommandUi.Id="analysis.disassemble" AutomationProperties.AutomationId="Command_Disassemble" />

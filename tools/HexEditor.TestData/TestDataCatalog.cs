@@ -132,7 +132,7 @@ public static partial class TestDataCatalog
         new("TD-ANA-ABC", 3, "ASCII の abc", path => WriteAll(path, Encoding.ASCII.GetBytes("abc"))),
         new("TD-ANA-SHA256SUM", Sha256SumLength, "TD-RANDOM-16M の sha256sum の出力 (TD-RANDOM-16M と同じフォルダに置く)", WriteSha256Sum,
             dir => Path.Combine(dir, "TD-RANDOM-16M.sha256")),
-    }.Concat(FormatItems()).Concat(CompareItems()).Concat(AnalysisItems()).Concat(TemplateItems()).Concat(VisualizerItems()).Concat(AutomationItems()).Concat(TemplateUiItems()).Concat(CliItems()).Concat(DisassemblyItems()).Concat(PatchItems()).Concat(DataCodecItems()).Concat(ToolsCalcItems()).Concat(ForCaseItems()).Concat(DevicesProtectItems()).Concat(ImageItems()).Concat(FileSystemItems()).Concat(TemplateInferenceItems()).Concat(StructDiffItems()).ToDictionary(i => i.Id);
+    }.Concat(FormatItems()).Concat(CompareItems()).Concat(AnalysisItems()).Concat(TemplateItems()).Concat(VisualizerItems()).Concat(AutomationItems()).Concat(TemplateUiItems()).Concat(CliItems()).Concat(DisassemblyItems()).Concat(PatchItems()).Concat(DataCodecItems()).Concat(ToolsCalcItems()).Concat(ForCaseItems()).Concat(DevicesProtectItems()).Concat(ImageItems()).Concat(FileSystemItems()).Concat(TemplateInferenceItems()).Concat(StructDiffItems()).Concat(FileMapItems()).ToDictionary(i => i.Id);
 
     /// <summary>TD-ANA-SHA256SUM の長さ: 64 桁の Hex、空白 2 つ、TD-RANDOM-16M.bin、LF。</summary>
     private const long Sha256SumLength = 64 + 2 + 17 + 1;

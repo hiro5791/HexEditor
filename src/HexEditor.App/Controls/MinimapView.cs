@@ -292,6 +292,90 @@ public sealed partial class MinimapView : Grid
     }
 
     /// <summary>色が見えなくても分類を区別できる模様 (統計パネルの凡例の模様と同じ種類)。</summary>
+    /// <summary>ドキュメントのファイルマップ (ANA-34 の仕様 8。App が設定する)。</summary>
+    public static Func<Document, Core.FileMap.FileMapResult?>? FileMapOf { get; set; }
+
+    /// <summary>「ファイルマップ」の印を描くか (印の ON / OFF)。</summary>
+    internal Func<bool>? ShowFileMap { get; set; }
+
+    /// <summary>ファイルマップの印のクリック (その位置のオフセット)。</summary>
+    internal Action<long>? FileMapInvoked { get; set; }
+
+    /// <summary>
+    /// 「ファイルマップ」の印 (ANA-34 の仕様 8): ファイルマップがあれば、内容のレーンを帯と同じ色と模様で、印の帯の左に描く (分類の印の代わり)。
+    /// 結果の範囲がドキュメントの長さを越える (編集で短くなった) なら null。
+    /// </summary>
+    private Core.FileMap.FileMapResult? FileMap()
+    {
+        if (_editor is null || ShowFileMap?.Invoke() == false || FileMapOf?.Invoke(_editor.Document) is not { } map)
+        {
+            return null;
+        }
+
+        return map.End <= _editor.Document.Length ? map : null;
+    }
+
+    /// <summary>ファイルマップの種類の色 (帯と同じ ThemeResource)。ハイコントラストでは背景のまま模様だけで示す。</summary>
+    private SchemeColor FileMapColor(Core.FileMap.FileMapKind kind, SchemeColor back)
+    {
+        if (HighContrast)
+        {
+            return back;
+        }
+
+        return Application.Current.Resources.TryGetValue(FileMapVisuals.BrushKey(kind), out object? value) && value is SolidColorBrush brush
+            ? new SchemeColor(0xFF, brush.Color.R, brush.Color.G, brush.Color.B)
+            : back;
+    }
+
+    /// <summary>ファイルマップの種類ごとの模様 (ピクセル単位。帯の模様と同じ向き)。</summary>
+    internal static bool FileMapPattern(Core.FileMap.FileMapKind kind, int x, int y) => kind switch
+    {
+        Core.FileMap.FileMapKind.Compressed => (x + y) % 3 == 0,
+        Core.FileMap.FileMapKind.Encrypted => (x + y) % 3 == 0 || (x - y + 300) % 3 == 0,
+        Core.FileMap.FileMapKind.Text => y % 3 == 0,
+        Core.FileMap.FileMapKind.Constant => (y + (x % 2)) % 3 == 0,
+        Core.FileMap.FileMapKind.Records => x % 2 == 0,
+        Core.FileMap.FileMapKind.Binary => (x - y + 300) % 3 == 0,
+        Core.FileMap.FileMapKind.Unreadable => (x / 2 + y / 2) % 2 == 0,
+        _ => false,
+    };
+
+    /// <summary>範囲で最も長い内容のレーンの種類。</summary>
+    private static Core.FileMap.FileMapKind? FileMapKindOf(Core.FileMap.FileMapResult map, long offset, long length)
+    {
+        Span<long> bytes = stackalloc long[Enum.GetValues<Core.FileMap.FileMapKind>().Length];
+        long end = offset + Math.Max(1, length);
+        bool any = false;
+        int seen = 0;
+        foreach (int i in map.InRange(Core.FileMap.FileMapLane.Content, offset, end))
+        {
+            Core.FileMap.FileMapRegion r = map.Regions[i];
+            bytes[(int)r.Kind] += Math.Min(end, r.End) - Math.Max(offset, r.Offset);
+            any = true;
+            if (++seen > 4096)
+            {
+                break;
+            }
+        }
+
+        if (!any)
+        {
+            return null;
+        }
+
+        int best = 0;
+        for (int k = 1; k < bytes.Length; k++)
+        {
+            if (bytes[k] > bytes[best])
+            {
+                best = k;
+            }
+        }
+
+        return (Core.FileMap.FileMapKind)best;
+    }
+
     internal static bool ClassPattern(Core.Statistics.DataClass c, int x, int y) => c switch
     {
         Core.Statistics.DataClass.Constant => y % 3 == 0,
@@ -473,8 +557,11 @@ public sealed partial class MinimapView : Grid
         }
 
         // 「分類」レイヤ (ANA-16 の仕様 7): 印の帯の左に、ピクセル行の範囲で最も多い分類を色と模様で描く。
-        Core.Statistics.ClassificationResult? classes = Classification();
-        int classStart = classes is null ? barArea : Math.Max(1, barArea - (int)Math.Round(ClassBand * Scale));
+        Core.FileMap.FileMapResult? fileMap = FileMap();
+        Core.Statistics.ClassificationResult? classes = fileMap is null ? Classification() : null;
+        int classStart = classes is null && fileMap is null ? barArea : Math.Max(1, barArea - (int)Math.Round(ClassBand * Scale));
+        _fileMapBand = fileMap is null ? null : (classStart / Scale, barArea / Scale);
+        _placedFileMap.Clear();
         SchemeColor patternColor = ThemeColor(HighContrast ? "SystemColorWindowTextColor" : "TextFillColorPrimary");
         _placedClasses.Clear();
         for (int y = 0; y < height; y++)
@@ -483,6 +570,17 @@ public sealed partial class MinimapView : Grid
             MinimapStats? stats = row >= 0 ? _computer.Row(row) : null;
             ReadOnlySpan<byte> rowBytes = byteTheme && stats is not null ? _computer.RowBytesOf(row) : [];
             Core.Statistics.DataClass rowClass = Core.Statistics.DataClass.None;
+            Core.FileMap.FileMapKind? rowKind = null;
+            if (fileMap is not null && row >= 0 && row < _computer.RowCount)
+            {
+                (long fs, long fl) = _computer.RangeOf(row);
+                rowKind = FileMapKindOf(fileMap, fs, fl);
+                if (_placedFileMap.Count == 0 || _placedFileMap[^1].Kind != rowKind)
+                {
+                    _placedFileMap.Add((y, rowKind));
+                }
+            }
+
             if (classes is not null && row >= 0 && row < _computer.RowCount)
             {
                 (long rs, long rl) = _computer.RangeOf(row);
@@ -499,6 +597,10 @@ public sealed partial class MinimapView : Grid
                 if (row < 0 || row >= _computer.RowCount)
                 {
                     // ドキュメントの外。
+                }
+                else if (x >= classStart && x < barArea && fileMap is not null)
+                {
+                    c = rowKind is not { } k ? back : FileMapPattern(k, x - classStart, y) ? patternColor : FileMapColor(k, back);
                 }
                 else if (x >= classStart && x < barArea && classes is not null)
                 {
@@ -700,6 +802,11 @@ public sealed partial class MinimapView : Grid
     /// <summary>「分類」レイヤの描いた分類 (ピクセルの y、分類。分類が変わる行だけ。テスト用)。</summary>
     private readonly List<(int Y, Core.Statistics.DataClass Class)> _placedClasses = [];
 
+    private readonly List<(int Y, Core.FileMap.FileMapKind? Kind)> _placedFileMap = [];
+
+    /// <summary>ファイルマップの印の帯の左右 (epx。描いていなければ null)。</summary>
+    private (double Left, double Right)? _fileMapBand;
+
     /// <summary>印の形 (仕様 6)。</summary>
     private enum MarkShape
     {
@@ -831,6 +938,14 @@ public sealed partial class MinimapView : Grid
         }
 
         double y = point.Position.Y;
+        if (_fileMapBand is (double bandLeft, double bandRight) && point.Position.X >= bandLeft && point.Position.X < bandRight && RowAt(y) is var fileMapRow and >= 0)
+        {
+            // ファイルマップの印のクリック: パネルを開き、その位置の領域を選ぶ (ANA-34 の仕様 8)。
+            FileMapInvoked?.Invoke(_computer.RangeOf(fileMapRow).Start);
+            e.Handled = true;
+            return;
+        }
+
         double top = Canvas.GetTop(_viewport);
         if (ShowViewport && y >= top && y <= top + _viewport.Height)
         {
@@ -1021,6 +1136,12 @@ public sealed partial class MinimapView : Grid
             ["menuOpen"] = _menu?.IsOpen ?? false,
             ["classified"] = _editor is not null && Core.Statistics.DataClassifier.LatestFor(_editor.Document) is not null,
             ["classificationShown"] = ShowClassification?.Invoke() != false,
+            ["fileMapShown"] = _fileMapBand is not null,
+            ["fileMapBand"] = _fileMapBand is (double l, double r) ? new System.Text.Json.Nodes.JsonArray(l, r) : null,
+            ["fileMap"] = new System.Text.Json.Nodes.JsonArray([.. _placedFileMap.Select(c => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
+            {
+                ["y"] = c.Y, ["kind"] = c.Kind?.ToString(),
+            })]),
             ["classes"] = new System.Text.Json.Nodes.JsonArray([.. _placedClasses.Select(c => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
             {
                 ["y"] = c.Y, ["class"] = c.Class.ToString(),

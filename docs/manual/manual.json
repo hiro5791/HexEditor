@@ -20,6 +20,7 @@
     "bookmarks",
     "compare",
     "statistics",
+    "file-map",
     "hashes",
     "disassembly",
     "checksum-files",

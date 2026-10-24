@@ -472,6 +472,15 @@
       "maximum": 10,
       "default": 2
     },
+    "fileMap.applyTemplatesToEmbedded": {
+      "description": "File map: templates for embedded files",
+      "type": "string",
+      "enum": [
+        "suggest",
+        "none"
+      ],
+      "default": "suggest"
+    },
     "files.adsNotice": {
       "description": "Notify when a file has alternate data streams",
       "type": "boolean",
