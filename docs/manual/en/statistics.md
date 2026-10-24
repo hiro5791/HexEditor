@@ -111,6 +111,8 @@ Signatures of known compression formats such as zlib, gzip, zstd, xz, bzip2, LZ4
 
 This is an estimate based on statistics. The panel always says "This is an estimate based on statistics and can be wrong." Do not trust it blindly.
 
+To see the classification together with format structures, embedded files and repeating records in one overview, use the [File map](file-map.md).
+
 ### Detecting the file type {#file-type}
 
 The type of a file can be found from its magic number and similar clues.

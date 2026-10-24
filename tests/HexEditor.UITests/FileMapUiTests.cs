@@ -76,6 +76,7 @@ public sealed class FileMapUiTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ANA-34-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Clicking_the_band_moves_the_cursor_and_double_click_selects_the_region() => UiTestContext.RunAsync(async ctx =>
     {
         (AppSession app, JsonObject state) = await MixAsync(ctx);
