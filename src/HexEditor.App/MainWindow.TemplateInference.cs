@@ -55,7 +55,19 @@ public sealed partial class MainWindow : ITemplateInferenceHost
         }
     }
 
-    private TemplateInferencePanel InferencePanel => _inferencePanel ??= new TemplateInferencePanel(this);
+    private TemplateInferencePanel InferencePanel
+    {
+        get
+        {
+            if (_inferencePanel is null)
+            {
+                _inferencePanel = new TemplateInferencePanel(this);
+                _inferencePanel.Bind(_inferenceSession);
+            }
+
+            return _inferencePanel;
+        }
+    }
 
     private bool InferencePanelShown => IsPanelShown(TemplateInferencePanelId) && _inferencePanel is { IsLoaded: true };
 
@@ -79,6 +91,25 @@ public sealed partial class MainWindow : ITemplateInferenceHost
             }
         };
         AttachInferenceToSelected();
+
+        // ウィンドウを本当に閉じたら、アプリ全体で持つ状態 (ドキュメントごとの推定) への購読を外す
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                if (_inferenceCursorDoc is { } doc)
+                {
+                    doc.EditorChanged -= InferenceDocument_EditorChanged;
+                }
+
+                if (_inferenceSession is { } s)
+                {
+                    s.TableChanged -= InferenceSession_TableChanged;
+                }
+
+                _inferenceDraftTimer?.Stop();
+            }
+        };
     }
 
     private bool HasInferenceDraft => _inferenceSession is { Table.Rows.Count: > 0 } s && s.Draft.Length > 0;
