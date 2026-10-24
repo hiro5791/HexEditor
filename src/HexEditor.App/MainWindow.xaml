@@ -331,6 +331,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_StructDiffs" cmd:CommandUi.Id="view.panel.structDiffs" AutomationProperties.AutomationId="Command_ToggleStructDiffs" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_MemoryMapPanel" cmd:CommandUi.Id="view.panel.memoryMap" AutomationProperties.AutomationId="Command_ToggleMemoryMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PacketsPanel" cmd:CommandUi.Id="view.panel.packets" AutomationProperties.AutomationId="Command_TogglePackets" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PartitionsPanel" cmd:CommandUi.Id="view.panel.partitions" AutomationProperties.AutomationId="Command_TogglePartitions" />
@@ -385,6 +386,9 @@
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Compare" AutomationProperties.AutomationId="Command_CompareMenu">
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareFiles" cmd:CommandUi.Id="analysis.compare" AutomationProperties.AutomationId="Command_Compare" />
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSaved" cmd:CommandUi.Id="analysis.compareSaved" AutomationProperties.AutomationId="Command_CompareSaved" />
+                            <!--  構造を理解した比較 (ANA-31)  -->
+                            <ToggleMenuFlyoutItem x:Uid="Menu_Analysis_CompareStructure" cmd:CommandUi.Id="compare.structure" AutomationProperties.AutomationId="Command_CompareStructure" />
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CompareStructureTemplate" cmd:CommandUi.Id="compare.structureTemplate" AutomationProperties.AutomationId="Command_CompareStructureTemplate" />
                             <!--  プロセスのスナップショット (ANA-09)  -->
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CreateSnapshot" cmd:CommandUi.Id="compare.createSnapshot" AutomationProperties.AutomationId="Command_CreateSnapshot" />

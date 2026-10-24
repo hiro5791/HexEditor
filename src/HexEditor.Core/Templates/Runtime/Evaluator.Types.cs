@@ -646,6 +646,9 @@ internal sealed partial class Evaluator
         "sealed", "readonly", "lazy", "size", "align", "no_advance", "endian", "bit_order", "encoding", "base", "relative",
         "pointer_map", "allow_null", "expect", "require", "show", "show_all", "visualize", "export", "bookmark", "inspector", "docs",
 
+        // 構造を理解した比較 (06 の ANA-31) の配列のキー。比較以外の動作は変えない
+        "diff_key",
+
         // .ksy の変換で使う (TPL-33)
         "substream", "ksy_enum", "instance", "ksy_root_io",
     ];

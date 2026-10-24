@@ -117,6 +117,54 @@ In a comparison tab, synchronized scrolling is on at first. When you scroll one 
 
 Turn it on or off with **Synchronized scrolling** in the toolbar. When it is off, the two sides scroll on their own. When you turn it back on, it follows the side that has the focus.
 
+## Comparing by structure {#structure-compare}
+
+When both files have the same format (for example two PNG images or two Windows executables), the comparison can also tell you which fields changed, not only which bytes. For example: `nt.FileHeader.TimeDateStamp` changed from one value to another, or one more tEXt chunk was added.
+
+### Turn it on
+
+- In the compare dialog, **Compare structure too** is on at first.
+- In the comparison tab, use **Compare structure** in the toolbar, or **Analysis > Compare > Compare structure**.
+
+The byte comparison still runs as usual. The structure comparison runs next to it and its result is shown in the **Structure differences** panel at the bottom (**View > Panels > Structure differences**).
+
+### Which template is used
+
+A structure template reads both sides. The template is chosen in this order.
+
+1. The template you chose with **Choose template...** (or **Analysis > Compare > Choose template for structure compare...**). You can set a start offset for each side.
+2. A template that is applied to both documents at the same place.
+3. A template whose magic matches both sides. A match by file extension only is not enough.
+
+The heading of the panel shows the template, the start offsets and why it was chosen. If no template is found, only the byte comparison is done, and the panel shows the reason and a **Choose template...** button. It does not work for process memory snapshots.
+
+### Reading the result
+
+The panel shows only the fields that differ and the structures that contain them. A structure row shows how many differences it contains, for example "Changed 5, Added 1, Removed 1".
+
+| Kind | Meaning |
+| --- | --- |
+| **Changed** | The value of the field is different |
+| **Added** / **Removed** | The element or field exists on the right only / on the left only |
+| **Moved** | The element is in a different position in the list |
+| **Moved and changed** | The element moved and its content also changed |
+| **Type changed** | The same name has a different type |
+| **Cannot parse** | The template could not read this part of one side. Everything after the error is gathered in one row |
+
+Fields that only moved because something before them got longer or shorter are not differences. Bytes that the template does not read are counted in the last row, **Differences outside the structure**.
+
+Elements of a list (such as PNG chunks) are matched by a key (for example the chunk type), by their content, or by position. The **Matching** column shows the method. To change it, right-click the row of the list and select **Matching method...**. Your choice is remembered for that template and list.
+
+### Moving and filtering
+
+- Select a row, or press <kbd>Enter</kbd>, to select the field on both sides. For an added field, the cursor on the other side goes to where the field would be.
+- When the panel has the focus, <kbd>Alt</kbd>+<kbd>F5</kbd> and <kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>F5</kbd> move between structure differences. To use these keys from the hex views too, turn on **Compare: move between structure differences** in the toolbar of the comparison tab. <kbd>Alt</kbd>+<kbd>←</kbd> takes you back.
+- Filter by kind with the buttons, or type part of a name, path or value. **Include padding** and **Show matching fields** show more rows.
+- Right-click a row to copy the path or the row, add a bookmark, or show the field in the result tree of the left or right document.
+- Select **Export...** to write JSON, CSV or a text report of the shown rows or of all differences.
+
+Large files are fine. The comparison stops after a set number of fields (1,000,000 for each side at first). If that happens, select **Raise limit and compare again**. You can cancel the comparison in the operations list; the differences found so far are kept.
+
 ## Comparing process memory snapshots {#process-snapshots}
 
 You can save the memory of a process at one moment and compare it with another moment or with the current memory. It helps you find out which parts of memory change as a program runs.

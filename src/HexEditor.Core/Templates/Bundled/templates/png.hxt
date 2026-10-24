@@ -67,4 +67,4 @@ struct Chunk {
 };
 
 u8    signature[8];
-Chunk chunks[until(last.type == "IEND" || std::eof())];
+Chunk chunks[until(last.type == "IEND" || std::eof())] [[diff_key("type")]];

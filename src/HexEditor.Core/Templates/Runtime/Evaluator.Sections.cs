@@ -20,6 +20,7 @@ internal sealed partial class Evaluator
         }
 
         TemplateSourceLocation at = c.Location;
+        s.NoteSource(src, off, len);
         s.PendingProducers.Add(() => DecompressInto(s, src, off, len, format, at));
         return Val.Void;
     }
@@ -152,6 +153,7 @@ internal sealed partial class Evaluator
         }
 
         TemplateSourceLocation at = c.Location;
+        s.NoteSource(src, off, len);
         s.PendingProducers.Add(() =>
         {
             if (len > Limits.Section * 4L)

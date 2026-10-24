@@ -346,6 +346,7 @@ public static class BuiltInCommands
         new("view.panel.yara", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
+        new("view.panel.structDiffs", "view"),
 
         // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
         new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
@@ -484,6 +485,14 @@ public static class BuiltInCommands
         new("compare.copyAllRight", "compare"),
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
+        // 構造を理解した比較 (ANA-31・ANA-32)。Alt+F5 / Shift+Alt+F5 は compare.nextDiff / previousDiff が構造の差分にも使う。
+        new("compare.structure", "compare") { Icon = "" },
+        new("compare.structureTemplate", "compare"),
+        new("compare.navigateStructure", "compare"),
+        new("compare.showStructDiffs", "compare"),
+        new("compare.nextStructDiff", "compare"),
+        new("compare.previousStructDiff", "compare"),
+        new("compare.exportStructDiffs", "compare"),
 
         // 比較の結果画面の「パッチを作成」(EDIT-42 の「呼び出し」。左を変換前、右を変換後にする)。
         new("compare.createPatch", "compare") { Icon = "\uE8A5" },

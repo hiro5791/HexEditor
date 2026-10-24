@@ -189,7 +189,15 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         _queue = queue;
         _refresh = queue.CreateTimer();
         _refresh.Interval = TimeSpan.FromMilliseconds(500);
-        _refresh.Tick += (_, _) => RaiseResultChanged();
+        _refresh.Tick += (_, _) =>
+        {
+            RaiseResultChanged();
+            RaiseStructChanged();
+            if (!IsRunning && StructResult is not { IsRunning: true })
+            {
+                _refresh.Stop();
+            }
+        };
 
         // 表示設定 (1 行のバイト数、グループ化、文字コード) は左右で共通にする (仕様 2)。右を左に合わせ、その後もどちらかを変えたら
         // もう一方に写す。
@@ -316,6 +324,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         CurrentIndex = -1;
         Distribution = null;
         _listView = null;
+        ResetStructDelta();
         IsStale = false;
         StaleByExternalChange = false;
         StatusMessage = null;
@@ -324,6 +333,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         if (FromPieces)
         {
             DataComparer.FromPieces(SavedContentDiff.Compute(rightSnapshot), result);
+            _structTask = RunStructureAsync(leftSnapshot, rightSnapshot, result, Task.CompletedTask);
             await FinishAsync(result);
             return;
         }
@@ -341,6 +351,9 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
                 return Task.CompletedTask;
             });
         _runTask = task;
+
+        // 構造の比較 (ANA-31) はバイトの比較と並行して行う
+        _structTask = RunStructureAsync(leftSnapshot, rightSnapshot, result, task);
         try
         {
             await task;
@@ -381,7 +394,10 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
     private async Task FinishAsync(CompareResult result)
     {
         IsRunning = false;
-        _refresh.Stop();
+        if (StructResult is not { IsRunning: true })
+        {
+            _refresh.Stop();
+        }
         RaiseResultChanged();
         int buckets = Buckets;
         DiffDistribution distribution = await Task.Run(() => DiffDistribution.Compute(result, buckets));
@@ -520,7 +536,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
     /// <summary>もう一方のカーソルを対応する位置に置き、カーソルの行を同じ高さに並べる。</summary>
     private void FollowCursor(EditorState driver, EditorState follower, bool fromRight)
     {
-        long mapped = Math.Clamp(DiffNavigation.Map(Result!, fromRight, driver.Cursor), 0, follower.Layout.MaxCursor);
+        long mapped = Math.Clamp(MapForSync(fromRight, driver.Cursor), 0, follower.Layout.MaxCursor);
         long rowOnScreen = driver.Layout.RowOf(driver.Cursor) - driver.TopRow;
         Sync(() => follower.FollowTo(mapped, follower.Layout.RowOf(mapped) - rowOnScreen));
     }
@@ -590,6 +606,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
 
         DiffRange d = Result.Diffs[index];
         CurrentIndex = index;
+        ResetStructDelta();
         bool right = FocusedRight;
         EditorState focused = Focused.Editor;
         EditorState other = Other.Editor;
@@ -993,5 +1010,6 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         }
 
         Result?.Dispose();
+        DisposeStructure();
     }
 }
