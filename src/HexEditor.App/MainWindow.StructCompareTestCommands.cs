@@ -50,8 +50,13 @@ public sealed partial class MainWindow
                 return TestStructState();
             case "structFocus":
                 ShowPanel(StructDiffsPanelId);
-                StructPanel.FocusTree();
-                await Task.Delay(1);
+                await WaitUntilForTestAsync(() => StructPanel.IsLoaded && StructPanel.ActualHeight > 0, TimeSpan.FromSeconds(10));
+                for (int attempt = 0; attempt < 50 && !StructPanel.HasTreeFocus; attempt++)
+                {
+                    StructPanel.FocusTree();
+                    await Task.Delay(20);
+                }
+
                 return TestStructState();
             case "structKey":
                 bool handled = StructPanel.HandleKey(Enum.Parse<VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true),

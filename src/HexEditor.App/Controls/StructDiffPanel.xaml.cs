@@ -154,7 +154,7 @@ public sealed partial class StructDiffPanel : UserControl
     public bool IsBusy { get; private set; }
 
     /// <summary>ツリー表にフォーカスがあるか (Alt+F5 を構造の差分の移動にする。ANA-32 の「呼び出し」)。</summary>
-    public bool HasTreeFocus => FocusManager.GetFocusedElement(XamlRoot) is DependencyObject d && IsInside(d);
+    public bool HasTreeFocus => XamlRoot is { } root && FocusManager.GetFocusedElement(root) is DependencyObject d && IsInside(d);
 
     private bool IsInside(DependencyObject d)
     {
