@@ -134,6 +134,9 @@ public sealed class StructDiffNode
     /// <summary>表示の計算 (<see cref="StructDiffView"/>) での前順の番号。</summary>
     internal int ViewIndex { get; set; } = -1;
 
+    /// <summary>結果の木に加えた (比較の中だけで使う)。</summary>
+    internal bool Attached { get; set; }
+
     public bool HasChildren => FirstChild is not null;
 
     public IEnumerable<StructDiffNode> Children

@@ -187,7 +187,6 @@ public static class StructComparer
         private readonly HashSet<string> _leftTruncated;
         private readonly HashSet<string> _rightTruncated;
         private readonly Dictionary<object, StructDiffNode> _unparsed = [];
-        private readonly HashSet<StructDiffNode> _attached = new(ReferenceEqualityComparer.Instance);
         private readonly byte[] _bufA = new byte[1 << 20];
         private readonly byte[] _bufB = new byte[1 << 20];
         private long _sameRows;
@@ -208,7 +207,6 @@ public static class StructComparer
             _rightErrors = ErrorsOf(right);
             _leftTruncated = TruncatedOf(left);
             _rightTruncated = TruncatedOf(right);
-            _attached.Add(r.Root);
         }
 
         public void Run() => CompareContainer(_r.Root, _left.Root, _right.Root, 0);
@@ -231,12 +229,24 @@ public static class StructComparer
 
         private void CompareContainer(StructDiffNode p, TemplateNode a, TemplateNode b, int depth)
         {
-            List<Item> la = Items(Kids(a));
-            List<Item> lb = Items(Kids(b));
-            string pathA = PathOf(a);
-            string pathB = PathOf(b);
-            (string Path, TemplateDiagnostic Diagnostic)? errA = ErrorInside(_leftErrors, pathA);
-            (string Path, TemplateDiagnostic Diagnostic)? errB = ErrorInside(_rightErrors, pathB);
+            List<TemplateNode> ka = Kids(a);
+            List<TemplateNode> kb = Kids(b);
+            (string Path, TemplateDiagnostic Diagnostic)? errA = _leftErrors.Count == 0 ? null : ErrorInside(_leftErrors, PathOf(a));
+            (string Path, TemplateDiagnostic Diagnostic)? errB = _rightErrors.Count == 0 ? null : ErrorInside(_rightErrors, PathOf(b));
+            if (errA is null && errB is null && SameNames(ka, kb))
+            {
+                // よくある形: 左右の子の名前と並びが同じ (対応付けの表を作らずに順に比べる)
+                for (int k = 0; k < ka.Count; k++)
+                {
+                    Check();
+                    CompareNode(p, ka[k], kb[k], depth, ka[k].Name, null, -1, -1, null, moved: false);
+                }
+
+                return;
+            }
+
+            List<Item> la = Items(ka);
+            List<Item> lb = Items(kb);
             int cutA = errA is { } ea ? ErrorChild(la, ea.Path) : la.Count;
             int cutB = errB is { } eb ? ErrorChild(lb, eb.Path) : lb.Count;
 
@@ -316,6 +326,25 @@ public static class StructComparer
                     }
                 }
             }
+        }
+
+        private static bool SameNames(List<TemplateNode> a, List<TemplateNode> b)
+        {
+            if (a.Count != b.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (a[i].BaseName is not null || b[i].BaseName is not null || a[i].Kind == TemplateNodeKind.Section
+                    || !string.Equals(a[i].Name, b[i].Name, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static IEnumerable<TemplateNode> Nodes(Item item) => item.Single is { } s ? [s] : item.Group!;
@@ -502,7 +531,7 @@ public static class StructComparer
                 return node;
             }
 
-            long before = _r.DiffCount;
+            long before = moved ? _r.DiffCount : 0;
             if (leafA)
             {
                 CompareLeaf(node, a, b);
@@ -680,7 +709,7 @@ public static class StructComparer
         private void CompareLeaf(StructDiffNode node, TemplateNode a, TemplateNode b)
         {
             Fields(1, 1);
-            if (a.HasError || b.HasError)
+            if (Failed(a) || Failed(b))
             {
                 Unparsed(node, a, b);
                 return;
@@ -711,7 +740,10 @@ public static class StructComparer
             return a.Size == b.Size && BytesEqual(a, b);
         }
 
-        private static bool HasRead(TemplateNode n) => n.Result.Invoke(() => Evaluator.HasReadConversion(n));
+        private static bool HasRead(TemplateNode n) => Evaluator.HasReadConversion(n);
+
+        /// <summary>ノードにエラーがあるか (診断の一覧を写さずに調べる)。</summary>
+        private static bool Failed(TemplateNode n) => n.Kind == TemplateNodeKind.Error || n.HasErrorFast;
 
         private static bool ValueEquals(object? x, object? y) => x switch
         {
@@ -1458,7 +1490,23 @@ public static class StructComparer
 
         // ───────────── 共通 ─────────────
 
-        private bool Plain(TemplateNode n) => n.Result.Invoke(() => n.Result.Evaluator.IsPlainFixed(n.Type));
+        private readonly Dictionary<object, bool> _plain = new(ReferenceEqualityComparer.Instance);
+
+        private bool Plain(TemplateNode n)
+        {
+            if (n.Type is not { } type)
+            {
+                return false;
+            }
+
+            if (!_plain.TryGetValue(type, out bool plain))
+            {
+                plain = n.Result.Invoke(() => n.Result.Evaluator.IsPlainFixed(type));
+                _plain[type] = plain;
+            }
+
+            return plain;
+        }
 
         /// <summary>差分の範囲 (ドキュメントの先頭から)。セクションの中のパターンは、セクションを作った元の範囲 (仕様 5 の 6)。</summary>
         private static (long Offset, long Size) RangeOf(TemplateNode n)
@@ -1553,17 +1601,15 @@ public static class StructComparer
         /// <summary>行を木に加える (まだ加えていない祖先も先に加える)。</summary>
         private void Attach(StructDiffNode node)
         {
-            if (_attached.Contains(node))
+            if (node.Attached || node.Parent is null)
             {
                 return;
             }
 
-            if (node.Parent is { } parent)
-            {
-                Attach(parent);
-                _attached.Add(node);
-                _r.Add(parent, node);
-            }
+            StructDiffNode parent = node.Parent;
+            Attach(parent);
+            node.Attached = true;
+            _r.Add(parent, node);
         }
 
         /// <summary>一致した行を加える (記録する数の上限まで)。</summary>

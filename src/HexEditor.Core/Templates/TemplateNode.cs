@@ -233,6 +233,23 @@ public sealed class TemplateNode
 
     public bool HasError => Kind == TemplateNodeKind.Error || Diagnostics.Any(d => d.Severity == TemplateSeverity.Error);
 
+    /// <summary>エラーの診断を持つか (一覧を写さずに調べる。構造の比較で使う)。</summary>
+    internal bool HasErrorFast
+    {
+        get
+        {
+            if (DiagnosticsList is null)
+            {
+                return false;
+            }
+
+            lock (Result.SyncRoot)
+            {
+                return DiagnosticsList.Any(d => d.Severity == TemplateSeverity.Error);
+            }
+        }
+    }
+
     public bool HasWarning => Diagnostics.Any(d => d.Severity == TemplateSeverity.Warning);
 
     /// <summary>パス (例: <c>chunks[3].header.width</c>。TPL-21 の仕様 6)。</summary>

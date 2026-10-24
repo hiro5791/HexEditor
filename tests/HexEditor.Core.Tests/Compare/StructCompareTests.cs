@@ -242,6 +242,7 @@ public sealed class StructCompareTests
 
     [Fact]
     [Trait(TC, "TC-ANA-31-11")]
+    [Trait("Category", "Nightly")]
     public void FieldLimitStopsAndRaisingItComparesEverything()
     {
         TemplateProgram many = FromText(TestDataCatalog.StructManyHxt, "many.hxt");
