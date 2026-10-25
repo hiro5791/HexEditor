@@ -7,6 +7,7 @@
 - OS のツールで作るファイルシステムのイメージは、作るたびにバイト単位では同じにならない。これらは生成時に内容の一覧 (マニフェスト) を記録し、テストはマニフェストと比べる。
 - 「保管」と書いたものは生成ツールでは作れない (macOS・他社製ツール・BitLocker が必要など)。一度だけ作って、テスト用の保管場所 (リポジトリの外。場所は未決定) に置き、生成ツールはそこから取得する。Linux のツールが必要なものは、生成ツールが WSL を使って作る。
 - 各テストケースのファイルの末尾にある「このファイルで使うテストデータ」の表は、後でこの一覧に統合する。
+- 手動テストだけで使う小さなテストデータ (TD-READONLY、TD-FIND-JA-UTF8、TD-TPL-COLOR3、TD-INSP-BM-SET、TD-UI-PROFILE-A11Y、`--test-hooks` の TD-VIEW-HOOK-READERR など) は、手動テスト支援ツールの準備 (`tools/HexEditor.ManualTests` の CaseSetup) が作る。準備で作れないもの (TD-VHDX-*・TD-FOR-BITLOCKER) の用意のしかたは [manual-test-prepare.md](manual-test-prepare.md) の 3 章。
 
 ## 1. 共通のテストデータ
 

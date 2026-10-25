@@ -1,62 +1,57 @@
-﻿using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+﻿using Microsoft.UI.Xaml;
 
 namespace ManualTestRunner;
 
 /// <summary>
-/// Provides application-specific behavior to supplement the default Application class.
+/// 開発中の確認用の印 (HexEditor の DevOptions と同じ %TEMP%\HexEditor\dev-no-activate)。印があるときは、ツールのウィンドウを常に手前に
+/// せず、アクティブにもしない (作業中の利用者のキー入力を奪わない。ツール自身の UI テストもこの印を置いて動かす)。
 /// </summary>
+public static class DevOptions
+{
+    public static string NoActivateMarker => Path.Combine(Path.GetTempPath(), "HexEditor", "dev-no-activate");
+
+    public static bool NoActivate => File.Exists(NoActivateMarker);
+}
+
+/// <summary>手動テスト支援ツールのアプリ。</summary>
 public partial class App : Application
 {
     private Window? _window;
 
-    /// <summary>
-    /// Initializes the singleton application object.  This is the first line of authored code
-    /// executed, and as such is the logical equivalent of main() or WinMain().
-    /// </summary>
     public App()
     {
         InitializeComponent();
     }
 
-    /// <summary>
-    /// Invoked when the application is launched.
-    /// </summary>
-    /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         _window = new MainWindow();
-
-        // 開発中の確認 (dev-no-activate) では、起動後に前のウィンドウへフォーカスを戻し、自分は後ろに回る。
-        bool noActivate = File.Exists(System.IO.Path.Combine(System.IO.Path.GetTempPath(), "HexEditor", "dev-no-activate"));
-        nint previous = noActivate ? GetForegroundWindow() : 0;
-        _window.Activate();
-        if (previous != 0)
+        if (!DevOptions.NoActivate)
         {
-            nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(_window);
-            SetWindowPos(hwnd, 1, 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0010);
-            SetForegroundWindow(previous);
+            _window.Activate();
+            return;
         }
+
+        // WS_EX_NOACTIVATE を付けてから Activate する (HexEditor の TestHooks.ShowWithoutActivation と同じ)。Activate しないと中身が
+        // 読み込まれず、付けないと XAML のフォーカスの移動でウィンドウがアクティブになる。表示したら一番後ろに回す。
+        nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(_window);
+        SetWindowLongPtr(hwnd, GwlExStyle, GetWindowLongPtr(hwnd, GwlExStyle) | WsExNoActivate);
+        _window.Activate();
+        SetWindowPos(hwnd, HwndBottom, 0, 0, 0, 0, SwpNoSize | SwpNoMove | SwpNoActivate);
     }
 
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
-    private static extern nint GetForegroundWindow();
+    private const int GwlExStyle = -20;
+    private const nint WsExNoActivate = 0x08000000;
+    private const nint HwndBottom = 1;
+    private const uint SwpNoSize = 0x0001;
+    private const uint SwpNoMove = 0x0002;
+    private const uint SwpNoActivate = 0x0010;
 
     [System.Runtime.InteropServices.DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(nint hWnd);
+    private static extern nint GetWindowLongPtr(nint hWnd, int index);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern nint SetWindowLongPtr(nint hWnd, int index, nint value);
 
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     private static extern bool SetWindowPos(nint hWnd, nint after, int x, int y, int cx, int cy, uint flags);

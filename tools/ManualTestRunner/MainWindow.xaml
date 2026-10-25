@@ -38,6 +38,20 @@
                 HorizontalAlignment="Stretch"
                 SelectionChanged="Filter_Changed" />
             <TextBox x:Name="FeatureFilter" Header="機能 ID (例: ENG-28)" TextChanged="FeatureFilter_TextChanged" />
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <CheckBox
+                    x:Name="HideEquipment"
+                    Checked="HideEquipment_Changed"
+                    Content="機材が必要なテストを除く"
+                    IsChecked="True"
+                    ToolTipService.ToolTip="USB メモリ・プリンタ・別の PC などが要るテストを一覧に出さない。報告には「機材が必要なため今回は実施しない」として書く"
+                    Unchecked="HideEquipment_Changed" />
+                <TextBlock
+                    x:Name="HiddenCount"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    IsTextSelectionEnabled="True" />
+            </StackPanel>
         </StackPanel>
 
         <ListView
@@ -47,7 +61,7 @@
             SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:CaseItem">
-                    <StackPanel Padding="0,4">
+                    <StackPanel Padding="0,4" AutomationProperties.Name="{x:Bind Header}">
                         <TextBlock FontWeight="SemiBold" Text="{x:Bind Header}" />
                         <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" />
                     </StackPanel>
@@ -56,9 +70,9 @@
         </ListView>
 
         <StackPanel Grid.Row="2" Spacing="6">
-            <TextBlock x:Name="Summary" TextWrapping="Wrap" />
+            <TextBlock x:Name="Summary" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
             <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Click="Report_Click" Content="報告を書き出す" />
+                <Button x:Name="ReportButton" Click="Report_Click" Content="報告を書き出す" />
                 <Button Click="NewRun_Click" Content="新しく始める" />
             </StackPanel>
             <CheckBox x:Name="TopMost" Checked="TopMost_Changed" Content="常に手前に表示" Unchecked="TopMost_Changed" />
@@ -79,15 +93,42 @@
                         VerticalAlignment="Top"
                         Click="CopyAll_Click"
                         Content="すべてコピー"
-                        ToolTipService.ToolTip="テストケースの番号・名前・前提・手順・期待結果をまとめてコピーする" />
+                        ToolTipService.ToolTip="テストケースの番号・名前・準備の手順・手順・期待結果をまとめてコピーする" />
                 </Grid>
-                <TextBlock x:Name="CaseFields" IsTextSelectionEnabled="True" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
-                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="前提" />
-                <TextBlock x:Name="Precondition" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Click="Prepare_Click" Content="準備" Style="{StaticResource AccentButtonStyle}" />
-                    <TextBlock x:Name="PrepareStatus" IsTextSelectionEnabled="True" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <TextBlock x:Name="CaseFields" Foreground="{ThemeResource TextFillColorSecondaryBrush}" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="準備の手順" />
+                <Border
+                    Padding="12"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <StackPanel x:Name="PrepPanel" Spacing="4" />
+                </Border>
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button
+                            x:Name="PrepareButton"
+                            Click="Prepare_Click"
+                            Content="準備"
+                            Style="{StaticResource AccentButtonStyle}"
+                            ToolTipService.ToolTip="テストデータとテスト用の設定フォルダを作り、HexEditor を起動する" />
+                        <Button x:Name="MakeVhd" Click="MakeVhd_Click" Content="仮想ディスクを作る (管理者の確認が出ます)" Visibility="Collapsed" />
+                        <Button x:Name="RemoveVhd" Click="RemoveVhd_Click" Content="仮想ディスクを外す" Visibility="Collapsed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button x:Name="BuildPortable" Click="BuildPortable_Click" Content="ポータブル版を作る (数分かかります)" Visibility="Collapsed" />
+                        <Button x:Name="BuildInstaller" Click="BuildInstaller_Click" Content="インストーラ版を作ってインストールする (数分かかります)" Visibility="Collapsed" />
+                    </StackPanel>
+                    <TextBlock x:Name="PrepareStatus" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                    <TextBlock
+                        x:Name="ToolStatus"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        IsTextSelectionEnabled="True"
+                        TextWrapping="Wrap" />
                 </StackPanel>
+
                 <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="手順" />
                 <StackPanel x:Name="Steps" Spacing="2" />
                 <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="期待結果" />
@@ -102,7 +143,7 @@
                 <Button Click="Fail_Click" Content="不合格" />
                 <Button Click="Hold_Click" Content="保留" />
                 <Button Click="NotApplicable_Click" Content="対象外" />
-                <TextBlock x:Name="CurrentResult" VerticalAlignment="Center" />
+                <TextBlock x:Name="CurrentResult" VerticalAlignment="Center" IsTextSelectionEnabled="True" />
             </StackPanel>
         </StackPanel>
     </Grid>
