@@ -17,8 +17,9 @@ namespace HexEditor.App;
 /// <summary>ディスク・プロセスを開く・書き込む (ENG-28〜ENG-34、VIEW-32)。</summary>
 public sealed partial class MainWindow
 {
-    private const string ShieldGlyph = ""; // Segoe Fluent: Permissions (盾)。
-    private const string LockGlyph = "";    // Lock。
+    // 記号のフォント (SymbolThemeFontFamily) の私用領域の文字。エスケープで書く (文字そのものを書くと、エディタ・変換で消えることがある)。
+    private const string ShieldGlyph = "\uE1A7"; // Segoe Fluent: Admin (盾。ステータスバーの補助プロセスの表示と同じ)。
+    private const string LockGlyph = "\uE72E";   // Lock。
 
     /// <summary>インストーラ版・ポータブル版のダウンロードページ (ENG-28 の仕様 12 の 5)。</summary>
     internal const string DownloadPageUrl = AboutInfo.RepositoryUrl + "/releases/latest";

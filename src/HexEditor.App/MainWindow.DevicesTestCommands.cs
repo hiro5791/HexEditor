@@ -4,6 +4,8 @@ using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Devices;
 using HexEditor.Core.Processes;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace HexEditor.App;
 
@@ -18,6 +20,63 @@ public sealed partial class MainWindow
     {
         switch (cmd)
         {
+            case "focusClearance":
+            {
+                // 要素の外側の、切り取られずに描ける幅 (エピクセル): 祖先の ScrollViewer (中身を自分の大きさで切り取る) の端までの
+                // 距離の最小。フォーカスの枠 (ComboBox は外側に 4 px、CheckBox は左右に 7 px) が切れないかを確かめる。
+                if (FindElement(request["id"]!.GetValue<string>()) is not { } element || element.XamlRoot is null)
+                {
+                    return new JsonObject { ["found"] = false };
+                }
+
+                Windows.Foundation.Rect bounds = element.TransformToVisual(null).TransformBounds(new Windows.Foundation.Rect(0, 0, element.ActualWidth, element.ActualHeight));
+                double left = double.MaxValue, top = double.MaxValue, right = double.MaxValue, bottom = double.MaxValue;
+                for (DependencyObject? parent = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(element); parent is not null and not ContentDialog;
+                     parent = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(parent))
+                {
+                    if (parent is ScrollViewer scroll)
+                    {
+                        Windows.Foundation.Rect clip = scroll.TransformToVisual(null).TransformBounds(new Windows.Foundation.Rect(0, 0, scroll.ActualWidth, scroll.ActualHeight));
+                        left = Math.Min(left, bounds.X - clip.X);
+                        top = Math.Min(top, bounds.Y - clip.Y);
+                        right = Math.Min(right, clip.X + clip.Width - (bounds.X + bounds.Width));
+                        bottom = Math.Min(bottom, clip.Y + clip.Height - (bounds.Y + bounds.Height));
+                    }
+                }
+
+                return new JsonObject { ["found"] = true, ["left"] = left, ["top"] = top, ["right"] = right, ["bottom"] = bottom };
+            }
+
+            case "deviceListRows":
+            {
+                // 「ディスクを開く」「プロセスを開く」の一覧の行 (表示している行): アイコンの文字、名前・詳しい情報の文字と左端の位置。
+                if (FindElement(request["id"]!.GetValue<string>()) is not ListView list)
+                {
+                    return new JsonObject { ["found"] = false };
+                }
+
+                var rows = new JsonArray();
+                for (int i = 0; i < list.Items.Count; i++)
+                {
+                    if (list.ContainerFromIndex(i) is ListViewItem { ContentTemplateRoot: Grid { Children: [FontIcon icon, StackPanel { Children: [TextBlock text, TextBlock detail] }] } } item)
+                    {
+                        rows.Add(new JsonObject
+                        {
+                            ["name"] = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(item),
+                            ["glyph"] = icon.Glyph,
+                            ["iconVisible"] = icon.Visibility == Visibility.Visible,
+                            ["iconFont"] = icon.FontFamily?.Source,
+                            ["text"] = text.Text,
+                            ["detail"] = detail.Text,
+                            ["textLeft"] = text.TransformToVisual(item).TransformPoint(default).X,
+                            ["detailLeft"] = detail.TransformToVisual(item).TransformPoint(default).X,
+                        });
+                    }
+                }
+
+                return new JsonObject { ["found"] = true, ["rows"] = rows };
+            }
+
             case "enumDevices":
             {
                 DeviceCatalog catalog = App.Devices.EnumerateDevices();
