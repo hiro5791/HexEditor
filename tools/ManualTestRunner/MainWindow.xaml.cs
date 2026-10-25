@@ -114,7 +114,18 @@ public sealed partial class MainWindow : Window
         Steps.Children.Clear();
         for (int i = 0; i < c.Steps.Count; i++)
         {
-            Steps.Children.Add(new CheckBox { Content = new TextBlock { Text = $"{i + 1}. {c.Steps[i]}", TextWrapping = TextWrapping.Wrap } });
+            // チェックボックスの中の文字は選べないので、チェックボックスの右に選べる文字を置く (手順をコピーできるように)。
+            var row = new Grid { ColumnSpacing = 4 };
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            string stepText = $"{i + 1}. {c.Steps[i]}";
+            var check = new CheckBox { MinWidth = 0 };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(check, stepText);
+            var text = new TextBlock { Text = stepText, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true, VerticalAlignment = VerticalAlignment.Center };
+            Grid.SetColumn(text, 1);
+            row.Children.Add(check);
+            row.Children.Add(text);
+            Steps.Children.Add(row);
         }
 
         Expected.Text = string.Join(Environment.NewLine, c.Expected.Select(e => "・" + e));
@@ -137,6 +148,36 @@ public sealed partial class MainWindow : Window
         int index = CaseList.SelectedIndex;
         Refresh();
         CaseList.SelectedIndex = Math.Min(index + 1, CaseList.Items.Count - 1);
+    }
+
+    /// <summary>今のテストケースの内容をまとめてクリップボードへ (利用者がボタンを押したときだけ)。</summary>
+    private void CopyAll_Click(object sender, RoutedEventArgs e)
+    {
+        if (_current is not { } c)
+        {
+            return;
+        }
+
+        var text = new System.Text.StringBuilder();
+        text.AppendLine(CaseTitle.Text);
+        text.AppendLine(CaseFields.Text);
+        text.AppendLine();
+        text.AppendLine("前提:");
+        text.AppendLine(c.Precondition);
+        text.AppendLine();
+        text.AppendLine("手順:");
+        for (int i = 0; i < c.Steps.Count; i++)
+        {
+            text.AppendLine($"{i + 1}. {c.Steps[i]}");
+        }
+
+        text.AppendLine();
+        text.AppendLine("期待結果:");
+        text.AppendLine(Expected.Text);
+        var package = new Windows.ApplicationModel.DataTransfer.DataPackage();
+        package.SetText(text.ToString());
+        Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(package);
+        PrepareStatus.Text = "テストケースの内容をコピーしました。";
     }
 
     private bool _filterRestored;
