@@ -9867,4 +9867,414 @@ SHA-256 指紋: {2}
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分鐘</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} 小時</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>起始位置在文件之外。</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>請輸入 {0} 到 {1} 位元組的記錄長度。</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>請選取至少包含 4 筆記錄的範圍。</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>請選取至少 {0} 位元組的範圍。</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>只能讀取 {0, plural, other {# 筆記錄}}，至少需要 4 筆。</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>所有 {0} 筆記錄中皆為 00。</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>所有 {1} 筆記錄中的值皆為 {0}。</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>所有 {1} 筆記錄中的值皆為 {0}。</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% 為 ASCII 字串（最長 {1} 個字元）。</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% 為 UTF-16 字串（最長 {1} 個字元）。</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>在 {1} 筆記錄中的 {0} 筆裡，值 = {2} + {3} × 記錄編號。</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% 為 UNIX 時間（秒），範圍從 {1} 到 {2}。</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% 為 64 位元 UNIX 時間（秒），範圍從 {1} 到 {2}。</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% 為 Windows FILETIME 值，範圍從 {1} 到 {2}。</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% 為 MS-DOS 日期和時間，範圍從 {1} 到 {2}。</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>所有值都小於文件長度（{0}），{1}% 是 {2} 的倍數，且隨記錄編號遞增。</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>所有非零值都小於文件長度（{0}），其中 {1}% 互不相同。</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>在 {0}% 的連續記錄中，等於與下一筆記錄的 {1} 之差。</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>每筆記錄中，{0} + 值都不會超出文件。</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% 為合理的浮點數值（{1} 種不同的值）。</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} 位元：{1}。</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} 種不同的值：{1}。</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>值從 {0} 到 {1}；沒有符合的規則。</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>每個位元組的熵皆為 {0:0.0} 位元或更高（接近隨機）。</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} 位元組，不符合任何規則。</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>以浮點數來看，只有 {0}% 是合理的值。</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>以日期來看，只有 {0}% 介於 1980 年和 2100 年之間。</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>以計數器來看，只有 {0}% 符合該序列。</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>以字串來看，只有 {0}% 以可列印字元開頭。</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>填補沒有名稱。</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>「{0}」不是有效的名稱。請使用字母、數字和 _，且不要以數字開頭。</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>「{0}」是保留字或型別名稱。</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>已有另一個欄位名為「{0}」。</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>由範本推斷產生的草稿 (TPL-38)。這只是推測，使用前請先檢查。</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>來源：{0}，範圍 {1}–{2}，記錄長度 {3}，{4, plural, other {# 筆記錄}}，{5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>推斷出的記錄（{0}）</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0}（信賴度{1}）：{2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>填補</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>魔術數字</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>常數</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>計數器</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>日期和時間</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>位移</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>浮點數</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>字串</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>字串 (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>旗標</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>列舉</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>整數</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>範本推斷</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>從選取範圍推斷範本(I)...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>範本推斷(1)</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>從選取範圍推斷範本...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>推斷此長度的範本</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>從選取範圍推斷</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;推斷;推測;結構</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>重新推斷</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;重新推斷;重新執行</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>套用推斷出的草稿</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;套用;草稿</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>在編輯器中開啟推斷出的草稿</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;編輯;草稿</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>顯示推斷面板</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;推斷;面板</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>範本推斷面板</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;推斷</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>記錄長度</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>記錄數</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>整個範圍</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>位元組順序</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>小端序</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>大端序</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>推斷</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>重新推斷</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>記錄長度候選</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} 位元組 · 分數 {1} · {2, plural, other {# 筆記錄}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>欄位</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>草稿 (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>套用</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>在編輯器中開啟</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>複製</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>已複製草稿。</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>請先開啟文件，再推斷範本。</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>請先推斷範本。</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>請以數字或運算式輸入起始位置。</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>請以數字或運算式輸入長度。</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>請輸入記錄數；留空表示使用整個範圍。</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>正在推斷...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>範本推斷</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>找不到固定長度的記錄。請輸入記錄長度。</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>無法推斷可變長度的記錄（其大小取決於長度欄位）。</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>記錄長度 {0}，{1, plural, other {# 筆記錄}}（推斷使用了 {2} 筆）。</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>小端序。</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>大端序。</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>有 {0, plural, other {# 筆記錄}}無法讀取，已被排除。</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>最後 {0, plural, other {# 位元組}}不足以構成一筆記錄。</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>內部錯誤：草稿存在語法錯誤（{0}）。</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}，{1}，{2}，{3}，信賴度{4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>無名稱</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>（警告：信賴度低）</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>（已手動變更）</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>已變更</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>候選：{0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>重新命名</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>與上一個欄位合併</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>分割...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>在此位元組數之後分割 (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>同時比較結構</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>比較檔案時，也會依結構範本解析出的結構（逐一欄位）進行比較。當兩側都符合同一個範本時，會自動選擇該範本。</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>結構比較：包含隱藏的模式</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>同時比較範本中標示為隱藏的模式。</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>結構比較：最大欄位數</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>兩側各比較完這麼多個欄位後停止結構比較（10,000 到 10,000,000）。</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>結構比較：陣列比對</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>陣列元素的比對方式，依範本和陣列分別設定。可在「結構差異」面板中透過「比對方式...」變更。</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較：比較結構</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff 結構 欄位 範本 差異</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比較：選擇結構比較使用的範本</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose 結構 範本 選擇</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比較：在結構差異之間移動</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target 下一個 上一個 結構 目標</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比較：顯示結構差異</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel 結構差異 面板</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比較：下一個結構差異</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field 結構 下一個 欄位</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比較：上一個結構差異</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field 結構 上一個 欄位</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比較：匯出結構差異</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report 結構 匯出 報告</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>切換結構差異</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel 結構差異 面板</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>結構差異(9)</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>比較結構(R)</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>選擇結構比較使用的範本(H)...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>同時比較結構</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>選擇結構比較使用的範本</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>比較</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>左側起始位移</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>右側起始位移</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>結構比較</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>結構差異</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>選擇範本</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>已比較 {0} 個欄位</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>範本：{0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>處理程序記憶體快照不支援結構比較。</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>移至左側資料</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>移至右側資料</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>複製路徑</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>複製列</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>複製左右兩側的值</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>在左側新增書籤</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>在右側新增書籤</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>比對方式...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>在左側結果樹狀結構中顯示</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>在右側結果樹狀結構中顯示</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>結構比較：{0}，{1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>中途停止（已取消）</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>已摺疊</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>已展開</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>左側的值</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>右側的值</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>左側位移</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>右側位移</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>比對</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}，{1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}，{1}，左 {2}，右 {3}，左 {4}，右 {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>，</value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>結構比較已關閉。請在比較索引標籤的工具列中開啟「同時比較結構」。</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>正在等待比較...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>請開啟比較索引標籤以檢視結構差異。</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>已完成，耗時 {0} 秒</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>正在比較：{0} 個欄位</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>已在欄位數上限處停止</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>結構比較失敗：{0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>欄位數已達上限（{0}），因此只比較了一部分。</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>顯示{0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>範本：{0}（{1}），左 {2} / 右 {3}。{4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>由您選擇。</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>兩側套用了同一個範本。</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>兩側的魔術數字相符。</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>結構差異</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>已變更</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>已新增</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>已移除</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>已移動</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>已移動並變更</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>類型已變更</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>無法解析</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>相同</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>左側：{0} 個錯誤，{1} 個警告</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>右側：{0} 個錯誤，{1} 個警告</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>範本輸出（左側）</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>範本輸出（右側）</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>沒有錯誤或警告。</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>索引鍵：{0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>內容</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>（元素較多，已依位置比對）</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>沒有結構差異。</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>沒有結構比較結果。</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>沒有結構差異</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>已回到第一個結構差異</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>已回到最後一個結構差異</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>未為結構比較選定範本（兩側的魔術數字必須符合同一個範本）。只進行了位元組比較。</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>範本存在語法錯誤：{0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>找不到範本檔案：{0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>結構之外的差異</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} 處差異，{1} 位元組</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>（範圍之外）</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>（填補）</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>範本錯誤</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>因達到上限而未比較</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>因層級過深而未比較</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>已比較的欄位：左側 {0}，右側 {1}。{2}。結構之外：{3}。{4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>選擇範本...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>編輯範本</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>提高上限並重新比較</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>匯出...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>依名稱、路徑或值篩選</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>篩選</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>包含填補</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>顯示相符的欄位</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>摘要</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>結構差異</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>匯出結構差異</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>文字報告</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>列</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>顯示的列（篩選後）</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>所有差異</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>位移</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>十進位</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>十六進位</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>儲存...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>匯出結構差異</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>（左側 {0}，右側 {1}）</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>範本：{0}（{1}）</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>起始位移：左側 {0}，右側 {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>已比較的欄位：左側 {0}，右側 {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>結構之外的差異：{0}，{1} 位元組</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>範本錯誤和警告：左側 {0} / {1}，右側 {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>耗時：{0} 秒</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>比對方式</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>陣列：{0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>方式</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>索引鍵</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>內容</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>索引鍵欄位</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>正在篩選...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>格式結構</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>內嵌檔案</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>已壓縮</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>已加密或隨機</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>文字</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>零</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>填補</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>重複記錄</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>二進位</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>無法讀取</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>依取樣估計</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>零</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>常數 {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>文字（{0}）</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>重複記錄（{0, plural, other {# 位元組}}）</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>取樣</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>掃描</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>結構</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>依取樣估計：在 {1} 位元組的 {0, plural, other {# 個區間}}中，各取中間的 4 KiB。</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} 連續 {0, plural, other {# 位元組}}。</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, other {# 位元組}}無法讀取。</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>熵 {0} 位元/位元組，卡方檢定 p 值 {1}。</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>熵 {0} 位元/位元組。</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>逐區塊分類（{1} 位元組的 {0, plural, other {# 個區塊}}）。</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>從 {0} 起的 {1, plural, other {# 位元組}}。</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>範本「{0}」在 {2}–{3} 放置了模式 {1}（{4, plural, other {# 位元組}}）。</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{0} 處有 {1} 簽章。</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>範本「{0}」解析了 {1}–{2}（{3, plural, other {# 位元組}}）。</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>範本「{0}」無法解析該資料（{1}）。</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>雕刻定義「{1}」給出的長度為 {0, plural, other {# 位元組}}（{2}）。</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>結構檢查</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>大小欄位</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>結尾標記</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>最大大小</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>結束位置不明；假定該區域在 {0} 處的下一個區域之前結束（{1, plural, other {# 位元組}}）。</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>{1} 處的 {0} 資料流已解壓縮，且檢查碼相符（壓縮後 {2, plural, other {# 位元組}}，解壓縮後 {3} 位元組）。</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>位移 {0} 位元組時，有 {1} 的位元組相同（位移 1–{2} 的平均值：{3}）。</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>此地圖是根據簽章和統計估計的，可能有誤。</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>轉換檢視：{0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>文件：{0}（{1}），{2, plural, other {# 位元組}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>範圍：{0}–{1}（{2, plural, other {# 位元組}}）</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>所有階段均已完成。</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>並非所有階段都已完成（其餘部分依取樣估計）。</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>依種類統計的位元組數：</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}：{1, plural, other {# 位元組}}（{2}）</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, other {# 個區域}}：</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>以及另外 {0, plural, other {# 個區域}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>建立檔案地圖</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout 檔案地圖 概觀 區域 版面配置</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>重建檔案地圖</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh 檔案地圖 重新建立 重新整理</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>顯示檔案地圖</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel 檔案地圖 面板</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>匯出檔案地圖</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report 檔案地圖 匯出 報告</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>對找到的檔案套用範本</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates 檔案地圖 內嵌檔案 範本</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>切換檔案地圖面板</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel 檔案地圖 面板</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>檔案地圖</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>檔案地圖</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>檔案地圖</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>檔案地圖</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>建立檔案地圖</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>檔案地圖</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>匯出檔案地圖</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>檔案地圖：內嵌檔案的範本</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>當檔案地圖發現範本可以解析的內嵌檔案時，建議套用範本。絕不會自動套用範本。</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>建議</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>不執行任何動作</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>概觀（取樣）</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>完整掃描</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>結構分析</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>尚無檔案地圖。建立一個，即可檢視文件中各處是什麼。</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}：{1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>完成：{0} 個區域。</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>已停止（已掃描 {1}%）：{0} 個區域。其餘部分依取樣估計。</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>結果對應的是編輯之前的內容。</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>無法建立檔案地圖：{0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>請透過「分析」&gt;「檔案地圖」或上方的「建立」來建立檔案地圖。</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>另有 {0, plural, other {# 個內嵌格式候選}}未保留。</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>建立</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>重建</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>匯出</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>文字報告...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>檔案地圖進度</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>放大</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>縮小</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>顯示整個地圖</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>以表格顯示</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>檔案地圖帶：結構通道和內容通道</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>捲動檔案地圖帶</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>圖例</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}：{1, plural, other {# 位元組}}（{2}）</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>檔案地圖區域</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>顯示種類</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>所有種類</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>將列出的列加入書籤</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>將列出的列加入多重選取</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>結束（含）</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>長度</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>標籤</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>信賴度</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>階段</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>請在地圖帶或清單中選取一個區域。</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1}（{2, plural, other {# 位元組}}）</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}，{1}，起始於 {2}，{3, plural, other {# 位元組}}，信賴度{4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>信賴度：{0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>階段：{0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>範本：{0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>選取範圍</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>新增書籤</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>套用範本「{0}」</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>在新索引標籤中開啟</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>從此處解壓縮...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>推斷範本...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>擷取字串...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>另存為檔案...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>無法使用範本推斷。</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>此文件沒有檔案地圖。</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>檔案地圖中沒有附範本的內嵌檔案。</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>找到 {0, plural, other {# 個內嵌檔案}}。要套用範本嗎？</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>套用</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>顯示清單</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>已對 {0, plural, other {# 個內嵌檔案}}套用範本。</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>已對 {0} 個內嵌檔案套用範本。有 {1, plural, other {# 個檔案}}未套用，因為一份文件最多只能有 {2} 個套用。</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>已將檔案地圖匯出到 {0}。</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>無法匯出檔案地圖：{0}</value></data>
 </root>

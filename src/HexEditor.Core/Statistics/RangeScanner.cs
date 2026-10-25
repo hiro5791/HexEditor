@@ -77,6 +77,10 @@ internal sealed class RangeScanner(DocumentSnapshot snapshot, LogicalRanges rang
         for (int i = 0; i < pieces.Count; i++)
         {
             token.ThrowIfCancellationRequested();
+
+            // 読み込みの完了を待つ間もキャンセルを受け付ける (遅いデータソースでもすぐに止まる。ANA-33 の「キャンセルは 100 ms 以内」)。
+            // 読みかけのバッファはもう使わない。
+            pending.Wait(token);
             List<(int, int)> bad = pending.GetAwaiter().GetResult();
             (long logical, long document, int length) = pieces[i];
             if (i + 1 < pieces.Count)

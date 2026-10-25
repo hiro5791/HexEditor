@@ -97,6 +97,18 @@ public sealed partial class StringsPanel : UserControl
     /// <summary>抽出中か。</summary>
     public bool IsRunning => _running is not null;
 
+    /// <summary>範囲を指定した状態にする (ファイルマップのテキストの領域の「文字列を抽出...」。ANA-34 の仕様 6)。</summary>
+    public void SetRange(long start, long endInclusive)
+    {
+        _scope.SelectedIndex = 2;
+        _rangeStart.Text = "0x" + start.ToString("X", CultureInfo.InvariantCulture);
+        _rangeEnd.Text = "0x" + endInclusive.ToString("X", CultureInfo.InvariantCulture);
+        Validate();
+    }
+
+    /// <summary>テスト用: 範囲の欄 (開始、終了)。</summary>
+    internal (int Scope, string Start, string End) RangeFields => (_scope.SelectedIndex, _rangeStart.Text, _rangeEnd.Text);
+
     /// <summary>テスト用: 文字コードを選ぶ。</summary>
     internal void SetEncodings(IReadOnlyList<string> ids)
     {

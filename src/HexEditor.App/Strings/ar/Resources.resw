@@ -9869,4 +9869,414 @@
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} ث</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} د</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} س</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>البداية خارج المستند.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>أدخل طول سجل من {0} إلى {1} بايت.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>حدّد نطاقًا يحتوي على 4 سجلات على الأقل.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>حدّد نطاقًا لا يقل عن {0} بايت.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>أمكن قراءة {0, plural, zero {# سجل} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلًا} other {# سجل}} فقط. يلزم 4 سجلات على الأقل.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 في جميع السجلات الـ {0}.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>القيمة نفسها {0} في جميع السجلات الـ {1}.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>القيمة نفسها {0} في جميع السجلات الـ {1}.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% سلاسل ASCII (حتى {1} حرفًا).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% سلاسل UTF-16 (حتى {1} حرفًا).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>في {0} من {1} سجلًا، القيمة = {2} + {3} × رقم السجل.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% أوقات UNIX (بالثواني) من {1} إلى {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% أوقات UNIX بنظام 64 بت (بالثواني) من {1} إلى {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% قيم FILETIME في Windows من {1} إلى {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% تواريخ وأوقات MS-DOS من {1} إلى {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>جميع القيم أقل من طول المستند ({0})، و{1}% منها من مضاعفات {2}، وتزداد مع رقم السجل.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>جميع القيم غير الصفرية أقل من طول المستند ({0}) و{1}% منها مختلفة.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>في {0}% من السجلات المتتالية، تساوي الفرق عن {1} في السجل التالي.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + القيمة تبقى داخل المستند في كل سجل.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% قيم فاصلة عائمة معقولة ({1} قيمة مختلفة).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} بت: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} قيمة مختلفة: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>قيم من {0} إلى {1}؛ لم تنطبق أي قاعدة.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>لكل بايت إنتروبيا {0:0.0} بت أو أكثر (قريبة من العشوائية).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} بايت لا تطابق أي قاعدة.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>كفاصلة عائمة، {0}% فقط قيم معقولة.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>كتاريخ، {0}% فقط بين عامي 1980 و2100.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>كعدّاد، {0}% فقط تتبع التسلسل.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>كسلسلة، {0}% فقط تبدأ بحرف قابل للطباعة.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>الحشو ليس له اسم.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>"{0}" ليس اسمًا صالحًا. استخدم الحروف والأرقام و_، ولا تبدأ برقم.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>"{0}" كلمة محجوزة أو اسم نوع.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>هناك حقل آخر يحمل الاسم "{0}" بالفعل.</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>مسودة أنشأها استنتاج القالب (TPL-38). هي مجرد تخمين، فتحقق منها قبل استخدامها.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>المصدر: {0}، النطاق {1}–{2}، طول السجل {3}، {4, plural, zero {# سجل} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلًا} other {# سجل}}، {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>السجلات المستنتجة ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (الثقة: {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>حشو</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>رقم سحري</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>ثابت</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>عدّاد</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>التاريخ والوقت</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>إزاحة</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>طول</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>فاصلة عائمة</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>سلسلة</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>سلسلة (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>أعلام</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>تعداد</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>عدد صحيح</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>غير معروف</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>عالية</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>متوسطة</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>منخفضة</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>استنتاج القالب</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>استنتاج قالب من التحديد...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>استنتاج القالب</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>استنتاج قالب من التحديد...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>استنتاج قالب بهذا الطول</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>استنتاج من التحديد</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;استنتاج;تخمين;بنية</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>استنتاج مجددًا</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;استنتاج مجددًا;إعادة التشغيل</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>تطبيق المسودة المستنتجة</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;تطبيق;مسودة</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>فتح المسودة المستنتجة في المحرر</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;تحرير;مسودة</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>إظهار لوحة الاستنتاج</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;استنتاج;لوحة</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>لوحة استنتاج القالب</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;استنتاج</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>البداية</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>الطول</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>طول السجل</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>تلقائي</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>السجلات</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>النطاق بالكامل</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>ترتيب البايتات</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>تلقائي</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>استنتاج</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>استنتاج مجددًا</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>أطوال السجل المرشحة</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} بايت · الدرجة {1} · {2, plural, zero {# سجل} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلًا} other {# سجل}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>الحقول</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>المسودة (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>تطبيق</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>فتح في المحرر</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>نسخ</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>تم نسخ المسودة.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>افتح مستندًا لاستنتاج قالب.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>استنتج قالبًا أولًا.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>أدخل البداية كرقم أو تعبير.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>أدخل الطول كرقم أو تعبير.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>أدخل عدد السجلات، أو اتركه فارغًا لاستخدام النطاق بالكامل.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>جارٍ الاستنتاج...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>استنتاج القالب</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>لم يُعثر على سجلات ذات طول ثابت. أدخل طول السجل.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>لا يمكن استنتاج السجلات ذات الطول المتغير (التي يعتمد حجمها على حقل طول).</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>طول السجل {0}، {1, plural, zero {# سجل} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلًا} other {# سجل}} (استُخدم {2} للاستنتاج).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>تعذرت قراءة {0, plural, zero {# سجل} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلًا} other {# سجل}} وتم استبعادها.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>آخر {0, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} لا تتسع في سجل.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>خطأ داخلي: المسودة تحتوي على أخطاء في الصياغة ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}، {1}، {2}، {3}، الثقة: {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>بلا اسم</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(تحذير: ثقة منخفضة)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(عُدّل يدويًا)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>معدّل</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>المرشحات: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>إعادة تسمية</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>دمج مع الحقل السابق</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>تقسيم...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>التقسيم بعد هذا العدد من البايتات (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>مقارنة البنية أيضًا</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>عند مقارنة الملفات، تُقارَن أيضًا البُنى التي يعثر عليها قالب بنية (حقلًا بحقل). يُختار القالب تلقائيًا عندما يطابق الجانبان القالب نفسه.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>مقارنة البنية: تضمين الأنماط المخفية</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>قارن أيضًا الأنماط المعلَّمة كمخفية في القالب.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>مقارنة البنية: الحد الأقصى للحقول</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>إيقاف مقارنة البنية بعد مقارنة هذا العدد من الحقول في كل جانب (من 10,000 إلى 10,000,000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>مقارنة البنية: مطابقة المصفوفات</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>كيفية مطابقة عناصر المصفوفة، لكل قالب ومصفوفة. غيّرها من "طريقة المطابقة..." في لوحة اختلافات البنية.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>المقارنة: مقارنة البنية</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff بنية حقل قالب اختلاف</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>المقارنة: اختيار القالب لمقارنة البنية</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose بنية قالب اختيار</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>المقارنة: التنقل بين اختلافات البنية</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target التالي السابق بنية هدف</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>المقارنة: إظهار اختلافات البنية</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel اختلافات البنية لوحة</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>المقارنة: اختلاف البنية التالي</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field بنية التالي حقل</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>المقارنة: اختلاف البنية السابق</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field بنية السابق حقل</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>المقارنة: تصدير اختلافات البنية</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report بنية تصدير تقرير</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>تبديل اختلافات البنية</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel اختلافات البنية لوحة</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>اختلافات البنية</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>مقارنة البنية</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>اختيار القالب لمقارنة البنية...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>خ</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>مقارنة البنية أيضًا</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>اختيار القالب لمقارنة البنية</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>مقارنة</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>إزاحة البداية اليسرى</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>إزاحة البداية اليمنى</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>مقارنة البنية</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>اختلافات البنية</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>اختيار القالب</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>تمت مقارنة {0} حقل</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>القالب: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>مقارنة البنية غير متاحة للقطات ذاكرة العمليات.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>الانتقال إلى بيانات اليسار</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>الانتقال إلى بيانات اليمين</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>نسخ المسار</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>نسخ الصف</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>نسخ القيمتين اليسرى واليمنى</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>إضافة إشارة مرجعية في اليسار</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>إضافة إشارة مرجعية في اليمين</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>طريقة المطابقة...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>إظهار في شجرة النتائج اليسرى</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>إظهار في شجرة النتائج اليمنى</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>مقارنة البنية: {0}، {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>توقفت في المنتصف (أُلغيت)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>مطوية</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>موسّعة</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>الاسم</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>الصنف</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>القيمة اليسرى</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>القيمة اليمنى</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>الإزاحة اليسرى</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>الإزاحة اليمنى</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>الحجم</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>المطابقة</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}، {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}، {1}، اليسار {2}، اليمين {3}، اليسار {4}، اليمين {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>، </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>مقارنة البنية متوقفة. شغّل "مقارنة البنية أيضًا" في شريط أدوات علامة تبويب المقارنة.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>بانتظار المقارنة...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>افتح علامة تبويب مقارنة لعرض اختلافات البنية.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>اكتملت في {0} ث</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>جارٍ المقارنة: {0} حقل</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>توقفت عند حد الحقول</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>فشلت مقارنة البنية: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>بلغ عدد الحقول الحد ({0})، لذا قورن جزء منها فقط.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>عرض {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>القالب: {0} ({1})، اليسار {2} / اليمين {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>اخترته أنت.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>طُبّق القالب نفسه على الجانبين.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>تطابق الرقم السحري في الجانبين.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>اختلافات البنية</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>تغيّر</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>أُضيف</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>أُزيل</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>نُقل</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>نُقل وتغيّر</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>تغيّر النوع</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>تعذر التحليل</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>متطابق</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>اليسار: {0} أخطاء، {1} تحذيرات</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>اليمين: {0} أخطاء، {1} تحذيرات</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>خرج القالب (اليسار)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>خرج القالب (اليمين)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>لا أخطاء ولا تحذيرات.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>المفتاح: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>المحتوى</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>الموضع</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(طُوبقت حسب الموضع لكثرة العناصر)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>لا توجد اختلافات في البنية.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>لا توجد نتيجة لمقارنة البنية.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>لا توجد اختلافات في البنية</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>عودة إلى أول اختلاف في البنية</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>عودة إلى آخر اختلاف في البنية</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>لم يُختر قالب لمقارنة البنية (يجب أن يطابق الجانبان القالب نفسه عبر الرقم السحري). أُجريت مقارنة البايتات فقط.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>القالب يحتوي على خطأ في الصياغة: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>لم يُعثر على ملف القالب: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>اختلافات خارج البنية</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} اختلاف، {1} بايت</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(خارج النطاق)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(حشو)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>خطأ في القالب</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>لم تتم المقارنة بسبب الحد الأقصى</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>لم تتم المقارنة لأنها عميقة جدًا</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>الحقول المقارَنة: اليسار {0}، اليمين {1}. {2}. خارج البنية: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>اختيار القالب...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>تحرير القالب</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>رفع الحد والمقارنة مجددًا</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>تصدير...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>تصفية بالاسم أو المسار أو القيمة</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>تصفية</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>تضمين الحشو</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>إظهار الحقول المتطابقة</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>ملخص</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>اختلافات البنية</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>تصدير اختلافات البنية</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>التنسيق</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>تقرير نصي</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>الصفوف</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>الصفوف المعروضة (بعد التصفية)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>جميع الاختلافات</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>الإزاحات</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>عشري</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>ست عشري</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>حفظ...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>تصدير اختلافات البنية</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(اليسار {0}، اليمين {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>القالب: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>إزاحات البداية: اليسار {0}، اليمين {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>الحقول المقارَنة: اليسار {0}، اليمين {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>الاختلافات خارج البنية: {0}، {1} بايت</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>أخطاء القالب وتحذيراته: اليسار {0} / {1}، اليمين {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>الزمن المنقضي: {0} ث</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>طريقة المطابقة</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>المصفوفة: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>الطريقة</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>تلقائي</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>المفتاح</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>المحتوى</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>الموضع</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>حقل المفتاح</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>جارٍ التصفية...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>بنية التنسيق</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>ملف مضمّن</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>مضغوط</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>مشفّر أو عشوائي</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>نص</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>صفر</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>حشو</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>سجلات متكررة</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>ثنائي</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>غير قابل للقراءة</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>مقدَّر من عيّنات</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>صفر</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>ثابت {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>نص ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>سجلات متكررة ({0, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>عالية</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>متوسطة</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>منخفضة</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>عيّنة</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>فحص</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>البنية</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>مقدَّر من عيّنات: الـ 4 KiB الأوسط من كل من {0, plural, zero {# فترة} one {فترة واحدة} two {فترتان} few {# فترات} many {# فترة} other {# فترة}} بحجم {1} بايت.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} متتالية من {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>تعذرت قراءة {0, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>الإنتروبيا {0} بت/بايت، قيمة p لاختبار مربع كاي {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>الإنتروبيا {0} بت/بايت.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>صُنّفت كتلة كتلة ({0, plural, zero {# كتلة} one {كتلة واحدة} two {كتلتان} few {# كتل} many {# كتلة} other {# كتلة}} بحجم {1} بايت).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} بدءًا من {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>وضع القالب "{0}" النمط {1} في {2}–{3} ({4, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>توقيع {1} في {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>حلّل القالب "{0}" المنطقة {1}–{2} ({3, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>تعذر على القالب "{0}" تحليل البيانات ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>أعطى تعريف carving "{1}" طولًا مقداره {0, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>فحص البنية</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>حقل الحجم</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>التذييل</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>الحجم الأقصى</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>النهاية غير معروفة؛ يُفترض أن المنطقة تنتهي قبل المنطقة التالية عند {0} ({1, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>فُكّ ضغط التدفق {0} عند {1} وتطابق مجموع التحقق ({2, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} مضغوطة، {3} بايت بعد فك الضغط).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>عند إزاحة {0} بايت، يتطابق {1} من البايتات (المتوسط للإزاحات 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>هذه الخريطة تقدير يستند إلى التواقيع والإحصاءات، وقد تكون خاطئة.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>عرض التحويل: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>المستند: {0} ({1})، {2, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>النطاق: {0}–{1} ({2, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>اكتملت جميع المراحل.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>لم تكتمل جميع المراحل (والباقي مقدَّر من عيّنات).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>البايتات حسب الصنف:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, zero {# منطقة} one {منطقة واحدة} two {منطقتان} few {# مناطق} many {# منطقة} other {# منطقة}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>و{0, plural, zero {# منطقة} one {منطقة واحدة} two {منطقتان} few {# مناطق} many {# منطقة} other {# منطقة}} أخرى</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>إنشاء خريطة الملف</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout خريطة الملف نظرة عامة مناطق تخطيط</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>إعادة بناء خريطة الملف</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh خريطة الملف إعادة إنشاء تحديث</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>إظهار خريطة الملف</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel خريطة الملف لوحة</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>تصدير خريطة الملف</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report خريطة الملف تصدير تقرير</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>تطبيق القوالب على الملفات التي عُثر عليها</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates خريطة الملف ملفات مضمّنة قوالب</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>تبديل لوحة خريطة الملف</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel خريطة الملف لوحة</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>خريطة الملف</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>خريطة الملف</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>خريطة الملف</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>خريطة الملف</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>إنشاء خريطة الملف</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>خريطة الملف</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>تصدير خريطة الملف</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>خريطة الملف: قوالب الملفات المضمّنة</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>عندما تعثر خريطة الملف على ملفات مضمّنة يستطيع قالب تحليلها، تُقترح عليك القوالب. لا تُطبَّق القوالب تلقائيًا أبدًا.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>اقتراح</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>عدم فعل شيء</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>نظرة عامة (عيّنات)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>فحص كامل</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>تحليل البنية</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>لا توجد خريطة ملف بعد. أنشئ واحدة لترى ما الموجود وأين في المستند.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>تم: {0, plural, zero {# منطقة} one {منطقة واحدة} two {منطقتان} few {# مناطق} many {# منطقة} other {# منطقة}}.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>توقف (تم فحص {1}%): {0, plural, zero {# منطقة} one {منطقة واحدة} two {منطقتان} few {# مناطق} many {# منطقة} other {# منطقة}}. الباقي مقدَّر من عيّنات.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>النتائج تخص المحتوى قبل التحرير.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>تعذر إنشاء خريطة الملف: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>أنشئ خريطة الملف من تحليل &gt; خريطة الملف، أو بزر إنشاء أعلاه.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, zero {# مرشح تنسيق مضمّن آخر} one {مرشح تنسيق مضمّن آخر واحد} two {مرشحا تنسيق مضمّن آخران} few {# مرشحات تنسيق مضمّن أخرى} many {# مرشح تنسيق مضمّن آخر} other {# مرشح تنسيق مضمّن آخر}} لم يُحتفظ بها.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>إنشاء</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>إعادة بناء</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>تصدير</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>تقرير نصي...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>تقدم خريطة الملف</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>تكبير</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>تصغير</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>إظهار الخريطة بالكامل</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>عرض كجدول</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>شريط خريطة الملف: مسار البنية ومسار المحتوى</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>تمرير شريط خريطة الملف</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>وسيلة الإيضاح</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>مناطق خريطة الملف</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>إظهار الصنف</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>كل الأصناف</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>الصفوف المعروضة إلى إشارات مرجعية</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>الصفوف المعروضة إلى تحديد متعدد</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>البداية</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>النهاية (شاملة)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>الطول</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>الصنف</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>التسمية</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>الثقة</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>المرحلة</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>حدّد منطقة في الشريط أو القائمة.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}، {1}، تبدأ عند {2}، {3, plural, zero {# بايت} one {بايت واحد} two {بايتان} few {# بايتات} many {# بايتًا} other {# بايت}}، الثقة: {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>الثقة: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>المرحلة: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>القالب: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>تحديد النطاق</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>إضافة إشارة مرجعية</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>تطبيق القالب "{0}"</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>فتح في علامة تبويب جديدة</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>فك الضغط من هنا...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>استنتاج قالب...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>استخراج السلاسل...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>حفظ كملف...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>استنتاج القالب غير متاح.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>لا توجد خريطة ملف لهذا المستند.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>لا تحتوي خريطة الملف على ملفات مضمّنة لها قالب.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>عُثر على {0, plural, zero {# ملف مضمّن} one {ملف مضمّن واحد} two {ملفان مضمّنان} few {# ملفات مضمّنة} many {# ملفًا مضمّنًا} other {# ملف مضمّن}}. هل تريد تطبيق القوالب؟</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>تطبيق</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>إظهار القائمة</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>طُبّقت القوالب على {0, plural, zero {# ملف مضمّن} one {ملف مضمّن واحد} two {ملفان مضمّنان} few {# ملفات مضمّنة} many {# ملفًا مضمّنًا} other {# ملف مضمّن}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>طُبّقت القوالب على {0} ملفًا مضمّنًا. لم يُطبَّق على {1, plural, zero {# ملف} one {ملف واحد} two {ملفان} few {# ملفات} many {# ملفًا} other {# ملف}} لأن المستند الواحد يمكن أن يحتوي على {2} تطبيقًا كحد أقصى.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>صُدّرت خريطة الملف إلى {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>تعذر تصدير خريطة الملف: {0}</value></data>
 </root>

@@ -96,6 +96,15 @@ public sealed partial class CompareDialog : Grid
         };
         AutomationProperties.SetAutomationId(expander, "CompareDialog_Options");
         methods.Children.Add(expander);
+
+        // 構造でも比較する (ANA-31 の「呼び出し」。既定は設定 compare.structure.enabled)
+        _structure = new CheckBox
+        {
+            Content = Loc.Get("Compare_Dialog_Structure"),
+            IsChecked = App.Settings?.GetBool(ViewModels.CompareSessionViewModel.StructEnabledKey, true) ?? true,
+        };
+        AutomationProperties.SetAutomationId(_structure, "CompareDialog_Structure");
+        methods.Children.Add(_structure);
         Grid.SetRow(methods, 1);
         Grid.SetColumnSpan(methods, 3);
         Children.Add(methods);
@@ -120,6 +129,11 @@ public sealed partial class CompareDialog : Grid
     public event EventHandler? ValidityChanged;
 
     public bool IsValid { get; private set; }
+
+    private readonly CheckBox _structure;
+
+    /// <summary>「構造でも比較する」。</summary>
+    public bool CompareStructure => _structure.IsChecked == true;
 
     /// <summary>「ファイルを選択...」の「参照」でファイルを選ぶ処理 (ウィンドウが設定する)。</summary>
     public Func<Task<string?>>? BrowseFile { get; set; }
@@ -235,6 +249,7 @@ public sealed partial class CompareDialog : Grid
             ["mergeGap"] = _mergeGap.Text,
             ["unit"] = _unit.SelectedIndex >= 0 ? CompareOptions.Units[_unit.SelectedIndex] : null,
             ["valid"] = IsValid,
+            ["structure"] = CompareStructure,
             ["warning"] = _warning.Text,
             ["optionsError"] = _optionsError.Text,
         };

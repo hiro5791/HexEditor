@@ -323,6 +323,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_VisualizerPanel" cmd:CommandUi.Id="view.panel.visualizer" AutomationProperties.AutomationId="Command_ToggleVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateVisualizer" cmd:CommandUi.Id="view.panel.templateVisualizer" AutomationProperties.AutomationId="Command_ToggleTemplateVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FileMap" cmd:CommandUi.Id="view.panel.fileMap" AutomationProperties.AutomationId="Command_PanelFileMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Disassembly" cmd:CommandUi.Id="view.panel.disassembly" AutomationProperties.AutomationId="Command_PanelDisassembly" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
@@ -331,6 +332,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_StructDiffs" cmd:CommandUi.Id="view.panel.structDiffs" AutomationProperties.AutomationId="Command_ToggleStructDiffs" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_MemoryMapPanel" cmd:CommandUi.Id="view.panel.memoryMap" AutomationProperties.AutomationId="Command_ToggleMemoryMap" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PacketsPanel" cmd:CommandUi.Id="view.panel.packets" AutomationProperties.AutomationId="Command_TogglePackets" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PartitionsPanel" cmd:CommandUi.Id="view.panel.partitions" AutomationProperties.AutomationId="Command_TogglePartitions" />
@@ -342,6 +344,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplatesPanel" cmd:CommandUi.Id="view.panel.templates" AutomationProperties.AutomationId="Command_ToggleTemplates" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateOutputPanel" cmd:CommandUi.Id="view.panel.templateOutput" AutomationProperties.AutomationId="Command_ToggleTemplateOutput" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_TemplateInferencePanel" cmd:CommandUi.Id="view.panel.templateInference" AutomationProperties.AutomationId="Command_ToggleTemplateInference" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
@@ -384,6 +387,9 @@
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Compare" AutomationProperties.AutomationId="Command_CompareMenu">
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareFiles" cmd:CommandUi.Id="analysis.compare" AutomationProperties.AutomationId="Command_Compare" />
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSaved" cmd:CommandUi.Id="analysis.compareSaved" AutomationProperties.AutomationId="Command_CompareSaved" />
+                            <!--  構造を理解した比較 (ANA-31)  -->
+                            <ToggleMenuFlyoutItem x:Uid="Menu_Analysis_CompareStructure" cmd:CommandUi.Id="compare.structure" AutomationProperties.AutomationId="Command_CompareStructure" />
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CompareStructureTemplate" cmd:CommandUi.Id="compare.structureTemplate" AutomationProperties.AutomationId="Command_CompareStructureTemplate" />
                             <!--  プロセスのスナップショット (ANA-09)  -->
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CreateSnapshot" cmd:CommandUi.Id="compare.createSnapshot" AutomationProperties.AutomationId="Command_CreateSnapshot" />
@@ -393,6 +399,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_FileMap" cmd:CommandUi.Id="analysis.fileMap" AutomationProperties.AutomationId="Command_FileMap" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
                         <!--  逆アセンブル (ANA-23) とデマングル (ANA-30)  -->
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Disassemble" cmd:CommandUi.Id="analysis.disassemble" AutomationProperties.AutomationId="Command_Disassemble" />
@@ -404,6 +411,8 @@
                             <MenuFlyoutItem x:Uid="Menu_Templates_FollowType" cmd:CommandUi.Id="templates.followType" AutomationProperties.AutomationId="Command_TemplateFollowType" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_ApplyKaitai" cmd:CommandUi.Id="templates.applyKaitai" AutomationProperties.AutomationId="Command_TemplateApplyKaitai" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_FindCandidates" cmd:CommandUi.Id="templates.findCandidates" AutomationProperties.AutomationId="Command_TemplateFindCandidates" />
+                            <!--  テンプレートの推定 (TPL-38〜TPL-40)  -->
+                            <MenuFlyoutItem x:Uid="Menu_Templates_Infer" cmd:CommandUi.Id="templates.infer" AutomationProperties.AutomationId="Command_TemplateInfer" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Rerun" cmd:CommandUi.Id="templates.rerun" AutomationProperties.AutomationId="Command_TemplateRerun" />
                             <MenuFlyoutItem x:Uid="Menu_Templates_Remove" cmd:CommandUi.Id="templates.remove" AutomationProperties.AutomationId="Command_TemplateRemove" />

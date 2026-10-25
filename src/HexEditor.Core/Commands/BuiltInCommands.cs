@@ -336,6 +336,7 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.statistics", "view"),
         new("view.panel.fileType", "view"),
+        new("view.panel.fileMap", "view"),
         new("view.panel.disassembly", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
@@ -346,6 +347,7 @@ public static class BuiltInCommands
         new("view.panel.yara", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
+        new("view.panel.structDiffs", "view"),
 
         // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
         new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
@@ -484,6 +486,14 @@ public static class BuiltInCommands
         new("compare.copyAllRight", "compare"),
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
+        // 構造を理解した比較 (ANA-31・ANA-32)。Alt+F5 / Shift+Alt+F5 は compare.nextDiff / previousDiff が構造の差分にも使う。
+        new("compare.structure", "compare") { Icon = "" },
+        new("compare.structureTemplate", "compare"),
+        new("compare.navigateStructure", "compare"),
+        new("compare.showStructDiffs", "compare"),
+        new("compare.nextStructDiff", "compare"),
+        new("compare.previousStructDiff", "compare"),
+        new("compare.exportStructDiffs", "compare"),
 
         // 比較の結果画面の「パッチを作成」(EDIT-42 の「呼び出し」。左を変換前、右を変換後にする)。
         new("compare.createPatch", "compare") { Icon = "\uE8A5" },
@@ -505,6 +515,13 @@ public static class BuiltInCommands
         new("analysis.fileType", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.here", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.embedded", "analysis") { Condition = "documentOpen" },
+
+        // ファイルマップ (ANA-33・ANA-34)。ショートカットは既定なし。
+        new("analysis.fileMap", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.rebuild", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.show", "analysis"),
+        new("analysis.fileMap.export", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileMap.applyTemplates", "analysis") { Condition = "documentOpen" },
         // カスタム CRC (ANA-20)、一致するアルゴリズムを探す (ANA-21 の仕様 5)、カーソル位置に書き込む (ANA-22 の仕様 3)。
         new("analysis.hash.customCrc", "analysis"),
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
@@ -554,9 +571,17 @@ public static class BuiltInCommands
         new("templates.visualize", "templates") { Condition = "documentOpen" },
         new("templates.online.browse", "templates"),
         new("templates.online.checkUpdates", "templates"),
+
+        // テンプレートの推定 (TPL-38〜TPL-40)。templates.infer はファイルマップ (ANA-34) からも引数 start・length・recordLength 付きで呼ぶ。
+        new("templates.infer", "templates") { Condition = "documentOpen" },
+        new("templates.inferAgain", "templates") { Condition = "documentOpen" },
+        new("templates.inferApply", "templates") { Condition = "documentOpen" },
+        new("templates.inferOpenEditor", "templates") { Condition = "documentOpen" },
+        new("templates.showInference", "templates"),
         new("view.panel.templates", "view"),
         new("view.panel.templateVisualizer", "view"),
         new("view.panel.templateOutput", "view"),
+        new("view.panel.templateInference", "view"),
 
         // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----
         new("codeEditor.run", "codeEditor") { DefaultBindings = [K("F5", KeyScope.CodeEditor)] },

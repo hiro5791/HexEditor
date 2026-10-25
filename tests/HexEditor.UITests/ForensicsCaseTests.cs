@@ -46,6 +46,25 @@ public sealed class ForensicsCaseTests
     private static async Task CreateCaseAsync(AppSession app, string folder, string timeZone = "Tokyo Standard Time") =>
         await Case(app, "create", ("folder", folder), ("number", "C-0001"), ("name", "テストケース"), ("investigator", "tester"), ("timeZone", timeZone));
 
+    /// <summary>連続して読んだ 2 回の内容が同じになるまで読み直す (最大 60 秒)。</summary>
+    private static async Task<byte[]> ReadStableDeviceAsync(string path, int length)
+    {
+        byte[] previous = CiPrivileged.ReadDevice(path, length);
+        DateTime limit = DateTime.UtcNow + UiTest.Scaled(TimeSpan.FromSeconds(60));
+        while (true)
+        {
+            await Task.Delay(500);
+            byte[] current = CiPrivileged.ReadDevice(path, length);
+            if (current.AsSpan().SequenceEqual(previous))
+            {
+                return current;
+            }
+
+            Assert.True(DateTime.UtcNow < limit, "The virtual disk content kept changing.");
+            previous = current;
+        }
+    }
+
     private static async Task WaitForHashesAsync(AppSession app, int evidenceCount)
     {
         await app.WaitUntilAsync(async () =>
@@ -179,7 +198,8 @@ public sealed class ForensicsCaseTests
         JsonObject disk = (await app.SendAsync("enumDevices"))["disks"]!.AsArray().Select(d => d!.AsObject()).Single(d => d["number"]!.GetValue<int>() == CiPrivileged.VhdDisk);
         JsonObject opened = await app.SendAsync("openDisk", new JsonObject { ["path"] = CiPrivileged.VhdDiskPath, ["readOnly"] = true });
         long length = opened["length"]!.GetValue<long>();
-        byte[] all = CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, (int)length);
+        // 直前のテスト (イメージの複製) で書いたディスクは、Windows が遅れてメタデータを書き戻すことがある。内容が止まるまで待ってから期待値を作る。
+        byte[] all = await ReadStableDeviceAsync(CiPrivileged.VhdDiskPath, (int)length);
 
         // 1. 「証拠を追加」(SHA-256 と MD5)。2. ハッシュ計算の完了を待つ。3. 行の各列。
         await Case(app, "addEvidence", ("hashes", new[] { "SHA-256", "MD5" }));

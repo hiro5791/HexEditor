@@ -35,7 +35,12 @@ public sealed partial class CompareView : UserControl
     [
         "compare.recompare", null, "compare.previousDiff", "compare.nextDiff", null, "compare.syncScroll", "compare.layout",
         null, "compare.copyLeft", "compare.copyRight", "compare.copyAllLeft", "compare.copyAllRight", null, "compare.saveReport", "compare.createPatch",
+
+        // 構造を理解した比較 (ANA-31 の「画面」、ANA-32 の仕様 5)
+        null, "compare.structure", "compare.structureTemplate", "compare.navigateStructure",
     ];
+
+    private static bool IsToggle(string id) => id is "compare.syncScroll" or "compare.layout" or "compare.structure" or "compare.navigateStructure";
 
     private readonly ICompareViewHost _host;
     private bool _settingMethod;
@@ -70,6 +75,7 @@ public sealed partial class CompareView : UserControl
         session.ResultChanged += Session_ResultChanged;
         session.ViewChanged += Session_ViewChanged;
         session.PropertyChanged += Session_PropertyChanged;
+        session.StructResultChanged += (_, _) => RefreshToolbarStates();
         MessageBar.Closed += (_, _) => _dismissedMessage = Session.StatusMessage;
         Loaded += (_, _) => UpdateAll();
         UpdateAll();
@@ -224,6 +230,8 @@ public sealed partial class CompareView : UserControl
         "compare.copyRight" => "",
         "compare.copyAllLeft" => "",
         "compare.copyAllRight" => "",
+        "compare.structureTemplate" => "",
+        "compare.navigateStructure" => "",
         _ => "",
     };
 
@@ -243,7 +251,7 @@ public sealed partial class CompareView : UserControl
             string keys = CommandService.ShortcutText(id);
             var icon = new FontIcon { Glyph = command?.Icon ?? GlyphOf(id) };
             ButtonBase button;
-            if (id is "compare.syncScroll" or "compare.layout")
+            if (IsToggle(id))
             {
                 button = new AppBarToggleButton { Label = name, Icon = icon };
             }
@@ -350,6 +358,12 @@ public sealed partial class CompareView : UserControl
             {
                 CommandState state = _host.StateOf(id);
                 button.IsEnabled = state.Enabled;
+                if (id == "compare.structureTemplate")
+                {
+                    // 使っているテンプレートの名前のボタン (押すと「構造の比較に使うテンプレートを選ぶ」。ANA-31 の「画面」)
+                    button.Label = Session.StructTemplateLabel;
+                    AutomationProperties.SetName(button, Loc.Format("Compare_Struct_TemplateButton", Session.StructTemplateLabel));
+                }
 
                 // 使えない理由をツールチップに出す (「右側は読み取り専用です」。ANA-07 の「エラー」)。
                 string name = AutomationProperties.GetName(button);

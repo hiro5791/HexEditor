@@ -23,6 +23,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 - [Bookmarks and annotations](bookmarks.md)
 - [Comparing files](compare.md)
 - [Statistics and analysis](statistics.md)
+- [File map](file-map.md)
 - [Hashes and checksums](hashes.md)
 - [Disassembly](disassembly.md)
 - [Checksum files](checksum-files.md)
@@ -49,6 +50,7 @@ New to HexEditor? Start with [Getting started](getting-started.md).
 
 - [Structure templates](templates.md)
 - [Template standard library](template-library.md)
+- [Template inference](template-inference.md)
 - [Template error codes](template-error-codes.md)
 - [Scripts](scripting.md)
 - [Macros](macros.md)

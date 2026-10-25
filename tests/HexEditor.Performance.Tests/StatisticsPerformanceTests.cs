@@ -138,6 +138,26 @@ public sealed class StatisticsPerformanceTests(ITestOutputHelper output)
     }
 
     /// <summary>
+    /// TC-ANA-33-04: 100 GB のファイルの全体のファイルマップを最後まで作っても、メモリ使用量が 1 GB を超えない。ブロックの大きさは 8 KiB
+    /// (100 GiB / 2^24 以上で最小の 2 の累乗)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-ANA-33-04")]
+    public void FileMapOfHundredGigabytesStaysUnderOneGigabyte()
+    {
+        Core.FileMap.FileMapResult? map = null;
+        long peak = PeakDuring(() =>
+        {
+            using var doc = Open("TD-SPARSE-100G");
+            map = Core.FileMap.FileMapBuilder.Build(doc.Current, new Core.FileMap.FileMapRequest { Templates = Core.Templates.TemplateCatalog.CreateDefault(null) });
+        });
+        output.WriteLine($"最大のプライベートバイト: {peak / MiB} MiB、領域 {map!.Regions.Count} 個");
+        Assert.True(map.Complete);
+        Assert.Equal(8192, map.BlockSize);
+        Assert.True(peak <= GiB, $"{peak / MiB} MiB");
+    }
+
+    /// <summary>
     /// TC-ANA-17-03 の Core の部分: 100 GB のファイルを開いたときの自動判定は最大 128 KiB しか読まず、すぐに終わる
     /// (判定はバックグラウンドで行い、先頭の表示を待たせない。表示の順序は UI の処理で、ここでは読む量と時間を計る)。
     /// </summary>

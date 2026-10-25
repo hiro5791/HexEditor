@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.StructDiffPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="StructDiffPanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        構造の差分パネル (ANA-32)。下のパネル「構造の差分」に置く (差分の一覧と並ぶタブ)。上部に要約と比較中の状態、テンプレートが
+        決まらないときなどの理由とボタン、ツールバー (種類の絞り込み、文字列の絞り込み、一致も表示、前 / 次、エクスポート、テンプレートの選択)、
+        その下にツリー表 (仮想化。表示中の行だけを作る)。
+        キー: ↑ / ↓ で移動、→ / ← で開閉、Enter で Hex ビューの範囲を選ぶ、Ctrl+C で行をコピー、Shift+F10 で右クリックメニュー。
+    -->
+    <UserControl.Resources>
+        <DataTemplate x:Key="RowTemplate" x:DataType="vm:StructDiffRowViewModel">
+            <Grid Background="Transparent" ColumnSpacing="6" ToolTipService.ToolTip="{x:Bind ToolTipText}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="260" />
+                    <ColumnDefinition Width="190" />
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Margin="{x:Bind Indent}"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <FontIcon
+                        Width="12"
+                        AutomationProperties.AccessibilityView="Raw"
+                        FontSize="10"
+                        Glyph="{x:Bind ExpanderGlyph, Mode=OneWay}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FlowDirection="LeftToRight"
+                        Text="{x:Bind Name}"
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <Border
+                        Width="14"
+                        Height="14"
+                        VerticalAlignment="Center"
+                        Background="{x:Bind Swatch}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Visibility="{x:Bind SwatchVisibility}">
+                        <FontIcon
+                            AutomationProperties.AccessibilityView="Raw"
+                            FontSize="10"
+                            Foreground="{x:Bind MarkBrush}"
+                            Glyph="{x:Bind KindGlyph}" />
+                    </Border>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{x:Bind KindText}"
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <TextBlock
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind LeftValue, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind RightValue, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="4"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind TypeText}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="5"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind LeftOffset}" />
+                <TextBlock
+                    Grid.Column="6"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind RightOffset}" />
+                <TextBlock
+                    Grid.Column="7"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind SizeText}"
+                    TextAlignment="Right" />
+                <TextBlock
+                    Grid.Column="8"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind MatchText}"
+                    TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid
+        x:Name="Root"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        RowSpacing="4"
+        SizeChanged="Root_SizeChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  要約 (ANA-31 の仕様 10) と比較中の状態 (ANA-32 の仕様 8)。幅が 800 px 未満のときは折りたためる。  -->
+        <Grid Padding="12,6,12,0" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton
+                x:Name="SummaryToggle"
+                x:Uid="StructDiff_SummaryToggle"
+                VerticalAlignment="Top"
+                AutomationProperties.AutomationId="StructDiff_SummaryToggle"
+                Click="SummaryToggle_Click"
+                IsChecked="True"
+                Visibility="Collapsed" />
+            <StackPanel
+                x:Name="SummaryArea"
+                Grid.Column="1"
+                Spacing="2">
+                <TextBlock
+                    x:Name="HeadingText"
+                    AutomationProperties.AutomationId="StructDiff_Heading"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="SummaryText"
+                    AutomationProperties.AutomationId="StructDiff_Summary"
+                    AutomationProperties.LiveSetting="Polite"
+                    TextWrapping="Wrap" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <HyperlinkButton
+                        x:Name="LeftDiagnostics"
+                        AutomationProperties.AutomationId="StructDiff_LeftDiagnostics"
+                        Click="LeftDiagnostics_Click"
+                        Visibility="Collapsed" />
+                    <HyperlinkButton
+                        x:Name="RightDiagnostics"
+                        AutomationProperties.AutomationId="StructDiff_RightDiagnostics"
+                        Click="RightDiagnostics_Click"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!--  理由 (テンプレートが決まらない・構文エラー・上限に達した) と、その場でできる操作。  -->
+        <StackPanel
+            x:Name="ReasonArea"
+            Grid.Row="1"
+            Padding="12,0"
+            Orientation="Horizontal"
+            Spacing="8"
+            Visibility="Collapsed">
+            <TextBlock
+                x:Name="ReasonText"
+                MaxWidth="560"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="StructDiff_Reason"
+                AutomationProperties.LiveSetting="Polite"
+                TextWrapping="Wrap" />
+            <Button
+                x:Name="ChooseTemplateButton"
+                x:Uid="StructDiff_ChooseTemplate"
+                AutomationProperties.AutomationId="StructDiff_ChooseTemplate"
+                Click="ChooseTemplate_Click" />
+            <Button
+                x:Name="EditTemplateButton"
+                x:Uid="StructDiff_EditTemplate"
+                AutomationProperties.AutomationId="StructDiff_EditTemplate"
+                Click="EditTemplate_Click"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="RaiseLimitButton"
+                x:Uid="StructDiff_RaiseLimit"
+                AutomationProperties.AutomationId="StructDiff_RaiseLimit"
+                Click="RaiseLimit_Click"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <!--  ツールバー: 種類の絞り込み、埋め草、文字列、一致も表示、前 / 次、エクスポート、テンプレートの選択。  -->
+        <ScrollViewer
+            Grid.Row="2"
+            HorizontalScrollBarVisibility="Auto"
+            HorizontalScrollMode="Auto"
+            VerticalScrollBarVisibility="Disabled"
+            VerticalScrollMode="Disabled">
+            <StackPanel
+                x:Name="ToolbarPanel"
+                Padding="12,0"
+                Orientation="Horizontal"
+                Spacing="4">
+                <TextBox
+                    x:Name="FilterBox"
+                    x:Uid="StructDiff_FilterBox"
+                    Width="180"
+                    AutomationProperties.AutomationId="StructDiff_Filter"
+                    TextChanged="FilterBox_TextChanged" />
+                <ToggleButton
+                    x:Name="PaddingToggle"
+                    x:Uid="StructDiff_IncludePadding"
+                    AutomationProperties.AutomationId="StructDiff_IncludePadding"
+                    Click="Filter_Click" />
+                <ToggleButton
+                    x:Name="SameToggle"
+                    x:Uid="StructDiff_ShowSame"
+                    AutomationProperties.AutomationId="StructDiff_ShowSame"
+                    Click="Filter_Click" />
+                <Button
+                    x:Name="PreviousButton"
+                    AutomationProperties.AutomationId="StructDiff_Previous"
+                    Click="Previous_Click">
+                    <FontIcon FontSize="14" Glyph="&#xE70E;" />
+                </Button>
+                <Button
+                    x:Name="NextButton"
+                    AutomationProperties.AutomationId="StructDiff_Next"
+                    Click="Next_Click">
+                    <FontIcon FontSize="14" Glyph="&#xE70D;" />
+                </Button>
+                <Button
+                    x:Name="ExportButton"
+                    x:Uid="StructDiff_Export"
+                    AutomationProperties.AutomationId="StructDiff_Export"
+                    Click="Export_Click" />
+                <Button
+                    x:Name="TemplateButton"
+                    AutomationProperties.AutomationId="StructDiff_Template"
+                    Click="ChooseTemplate_Click" />
+                <TextBlock
+                    x:Name="BusyText"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="StructDiff_Busy"
+                    AutomationProperties.LiveSetting="Polite"
+                    Visibility="Collapsed" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid
+            x:Name="HeaderRow"
+            Grid.Row="3"
+            Padding="24,0,12,0"
+            AutomationProperties.AccessibilityView="Raw"
+            ColumnSpacing="6" />
+
+        <local:StructDiffListView
+            x:Name="Tree"
+            x:Uid="StructDiff_Tree"
+            Grid.Row="4"
+            AutomationProperties.AutomationId="StructDiff_Tree"
+            ContextRequested="Tree_ContextRequested"
+            DoubleTapped="Tree_DoubleTapped"
+            IsItemClickEnabled="False"
+            ItemTemplate="{StaticResource RowTemplate}"
+            KeyDown="Tree_KeyDown"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollMode="Auto"
+            SelectionMode="Single"
+            Tapped="Tree_Tapped" />
+
+        <TextBlock
+            x:Name="EmptyText"
+            Grid.Row="4"
+            Margin="12"
+            AutomationProperties.AutomationId="StructDiff_Empty"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
+    </Grid>
+</UserControl>

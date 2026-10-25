@@ -267,6 +267,14 @@ public static class BuiltInSettings
         new("analysis.classify.pValueLow", SettingCategories.Advanced, SettingKind.Number, 0.01) { Min = 0, Max = 0.5, Step = 0.01, Order = 115, Group = "analysis" },
         new("analysis.classify.pValueHigh", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 116, Group = "analysis" },
         new("analysis.classify.compressedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.2) { Min = 0, Max = 8, Step = 0.05, Order = 117, Group = "analysis" },
+        // 構造を理解した比較 (ANA-31)。配列ごとの対応付けの方法は構造の差分パネルで変える (設定画面には出さない)。
+        new("compare.structure.enabled", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 118, Group = "analysis" },
+        new("compare.structure.includeHidden", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 119, Group = "analysis" },
+        new("compare.structure.maxFields", SettingCategories.Advanced, SettingKind.Int, 1_000_000) { Min = 10_000, Max = 10_000_000, Order = 120, Group = "analysis" },
+        new(HexEditor.Core.Compare.Structure.StructArrayRules.SettingKey, SettingCategories.Advanced, SettingKind.List, new JsonArray()) { Order = 121, ShowInPage = false },
+
+        // ファイルマップ (ANA-34 の仕様 7): 埋め込まれたファイルのテンプレートは提案するだけ (自動では適用しない。利用者の決定 2026-10-21)。
+        new("fileMap.applyTemplatesToEmbedded", SettingCategories.Advanced, SettingKind.Choice, "suggest") { Options = ["suggest", "none"], Order = 122, Group = "analysis" },
         // ディスク・プロセス (ENG-28 の仕様 5・6、ENG-32 の仕様 3、ENG-33 の仕様 6)。
         new(DeviceSettings.HelperTimeoutKey, SettingCategories.Advanced, SettingKind.Int, 30)
         {

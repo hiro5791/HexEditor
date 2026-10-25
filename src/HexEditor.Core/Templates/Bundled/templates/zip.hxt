@@ -202,6 +202,6 @@ if (eocd_position < 0) {
         total_entries = zip64_eocd.total_entries;
         central_directory_offset = zip64_eocd.central_directory_offset;
     }
-    CentralDirectoryEntry central_directory[total_entries] @ central_directory_offset;
+    CentralDirectoryEntry central_directory[total_entries] @ central_directory_offset [[diff_key("file_name")]];
     LocalFile local_files[total_entries];
 }

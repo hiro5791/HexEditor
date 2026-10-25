@@ -316,6 +316,10 @@ The top of the panel shows the kind and the size. For sound, use **Play**, **Sto
 
 A visualizer shows at most 64 MB of data, and images up to 16,384 × 16,384 pixels. If the data is larger, only the beginning is shown and the panel says so. If an image cannot be decoded, the panel shows "Cannot show this image" and the reason. HexEditor keeps working.
 
+## Infer a template from records {#infer-a-template}
+
+If there is no template for your data but it is made of fixed-length records, select the records, right-click and select **Infer template from selection**. HexEditor guesses the record length and the field types and makes a draft template that you can apply at once or open in the template editor. See [Template inference](template-inference.md).
+
 ## Online templates {#online-templates}
 
 You can find templates for more formats in online repositories, install them, and keep them up to date.

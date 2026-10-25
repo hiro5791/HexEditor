@@ -86,7 +86,7 @@ The **Patterns** tab finds frequent byte sequences and the period of repetition.
 Use **Results** to switch between two views.
 
 - **Frequent byte sequences**: rank, hex, text, count, percentage and first position. Double-click a row to go to the first occurrence. Right-click and select **Find all** to find every occurrence.
-- **Periods**: an estimate of how many bytes it takes for the data to repeat. For a file made of fixed-length records, the record length ranks high. Right-click and select **Show records of this length** to alternate the background color for every record of that length.
+- **Periods**: an estimate of how many bytes it takes for the data to repeat. For a file made of fixed-length records, the record length ranks high. Right-click and select **Show records of this length** to alternate the background color for every record of that length, or **Infer a template with this length** to start [template inference](template-inference.md).
 
 Even for large files, the working memory is at most 256 MB. The counts are exact. If you cancel, the partial results are discarded.
 
@@ -110,6 +110,8 @@ The **Classification** tab (or **Analysis > Detect Encrypted/Compressed Data**) 
 Signatures of known compression formats such as zlib, gzip, zstd, xz, bzip2, LZ4, 7z and ZIP are also searched, and the places found are added to the list.
 
 This is an estimate based on statistics. The panel always says "This is an estimate based on statistics and can be wrong." Do not trust it blindly.
+
+To see the classification together with format structures, embedded files and repeating records in one overview, use the [File map](file-map.md).
 
 ### Detecting the file type {#file-type}
 

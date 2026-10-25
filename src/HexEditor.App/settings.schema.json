@@ -214,6 +214,31 @@
       "type": "string",
       "default": ""
     },
+    "compare.structure.arrayRules": {
+      "description": "Structure compare: array matching",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "compare.structure.enabled": {
+      "description": "Compare structure too",
+      "type": "boolean",
+      "default": true
+    },
+    "compare.structure.includeHidden": {
+      "description": "Structure compare: include hidden patterns",
+      "type": "boolean",
+      "default": false
+    },
+    "compare.structure.maxFields": {
+      "description": "Structure compare: maximum fields",
+      "type": "integer",
+      "minimum": 10000,
+      "maximum": 10000000,
+      "default": 1000000
+    },
     "devices.helperIdleMinutes": {
       "description": "Close the administrator helper after (minutes)",
       "type": "integer",
@@ -446,6 +471,15 @@
       "minimum": 0,
       "maximum": 10,
       "default": 2
+    },
+    "fileMap.applyTemplatesToEmbedded": {
+      "description": "File map: templates for embedded files",
+      "type": "string",
+      "enum": [
+        "suggest",
+        "none"
+      ],
+      "default": "suggest"
     },
     "files.adsNotice": {
       "description": "Notify when a file has alternate data streams",

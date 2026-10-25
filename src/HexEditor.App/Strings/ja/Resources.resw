@@ -9876,4 +9876,414 @@ SHA-256 のフィンガープリント: {2}
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} 秒</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} 時間</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>開始がドキュメントの外です。</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>レコード長は {0}〜{1} バイトで入力してください。</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>レコードが 4 個以上入る範囲を選んでください。</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>{0} バイト以上の範囲を選んでください。</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>読めたレコードが {0} 個だけです。4 個以上必要です。</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>{0} レコードのすべてで 00。</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>{1} レコードのすべてで同じ値 {0}。</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>{1} レコードのすべてで同じ値 {0}。</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% が ASCII の文字列 (最大 {1} 文字)。</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% が UTF-16 の文字列 (最大 {1} 文字)。</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>{1} レコードのうち {0} で、値 = {2} + {3} × レコード番号。</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% が {1}〜{2} の UNIX 時刻 (秒)。</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% が {1}〜{2} の 64 bit の UNIX 時刻 (秒)。</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% が {1}〜{2} の Windows の FILETIME。</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% が {1}〜{2} の MS-DOS の日時。</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>値はすべてドキュメントの長さ ({0}) 未満で、{1}% が {2} の倍数、レコード番号の順に増える。</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>00 でない値はすべてドキュメントの長さ ({0}) 未満で、{1}% が互いに異なる。</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>連続したレコードの {0}% で、次のレコードの {1} との差と一致する。</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>すべてのレコードで {0} + 値がドキュメントの中に収まる。</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% が妥当な浮動小数点の値 (異なる値 {1} 個)。</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} 個のビット: {1}。</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} 種類の値: {1}。</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>値は {0}〜{1} で、どの規則にも当たらない。</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>すべてのバイトのエントロピーが {0:0.0} ビット以上 (乱数に近い)。</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>どの規則にも当たらない {0} バイト。</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>浮動小数点としては {0}% だけが妥当な値。</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>日時としては {0}% だけが 1980〜2100 年。</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>連番としては {0}% だけが並びに合う。</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>文字列としては {0}% だけが印字可能な文字で始まる。</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>埋め草には名前を付けられません。</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>「{0}」は名前として使えません。英字・数字・_ を使い、数字で始めないでください。</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>「{0}」は予約語か型の名前です。</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>「{0}」という名前のフィールドがすでにあります。</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>テンプレートの推定 (TPL-38) で作った下書きです。推定なので、確かめてから使ってください。</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>元: {0}、範囲 {1}〜{2}、レコード長 {3}、レコード {4} 個、{5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>推定したレコード ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (確度 {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>埋め草</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>マジック</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>定数</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>連番</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>日時</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>文字列</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>文字列 (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>フラグ</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>列挙</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>整数</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>テンプレートの推定</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>選択範囲からテンプレートを推定...(I)</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>テンプレートの推定(8)</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>選択範囲からテンプレートを推定...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>この長さでテンプレートを推定</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>選択範囲から推定</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>すいてい;てんぷれーと;せんたくはんい</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>推定し直す</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>すいていしなおす</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>推定した下書きを適用</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>てきよう;したがき</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>推定した下書きをエディタで開く</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>えでぃた;したがき</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>推定のパネルを表示</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>すいてい;ぱねる</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>テンプレートの推定のパネル</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>すいてい</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>レコード長</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>レコードの数</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>範囲いっぱい</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>リトル</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>ビッグ</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>推定</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>推定し直す</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>レコード長の候補</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} バイト · 得点 {1} · レコード {2} 個</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>フィールド</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>下書き (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>エディタで開く</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>下書きをコピーしました。</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>テンプレートを推定するドキュメントを開いてください。</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>先にテンプレートを推定してください。</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>開始を数値か入力式で入力してください。</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>長さを数値か入力式で入力してください。</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>レコードの数を入力してください (空欄なら範囲いっぱい)。</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>推定しています...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>テンプレートの推定</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>固定長のレコードが見つかりませんでした。レコード長を入力してください。</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>可変長のレコード (長さのフィールドで大きさが変わるもの) は推定できません。</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>レコード長 {0}、レコード {1} 個 (推定に {2} 個を使用)。</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>リトルエンディアン。</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>ビッグエンディアン。</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>読めなかったレコード {0} 個を除きました。</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>末尾の {0} バイトはレコードに入りません。</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>内部エラー: 下書きに構文エラーがあります ({0})。</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}、{1}、{2}、{3}、確度 {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>名前なし</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(注意: 確度 低)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(手で変更)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>手で変更</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>候補: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>型</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>前のフィールドと結合</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>分割...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>分ける位置 (先頭からのバイト数、1〜{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>構造でも比較する</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>ファイルを比較するときに、構造体テンプレートで解析した構造もフィールドの単位で比べます。テンプレートは、左右が同じテンプレートに一致するときに自動で選ばれます。</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>構造の比較: 隠したパターンも比べる</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>テンプレートで hidden を付けたパターンも比べます。</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>構造の比較: フィールドの数の上限</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>左右それぞれ、この数のフィールドを比べたら構造の比較を止めます (10,000〜10,000,000)。</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>構造の比較: 配列の対応付け</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>テンプレートと配列ごとの、要素の対応付けの方法。構造の差分パネルの「対応付けの方法...」で変えます。</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較: 構造で比較</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>こうぞうでひかく</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比較: 構造の比較に使うテンプレートを選ぶ</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>こうぞうのひかくにつかうてんぷれーとをえらぶ</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比較: 移動の対象を構造にする</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>いどうのたいしょうをこうぞうにする</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比較: 構造の差分を表示</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをひょうじ</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比較: 次の構造の差分</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>つぎのこうぞうのさぶん</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比較: 前の構造の差分</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>まえのこうぞうのさぶん</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比較: 構造の差分をエクスポート</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをえくすぽーと</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>構造の差分の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>こうぞうのさぶんのひょうじきりかえ</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>構造の差分(8)</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>構造で比較(R)</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ(H)...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>構造でも比較する</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>比較</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>左の開始オフセット</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>右の開始オフセット</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>構造の比較</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>テンプレートを選ぶ</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>比べたフィールド: {0}</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>テンプレート: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>プロセスメモリのスナップショットでは、構造の比較は使えません。</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>左のデータへ移動</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>右のデータへ移動</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>行をコピー</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>左右の値をコピー</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>左にブックマークを追加</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>右にブックマークを追加</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>対応付けの方法...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>左の結果ツリーで表示</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>右の結果ツリーで表示</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>構造の比較: {0}、{1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>途中で中止</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>閉じている</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>開いている</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>左の値</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>右の値</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>型</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>左オフセット</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>右オフセット</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>対応付け</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}、{1}、左 {2}、右 {3}、左 {4}、右 {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>、</value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>構造の比較はオフです。比較タブのツールバーの「構造で比較」でオンにできます。</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>比較を待っています...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>比較タブを開くと、構造の差分を表示します。</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>完了 ({0} 秒)</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>比較中: {0} フィールド</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>上限のため途中まで</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>構造の比較に失敗しました: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>フィールドの数が上限 ({0}) に達したため、途中まで比べました。</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>{0} を表示</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>テンプレート: {0} ({1})、左 {2} / 右 {3}。{4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>選んだテンプレートです。</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>左右に同じテンプレートの適用があるため。</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>両方のマジックが一致したため。</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>変更</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>追加</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>削除</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>移動</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>移動・変更</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>型の変更</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>解析できない</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>一致</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>左: エラー {0}、警告 {1}</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>右: エラー {0}、警告 {1}</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>テンプレートの出力 (左)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>テンプレートの出力 (右)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>エラー・警告はありません。</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>キー: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>内容</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(要素が多いため位置で対応付けました)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>構造の差分はありません。</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>構造の比較の結果がありません。</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>構造の差分はありません</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>先頭の構造の差分に戻りました</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>末尾の構造の差分に戻りました</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>構造の比較に使うテンプレートが決まりませんでした (左右が同じテンプレートのマジックに一致する必要があります)。バイトの比較だけを行いました。</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>テンプレートに構文エラーがあります: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>テンプレートのファイルが見つかりません: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>構造の外の差分</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} 件、{1} バイト</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(範囲外)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(埋め草)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>テンプレートのエラー</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>上限のため比べていません</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>深すぎるため比べていません</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>比べたフィールド: 左 {0}、右 {1}。{2}。構造の外の差分: {3}。{4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>テンプレートを選ぶ...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>テンプレートを編集</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>上限を上げて再比較</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>名前・パス・値で絞り込み</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>埋め草を含める</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>一致したフィールドも表示</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>要約</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>構造の差分</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>構造の差分をエクスポート</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>テキストのレポート</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>対象</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>表示中の行 (絞り込みの後)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>すべての差分</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>オフセット</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>10 進</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>保存...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>構造の差分のエクスポート</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(左 {0}、右 {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>テンプレート: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>開始オフセット: 左 {0}、右 {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>比べたフィールド: 左 {0}、右 {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>構造の外の差分: {0} 件、{1} バイト</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>テンプレートのエラー・警告: 左 {0} / {1}、右 {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>かかった時間: {0} 秒</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>対応付けの方法</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>配列: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>方法</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>キー</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>内容</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>位置</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>キーのフィールド</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>絞り込み中...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>形式の構造</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>埋め込まれたファイル</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>圧縮</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>暗号化・乱数</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>埋め草</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>繰り返しのレコード</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>標本による推定</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>ゼロ</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>定数 {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>テキスト ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>繰り返しのレコード ({0} バイト)</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>標本</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>走査</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>構造</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>区間の中央の 4 KiB の標本による推定です (区間 {0} 個、区間の長さ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} が {0} バイト続いています。</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0} バイトを読み込めませんでした。</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>エントロピー {0} ビット / バイト、カイ二乗の p 値 {1}。</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>エントロピー {0} ビット / バイト。</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>ブロックごとに分類しました (ブロック {0} 個、ブロックの大きさ {1} バイト)。</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{0} から {1} バイト。</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>テンプレート "{0}" でパターン {1} を {2}〜{3} ({4} バイト) に置きました。</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{0} に {1} のシグネチャがあります。</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>テンプレート "{0}" で {1}〜{2} ({3} バイト) を解析できました。</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>テンプレート "{0}" の解析に失敗しました ({1})。</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>カービングの定義 "{1}" で長さを {0} バイトと決めました ({2})。</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>構造の検証</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>サイズの取得</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>フッター</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>終わりが不明です。次の領域の始まりの {0} まで ({1} バイト) とみなしました。</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>{1} の {0} のストリームを展開でき、チェック値が一致しました (圧縮 {2} バイト、展開後 {3} バイト)。</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>ずらし {0} バイトで {1} が一致します (ずらし 1〜{2} の平均は {3})。</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>シグネチャと統計に基づく推定で、誤りがありえます。</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>変換ビュー: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>ドキュメント: {0} ({1})、{2} バイト</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>範囲: {0}〜{1} ({2} バイト)</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>すべての段階が終わっています。</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>まだ終わっていない段階があります (残りは標本による推定です)。</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>種類ごとのバイト数:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>領域 ({0} 個):</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>ほか {0} 件</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>ファイルマップを作成</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>ふぁいるまっぷ みとりず りょういき</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>ファイルマップを作り直す</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>ふぁいるまっぷをつくりなおす</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>ファイルマップを表示</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>ふぁいるまっぷをひょうじ</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>ファイルマップをエクスポート</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>ふぁいるまっぷをえくすぽーと</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>見つかったファイルにテンプレートを適用</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>みつかったふぁいるにてんぷれーとをてきよう</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>ファイルマップパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>ふぁいるまっぷぱねる</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>ファイルマップ</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>ファイルマップを作成</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>ファイルマップの作成</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>ファイルマップのエクスポート</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>ファイルマップ: 埋め込まれたファイルのテンプレート</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>ファイルマップで、テンプレートで解析できる埋め込まれたファイルが見つかったときに、テンプレートの適用を提案します。自動では適用しません。</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>提案する</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>しない</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>概観 (標本)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>全体の走査</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>構造の解析</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>ファイルマップはまだありません。作成すると、ドキュメントのどこに何があるかを表示します。</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>完了: 領域 {0} 個。</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>途中で中止 ({1}% まで走査): 領域 {0} 個。残りは標本による推定です。</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>結果は編集前の内容のものです。</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>ファイルマップを作成できませんでした: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>解析 &gt; ファイルマップ、または上の「作成」でファイルマップを作ります。</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>ほか {0} 件の埋め込まれた形式の候補は持っていません。</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>作り直す</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>テキストのレポート...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>ファイルマップの進捗</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>拡大</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>縮小</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>全体を表示</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>表で表示</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>ファイルマップの帯 (構造のレーンと内容のレーン)</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>ファイルマップの帯のスクロール</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>凡例</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>ファイルマップの領域</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>表示する種類</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>すべての種類</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>一覧の行をブックマークに</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>一覧の行をマルチ選択に</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>終了 (含む)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>ラベル</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>確度</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>段階</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>帯か一覧で領域を選んでください。</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}、{1}、開始 {2}、{3} バイト、確度 {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>確度: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>段階: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>テンプレート: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>範囲を選択</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>ブックマークに追加</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>テンプレート "{0}" を適用</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>新しいタブで開く</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>ここから展開...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>テンプレートを推定...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>文字列を抽出...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>ファイルとして保存...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>テンプレートの推定を使えません。</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>このドキュメントのファイルマップがありません。</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>ファイルマップに、テンプレートの決まった埋め込まれたファイルがありません。</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>埋め込まれたファイルが {0} 個見つかりました。テンプレートを適用しますか?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>適用</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>一覧を表示</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>埋め込まれたファイル {0} 個にテンプレートを適用しました。</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>埋め込まれたファイル {0} 個にテンプレートを適用しました。適用の数の上限 ({2} 個) に達したため、{1} 個は適用していません。</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>ファイルマップを {0} に書き出しました。</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>ファイルマップを書き出せませんでした: {0}</value></data>
 </root>

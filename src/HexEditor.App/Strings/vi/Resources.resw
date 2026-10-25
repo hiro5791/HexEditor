@@ -9867,4 +9867,414 @@ Kết nối sẽ không được thực hiện trừ khi bạn chọn thay khóa
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} giây</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} phút</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} giờ</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>Vị trí bắt đầu nằm ngoài tài liệu.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Nhập độ dài bản ghi từ {0} đến {1} byte.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Chọn một phạm vi chứa ít nhất 4 bản ghi.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Chọn một phạm vi dài ít nhất {0} byte.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Chỉ đọc được {0, plural, other {# bản ghi}}. Cần ít nhất 4 bản ghi.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 trong cả {0} bản ghi.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Cùng giá trị {0} trong cả {1} bản ghi.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Cùng giá trị {0} trong cả {1} bản ghi.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% là chuỗi ASCII (dài tối đa {1} ký tự).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% là chuỗi UTF-16 (dài tối đa {1} ký tự).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>Trong {0} trên {1} bản ghi, giá trị = {2} + {3} × số thứ tự bản ghi.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% là thời gian UNIX (giây) từ {1} đến {2}.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% là thời gian UNIX 64 bit (giây) từ {1} đến {2}.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% là giá trị FILETIME của Windows từ {1} đến {2}.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% là ngày giờ MS-DOS từ {1} đến {2}.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Mọi giá trị đều nhỏ hơn độ dài tài liệu ({0}), {1}% là bội số của {2} và tăng dần theo số thứ tự bản ghi.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Mọi giá trị khác 0 đều nhỏ hơn độ dài tài liệu ({0}) và {1}% trong số đó khác nhau.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>Trong {0}% các bản ghi liên tiếp, bằng hiệu số so với {1} của bản ghi kế tiếp.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + giá trị luôn nằm trong tài liệu ở mọi bản ghi.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% là giá trị dấu phẩy động hợp lý ({1} giá trị khác nhau).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} bit: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} giá trị khác nhau: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Giá trị từ {0} đến {1}; không khớp quy tắc nào.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Mỗi byte đều có entropy từ {0:0.0} bit trở lên (gần như ngẫu nhiên).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} byte không khớp quy tắc nào.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Xét như số dấu phẩy động thì chỉ {0}% là giá trị hợp lý.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Xét như ngày thì chỉ {0}% nằm trong khoảng từ năm 1980 đến 2100.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Xét như bộ đếm thì chỉ {0}% theo đúng dãy số.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Xét như chuỗi thì chỉ {0}% bắt đầu bằng ký tự in được.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>Phần đệm không có tên.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>"{0}" không phải là tên hợp lệ. Hãy dùng chữ cái, chữ số và _, và không bắt đầu bằng chữ số.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>"{0}" là từ khóa dành riêng hoặc tên kiểu.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Một trường khác đã có tên "{0}".</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>Bản nháp do suy luận mẫu tạo ra (TPL-38). Đây chỉ là phỏng đoán, hãy kiểm tra trước khi dùng.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Nguồn: {0}, phạm vi {1}–{2}, độ dài bản ghi {3}, {4, plural, other {# bản ghi}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Bản ghi được suy luận ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (độ tin cậy {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Phần đệm</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Số magic</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Hằng số</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Bộ đếm</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Ngày và giờ</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Độ lệch</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Dấu phẩy động</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Chuỗi</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Chuỗi (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Cờ</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Kiểu liệt kê</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Số nguyên</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Không xác định</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>cao</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>trung bình</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>thấp</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Suy luận mẫu</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Suy luận mẫu từ vùng chọn...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Suy luận mẫu</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Suy luận mẫu từ vùng chọn...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Suy luận mẫu với độ dài này</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Suy luận từ vùng chọn</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>infer;guess;structure;suy luận;đoán;cấu trúc</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Suy luận lại</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>reinfer;rerun;suy luận lại;chạy lại</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>Áp dụng bản nháp đã suy luận</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>apply;draft;áp dụng;bản nháp</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>Mở bản nháp đã suy luận trong trình soạn thảo</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>edit;draft;sửa;bản nháp</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>Hiện bảng suy luận</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>inference;panel;suy luận;bảng</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Bảng suy luận mẫu</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>inference;suy luận</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Đầu</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Độ dài bản ghi</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Tự động</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Số bản ghi</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Toàn bộ phạm vi</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Thứ tự byte</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Tự động</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Suy luận</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Suy luận lại</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Các độ dài bản ghi khả dĩ</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} byte · điểm {1} · {2, plural, other {# bản ghi}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Trường</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Bản nháp (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Áp dụng</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Mở trong trình soạn thảo</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Sao chép</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>Đã sao chép bản nháp.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Hãy mở một tài liệu để suy luận mẫu.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Hãy suy luận mẫu trước.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>Nhập vị trí bắt đầu dưới dạng số hoặc biểu thức.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>Nhập độ dài dưới dạng số hoặc biểu thức.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Nhập số bản ghi, hoặc để trống để dùng toàn bộ phạm vi.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Đang suy luận...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Suy luận mẫu</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Không tìm thấy bản ghi có độ dài cố định. Hãy nhập độ dài bản ghi.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>Không thể suy luận bản ghi có độ dài thay đổi (kích thước phụ thuộc vào trường độ dài).</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Độ dài bản ghi {0}, {1, plural, other {# bản ghi}} (dùng {2} bản ghi để suy luận).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, other {# bản ghi}} không đọc được nên đã bị bỏ qua.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>{0, plural, other {# byte}} cuối cùng không vừa với một bản ghi.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Lỗi nội bộ: bản nháp có lỗi cú pháp ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, độ tin cậy {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>không có tên</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(cảnh báo: độ tin cậy thấp)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(đã sửa thủ công)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>đã sửa</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Các lựa chọn: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Đổi tên</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Kiểu</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Gộp với trường trước</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Tách...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Tách sau số byte này (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>So sánh cả cấu trúc</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>Khi so sánh tệp, so sánh cả các cấu trúc tìm được bằng mẫu cấu trúc (từng trường một). Mẫu được chọn tự động khi cả hai bên khớp cùng một mẫu.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>So sánh cấu trúc: gồm cả mẫu ẩn</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>So sánh cả các mẫu được đánh dấu ẩn trong mẫu cấu trúc.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>So sánh cấu trúc: số trường tối đa</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Dừng so sánh cấu trúc sau khi đã so sánh số trường này ở mỗi bên (10.000 đến 10.000.000).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>So sánh cấu trúc: ghép mảng</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Cách ghép các phần tử mảng, theo từng mẫu và từng mảng. Đổi bằng "Cách ghép..." trong bảng Khác biệt cấu trúc.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>So sánh: so sánh cấu trúc</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff cấu trúc trường mẫu khác biệt</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>So sánh: chọn mẫu để so sánh cấu trúc</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose cấu trúc mẫu chọn</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>So sánh: di chuyển giữa các khác biệt cấu trúc</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target tiếp trước cấu trúc đích</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>So sánh: hiện khác biệt cấu trúc</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel khác biệt cấu trúc bảng</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>So sánh: khác biệt cấu trúc tiếp theo</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field cấu trúc tiếp trường</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>So sánh: khác biệt cấu trúc trước</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field cấu trúc trước trường</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>So sánh: xuất khác biệt cấu trúc</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report cấu trúc xuất báo cáo</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Bật/tắt khác biệt cấu trúc</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel khác biệt cấu trúc bảng</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Khác biệt cấu trúc</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>So sánh cấu trúc</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Chọn mẫu để so sánh cấu trúc...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>So sánh cả cấu trúc</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Chọn mẫu để so sánh cấu trúc</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>So sánh</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Offset bắt đầu bên trái</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Offset bắt đầu bên phải</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>So sánh cấu trúc</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Khác biệt cấu trúc</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Chọn mẫu</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>Đã so sánh {0} trường</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Mẫu: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>Không thể so sánh cấu trúc với ảnh chụp nhanh bộ nhớ tiến trình.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Đến dữ liệu bên trái</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Đến dữ liệu bên phải</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Sao chép đường dẫn</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Sao chép hàng</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Sao chép giá trị bên trái và bên phải</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Thêm dấu trang bên trái</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Thêm dấu trang bên phải</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Cách ghép...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Hiện trong cây kết quả bên trái</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Hiện trong cây kết quả bên phải</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>So sánh cấu trúc: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Đã dừng giữa chừng (đã hủy)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>đã thu gọn</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>đã mở rộng</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Loại</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Giá trị bên trái</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Giá trị bên phải</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Kiểu</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Offset bên trái</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Offset bên phải</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Kích thước</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Cách ghép</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, trái {2}, phải {3}, trái {4}, phải {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>So sánh cấu trúc đang tắt. Hãy bật "So sánh cả cấu trúc" trên thanh công cụ của tab so sánh.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Đang chờ so sánh...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Hãy mở một tab so sánh để xem khác biệt cấu trúc.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Xong trong {0} giây</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Đang so sánh: {0} trường</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>Đã dừng ở giới hạn số trường</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>So sánh cấu trúc không thành công: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>Số trường đã đạt giới hạn ({0}) nên chỉ so sánh được một phần.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Hiện {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Mẫu: {0} ({1}), trái {2} / phải {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Do bạn chọn.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Cả hai bên đã áp dụng cùng một mẫu.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Số magic của hai bên khớp nhau.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Khác biệt cấu trúc</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Đã thay đổi</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Đã thêm</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Đã xóa</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Đã di chuyển</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Đã di chuyển và thay đổi</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Đã đổi kiểu</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Không phân tích được</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Giống nhau</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Bên trái: {0} lỗi, {1} cảnh báo</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Bên phải: {0} lỗi, {1} cảnh báo</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Đầu ra của mẫu (bên trái)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Đầu ra của mẫu (bên phải)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Không có lỗi hay cảnh báo.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Khóa: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Nội dung</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Vị trí</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(ghép theo vị trí vì có nhiều phần tử)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Không có khác biệt cấu trúc.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Không có kết quả so sánh cấu trúc.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Không có khác biệt cấu trúc</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Đã quay lại khác biệt cấu trúc đầu tiên</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Đã quay lại khác biệt cấu trúc cuối cùng</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Chưa chọn mẫu để so sánh cấu trúc (hai bên phải khớp cùng một mẫu theo số magic). Chỉ so sánh byte.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>Mẫu có lỗi cú pháp: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>Không tìm thấy tệp mẫu: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Khác biệt nằm ngoài cấu trúc</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} khác biệt, {1} byte</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(ngoài phạm vi)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(đệm)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>lỗi mẫu</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>Không so sánh vì đã đạt giới hạn</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Không so sánh vì quá sâu</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Số trường đã so sánh: trái {0}, phải {1}. {2}. Ngoài cấu trúc: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Chọn mẫu...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Sửa mẫu</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Nâng giới hạn và so sánh lại</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Xuất...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Lọc theo tên, đường dẫn hoặc giá trị</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Lọc</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Gồm cả phần đệm</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Hiện các trường khớp nhau</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Tóm tắt</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Khác biệt cấu trúc</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Xuất khác biệt cấu trúc</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Định dạng</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Báo cáo dạng văn bản</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Hàng</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Các hàng đang hiện (sau khi lọc)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Tất cả khác biệt</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Offset</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Thập phân</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Thập lục phân</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Lưu...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Xuất khác biệt cấu trúc</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(trái {0}, phải {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Mẫu: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Offset bắt đầu: trái {0}, phải {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Số trường đã so sánh: trái {0}, phải {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Khác biệt ngoài cấu trúc: {0}, {1} byte</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Lỗi và cảnh báo của mẫu: trái {0} / {1}, phải {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Thời gian: {0} giây</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Cách ghép</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Mảng: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Cách</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Tự động</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Khóa</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Nội dung</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Vị trí</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Trường khóa</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Đang lọc...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Cấu trúc định dạng</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Tệp nhúng</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Đã nén</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Đã mã hóa hoặc ngẫu nhiên</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Văn bản</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Số không</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Đệm</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Bản ghi lặp lại</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Nhị phân</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Không đọc được</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Ước lượng từ mẫu lấy</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Số không</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Hằng số {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Văn bản ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Bản ghi lặp lại ({0, plural, other {# byte}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Cao</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Trung bình</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Thấp</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Lấy mẫu</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Quét</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Cấu trúc</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Ước lượng từ mẫu lấy: 4 KiB ở giữa của mỗi {0, plural, other {# khoảng}} dài {1} byte.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{1} liên tiếp {0, plural, other {# byte}}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>Không đọc được {0, plural, other {# byte}}.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entropy {0} bit/byte, giá trị p của kiểm định chi bình phương {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entropy {0} bit/byte.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Được phân loại theo từng khối ({0, plural, other {# khối}} dài {1} byte).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, other {# byte}} từ {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>Mẫu "{0}" đặt mẫu hình {1} tại {2}–{3} ({4, plural, other {# byte}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>Chữ ký {1} tại {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>Mẫu "{0}" đã phân tích {1}–{2} ({3, plural, other {# byte}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>Mẫu "{0}" không phân tích được dữ liệu ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>Định nghĩa carving "{1}" cho độ dài {0, plural, other {# byte}} ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>kiểm tra cấu trúc</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>trường kích thước</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>phần cuối</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>kích thước tối đa</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>Chưa biết điểm kết thúc; giả định vùng này kết thúc trước vùng kế tiếp tại {0} ({1, plural, other {# byte}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>Luồng {0} tại {1} đã được giải nén và tổng kiểm khớp ({2, plural, other {# byte}} đã nén, {3} byte sau khi giải nén).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>Với độ lệch {0} byte, {1} số byte khớp nhau (trung bình cho độ lệch 1–{2}: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Bản đồ này là ước lượng dựa trên chữ ký và thống kê, nên có thể sai.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Chế độ xem biến đổi: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Tài liệu: {0} ({1}), {2, plural, other {# byte}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Phạm vi: {0}–{1} ({2, plural, other {# byte}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Tất cả các giai đoạn đã hoàn tất.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Chưa hoàn tất mọi giai đoạn (phần còn lại được ước lượng từ mẫu lấy).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Số byte theo loại:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, other {# byte}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, other {# vùng}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>và {0, plural, other {# vùng}} nữa</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Tạo bản đồ tệp</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>file map overview regions layout bản đồ tệp tổng quan vùng bố cục</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Tạo lại bản đồ tệp</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>file map recreate refresh bản đồ tệp tạo lại làm mới</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Hiện bản đồ tệp</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>file map panel bản đồ tệp bảng</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Xuất bản đồ tệp</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>file map json csv report bản đồ tệp xuất báo cáo</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Áp dụng mẫu cho các tệp tìm thấy</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>file map embedded files templates bản đồ tệp tệp nhúng mẫu</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Bật/tắt bảng bản đồ tệp</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>file map panel bản đồ tệp bảng</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Bản đồ tệp</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Bản đồ tệp</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Bản đồ tệp</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Bản đồ tệp</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Tạo bản đồ tệp</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Bản đồ tệp</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Xuất bản đồ tệp</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Bản đồ tệp: mẫu cho tệp nhúng</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Khi bản đồ tệp tìm thấy tệp nhúng mà mẫu có thể phân tích, sẽ đề xuất áp dụng mẫu. Mẫu không bao giờ được áp dụng tự động.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Đề xuất</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Không làm gì</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Tổng quan (lấy mẫu)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Quét toàn bộ</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Phân tích cấu trúc</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Chưa có bản đồ tệp. Hãy tạo một bản đồ để xem cái gì nằm ở đâu trong tài liệu.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Xong: {0} vùng.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Đã dừng (đã quét {1}%): {0} vùng. Phần còn lại được ước lượng từ mẫu lấy.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Kết quả là của nội dung trước khi sửa.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>Không thể tạo bản đồ tệp: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Tạo bản đồ tệp bằng Phân tích &gt; Bản đồ tệp, hoặc bằng nút Tạo ở trên.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, other {# định dạng nhúng khả dĩ}} không được giữ lại.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Tạo</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Tạo lại</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Hủy</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Xuất</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Báo cáo dạng văn bản...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>Tiến trình bản đồ tệp</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Phóng to</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Thu nhỏ</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Hiện toàn bộ bản đồ</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Hiện dạng bảng</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Dải bản đồ tệp: làn cấu trúc và làn nội dung</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>Cuộn dải bản đồ tệp</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Chú giải</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, other {# byte}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>Các vùng của bản đồ tệp</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Hiện loại</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Mọi loại</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>Đưa các hàng đang liệt kê vào dấu trang</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>Đưa các hàng đang liệt kê vào vùng chọn nhiều</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Đầu</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Cuối (gồm cả)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Độ dài</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Loại</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Nhãn</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Độ tin cậy</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Giai đoạn</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Chọn một vùng trên dải hoặc trong danh sách.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, other {# byte}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, bắt đầu tại {2}, {3, plural, other {# byte}}, độ tin cậy {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Độ tin cậy: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Giai đoạn: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Mẫu: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Chọn phạm vi</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Thêm dấu trang</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>Áp dụng mẫu "{0}"</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Mở trong tab mới</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Giải nén từ đây...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Suy luận mẫu...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Trích xuất chuỗi...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Lưu thành tệp...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>Không thể suy luận mẫu.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Tài liệu này không có bản đồ tệp.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>Bản đồ tệp không có tệp nhúng nào có mẫu.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>Đã tìm thấy {0, plural, other {# tệp nhúng}}. Áp dụng mẫu?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Áp dụng</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Hiện danh sách</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>Đã áp dụng mẫu cho {0, plural, other {# tệp nhúng}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>Đã áp dụng mẫu cho {0} tệp nhúng. {1, plural, other {# tệp}} chưa được áp dụng vì một tài liệu chỉ có thể có tối đa {2} lần áp dụng.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>Đã xuất bản đồ tệp ra {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>Không thể xuất bản đồ tệp: {0}</value></data>
 </root>

@@ -9866,4 +9866,414 @@ A kapcsolat nem jön létre, hacsak nem dönt a kulcs cseréje mellett.</value><
   <data name="Wipe_Seconds" xml:space="preserve"><value>{0} mp</value></data>
   <data name="Wipe_Minutes" xml:space="preserve"><value>{0} perc</value></data>
   <data name="Wipe_Hours" xml:space="preserve"><value>{0} óra</value></data>
+  <data name="TplInfer_Block_Start" xml:space="preserve"><value>A kezdet a dokumentumon kívül esik.</value></data>
+  <data name="TplInfer_Block_RecordLength" xml:space="preserve"><value>Adjon meg {0} és {1} bájt közötti rekordhosszt.</value></data>
+  <data name="TplInfer_Block_FourRecords" xml:space="preserve"><value>Jelöljön ki legalább 4 rekordot tartalmazó tartományt.</value></data>
+  <data name="TplInfer_Block_MinLength" xml:space="preserve"><value>Jelöljön ki legalább {0} bájt hosszú tartományt.</value></data>
+  <data name="TplInfer_Block_Unreadable" xml:space="preserve"><value>Csak {0, plural, one {# rekordot} other {# rekordot}} sikerült beolvasni. Legalább 4 kell.</value></data>
+  <data name="TplInfer_Reason_Padding" xml:space="preserve"><value>00 mind a(z) {0} rekordban.</value></data>
+  <data name="TplInfer_Reason_Magic" xml:space="preserve"><value>Ugyanaz az érték ({0}) mind a(z) {1} rekordban.</value></data>
+  <data name="TplInfer_Reason_Constant" xml:space="preserve"><value>Ugyanaz az érték ({0}) mind a(z) {1} rekordban.</value></data>
+  <data name="TplInfer_Reason_Ascii" xml:space="preserve"><value>{0}% ASCII-karakterlánc (legfeljebb {1} karakter).</value></data>
+  <data name="TplInfer_Reason_Utf16" xml:space="preserve"><value>{0}% UTF-16 karakterlánc (legfeljebb {1} karakter).</value></data>
+  <data name="TplInfer_Reason_Counter" xml:space="preserve"><value>{1} rekordból {0} esetében érték = {2} + {3} × rekordszám.</value></data>
+  <data name="TplInfer_Reason_Time_time32_t" xml:space="preserve"><value>{0}% UNIX-idő (másodpercben), {1} és {2} között.</value></data>
+  <data name="TplInfer_Reason_Time_time64_t" xml:space="preserve"><value>{0}% 64 bites UNIX-idő (másodpercben), {1} és {2} között.</value></data>
+  <data name="TplInfer_Reason_Time_filetime" xml:space="preserve"><value>{0}% Windows FILETIME-érték, {1} és {2} között.</value></data>
+  <data name="TplInfer_Reason_Time_dosdatetime" xml:space="preserve"><value>{0}% MS-DOS dátum és idő, {1} és {2} között.</value></data>
+  <data name="TplInfer_Reason_OffsetHigh" xml:space="preserve"><value>Minden érték kisebb a dokumentum hosszánál ({0}), {1}% a(z) {2} többszöröse, és nőnek a rekordszámmal.</value></data>
+  <data name="TplInfer_Reason_Offset" xml:space="preserve"><value>Minden nem nulla érték kisebb a dokumentum hosszánál ({0}), és {1}%-uk különböző.</value></data>
+  <data name="TplInfer_Reason_LengthHigh" xml:space="preserve"><value>Az egymást követő rekordok {0}%-ában az érték egyenlő a következő rekord {1} értékével vett különbséggel.</value></data>
+  <data name="TplInfer_Reason_Length" xml:space="preserve"><value>{0} + érték minden rekordban a dokumentumon belül marad.</value></data>
+  <data name="TplInfer_Reason_Float" xml:space="preserve"><value>{0}% hihető lebegőpontos érték ({1} különböző érték).</value></data>
+  <data name="TplInfer_Reason_Flags" xml:space="preserve"><value>{0} bit: {1}.</value></data>
+  <data name="TplInfer_Reason_Enum" xml:space="preserve"><value>{0} különböző érték: {1}.</value></data>
+  <data name="TplInfer_Reason_Integer" xml:space="preserve"><value>Értékek {0} és {1} között; egyetlen szabály sem illik rájuk.</value></data>
+  <data name="TplInfer_Reason_Unknown" xml:space="preserve"><value>Minden bájt entrópiája legalább {0:0.0} bit (közel véletlenszerű).</value></data>
+  <data name="TplInfer_Reason_Bytes" xml:space="preserve"><value>{0} bájt, amelyre egyetlen szabály sem illik.</value></data>
+  <data name="TplInfer_Near_Float" xml:space="preserve"><value>Lebegőpontos számként csak {0}% a hihető érték.</value></data>
+  <data name="TplInfer_Near_Time" xml:space="preserve"><value>Dátumként csak {0}% esik 1980 és 2100 közé.</value></data>
+  <data name="TplInfer_Near_Counter" xml:space="preserve"><value>Számlálóként csak {0}% követi a sorozatot.</value></data>
+  <data name="TplInfer_Near_Ascii" xml:space="preserve"><value>Karakterláncként csak {0}% kezdődik nyomtatható karakterrel.</value></data>
+  <data name="TplInfer_Name_Padding" xml:space="preserve"><value>A kitöltésnek nincs neve.</value></data>
+  <data name="TplInfer_Name_Invalid" xml:space="preserve"><value>A(z) „{0}” nem érvényes név. Használjon betűket, számjegyeket és _ jelet, és ne kezdje számjeggyel.</value></data>
+  <data name="TplInfer_Name_Reserved" xml:space="preserve"><value>A(z) „{0}” foglalt szó vagy típusnév.</value></data>
+  <data name="TplInfer_Name_Duplicate" xml:space="preserve"><value>Egy másik mező neve már „{0}”.</value></data>
+  <data name="TplInfer_Draft_Header1" xml:space="preserve"><value>A sablon levezetése által készített vázlat (TPL-38). Ez csak egy tipp, ezért használat előtt ellenőrizze.</value></data>
+  <data name="TplInfer_Draft_Header2" xml:space="preserve"><value>Forrás: {0}, tartomány: {1}–{2}, rekordhossz: {3}, {4, plural, one {# rekord} other {# rekord}}, {5}</value></data>
+  <data name="TplInfer_Draft_PragmaName" xml:space="preserve"><value>Levezetett rekordok ({0})</value></data>
+  <data name="TplInfer_Draft_Comment" xml:space="preserve"><value>{0} (megbízhatóság: {1}): {2}</value></data>
+  <data name="TplInfer_Kind_Padding" xml:space="preserve"><value>Kitöltés</value></data>
+  <data name="TplInfer_Kind_Magic" xml:space="preserve"><value>Mágikus szám</value></data>
+  <data name="TplInfer_Kind_Constant" xml:space="preserve"><value>Konstans</value></data>
+  <data name="TplInfer_Kind_Counter" xml:space="preserve"><value>Számláló</value></data>
+  <data name="TplInfer_Kind_Time" xml:space="preserve"><value>Dátum és idő</value></data>
+  <data name="TplInfer_Kind_Offset" xml:space="preserve"><value>Eltolás</value></data>
+  <data name="TplInfer_Kind_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="TplInfer_Kind_Float" xml:space="preserve"><value>Lebegőpontos szám</value></data>
+  <data name="TplInfer_Kind_AsciiString" xml:space="preserve"><value>Karakterlánc</value></data>
+  <data name="TplInfer_Kind_Utf16String" xml:space="preserve"><value>Karakterlánc (UTF-16)</value></data>
+  <data name="TplInfer_Kind_Flags" xml:space="preserve"><value>Jelzők</value></data>
+  <data name="TplInfer_Kind_Enum" xml:space="preserve"><value>Felsorolás</value></data>
+  <data name="TplInfer_Kind_Integer" xml:space="preserve"><value>Egész szám</value></data>
+  <data name="TplInfer_Kind_Unknown" xml:space="preserve"><value>Ismeretlen</value></data>
+  <data name="TplInfer_Confidence_High" xml:space="preserve"><value>magas</value></data>
+  <data name="TplInfer_Confidence_Medium" xml:space="preserve"><value>közepes</value></data>
+  <data name="TplInfer_Confidence_Low" xml:space="preserve"><value>alacsony</value></data>
+  <data name="Panel_TemplateInference_Title" xml:space="preserve"><value>Sablon levezetése</value></data>
+  <data name="Menu_Templates_Infer.Text" xml:space="preserve"><value>Sablon levezetése a kijelölésből...</value></data>
+  <data name="Menu_Templates_Infer.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_TemplateInferencePanel.Text" xml:space="preserve"><value>Sablon levezetése</value></data>
+  <data name="Menu_View_TemplateInferencePanel.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="HexView_Menu_TemplateInfer" xml:space="preserve"><value>Sablon levezetése a kijelölésből...</value></data>
+  <data name="Stats_Menu_InferTemplate" xml:space="preserve"><value>Sablon levezetése ezzel a hosszal</value></data>
+  <data name="Cmd_templates_infer" xml:space="preserve"><value>Levezetés a kijelölésből</value></data>
+  <data name="CmdAlias_templates_infer" xml:space="preserve"><value>levezetés tipp szerkezet infer guess structure</value></data>
+  <data name="Cmd_templates_inferAgain" xml:space="preserve"><value>Levezetés újra</value></data>
+  <data name="CmdAlias_templates_inferAgain" xml:space="preserve"><value>újra ismétlés reinfer rerun</value></data>
+  <data name="Cmd_templates_inferApply" xml:space="preserve"><value>A levezetett vázlat alkalmazása</value></data>
+  <data name="CmdAlias_templates_inferApply" xml:space="preserve"><value>alkalmaz vázlat apply draft</value></data>
+  <data name="Cmd_templates_inferOpenEditor" xml:space="preserve"><value>A levezetett vázlat megnyitása a szerkesztőben</value></data>
+  <data name="CmdAlias_templates_inferOpenEditor" xml:space="preserve"><value>szerkesztés vázlat edit draft</value></data>
+  <data name="Cmd_templates_showInference" xml:space="preserve"><value>A levezetés panel megjelenítése</value></data>
+  <data name="CmdAlias_templates_showInference" xml:space="preserve"><value>levezetés panel inference panel</value></data>
+  <data name="Cmd_view_panel_templateInference" xml:space="preserve"><value>Sablonlevezetés panel</value></data>
+  <data name="CmdAlias_view_panel_templateInference" xml:space="preserve"><value>levezetés inference</value></data>
+  <data name="TplInfer_Start" xml:space="preserve"><value>Kezdet</value></data>
+  <data name="TplInfer_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="TplInfer_RecordLength" xml:space="preserve"><value>Rekordhossz</value></data>
+  <data name="TplInfer_Auto" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="TplInfer_Count" xml:space="preserve"><value>Rekordok</value></data>
+  <data name="TplInfer_FillRange" xml:space="preserve"><value>Teljes tartomány</value></data>
+  <data name="TplInfer_Endian" xml:space="preserve"><value>Bájtsorrend</value></data>
+  <data name="TplInfer_Endian_Auto" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="TplInfer_Endian_Little" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplInfer_Endian_Big" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplInfer_Run" xml:space="preserve"><value>Levezetés</value></data>
+  <data name="TplInfer_Reinfer" xml:space="preserve"><value>Levezetés újra</value></data>
+  <data name="TplInfer_Candidates" xml:space="preserve"><value>Rekordhossz-jelöltek</value></data>
+  <data name="TplInfer_Candidate" xml:space="preserve"><value>{0} bájt · pontszám: {1} · {2, plural, one {# rekord} other {# rekord}}</value></data>
+  <data name="TplInfer_Table" xml:space="preserve"><value>Mezők</value></data>
+  <data name="TplInfer_Preview" xml:space="preserve"><value>Vázlat (HXT)</value></data>
+  <data name="TplInfer_Apply" xml:space="preserve"><value>Alkalmazás</value></data>
+  <data name="TplInfer_OpenEditor" xml:space="preserve"><value>Megnyitás a szerkesztőben</value></data>
+  <data name="TplInfer_Copy" xml:space="preserve"><value>Másolás</value></data>
+  <data name="TplInfer_Copied" xml:space="preserve"><value>A vázlat átmásolva.</value></data>
+  <data name="TplInfer_NoDocument" xml:space="preserve"><value>Nyisson meg egy dokumentumot a sablon levezetéséhez.</value></data>
+  <data name="TplInfer_NoResult" xml:space="preserve"><value>Először vezessen le egy sablont.</value></data>
+  <data name="TplInfer_BadStart" xml:space="preserve"><value>A kezdetet számként vagy kifejezésként adja meg.</value></data>
+  <data name="TplInfer_BadLength" xml:space="preserve"><value>A hosszt számként vagy kifejezésként adja meg.</value></data>
+  <data name="TplInfer_BadCount" xml:space="preserve"><value>Adja meg a rekordok számát, vagy hagyja üresen a teljes tartományhoz.</value></data>
+  <data name="TplInfer_Running" xml:space="preserve"><value>Levezetés...</value></data>
+  <data name="TplInfer_OperationName" xml:space="preserve"><value>Sablon levezetése</value></data>
+  <data name="TplInfer_NotFound" xml:space="preserve"><value>Nem található fix hosszúságú rekord. Adja meg a rekordhosszt.</value></data>
+  <data name="TplInfer_VariableLength" xml:space="preserve"><value>A változó hosszúságú rekordokat (amelyek mérete egy hosszmezőtől függ) nem lehet levezetni.</value></data>
+  <data name="TplInfer_StatusRecords" xml:space="preserve"><value>Rekordhossz: {0}, {1, plural, one {# rekord} other {# rekord}} ({2} használva a levezetéshez).</value></data>
+  <data name="TplInfer_StatusLittle" xml:space="preserve"><value>Little-endian.</value></data>
+  <data name="TplInfer_StatusBig" xml:space="preserve"><value>Big-endian.</value></data>
+  <data name="TplInfer_StatusUnreadable" xml:space="preserve"><value>{0, plural, one {# rekordot nem sikerült beolvasni, ezért kimaradt} other {# rekordot nem sikerült beolvasni, ezért kimaradt}}.</value></data>
+  <data name="TplInfer_Remainder" xml:space="preserve"><value>Az utolsó {0, plural, one {# bájt nem fér} other {# bájt nem fér}} bele egy rekordba.</value></data>
+  <data name="TplInfer_InternalError" xml:space="preserve"><value>Belső hiba: a vázlat szintaktikai hibákat tartalmaz ({0}).</value></data>
+  <data name="TplInfer_RowName" xml:space="preserve"><value>{0}, {1}, {2}, {3}, megbízhatóság: {4}</value></data>
+  <data name="TplInfer_NoName" xml:space="preserve"><value>név nélkül</value></data>
+  <data name="TplInfer_LowWarning" xml:space="preserve"><value>(figyelmeztetés: alacsony megbízhatóság)</value></data>
+  <data name="TplInfer_Manual" xml:space="preserve"><value>(kézzel módosítva)</value></data>
+  <data name="TplInfer_ManualShort" xml:space="preserve"><value>módosítva</value></data>
+  <data name="TplInfer_Alternatives" xml:space="preserve"><value>Jelöltek: {0}</value></data>
+  <data name="TplInfer_Menu_Rename" xml:space="preserve"><value>Átnevezés</value></data>
+  <data name="TplInfer_Menu_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="TplInfer_Menu_Merge" xml:space="preserve"><value>Összevonás az előző mezővel</value></data>
+  <data name="TplInfer_Menu_Split" xml:space="preserve"><value>Felosztás...</value></data>
+  <data name="TplInfer_SplitAt" xml:space="preserve"><value>Felosztás ennyi bájt után (1–{0})</value></data>
+  <data name="Set_compare_structure_enabled" xml:space="preserve"><value>A szerkezet összehasonlítása is</value></data>
+  <data name="SetDesc_compare_structure_enabled" xml:space="preserve"><value>Fájlok összehasonlításakor a szerkezetsablon által talált szerkezeteket is összehasonlítja (mezőnként). A sablont automatikusan kiválasztja, ha mindkét oldal ugyanahhoz a sablonhoz illik.</value></data>
+  <data name="Set_compare_structure_includeHidden" xml:space="preserve"><value>Szerkezet-összehasonlítás: rejtett minták is</value></data>
+  <data name="SetDesc_compare_structure_includeHidden" xml:space="preserve"><value>A sablonban rejtettként megjelölt mintákat is összehasonlítja.</value></data>
+  <data name="Set_compare_structure_maxFields" xml:space="preserve"><value>Szerkezet-összehasonlítás: mezők legnagyobb száma</value></data>
+  <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Leállítja a szerkezet-összehasonlítást, miután oldalanként ennyi mezőt összehasonlított (10 000 és 10 000 000 között).</value></data>
+  <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Szerkezet-összehasonlítás: tömbök párosítása</value></data>
+  <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Hogyan párosítja a tömbelemeket, sablononként és tömbönként. A „Párosítási módszer...” paranccsal módosíthatja a Szerkezeti különbségek panelen.</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Összehasonlítás: szerkezet összehasonlítása</value></data>
+  <data name="CmdAlias_compare_structure" xml:space="preserve"><value>szerkezet mező sablon különbség structure field template diff</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Összehasonlítás: sablon kiválasztása a szerkezet-összehasonlításhoz</value></data>
+  <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>szerkezet sablon kiválasztás structure template choose</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Összehasonlítás: lépkedés a szerkezeti különbségek között</value></data>
+  <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>következő előző szerkezet cél next previous structure target</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Összehasonlítás: szerkezeti különbségek megjelenítése</value></data>
+  <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>szerkezet különbségek panel structure differences panel</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Összehasonlítás: következő szerkezeti különbség</value></data>
+  <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>szerkezet következő mező structure next field</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Összehasonlítás: előző szerkezeti különbség</value></data>
+  <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>szerkezet előző mező structure previous field</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Összehasonlítás: szerkezeti különbségek exportálása</value></data>
+  <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>szerkezet exportálás jelentés structure export json csv report</value></data>
+  <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Szerkezeti különbségek be/ki</value></data>
+  <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>szerkezet különbségek panel structure differences panel</value></data>
+  <data name="Menu_View_StructDiffs.Text" xml:space="preserve"><value>Szerkezeti különbségek</value></data>
+  <data name="Menu_View_StructDiffs.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Menu_Analysis_CompareStructure.Text" xml:space="preserve"><value>Szerkezet összehasonlítása</value></data>
+  <data name="Menu_Analysis_CompareStructure.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.Text" xml:space="preserve"><value>Sablon kiválasztása a szerkezet-összehasonlításhoz...</value></data>
+  <data name="Menu_Analysis_CompareStructureTemplate.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Compare_Dialog_Structure" xml:space="preserve"><value>A szerkezet összehasonlítása is</value></data>
+  <data name="Compare_StructDialog_Title" xml:space="preserve"><value>Sablon kiválasztása a szerkezet-összehasonlításhoz</value></data>
+  <data name="Compare_StructDialog_Ok" xml:space="preserve"><value>Összehasonlítás</value></data>
+  <data name="Compare_StructDialog_LeftOffset" xml:space="preserve"><value>Bal oldali kezdő eltolás</value></data>
+  <data name="Compare_StructDialog_RightOffset" xml:space="preserve"><value>Jobb oldali kezdő eltolás</value></data>
+  <data name="Compare_StructOperationName" xml:space="preserve"><value>Szerkezet-összehasonlítás</value></data>
+  <data name="Compare_StructPanel_Title" xml:space="preserve"><value>Szerkezeti különbségek</value></data>
+  <data name="Compare_Struct_ChooseTemplate" xml:space="preserve"><value>Sablon kiválasztása</value></data>
+  <data name="Compare_Struct_Fields" xml:space="preserve"><value>Összehasonlított mezők: {0}</value></data>
+  <data name="Compare_Struct_TemplateButton" xml:space="preserve"><value>Sablon: {0}</value></data>
+  <data name="Compare_Struct_Unsupported" xml:space="preserve"><value>A szerkezet-összehasonlítás nem érhető el folyamatmemória-pillanatképekhez.</value></data>
+  <data name="StructDiffMenu_GoLeft" xml:space="preserve"><value>Ugrás a bal oldali adatokra</value></data>
+  <data name="StructDiffMenu_GoRight" xml:space="preserve"><value>Ugrás a jobb oldali adatokra</value></data>
+  <data name="StructDiffMenu_CopyPath" xml:space="preserve"><value>Elérési út másolása</value></data>
+  <data name="StructDiffMenu_CopyRow" xml:space="preserve"><value>Sor másolása</value></data>
+  <data name="StructDiffMenu_CopyValues" xml:space="preserve"><value>Bal és jobb oldali érték másolása</value></data>
+  <data name="StructDiffMenu_BookmarkLeft" xml:space="preserve"><value>Könyvjelző hozzáadása balra</value></data>
+  <data name="StructDiffMenu_BookmarkRight" xml:space="preserve"><value>Könyvjelző hozzáadása jobbra</value></data>
+  <data name="StructDiffMenu_Matching" xml:space="preserve"><value>Párosítási módszer...</value></data>
+  <data name="StructDiffMenu_TreeLeft" xml:space="preserve"><value>Megjelenítés a bal oldali eredményfában</value></data>
+  <data name="StructDiffMenu_TreeRight" xml:space="preserve"><value>Megjelenítés a jobb oldali eredményfában</value></data>
+  <data name="StructDiff_BookmarkComment" xml:space="preserve"><value>Szerkezet-összehasonlítás: {0}, {1}</value></data>
+  <data name="StructDiff_Cancelled" xml:space="preserve"><value>Félúton leállítva (megszakítva)</value></data>
+  <data name="StructDiff_Collapsed" xml:space="preserve"><value>összecsukva</value></data>
+  <data name="StructDiff_Expanded" xml:space="preserve"><value>kibontva</value></data>
+  <data name="StructDiff_Column_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="StructDiff_Column_Kind" xml:space="preserve"><value>Fajta</value></data>
+  <data name="StructDiff_Column_LeftValue" xml:space="preserve"><value>Bal oldali érték</value></data>
+  <data name="StructDiff_Column_RightValue" xml:space="preserve"><value>Jobb oldali érték</value></data>
+  <data name="StructDiff_Column_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="StructDiff_Column_LeftOffset" xml:space="preserve"><value>Bal oldali eltolás</value></data>
+  <data name="StructDiff_Column_RightOffset" xml:space="preserve"><value>Jobb oldali eltolás</value></data>
+  <data name="StructDiff_Column_Size" xml:space="preserve"><value>Méret</value></data>
+  <data name="StructDiff_Column_Match" xml:space="preserve"><value>Párosítás</value></data>
+  <data name="StructDiff_ContainerName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="StructDiff_LeafName" xml:space="preserve"><value>{0}, {1}, bal: {2}, jobb: {3}, bal: {4}, jobb: {5}</value></data>
+  <data name="StructDiff_CountSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="StructDiff_Disabled" xml:space="preserve"><value>A szerkezet-összehasonlítás ki van kapcsolva. Kapcsolja be az „A szerkezet összehasonlítása is” beállítást az összehasonlítás lap eszköztárán.</value></data>
+  <data name="StructDiff_Waiting" xml:space="preserve"><value>Várakozás az összehasonlításra...</value></data>
+  <data name="StructDiff_NoCompare" xml:space="preserve"><value>Nyisson meg egy összehasonlítás lapot a szerkezeti különbségek megtekintéséhez.</value></data>
+  <data name="StructDiff_Elapsed" xml:space="preserve"><value>Kész {0} mp alatt</value></data>
+  <data name="StructDiff_Running" xml:space="preserve"><value>Összehasonlítás: {0} mező</value></data>
+  <data name="StructDiff_StoppedAtLimit" xml:space="preserve"><value>A mezőkorlátnál leállítva</value></data>
+  <data name="StructDiff_Failed" xml:space="preserve"><value>A szerkezet-összehasonlítás sikertelen: {0}</value></data>
+  <data name="StructDiff_FieldLimit" xml:space="preserve"><value>A mezők száma elérte a korlátot ({0}), ezért csak egy részük lett összehasonlítva.</value></data>
+  <data name="StructDiff_FilterKind" xml:space="preserve"><value>Megjelenítés: {0}</value></data>
+  <data name="StructDiff_Heading" xml:space="preserve"><value>Sablon: {0} ({1}), bal: {2} / jobb: {3}. {4}</value></data>
+  <data name="StructDiff_Reason_UserChoice" xml:space="preserve"><value>Ön választotta.</value></data>
+  <data name="StructDiff_Reason_SameApplication" xml:space="preserve"><value>Mindkét oldalon ugyanaz a sablon van alkalmazva.</value></data>
+  <data name="StructDiff_Reason_MagicMatch" xml:space="preserve"><value>Mindkét oldal mágikus száma egyezett.</value></data>
+  <data name="StructDiff_Title" xml:space="preserve"><value>Szerkezeti különbségek</value></data>
+  <data name="StructDiff_Kind_Changed" xml:space="preserve"><value>Módosítva</value></data>
+  <data name="StructDiff_Kind_Added" xml:space="preserve"><value>Hozzáadva</value></data>
+  <data name="StructDiff_Kind_Removed" xml:space="preserve"><value>Eltávolítva</value></data>
+  <data name="StructDiff_Kind_Moved" xml:space="preserve"><value>Áthelyezve</value></data>
+  <data name="StructDiff_Kind_MovedChanged" xml:space="preserve"><value>Áthelyezve és módosítva</value></data>
+  <data name="StructDiff_Kind_TypeChanged" xml:space="preserve"><value>Típus módosítva</value></data>
+  <data name="StructDiff_Kind_Unparsed" xml:space="preserve"><value>Nem értelmezhető</value></data>
+  <data name="StructDiff_Kind_Same" xml:space="preserve"><value>Azonos</value></data>
+  <data name="StructDiff_LeftDiagnostics" xml:space="preserve"><value>Bal: {0} hiba, {1} figyelmeztetés</value></data>
+  <data name="StructDiff_RightDiagnostics" xml:space="preserve"><value>Jobb: {0} hiba, {1} figyelmeztetés</value></data>
+  <data name="StructDiff_LeftOutput" xml:space="preserve"><value>Sablonkimenet (bal)</value></data>
+  <data name="StructDiff_RightOutput" xml:space="preserve"><value>Sablonkimenet (jobb)</value></data>
+  <data name="StructDiff_NoDiagnostics" xml:space="preserve"><value>Nincs hiba vagy figyelmeztetés.</value></data>
+  <data name="StructDiff_Match_Key" xml:space="preserve"><value>Kulcs: {0}</value></data>
+  <data name="StructDiff_Match_Content" xml:space="preserve"><value>Tartalom</value></data>
+  <data name="StructDiff_Match_Index" xml:space="preserve"><value>Pozíció</value></data>
+  <data name="StructDiff_TooManyForContent" xml:space="preserve"><value>(pozíció szerint párosítva, mert sok az elem)</value></data>
+  <data name="StructDiff_NoDiffs" xml:space="preserve"><value>Nincs szerkezeti különbség.</value></data>
+  <data name="StructDiff_NoResult" xml:space="preserve"><value>Nincs szerkezet-összehasonlítási eredmény.</value></data>
+  <data name="StructDiff_NoStructDiffs" xml:space="preserve"><value>Nincs szerkezeti különbség</value></data>
+  <data name="StructDiff_WrappedToFirst" xml:space="preserve"><value>Vissza az első szerkezeti különbséghez</value></data>
+  <data name="StructDiff_WrappedToLast" xml:space="preserve"><value>Vissza az utolsó szerkezeti különbséghez</value></data>
+  <data name="StructDiff_NoTemplate" xml:space="preserve"><value>Nem lett sablon kiválasztva a szerkezet-összehasonlításhoz (mindkét oldalnak a mágikus szám alapján ugyanahhoz a sablonhoz kell illenie). Csak a bájtösszehasonlítás futott le.</value></data>
+  <data name="StructDiff_SyntaxError" xml:space="preserve"><value>A sablon szintaktikai hibát tartalmaz: {0}</value></data>
+  <data name="StructDiff_TemplateMissing" xml:space="preserve"><value>A sablonfájl nem található: {0}</value></data>
+  <data name="StructDiff_Outside" xml:space="preserve"><value>Különbségek a szerkezeten kívül</value></data>
+  <data name="StructDiff_OutsideValue" xml:space="preserve"><value>{0} különbség, {1} bájt</value></data>
+  <data name="StructDiff_OutsideMark" xml:space="preserve"><value>(tartományon kívül)</value></data>
+  <data name="StructDiff_PaddingMark" xml:space="preserve"><value>(kitöltés)</value></data>
+  <data name="StructDiff_Reason_Error" xml:space="preserve"><value>sablonhiba</value></data>
+  <data name="StructDiff_Reason_Limit" xml:space="preserve"><value>A korlát miatt nem lett összehasonlítva</value></data>
+  <data name="StructDiff_Reason_TooDeep" xml:space="preserve"><value>Nem lett összehasonlítva, mert túl mély</value></data>
+  <data name="StructDiff_SummaryText" xml:space="preserve"><value>Összehasonlított mezők: bal: {0}, jobb: {1}. {2}. A szerkezeten kívül: {3}. {4}</value></data>
+  <data name="StructDiff_ChooseTemplate.Content" xml:space="preserve"><value>Sablon kiválasztása...</value></data>
+  <data name="StructDiff_EditTemplate.Content" xml:space="preserve"><value>Sablon szerkesztése</value></data>
+  <data name="StructDiff_RaiseLimit.Content" xml:space="preserve"><value>Korlát emelése és összehasonlítás újra</value></data>
+  <data name="StructDiff_Export.Content" xml:space="preserve"><value>Exportálás...</value></data>
+  <data name="StructDiff_FilterBox.PlaceholderText" xml:space="preserve"><value>Szűrés név, elérési út vagy érték szerint</value></data>
+  <data name="StructDiff_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Szűrő</value></data>
+  <data name="StructDiff_IncludePadding.Content" xml:space="preserve"><value>Kitöltés is</value></data>
+  <data name="StructDiff_ShowSame.Content" xml:space="preserve"><value>Egyező mezők megjelenítése</value></data>
+  <data name="StructDiff_SummaryToggle.Content" xml:space="preserve"><value>Összegzés</value></data>
+  <data name="StructDiff_Tree.AutomationProperties.Name" xml:space="preserve"><value>Szerkezeti különbségek</value></data>
+  <data name="StructExport_Title" xml:space="preserve"><value>Szerkezeti különbségek exportálása</value></data>
+  <data name="StructExport_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="StructExport_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="StructExport_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="StructExport_Text" xml:space="preserve"><value>Szöveges jelentés</value></data>
+  <data name="StructExport_Scope" xml:space="preserve"><value>Sorok</value></data>
+  <data name="StructExport_Shown" xml:space="preserve"><value>Megjelenített sorok (szűrés után)</value></data>
+  <data name="StructExport_All" xml:space="preserve"><value>Minden különbség</value></data>
+  <data name="StructExport_Offsets" xml:space="preserve"><value>Eltolások</value></data>
+  <data name="StructExport_Decimal" xml:space="preserve"><value>Tizedes</value></data>
+  <data name="StructExport_Hex" xml:space="preserve"><value>Hexadecimális</value></data>
+  <data name="StructExport_Save" xml:space="preserve"><value>Mentés...</value></data>
+  <data name="StructExport_OperationName" xml:space="preserve"><value>Szerkezeti különbségek exportálása</value></data>
+  <data name="StructExport_OffsetsFormat" xml:space="preserve"><value>(bal: {0}, jobb: {1})</value></data>
+  <data name="StructExport_Template" xml:space="preserve"><value>Sablon: {0} ({1})</value></data>
+  <data name="StructExport_Starts" xml:space="preserve"><value>Kezdő eltolások: bal: {0}, jobb: {1}</value></data>
+  <data name="StructExport_Fields" xml:space="preserve"><value>Összehasonlított mezők: bal: {0}, jobb: {1}</value></data>
+  <data name="StructExport_Outside" xml:space="preserve"><value>Különbségek a szerkezeten kívül: {0}, {1} bájt</value></data>
+  <data name="StructExport_Diagnostics" xml:space="preserve"><value>Sablonhibák és figyelmeztetések: bal: {0} / {1}, jobb: {2} / {3}</value></data>
+  <data name="StructExport_Elapsed" xml:space="preserve"><value>Eltelt idő: {0} mp</value></data>
+  <data name="StructRule_Title" xml:space="preserve"><value>Párosítási módszer</value></data>
+  <data name="StructRule_Array" xml:space="preserve"><value>Tömb: {0}</value></data>
+  <data name="StructRule_Method" xml:space="preserve"><value>Módszer</value></data>
+  <data name="StructRule_Auto" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="StructRule_Key" xml:space="preserve"><value>Kulcs</value></data>
+  <data name="StructRule_Content" xml:space="preserve"><value>Tartalom</value></data>
+  <data name="StructRule_Index" xml:space="preserve"><value>Pozíció</value></data>
+  <data name="StructRule_KeyField" xml:space="preserve"><value>Kulcsmező</value></data>
+  <data name="StructDiff_Busy" xml:space="preserve"><value>Szűrés...</value></data>
+  <data name="FileMap_Kind_Structure" xml:space="preserve"><value>Formátumszerkezet</value></data>
+  <data name="FileMap_Kind_Embedded" xml:space="preserve"><value>Beágyazott fájl</value></data>
+  <data name="FileMap_Kind_Compressed" xml:space="preserve"><value>Tömörített</value></data>
+  <data name="FileMap_Kind_Encrypted" xml:space="preserve"><value>Titkosított vagy véletlen</value></data>
+  <data name="FileMap_Kind_Text" xml:space="preserve"><value>Szöveg</value></data>
+  <data name="FileMap_Kind_Zero" xml:space="preserve"><value>Nulla</value></data>
+  <data name="FileMap_Kind_Constant" xml:space="preserve"><value>Kitöltés</value></data>
+  <data name="FileMap_Kind_Records" xml:space="preserve"><value>Ismétlődő rekordok</value></data>
+  <data name="FileMap_Kind_Binary" xml:space="preserve"><value>Bináris</value></data>
+  <data name="FileMap_Kind_Unreadable" xml:space="preserve"><value>Olvashatatlan</value></data>
+  <data name="FileMap_Kind_Sample" xml:space="preserve"><value>Mintákból becsülve</value></data>
+  <data name="FileMap_Label_Zero" xml:space="preserve"><value>Nulla</value></data>
+  <data name="FileMap_Label_Constant" xml:space="preserve"><value>Konstans: {0}</value></data>
+  <data name="FileMap_Label_Text" xml:space="preserve"><value>Szöveg ({0})</value></data>
+  <data name="FileMap_Label_Records" xml:space="preserve"><value>Ismétlődő rekordok ({0, plural, one {# bájt} other {# bájt}})</value></data>
+  <data name="FileMap_Confidence_High" xml:space="preserve"><value>Magas</value></data>
+  <data name="FileMap_Confidence_Medium" xml:space="preserve"><value>Közepes</value></data>
+  <data name="FileMap_Confidence_Low" xml:space="preserve"><value>Alacsony</value></data>
+  <data name="FileMap_Stage_Sample" xml:space="preserve"><value>Minta</value></data>
+  <data name="FileMap_Stage_Scan" xml:space="preserve"><value>Vizsgálat</value></data>
+  <data name="FileMap_Stage_Structure" xml:space="preserve"><value>Szerkezet</value></data>
+  <data name="FileMap_Ev_Sample" xml:space="preserve"><value>Mintákból becsülve: {0, plural, one {# darab} other {# darab}}, egyenként {1} bájtos intervallum közül mindegyik középső 4 KiB-ja.</value></data>
+  <data name="FileMap_Ev_Constant" xml:space="preserve"><value>{0, plural, one {# bájt} other {# egymást követő bájt}}, értéke: {1}.</value></data>
+  <data name="FileMap_Ev_Unreadable" xml:space="preserve"><value>{0, plural, one {# bájtot} other {# bájtot}} nem sikerült beolvasni.</value></data>
+  <data name="FileMap_Ev_EntropyP" xml:space="preserve"><value>Entrópia: {0} bit/bájt, khí-négyzet p-érték: {1}.</value></data>
+  <data name="FileMap_Ev_Entropy" xml:space="preserve"><value>Entrópia: {0} bit/bájt.</value></data>
+  <data name="FileMap_Ev_Blocks" xml:space="preserve"><value>Blokkonként osztályozva ({0, plural, one {# blokk} other {# blokk}}, egyenként {1} bájt).</value></data>
+  <data name="FileMap_Ev_Range" xml:space="preserve"><value>{1, plural, one {# bájt} other {# bájt}} innen: {0}.</value></data>
+  <data name="FileMap_Ev_StructurePattern" xml:space="preserve"><value>A(z) „{0}” sablon a(z) {1} mintát helyezte el itt: {2}–{3} ({4, plural, one {# bájt} other {# bájt}}).</value></data>
+  <data name="FileMap_Ev_Signature" xml:space="preserve"><value>{1} aláírás itt: {0}.</value></data>
+  <data name="FileMap_Ev_TemplateParsed" xml:space="preserve"><value>A(z) „{0}” sablon ezt értelmezte: {1}–{2} ({3, plural, one {# bájt} other {# bájt}}).</value></data>
+  <data name="FileMap_Ev_TemplateFailed" xml:space="preserve"><value>A(z) „{0}” sablon nem tudta értelmezni az adatokat ({1}).</value></data>
+  <data name="FileMap_Ev_Carved" xml:space="preserve"><value>A(z) „{1}” carving-definíció {0, plural, one {# bájt} other {# bájt}} hosszt adott ({2}).</value></data>
+  <data name="FileMap_Method_Structure" xml:space="preserve"><value>szerkezetellenőrzés</value></data>
+  <data name="FileMap_Method_SizeField" xml:space="preserve"><value>méretmező</value></data>
+  <data name="FileMap_Method_Footer" xml:space="preserve"><value>lábléc</value></data>
+  <data name="FileMap_Method_MaxSize" xml:space="preserve"><value>legnagyobb méret</value></data>
+  <data name="FileMap_Ev_EndUnknown" xml:space="preserve"><value>A vég ismeretlen; a feltételezés szerint a terület a következő terület előtt ér véget itt: {0} ({1, plural, one {# bájt} other {# bájt}}).</value></data>
+  <data name="FileMap_Ev_Stream" xml:space="preserve"><value>A(z) {0} adatfolyam itt: {1} ki lett tömörítve, és az ellenőrzőösszege egyezik ({2, plural, one {# bájt} other {# bájt}} tömörítve, {3} bájt kitömörítve).</value></data>
+  <data name="FileMap_Ev_Records" xml:space="preserve"><value>{0} bájtos eltolásnál a bájtok közül {1} egyezik (az 1–{2} eltolások átlaga: {3}).</value></data>
+  <data name="FileMap_EstimateNote" xml:space="preserve"><value>Ez a térkép aláírásokon és statisztikán alapuló becslés, és téves lehet.</value></data>
+  <data name="FileMap_TransformView" xml:space="preserve"><value>Átalakított nézet: {0}</value></data>
+  <data name="FileMap_Report_Document" xml:space="preserve"><value>Dokumentum: {0} ({1}), {2, plural, one {# bájt} other {# bájt}}</value></data>
+  <data name="FileMap_Report_Range" xml:space="preserve"><value>Tartomány: {0}–{1} ({2, plural, one {# bájt} other {# bájt}})</value></data>
+  <data name="FileMap_Report_Complete" xml:space="preserve"><value>Minden szakasz kész.</value></data>
+  <data name="FileMap_Report_Incomplete" xml:space="preserve"><value>Nem minden szakasz kész (a többi mintákból becsült).</value></data>
+  <data name="FileMap_Report_Legend" xml:space="preserve"><value>Bájtok fajtánként:</value></data>
+  <data name="FileMap_Report_LegendLine" xml:space="preserve"><value>{0}: {1, plural, one {# bájt} other {# bájt}} ({2})</value></data>
+  <data name="FileMap_Report_Regions" xml:space="preserve"><value>{0, plural, one {# terület} other {# terület}}:</value></data>
+  <data name="FileMap_Omitted" xml:space="preserve"><value>és még {0, plural, one {# terület} other {# terület}}</value></data>
+  <data name="Cmd_analysis_fileMap" xml:space="preserve"><value>Fájltérkép létrehozása</value></data>
+  <data name="CmdAlias_analysis_fileMap" xml:space="preserve"><value>fájltérkép áttekintés területek elrendezés file map overview regions layout</value></data>
+  <data name="Cmd_analysis_fileMap_rebuild" xml:space="preserve"><value>Fájltérkép újralétrehozása</value></data>
+  <data name="CmdAlias_analysis_fileMap_rebuild" xml:space="preserve"><value>fájltérkép újra frissítés file map recreate refresh</value></data>
+  <data name="Cmd_analysis_fileMap_show" xml:space="preserve"><value>Fájltérkép megjelenítése</value></data>
+  <data name="CmdAlias_analysis_fileMap_show" xml:space="preserve"><value>fájltérkép panel file map panel</value></data>
+  <data name="Cmd_analysis_fileMap_export" xml:space="preserve"><value>Fájltérkép exportálása</value></data>
+  <data name="CmdAlias_analysis_fileMap_export" xml:space="preserve"><value>fájltérkép exportálás jelentés file map json csv report</value></data>
+  <data name="Cmd_analysis_fileMap_applyTemplates" xml:space="preserve"><value>Sablonok alkalmazása a talált fájlokra</value></data>
+  <data name="CmdAlias_analysis_fileMap_applyTemplates" xml:space="preserve"><value>fájltérkép beágyazott fájlok sablonok file map embedded files templates</value></data>
+  <data name="Cmd_view_panel_fileMap" xml:space="preserve"><value>Fájltérkép panel be/ki</value></data>
+  <data name="CmdAlias_view_panel_fileMap" xml:space="preserve"><value>fájltérkép panel file map panel</value></data>
+  <data name="Menu_Analysis_FileMap.Text" xml:space="preserve"><value>Fájltérkép</value></data>
+  <data name="Menu_Analysis_FileMap.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_FileMap.Text" xml:space="preserve"><value>Fájltérkép</value></data>
+  <data name="Menu_View_FileMap.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Panel_FileMap_Title" xml:space="preserve"><value>Fájltérkép</value></data>
+  <data name="Minimap_Mark_fileMap" xml:space="preserve"><value>Fájltérkép</value></data>
+  <data name="Minimap_CreateFileMap" xml:space="preserve"><value>Fájltérkép létrehozása</value></data>
+  <data name="Operation_FileMap" xml:space="preserve"><value>Fájltérkép</value></data>
+  <data name="Operation_FileMapExport" xml:space="preserve"><value>Fájltérkép exportálása</value></data>
+  <data name="Set_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Fájltérkép: sablonok beágyazott fájlokhoz</value></data>
+  <data name="SetDesc_fileMap_applyTemplatesToEmbedded" xml:space="preserve"><value>Ha a fájltérkép olyan beágyazott fájlokat talál, amelyeket egy sablon értelmezni tud, javasolja a sablonok alkalmazását. A sablonokat soha nem alkalmazza automatikusan.</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_suggest" xml:space="preserve"><value>Javaslat</value></data>
+  <data name="SetOpt_fileMap_applyTemplatesToEmbedded_none" xml:space="preserve"><value>Semmi</value></data>
+  <data name="FileMap_StageName_Sample" xml:space="preserve"><value>Áttekintés (minták)</value></data>
+  <data name="FileMap_StageName_Scan" xml:space="preserve"><value>Teljes vizsgálat</value></data>
+  <data name="FileMap_StageName_Structure" xml:space="preserve"><value>Szerkezetelemzés</value></data>
+  <data name="FileMap_Status_None" xml:space="preserve"><value>Még nincs fájltérkép. Hozzon létre egyet, hogy lássa, mi hol van a dokumentumban.</value></data>
+  <data name="FileMap_Status_Running" xml:space="preserve"><value>{0}: {1}%</value></data>
+  <data name="FileMap_Status_Done" xml:space="preserve"><value>Kész: {0} terület.</value></data>
+  <data name="FileMap_Status_Cancelled" xml:space="preserve"><value>Leállítva ({1}% megvizsgálva): {0} terület. A többi mintákból becsült.</value></data>
+  <data name="FileMap_Stale" xml:space="preserve"><value>Az eredmények a szerkesztés előtti tartalomra vonatkoznak.</value></data>
+  <data name="FileMap_Failed" xml:space="preserve"><value>A fájltérképet nem sikerült létrehozni: {0}</value></data>
+  <data name="FileMap_None" xml:space="preserve"><value>Hozzon létre fájltérképet az Elemzés &gt; Fájltérkép paranccsal, vagy a fenti Létrehozás gombbal.</value></data>
+  <data name="FileMap_OmittedCandidates" xml:space="preserve"><value>{0, plural, one {Még # beágyazott formátumjelölt nem lett megőrizve} other {Még # beágyazott formátumjelölt nem lett megőrizve}}.</value></data>
+  <data name="FileMap_Create" xml:space="preserve"><value>Létrehozás</value></data>
+  <data name="FileMap_Rebuild" xml:space="preserve"><value>Újralétrehozás</value></data>
+  <data name="FileMap_Cancel" xml:space="preserve"><value>Mégse</value></data>
+  <data name="FileMap_Export" xml:space="preserve"><value>Exportálás</value></data>
+  <data name="FileMap_Export_Json" xml:space="preserve"><value>JSON...</value></data>
+  <data name="FileMap_Export_Csv" xml:space="preserve"><value>CSV...</value></data>
+  <data name="FileMap_Export_Text" xml:space="preserve"><value>Szöveges jelentés...</value></data>
+  <data name="FileMap_Progress" xml:space="preserve"><value>A fájltérkép készültsége</value></data>
+  <data name="FileMap_ZoomIn" xml:space="preserve"><value>Nagyítás</value></data>
+  <data name="FileMap_ZoomOut" xml:space="preserve"><value>Kicsinyítés</value></data>
+  <data name="FileMap_ZoomFit" xml:space="preserve"><value>Teljes térkép megjelenítése</value></data>
+  <data name="FileMap_ShowTable" xml:space="preserve"><value>Megjelenítés táblázatként</value></data>
+  <data name="FileMap_BandName" xml:space="preserve"><value>Fájltérkép sáv: szerkezeti sáv és tartalmi sáv</value></data>
+  <data name="FileMap_BandScroll" xml:space="preserve"><value>A fájltérkép sáv görgetése</value></data>
+  <data name="FileMap_Legend" xml:space="preserve"><value>Jelmagyarázat</value></data>
+  <data name="FileMap_LegendItem" xml:space="preserve"><value>{0}: {1, plural, one {# bájt} other {# bájt}} ({2})</value></data>
+  <data name="FileMap_List" xml:space="preserve"><value>A fájltérkép területei</value></data>
+  <data name="FileMap_Filter" xml:space="preserve"><value>Fajta megjelenítése</value></data>
+  <data name="FileMap_Filter_All" xml:space="preserve"><value>Minden fajta</value></data>
+  <data name="FileMap_RowsToBookmarks" xml:space="preserve"><value>A felsorolt sorok könyvjelzőkbe</value></data>
+  <data name="FileMap_RowsToSelection" xml:space="preserve"><value>A felsorolt sorok többes kijelölésbe</value></data>
+  <data name="FileMap_Col_Start" xml:space="preserve"><value>Kezdet</value></data>
+  <data name="FileMap_Col_End" xml:space="preserve"><value>Vég (bezárólag)</value></data>
+  <data name="FileMap_Col_Length" xml:space="preserve"><value>Hossz</value></data>
+  <data name="FileMap_Col_Kind" xml:space="preserve"><value>Fajta</value></data>
+  <data name="FileMap_Col_Label" xml:space="preserve"><value>Címke</value></data>
+  <data name="FileMap_Col_Confidence" xml:space="preserve"><value>Megbízhatóság</value></data>
+  <data name="FileMap_Col_Stage" xml:space="preserve"><value>Szakasz</value></data>
+  <data name="FileMap_NoSelection" xml:space="preserve"><value>Jelöljön ki egy területet a sávban vagy a listában.</value></data>
+  <data name="FileMap_RangeText" xml:space="preserve"><value>{0}–{1} ({2, plural, one {# bájt} other {# bájt}})</value></data>
+  <data name="FileMap_RegionName" xml:space="preserve"><value>{0}, {1}, kezdete: {2}, {3, plural, one {# bájt} other {# bájt}}, megbízhatóság: {4}</value></data>
+  <data name="FileMap_ConfidenceText" xml:space="preserve"><value>Megbízhatóság: {0}</value></data>
+  <data name="FileMap_StageText" xml:space="preserve"><value>Szakasz: {0}</value></data>
+  <data name="FileMap_TemplateText" xml:space="preserve"><value>Sablon: {0}</value></data>
+  <data name="FileMap_Act_Select" xml:space="preserve"><value>Tartomány kijelölése</value></data>
+  <data name="FileMap_Act_Bookmark" xml:space="preserve"><value>Könyvjelző hozzáadása</value></data>
+  <data name="FileMap_Act_ApplyTemplate" xml:space="preserve"><value>A(z) „{0}” sablon alkalmazása</value></data>
+  <data name="FileMap_Act_OpenTab" xml:space="preserve"><value>Megnyitás új lapon</value></data>
+  <data name="FileMap_Act_Decompress" xml:space="preserve"><value>Kitömörítés innen...</value></data>
+  <data name="FileMap_Act_InferTemplate" xml:space="preserve"><value>Sablon levezetése...</value></data>
+  <data name="FileMap_Act_Strings" xml:space="preserve"><value>Karakterláncok kinyerése...</value></data>
+  <data name="FileMap_Act_SaveAs" xml:space="preserve"><value>Mentés fájlként...</value></data>
+  <data name="FileMap_Reason_NoInference" xml:space="preserve"><value>A sablon levezetése nem érhető el.</value></data>
+  <data name="FileMap_Reason_NoMap" xml:space="preserve"><value>Ehhez a dokumentumhoz nincs fájltérkép.</value></data>
+  <data name="FileMap_Reason_NoTemplates" xml:space="preserve"><value>A fájltérkép nem tartalmaz sablonnal rendelkező beágyazott fájlt.</value></data>
+  <data name="FileMap_SuggestTemplates" xml:space="preserve"><value>{0, plural, one {# beágyazott fájl található} other {# beágyazott fájl található}}. Alkalmazza a sablonokat?</value></data>
+  <data name="FileMap_SuggestApply" xml:space="preserve"><value>Alkalmazás</value></data>
+  <data name="FileMap_SuggestList" xml:space="preserve"><value>Lista megjelenítése</value></data>
+  <data name="FileMap_TemplatesApplied" xml:space="preserve"><value>A sablonok alkalmazva {0, plural, one {# beágyazott fájlra} other {# beágyazott fájlra}}.</value></data>
+  <data name="FileMap_TemplatesLimit" xml:space="preserve"><value>A sablonok alkalmazva {0} beágyazott fájlra. {1, plural, one {# fájlra nem lett alkalmazva} other {# fájlra nem lett alkalmazva}}, mert egy dokumentumnak legfeljebb {2} alkalmazása lehet.</value></data>
+  <data name="FileMap_Exported" xml:space="preserve"><value>A fájltérkép exportálva ide: {0}.</value></data>
+  <data name="FileMap_ExportFailed" xml:space="preserve"><value>A fájltérképet nem sikerült exportálni: {0}</value></data>
 </root>

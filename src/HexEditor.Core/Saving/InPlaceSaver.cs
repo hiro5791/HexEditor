@@ -67,10 +67,22 @@ public static class InPlaceSaver
     private static readonly byte[] OldMagic = "HEXJRNL1"u8.ToArray();
 
     /// <summary>テスト用: ジャーナルを書いた後、ファイルに書き込む前に呼ぶ (強制終了の再現。テスト方針 7.2)。</summary>
-    internal static Action? AfterJournalWritten { get; set; }
+    internal static Action? AfterJournalWritten
+    {
+        get => s_afterJournalWritten.Value;
+        set => s_afterJournalWritten.Value = value;
+    }
 
-    /// <summary>テスト用: 手順 4 で範囲 (0 から数える) を書いた直後に呼ぶ。</summary>
-    internal static Action<int>? AfterRangeWritten { get; set; }
+    private static readonly AsyncLocal<Action?> s_afterJournalWritten = new();
+
+    private static readonly AsyncLocal<Action<int>?> s_afterRangeWritten = new();
+
+    /// <summary>テスト用: 手順 4 で範囲 (0 から数える) を書いた直後に呼ぶ。テストの並列実行で他テストの保存に漏れないよう、設定した実行コンテキストだけに効かせる。</summary>
+    internal static Action<int>? AfterRangeWritten
+    {
+        get => s_afterRangeWritten.Value;
+        set => s_afterRangeWritten.Value = value;
+    }
 
     /// <summary>その場保存できるか (ENG-23 の仕様 1)。</summary>
     public static bool CanSaveInPlace(DocumentSnapshot snapshot, string targetPath)

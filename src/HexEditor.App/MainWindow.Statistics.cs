@@ -88,6 +88,7 @@ public sealed partial class MainWindow
         SearchNext = SearchBytesAsync,
         FindAll = FindAllBytesAsync,
         ShowRecordView = ShowRecordViewOfLength,
+        InferTemplate = InferTemplateOfLength,
         OpenDecompress = DecompressHook is { } decompress ? (offset, format) => decompress(this, offset, format) : null,
 
         // マルチ選択 (EDIT-07) の要素、ドキュメントのエンディアン (VIEW-11)、共通の注釈レイヤー (INSP-32)。
@@ -119,6 +120,18 @@ public sealed partial class MainWindow
         UpdateViewMenu();
         QueueStatusBarLayout();
         FocusEditor();
+    }
+
+    /// <summary>「この長さでテンプレートを推定」: 統計の対象の範囲 (選択範囲・なければ全体) とその周期のレコード長でテンプレートの推定を開く (TPL-38)。</summary>
+    private void InferTemplateOfLength(long length)
+    {
+        if (Editor is not { } editor || length < 1 || length > Core.Templates.Inference.TemplateInferenceRequest.MaxRecordLength)
+        {
+            return;
+        }
+
+        (long start, long count) = editor.HasSelection ? (editor.SelectionStart, editor.SelectionLength) : (0, editor.Document.Length);
+        OpenTemplateInference(start, count, (int)length);
     }
 
     private StatisticsPanel CreateStatisticsPanel()

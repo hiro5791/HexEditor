@@ -259,6 +259,7 @@ public sealed partial class MainWindow
         RegisterToolsCalcCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
+        RegisterFileMapCommands();
         RegisterTemplateCommands();
         RegisterDisassemblyCommands();
 

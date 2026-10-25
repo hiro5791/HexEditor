@@ -63,6 +63,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             });
         }
 
+        RegisterStructDiffPanel();
         CompareWithDisk = (window, doc) => window.CompareWithSavedAsync(doc, external: true);
 
         // 履歴パネルの「2 つの時点を比較」(EDIT-20 の仕様 5): 2 つの時点の内容を読み取り専用のコピーとして比較タブで比べる。
@@ -149,6 +150,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         }
 
         Commands.Register("compare.showDiffList", () => ShowPanel(DiffsPanelId));
+        RegisterStructCompareCommands();
         Commands.Register("compare.saveReport", async () =>
         {
             if (CurrentCompare is { } c)
@@ -217,6 +219,13 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
     /// <summary>次 / 前の差分へ移動する (ANA-05)。</summary>
     private void MoveDiff(bool next)
     {
+        // 構造の差分パネルにフォーカスがある、または「移動の対象」が「構造」: 構造の差分の間を移動する (ANA-32 の仕様 5)
+        if ((ActiveCompare ?? CurrentCompare) is { } structural && NavigatesStructure(structural))
+        {
+            MoveStruct(structural, next);
+            return;
+        }
+
         if (DiffNavigationTarget() is not { } target || target.Session.Result is not { } result)
         {
             ShowStatusMessage(Loc.Get("Compare_NoResult"));
@@ -330,7 +339,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
 
         CommandService.State?.Set(CompareOptionsKey, content.Options.ToJson());
         (CompareTargetSpec l, CompareTargetSpec r) = content.Targets;
-        await OpenCompareAsync(l, r, content.Options);
+        await OpenCompareAsync(l, r, content.Options, structure: content.CompareStructure);
     }
 
     private async Task<string?> PickCompareFileAsync()
@@ -364,11 +373,16 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
     /// 開けなかった場合 (ファイルが開けない) は理由を知らせて null。
     /// </summary>
     public async Task<CompareSessionViewModel?> OpenCompareAsync(CompareTargetSpec left, CompareTargetSpec right, CompareOptions options,
-        bool fromPieces = false)
+        bool fromPieces = false, bool? structure = null)
     {
         if (_compares.FirstOrDefault(c => Same(c.LeftSpec, left) && Same(c.RightSpec, right) && !c.Left.IsClosed && !c.Right.IsClosed) is { } existing)
         {
             existing.Options = options;
+            if (structure is { } s)
+            {
+                existing.StructureEnabled = s;
+            }
+
             ShowCompare(existing);
             await existing.RunAsync();
             return existing;
@@ -392,7 +406,13 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             Vm.Operations, DispatcherQueue)
         {
             FromPieces = fromPieces,
+            ApplicationsOf = StructApplicationsOf,
         };
+        if (structure is { } enabled)
+        {
+            session.StructureEnabled = enabled;
+        }
+
         var view = new CompareView(this, session);
         view.Focused += (_, side) => OnCompareSideFocused(session, side);
 
@@ -415,6 +435,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         ShowToolPage(session.Id, view, session.Title, "");
         ShowPanel(DiffsPanelId, focus: false);
         DiffPanel.Session = session;
+        StructPanel.Session = session;
         DispatcherQueue.TryEnqueue(() => view.LeftView.Focus(FocusState.Programmatic));
         await session.RunAsync();
         return session;
@@ -629,6 +650,11 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             _diffPanel.Session = _lastCompare;
         }
 
+        if (_structPanel is not null && ReferenceEquals(_structPanel.Session, session))
+        {
+            _structPanel.Session = _lastCompare;
+        }
+
         session.Dispose();
     }
 
@@ -640,6 +666,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         {
             _lastCompare = active;
             DiffPanel.Session = active;
+            StructPanel.Session = active;
         }
 
         UpdateCompareStatus();

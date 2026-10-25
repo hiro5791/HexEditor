@@ -486,9 +486,13 @@ public sealed class ProcessWatch : IAsyncDisposable
     private readonly ManagementEventWatcher _trace;
     private readonly HashSet<int> _sentinels = [];
 
+    // 見張りを始めた時刻。これより前に作られたプロセス (直前のテストの補助プロセスなど) の通知が遅れて届いても数えない。
+    private readonly DateTime _startedUtc;
+
     public ProcessWatch()
     {
         CiPrivileged.EnsureEnabled();
+        _startedUtc = DateTime.UtcNow;
         _before = [.. Names.SelectMany(Process.GetProcessesByName).Select(p => { using (p) { return p.Id; } })];
         // WqlEventQuery の文字列の引数は「select * 」で始まる問い合わせか、イベントのクラス名だけを受け付ける (列を並べた問い合わせは
         // クラス名として解釈されて Invalid parameter になる)。クラス名を渡す (select * from Win32_ProcessStartTrace になる)。
@@ -506,7 +510,7 @@ public sealed class ProcessWatch : IAsyncDisposable
                     {
                         using (p)
                         {
-                            if (!_before.Contains(p.Id))
+                            if (!_before.Contains(p.Id) && !StartedBeforeWatch(p))
                             {
                                 lock (_lock)
                                 {
@@ -562,6 +566,8 @@ public sealed class ProcessWatch : IAsyncDisposable
     {
         string name = Path.GetFileNameWithoutExtension(e.NewEvent["ProcessName"] as string ?? string.Empty);
         int pid = Convert.ToInt32(e.NewEvent["ProcessID"], System.Globalization.CultureInfo.InvariantCulture);
+        int parent = Convert.ToInt32(e.NewEvent["ParentProcessID"], System.Globalization.CultureInfo.InvariantCulture);
+        DateTime created = e.NewEvent["TIME_CREATED"] is { } t ? DateTime.FromFileTimeUtc((long)Convert.ToUInt64(t, System.Globalization.CultureInfo.InvariantCulture)) : DateTime.UtcNow;
         lock (_lock)
         {
             if (_sentinels.Remove(pid))
@@ -570,14 +576,32 @@ public sealed class ProcessWatch : IAsyncDisposable
                 return;
             }
 
+            // 見張りを始める前に作られたプロセスの通知が遅れて届いたもの。
+            if (created < _startedUtc)
+            {
+                return;
+            }
+
             if (Names.Contains(name, StringComparer.OrdinalIgnoreCase))
             {
-                string entry = $"{name}.exe ({pid})";
+                string entry = $"{name}.exe ({pid}, parent {parent}, created {created:O})";
                 if (!_seen.Contains(entry))
                 {
                     _seen.Add(entry);
                 }
             }
+        }
+    }
+
+    private bool StartedBeforeWatch(Process p)
+    {
+        try
+        {
+            return p.StartTime.ToUniversalTime() < _startedUtc;
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
+        {
+            return false;
         }
     }
 

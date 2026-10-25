@@ -23,6 +23,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 - [ブックマークと注釈](bookmarks.md)
 - [ファイルの比較](compare.md)
 - [統計と解析](statistics.md)
+- [ファイルマップ](file-map.md)
 - [ハッシュとチェックサム](hashes.md)
 - [逆アセンブル](disassembly.md)
 - [チェックサムファイル](checksum-files.md)
@@ -49,6 +50,7 @@ HexEditor は Windows 向けのバイナリエディタです。どんなに大�
 
 - [構造体テンプレート](templates.md)
 - [テンプレートの標準ライブラリ](template-library.md)
+- [テンプレートの推定](template-inference.md)
 - [テンプレートのエラーのコード](template-error-codes.md)
 - [スクリプト](scripting.md)
 - [マクロ](macros.md)

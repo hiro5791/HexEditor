@@ -111,7 +111,8 @@ public sealed partial class ClassBand : UserControl, IChartItems
                 }
 
                 fill.Children.Add(new RectangleGeometry { Rect = rect });
-                marks.Children.Add(ChartSupport.Pattern(StatisticsViewModel.PatternOf(group.Key), rect, 6));
+                // 模様は平らに足す (GeometryGroup の入れ子は WinUI の描画を 0xC000027B で落とす)。
+                ChartSupport.AddPattern(marks, StatisticsViewModel.PatternOf(group.Key), rect, 6);
             }
 
             _canvas.Children.Add(new Path { Data = fill, Fill = ChartSupport.Brush(BrushKey(group.Key), this) });

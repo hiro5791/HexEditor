@@ -108,6 +108,9 @@ public sealed partial class HexView
     /// <summary>ミニマップの境界のドラッグで幅を変えた (VIEW-35 の仕様 1。ウィンドウが全ドキュメント共通の設定に保存する)。</summary>
     public event EventHandler<double>? MinimapWidthCommitted;
 
+    /// <summary>ミニマップのファイルマップの印のクリック (その位置のオフセット。ウィンドウがファイルマップのパネルを開く。ANA-34 の仕様 8)。</summary>
+    public Action<long>? MinimapFileMapInvoked { get; set; }
+
     /// <summary>ミニマップの右クリックメニューの項目 (ウィンドウが作る)。</summary>
     public Action<HexView, MenuFlyout>? MinimapMenuOpening { get; set; }
 
@@ -130,6 +133,8 @@ public sealed partial class HexView
         ((Grid)Content).Children.Add(_minimap);
         _minimap.Marks = MinimapMarksNow;
         _minimap.ShowClassification = () => !HiddenMinimapMarks.Contains("classification");
+        _minimap.ShowFileMap = () => !HiddenMinimapMarks.Contains("fileMap");
+        _minimap.FileMapInvoked = offset => MinimapFileMapInvoked?.Invoke(offset);
         _minimap.HighContrast = IsHighContrast;
         _minimap.ByteTheme = _byteTheme;
         _minimap.MenuOpening = menu => MinimapMenuOpening?.Invoke(this, menu);

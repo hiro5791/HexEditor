@@ -572,6 +572,7 @@ internal sealed partial class Evaluator
                     throw OutOfRange("std::section::copy", off);
                 }
 
+                s.NoteSource(src, off, len);
                 s.PendingProducers.Add(() => CopyInto(s, src, off, len));
                 return Val.Void;
             }

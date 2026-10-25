@@ -709,18 +709,49 @@ internal sealed class YaraForIn(YaraQuantifier quantifier, string[] names, YaraE
         c.Push(scope);
         try
         {
-            foreach (YValue[] values in Iterate(c))
+            if (lo is not null)
             {
-                c.Tick();
-                total++;
-                for (int i = 0; i < names.Length; i++)
+                // 範囲 (a..b) は反復ごとの配列を作らない (巨大な範囲でも、時間の上限までの間に確保が増え続けないように)。
+                YValue a = lo.Eval(c), b = hi!.Eval(c);
+                if (a.Kind == YKind.Integer && b.Kind == YKind.Integer)
                 {
-                    scope[names[i]] = i < values.Length ? values[i] : YValue.Undefined;
-                }
+                    for (long n = a.I; n <= b.I; n++)
+                    {
+                        c.Tick();
+                        total++;
+                        scope[names[0]] = YValue.Int(n);
+                        for (int i = 1; i < names.Length; i++)
+                        {
+                            scope[names[i]] = YValue.Undefined;
+                        }
 
-                if (body.Eval(c).Truthy)
+                        if (body.Eval(c).Truthy)
+                        {
+                            trues++;
+                        }
+
+                        if (n == long.MaxValue)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (YValue[] values in Iterate(c))
                 {
-                    trues++;
+                    c.Tick();
+                    total++;
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        scope[names[i]] = i < values.Length ? values[i] : YValue.Undefined;
+                    }
+
+                    if (body.Eval(c).Truthy)
+                    {
+                        trues++;
+                    }
                 }
             }
         }

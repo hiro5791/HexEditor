@@ -467,6 +467,29 @@ public static class PatternStatistics
         return RankPeriods(ratios, count);
     }
 
+    /// <summary>
+    /// 1 つの範囲 (ファイルマップ (ANA-33 の仕様 2 の 3 の (d)) では領域の先頭 256 KiB) の自己相関 (ANA-15 の仕様 3 と同じ計算)。
+    /// 戻り値の [k] は、ずらし k (1〜<see cref="MaxPeriod"/>) で一致するバイトの割合 ([0] と比べられない k は NaN)。読めない部分を含む場合は null。
+    /// </summary>
+    internal static double[]? AutocorrelationRatios(DocumentSnapshot snapshot, long offset, int length, CancellationToken token)
+    {
+        byte[] data = new byte[length];
+        Sources.ReadResult read = snapshot.Read(offset, data);
+        if (!read.IsComplete)
+        {
+            return null;
+        }
+
+        double[] ratios = new double[MaxPeriod + 1];
+        ratios[0] = double.NaN;
+        Parallel.For(1, MaxPeriod + 1, new ParallelOptions { CancellationToken = token }, k =>
+        {
+            int len = length - k;
+            ratios[k] = len <= 0 ? double.NaN : (double)CountEqual(data.AsSpan(0, len), data.AsSpan(k, len)) / len;
+        });
+        return ratios;
+    }
+
     /// <summary>割合の高い順に並べ、割合がほぼ同じ約数の周期を先にする。</summary>
     internal static IReadOnlyList<PeriodCandidate> RankPeriods(IReadOnlyList<PeriodCandidate> candidates, int count)
     {

@@ -10,7 +10,7 @@ namespace HexEditor.Core.Tests.TestSpec;
 public sealed class CoverageTests
 {
     /// <summary>完了したフェーズ。</summary>
-    private const int CompletedPhase = 5;
+    private const int CompletedPhase = 6;
 
     private static Coverage Load() =>
         Coverage.Load(Path.GetDirectoryName(SourceTests.FindRepoFile("HexEditor.slnx"))!);
