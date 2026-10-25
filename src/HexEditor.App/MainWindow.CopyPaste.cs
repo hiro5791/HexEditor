@@ -361,7 +361,7 @@ public sealed partial class MainWindow
         left.Children.Add(list);
         var top = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16 };
         top.Children.Add(left);
-        top.Children.Add(new ScrollViewer { Content = settings, Height = 400 });
+        top.Children.Add(DialogParts.KeepFocusVisuals(new ScrollViewer { Content = settings, Height = 400 }));
         var body = new StackPanel { Spacing = 8 };
         body.Children.Add(top);
         body.Children.Add(preview);

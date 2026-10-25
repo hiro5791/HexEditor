@@ -57,11 +57,13 @@ public sealed partial class MainWindow
         /// <summary>盾・錠のアイコンの説明 (ツールチップ。ENG-29 の仕様 3 の 3、ENG-32 の仕様 1)。</summary>
         public string? Tooltip => Locked ? Loc.Get("OpenProcess_LockedTip") : NeedsAdmin ? Loc.Get("OpenDevice_ShieldTip") : null;
 
-        /// <summary>一覧に出す文字列 (盾・錠のアイコンを色だけに頼らず文字でも示す。ENG-29 の仕様 3)。2 行目に詳しい情報。</summary>
-        public string Label =>
-            (Locked ? LockGlyph + " " : NeedsAdmin ? ShieldGlyph + " " : string.Empty) + Text + (Detail.Length > 0 ? Environment.NewLine + "    " + Detail : string.Empty);
+        /// <summary>行の先頭の盾・錠のアイコン (記号のフォントの文字。ENG-29 の仕様 3 の 3、ENG-32 の仕様 1)。付けない行は空。</summary>
+        public string IconGlyph => Locked ? LockGlyph : NeedsAdmin ? ShieldGlyph : string.Empty;
 
-        public override string ToString() => Label;
+        /// <summary>行の UI オートメーションの名前 (名前と詳しい情報。アイコンの意味はヘルプテキストのツールチップの文で読む)。</summary>
+        public string AccessibleName => Text + (Detail.Length > 0 ? ", " + Detail : string.Empty);
+
+        public override string ToString() => AccessibleName;
     }
 
     /// <summary>「ディスクを開く」の結果。</summary>
@@ -72,24 +74,57 @@ public sealed partial class MainWindow
 
     private static ListView DeviceList(string automationId, string name)
     {
+        // 行: [盾・錠のアイコンの列 (幅は固定)] [名前 / 詳しい情報]。アイコンは記号のフォントの FontIcon で描き、アイコンのない行も
+        // 同じ幅の列を空けて、名前と詳しい情報の左端をすべての行でそろえる (文字列の先頭に記号と空白を入れると、行ごとに字下げがずれる)。
+        // 中身は ContainerContentChanging で入れる。
         var list = new ListView
         {
             SelectionMode = ListViewSelectionMode.Single,
-            DisplayMemberPath = nameof(DeviceListItem.Label),
+            ItemTemplate = (DataTemplate)Microsoft.UI.Xaml.Markup.XamlReader.Load(
+                """
+                <DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                  <Grid ColumnSpacing="8" Padding="0,4">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="16" />
+                      <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon FontSize="14" VerticalAlignment="Top" Margin="0,3,0,0" />
+                    <StackPanel Grid.Column="1">
+                      <TextBlock TextWrapping="Wrap" />
+                      <TextBlock TextWrapping="Wrap" />
+                    </StackPanel>
+                  </Grid>
+                </DataTemplate>
+                """),
             MaxHeight = 320,
             MinWidth = 460,
         };
         AutomationProperties.SetName(list, name);
         AutomationProperties.SetAutomationId(list, automationId);
 
-        // 盾・錠のアイコンのツールチップ (行ごと)。
+        // アイコン・名前・詳しい情報と、盾・錠のアイコンのツールチップ (行ごと)。
         list.ContainerContentChanging += (_, e) =>
         {
-            if (e.Item is DeviceListItem item && e.ItemContainer is { } container)
+            if (e.InRecycleQueue || e.Item is not DeviceListItem item || e.ItemContainer is not { } container)
             {
-                ToolTipService.SetToolTip(container, item.Tooltip);
-                AutomationProperties.SetHelpText(container, item.Tooltip ?? string.Empty);
+                return;
             }
+
+            if (container.ContentTemplateRoot is Grid { Children: [FontIcon icon, StackPanel { Children: [TextBlock text, TextBlock detail] }] })
+            {
+                icon.FontFamily = (Microsoft.UI.Xaml.Media.FontFamily)Application.Current.Resources["SymbolThemeFontFamily"];
+                icon.Glyph = item.IconGlyph;
+                icon.Visibility = item.IconGlyph.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+                text.Text = item.Text;
+                detail.Text = item.Detail;
+                detail.Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"];
+                detail.Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+                detail.Visibility = item.Detail.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            AutomationProperties.SetName(container, item.AccessibleName);
+            ToolTipService.SetToolTip(container, item.Tooltip);
+            AutomationProperties.SetHelpText(container, item.Tooltip ?? string.Empty);
         };
         return list;
     }
