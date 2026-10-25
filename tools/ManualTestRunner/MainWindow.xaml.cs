@@ -35,6 +35,10 @@ public sealed partial class MainWindow : Window
 
         PhaseChoice.SelectedIndex = lastPhase;
 
+        // 前回選んだ「テストの選び方」を使う (起動のたびに選び直さなくてよいように)。
+        FilterChoice.SelectedIndex = LoadFilterChoice();
+        _filterRestored = true;
+
         // 開発中の確認 (dev-no-activate) では前面に出さない。それ以外は既定で常に手前に表示する。
         bool noActivate = File.Exists(Path.Combine(Path.GetTempPath(), "HexEditor", "dev-no-activate"));
         TopMost.IsChecked = !noActivate;
@@ -135,7 +139,50 @@ public sealed partial class MainWindow : Window
         CaseList.SelectedIndex = Math.Min(index + 1, CaseList.Items.Count - 1);
     }
 
-    private void Filter_Changed(object sender, SelectionChangedEventArgs e) => Refresh();
+    private bool _filterRestored;
+
+    private static string FilterChoicePath => Path.Combine(RunStore.Folder, "filter-choice.txt");
+
+    private int LoadFilterChoice()
+    {
+        try
+        {
+            if (File.Exists(FilterChoicePath)
+                && int.TryParse(File.ReadAllText(FilterChoicePath).Trim(), out int index)
+                && index >= 0 && index < FilterChoice.Items.Count)
+            {
+                return index;
+            }
+        }
+        catch (IOException)
+        {
+        }
+        catch (UnauthorizedAccessException)
+        {
+        }
+
+        return 0;
+    }
+
+    private void Filter_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_filterRestored && ReferenceEquals(sender, FilterChoice) && FilterChoice.SelectedIndex >= 0)
+        {
+            try
+            {
+                Directory.CreateDirectory(RunStore.Folder);
+                File.WriteAllText(FilterChoicePath, FilterChoice.SelectedIndex.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+        }
+
+        Refresh();
+    }
 
     private void FeatureFilter_TextChanged(object sender, TextChangedEventArgs e) => Refresh();
 
