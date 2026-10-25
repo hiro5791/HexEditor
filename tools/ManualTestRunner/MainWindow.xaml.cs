@@ -245,7 +245,10 @@ public sealed partial class MainWindow : Window
         PrepareStatus.Text = "準備しています...";
         _hexEditor = Preparer.Prepare(_current, out IReadOnlyList<string> missing);
         PrepareStatus.Text = (_hexEditor is null ? "HexEditor を起動できませんでした (HEXEDITOR_EXE を設定するか、HexEditor.App をビルドしてください)。" : "HexEditor を起動しました。")
-            + (missing.Count > 0 ? $" 手で用意するテストデータ: {string.Join("、", missing)}" : string.Empty);
+            + (missing.Count > 0 ? $" 手で用意するテストデータ: {string.Join("、", missing)}" : string.Empty)
+            + (missing.Any(m => m.StartsWith("TD-VHDX", StringComparison.Ordinal))
+                ? " (仮想ディスクは、管理者として開いた PowerShell で build\\tests\\New-ManualTestVhd.ps1 を実行すると作れます。手引きの 2 章を参照)"
+                : string.Empty);
     }
 
     private void Pass_Click(object sender, RoutedEventArgs e) => Record(Outcome.Pass);

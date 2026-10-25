@@ -52,6 +52,26 @@ $env:HEXEDITOR_EXE = "C:\...\HexEditor.exe"
 - ツールのウィンドウは、既定で「常に手前に表示」になります。邪魔なときは「常に手前に表示」のチェックを外します。
 - 結果は `%LOCALAPPDATA%\HexEditorManualTests` に自動で保存されます。途中で閉じても、次回は続きから再開できます。
 
+### 仮想ディスクの用意 (TD-VHDX-MBR / TD-VHDX-GPT / TD-VHDX-CLONE)
+
+ディスクを開くテストなどは、テスト用の仮想ディスクを使います。
+支援ツールの「準備」では作れないので、次の手順で作ります。
+
+1. スタートメニューで「PowerShell」を右クリックし、「管理者として実行」で開く。
+2. 次を実行する。`%USERPROFILE%\HexEditorManualTestData` に 3 つの `.vhdx` を作って接続する。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File F:\dev\HexEditor\build\tests\New-ManualTestVhd.ps1
+```
+
+- HexEditor の「ディスクを開く」では「Msft Virtual Disk」と表示される (64 MiB が 2 つ、512 MiB が 1 つ)。
+- Windows の設定は変えない。作るのは上のフォルダの 3 つのファイルだけ。
+- 手動テストが終わったら、同じく管理者の PowerShell で `-Dismount` を付けて実行し、接続を外してファイルを消す。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File F:\dev\HexEditor\build\tests\New-ManualTestVhd.ps1 -Dismount
+```
+
 ## 3. 全フェーズの手動・半自動を選ぶ
 
 ツールの左上で、次のように選びます。
