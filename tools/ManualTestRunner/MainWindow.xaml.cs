@@ -26,6 +26,15 @@ public sealed partial class MainWindow : Window
         AppWindow.Resize(new SizeInt32(1100, 900));
         _all = TestCaseParser.ParseDirectory(FindCasesDirectory()).Where(c => c.IsManual).ToList();
 
+        // フェーズの選択肢は、テストケースにある最大のフェーズまで作る (フェーズが増えてもツールを直さなくてよいように)。
+        int lastPhase = _all.Count == 0 ? 0 : _all.Max(c => c.Phase);
+        for (int phase = 0; phase <= lastPhase; phase++)
+        {
+            PhaseChoice.Items.Add(phase.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        PhaseChoice.SelectedIndex = lastPhase;
+
         // 開発中の確認 (dev-no-activate) では前面に出さない。それ以外は既定で常に手前に表示する。
         bool noActivate = File.Exists(Path.Combine(Path.GetTempPath(), "HexEditor", "dev-no-activate"));
         TopMost.IsChecked = !noActivate;

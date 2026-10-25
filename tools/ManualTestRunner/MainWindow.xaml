@@ -36,15 +36,7 @@
                 x:Name="PhaseChoice"
                 Header="フェーズ (以下)"
                 HorizontalAlignment="Stretch"
-                SelectedIndex="5"
-                SelectionChanged="Filter_Changed">
-                <ComboBoxItem Content="0" />
-                <ComboBoxItem Content="1" />
-                <ComboBoxItem Content="2" />
-                <ComboBoxItem Content="3" />
-                <ComboBoxItem Content="4" />
-                <ComboBoxItem Content="5" />
-            </ComboBox>
+                SelectionChanged="Filter_Changed" />
             <TextBox x:Name="FeatureFilter" Header="機能 ID (例: ENG-28)" TextChanged="FeatureFilter_TextChanged" />
         </StackPanel>
 
