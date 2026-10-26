@@ -18,7 +18,7 @@ namespace HexEditor.App;
 public sealed partial class MainWindow
 {
     // 記号のフォント (SymbolThemeFontFamily) の私用領域の文字。エスケープで書く (文字そのものを書くと、エディタ・変換で消えることがある)。
-    private const string ShieldGlyph = "\uE1A7"; // Segoe Fluent: Admin (盾。ステータスバーの補助プロセスの表示と同じ)。
+    private const string ShieldGlyph = "\uEA18"; // Segoe Fluent: Shield (盾。ステータスバーの補助プロセスの表示と同じ)。
     private const string LockGlyph = "\uE72E";   // Lock。
 
     /// <summary>インストーラ版・ポータブル版のダウンロードページ (ENG-28 の仕様 12 の 5)。</summary>

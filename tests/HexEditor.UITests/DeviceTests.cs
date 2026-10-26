@@ -294,7 +294,7 @@ public sealed class DeviceTests
         Assert.Equal(2, rows.Count);
         JsonObject disk = rows.Select(r => r!.AsObject()).Single(r => r["text"]!.GetValue<string>().Contains("Fake Disk", StringComparison.Ordinal));
         JsonObject usb = rows.Select(r => r!.AsObject()).Single(r => r["text"]!.GetValue<string>().Contains("E:", StringComparison.Ordinal));
-        Assert.Equal("\uE1A7", disk["glyph"]!.GetValue<string>());
+        Assert.Equal("\uEA18", disk["glyph"]!.GetValue<string>());
         Assert.True(disk["iconVisible"]!.GetValue<bool>());
         Assert.Contains("Segoe", disk["iconFont"]!.GetValue<string>(), StringComparison.Ordinal);
         Assert.False(usb["iconVisible"]!.GetValue<bool>());

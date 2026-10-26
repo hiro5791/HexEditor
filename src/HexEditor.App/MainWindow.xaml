@@ -917,7 +917,7 @@
                     Style="{StaticResource StatusItemStyle}"
                     Tag="helper"
                     Visibility="Collapsed">
-                    <FontIcon FontSize="14" Glyph="&#xE1A7;" />
+                    <FontIcon FontSize="14" Glyph="&#xEA18;" />
                 </Button>
                 <!--  外部からの自動操作 (AUTO-45 の仕様 3): オンの間は必ず示す (利用者が隠せる項目にしない)。クリックで設定を開く。  -->
                 <Button
