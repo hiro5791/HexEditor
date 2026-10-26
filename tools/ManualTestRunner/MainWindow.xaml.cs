@@ -188,7 +188,7 @@ public sealed partial class MainWindow : Window
         Expected.Text = string.Join(Environment.NewLine, c.Expected.Select(e => "・" + e));
         CaseResult? r = _store.ResultOf(c.Id);
         Comment.Text = r?.Comment ?? string.Empty;
-        CurrentResult.Text = r is null ? string.Empty : $"記録: {RunStore.Label(r.Outcome)} ({r.At:MM/dd HH:mm})";
+        CurrentResult.Text = r is null ? "まだ結果を付けていません" : $"記録: {RunStore.Label(r.Outcome)} ({r.At:MM/dd HH:mm})";
         Warning.Text = "注意: このツールが管理者として動いているため、起動する HexEditor も管理者になります。一般ユーザーの権限のテストでは、ツールを普通に起動し直してください。";
         Warning.Visibility = Preparer.ToolIsElevated ? Visibility.Visible : Visibility.Collapsed;
         _plan = PrepGuide.Plan(_book, c);

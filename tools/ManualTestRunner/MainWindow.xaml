@@ -173,7 +173,7 @@
         <StackPanel x:Name="ResultPanel" Grid.Row="2" Grid.Column="1" Spacing="6" Visibility="Collapsed">
             <TextBox x:Name="Comment" Header="コメント" AcceptsReturn="True" MinHeight="60" TextWrapping="Wrap" />
             <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Click="Pass_Click" Content="合格" Style="{StaticResource AccentButtonStyle}" />
+                <Button Click="Pass_Click" Content="合格" />
                 <Button Click="Fail_Click" Content="不合格" />
                 <Button Click="Hold_Click" Content="保留" />
                 <Button Click="NotApplicable_Click" Content="対象外" />
