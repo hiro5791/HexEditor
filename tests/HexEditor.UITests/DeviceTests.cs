@@ -11,7 +11,7 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class DeviceTests
 {
-    private static JsonObject Hooks(UiTestContext ctx)
+    internal static JsonObject Hooks(UiTestContext ctx)
     {
         var devices = new JsonObject
         {

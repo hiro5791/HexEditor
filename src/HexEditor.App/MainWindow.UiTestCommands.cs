@@ -217,6 +217,7 @@ public sealed partial class MainWindow
 
     /// <summary>
     /// フォーカスを動かす。<c>target</c>: "editor" (Hex ビュー)、"next" / "previous" (Tab / Shift+Tab と同じ移動)、
+    /// "windowRoot" (Root の外のウィンドウの根元。<see cref="FocusWindowRoot"/>)、
     /// それ以外は AutomationId。<c>keyboard</c> が true (既定) ならキーボードで移したときと同じ扱い (フォーカスの枠を出す)。
     /// </summary>
     private JsonObject TestFocus(JsonObject request)
@@ -226,6 +227,7 @@ public sealed partial class MainWindow
         bool moved = target switch
         {
             "editor" => CurrentView()?.Focus(state) ?? false,
+            "windowRoot" => FocusWindowRoot(),
             "next" or "previous" => FocusManager.TryMoveFocus(
                 target == "next" ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous,
                 new FindNextElementOptions { SearchRoot = Root.XamlRoot.Content }),
@@ -250,6 +252,34 @@ public sealed partial class MainWindow
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// フォーカスを、ウィンドウの中身 (Root) の外にあるウィンドウの根元の ScrollViewer に移す (枠は出ない)。WinUI はウィンドウのアクティブ化や
+    /// フォーカスを受けない場所のクリックで、フォーカスを Root の外の根元の要素に置くことがある。その状態でもショートカットキーが効くことを確かめる。
+    /// 根元の ScrollViewer はふだんはタブで止まらないので、移すあいだだけ IsTabStop を立てる。
+    /// </summary>
+    private bool FocusWindowRoot()
+    {
+        Control? top = null;
+        for (DependencyObject? node = VisualTreeHelper.GetParent(Root); node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is Control control)
+            {
+                top = control;
+            }
+        }
+
+        if (top is null)
+        {
+            return false;
+        }
+
+        bool tabStop = top.IsTabStop;
+        top.IsTabStop = true;
+        bool moved = top.Focus(FocusState.Pointer);
+        top.IsTabStop = tabStop;
+        return moved;
     }
 
     /// <summary>

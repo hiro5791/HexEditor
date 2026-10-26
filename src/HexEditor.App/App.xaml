@@ -15,6 +15,14 @@
                 <ResourceDictionary Source="ms-appx:///Themes/ComparePalette.xaml" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
+            <!--
+                メニューバー (UI-03) の項目の間を詰める (軽量スタイル。テンプレートは既定のまま): 既定 (左右の余白 10 + 外側 4。文字の間が 28 px)
+                では、日本語などの長い見出しでタイトルバーのコマンドパレットのボタンが押し出される。文字の間を 18 px にする。外側の 3 px は、
+                フォーカスの枠 (FocusVisualMargin -3) が隣の項目に重ならない最小の幅。MenuBarItemButtonPadding は既定のテンプレートが
+                StaticResource で参照するため、アプリのリソースに置かないと効かない。色は変えない (テーマ・ハイコントラストは既定のまま)。
+            -->
+            <Thickness x:Key="MenuBarItemButtonPadding">6,4,6,4</Thickness>
+            <Thickness x:Key="MenuBarItemMargin">3,4,3,4</Thickness>
             <!--  画面全体のズーム (UI-08 の仕様 3): ダイアログもウィンドウの中身と同じ倍率で拡大する  -->
             <Style BasedOn="{StaticResource DefaultContentDialogStyle}" TargetType="ContentDialog">
                 <Setter Property="controls:ScreenZoom.Follow" Value="True" />

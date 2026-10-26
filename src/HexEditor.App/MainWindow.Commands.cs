@@ -49,7 +49,8 @@ public sealed partial class MainWindow
         _keys = new KeyDispatcher(Commands);
 
         // ウィンドウのルートで、フォーカスのある部品より先にキーを受け取る。
-        Root.AddHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(Root_PreviewKeyDown), handledEventsToo: false);
+        AttachWindowKeyHandler();
+        Root.Loaded += (_, _) => AttachWindowKeyHandler();
 
         Action bindingsChanged = () => DispatcherQueue.TryEnqueue(() =>
         {
@@ -290,6 +291,37 @@ public sealed partial class MainWindow
     }
 
     // ---- キーの振り分け ----
+
+    private KeyEventHandler? _windowKeyHandler;
+    private UIElement? _windowKeyTarget;
+
+    /// <summary>
+    /// キーの振り分けを、ウィンドウの表示の木のいちばん上の要素に付ける。WinUI は、ウィンドウがアクティブになったときやフォーカスを受けない
+    /// 場所をクリックしたときに、フォーカスを Root の外にあるウィンドウの根元の要素 (枠の出ない ScrollViewer など) に置くことがある。
+    /// Root に付けると、そのあいだのキーを受け取れず、スタートページで Ctrl+Shift+D などのショートカットキーが効かなくなる。
+    /// 表示の木につながる前 (コンストラクタ) は Root に付け、Root が読み込まれたら上に付け替える。
+    /// </summary>
+    private void AttachWindowKeyHandler()
+    {
+        UIElement top = Root;
+        for (DependencyObject? node = VisualTreeHelper.GetParent(Root); node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is UIElement element)
+            {
+                top = element;
+            }
+        }
+
+        if (ReferenceEquals(top, _windowKeyTarget))
+        {
+            return;
+        }
+
+        _windowKeyHandler ??= new KeyEventHandler(Root_PreviewKeyDown);
+        _windowKeyTarget?.RemoveHandler(UIElement.PreviewKeyDownEvent, _windowKeyHandler);
+        top.AddHandler(UIElement.PreviewKeyDownEvent, _windowKeyHandler, handledEventsToo: false);
+        _windowKeyTarget = top;
+    }
 
     private void Root_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
     {

@@ -10,6 +10,7 @@ using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace HexEditor.App;
 
@@ -118,7 +119,7 @@ public sealed partial class MainWindow
             UpdatePaletteButton();
             DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
             {
-                if (_paletteButtonText.IsTextTrimmed && _paletteButtonText.Visibility == Visibility.Visible && !_paletteTextOverflow)
+                if ((_paletteButtonText.IsTextTrimmed || PaletteButtonClipped()) && _paletteButtonText.Visibility == Visibility.Visible && !_paletteTextOverflow)
                 {
                     _paletteTextOverflow = true;
                     UpdatePaletteButton();
@@ -126,6 +127,28 @@ public sealed partial class MainWindow
             });
         };
         UpdatePaletteButton();
+    }
+
+    /// <summary>
+    /// 入口のボタンが、タイトルバーの中身の欄 (メニューバーとタイトルの残り) より広く、右端が切れているか。最小幅 (240 px) のボタンは
+    /// 欄が狭くても縮まず文字列も省略されないので、欄の幅と比べる。
+    /// </summary>
+    private bool PaletteButtonClipped()
+    {
+        if (_paletteButton is not { ActualWidth: > 0 } button)
+        {
+            return false;
+        }
+
+        for (DependencyObject? node = VisualTreeHelper.GetParent(button); node is not null && node != AppTitleBar; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is FrameworkElement { ActualWidth: > 0 } host && host.ActualWidth + 0.5 < button.ActualWidth)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>入口の文字列が入りきらなかった (次にウィンドウの幅が変わるまでアイコンだけにする)。</summary>
