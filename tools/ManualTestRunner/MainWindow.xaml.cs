@@ -189,6 +189,7 @@ public sealed partial class MainWindow : Window
         CaseResult? r = _store.ResultOf(c.Id);
         Comment.Text = r?.Comment ?? string.Empty;
         CurrentResult.Text = r is null ? "まだ結果を付けていません" : $"記録: {RunStore.Label(r.Outcome)} ({r.At:MM/dd HH:mm})";
+        ShowRecordedOutcome(r?.Outcome ?? Outcome.NotRun);
         Warning.Text = "注意: このツールが管理者として動いているため、起動する HexEditor も管理者になります。一般ユーザーの権限のテストでは、ツールを普通に起動し直してください。";
         Warning.Visibility = Preparer.ToolIsElevated ? Visibility.Visible : Visibility.Collapsed;
         _plan = PrepGuide.Plan(_book, c);
@@ -997,6 +998,16 @@ public sealed partial class MainWindow : Window
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or System.ComponentModel.Win32Exception or InvalidDataException)
         {
             return $"{name}を作れませんでした: {ex.Message}";
+        }
+    }
+
+    /// <summary>記録した結果のボタンだけを強調する (何も記録していなければ、どれも強調しない。押す前から選ばれているように見せない)。</summary>
+    private void ShowRecordedOutcome(Outcome outcome)
+    {
+        var accent = (Style)Application.Current.Resources["AccentButtonStyle"];
+        foreach ((Button button, Outcome value) in new[] { (PassButton, Outcome.Pass), (FailButton, Outcome.Fail), (HoldButton, Outcome.Hold), (NotApplicableButton, Outcome.NotApplicable) })
+        {
+            button.Style = value == outcome ? accent : null;
         }
     }
 
