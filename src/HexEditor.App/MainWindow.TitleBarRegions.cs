@@ -98,12 +98,15 @@ public sealed partial class MainWindow
     /// <summary>入力を通す領域を、見えている対話する要素の矩形 (クライアント領域の物理ピクセル) だけにする。</summary>
     private void ApplyTitleBarRegions()
     {
-        if (Root.XamlRoot is not { } xamlRoot)
+        // 閉じたウィンドウでは何もしない。閉じる途中の SizeChanged・XamlRoot.Changed で予約した処理が閉じたあとに動くことがあり、
+        // そのときは AppWindow が null になる。DispatcherQueue の処理の中の例外は Application.UnhandledException に来ず、
+        // プロセスが 0xC000027B で落ちる (2 つ目のウィンドウを閉じると落ちていた)。
+        if (_closingConfirmed || AppWindow is not { } appWindow || Root.XamlRoot is not { } xamlRoot)
         {
             return;
         }
 
-        var source = InputNonClientPointerSource.GetForWindowId(AppWindow.Id);
+        var source = InputNonClientPointerSource.GetForWindowId(appWindow.Id);
         var rects = new List<RectInt32>();
         if (AppTitleBar.Visibility == Visibility.Visible)
         {
