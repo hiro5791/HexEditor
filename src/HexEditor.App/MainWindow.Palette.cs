@@ -66,6 +66,7 @@ public sealed partial class MainWindow
         };
 
         InitializePaletteButton();
+        InitializeTitleBarRegions();
     }
 
     // ---- タイトルバーの入口 (UI-02 の仕様 4) ----
@@ -79,7 +80,7 @@ public sealed partial class MainWindow
     /// <summary>
     /// タイトルバーのコマンドパレットの入口: 幅 240〜400 px のボタンに「コマンドを検索 (Ctrl+Shift+P)」(今の割り当てのキー) を
     /// 表示し、押すとコマンドモード (「&gt;」) で開く。ウィンドウ幅が 900 px 未満では虫眼鏡のアイコンだけにする。
-    /// TitleBar の Content に置くので、ドラッグ領域から除かれる (仕様 5)。
+    /// TitleBar の Content に置く。入力を通す領域にするのはこのボタンの矩形だけ (仕様 5。MainWindow.TitleBarRegions.cs)。
     /// </summary>
     private void InitializePaletteButton()
     {

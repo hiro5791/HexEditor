@@ -64,8 +64,9 @@
         </Grid.RowDefinitions>
 
         <!--
-            タイトルバー (UI-02): アイコン、メニューバー (UI-03)、タイトルの順。TitleBar は Content の対話する要素を
-            ドラッグ領域から除く。タイトルは自分で表示する (TitleBar の Title はメニューより前に出るため)。
+            タイトルバー (UI-02): アイコン、メニューバー (UI-03)、タイトルの順。タイトルは自分で表示する (TitleBar の Title では
+            アイコンがメニューより後ろに出て、長いタイトルが省略されないため)。TitleBar は LeftHeader の欄全体を入力を通す領域にするので、
+            メニューバーと入口のボタンだけを入力を通す領域に置き直す (アイコン・タイトル・余白はドラッグできる。MainWindow.TitleBarRegions.cs)。
         -->
         <!--  タイトルバー自体はフォーカスを受けない (枠の出ないフォーカスの止まり先を作らない。UI-52 の仕様 6)。  -->
         <TitleBar
@@ -575,7 +576,8 @@
                         AutomationProperties.AutomationId="WindowTitle"
                         Style="{ThemeResource CaptionTextBlockStyle}"
                         Text="HexEditor"
-                        TextTrimming="CharacterEllipsis" />
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
                 </Grid>
             </TitleBar.LeftHeader>
         </TitleBar>

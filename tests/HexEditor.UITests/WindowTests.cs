@@ -92,6 +92,86 @@ public sealed partial class WindowTests
         Assert.True(InAny(regions["passthrough"]!.AsArray(), (menu["left"]!.GetValue<double>() + 10) * scale, y * scale), "the menu bar is in the drag region");
     });
 
+    [Theory]
+    [InlineData("ja", false)]
+    [InlineData("en", false)]
+    [InlineData("ja", true)]
+    [InlineData("en", true)]
+    [InlineData("ar", true)]
+    [Trait(UiTest.TC, "TC-UI-02-04")]
+    public Task Title_text_and_icon_are_caption_and_only_menu_and_palette_pass_through(string language, bool longTitle) => UiTestContext.RunAsync(async ctx =>
+    {
+        // TitleBar は LeftHeader の欄全体 (アイコン・メニューバー・タイトル) を入力を通す領域にするため、タイトルの上を
+        // ドラッグしてもウィンドウが動かなかった。入力を通す領域がメニューバーと入口のボタンの矩形だけで、アイコン・タイトルの
+        // 文字列・その間の余白はドラッグ領域 (Caption) にあることを確かめる。長いタイトル (長い名前のファイルを開く) でも同じ。
+        string[] files = longTitle
+            ? [ctx.WriteFile("A_very_long_file_name_to_fill_the_title_bar_of_the_main_window_and_check_the_drag_region_0123456789.bin", new byte[256])]
+            : [];
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = language, Files = files });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1260 * scale), (int)(800 * scale));
+
+        JsonObject title = await app.ElementAsync("WindowTitle");
+        if (longTitle)
+        {
+            await app.WaitUntilAsync(async () => (await app.ElementAsync("WindowTitle"))["text"]!.GetValue<string>().StartsWith("A_very_long", StringComparison.Ordinal), TimeSpan.FromSeconds(10), "the long title");
+        }
+
+        // サイズの変更のあと、入力を通す領域が置き直されるまで待つ (メニューバーと入口の 2 つだけになる)。
+        JsonObject regions = new();
+        JsonObject menu = new(), palette = new(), icon = new();
+        await app.WaitUntilAsync(async () =>
+        {
+            title = await app.ElementAsync("WindowTitle");
+            menu = await app.ElementAsync("MainMenu");
+            palette = await app.ElementAsync("TitleBar_Palette");
+            icon = await app.ElementAsync("TitleBar_Icon");
+            regions = await app.SendAsync("nonClientRegions");
+            JsonArray p = regions["passthrough"]!.AsArray();
+            return p.Count == 2 && Covers(p, menu) && Covers(p, palette);
+        }, TimeSpan.FromSeconds(10), "passthrough regions for the menu bar and the palette entry only");
+
+        JsonArray passthrough = regions["passthrough"]!.AsArray();
+        JsonArray caption = regions["caption"]!.AsArray();
+        double y = (title["top"]!.GetValue<double>() + title["bottom"]!.GetValue<double>()) / 2 * scale;
+        void AssertCaption(double xDip, string what)
+        {
+            Assert.False(InAny(passthrough, xDip * scale, y), $"{what} ({xDip}) is a passthrough region: {regions.ToJsonString()}");
+            Assert.True(InAny(caption, xDip * scale, y), $"{what} ({xDip}) is not a caption region: {regions.ToJsonString()}");
+        }
+
+        // タイトルの文字列の中央とアイコンの中央はドラッグ領域。
+        AssertCaption((title["left"]!.GetValue<double>() + title["right"]!.GetValue<double>()) / 2, "the title text");
+        Assert.True(title["width"]!.GetValue<double>() > 40, $"the title is too narrow ({title.ToJsonString()})");
+        AssertCaption((icon["left"]!.GetValue<double>() + icon["right"]!.GetValue<double>()) / 2, "the icon");
+
+        // メニューバーと入口の間 (タイトルと余白) は、端の 1 px を除いてすべてドラッグ領域。
+        double gapStart = Math.Min(menu["right"]!.GetValue<double>(), palette["right"]!.GetValue<double>());
+        double gapEnd = Math.Max(menu["left"]!.GetValue<double>(), palette["left"]!.GetValue<double>());
+        Assert.True(gapEnd - gapStart > 40, $"no room between the menu bar and the palette entry ({gapStart}..{gapEnd})");
+        for (double x = gapStart + 1; x < gapEnd - 1; x += 4)
+        {
+            AssertCaption(x, "the space between the menu bar and the palette entry");
+        }
+
+        // 長いタイトルは省略され、入口のボタンをウィンドウの外へ押し出さない。
+        if (longTitle)
+        {
+            Assert.True(title["isTextTrimmed"]!.GetValue<bool>(), $"the long title is not trimmed ({title.ToJsonString()})");
+        }
+
+        int captionRight = caption.Max(r => r!["right"]!.GetValue<int>());
+        Assert.True(palette["right"]!.GetValue<double>() * scale <= captionRight + 1 && palette["left"]!.GetValue<double>() >= 0, $"the palette entry is outside the title bar ({palette.ToJsonString()})");
+
+        // メニューバーと入口の中央は入力を通す領域 (クリックが届く)。
+        Assert.True(InAny(passthrough, (menu["left"]!.GetValue<double>() + 10) * scale, y), "the menu bar is in the drag region");
+        Assert.True(InAny(passthrough, (palette["left"]!.GetValue<double>() + palette["right"]!.GetValue<double>()) / 2 * scale, y), "the palette entry is in the drag region");
+
+        bool Covers(JsonArray rects, JsonObject e) => rects.Any(r =>
+            Math.Abs(r!["left"]!.GetValue<int>() - (e["left"]!.GetValue<double>() * scale)) <= 2
+            && Math.Abs(r["right"]!.GetValue<int>() - (e["right"]!.GetValue<double>() * scale)) <= 2);
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-UI-02-05")]
     [Trait(UiTest.Priority, UiTest.High)]
