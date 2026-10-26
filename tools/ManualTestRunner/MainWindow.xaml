@@ -119,7 +119,9 @@
                         <StackPanel x:Name="GuideButtons" Orientation="Horizontal" Spacing="8">
                             <Button
                                 x:Name="GuideButton"
-                                MinWidth="120"
+                                MinWidth="160"
+                                Padding="24,8"
+                                FontSize="16"
                                 Click="GuideButton_Click"
                                 Style="{StaticResource AccentButtonStyle}" />
                             <Button x:Name="SkipButton" Click="SkipButton_Click" Visibility="Collapsed" />
