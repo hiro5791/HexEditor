@@ -80,7 +80,7 @@
 
         <!--  テストケースの内容と結果の記録。上の「いま行うこと」に、次に行うことを 1 つだけ出す (説明を読まなくても次のボタンが分かるように)。  -->
         <ScrollViewer x:Name="DetailScroll" Grid.RowSpan="2" Grid.Column="1">
-            <StackPanel x:Name="Detail" Spacing="12" Visibility="Collapsed">
+            <StackPanel x:Name="Detail" Padding="0,0,16,0" Spacing="12" Visibility="Collapsed">
                 <Grid ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
