@@ -175,7 +175,7 @@ public sealed partial class MainWindow : Window
             var row = new Grid { ColumnSpacing = 4 };
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            string stepText = $"{i + 1}. {c.Steps[i]}";
+            string stepText = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}";
             var check = new CheckBox { MinWidth = 0 };
             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(check, stepText);
             var text = new TextBlock { Text = stepText, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true, VerticalAlignment = VerticalAlignment.Center };

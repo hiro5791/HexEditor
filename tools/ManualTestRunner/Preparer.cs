@@ -302,6 +302,52 @@ public static class Preparer
         return File.Exists(VhdLog) ? await File.ReadAllTextAsync(VhdLog) : "ログがありません (スクリプトが動きませんでした)。";
     }
 
+    /// <summary>
+    /// 手順の文の TD-VHDX-… に、この PC でのディスクの番号を書き足す (HexEditor の一覧には「ディスク 3 (Msft Virtual Disk, …)」と出て、
+    /// TD-VHDX-… の名前は出ないため)。仮想ディスクのログがなければ、そのまま返す。
+    /// </summary>
+    public static string WithDiskNumbers(string text)
+    {
+        if (!text.Contains("TD-VHDX-", StringComparison.Ordinal) || !File.Exists(VhdLog))
+        {
+            return text;
+        }
+
+        string log;
+        try
+        {
+            log = File.ReadAllText(VhdLog);
+        }
+        catch (IOException)
+        {
+            return text;
+        }
+
+        return WithDiskNumbers(text, log);
+    }
+
+    /// <summary><see cref="WithDiskNumbers(string)"/> の本体 (ログの中身を受け取る)。</summary>
+    public static string WithDiskNumbers(string text, string log)
+    {
+        if (!log.Contains("RESULT: attached", StringComparison.Ordinal))
+        {
+            return text;
+        }
+
+        foreach (string line in log.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] parts = line.Split(' ', 4);
+            if (parts.Length >= 3 && parts[0] == "DISK" && int.TryParse(parts[2], out int number))
+            {
+                // 後ろに - や英大文字が続くものは別の名前なので当てない。
+                text = System.Text.RegularExpressions.Regex.Replace(
+                    text, System.Text.RegularExpressions.Regex.Escape(parts[1]) + "(?![-A-Z])", $"{parts[1]} (一覧の「ディスク {number}」)");
+            }
+        }
+
+        return text;
+    }
+
     /// <summary>仮想ディスクのログを、利用者向けの文に直す。</summary>
     public static string DescribeVirtualDiskLog(string log)
     {
