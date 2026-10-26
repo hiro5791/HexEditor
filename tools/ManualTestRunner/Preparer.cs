@@ -367,12 +367,16 @@ public static class Preparer
         string log = Path.Combine(LogsFolder, $"publish-{distro.ToLowerInvariant()}.log");
         string script = Path.Combine(RepoRoot, "build", "publish.ps1");
         string shell = FindOnPath("pwsh.exe") ?? "powershell.exe";
-        var start = new ProcessStartInfo(shell, $"-NoProfile -ExecutionPolicy Bypass -File \"{script}\" -Distro {distro} -Arch {Arch}")
+        // 出力を UTF-8 にそろえて読む (既定のコードページで読むと、dotnet の日本語のメッセージが文字化けする)。
+        string command = $"[Console]::OutputEncoding = [Text.Encoding]::UTF8; & '{script.Replace("'", "''")}' -Distro {distro} -Arch {Arch}";
+        var start = new ProcessStartInfo(shell, $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"")
         {
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8,
+            StandardErrorEncoding = System.Text.Encoding.UTF8,
             WorkingDirectory = RepoRoot,
         };
         using var writer = new StreamWriter(log, append: false);
