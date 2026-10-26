@@ -63,8 +63,8 @@ public sealed partial class MainWindow : Window
         HideEquipment.IsChecked = LoadChoice(HideEquipmentPath, 1, 2) == 1;
         _restored = true;
 
-        // 開発中の確認 (dev-no-activate) では前面に出さない。それ以外は既定で常に手前に表示する。
-        TopMost.IsChecked = !DevOptions.NoActivate;
+        // 開発中の確認 (dev-no-activate) では前面に出さない。それ以外は前回の選択 (既定はオン) を使う。
+        TopMost.IsChecked = !DevOptions.NoActivate && LoadChoice(TopMostPath, 1, 2) == 1;
         Refresh();
 
         // 仮想ディスク・ポータブル版・インストーラ版ができたことは、ファイルとログで見つけて自動で「済み」にする (2 秒ごと)。
@@ -835,6 +835,8 @@ public sealed partial class MainWindow : Window
 
     private static string HideEquipmentPath => Path.Combine(RunStore.Folder, "hide-equipment.txt");
 
+    private static string TopMostPath => Path.Combine(RunStore.Folder, "top-most.txt");
+
     private static int LoadChoice(string path, int fallback, int count)
     {
         try
@@ -1089,6 +1091,11 @@ public sealed partial class MainWindow : Window
         if (AppWindow.Presenter is OverlappedPresenter presenter)
         {
             presenter.IsAlwaysOnTop = TopMost.IsChecked == true && !DevOptions.NoActivate;
+        }
+
+        if (_restored && !DevOptions.NoActivate)
+        {
+            SaveChoice(TopMostPath, TopMost.IsChecked == true ? 1 : 0);
         }
     }
 }
