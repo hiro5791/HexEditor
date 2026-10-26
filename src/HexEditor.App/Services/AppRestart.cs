@@ -97,6 +97,13 @@ public static class AppRestart
         }
 
         App.Settings.Flush();
+
+        // テストでは runas の代わり (UAC を出さない。起動できた / 拒否された扱い)。
+        if (TestHooks.TryRunAsAdmin(args, out bool started))
+        {
+            return started ? true : throw new System.ComponentModel.Win32Exception(1223);
+        }
+
         Microsoft.Windows.AppLifecycle.AppInstance current = Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent();
         string key = current.Key;
         current.UnregisterKey();

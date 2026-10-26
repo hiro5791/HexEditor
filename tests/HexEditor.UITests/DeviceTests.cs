@@ -327,4 +327,66 @@ public sealed class DeviceTests
         Assert.Contains(map["modules"]!.AsArray(), m => m!.GetValue<string>() == "TestTarget.exe");
         Assert.Contains(map["regions"]!.AsArray(), r => r!["access"]!.GetValue<string>() == "Readable");
     });
+
+    // ---- ENG-28 の仕様 12 の 7: 補助プロセスがないときの「管理者として再起動」 (runas はテスト用の設定で差し替える。昇格しない) ----
+
+    private static readonly Lazy<Dictionary<string, string>> En = new(() => UiHelpers.LoadResw("en"));
+
+    /// <summary>補助プロセスがない扱いで、偽の物理ディスク 0 を「ディスクを開く」から開こうとし、案内ダイアログの「管理者として再起動」を押す。</summary>
+    private static async Task RestartAsAdministratorFromGuidanceAsync(AppSession app)
+    {
+        await app.CommandAsync("Command_OpenDisk");
+        FlaUI.Core.AutomationElements.AutomationElement dialog = await app.WaitForDialogAsync("OpenDiskDialog");
+        string format = En.Value["OpenDisk_DiskName"];
+        string name = format[..format.IndexOf("{1}", StringComparison.Ordinal)].Replace("{0}", "0", StringComparison.Ordinal);
+        FlaUI.Core.AutomationElements.AutomationElement? item = null;
+        await app.WaitUntilAsync(() => Task.FromResult((item = dialog.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.ListItem))
+            .FirstOrDefault(i => AppSession.NameOf(i).Contains(name, StringComparison.Ordinal))) is not null), UiTest.Scaled(TimeSpan.FromSeconds(15)), $"the list item '{name}'");
+        item!.Patterns.SelectionItem.Pattern.Select();
+        await app.InvokeDialogButtonAsync(En.Value["Common_Open"], idle: false);
+
+        FlaUI.Core.AutomationElements.AutomationElement guidance = await app.WaitForDialogAsync("AdminGuidanceDialog");
+        Assert.Contains(En.Value["AdminGuide_Restart"], UiHelpers.DialogButtons(guidance));
+        await app.InvokeDialogButtonAsync(En.Value["AdminGuide_Restart"], idle: false);
+    }
+
+    private static JsonObject RestartHooks(UiTestContext ctx, string runAs)
+    {
+        JsonObject hooks = Hooks(ctx);
+        hooks["helperMissing"] = true;
+        hooks["runAsAdmin"] = runAs;
+        return hooks;
+    }
+
+    [Fact]
+    public Task Restart_as_administrator_saves_the_open_tabs_and_does_not_overwrite_them_while_exiting() => UiTestContext.RunAsync(async ctx =>
+    {
+        // TC-ENG-28-10 の不具合の回帰: 確認で文書を閉じた後にセッションを写し直し、タブが「閉じたタブ」に移った空のセッションで上書きしていた。
+        string seq = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = RestartHooks(ctx, "accept"), Files = [seq] });
+        await app.WaitForTabsAsync(1);
+
+        await RestartAsAdministratorFromGuidanceAsync(app);
+        await app.WaitForExitAsync(UiTest.Scaled(TimeSpan.FromSeconds(30)));
+
+        // 新しいプロセスが復元するセッション: TD-SEQ-1M のタブが開いたまま (閉じたタブではない)。
+        JsonObject session = JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(app.Profile, "session.json")))!.AsObject();
+        JsonArray tabs = session["windows"]![0]!["tabs"]!.AsArray();
+        Assert.Equal([Path.GetFullPath(seq)], tabs.Select(t => Path.GetFullPath(t!["path"]!.GetValue<string>())));
+        Assert.DoesNotContain(session["closedTabs"]?.AsArray() ?? [], t => string.Equals(t!["path"]?.GetValue<string>(), seq, StringComparison.OrdinalIgnoreCase));
+    });
+
+    [Fact]
+    public Task Restart_as_administrator_denied_by_uac_keeps_the_app_and_its_tabs() => UiTestContext.RunAsync(async ctx =>
+    {
+        // ENG-28 の仕様 12 の 7: UAC で拒否されたら終了せず、元の状態のまま続ける (タブを閉じない)。
+        string seq = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = RestartHooks(ctx, "deny"), Files = [seq] });
+        await app.WaitForTabsAsync(1);
+
+        await RestartAsAdministratorFromGuidanceAsync(app);
+        await app.WaitUntilAsync(() => Task.FromResult(app.Find("AdminGuidanceDialog") is null), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the guidance dialog to close");
+        await app.IdleAsync();
+        Assert.Equal([Path.GetFileName(seq)], await app.TabNamesAsync());
+    });
 }

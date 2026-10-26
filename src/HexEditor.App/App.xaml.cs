@@ -221,7 +221,15 @@ public partial class App : Application
         // メモリの上限の監視 (ENG-08)。1 秒ごとに集計し、上限を超えたら減らす。減らしきれなければ知らせる。
         _memoryMonitor = new MemoryMonitor(vm.Memory);
         _memoryMonitor.OverLimit += (_, _) => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowMemoryOverLimit(vm.Memory.Limit));
-        _memoryMonitor.LowMemory += (_, _) => AppLog.Warning("Low memory notification: cache trimmed.");
+        // OS の通知は空きメモリが閾値の前後を行き来すると数秒ごとに立つ。キャッシュは毎回縮めるが、ログは 1 分に 1 回にまとめる。
+        var lowMemoryLog = new Core.Engine.RateLimitedReport(TimeSpan.FromMinutes(1));
+        _memoryMonitor.LowMemory += (_, _) =>
+        {
+            if (lowMemoryLog.TryReport(out int count))
+            {
+                AppLog.Warning(count == 1 ? "Low memory notification: cache trimmed." : $"Low memory notification: cache trimmed ({count} times since the last report).");
+            }
+        };
 
         // トースト通知を押したら、ウィンドウを前に出す (UI-36 の仕様 8)。
         ToastNotifier.Invoked += () => DispatcherQueue.TryEnqueue(() => WindowManager.Current.Activate());

@@ -825,7 +825,8 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(dialog, "AdminGuidanceDialog");
         if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary && canRestart)
         {
-            await RestartElevatedAsync();
+            // 終了時と同じ確認・セッションの保存をしてから、管理者として起動し直す (ENG-28 の仕様 12 の 7)。
+            await WindowManager.RestartAsAdministratorAsync(this);
         }
     }
 
@@ -851,29 +852,6 @@ public sealed partial class MainWindow
         }
 
         return (texts, canRestart);
-    }
-
-    private async Task RestartElevatedAsync()
-    {
-        // 終了時と同じ確認・セッションの保存をしてから、管理者として起動し直す (ENG-28 の仕様 12 の 7)。
-        if (!await ConfirmExitAsync())
-        {
-            return;
-        }
-
-        SaveSession();
-        try
-        {
-            if (AppRestart.RestartAsAdministrator())
-            {
-                Application.Current.Exit();
-            }
-        }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException or IOException)
-        {
-            // UAC で拒否された: 終了せず続ける (仕様 12 の 7)。
-            AppLog.Info($"Relaunch as admin cancelled: {ex.Message}");
-        }
     }
 
     private void RefreshHelperIndicator() => UpdateHelperShield();

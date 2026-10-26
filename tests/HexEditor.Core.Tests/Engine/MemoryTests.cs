@@ -96,6 +96,25 @@ public sealed class MemoryTests
     }
 
     [Fact]
+    public void RepeatedLowMemoryReportsAreCoalesced()
+    {
+        // OS の通知が数秒ごとに立っても、ログは間隔ごとに 1 回 (まとめた回数つき)。
+        var clock = new ManualTimeProvider();
+        var report = new RateLimitedReport(TimeSpan.FromMinutes(1), clock);
+        Assert.True(report.TryReport(out int first));
+        Assert.Equal(1, first);
+        for (int i = 0; i < 5; i++)
+        {
+            clock.Advance(TimeSpan.FromSeconds(6));
+            Assert.False(report.TryReport(out _));
+        }
+
+        clock.Advance(TimeSpan.FromSeconds(31));
+        Assert.True(report.TryReport(out int later));
+        Assert.Equal(6, later);
+    }
+
+    [Fact]
     public async Task CancelAndWaitStopsOperationsOfDocument()
     {
         var center = new OperationCenter();
