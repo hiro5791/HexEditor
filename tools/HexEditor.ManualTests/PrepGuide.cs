@@ -17,6 +17,9 @@ public enum GuideAction
     /// <summary>「インストーラ版を作ってインストールする」。</summary>
     BuildInstaller,
 
+    /// <summary>「隠すファイル」の名前を一時的に変える (準備の前に自動で行う)。</summary>
+    HideFiles,
+
     /// <summary>「準備」(テストデータと設定フォルダを作り、HexEditor を起動する)。</summary>
     Prepare,
 
@@ -129,6 +132,13 @@ public static partial class PrepGuide
         }
 
         var steps = new List<GuideStep>(before);
+        if (prep.HiddenFiles.Count > 0)
+        {
+            steps.Add(new GuideStep("hide", GuideAction.HideFiles,
+                $"補助プロセス ({string.Join("、", prep.HiddenFiles)}) を一時的に隠します",
+                ["テストが終わると (結果を押す・別のテストケースを選ぶ・ツールを閉じる) 自動で元に戻します。"]));
+        }
+
         var prepareLines = new List<string>();
         if (prep.IsAdmin || prep.AdminCommand is not null)
         {

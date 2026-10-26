@@ -41,9 +41,10 @@ public sealed record CasePrep(
     string? Hooks,
     string? CopyTo,
     string? AdminCommand,
+    IReadOnlyList<string> HiddenFiles,
     IReadOnlyList<string> Steps)
 {
-    public static CasePrep Default(string id) => new(id, LaunchKind.Dev, null, [], null, null, null, null, []);
+    public static CasePrep Default(string id) => new(id, LaunchKind.Dev, null, [], null, null, null, null, [], []);
 
     /// <summary>「引数」が「なし」(ファイルを開かない)。</summary>
     public bool OpensNothing => Arguments == "なし";
@@ -201,7 +202,7 @@ public sealed partial class PrepBook
             launch = parsed ?? LaunchKind.Dev;
         }
 
-        foreach (string key in fields.Keys.Where(k => k is not ("起動" or "引数" or "必要なもの" or "設定" or "フック" or "コピー先" or "コマンド (管理者)")))
+        foreach (string key in fields.Keys.Where(k => k is not ("起動" or "引数" or "必要なもの" or "設定" or "フック" or "コピー先" or "コマンド (管理者)" or "隠すファイル")))
         {
             problems.Add($"{id}: 項目「{key}」は使えません。");
         }
@@ -209,8 +210,11 @@ public sealed partial class PrepBook
         IReadOnlyList<string> needs = fields.TryGetValue("必要なもの", out string? needText)
             ? needText.Split('、', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             : [];
+        IReadOnlyList<string> hidden = fields.TryGetValue("隠すファイル", out string? hiddenText)
+            ? hiddenText.Split('、', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            : [];
         return new CasePrep(id, launch, fields.GetValueOrDefault("引数"), needs, fields.GetValueOrDefault("設定"), fields.GetValueOrDefault("フック"),
-            fields.GetValueOrDefault("コピー先"), fields.GetValueOrDefault("コマンド (管理者)"), steps);
+            fields.GetValueOrDefault("コピー先"), fields.GetValueOrDefault("コマンド (管理者)"), hidden, steps);
     }
 
     public CasePrep For(string id) => Cases.GetValueOrDefault(id) ?? CasePrep.Default(id);
@@ -299,6 +303,16 @@ public sealed partial class PrepBook
                 {
                     yield return $"{c.Id}: {name}が JSON のオブジェクトではありません。";
                 }
+            }
+
+            foreach (string name in prep.HiddenFiles.Where(n => n != Path.GetFileName(n) || n.Length == 0))
+            {
+                yield return $"{c.Id}: 隠すファイル「{name}」はファイル名だけで書いてください。";
+            }
+
+            if (prep.HiddenFiles.Count > 0 && prep.Launch == LaunchKind.None)
+            {
+                yield return $"{c.Id}: 起動が「なし」のときは、隠すファイルを使えません。";
             }
 
             if (prep.CopyTo is not (null or "デスクトップ"))

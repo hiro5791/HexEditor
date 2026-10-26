@@ -82,9 +82,11 @@ public sealed class ManualPrepTests(ITestOutputHelper output) : IDisposable
         Assert.Equal($"下の手順 1〜{eng2801Case.Steps.Count} を順に行い、結果を押してください", eng2801.Steps[^1].Title);
         Assert.Contains(eng2801.Notes, n => n.Name == "一般ユーザーの権限");
 
-        // 「準備の前に」とある補足は、ポータブル版の後・準備の前の段階になる。
+        // 「隠すファイル」は、ポータブル版の後・準備の前の自動の段階になる (手で名前を変えない)。
         GuidePlan eng2810 = PrepGuide.Plan(book, cases.Single(c => c.Id == "TC-ENG-28-10"));
-        Assert.Equal([GuideAction.BuildPortable, GuideAction.Hand, GuideAction.Prepare, GuideAction.RunSteps], eng2810.Steps.Select(s => s.Action));
+        Assert.Equal([GuideAction.BuildPortable, GuideAction.HideFiles, GuideAction.Prepare, GuideAction.RunSteps], eng2810.Steps.Select(s => s.Action));
+        Assert.Equal("補助プロセス (HexEditor.Elevated.exe) を一時的に隠します", eng2810.Steps[1].Title);
+        Assert.Equal(["HexEditor.Elevated.exe"], book.For("TC-ENG-28-10").HiddenFiles);
 
         // 機材は最初。「ないとき」の書き方から、飛ばすときの結果とコメントが分かる。
         GuidePlan for2007 = PrepGuide.Plan(book, cases.Single(c => c.Id == "TC-FOR-20-07"));
@@ -102,6 +104,73 @@ public sealed class ManualPrepTests(ITestOutputHelper output) : IDisposable
         TestCase bitlocker = cases.First(c => c.TestData.Contains("TD-FOR-BITLOCKER"));
         GuideStep data = PrepGuide.Plan(book, bitlocker).Steps.Single(s => s.Key == "data:TD-FOR-BITLOCKER");
         Assert.Equal(("対象外", "Home のため"), (data.SkipOutcome, data.SkipComment));
+    }
+
+    [Fact]
+    public void HiddenFilesFieldIsParsedAndValidated()
+    {
+        PrepBook book = PrepBook.Parse(
+        [
+            "### TC-AAA-01-01",
+            "| 項目 | 内容 |",
+            "| --- | --- |",
+            "| 起動 | ポータブル版 |",
+            "| 隠すファイル | a.exe、b.dll |",
+            "### TC-AAA-01-02",
+            "| 項目 | 内容 |",
+            "| --- | --- |",
+            "| 起動 | なし |",
+            "| 隠すファイル | sub/c.exe |",
+        ]);
+        Assert.Equal(["a.exe", "b.dll"], book.For("TC-AAA-01-01").HiddenFiles);
+        Assert.Empty(book.For("TC-AAA-01-99").HiddenFiles);
+        var cases = new[] { "TC-AAA-01-01", "TC-AAA-01-02" }
+            .Select(id => new TestCase(id, id, string.Empty, new Dictionary<string, string> { ["種別"] = "手動" }, string.Empty, [], [])).ToList();
+        string[] problems = [.. book.Validate(cases).Where(p => p.Contains("隠すファイル", StringComparison.Ordinal))];
+        Assert.Equal(2, problems.Length);
+        Assert.All(problems, p => Assert.StartsWith("TC-AAA-01-02", p, StringComparison.Ordinal));
+        Assert.DoesNotContain(book.Validate(cases), p => p.Contains("項目「隠すファイル」", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void FileHiderHidesAndRestoresIdempotentlyWithoutOverwriting()
+    {
+        Directory.CreateDirectory(_dir);
+        string path = Path.Combine(_dir, "h.exe");
+        File.WriteAllText(path, "x");
+
+        // 隠す (2 回目は何もしない)。
+        Assert.Null(FileHider.Hide(_dir, "h.exe"));
+        Assert.True(FileHider.IsHidden(_dir, "h.exe"));
+        Assert.False(File.Exists(path));
+        Assert.Null(FileHider.Hide(_dir, "h.exe"));
+        Assert.Equal("x", File.ReadAllText(path + ".bak"));
+
+        // 戻す (2 回目は何もしない)。
+        Assert.Null(FileHider.Restore(_dir, "h.exe", out bool restored));
+        Assert.True(restored);
+        Assert.Equal("x", File.ReadAllText(path));
+        Assert.Null(FileHider.Restore(_dir, "h.exe", out restored));
+        Assert.False(restored);
+
+        // 両方あるときは、どちらも上書きせずに理由を返す。
+        File.WriteAllText(path + ".bak", "old");
+        Assert.NotNull(FileHider.Hide(_dir, "h.exe"));
+        Assert.NotNull(FileHider.Restore(_dir, "h.exe", out restored));
+        Assert.False(restored);
+        Assert.Equal("x", File.ReadAllText(path));
+        Assert.Equal("old", File.ReadAllText(path + ".bak"));
+
+        // ないときは理由を返す。動いているプログラム (開いたまま) は名前を変えられず、理由を返す。
+        Assert.NotNull(FileHider.Hide(_dir, "none.exe"));
+        File.Delete(path + ".bak");
+        using (var locked = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            Assert.NotNull(FileHider.Hide(_dir, "h.exe"));
+            Assert.True(File.Exists(path));
+        }
+
+        Assert.Null(FileHider.Hide(_dir, "h.exe"));
     }
 
     [Fact]

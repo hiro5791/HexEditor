@@ -186,6 +186,77 @@ public static class Preparer
         }
     }
 
+    /// <summary>起動の種類の HexEditor.exe があるフォルダ (「隠すファイル」を置くところ)。まだ作っていなければ null (模擬のときは場所だけ返す)。</summary>
+    public static string? LaunchFolder(LaunchKind kind)
+    {
+        string? exe = kind switch
+        {
+            LaunchKind.Portable or LaunchKind.PortableAdmin => PortableExe,
+            LaunchKind.Installer => InstallerExe,
+            LaunchKind.None => null,
+            _ => FindDevBuild(),
+        };
+        return exe is null ? null : Path.GetDirectoryName(exe);
+    }
+
+    /// <summary>「隠すファイル」がすべて隠れている。</summary>
+    public static bool AreHidden(CasePrep prep) =>
+        prep.HiddenFiles.Count > 0 && LaunchFolder(prep.Launch) is { } folder && prep.HiddenFiles.All(n => FileHider.IsHidden(folder, n));
+
+    /// <summary>「隠すファイル」の名前を .bak に変える (準備の前)。できなければ理由を返す。</summary>
+    public static string? HideFiles(CasePrep prep)
+    {
+        if (LaunchFolder(prep.Launch) is not { } folder || !Directory.Exists(folder))
+        {
+            return prep.Launch switch
+            {
+                LaunchKind.Portable or LaunchKind.PortableAdmin => "ポータブル版がまだありません。",
+                LaunchKind.Installer => "インストーラ版がまだインストールされていません。",
+                _ => "開発版の HexEditor が見つかりません。",
+            };
+        }
+
+        foreach (string name in prep.HiddenFiles)
+        {
+            if (FileHider.Hide(folder, name) is { } error)
+            {
+                return error;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 隠したファイルを元に戻す。<paramref name="keepCase"/> のテストケースが隠すファイルは戻さない (そのテストケースを開いているあいだは隠したままにする)。
+    /// ツールの起動時・結果の記録時・別のテストケースを選んだとき・ツールを閉じるときに呼ぶ。戻せなかったものがあれば理由を返す。
+    /// </summary>
+    public static string? RestoreHidden(PrepBook book, string? keepCase)
+    {
+        var entries = new List<(string Folder, string Name, string CaseId)>();
+        foreach (CasePrep prep in book.Cases.Values.Where(p => p.HiddenFiles.Count > 0))
+        {
+            if (LaunchFolder(prep.Launch) is { } folder)
+            {
+                entries.AddRange(prep.HiddenFiles.Select(n => (folder, n, prep.Id)));
+            }
+        }
+
+        static string Key(string folder, string name) => Path.Combine(folder, name).ToUpperInvariant();
+        HashSet<string> keep = entries.Where(e => e.CaseId == keepCase).Select(e => Key(e.Folder, e.Name)).ToHashSet();
+        var all = entries.Where(e => !keep.Contains(Key(e.Folder, e.Name))).Select(e => (e.Folder, e.Name)).Distinct().ToList();
+        var problems = new List<string>();
+        foreach ((string folder, string name) in all)
+        {
+            if (FileHider.Restore(folder, name, out _) is { } problem)
+            {
+                problems.Add(problem);
+            }
+        }
+
+        return problems.Count == 0 ? null : string.Join(Environment.NewLine, problems.Distinct());
+    }
+
     /// <summary>起動の種類の HexEditor.exe (なければ null)。</summary>
     public static string? ExeFor(LaunchKind kind) => kind switch
     {
@@ -407,6 +478,11 @@ public static class Preparer
             string exe = distro == "Portable" ? PortableExe : InstallerExe;
             Directory.CreateDirectory(Path.GetDirectoryName(exe)!);
             await File.WriteAllBytesAsync(exe, []);
+            if (distro == "Portable")
+            {
+                await File.WriteAllBytesAsync(Path.Combine(Path.GetDirectoryName(exe)!, "HexEditor.Elevated.exe"), []);
+            }
+
             return null;
         }
 

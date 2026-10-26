@@ -324,18 +324,41 @@ public sealed class ManualTestRunnerTests : IDisposable
         Assert.NotNull(w.FindFirstDescendant(cf => cf.ByAutomationId("RedoPrepare")));
         Shot(w, "TC-ENG-28-01-final");
 
-        // TC-ENG-28-10: ポータブル版を作ったあと、手で行う補足 (準備の前に) で止まる。[済んだ] を押すと、続き (起動) を自動で行う。
+        // TC-ENG-28-10: 「準備」1 つで、ポータブル版 → 補助プロセス (HexEditor.Elevated.exe) の一時的な非表示 → 起動まで自動で行う (手で名前を変えない)。
+        string portableFolder = Path.Combine(_dir, "portable", "HexEditor");
         await SelectCaseAsync(w, "ENG-28-10", "TC-ENG-28-10");
         await UntilTitleAsync(w, "1/4  「準備」を押してください");
+        Assert.Contains("・補助プロセス (HexEditor.Elevated.exe) を一時的に隠します", AllText(w));
         ById(w, "GuideButton").Patterns.Invoke.Pattern.Invoke();
-        await UntilTitleAsync(w, "2/4  準備の前に、下のことを行います");
-        Assert.Contains("✓ 1. ポータブル版を作ります  (済み)", AllText(w));
-        button = ById(w, "GuideButton");
-        Assert.Equal("済んだ", NameOf(button));
-        AssertVisibleWithoutScrolling(w, button);
-        Shot(w, "TC-ENG-28-10-hand");
-        button.Patterns.Invoke.Pattern.Invoke();
         await UntilTitleAsync(w, $"4/4  下の手順 1〜{manual.Single(c => c.Id == "TC-ENG-28-10").Steps.Count} を順に行い、結果を押してください");
+        Assert.True(File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe.bak")));
+        Assert.False(File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe")));
+        Shot(w, "TC-ENG-28-10");
+
+        // 別のテストケースを選ぶと、名前が元に戻る。選び直すと「隠す」段階が未済に戻る (もう一度「準備」を押せる)。
+        await SelectCaseAsync(w, "ENG-28-11", "TC-ENG-28-11");
+        await UntilAsync(() => File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe")) ? "ok" : null, "別のテストケースを選んでも名前が戻りません。");
+        Assert.False(File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe.bak")));
+        await SelectCaseAsync(w, "ENG-28-10", "TC-ENG-28-10");
+        await UntilTitleAsync(w, "2/4  「準備」を押してください");
+
+        // 動いている HexEditor が名前を変えさせないとき (ファイルを開いたまま): 理由を出して止まり、閉じてから「もう一度」で続きから行う。
+        using (var locked = new FileStream(Path.Combine(portableFolder, "HexEditor.Elevated.exe"), FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            ById(w, "GuideButton").Patterns.Invoke.Pattern.Invoke();
+            await UntilTitleAsync(w, "2/4  準備が途中で止まりました");
+            Assert.Contains("名前を変えられませんでした", AllText(w));
+            Assert.Equal("もう一度", NameOf(ById(w, "GuideButton")));
+        }
+
+        ById(w, "GuideButton").Patterns.Invoke.Pattern.Invoke();
+        await UntilTitleAsync(w, $"4/4  下の手順 1〜{manual.Single(c => c.Id == "TC-ENG-28-10").Steps.Count} を順に行い、結果を押してください");
+        Assert.True(File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe.bak")));
+
+        // 結果を押すと、名前が元に戻る。
+        ById(w, "PassButton").Patterns.Invoke.Pattern.Invoke();
+        await UntilAsync(() => File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe")) ? "ok" : null, "結果を押しても名前が戻りません。");
+        Assert.False(File.Exists(Path.Combine(portableFolder, "HexEditor.Elevated.exe.bak")));
 
         // 準備の要らないテストケース (起動するだけ): 1/2 が「準備」で、手順がすぐ下に見える。
         TestCase plain = manual.First(c => !book.NeedsEquipment(c) && c.Steps.Count > 0 && book.For(c.Id).Launch == LaunchKind.Dev

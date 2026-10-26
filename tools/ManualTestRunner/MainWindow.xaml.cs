@@ -35,6 +35,7 @@ public sealed partial class MainWindow : Window
     private readonly Dictionary<string, string> _failed = [];
     private string? _runningCase;
     private string? _runningKey;
+    private string? _restoreNote;
     private GuidePlan? _plan;
     private string _guideSignature = string.Empty;
 
@@ -48,6 +49,9 @@ public sealed partial class MainWindow : Window
         _everyCase = every.GroupBy(c => c.Id).ToDictionary(g => g.Key, g => g.First());
         _all = every.Where(c => c.IsManual).ToList();
         _book = PrepBook.LoadNextTo(casesDirectory);
+
+        // 前回、隠したまま終わった補助プロセス (HexEditor.Elevated.exe.bak など) を元に戻す。
+        _restoreNote = Preparer.RestoreHidden(_book, keepCase: null);
 
         // フェーズの選択肢は、テストケースにある最大のフェーズまで作る (フェーズが増えてもツールを直さなくてよいように)。
         int lastPhase = _all.Count == 0 ? 0 : _all.Max(c => c.Phase);
@@ -72,7 +76,11 @@ public sealed partial class MainWindow : Window
         _guideTimer.Interval = TimeSpan.FromSeconds(2);
         _guideTimer.Tick += (_, _) => UpdateGuide(force: false);
         _guideTimer.Start();
-        Closed += (_, _) => _guideTimer.Stop();
+        Closed += (_, _) =>
+        {
+            _guideTimer.Stop();
+            Preparer.RestoreHidden(_book, keepCase: null);
+        };
     }
 
     private static string FindCasesDirectory()
@@ -163,6 +171,9 @@ public sealed partial class MainWindow : Window
 
     private void Show(TestCase c)
     {
+        // 別のテストケースを選んだら、前のテストケースで隠したファイルを戻す (このテストケースの分は戻さない)。
+        string? restoreProblem = Preparer.RestoreHidden(_book, keepCase: c.Id) ?? _restoreNote;
+        _restoreNote = null;
         _current = c;
         Detail.Visibility = ResultPanel.Visibility = Visibility.Visible;
         CaseTitle.Text = $"{c.Id} {c.Title}";
@@ -196,6 +207,11 @@ public sealed partial class MainWindow : Window
         Status = _book.NeedsVirtualDisks(c) && Preparer.VirtualDisksAttached
             ? "前回の仮想ディスクの結果:" + Environment.NewLine + Preparer.DescribeVirtualDiskLog(File.ReadAllText(Preparer.VhdLog))
             : string.Empty;
+        if (restoreProblem is not null)
+        {
+            Status = "隠したファイルを元に戻せませんでした:" + Environment.NewLine + restoreProblem;
+        }
+
         UpdateGuide(force: true);
         DetailScroll.ChangeView(null, 0, null, disableAnimation: true);
     }
@@ -208,13 +224,14 @@ public sealed partial class MainWindow : Window
         GuideAction.MakeVirtualDisks => Preparer.VirtualDisksAttached,
         GuideAction.BuildPortable => File.Exists(Preparer.PortableExe),
         GuideAction.BuildInstaller => File.Exists(Preparer.InstallerExe),
+        GuideAction.HideFiles => Preparer.AreHidden(_book.For(c.Id)),
         GuideAction.Prepare => _prepared.Contains(c.Id),
         _ => false,
     };
 
     /// <summary>準備ボタン 1 つで自動で行う段階 (仮想ディスク・ポータブル版・インストーラ版・準備)。</summary>
     private static bool IsAutomatic(GuideAction action) =>
-        action is GuideAction.MakeVirtualDisks or GuideAction.BuildPortable or GuideAction.BuildInstaller or GuideAction.Prepare;
+        action is GuideAction.MakeVirtualDisks or GuideAction.BuildPortable or GuideAction.BuildInstaller or GuideAction.HideFiles or GuideAction.Prepare;
 
     /// <summary>まだ済んでいない最初の段階 (いま行うこと)。</summary>
     private int CurrentStepIndex(TestCase c, GuidePlan plan)
@@ -514,6 +531,7 @@ public sealed partial class MainWindow : Window
                     GuideAction.MakeVirtualDisks => await VirtualDisksCoreAsync(dismount: false),
                     GuideAction.BuildPortable => await BuildCoreAsync("Portable"),
                     GuideAction.BuildInstaller => await BuildCoreAsync("Installer"),
+                    GuideAction.HideFiles => Preparer.HideFiles(_book.For(c.Id)),
                     _ => Prepare(c),
                 };
                 if (error is null && !IsDone(c, step))
@@ -732,6 +750,11 @@ public sealed partial class MainWindow : Window
             yield return "テストデータをデスクトップに置く";
         }
 
+        if (prep.HiddenFiles.Count > 0)
+        {
+            yield return $"補助プロセス ({string.Join("、", prep.HiddenFiles)}) を一時的に隠す (名前を .bak に変える。結果を押す・別のテストケースを選ぶ・ツールを閉じると自動で戻す)";
+        }
+
         if (prep.AdminCommand is { } command)
         {
             yield return $"管理者の PowerShell で「{command}」を実行する (管理者の確認が出る)";
@@ -783,6 +806,9 @@ public sealed partial class MainWindow : Window
         // 不合格のときは HexEditor のウィンドウを撮って添付する。
         string? screenshot = outcome == Outcome.Fail ? Preparer.CaptureWindow(_hexEditor, c.Id) : null;
         _store.Record(c.Id, new CaseResult(outcome, Comment.Text, screenshot, DateTimeOffset.Now, EnvironmentInfo.Describe()));
+
+        // 結果を付けたら、隠したファイルを戻す。
+        _restoreNote = Preparer.RestoreHidden(_book, keepCase: null);
         int index = CaseList.SelectedIndex;
         Refresh();
         CaseList.SelectedIndex = Math.Min(index + 1, CaseList.Items.Count - 1);
@@ -1039,6 +1065,8 @@ public sealed partial class MainWindow : Window
             reminders.Add("仮想ディスクが接続されたままです。手動テストが終わったなら「仮想ディスクを外す」を押してください (管理者の確認が出ます)。");
         }
 
+        // 隠したファイルは結果を付けたときに自動で戻る。戻っていなければ、もう一度戻してみて、それでも戻らなければ知らせる (念のため)。
+        Preparer.RestoreHidden(_book, keepCase: null);
         if (File.Exists(Path.Combine(Preparer.PortableFolder, "HexEditor", "HexEditor.Elevated.exe.bak")))
         {
             reminders.Add("ポータブル版の HexEditor.Elevated.exe.bak の名前が戻っていません (TC-ENG-28-10)。HexEditor.Elevated.exe に戻してください: " + Path.Combine(Preparer.PortableFolder, "HexEditor"));
