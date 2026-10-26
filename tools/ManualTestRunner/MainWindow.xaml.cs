@@ -26,6 +26,14 @@ public sealed partial class MainWindow : Window
     private Process? _hexEditor;
     private bool _busy;
 
+    // 「いま行うこと」の状態。手で行った段階 ([済んだ] を押したもの) と準備の結果は、テストケースごとに覚える (このツールを閉じるまで)。
+    private readonly Dictionary<string, HashSet<string>> _handDone = [];
+    private readonly Dictionary<string, PrepareOutcome> _outcomes = [];
+    private readonly HashSet<string> _prepared = [];
+    private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _guideTimer;
+    private GuidePlan? _plan;
+    private string _guideSignature = string.Empty;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -54,6 +62,13 @@ public sealed partial class MainWindow : Window
         // 開発中の確認 (dev-no-activate) では前面に出さない。それ以外は既定で常に手前に表示する。
         TopMost.IsChecked = !DevOptions.NoActivate;
         Refresh();
+
+        // 仮想ディスク・ポータブル版・インストーラ版ができたことは、ファイルとログで見つけて自動で「済み」にする (2 秒ごと)。
+        _guideTimer = DispatcherQueue.CreateTimer();
+        _guideTimer.Interval = TimeSpan.FromSeconds(2);
+        _guideTimer.Tick += (_, _) => UpdateGuide(force: false);
+        _guideTimer.Start();
+        Closed += (_, _) => _guideTimer.Stop();
     }
 
     private static string FindCasesDirectory()
@@ -148,13 +163,7 @@ public sealed partial class MainWindow : Window
         Detail.Visibility = ResultPanel.Visibility = Visibility.Visible;
         CaseTitle.Text = $"{c.Id} {c.Title}";
         CaseFields.Text = string.Join("  /  ", c.Fields.Select(f => $"{f.Key}: {f.Value}"));
-        CasePrep prep = _book.For(c.Id);
-        bool vhd = _book.NeedsVirtualDisks(c);
-        MakeVhd.Visibility = RemoveVhd.Visibility = vhd ? Visibility.Visible : Visibility.Collapsed;
-        BuildPortable.Visibility = prep.IsPortable || _book.NeedsOf(c).Any(n => n.Name.Contains("仮想マシン", StringComparison.Ordinal))
-            ? Visibility.Visible : Visibility.Collapsed;
-        BuildInstaller.Visibility = prep.Launch == LaunchKind.Installer ? Visibility.Visible : Visibility.Collapsed;
-        BuildPrepPanel(c, null);
+        BuildPrepPanel(c, _outcomes.GetValueOrDefault(c.Id));
         Steps.Children.Clear();
         for (int i = 0; i < c.Steps.Count; i++)
         {
@@ -176,18 +185,283 @@ public sealed partial class MainWindow : Window
         CaseResult? r = _store.ResultOf(c.Id);
         Comment.Text = r?.Comment ?? string.Empty;
         CurrentResult.Text = r is null ? string.Empty : $"記録: {RunStore.Label(r.Outcome)} ({r.At:MM/dd HH:mm})";
-        PrepareStatus.Text = Preparer.ToolIsElevated
-            ? "注意: このツールが管理者として動いているため、起動する HexEditor も管理者になります。一般ユーザーの権限のテストでは、ツールを普通に起動し直してください。"
-            : string.Empty;
-        ToolStatus.Text = vhd && Preparer.VirtualDisksExist && File.Exists(Preparer.VhdLog)
+        Warning.Text = "注意: このツールが管理者として動いているため、起動する HexEditor も管理者になります。一般ユーザーの権限のテストでは、ツールを普通に起動し直してください。";
+        Warning.Visibility = Preparer.ToolIsElevated ? Visibility.Visible : Visibility.Collapsed;
+        _plan = PrepGuide.Plan(_book, c);
+        Status = _book.NeedsVirtualDisks(c) && Preparer.VirtualDisksAttached
             ? "前回の仮想ディスクの結果:" + Environment.NewLine + Preparer.DescribeVirtualDiskLog(File.ReadAllText(Preparer.VhdLog))
             : string.Empty;
+        UpdateGuide(force: true);
+        DetailScroll.ChangeView(null, 0, null, disableAnimation: true);
     }
+
+    // ---- いま行うこと ----
+
+    private bool IsDone(TestCase c, GuideStep step) => step.Action switch
+    {
+        GuideAction.Hand => _handDone.TryGetValue(c.Id, out HashSet<string>? done) && done.Contains(step.Key),
+        GuideAction.MakeVirtualDisks => Preparer.VirtualDisksAttached,
+        GuideAction.BuildPortable => File.Exists(Preparer.PortableExe),
+        GuideAction.BuildInstaller => File.Exists(Preparer.InstallerExe),
+        GuideAction.Prepare => _prepared.Contains(c.Id),
+        _ => false,
+    };
+
+    /// <summary>まだ済んでいない最初の段階 (いま行うこと)。</summary>
+    private int CurrentStepIndex(TestCase c, GuidePlan plan)
+    {
+        for (int i = 0; i < plan.Steps.Count; i++)
+        {
+            if (!IsDone(c, plan.Steps[i]))
+            {
+                return i;
+            }
+        }
+
+        return plan.Steps.Count - 1;
+    }
+
+    /// <summary>「いま行うこと」の下の結果・進み具合の文。空なら欄を畳む (ボタンの下に空きを作らない)。</summary>
+    private string Status
+    {
+        set
+        {
+            GuideStatus.Text = value;
+            GuideStatus.Visibility = value.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+
+    private GuideStep? CurrentStep => _current is { } c && _plan is { } plan ? plan.Steps[CurrentStepIndex(c, plan)] : null;
+
+    private static string ButtonLabel(GuideAction action) => action switch
+    {
+        GuideAction.Hand => "済んだ",
+        GuideAction.MakeVirtualDisks => "仮想ディスクを作る",
+        GuideAction.BuildPortable => "ポータブル版を作る",
+        GuideAction.BuildInstaller => "インストーラ版を作ってインストールする",
+        GuideAction.Prepare => "準備",
+        _ => string.Empty,
+    };
+
+    /// <summary>
+    /// 「いま行うこと」と準備の流れを作り直す。<paramref name="force"/> が false なら、段階の済み・未済が変わったときだけ作り直す
+    /// (2 秒ごとの確認で、選んでいる文字やフォーカスを消さないように)。
+    /// </summary>
+    private void UpdateGuide(bool force)
+    {
+        if (_current is not { } c || _plan is not { } plan)
+        {
+            return;
+        }
+
+        bool[] done = plan.Steps.Select(s => IsDone(c, s)).ToArray();
+        string signature = $"{c.Id}|{string.Join(",", done)}|{_busy}|{Preparer.VirtualDisksExist}";
+        if (!force && signature == _guideSignature)
+        {
+            return;
+        }
+
+        _guideSignature = signature;
+        int current = CurrentStepIndex(c, plan);
+        GuideStep step = plan.Steps[current];
+        bool final = step.Action == GuideAction.RunSteps;
+        GuideTitle.Text = $"{current + 1}/{plan.Steps.Count}  {step.Title}";
+
+        GuideLines.Children.Clear();
+        // 「ないとき:」の行は、下の飛ばすボタンの説明に置き換える。
+        foreach (string line in step.Lines.Where(l => step.SkipOutcome is null || !l.StartsWith("ないとき", StringComparison.Ordinal)))
+        {
+            GuideLines.Children.Add(Line(line));
+        }
+
+        if (step.SkipOutcome is { } skip)
+        {
+            string comment = step.SkipComment is { } text ? $"コメントに「{text}」と書いて" : "コメントに理由を書いてから押すと";
+            GuideLines.Children.Add(Line(skip == "保留"
+                ? $"まだできないときは「まだできない (保留にする)」を押します ({comment}、結果を「保留」にして次のテストケースに進みます)。"
+                : $"ないときは「ない (対象外にする)」を押します ({comment}、結果を「対象外」にして次のテストケースに進みます)。"));
+        }
+
+        if (final)
+        {
+            AddFinalLines(c, plan);
+        }
+
+        string label = ButtonLabel(step.Action);
+        GuideButton.Content = label;
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(GuideButton, label);
+        GuideButton.Visibility = label.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        GuideButton.IsEnabled = !_busy;
+        SkipButton.Visibility = step.SkipOutcome is null ? Visibility.Collapsed : Visibility.Visible;
+        SkipButton.Content = step.SkipOutcome == "保留" ? "まだできない (保留にする)" : "ない (対象外にする)";
+        SkipButton.IsEnabled = !_busy;
+
+        // 準備の流れ。手順の段階になったら 1 行にまとめ、手順を「いま行うこと」のすぐ下に出す。
+        Checklist.Children.Clear();
+        if (final)
+        {
+            if (plan.Steps.Count > 1)
+            {
+                Checklist.Children.Add(Line($"✓ 準備はすべて済みました ({plan.Steps.Count - 1} 件)", secondary: true));
+            }
+        }
+        else
+        {
+            Checklist.Children.Add(Line("準備の流れ", strong: true));
+            for (int i = 0; i < plan.Steps.Count; i++)
+            {
+                string mark = i == current ? "▶" : done[i] ? "✓" : "・";
+                string state = i == current ? "  ← いまここ" : done[i] ? "  (済み)" : string.Empty;
+                string title = plan.Steps[i].Action == GuideAction.RunSteps ? "手順を行い、結果を押す" : plan.Steps[i].Title;
+                Checklist.Children.Add(Line($"{mark} {i + 1}. {title}{state}", strong: i == current, secondary: i != current));
+            }
+        }
+
+        RedoPrepare.Visibility = _prepared.Contains(c.Id) ? Visibility.Visible : Visibility.Collapsed;
+        RemoveVhd.Visibility = plan.Steps.Any(s => s.Action == GuideAction.MakeVirtualDisks && IsDone(c, s)) ? Visibility.Visible : Visibility.Collapsed;
+        GuideStep? built = plan.Steps.FirstOrDefault(s => s.Action is GuideAction.BuildPortable or GuideAction.BuildInstaller && IsDone(c, s));
+        Rebuild.Visibility = built is null ? Visibility.Collapsed : Visibility.Visible;
+        Rebuild.Content = built?.Action == GuideAction.BuildInstaller ? "インストーラ版を作り直す" : "ポータブル版を作り直す";
+        Rebuild.Tag = built?.Action;
+        RedoPrepare.IsEnabled = Rebuild.IsEnabled = RemoveVhd.IsEnabled = !_busy;
+
+        StepsHeading.Text = final ? "手順" : "手順 (準備が終わってから行います。いまはまだ行いません)";
+        foreach (CheckBox check in Steps.Children.OfType<Grid>().SelectMany(g => g.Children.OfType<CheckBox>()))
+        {
+            check.IsEnabled = final;
+        }
+    }
+
+    /// <summary>最後の段階 (手順を行う) に、手順の間に気をつけること・準備で作ったテストデータの場所・参照するテストケースを書く。</summary>
+    private void AddFinalLines(TestCase c, GuidePlan plan)
+    {
+        foreach (PrepNeed note in plan.Notes)
+        {
+            GuideLines.Children.Add(Line("■ " + note.Name, strong: true));
+            foreach (string line in note.Lines)
+            {
+                GuideLines.Children.Add(Line(line));
+            }
+        }
+
+        if (_outcomes.GetValueOrDefault(c.Id)?.Setup is { Files.Count: > 0 } setup)
+        {
+            GuideLines.Children.Add(Line("■ 準備で作ったテストデータの場所", strong: true));
+            foreach ((string id, string path) in setup.Files)
+            {
+                GuideLines.Children.Add(Line($"{id}: {path}"));
+            }
+        }
+
+        foreach (string id in PrepBook.ReferencedCases(c))
+        {
+            if (!_everyCase.TryGetValue(id, out TestCase? other))
+            {
+                continue;
+            }
+
+            GuideLines.Children.Add(Line($"■ 参照するテストケース {other.Id} {other.Title}", strong: true));
+            if (other.Precondition.Length > 0)
+            {
+                GuideLines.Children.Add(Line("前提: " + other.Precondition));
+            }
+
+            for (int i = 0; i < other.Steps.Count; i++)
+            {
+                GuideLines.Children.Add(Line($"手順 {i + 1}. {other.Steps[i]}"));
+            }
+        }
+    }
+
+    private static TextBlock Line(string text, bool strong = false, bool secondary = false)
+    {
+        var block = new TextBlock
+        {
+            Text = text,
+            IsTextSelectionEnabled = true,
+            TextWrapping = TextWrapping.Wrap,
+            FontWeight = strong ? Microsoft.UI.Text.FontWeights.SemiBold : Microsoft.UI.Text.FontWeights.Normal,
+        };
+        if (secondary)
+        {
+            block.Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+        }
+
+        return block;
+    }
+
+    private async void GuideButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_current is not { } c || CurrentStep is not { } step)
+        {
+            return;
+        }
+
+        switch (step.Action)
+        {
+            case GuideAction.Hand:
+                if (!_handDone.TryGetValue(c.Id, out HashSet<string>? done))
+                {
+                    _handDone[c.Id] = done = [];
+                }
+
+                done.Add(step.Key);
+                Status = string.Empty;
+                UpdateGuide(force: true);
+                break;
+            case GuideAction.MakeVirtualDisks:
+                await RunVirtualDisksAsync(dismount: false);
+                break;
+            case GuideAction.BuildPortable:
+                await BuildAsync("Portable");
+                break;
+            case GuideAction.BuildInstaller:
+                await BuildAsync("Installer");
+                break;
+            case GuideAction.Prepare:
+                Prepare(c);
+                break;
+        }
+    }
+
+    /// <summary>機材などがないとき: 結果を「対象外」(または「保留」) にして次のテストケースへ。</summary>
+    private void SkipButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (CurrentStep is not { SkipOutcome: { } outcome } step)
+        {
+            return;
+        }
+
+        if (Comment.Text.Trim().Length == 0)
+        {
+            if (step.SkipComment is null)
+            {
+                Status = $"下の「コメント」に理由 (テストケースの前提にある条件など) を書いてから、もう一度「{SkipButton.Content}」を押してください。";
+                Comment.Focus(FocusState.Programmatic);
+                return;
+            }
+
+            Comment.Text = step.SkipComment;
+        }
+
+        Record(outcome == "保留" ? Outcome.Hold : Outcome.NotApplicable);
+    }
+
+    private void RedoPrepare_Click(object sender, RoutedEventArgs e)
+    {
+        if (_current is { } c)
+        {
+            Prepare(c);
+        }
+    }
+
+    private async void Rebuild_Click(object sender, RoutedEventArgs e) =>
+        await BuildAsync(Rebuild.Tag is GuideAction.BuildInstaller ? "Installer" : "Portable");
 
     // ---- 準備の手順 ----
 
     /// <summary>
-    /// 準備の手順の欄を作る。<paramref name="outcome"/> が null なら準備ボタンで行うことを「・」で、準備の後は行ったことを「✔」で示す。
+    /// 準備の手順の欄を作る。<paramref name="outcome"/> が null なら準備ボタンで行うことを「・」で、準備の後は行ったことを「✓」で示す。
     /// </summary>
     private void BuildPrepPanel(TestCase c, PrepareOutcome? outcome)
     {
@@ -199,7 +473,7 @@ public sealed partial class MainWindow : Window
         {
             bool publish = equipment.Contains("公開・署名のあと");
             AddText($"このテストケースには機材が要ります: {string.Join("、", equipment)}。"
-                + (publish ? "公開・署名がまだなら「保留」を押してください。" : "なければ「対象外」を押してください (下の「あなたが行うこと」に書き方があります)。"), strong: true);
+                + (publish ? "公開・署名がまだなら「保留」を押してください。" : "なければ「対象外」を押してください (下の「用意のしかた」に書き方があります)。"), strong: true);
         }
 
         AddHeading(outcome is null ? "1. 準備ボタンで自動で行うこと" : "1. 準備ボタンが行ったこと");
@@ -214,7 +488,7 @@ public sealed partial class MainWindow : Window
         {
             foreach (string line in outcome.Done)
             {
-                AddText("✔ " + line);
+                AddText("✓ " + line);
             }
 
             foreach (string line in outcome.Problems)
@@ -226,7 +500,7 @@ public sealed partial class MainWindow : Window
         AddHeading("2. テストケースの前提");
         AddText(c.Precondition.Length > 0 ? c.Precondition : "(なし)");
 
-        AddHeading("3. あなたが行うこと");
+        AddHeading("3. 用意のしかた (上の「いま行うこと」が 1 つずつ案内します)");
         bool any = false;
         foreach (PrepNeed need in needs)
         {
@@ -263,7 +537,7 @@ public sealed partial class MainWindow : Window
 
         if (!any)
         {
-            AddText("準備ボタンを押すだけで、前提の状態になります。");
+            AddText("「準備」を押すだけで、前提の状態になります。");
         }
 
         IReadOnlyList<string> references = PrepBook.ReferencedCases(c);
@@ -305,7 +579,7 @@ public sealed partial class MainWindow : Window
         {
             yield return id.StartsWith("TD-VHDX", StringComparison.Ordinal)
                 ? $"{id} は作らない (「仮想ディスクを作る」で用意する)"
-                : $"{id} は作れない (「あなたが行うこと」を見る)";
+                : $"{id} は作れない (「用意のしかた」を見る)";
         }
 
         if (prep.Settings is { } settings)
@@ -386,7 +660,19 @@ public sealed partial class MainWindow : Window
         text.AppendLine(CaseTitle.Text);
         text.AppendLine(CaseFields.Text);
         text.AppendLine();
-        text.AppendLine("準備の手順:");
+        text.AppendLine("いま行うこと: " + GuideTitle.Text);
+        foreach (TextBlock line in GuideLines.Children.OfType<TextBlock>())
+        {
+            text.AppendLine(line.Text);
+        }
+
+        foreach (TextBlock line in Checklist.Children.OfType<TextBlock>())
+        {
+            text.AppendLine(line.Text);
+        }
+
+        text.AppendLine();
+        text.AppendLine("詳しい説明:");
         text.AppendLine(PrepPanelText());
         text.AppendLine();
         text.AppendLine("手順:");
@@ -401,7 +687,7 @@ public sealed partial class MainWindow : Window
         var package = new Windows.ApplicationModel.DataTransfer.DataPackage();
         package.SetText(text.ToString());
         Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(package);
-        PrepareStatus.Text = "テストケースの内容をコピーしました。";
+        Status = "テストケースの内容をコピーしました。";
     }
 
     // ---- 選び方の保存 ----
@@ -476,23 +762,29 @@ public sealed partial class MainWindow : Window
 
     // ---- 準備 ----
 
-    private void Prepare_Click(object sender, RoutedEventArgs e)
+    /// <summary>準備ボタン。HexEditor を起動できたら (起動しないテストケースはテストデータを作れたら)、準備の段階を「済み」にする。</summary>
+    private void Prepare(TestCase c)
     {
-        if (_current is not { } c)
+        CasePrep prep = _book.For(c.Id);
+        PrepareOutcome outcome = Preparer.Prepare(c, prep);
+        _hexEditor = outcome.HexEditor ?? _hexEditor;
+        _outcomes[c.Id] = outcome;
+        BuildPrepPanel(c, outcome);
+        bool ready = outcome.Setup is not null && (prep.Launch == LaunchKind.None || outcome.HexEditor is not null);
+        if (ready)
         {
-            return;
+            _prepared.Add(c.Id);
         }
 
-        PrepareStatus.Text = "準備しています...";
-        PrepareOutcome outcome = Preparer.Prepare(c, _book.For(c.Id));
-        _hexEditor = outcome.HexEditor ?? _hexEditor;
-        BuildPrepPanel(c, outcome);
-        PrepareStatus.Text = outcome.Problems.Count == 0
-            ? "準備が終わりました。上の「3. あなたが行うこと」を行ってから、手順に進んでください。"
-            : "準備の一部ができませんでした。上の「✖」の行を見てください。";
-    }
+        var text = new StringBuilder(ready ? "✓ 準備が終わりました。" : "✖ 準備ができませんでした。");
+        foreach (string problem in outcome.Problems)
+        {
+            text.AppendLine().Append("✖ ").Append(problem);
+        }
 
-    private async void MakeVhd_Click(object sender, RoutedEventArgs e) => await RunVirtualDisksAsync(dismount: false);
+        Status = text.ToString();
+        UpdateGuide(force: true);
+    }
 
     private async void RemoveVhd_Click(object sender, RoutedEventArgs e) => await RunVirtualDisksAsync(dismount: true);
 
@@ -504,28 +796,24 @@ public sealed partial class MainWindow : Window
         }
 
         _busy = true;
-        MakeVhd.IsEnabled = RemoveVhd.IsEnabled = false;
-        ToolStatus.Text = dismount
+        UpdateGuide(force: true);
+        Status = dismount
             ? "仮想ディスクを外しています。管理者の確認が出たら「はい」を押してください..."
             : "仮想ディスクを作っています。管理者の確認が出たら「はい」を押してください (1 分ほどかかります)...";
         try
         {
             string? log = await Preparer.RunVirtualDiskScriptAsync(dismount);
-            ToolStatus.Text = log is null
-                ? "管理者の確認で「いいえ」が押されたため、何もしませんでした。"
+            Status = log is null
+                ? "管理者の確認で「いいえ」が押されたため、何もしませんでした。もう一度押してください。"
                 : Preparer.DescribeVirtualDiskLog(log) + Environment.NewLine + $"(ログ: {Preparer.VhdLog})";
         }
         finally
         {
             _busy = false;
-            MakeVhd.IsEnabled = RemoveVhd.IsEnabled = true;
             Refresh();
+            UpdateGuide(force: true);
         }
     }
-
-    private async void BuildPortable_Click(object sender, RoutedEventArgs e) => await BuildAsync("Portable");
-
-    private async void BuildInstaller_Click(object sender, RoutedEventArgs e) => await BuildAsync("Installer");
 
     private async Task BuildAsync(string distro)
     {
@@ -535,27 +823,27 @@ public sealed partial class MainWindow : Window
         }
 
         _busy = true;
-        BuildPortable.IsEnabled = BuildInstaller.IsEnabled = false;
+        UpdateGuide(force: true);
         string name = distro == "Portable" ? "ポータブル版" : "インストーラ版";
-        ToolStatus.Text = $"{name}を作っています (数分かかります。このツールは閉じないでください)...";
-        var progress = new Progress<string>(line => ToolStatus.Text = $"{name}を作っています (数分かかります)...{Environment.NewLine}{line}");
+        Status = $"{name}を作っています (数分かかります。このツールは閉じないでください)...";
+        var progress = new Progress<string>(line => Status = $"{name}を作っています (数分かかります)...{Environment.NewLine}{line}");
         try
         {
             string? error = await Preparer.BuildDistributionAsync(distro, progress);
-            ToolStatus.Text = error is null
+            Status = error is null
                 ? (distro == "Portable"
-                    ? $"ポータブル版を作りました: {Preparer.PortableExe}{Environment.NewLine}zip: {Preparer.ArtifactsFolder(distro)}{Environment.NewLine}もう一度「準備」を押してください。"
-                    : $"インストーラ版をインストールしました: {Preparer.InstallerExe}{Environment.NewLine}Setup.exe: {Preparer.ArtifactsFolder(distro)}{Environment.NewLine}もう一度「準備」を押してください。")
-                : error;
+                    ? $"✓ ポータブル版を作りました: {Preparer.PortableExe}{Environment.NewLine}zip: {Preparer.ArtifactsFolder(distro)}"
+                    : $"✓ インストーラ版をインストールしました: {Preparer.InstallerExe}{Environment.NewLine}Setup.exe: {Preparer.ArtifactsFolder(distro)}")
+                : "✖ " + error;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or System.ComponentModel.Win32Exception or InvalidDataException)
         {
-            ToolStatus.Text = $"{name}を作れませんでした: {ex.Message}";
+            Status = $"✖ {name}を作れませんでした: {ex.Message}";
         }
         finally
         {
             _busy = false;
-            BuildPortable.IsEnabled = BuildInstaller.IsEnabled = true;
+            UpdateGuide(force: true);
         }
     }
 

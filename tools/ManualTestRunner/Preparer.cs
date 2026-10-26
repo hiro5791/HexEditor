@@ -33,6 +33,31 @@ public static class Preparer
 
     public static bool VirtualDisksExist => Directory.Exists(VhdFolder) && Directory.EnumerateFiles(VhdFolder, "TD-VHDX-*.vhdx").Any();
 
+    /// <summary>
+    /// 仮想ディスクが接続されている (と見てよい): ファイルがあり、最後の「仮想ディスクを作る」のログが「接続した」で、そのログが PC を起動した後に
+    /// 書かれた (再起動すると接続が外れるため)。ディスクそのものには触れない。
+    /// </summary>
+    public static bool VirtualDisksAttached
+    {
+        get
+        {
+            try
+            {
+                if (!VirtualDisksExist || !File.Exists(VhdLog))
+                {
+                    return false;
+                }
+
+                DateTime boot = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount64);
+                return File.GetLastWriteTime(VhdLog) > boot && File.ReadAllText(VhdLog).Contains("RESULT: attached", StringComparison.Ordinal);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+    }
+
     public static string Arch => RuntimeInformation.OSArchitecture == Architecture.Arm64 ? "arm64" : "x64";
 
     /// <summary>このツールが管理者として動いている (起動する HexEditor も管理者になる)。</summary>
@@ -78,7 +103,7 @@ public static class Preparer
         {
             problems.Add(id.StartsWith("TD-VHDX", StringComparison.Ordinal)
                 ? $"{id} は「仮想ディスクを作る」で用意します。"
-                : $"{id} は準備ボタンでは作れません (「あなたが行うこと」を見てください)。");
+                : $"{id} は準備ボタンでは作れません (「詳しい説明」の「用意のしかた」を見てください)。");
         }
 
         if (prep.AdminCommand is { } command)

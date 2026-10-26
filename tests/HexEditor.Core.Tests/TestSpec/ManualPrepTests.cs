@@ -59,6 +59,51 @@ public sealed class ManualPrepTests(ITestOutputHelper output) : IDisposable
         Assert.Contains(book.NeedsOf(c), n => n.Name == PrepBook.InstallerNeed);
     }
 
+    /// <summary>
+    /// 「いま行うこと」の段階 (手動テスト支援ツール): 要るものだけを、行う順に並べる。準備はちょうど 1 回、最後は手順。
+    /// </summary>
+    [Fact]
+    public void GuidePlanListsOnlyTheNeededActionsInOrder()
+    {
+        PrepBook book = PrepBook.LoadNextTo(CasesDirectory);
+        List<TestCase> cases = ManualCases();
+        foreach (TestCase c in cases)
+        {
+            GuidePlan plan = PrepGuide.Plan(book, c);
+            Assert.Equal(GuideAction.RunSteps, plan.Steps[^1].Action);
+            Assert.Single(plan.Steps, s => s.Action == GuideAction.Prepare);
+            Assert.Equal(plan.Steps.Count, plan.Steps.Select(s => s.Key).Distinct().Count());
+            Assert.All(plan.Steps, s => Assert.False(string.IsNullOrWhiteSpace(s.Title)));
+        }
+
+        TestCase eng2801Case = cases.Single(c => c.Id == "TC-ENG-28-01");
+        GuidePlan eng2801 = PrepGuide.Plan(book, eng2801Case);
+        Assert.Equal([GuideAction.MakeVirtualDisks, GuideAction.BuildInstaller, GuideAction.Prepare, GuideAction.RunSteps], eng2801.Steps.Select(s => s.Action));
+        Assert.Equal($"下の手順 1〜{eng2801Case.Steps.Count} を順に行い、結果を押してください", eng2801.Steps[^1].Title);
+        Assert.Contains(eng2801.Notes, n => n.Name == "一般ユーザーの権限");
+
+        // 「準備の前に」とある補足は、ポータブル版の後・準備の前の段階になる。
+        GuidePlan eng2810 = PrepGuide.Plan(book, cases.Single(c => c.Id == "TC-ENG-28-10"));
+        Assert.Equal([GuideAction.BuildPortable, GuideAction.Hand, GuideAction.Prepare, GuideAction.RunSteps], eng2810.Steps.Select(s => s.Action));
+
+        // 機材は最初。「ないとき」の書き方から、飛ばすときの結果とコメントが分かる。
+        GuidePlan for2007 = PrepGuide.Plan(book, cases.Single(c => c.Id == "TC-FOR-20-07"));
+        Assert.Equal([GuideAction.Hand, GuideAction.Prepare, GuideAction.RunSteps], for2007.Steps.Select(s => s.Action));
+        Assert.Equal("機材を用意します: 消えてよい USB メモリ", for2007.Steps[0].Title);
+        Assert.Equal("対象外", for2007.Steps[0].SkipOutcome);
+        Assert.Equal("消えてよい USB メモリなし", for2007.Steps[0].SkipComment);
+        Assert.Contains(for2007.Notes, n => n.Name == PrepBook.AdminNeed);
+
+        // 公開・署名のあとのものは「保留」で飛ばす。
+        TestCase publish = cases.First(c => book.EquipmentOf(c).Contains("公開・署名のあと"));
+        Assert.Contains(PrepGuide.Plan(book, publish).Steps, s => s.SkipOutcome == "保留");
+
+        // 準備ボタンで作れないテストデータ (TD-FOR-BITLOCKER) は、手で用意する段階になり、対象外で飛ばせる。
+        TestCase bitlocker = cases.First(c => c.TestData.Contains("TD-FOR-BITLOCKER"));
+        GuideStep data = PrepGuide.Plan(book, bitlocker).Steps.Single(s => s.Key == "data:TD-FOR-BITLOCKER");
+        Assert.Equal(("対象外", "Home のため"), (data.SkipOutcome, data.SkipComment));
+    }
+
     [Fact]
     public void SetupPreparesBookmarksSettingsScriptsAndHooks()
     {

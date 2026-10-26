@@ -170,7 +170,7 @@ public sealed class ManualTestRunnerTests : IDisposable
         AutomationElement item = await UntilAsync(() => ListItems(window).FirstOrDefault(i => NameOf(i).Contains(id, StringComparison.Ordinal)
             || i.FindAllDescendants().Any(d => NameOf(d).Contains(id, StringComparison.Ordinal))), $"{id} が一覧に出ません。");
         item.Patterns.SelectionItem.Pattern.Select();
-        await UntilAsync(() => AllText(window).Contains(id, StringComparison.Ordinal) && window.FindFirstDescendant(cf => cf.ByAutomationId("PrepareButton")) is not null ? "ok" : null,
+        await UntilAsync(() => AllText(window).Contains(id, StringComparison.Ordinal) && window.FindFirstDescendant(cf => cf.ByAutomationId("GuideButton")) is not null ? "ok" : null,
             $"{id} の内容が出ません。");
     }
 
@@ -215,23 +215,24 @@ public sealed class ManualTestRunnerTests : IDisposable
         await UntilAsync(() => ListItems(w).Count == 0 ? "ok" : null, "機材が必要な TC-FOR-20-07 が一覧に出ています。");
         ById(w, "HideEquipment").AsCheckBox().Toggle();
         await SelectCaseAsync(w, "FOR-20-07", "TC-FOR-20-07");
+        Assert.Equal("済んだ", NameOf(ById(w, "GuideButton")));
+        ById(w, "DetailsExpander").Patterns.ExpandCollapse.Pattern.Expand();
+        await UntilAsync(() => AllText(w).Contains("■ 機材: 消えてよい USB メモリ", StringComparison.Ordinal) ? "ok" : null, "詳しい説明が開きません。");
         string text = AllText(w);
         Assert.Contains("このテストケースには機材が要ります: 消えてよい USB メモリ", text);
         Assert.Contains("■ 機材: 消えてよい USB メモリ", text);
         Assert.Contains("ないとき:", text);
         Assert.Contains("■ 管理者として実行", text);
-        Assert.Null(w.FindFirstDescendant(cf => cf.ByAutomationId("MakeVhd")));
         Assert.Equal("0", File.ReadAllText(Path.Combine(_dir, "hide-equipment.txt")).Trim());
 
-        // 仮想ディスクが要るもの: ボタンと準備の手順が出る (ボタンは押さない。管理者の確認が出るため)。
+        // 仮想ディスクが要るもの: いま行うことに「仮想ディスクを作る」が出て、詳しい説明に準備の手順が出る (ボタンは押さない。管理者の確認が出るため)。
         await SelectCaseAsync(w, "ENG-28-01", "TC-ENG-28-01");
-        Assert.NotNull(w.FindFirstDescendant(cf => cf.ByAutomationId("MakeVhd")));
-        Assert.NotNull(w.FindFirstDescendant(cf => cf.ByAutomationId("RemoveVhd")));
-        Assert.NotNull(w.FindFirstDescendant(cf => cf.ByAutomationId("BuildInstaller")));
+        Assert.Equal("仮想ディスクを作る", NameOf(ById(w, "GuideButton")));
         text = AllText(w);
         Assert.Contains("1. 準備ボタンで自動で行うこと", text);
         Assert.Contains("TD-VHDX-MBR は作らない (「仮想ディスクを作る」で用意する)", text);
         Assert.Contains("■ 仮想ディスク", text);
+        Assert.Contains("3. 用意のしかた", text);
         Assert.Contains("■ インストーラ版", text);
         Assert.Contains("2. テストケースの前提", text);
 
@@ -260,6 +261,137 @@ public sealed class ManualTestRunnerTests : IDisposable
         Assert.Equal(string.Empty, NameOf(ById(again.Window, "HiddenCount")));
         AssertNotInFront(again.Process);
         await CloseAsync(again);
+    }
+
+    /// <summary>
+    /// 「いま行うこと」は 1 つだけ出し、そのボタンはスクロールしなくても見える。段階が済むと (ファイルができる・[済んだ] を押す) 次の段階に進む。
+    /// 管理者の確認が出るボタン・インストールするボタン・準備ボタンは押さない。
+    /// </summary>
+    [ManualTestRunnerFact]
+    public async Task GuidesOneActionAtATime()
+    {
+        List<TestCase> manual = TestCaseParser.ParseDirectory(CasesDirectory).Where(c => c.IsManual).ToList();
+        PrepBook book = PrepBook.LoadNextTo(CasesDirectory);
+        File.WriteAllText(Path.Combine(_dir, "filter-choice.txt"), "1");
+        File.WriteAllText(Path.Combine(_dir, "hide-equipment.txt"), "0");
+        Runner runner = await StartAsync();
+        Window w = runner.Window;
+
+        // 既定の大きさ (1100 × 900)。
+        Assert.InRange(w.BoundingRectangle.Width, 1098, 1102);
+        Assert.InRange(w.BoundingRectangle.Height, 898, 902);
+
+        // TC-ENG-28-01: 1 番目は「仮想ディスクを作る」(ログは一時フォルダにあるので、この PC の仮想ディスクにかかわらず未済)。
+        TestCase eng2801 = manual.Single(c => c.Id == "TC-ENG-28-01");
+        GuidePlan plan = PrepGuide.Plan(book, eng2801);
+        Assert.Equal([GuideAction.MakeVirtualDisks, GuideAction.BuildInstaller, GuideAction.Prepare, GuideAction.RunSteps], plan.Steps.Select(s => s.Action));
+        await SelectCaseAsync(w, "ENG-28-01", "TC-ENG-28-01");
+        await UntilTitleAsync(w, "1/4  仮想ディスクを作ります");
+        AutomationElement button = ById(w, "GuideButton");
+        Assert.Equal("仮想ディスクを作る", NameOf(button));
+        AssertVisibleWithoutScrolling(w, button);
+        Assert.Contains("▶ 1. 仮想ディスクを作ります  ← いまここ", AllText(w));
+        Assert.Contains("手順 (準備が終わってから行います。いまはまだ行いません)", AllText(w));
+        Shot(w, "TC-ENG-28-01");
+
+        // TC-ENG-28-10: ポータブル版ができていれば (ここでは一時フォルダに置いた空の exe) 1 番目は自動で済み、補足の段階から。[済んだ] で準備に進む。
+        string portable = Path.Combine(_dir, "portable", "HexEditor", "HexEditor.exe");
+        Directory.CreateDirectory(Path.GetDirectoryName(portable)!);
+        File.WriteAllBytes(portable, []);
+        await SelectCaseAsync(w, "ENG-28-10", "TC-ENG-28-10");
+        await UntilTitleAsync(w, "2/4  準備の前に、下のことを行います");
+        Assert.Contains("✓ 1. ポータブル版を作ります  (済み)", AllText(w));
+        button = ById(w, "GuideButton");
+        Assert.Equal("済んだ", NameOf(button));
+        AssertVisibleWithoutScrolling(w, button);
+        Shot(w, "TC-ENG-28-10-step2");
+        button.Patterns.Invoke.Pattern.Invoke();
+        await UntilTitleAsync(w, "3/4  「準備」を押して、HexEditor を起動します");
+        button = ById(w, "GuideButton");
+        Assert.Equal("準備", NameOf(button));
+        AssertVisibleWithoutScrolling(w, button);
+        Shot(w, "TC-ENG-28-10-step3");
+
+        // 準備の要らないテストケース (起動するだけ): 1/2 が「準備」で、手順がすぐ下に見える。
+        TestCase plain = manual.First(c => !book.NeedsEquipment(c) && c.Steps.Count > 0 && book.For(c.Id).Launch == LaunchKind.Dev
+            && PrepGuide.Plan(book, c) is { Steps.Count: 2, Notes.Count: 0 });
+        await SelectCaseAsync(w, plain.Id["TC-".Length..], plain.Id);
+        await UntilTitleAsync(w, "1/2  「準備」を押して、HexEditor を起動します");
+        AssertVisibleWithoutScrolling(w, ById(w, "GuideButton"));
+        string firstStep = $"1. {plain.Steps[0]}";
+        AutomationElement step = w.FindAllDescendants(cf => cf.ByControlType(ControlType.Text)).First(t => NameOf(t) == firstStep);
+        AssertVisibleWithoutScrolling(w, step);
+        Shot(w, plain.Id);
+
+        // HexEditor を起動しないテストケース (別の PC で行う): 準備を押してもテストデータを作るだけなので、最後の段階まで進めて確かめる。
+        TestCase remote = manual.Single(c => c.Id == "TC-UI-02-07");
+        CasePrep remotePrep = book.For(remote.Id);
+        Assert.True(remotePrep is { Launch: LaunchKind.None, AdminCommand: null, CopyTo: null }, "TC-UI-02-07 の準備が、起動しないものではなくなりました。");
+        GuidePlan remotePlan = PrepGuide.Plan(book, remote);
+        Assert.Equal([GuideAction.Hand, GuideAction.BuildPortable, GuideAction.Prepare, GuideAction.RunSteps], remotePlan.Steps.Select(s => s.Action));
+        await SelectCaseAsync(w, "UI-02-07", "TC-UI-02-07");
+        await UntilTitleAsync(w, "1/4  機材を用意します: Windows 10 の仮想マシン");
+        ById(w, "GuideButton").Patterns.Invoke.Pattern.Invoke();
+        await UntilTitleAsync(w, "3/4  「準備」を押して、テストデータを作ります");
+        ById(w, "GuideButton").Patterns.Invoke.Pattern.Invoke();
+        await UntilTitleAsync(w, "4/4  " + remotePlan.Steps[^1].Title);
+        Assert.Contains("✓ 準備はすべて済みました (3 件)", AllText(w));
+        Assert.Contains("✓ 準備が終わりました。", AllText(w));
+        Assert.Equal("手順", NameOf(ById(w, "StepsHeading")));
+        Assert.NotNull(w.FindFirstDescendant(cf => cf.ByAutomationId("RedoPrepare")));
+        Assert.Null(w.FindFirstDescendant(cf => cf.ByAutomationId("GuideButton")));
+        Shot(w, "TC-UI-02-07-final");
+
+        // 機材が要るもの: 1 番目は機材の用意。「ない (対象外にする)」で、コメント付きの対象外を記録して次へ進む。
+        await SelectCaseAsync(w, "FOR-20-07", "TC-FOR-20-07");
+        await UntilTitleAsync(w, "1/3  機材を用意します: 消えてよい USB メモリ");
+        AutomationElement skip = ById(w, "SkipButton");
+        Assert.Equal("ない (対象外にする)", NameOf(skip));
+        AssertVisibleWithoutScrolling(w, skip);
+        Shot(w, "TC-FOR-20-07");
+        skip.Patterns.Invoke.Pattern.Invoke();
+        string run = Path.Combine(_dir, "current-run.json");
+        await UntilAsync(() => File.Exists(run) && File.ReadAllText(run).Contains("TC-FOR-20-07", StringComparison.Ordinal) ? "ok" : null, "対象外が記録されません。");
+        using (var json = System.Text.Json.JsonDocument.Parse(File.ReadAllText(run)))
+        {
+            System.Text.Json.JsonElement result = json.RootElement.GetProperty("TC-FOR-20-07");
+            Assert.Equal(4, result.GetProperty("Outcome").GetInt32());
+            Assert.Equal("消えてよい USB メモリなし", result.GetProperty("Comment").GetString());
+        }
+
+        AssertNotInFront(runner.Process);
+        await CloseAsync(runner);
+    }
+
+    private static async Task UntilTitleAsync(Window window, string title)
+    {
+        try
+        {
+            await UntilAsync(() => window.FindFirstDescendant(cf => cf.ByAutomationId("GuideTitle")) is { } t && NameOf(t) == title ? "ok" : null, title);
+        }
+        catch (TimeoutException)
+        {
+            string now = window.FindFirstDescendant(cf => cf.ByAutomationId("GuideTitle")) is { } t ? NameOf(t) : "なし";
+            throw new Xunit.Sdk.XunitException($"いま行うことが「{title}」になりません (今: 「{now}」)。");
+        }
+    }
+
+    /// <summary>右側の欄 (スクロールする所) の、スクロールしないで見える範囲にある。</summary>
+    private static void AssertVisibleWithoutScrolling(Window window, AutomationElement element)
+    {
+        System.Drawing.Rectangle view = ById(window, "DetailScroll").BoundingRectangle;
+        System.Drawing.Rectangle r = element.BoundingRectangle;
+        Assert.False(r.IsEmpty, $"{NameOf(element)} の位置が取れません。");
+        Assert.True(view.Contains(r), $"{NameOf(element)} ({r}) が、スクロールしないで見える範囲 ({view}) の外にあります。");
+    }
+
+    /// <summary>環境変数 HEXEDITOR_RUNNER_SHOTS があれば、ウィンドウを前面に出さずに撮って、そのフォルダに置く (見た目の確認用)。</summary>
+    private static void Shot(Window window, string name)
+    {
+        if (Environment.GetEnvironmentVariable("HEXEDITOR_RUNNER_SHOTS") is { Length: > 0 } folder)
+        {
+            WindowImage.Capture(window.Properties.NativeWindowHandle.Value).Save(Path.Combine(folder, name + ".bmp"));
+        }
     }
 
     /// <summary>一覧の下の「N 件 / 合計…」の N。</summary>

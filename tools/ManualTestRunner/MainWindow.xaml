@@ -78,9 +78,9 @@
             <CheckBox x:Name="TopMost" Checked="TopMost_Changed" Content="常に手前に表示" Unchecked="TopMost_Changed" />
         </StackPanel>
 
-        <!--  テストケースの内容と結果の記録  -->
-        <ScrollViewer Grid.RowSpan="2" Grid.Column="1">
-            <StackPanel x:Name="Detail" Spacing="10" Visibility="Collapsed">
+        <!--  テストケースの内容と結果の記録。上の「いま行うこと」に、次に行うことを 1 つだけ出す (説明を読まなくても次のボタンが分かるように)。  -->
+        <ScrollViewer x:Name="DetailScroll" Grid.RowSpan="2" Grid.Column="1">
+            <StackPanel x:Name="Detail" Spacing="12" Visibility="Collapsed">
                 <Grid ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -95,44 +95,76 @@
                         Content="すべてコピー"
                         ToolTipService.ToolTip="テストケースの番号・名前・準備の手順・手順・期待結果をまとめてコピーする" />
                 </Grid>
-                <TextBlock x:Name="CaseFields" Foreground="{ThemeResource TextFillColorSecondaryBrush}" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
 
-                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="準備の手順" />
+                <!--  いま行うこと (1 つだけ)  -->
                 <Border
-                    Padding="12"
+                    x:Name="GuideCard"
+                    Padding="16"
+                    AutomationProperties.Name="いま行うこと"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
+                    BorderBrush="{ThemeResource AccentFillColorDefaultBrush}"
+                    BorderThickness="2"
                     CornerRadius="8">
-                    <StackPanel x:Name="PrepPanel" Spacing="4" />
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="いま行うこと" />
+                        <TextBlock
+                            x:Name="GuideTitle"
+                            IsTextSelectionEnabled="True"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            TextWrapping="Wrap" />
+                        <StackPanel x:Name="GuideLines" Spacing="4" />
+                        <StackPanel x:Name="GuideButtons" Orientation="Horizontal" Spacing="8">
+                            <Button
+                                x:Name="GuideButton"
+                                MinWidth="120"
+                                Click="GuideButton_Click"
+                                Style="{StaticResource AccentButtonStyle}" />
+                            <Button x:Name="SkipButton" Click="SkipButton_Click" Visibility="Collapsed" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Name="GuideStatus"
+                            Visibility="Collapsed"
+                            IsTextSelectionEnabled="True"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
                 </Border>
-                <StackPanel Spacing="8">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Button
-                            x:Name="PrepareButton"
-                            Click="Prepare_Click"
-                            Content="準備"
-                            Style="{StaticResource AccentButtonStyle}"
-                            ToolTipService.ToolTip="テストデータとテスト用の設定フォルダを作り、HexEditor を起動する" />
-                        <Button x:Name="MakeVhd" Click="MakeVhd_Click" Content="仮想ディスクを作る (管理者の確認が出ます)" Visibility="Collapsed" />
-                        <Button x:Name="RemoveVhd" Click="RemoveVhd_Click" Content="仮想ディスクを外す" Visibility="Collapsed" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Button x:Name="BuildPortable" Click="BuildPortable_Click" Content="ポータブル版を作る (数分かかります)" Visibility="Collapsed" />
-                        <Button x:Name="BuildInstaller" Click="BuildInstaller_Click" Content="インストーラ版を作ってインストールする (数分かかります)" Visibility="Collapsed" />
-                    </StackPanel>
-                    <TextBlock x:Name="PrepareStatus" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
-                    <TextBlock
-                        x:Name="ToolStatus"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        IsTextSelectionEnabled="True"
-                        TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="Warning"
+                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                    IsTextSelectionEnabled="True"
+                    TextWrapping="Wrap"
+                    Visibility="Collapsed" />
+
+                <!--  準備の流れ (済み・いま・このあと)  -->
+                <StackPanel x:Name="Checklist" Spacing="2" AutomationProperties.Name="準備の流れ" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <HyperlinkButton x:Name="RedoPrepare" Click="RedoPrepare_Click" Content="もう一度準備する" Visibility="Collapsed" />
+                    <HyperlinkButton x:Name="Rebuild" Click="Rebuild_Click" Visibility="Collapsed" />
+                    <HyperlinkButton x:Name="RemoveVhd" Click="RemoveVhd_Click" Content="仮想ディスクを外す (管理者の確認が出ます)" Visibility="Collapsed" />
                 </StackPanel>
 
-                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="手順" />
-                <StackPanel x:Name="Steps" Spacing="2" />
-                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="期待結果" />
-                <TextBlock x:Name="Expected" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                <!--  手順と期待結果  -->
+                <StackPanel Spacing="6">
+                    <TextBlock x:Name="StepsHeading" IsTextSelectionEnabled="True" Style="{StaticResource BodyStrongTextBlockStyle}" Text="手順" />
+                    <StackPanel x:Name="Steps" Spacing="2" />
+                    <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="期待結果" />
+                    <TextBlock x:Name="Expected" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <!--  長い説明は畳んでおく  -->
+                <Expander
+                    x:Name="DetailsExpander"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Header="詳しい説明 (テストケースの前提・準備ボタンが行うことなど)">
+                    <StackPanel Spacing="4">
+                        <TextBlock x:Name="CaseFields" Foreground="{ThemeResource TextFillColorSecondaryBrush}" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                        <StackPanel x:Name="PrepPanel" Spacing="4" />
+                    </StackPanel>
+                </Expander>
             </StackPanel>
         </ScrollViewer>
 
