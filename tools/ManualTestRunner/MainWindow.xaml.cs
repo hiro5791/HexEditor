@@ -22,6 +22,7 @@ public sealed partial class MainWindow : Window
     private readonly PrepBook _book;
     private readonly RunStore _store = RunStore.LoadOrCreate();
     private readonly bool _restored;
+    private bool _keepingSelection;
     private TestCase? _current;
     private Process? _hexEditor;
     private bool _busy;
@@ -135,9 +136,28 @@ public sealed partial class MainWindow : Window
         }
 
         List<TestCase> cases = Selected().ToList();
-        CaseList.ItemsSource = cases
+        var items = cases
             .Select(c => new CaseItem(c, $"{Mark(_store.OutcomeOf(c.Id))} {c.Id} ({c.Minutes} 分)", c.Title))
             .ToList();
+
+        // 一覧を作り直しても、表示中のテストケースの選択を残す (準備の後などに、どれを選んでいるか分からなくならないように)。
+        // 選び直しで Show が動くと手順のチェックなどが消えるため、そのあいだは選択の変更を無視する。
+        _keepingSelection = true;
+        try
+        {
+            CaseList.ItemsSource = items;
+            int keep = _current is { } shown ? items.FindIndex(i => i.Case.Id == shown.Id) : -1;
+            if (keep >= 0)
+            {
+                CaseList.SelectedIndex = keep;
+                CaseList.ScrollIntoView(items[keep]);
+            }
+        }
+        finally
+        {
+            _keepingSelection = false;
+        }
+
         int hidden = HiddenByEquipment().Count;
         HiddenCount.Text = HidesEquipment ? $"({hidden} 件を除いています)" : string.Empty;
         int remaining = cases.Count(c => _store.OutcomeOf(c.Id) == Outcome.NotRun);
@@ -809,9 +829,13 @@ public sealed partial class MainWindow : Window
 
         // 結果を付けたら、隠したファイルを戻す。
         _restoreNote = Preparer.RestoreHidden(_book, keepCase: null);
-        int index = CaseList.SelectedIndex;
+        // 次のテストケースへ進む (「未実施のもの」で選んでいると、結果を付けたものは一覧から消える)。
+        var before = (CaseList.ItemsSource as List<CaseItem>) ?? [];
+        string? next = before.SkipWhile(i => i.Case.Id != c.Id).Skip(1).FirstOrDefault()?.Case.Id;
         Refresh();
-        CaseList.SelectedIndex = Math.Min(index + 1, CaseList.Items.Count - 1);
+        var after = (CaseList.ItemsSource as List<CaseItem>) ?? [];
+        int target = next is null ? -1 : after.FindIndex(i => i.Case.Id == next);
+        CaseList.SelectedIndex = target >= 0 ? target : after.FindIndex(i => i.Case.Id == c.Id);
     }
 
     /// <summary>今のテストケースの内容をまとめてクリップボードへ (利用者がボタンを押したときだけ)。</summary>
@@ -922,7 +946,7 @@ public sealed partial class MainWindow : Window
 
     private void CaseList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (CaseList.SelectedItem is CaseItem item)
+        if (!_keepingSelection && CaseList.SelectedItem is CaseItem item)
         {
             Show(item.Case);
         }
