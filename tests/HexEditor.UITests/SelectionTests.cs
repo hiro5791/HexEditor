@@ -529,6 +529,20 @@ public sealed class SelectionTests
         await app.CommandAsync("Command_Fill");
         await app.WaitForAsync("FillDialog");
         await app.IdleAsync();
+
+        // 200 万の範囲を持つ選択では、ダイアログの確認 (範囲の数・バイト数の集計) と UI オートメーションの木の構築に時間がかかる。
+        // 混んだ CI のランナーでは既定の 15 秒を超えたことがある (run 40584299115) ため、この選択に限って長く待ち、
+        // 間に合わなかったときはダイアログの文字を失敗の文に入れる。
+        try
+        {
+            await app.WaitForAsync("Fill_Value", TimeSpan.FromSeconds(90));
+        }
+        catch (TimeoutException ex)
+        {
+            string dialogs = string.Join(" | ", app.Window.FindAllDescendants(cf => cf.ByClassName("ContentDialog")).Select(AppSession.AllText));
+            throw new TimeoutException($"{ex.Message} Dialogs: [{dialogs}]", ex);
+        }
+
         await app.UiaSetValueAsync("Fill_Value", "0xFF");
         await EditCommandTests.PressAsync(app);
         Assert.Equal(new byte[] { 0xFF, 0xFF }, await app.BytesAsync(0, 2));

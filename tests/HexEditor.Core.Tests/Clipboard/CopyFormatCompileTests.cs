@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using HexEditor.Core.Clipboard;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Clipboard;
@@ -20,6 +20,7 @@ public sealed class RequiresToolFactAttribute : FactAttribute
 
 /// <summary>各言語の配列の出力を処理系に通す (TC-EDIT-25-02)。0〜255 の 256 バイト (TD-BYTES-256) を対象にする。</summary>
 [Trait("Category", "Integration")]
+[Collection(SerialCollection.Name)]
 public sealed class CopyFormatCompileTests
 {
     private static readonly byte[] Bytes256 = Enumerable.Range(0, 256).Select(i => (byte)i).ToArray();
@@ -48,25 +49,7 @@ public sealed class CopyFormatCompileTests
     private static string Output(CopyFormat format, CopyOptions? options = null) =>
         CopyFormatter.Format(format, Bytes256, 0, (options ?? new CopyOptions()) with { NewLine = "\n" }, out _);
 
-    private static string Run(string tool, string arguments, string directory)
-    {
-        var info = new ProcessStartInfo(FindTool(tool)!, arguments)
-        {
-            WorkingDirectory = directory,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        info.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        info.Environment["DOTNET_NOLOGO"] = "1";
-        using Process process = Process.Start(info)!;
-        Task<string> stdout = process.StandardOutput.ReadToEndAsync();
-        Task<string> stderr = process.StandardError.ReadToEndAsync();
-        Assert.True(process.WaitForExit(TimeSpan.FromMinutes(3)), $"{tool} が終わりません。");
-        Assert.True(process.ExitCode == 0, $"{tool} {arguments}: {stderr.Result}{stdout.Result}");
-        return stdout.Result.ReplaceLineEndings("\n");
-    }
+    private static string Run(string tool, string arguments, string directory) => ToolProcess.Run(tool, arguments, directory);
 
     private static string TempDir()
     {

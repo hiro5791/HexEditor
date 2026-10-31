@@ -51,33 +51,16 @@ public sealed class TemplatePackageTests
 
     private static (int ExitCode, string Output) Run(string workingDirectory, params string[] args)
     {
-        var info = new ProcessStartInfo("dotnet")
-        {
-            WorkingDirectory = workingDirectory,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
+        var info = new ProcessStartInfo("dotnet") { WorkingDirectory = workingDirectory };
         foreach (string a in args)
         {
             info.ArgumentList.Add(a);
         }
 
-        // 利用者の設定を読み書きしない: テレメトリーと初回の案内を止める。
-        info.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        info.Environment["DOTNET_NOLOGO"] = "1";
-        info.Environment["DOTNET_SKIP_FIRST_TIME_EXPERIENCE"] = "1";
-        using Process process = Process.Start(info)!;
-        Task<string> output = process.StandardOutput.ReadToEndAsync();
-        Task<string> error = process.StandardError.ReadToEndAsync();
-        if (!process.WaitForExit(TimeSpan.FromMinutes(10)))
-        {
-            process.Kill(entireProcessTree: true);
-            throw new TimeoutException("dotnet " + string.Join(' ', args));
-        }
-
-        return (process.ExitCode, output.Result + error.Result);
+        // dotnet build / test が残す常駐のプロセスが出力のパイプを握ったままでも、終わりのない ReadToEnd で止まらないようにする
+        // (ToolProcess。以前はここで最大 10 分を超えて止まり、テストホストがハングした)。
+        (int code, string output, string error) = ToolProcess.Execute(info, TimeSpan.FromMinutes(10), "dotnet " + string.Join(' ', args));
+        return (code, output + error);
     }
 
     private static void Ok(string workingDirectory, params string[] args)
