@@ -345,8 +345,9 @@ public sealed class DeviceTests
         item!.Patterns.SelectionItem.Pattern.Select();
         await app.InvokeDialogButtonAsync(En.Value["Common_Open"], idle: false);
 
-        FlaUI.Core.AutomationElements.AutomationElement guidance = await app.WaitForDialogAsync("AdminGuidanceDialog");
-        Assert.Contains(En.Value["AdminGuide_Restart"], UiHelpers.DialogButtons(guidance));
+        // ダイアログが UI オートメーションに現れた直後は、ボタンがまだないことがある (CI のランナーで一覧が空だった)。
+        // InvokeDialogButtonAsync がボタンが現れるまで待つ。「管理者として再起動」が出なければ、ここでタイムアウトして失敗する。
+        await app.WaitForDialogAsync("AdminGuidanceDialog");
         await app.InvokeDialogButtonAsync(En.Value["AdminGuide_Restart"], idle: false);
     }
 

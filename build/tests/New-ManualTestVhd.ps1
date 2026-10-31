@@ -4,7 +4,7 @@
 
 .DESCRIPTION
   For the person doing the manual test pass. The manual test tool (tools/ManualTestRunner) runs it elevated when the
-  user presses its "仮想ディスクを作る" button (Windows shows the UAC prompt), and reads the log file (-LogPath) to show
+  user presses its create-virtual-disk button (Windows shows the UAC prompt), and reads the log file (-LogPath) to show
   the disk numbers. It can also be run in a PowerShell window started with "Run as administrator".
   It only creates new .vhdx files in the given folder and attaches them; it does not change any Windows setting
   (UAC stays as it is, unlike build/tests/Mount-TestVhd.ps1 for CI).

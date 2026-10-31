@@ -357,7 +357,7 @@ public sealed partial class MainWindow
     /// 表示中の文字列の切れと要素の重なり (UI-46 の受け入れ基準 2、UI-47 の仕様 3)。ウィンドウと開いているポップアップ
     /// (ダイアログ・フライアウト) を調べる。Hex ビューの中 (データの表示) は除く。
     /// <list type="bullet">
-    /// <item>trimmed: <see cref="TextBlock.IsTextTrimmed"/> が true (省略記号で切れた)。</item>
+    /// <item>trimmed: <see cref="TextBlock.IsTextTrimmed"/> が true (省略記号で切れた)。ウィンドウのタイトルは除く (UI-02 の仕様 5)。</item>
     /// <item>clipped: 省略記号を使わずに、文字列が要素の幅 (折り返す場合は高さ) に収まっていない。</item>
     /// <item>overlaps: 同じパネルの兄弟の要素 (別のセル) の表示範囲が重なっている。</item>
     /// </list>
@@ -386,8 +386,12 @@ public sealed partial class MainWindow
             {
                 if (text.IsTextTrimmed)
                 {
-                    trimmed.Add(Describe(text));
-                    AppLog.Warning($"Text trimmed: \"{text.Text}\" ({Where(text)})");
+                    // ウィンドウのタイトルは、入口ボタンを押し出さないように省略記号で切る仕様 (UI-02 の仕様 5)。切れとして数えない。
+                    if (!ReferenceEquals(text, WindowTitle))
+                    {
+                        trimmed.Add(Describe(text));
+                        AppLog.Warning($"Text trimmed: \"{text.Text}\" ({Where(text)})");
+                    }
                 }
                 else if (IsClipped(text))
                 {
