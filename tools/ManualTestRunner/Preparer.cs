@@ -27,6 +27,57 @@ public static class Preparer
 
     public static string PortableExe => Path.Combine(PortableFolder, "HexEditor", "HexEditor.exe");
 
+    private static readonly Lazy<DateTime> NewestSource = new(FindNewestSource);
+
+    /// <summary>
+    /// ポータブル版・インストーラ版が使える状態か: あり、作ったあとに src のソースが変わっていない。
+    /// 古い版のままテストすると、直した不具合が残っているように見えるため、古ければ「準備」で作り直す。
+    /// </summary>
+    public static bool IsUpToDate(string distro)
+    {
+        string exe = distro == "Portable" ? PortableExe : InstallerExe;
+        if (!File.Exists(exe))
+        {
+            return false;
+        }
+
+        if (Fake)
+        {
+            return true;
+        }
+
+        string stamp = BuildStamp(distro);
+        string dll = Path.Combine(Path.GetDirectoryName(exe)!, "HexEditor.dll");
+        DateTime built = File.Exists(stamp) ? File.GetLastWriteTimeUtc(stamp) : File.GetLastWriteTimeUtc(File.Exists(dll) ? dll : exe);
+        return built >= NewestSource.Value;
+    }
+
+    /// <summary>作り始めた時刻を覚える (ソースの一部しか変わらないと、HexEditor.dll の日時は新しくならないため)。</summary>
+    public static void MarkBuilt(string distro, DateTime startedUtc)
+    {
+        Directory.CreateDirectory(LogsFolder);
+        File.WriteAllText(BuildStamp(distro), string.Empty);
+        File.SetLastWriteTimeUtc(BuildStamp(distro), startedUtc);
+    }
+
+    private static string BuildStamp(string distro) => Path.Combine(LogsFolder, $"built-{distro.ToLowerInvariant()}.txt");
+
+    private static DateTime FindNewestSource()
+    {
+        string src = Path.Combine(RepoRoot, "src");
+        if (!Directory.Exists(src))
+        {
+            return DateTime.MinValue;
+        }
+
+        string[] skipped = [$"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", $"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}"];
+        return Directory.EnumerateFiles(src, "*", SearchOption.AllDirectories)
+            .Where(f => !skipped.Any(d => f.Contains(d, StringComparison.OrdinalIgnoreCase)))
+            .Select(File.GetLastWriteTimeUtc)
+            .DefaultIfEmpty(DateTime.MinValue)
+            .Max();
+    }
+
     /// <summary>インストーラ版 (Velopack) のインストール先。</summary>
     public static string InstallerExe => Fake
         ? Path.Combine(RunStore.Folder, "fake-installer", "HexEditor.exe")

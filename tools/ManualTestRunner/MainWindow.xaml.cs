@@ -242,8 +242,8 @@ public sealed partial class MainWindow : Window
     {
         GuideAction.Hand => _handDone.TryGetValue(c.Id, out HashSet<string>? done) && done.Contains(step.Key),
         GuideAction.MakeVirtualDisks => Preparer.VirtualDisksAttached,
-        GuideAction.BuildPortable => File.Exists(Preparer.PortableExe),
-        GuideAction.BuildInstaller => File.Exists(Preparer.InstallerExe),
+        GuideAction.BuildPortable => Preparer.IsUpToDate("Portable"),
+        GuideAction.BuildInstaller => Preparer.IsUpToDate("Installer"),
         GuideAction.HideFiles => Preparer.AreHidden(_book.For(c.Id)),
         GuideAction.Prepare => _prepared.Contains(c.Id),
         _ => false,
@@ -1034,11 +1034,14 @@ public sealed partial class MainWindow : Window
         var progress = new Progress<string>(line => Status = $"{name}を作っています (数分かかります)...{Environment.NewLine}{line}");
         try
         {
+            DateTime started = DateTime.UtcNow;
             string? error = await Preparer.BuildDistributionAsync(distro, progress);
             if (error is not null)
             {
                 return error;
             }
+
+            Preparer.MarkBuilt(distro, started);
 
             Status = distro == "Portable"
                 ? $"✓ ポータブル版を作りました: {Preparer.PortableExe}{Environment.NewLine}zip: {Preparer.ArtifactsFolder(distro)}"
