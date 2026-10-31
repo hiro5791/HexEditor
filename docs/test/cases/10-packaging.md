@@ -1273,9 +1273,9 @@
 
 1. `Ctrl+Shift+D` を押す。
 2. 一覧で「ディスク 0」を選び、「開く」を押す。
-3. UAC の確認画面の発行元を見る。
+3. UAC の確認画面 (画面が暗くなって出る) の「発行元」の表示を見る。
 4. 「はい」を押す。
-5. Hex ビューのオフセット 0x1FE〜0x1FF の値を見る。
+5. Hex ビューの 000001F0 の行の右端の 2 個のセル (オフセット 0x1FE〜0x1FF) の値を見る (見えなければ、Ctrl+G で 0x1F0 と入力して移動する)。
 
 **期待結果**:
 
@@ -1303,7 +1303,7 @@
 1. `Ctrl+Shift+D` を押す。
 2. 一覧で「ディスク 0」を選び、「開く」を押す。
 3. UAC の確認画面で「はい」を押す。
-4. Hex ビューのオフセット 0x1FE〜0x1FF の値を見る。
+4. Hex ビューの 000001F0 の行の右端の 2 個のセル (オフセット 0x1FE〜0x1FF) の値を見る (見えなければ、Ctrl+G で 0x1F0 と入力して移動する)。
 
 **期待結果**:
 
@@ -1434,12 +1434,12 @@
 
 **手順**:
 
-1. 管理者として PowerShell を開き、`(Get-CimInstance Win32_Process -Filter "Name='HexEditor.Elevated.exe'").CommandLine` を実行する。
-2. 出力の `--pipe` の次の値 (パイプ名) を控える。
-3. 一般の権限で別の PowerShell を開き、`$p = [System.IO.Pipes.NamedPipeClientStream]::new('.', '<控えたパイプ名>', 'InOut')` を実行する。
+1. スタートボタンを右クリックして「ターミナル (管理者)」を選び (UAC は「はい」)、開いた PowerShell で、`(Get-CimInstance Win32_Process -Filter "Name='HexEditor.Elevated.exe'").CommandLine` を実行する。
+2. 出力された 1 行の中の `--pipe` のすぐ後ろの文字列 (パイプ名) を、メモ帳などに控える。
+3. 管理者ではない普通の PowerShell を、別に開く (スタートメニューから「PowerShell」を起動する。「管理者として実行」は選ばない)。その PowerShell で、`<控えたパイプ名>` を控えたパイプ名に書き換えて `$p = [System.IO.Pipes.NamedPipeClientStream]::new('.', '<控えたパイプ名>', 'InOut')` を実行する。
 4. `$p.Connect(3000)` を実行する。
 5. 接続できた場合は、`$b = [byte[]](1,2,3,4); $p.Write($b,0,4); $p.Flush(); $p.ReadByte()` を実行する。
-6. HexEditor でディスクの別の位置へ移動して読めることを確認する。
+6. HexEditor に戻り、Ctrl+G で `0x2000` と入力して Enter を押し、Hex ビューにバイトが表示される (読み込み中のまま止まらない) ことを確認する。
 
 **期待結果**:
 
