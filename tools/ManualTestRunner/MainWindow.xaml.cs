@@ -955,11 +955,31 @@ public sealed partial class MainWindow : Window
     // ---- 準備 ----
 
     /// <summary>
+    /// 前のテストケースで起動した HexEditor を閉じる (テストケースごとにウィンドウが増えないように)。ふつうに閉じるだけで強制終了はしないので、
+    /// 保存の確認が出たときなどは開いたままになる。
+    /// </summary>
+    private void CloseLastHexEditor()
+    {
+        try
+        {
+            if (_hexEditor is { HasExited: false } last && last.CloseMainWindow())
+            {
+                last.WaitForExit(2000);
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            // すでに終わっている・権限がなくて触れない (管理者として動いているなど): そのままにする。
+        }
+    }
+
+    /// <summary>
     /// テストデータと設定フォルダを作り、HexEditor を起動する。起動できたら (起動しないテストケースはテストデータを作れたら) 準備の段階を「済み」にし、
     /// null を返す。できなければ理由を返す。
     /// </summary>
     private string? Prepare(TestCase c)
     {
+        CloseLastHexEditor();
         CasePrep prep = _book.For(c.Id);
         PrepareOutcome outcome = Preparer.Prepare(c, prep);
         _hexEditor = outcome.HexEditor ?? _hexEditor;
@@ -1029,6 +1049,7 @@ public sealed partial class MainWindow : Window
     /// <summary>ポータブル版・インストーラ版を作る (数分かかる)。進み具合は「いま行うこと」の下に出す。成功したら null、できなければ理由。</summary>
     private async Task<string?> BuildCoreAsync(string distro)
     {
+        CloseLastHexEditor();
         string name = distro == "Portable" ? "ポータブル版" : "インストーラ版";
         Status = $"{name}を作っています (数分かかります。このツールは閉じないでください)...";
         var progress = new Progress<string>(line => Status = $"{name}を作っています (数分かかります)...{Environment.NewLine}{line}");
