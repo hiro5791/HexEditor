@@ -14,6 +14,12 @@ public sealed record TestDataItem(string Id, long Length, string Description, Ac
     public Func<long>? ComputeLength { get; init; }
 
     public long ExpectedLength => ComputeLength?.Invoke() ?? Length;
+
+    /// <summary>
+    /// 先頭のファイル以外にも複数のファイルを持つもの (フォルダ型) で、キャッシュのフォルダに全部そろっているか。足りなければ作り直す
+    /// (先頭のファイルの長さだけを見ると、生成処理にファイルを足したり、一部が消えたりしたキャッシュを使い続けてしまう)。引数はキャッシュの置き場所。
+    /// </summary>
+    public Func<string, bool>? IsComplete { get; init; }
 }
 
 /// <summary>
@@ -239,7 +245,7 @@ public static partial class TestDataCatalog
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         lock (Items)
         {
-            if (File.Exists(path) && new FileInfo(path).Length == item.ExpectedLength)
+            if (File.Exists(path) && new FileInfo(path).Length == item.ExpectedLength && (item.IsComplete?.Invoke(directory) ?? true))
             {
                 return path;
             }
