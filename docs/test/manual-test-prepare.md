@@ -344,9 +344,8 @@ BitLocker で暗号化した VHDX で、Windows 11 Pro でないと作れない 
 ### TC-VIEW-35-07
 | 項目 | 内容 |
 | --- | --- |
+| 設定 | {"view.minimap.visible": true, "view.minimap.content": "entropy", "view.minimap.range": "whole"} |
 | 必要なもの | 半自動の目視、ライトとダークのテーマ、ハイコントラスト |
-
-1. コマンドパレット (Ctrl+Shift+P) で「ミニマップの表示切り替え」を実行し、「ミニマップの表示内容: エントロピー」を実行する。
 
 ### TC-VIEW-41-02
 | 項目 | 内容 |
