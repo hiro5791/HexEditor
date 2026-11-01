@@ -202,18 +202,8 @@ public sealed partial class MainWindow : Window
         Steps.Children.Clear();
         for (int i = 0; i < c.Steps.Count; i++)
         {
-            // チェックボックスの中の文字は選べないので、チェックボックスの右に選べる文字を置く (手順をコピーできるように)。
-            var row = new Grid { ColumnSpacing = 4 };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            string stepText = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}";
-            var check = new CheckBox { MinWidth = 0 };
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(check, stepText);
-            var text = new TextBlock { Text = stepText, TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true, VerticalAlignment = VerticalAlignment.Center };
-            Grid.SetColumn(text, 1);
-            row.Children.Add(check);
-            row.Children.Add(text);
-            Steps.Children.Add(row);
+            // 手順にチェックボックスは付けない (押すとフォーカスがこのツールに移り、HexEditor でのキー入力の手順が成り立たなくなる)。
+            Steps.Children.Add(new TextBlock { Text = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}", TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
         }
 
         Expected.Text = string.Join(Environment.NewLine, c.Expected.Select(e => "・" + e));
