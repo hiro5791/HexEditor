@@ -16,6 +16,12 @@ namespace HexEditor.App.Controls;
 /// </summary>
 public sealed partial class StatisticsPanel : UserControl, IPanelContent
 {
+    /// <summary>タブの中身の高さの下限。パネルがこれより低いと、パネル全体を縦にスクロールする。</summary>
+    private const double MinPageHeight = 260;
+
+    private StatsTab? _shownTab;
+    private bool _pageScrollPending = true;
+
     public StatisticsPanel(StatisticsViewModel viewModel)
     {
         ViewModel = viewModel;
@@ -77,6 +83,46 @@ public sealed partial class StatisticsPanel : UserControl, IPanelContent
         ViewModel.Tab = tab;
         SyncTab();
     }
+
+    /// <summary>テスト用: スクロールの状態と、表示中のタブの中身の高さ。</summary>
+    internal (double Viewport, double Extent, double Offset, double PageHeight) ScrollState =>
+        (PanelScroll.ViewportHeight, PanelScroll.ExtentHeight, PanelScroll.VerticalOffset, PagesHost.ActualHeight);
+
+    /// <summary>
+    /// 全体の高さを決める: パネルが十分に高ければパネルの高さ (タブの中身が残りを使う)、低ければ上の設定とタブの中身の下限の合計 (スクロールする)。
+    /// ScrollViewer の中では高さの制約がなく、中身の一覧が仮想化されないので、高さを必ず数値で指定する。
+    /// </summary>
+    private void Layout_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        double viewport = PanelScroll.ActualHeight;
+        if (viewport <= 0 || SettingsBar.ActualHeight <= 0 || Tabs.ActualHeight <= 0)
+        {
+            return;
+        }
+
+        double header = SettingsBar.ActualHeight + StatusBand.ActualHeight + Tabs.ActualHeight + (PanelRoot.RowSpacing * 3) + PanelRoot.Padding.Top + PanelRoot.Padding.Bottom;
+        double height = Math.Max(viewport, header + MinPageHeight);
+        if (Math.Abs(PanelRoot.Height - height) >= 1)
+        {
+            PanelRoot.Height = height;
+        }
+
+        if (_pageScrollPending)
+        {
+            _pageScrollPending = false;
+            ScrollToPage();
+        }
+    }
+
+    /// <summary>パネルが低いときは、タブの見出しが上端に来るようにスクロールする (設定の部品の下に結果が隠れたままにしない)。</summary>
+    private void ScrollToPage() => DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+    {
+        PanelScroll.UpdateLayout();
+        if (PanelScroll.ScrollableHeight > 0)
+        {
+            PanelScroll.ChangeView(null, Tabs.TransformToVisual(PanelRoot).TransformPoint(default).Y, null, disableAnimation: true);
+        }
+    });
 
     private void SyncAll()
     {
@@ -149,6 +195,11 @@ public sealed partial class StatisticsPanel : UserControl, IPanelContent
         DigramPage.Visibility = Show(StatsTab.Digram);
         PatternPage.Visibility = Show(StatsTab.Pattern);
         ClassifyPage.Visibility = Show(StatsTab.Classify);
+        if (_shownTab != ViewModel.Tab)
+        {
+            _shownTab = ViewModel.Tab;
+            ScrollToPage();
+        }
     }
 
     private Visibility Show(StatsTab tab) => ViewModel.Tab == tab ? Visibility.Visible : Visibility.Collapsed;

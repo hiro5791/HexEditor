@@ -47,6 +47,47 @@ public sealed class StatisticsPanelTests
         await app.WaitUntilAsync(async () => !(await StatsAsync(app))["open"]!.GetValue<bool>(), Wait, "the panel to close");
     });
 
+    /// <summary>
+    /// 既定の高さ (下部 220) のパネルで、どのタブの中身も見えているかスクロールで出せる (ANA-10 の「画面」)。不具合: 上の設定の部品と見出しでパネルの高さを
+    /// 使い切り、タブの中身の高さが 0 になってスクロールもできなかった (手動テスト TC-ANA-16-03)。
+    /// </summary>
+    [Theory]
+    [Trait(UiTest.TC, "TC-ANA-10-06")]
+    [InlineData("Histogram", "Stats_HistogramChart")]
+    [InlineData("Descriptive", "Stats_Descriptive")]
+    [InlineData("Entropy", "Stats_EntropyChart")]
+    [InlineData("Digram", "Stats_DigramChart")]
+    [InlineData("Pattern", "Stats_NGrams")]
+    [InlineData("Classify", "Stats_ClassBand")]
+    public Task Page_content_is_visible_at_the_default_panel_size(string tab, string content) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
+        await ShowAndWaitAsync(app, tab);
+        await app.WaitUntilAsync(async () =>
+        {
+            var bounds = (await app.WaitForAsync(content)).BoundingRectangle;
+            return bounds.Width > 0 && bounds.Height > 0;
+        }, Wait, $"{content} with a non-zero size");
+
+        // タブの中身には下限の高さがあり、全体の高さは数値で決まっている (一覧が仮想化されたまま)
+        JsonObject layout = (await StatsAsync(app))["layout"]!.AsObject();
+        double viewport = layout["viewport"]!.GetValue<double>(), extent = layout["extent"]!.GetValue<double>(), pageHeight = layout["pageHeight"]!.GetValue<double>();
+        Assert.True(pageHeight >= 250, $"page height {pageHeight}");
+        Assert.True(extent <= viewport + 400 + pageHeight, $"extent {extent} (viewport {viewport}, page {pageHeight})");
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ANA-10-06")]
+    public Task Classify_list_can_be_scrolled_into_view_at_the_default_panel_size() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-CLASSES")] });
+        await app.CommandAsync("Command_Classify");
+        await app.WaitUntilAsync(async () => (await StatsAsync(app))["legend"]!.AsArray().Count > 0, Wait, "the classification");
+
+        (await app.WaitForAsync("Stats_Scroll")).Patterns.Scroll.Pattern.SetScrollPercent(-1, 100);
+        await app.WaitUntilAsync(async () => (await app.WaitForAsync("Stats_ClassList")).BoundingRectangle.Height > 0, Wait, "the class list after scrolling");
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-ANA-10-03")]
     public Task Double_clicking_a_bar_moves_to_the_next_occurrence() => UiTestContext.RunAsync(async ctx =>
