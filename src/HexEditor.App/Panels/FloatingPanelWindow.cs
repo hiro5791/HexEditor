@@ -32,13 +32,14 @@ public sealed class FloatingPanelWindow : Window
         ScreenZoom.Changed += zoomChanged;
         Closed += (_, _) => ScreenZoom.Changed -= zoomChanged;
         Title = title;
-        SystemBackdrop = new Microsoft.UI.Xaml.Media.MicaBackdrop();
         // メインウィンドウの中身は ZoomHost の中 (MainWindow.Zoom.cs)。テーマと向きは、その中のルートから受け継ぐ。
         if ((owner.Content is ZoomHost { Children.Count: > 0 } host ? host.Children[0] : owner.Content) is FrameworkElement ownerRoot)
         {
             root.RequestedTheme = ownerRoot.ActualTheme;
             root.FlowDirection = ownerRoot.FlowDirection;
         }
+
+        Services.Appearance.ApplyBackdrop(this, root, App.Settings);
 
         Owner = owner;
         SetWindowLongPtr(Hwnd, GwlpHwndParent, WinRT.Interop.WindowNative.GetWindowHandle(owner));

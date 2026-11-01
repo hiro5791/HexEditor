@@ -427,6 +427,24 @@ public sealed partial class WindowTests
         Assert.True(allowed.Any(a => Close(a, color)), $"the accent button is #{color & 0xFFFFFF:X6}, not #E81123 or its shades");
     });
 
+    /// <summary>背景素材を使わないときは、ウィンドウの背景をテーマの色で塗る (不具合: 塗らず黒が見えていた。手動テスト TC-UI-02-06 の砂漠で見つかった)。</summary>
+    [Theory]
+    [InlineData("light")]
+    [InlineData("dark")]
+    [Trait(UiTest.TC, "TC-UI-27-02")]
+    public Task Window_without_a_backdrop_has_the_theme_background(string theme) => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), $"{{\"$schemaVersion\": 1, \"ui.backdrop\": \"none\", \"ui.theme\": \"{theme}\"}}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, WaitForEditor = false });
+        await app.WaitForAsync("Start_Open");
+        Assert.Equal("None", (await app.StateAsync())["backdrop"]!.GetValue<string>());
+        await Task.Delay(500);
+
+        uint color = SampleBackground(app, "TitleBar");
+        Assert.Equal(theme == "light" ? 0xF3F3F3u : 0x202020u, color & 0xFFFFFF);
+    });
+
     [Fact(Skip = "Windows の「透明効果」(EnableTransparency) を切り替える必要があり、作業中の PC の設定を変えるため自動では実行しない (CI の専用の環境が必要)")]
     [Trait(UiTest.TC, "TC-UI-27-04")]
     public Task Transparency_off_uses_a_solid_background() => Task.CompletedTask;
