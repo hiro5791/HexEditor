@@ -362,7 +362,7 @@ public sealed class ManualTestRunnerTests : IDisposable
 
         // 準備の要らないテストケース (起動するだけ): 1/2 が「準備」で、手順がすぐ下に見える。
         TestCase plain = manual.First(c => !book.NeedsEquipment(c) && c.Steps.Count > 0 && book.For(c.Id).Launch == LaunchKind.Dev
-            && PrepGuide.Plan(book, c) is { Steps.Count: 2, Notes.Count: 0 });
+            && PrepGuide.Plan(book, c) is { Steps.Count: 2 });
         await SelectCaseAsync(w, plain.Id["TC-".Length..], plain.Id);
         await UntilTitleAsync(w, "1/2  「準備」を押してください");
         AssertVisibleWithoutScrolling(w, ById(w, "GuideButton"));
