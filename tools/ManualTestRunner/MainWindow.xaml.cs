@@ -211,6 +211,8 @@ public sealed partial class MainWindow : Window
             Steps.Children.Add(new TextBlock { Text = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}", TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
         }
 
+        PipeProbePanel.Visibility = c.Steps.Any(step => step.Contains("「パイプに接続する」", StringComparison.Ordinal)) ? Visibility.Visible : Visibility.Collapsed;
+        PipeProbeResult.Text = string.Empty;
         Expected.Text = string.Join(Environment.NewLine, c.Expected.Select(e => "・" + e));
         CaseResult? r = _store.ResultOf(c.Id);
         Comment.Text = r?.Comment ?? string.Empty;
@@ -478,6 +480,16 @@ public sealed partial class MainWindow : Window
         }
 
         return block;
+    }
+
+    /// <summary>補助プロセスのパイプにこのツールから接続する (TC-PKG-14-07)。結果はコメントにも残す。</summary>
+    private async void PipeProbe_Click(object sender, RoutedEventArgs e)
+    {
+        PipeProbeButton.IsEnabled = false;
+        string result = HelperPipeProbe.Describe(await HelperPipeProbe.RunAsync(HelperPipeProbe.DefaultTimeout));
+        PipeProbeButton.IsEnabled = true;
+        PipeProbeResult.Text = result;
+        Comment.Text = (Comment.Text.Length > 0 ? Comment.Text + Environment.NewLine : string.Empty) + result;
     }
 
     private async void GuideButton_Click(object sender, RoutedEventArgs e)
