@@ -91,6 +91,54 @@ public static class ScreenCheck
         }
     }
 
+    /// <summary>
+    /// 文字の輪郭のぼやけの幅 (画素)。範囲の中を横に見て、背景から文字の色へ変わるまでの途中の色の幅の中央値を返す (輪郭がなければ 0)。
+    /// 拡大した画像を引き伸ばして描くと、倍率と同じくらいの幅になる。
+    /// </summary>
+    public static int EdgeWidth(uint[] pixels, int width, int left, int top, int right, int bottom)
+    {
+        var values = new List<double>();
+        for (int y = top; y < bottom; y++)
+        {
+            for (int x = left; x < right; x++)
+            {
+                values.Add(Gray(pixels[(y * width) + x]));
+            }
+        }
+
+        double background = values.GroupBy(v => v).MaxBy(g => g.Count())!.Key;
+        double ink = values.MaxBy(v => Math.Abs(v - background));
+        double Level(int x, int y) => (Gray(pixels[(y * width) + x]) - background) / (ink - background);
+
+        var widths = new List<int>();
+        for (int y = top; y < bottom && ink != background; y++)
+        {
+            int start = -1;
+            for (int x = left; x < right; x++)
+            {
+                double level = Level(x, y);
+                if (level <= 0.1)
+                {
+                    start = x;
+                }
+                else if (level >= 0.9)
+                {
+                    if (start >= 0)
+                    {
+                        widths.Add(x - start - 1);
+                    }
+
+                    start = -1;
+                }
+            }
+        }
+
+        widths.Sort();
+        return widths.Count == 0 ? 0 : widths[widths.Count / 2];
+    }
+
+    private static double Gray(uint rgb) => (((rgb >> 16) & 0xFF) + ((rgb >> 8) & 0xFF) + (rgb & 0xFF)) / 765.0;
+
     /// <summary>2 つの色の明るさの比 (WCAG 2.1)。</summary>
     public static double Contrast(uint a, uint b)
     {

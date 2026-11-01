@@ -72,6 +72,30 @@ public sealed class ScreenCheckTests
         Assert.Empty(ScreenCheck.Evaluate(pixels, Width, Height, 1, [0x000000, 0xFFFFFF]));
     }
 
+    private static uint[] Stripes(int blur)
+    {
+        uint[] pixels = new uint[Width * 4];
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                int phase = x % 40;
+                double level = phase < 30 ? 0 : phase >= 30 + blur ? 1 : (phase - 29.0) / (blur + 1);
+                uint gray = (uint)(255 * (1 - level));
+                pixels[(y * Width) + x] = (gray << 16) | (gray << 8) | gray;
+            }
+        }
+
+        return pixels;
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(4, 4)]
+    public void Edge_width_grows_with_the_blur(int blur, int expected) =>
+        Assert.Equal(expected, ScreenCheck.EdgeWidth(Stripes(blur), Width, 0, 0, Width, 4));
+
     [Fact]
     public void Contrast_follows_wcag() => Assert.Equal(21, ScreenCheck.Contrast(0xFFFFFF, 0x000000), 1);
 }

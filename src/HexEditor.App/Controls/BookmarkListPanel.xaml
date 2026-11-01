@@ -180,6 +180,7 @@
                     AutomationProperties.AccessibilityView="Raw"
                     FontSize="10"
                     Glyph="{x:Bind Chevron, Mode=OneWay}"
+                    MirroredWhenRightToLeft="True"
                     Tag="{x:Bind}"
                     Tapped="GroupChevron_Tapped" />
                 <Border

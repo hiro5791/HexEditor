@@ -197,9 +197,9 @@ public sealed class ManualPrepTests(ITestOutputHelper output) : IDisposable
         Assert.Equal(a11y.Files["TD-ZERO-1M"], hooks["fileSources"]![0]!["match"]!.GetValue<string>());
         Assert.Equal(["--offset", "0x10", a11y.Files["TD-ZERO-1M"]], a11y.Arguments[^3..]);
 
-        // TC-UI-08-06: 画面全体の拡大 400%。
-        SetupResult zoom = CaseSetup.Run(cases["TC-UI-08-06"], book.For("TC-UI-08-06"), data, Path.Combine(_dir, "p3"));
-        Assert.Equal(400, JsonNode.Parse(File.ReadAllText(Path.Combine(zoom.Profile, "settings.json")))!["view.zoom.ui"]!.GetValue<int>());
+        // TC-ANA-16-03: 準備の説明の「設定」。
+        SetupResult themed = CaseSetup.Run(cases["TC-ANA-16-03"], book.For("TC-ANA-16-03"), data, Path.Combine(_dir, "p3"));
+        Assert.Equal("light", JsonNode.Parse(File.ReadAllText(Path.Combine(themed.Profile, "settings.json")))!["ui.theme"]!.GetValue<string>());
 
         // TC-AUTO-20-06: スクリプトを設定フォルダに置く。
         SetupResult script = CaseSetup.Run(cases["TC-AUTO-20-06"], book.For("TC-AUTO-20-06"), data, Path.Combine(_dir, "p4"));

@@ -24,7 +24,8 @@
                 <FontIcon
                     AutomationProperties.AccessibilityView="Raw"
                     FontSize="10"
-                    Glyph="{x:Bind Chevron, Mode=OneWay}" />
+                    Glyph="{x:Bind Chevron, Mode=OneWay}"
+                    MirroredWhenRightToLeft="True" />
                 <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}" />
             </StackPanel>
         </DataTemplate>
@@ -61,6 +62,7 @@
                         AutomationProperties.AccessibilityView="Raw"
                         FontSize="10"
                         Glyph="{x:Bind Chevron, Mode=OneWay}"
+                        MirroredWhenRightToLeft="True"
                         Tapped="Expand_Tapped"
                         Visibility="{x:Bind CanExpand, Mode=OneWay}" />
                     <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />

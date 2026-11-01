@@ -101,6 +101,53 @@ public sealed class LocalizationTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-UI-44-05")]
+    public Task Arabic_inspector_opens_on_the_left_and_its_group_arrow_points_left() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ar", Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.CommandAsync("Command_ToggleInspector");
+        await app.WaitUntilAsync(() => app.IsShownAsync("InspectorPanel"), TimeSpan.FromSeconds(10), "the inspector panel");
+
+        var panel = (await app.WaitForAsync("InspectorPanel")).BoundingRectangle;
+        var hex = (await app.WaitForAsync("HexView")).BoundingRectangle;
+        Assert.True(panel.Right <= hex.Left + 1, $"the panel ({panel.Right}) is not left of the hex view ({hex.Left})");
+        Assert.Equal("RightToLeft", (await app.ElementAsync("InspectorPanel"))["flowDirection"]!.GetValue<string>());
+
+        // 見出しを閉じ、選択の印が重ならないよう次の行へ移る。
+        await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "Inspector_Group_Integer" });
+        await app.IdleAsync();
+        WindowKeys.Press(app, 0x0D);
+        await app.WaitUntilAsync(async () => (await app.SendAsync("inspector"))["items"]!.AsArray()
+            .First(i => i!["id"]!.GetValue<string>() == "Inspector_Group_Integer")!["collapsed"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the collapsed group");
+        WindowKeys.Press(app, 0x28);
+        await app.IdleAsync();
+        await Task.Delay(500);
+
+        var header = (await app.WaitForAsync("Inspector_Group_Integer")).BoundingRectangle;
+        NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+        WindowImage image = app.Screenshot();
+        int left = (int)header.Left - window.Left, right = (int)header.Right - window.Left, top = (int)header.Top - window.Top + 6, bottom = (int)header.Bottom - window.Top - 6;
+        uint background = image.Pixel(left + ((right - left) / 2), top);
+        bool Ink(int x, int y) => (image.Pixel(x, y) & 0xFFFFFF) != (background & 0xFFFFFF);
+        bool Column(int x) => Enumerable.Range(top, bottom - top).Any(y => Ink(x, y));
+
+        // 見出しの文字と矢印は右に寄る。いちばん右のかたまりが矢印。
+        int inkRight = Enumerable.Range(left, right - left).Last(Column);
+        int inkLeft = Enumerable.Range(left, right - left).First(Column);
+        Assert.True(right - inkRight < inkLeft - left, $"the header is not on the right (ink {inkLeft}..{inkRight} in {left}..{right})");
+        int arrowLeft = inkRight;
+        while (Column(arrowLeft - 1))
+        {
+            arrowLeft--;
+        }
+
+        // 左向きなら、いちばん左の画素は矢印の高さの真ん中にあり、上の端にはない。
+        var rows = Enumerable.Range(top, bottom - top).Where(y => Enumerable.Range(arrowLeft, inkRight - arrowLeft + 1).Any(x => Ink(x, y))).ToList();
+        int Start(int y) => Enumerable.Range(arrowLeft, inkRight - arrowLeft + 1).First(x => Ink(x, y));
+        Assert.True(Start(rows[rows.Count / 2]) < Start(rows[0]), $"the arrow does not point left (top {Start(rows[0])}, middle {Start(rows[rows.Count / 2])})");
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-44-02")]
     public Task Arabic_offset_input_is_left_to_right() => UiTestContext.RunAsync(async ctx =>
     {
