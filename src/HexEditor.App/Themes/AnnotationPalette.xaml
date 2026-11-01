@@ -9,7 +9,8 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <!--  背景素材を使わないときのウィンドウの背景 (UI-27 の仕様 4・5)  -->
-            <SolidColorBrush x:Key="WindowSolidBackgroundBrush" Color="#FFF3F3F3" />
+            <Color x:Key="WindowSolidBackgroundColor">#FFF3F3F3</Color>
+            <SolidColorBrush x:Key="WindowSolidBackgroundBrush" Color="{StaticResource WindowSolidBackgroundColor}" />
             <Color x:Key="BookmarkBackground1Color">#FFFFD6D6</Color>
             <Color x:Key="BookmarkBackground2Color">#FFFFE2C2</Color>
             <Color x:Key="BookmarkBackground3Color">#FFFFF2B3</Color>
@@ -115,7 +116,8 @@
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <!--  背景素材を使わないときのウィンドウの背景 (UI-27 の仕様 4・5)  -->
-            <SolidColorBrush x:Key="WindowSolidBackgroundBrush" Color="#FF202020" />
+            <Color x:Key="WindowSolidBackgroundColor">#FF202020</Color>
+            <SolidColorBrush x:Key="WindowSolidBackgroundBrush" Color="{StaticResource WindowSolidBackgroundColor}" />
             <Color x:Key="BookmarkBackground1Color">#FF5C2626</Color>
             <Color x:Key="BookmarkBackground2Color">#FF5C3B1A</Color>
             <Color x:Key="BookmarkBackground3Color">#FF524618</Color>

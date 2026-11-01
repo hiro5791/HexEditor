@@ -11,6 +11,7 @@ namespace HexEditor.App.Services;
 public static class AnnotationBrushes
 {
     private static readonly Dictionary<(string Theme, uint Rgb, bool Mark), SolidColorBrush> Custom = [];
+    private static readonly Dictionary<(string Theme, string Key), SolidColorBrush> ThemedColors = [];
 
     /// <summary>テーマの辞書の名前 (ハイコントラストを優先)。</summary>
     public static string ThemeOf(FrameworkElement scope, bool highContrast) =>
@@ -28,10 +29,20 @@ public static class AnnotationBrushes
     {
         foreach (string name in theme == "Dark" ? new[] { "Dark", "Default" } : [theme])
         {
-            if (dictionary.ThemeDictionaries.TryGetValue(name, out object? found) && found is ResourceDictionary themed
-                && themed.TryGetValue(key, out object? value) && value is Brush brush)
+            if (dictionary.ThemeDictionaries.TryGetValue(name, out object? found) && found is ResourceDictionary themed)
             {
-                return brush;
+                // 辞書の中の StaticResource はアプリのテーマで解決される (要素のテーマと違うと、別のテーマの色になる)。
+                // 同じ名前の色があれば、そちらを使う。
+                if (key.EndsWith("Brush", StringComparison.Ordinal) && themed.TryGetValue(key[..^"Brush".Length] + "Color", out object? color)
+                    && color is Windows.UI.Color value)
+                {
+                    return ThemedColors.TryGetValue((name, key), out SolidColorBrush? cached) ? cached : ThemedColors[(name, key)] = new SolidColorBrush(value);
+                }
+
+                if (themed.TryGetValue(key, out object? brush) && brush is Brush themedBrush)
+                {
+                    return themedBrush;
+                }
             }
         }
 

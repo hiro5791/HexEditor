@@ -93,8 +93,13 @@ public sealed class StatisticsPanelTests
         await app.CommandAsync("Command_Classify");
         await app.WaitUntilAsync(async () => (await StatsAsync(app))["legend"]!.AsArray().Count > 0, Wait, "the classification");
 
-        (await app.WaitForAsync("Stats_Scroll")).Patterns.Scroll.Pattern.SetScrollPercent(-1, 100);
-        await app.WaitUntilAsync(async () => (await app.WaitForAsync("Stats_ClassList")).BoundingRectangle.Height > 0, Wait, "the class list after scrolling");
+        // タブを開いたときの「タブの見出しを上端に」の移動が後から来ると、スクロールが戻るので、見えるまで繰り返す。
+        await app.WaitUntilAsync(async () =>
+        {
+            (await app.WaitForAsync("Stats_Scroll")).Patterns.Scroll.Pattern.SetScrollPercent(-1, 100);
+            await Task.Delay(100);
+            return (await app.WaitForAsync("Stats_ClassList")).BoundingRectangle.Height > 0;
+        }, Wait, "the class list after scrolling");
     });
 
     [Fact]
