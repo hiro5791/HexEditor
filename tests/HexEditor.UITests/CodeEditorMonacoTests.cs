@@ -76,6 +76,7 @@ public sealed class CodeEditorMonacoTests
 
     [Theory]
     [Trait(UiTest.TC, "TC-AUTO-20-08")]
+    [Trait(UiTest.Priority, UiTest.High)]
     [InlineData("en", "en", "Find")]
     [InlineData("ja", "ja", "検索")]
     [InlineData("de", "de", "Suchen")]
@@ -97,6 +98,7 @@ public sealed class CodeEditorMonacoTests
 
     [Theory]
     [Trait(UiTest.TC, "TC-AUTO-20-09")]
+    [Trait(UiTest.Priority, UiTest.High)]
     [InlineData("missing")]
     [InlineData("hang")]
     [InlineData("broken")]

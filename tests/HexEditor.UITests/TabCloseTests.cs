@@ -31,6 +31,7 @@ public sealed class TabCloseTests
     /// <summary>コマンドで開くページ: 文書があってもなくても、Ctrl+W でそのページだけが閉じる。</summary>
     [Theory]
     [Trait(UiTest.TC, "TC-UI-09-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     [InlineData("settings.open", "ToolPageTab_settings", true)]
     [InlineData("settings.open", "ToolPageTab_settings", false)]
     [InlineData("help.shortcuts", "ToolPageTab_shortcuts", true)]
@@ -50,6 +51,7 @@ public sealed class TabCloseTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-09-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_W_closes_the_selected_script_editor_and_asks_when_it_has_changes() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
@@ -76,6 +78,7 @@ public sealed class TabCloseTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-09-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_W_closes_the_template_editor_tab_without_a_document() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { WaitForEditor = false });
@@ -91,6 +94,7 @@ public sealed class TabCloseTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-09-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_W_on_a_document_tab_still_closes_the_document_with_a_tool_page_open_behind_it() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256"), ctx.TestData("TD-SEQ-1M")] });

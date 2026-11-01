@@ -237,6 +237,7 @@ public sealed class InspectorTests
     /// <summary>ListViewItem は Enter と Space を処理済みにする。panelKey はそこを通らないので、実際のキーの道筋で確かめる。</summary>
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-01-08")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Real_enter_and_space_toggle_a_group_and_open_a_row() => UiTestContext.RunAsync(async ctx =>
     {
         const int Enter = 0x0D, Space = 0x20;

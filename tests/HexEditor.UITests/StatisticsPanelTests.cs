@@ -53,6 +53,7 @@ public sealed class StatisticsPanelTests
     /// </summary>
     [Theory]
     [Trait(UiTest.TC, "TC-ANA-10-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     [InlineData("Histogram", "Stats_HistogramChart")]
     [InlineData("Descriptive", "Stats_Descriptive")]
     [InlineData("Entropy", "Stats_EntropyChart")]
@@ -78,6 +79,7 @@ public sealed class StatisticsPanelTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ANA-10-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Classify_list_can_be_scrolled_into_view_at_the_default_panel_size() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-CLASSES")] });
