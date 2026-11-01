@@ -2614,13 +2614,13 @@ Detaliile au fost scrise în:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Poziție de început UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Deplasament mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Vizualizare: decodare UTF-32 de la deplasamentele cu restul 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Decodare UTF-32 de la deplasamentele cu restul 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>utf-32 poziție pozitie început inceput fază faza start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Vizualizare: decodare UTF-32 de la deplasamentele cu restul 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Decodare UTF-32 de la deplasamentele cu restul 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>utf-32 poziție pozitie început inceput fază faza start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Vizualizare: decodare UTF-32 de la deplasamentele cu restul 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Decodare UTF-32 de la deplasamentele cu restul 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>utf-32 poziție pozitie început inceput fază faza start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Vizualizare: decodare UTF-32 de la deplasamentele cu restul 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Decodare UTF-32 de la deplasamentele cu restul 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>utf-32 poziție pozitie început inceput fază faza start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Lista istoricului</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>salt istoric listă lista înapoi inapoi poziții pozitii recente jump history list back recent positions</value></data>
@@ -9993,19 +9993,19 @@ Conexiunea nu se stabilește decât dacă alegeți să înlocuiți cheia.</value
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Oprește compararea structurii după compararea acestui număr de câmpuri pe fiecare parte (de la 10.000 la 10.000.000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Comparare structură: asocierea tablourilor</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Cum sunt asociate elementele tablourilor, pentru fiecare șablon și tablou. Modificați cu „Metodă de asociere...” în panoul Diferențe de structură.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Comparare: compară structura</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Compară structura</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structură câmp șablon diferență structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Comparare: alege șablonul pentru compararea structurii</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Alege șablonul pentru compararea structurii</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structură șablon alege structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Comparare: deplasare între diferențele de structură</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Deplasare între diferențele de structură</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>următoarea anterioară structură țintă next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Comparare: afișează diferențele de structură</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Afișează diferențele de structură</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structură diferențe panou structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Comparare: următoarea diferență de structură</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Următoarea diferență de structură</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structură următorul câmp structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Comparare: diferența de structură anterioară</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Diferența de structură anterioară</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structură câmpul anterior structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Comparare: exportă diferențele de structură</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Exportă diferențele de structură</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structură export raport structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Afișează sau ascunde diferențele de structură</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structură diferențe panou structure differences panel</value></data>

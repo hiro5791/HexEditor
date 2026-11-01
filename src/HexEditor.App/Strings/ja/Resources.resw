@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 の開始位置(P)</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>オフセットを 4 で割った余り {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>表示: UTF-32 を余り 0 の位置から解読</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>UTF-32 を余り 0 の位置から解読</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり ぜろ</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>表示: UTF-32 を余り 1 の位置から解読</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>UTF-32 を余り 1 の位置から解読</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり いち</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>表示: UTF-32 を余り 2 の位置から解読</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>UTF-32 を余り 2 の位置から解読</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり に</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>表示: UTF-32 を余り 3 の位置から解読</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>UTF-32 を余り 3 の位置から解読</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり さん</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>履歴の一覧</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>りれき いちらん じゃんぷ もどる</value></data>
@@ -10003,19 +10003,19 @@ SHA-256 のフィンガープリント: {2}
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>左右それぞれ、この数のフィールドを比べたら構造の比較を止めます (10,000〜10,000,000)。</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>構造の比較: 配列の対応付け</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>テンプレートと配列ごとの、要素の対応付けの方法。構造の差分パネルの「対応付けの方法...」で変えます。</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較: 構造で比較</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>構造で比較</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>こうぞうでひかく</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比較: 構造の比較に使うテンプレートを選ぶ</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>構造の比較に使うテンプレートを選ぶ</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>こうぞうのひかくにつかうてんぷれーとをえらぶ</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比較: 移動の対象を構造にする</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>移動の対象を構造にする</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>いどうのたいしょうをこうぞうにする</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比較: 構造の差分を表示</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>構造の差分を表示</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをひょうじ</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比較: 次の構造の差分</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>次の構造の差分</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>つぎのこうぞうのさぶん</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比較: 前の構造の差分</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>前の構造の差分</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>まえのこうぞうのさぶん</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比較: 構造の差分をエクスポート</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>構造の差分をエクスポート</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>こうぞうのさぶんをえくすぽーと</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>構造の差分の表示切り替え</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>こうぞうのさぶんのひょうじきりかえ</value></data>

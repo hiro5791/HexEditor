@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 起始位置(P)</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>位移除以 4 的餘數 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>檢視：從餘數為 0 的位移解碼 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>從餘數為 0 的位移解碼 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>UTF-32 起始位置 餘數 0 utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>檢視：從餘數為 1 的位移解碼 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>從餘數為 1 的位移解碼 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>UTF-32 起始位置 餘數 1 utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>檢視：從餘數為 2 的位移解碼 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>從餘數為 2 的位移解碼 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>UTF-32 起始位置 餘數 2 utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>檢視：從餘數為 3 的位移解碼 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>從餘數為 3 的位移解碼 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>UTF-32 起始位置 餘數 3 utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>記錄清單</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>記錄 清單 跳躍 返回 最近的位置 jump history list back recent positions</value></data>
@@ -9994,19 +9994,19 @@ SHA-256 指紋: {2}
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>兩側各比較完這麼多個欄位後停止結構比較（10,000 到 10,000,000）。</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>結構比較：陣列比對</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>陣列元素的比對方式，依範本和陣列分別設定。可在「結構差異」面板中透過「比對方式...」變更。</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較：比較結構</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>比較結構</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff 結構 欄位 範本 差異</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比較：選擇結構比較使用的範本</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>選擇結構比較使用的範本</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose 結構 範本 選擇</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比較：在結構差異之間移動</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>在結構差異之間移動</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target 下一個 上一個 結構 目標</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比較：顯示結構差異</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>顯示結構差異</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel 結構差異 面板</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比較：下一個結構差異</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>下一個結構差異</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field 結構 下一個 欄位</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比較：上一個結構差異</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>上一個結構差異</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field 結構 上一個 欄位</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比較：匯出結構差異</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>匯出結構差異</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report 結構 匯出 報告</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>切換結構差異</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel 結構差異 面板</value></data>

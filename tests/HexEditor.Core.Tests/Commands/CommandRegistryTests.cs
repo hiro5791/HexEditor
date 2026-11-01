@@ -22,6 +22,36 @@ public sealed partial class CommandRegistryTests
     private static Dictionary<string, string> Strings(string language) =>
         ResourceChecker.LoadResw(Path.Combine(AppFolder, "Strings", language, "Resources.resw"));
 
+    /// <summary>パレットの「カテゴリ: 表示名」(UI-17) で、表示名の側にカテゴリを書いていない (不具合: 「比較: 比較: 構造の差分を表示」)。</summary>
+    [Fact]
+    [Trait(TC, "TC-UI-17-07")]
+    public void No_command_name_repeats_its_category_in_any_language()
+    {
+        var errors = new List<string>();
+        foreach (string folder in Directory.EnumerateDirectories(Path.Combine(AppFolder, "Strings")))
+        {
+            string language = Path.GetFileName(folder);
+            if (!File.Exists(Path.Combine(folder, "Resources.resw")))
+            {
+                continue;
+            }
+
+            Dictionary<string, string> strings = Strings(language);
+            foreach (CommandDefinition command in BuiltInCommands.All.Where(c => c.Text is null))
+            {
+                if (strings.TryGetValue("Cmd_" + CommandDefinition.KeyPart(command.Id), out string? name)
+                    && strings.TryGetValue("CmdCategory_" + command.Category, out string? category)
+                    && name.StartsWith(category, StringComparison.OrdinalIgnoreCase)
+                    && name[category.Length..].TrimStart() is [':' or '：', ..])
+                {
+                    errors.Add($"{language}: {command.Id}: {name}");
+                }
+            }
+        }
+
+        Assert.True(errors.Count == 0, string.Join(Environment.NewLine, errors));
+    }
+
     [Fact]
     [Trait(TC, "TC-UI-16-01")]
     public void Every_menu_item_refers_to_a_registered_command_and_ids_are_unique()

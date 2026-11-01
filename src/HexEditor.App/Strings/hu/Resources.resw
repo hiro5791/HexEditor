@@ -2614,13 +2614,13 @@ A részletek helye:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 kezdőpozíció</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Eltolás mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Nézet: UTF-32 dekódolása 0 maradékú eltolástól</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>UTF-32 dekódolása 0 maradékú eltolástól</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>kezdőpozíció kezdopozicio fázis fazis utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Nézet: UTF-32 dekódolása 1 maradékú eltolástól</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>UTF-32 dekódolása 1 maradékú eltolástól</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>kezdőpozíció kezdopozicio fázis fazis utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Nézet: UTF-32 dekódolása 2 maradékú eltolástól</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>UTF-32 dekódolása 2 maradékú eltolástól</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>kezdőpozíció kezdopozicio fázis fazis utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Nézet: UTF-32 dekódolása 3 maradékú eltolástól</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>UTF-32 dekódolása 3 maradékú eltolástól</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>kezdőpozíció kezdopozicio fázis fazis utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Előzménylista</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>ugrás ugras előzmények elozmenyek lista vissza legutóbbi pozíciók jump history list back recent positions</value></data>
@@ -9993,19 +9993,19 @@ A kapcsolat nem jön létre, hacsak nem dönt a kulcs cseréje mellett.</value><
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Leállítja a szerkezet-összehasonlítást, miután oldalanként ennyi mezőt összehasonlított (10 000 és 10 000 000 között).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Szerkezet-összehasonlítás: tömbök párosítása</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Hogyan párosítja a tömbelemeket, sablononként és tömbönként. A „Párosítási módszer...” paranccsal módosíthatja a Szerkezeti különbségek panelen.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Összehasonlítás: szerkezet összehasonlítása</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Szerkezet összehasonlítása</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>szerkezet mező sablon különbség structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Összehasonlítás: sablon kiválasztása a szerkezet-összehasonlításhoz</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Sablon kiválasztása a szerkezet-összehasonlításhoz</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>szerkezet sablon kiválasztás structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Összehasonlítás: lépkedés a szerkezeti különbségek között</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Lépkedés a szerkezeti különbségek között</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>következő előző szerkezet cél next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Összehasonlítás: szerkezeti különbségek megjelenítése</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Szerkezeti különbségek megjelenítése</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>szerkezet különbségek panel structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Összehasonlítás: következő szerkezeti különbség</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Következő szerkezeti különbség</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>szerkezet következő mező structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Összehasonlítás: előző szerkezeti különbség</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Előző szerkezeti különbség</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>szerkezet előző mező structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Összehasonlítás: szerkezeti különbségek exportálása</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Szerkezeti különbségek exportálása</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>szerkezet exportálás jelentés structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Szerkezeti különbségek be/ki</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>szerkezet különbségek panel structure differences panel</value></data>

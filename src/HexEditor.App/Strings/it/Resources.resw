@@ -2613,13 +2613,13 @@ I dettagli sono stati scritti in:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Posizione iniziale UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Offset mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Visualizza: decodifica UTF-32 da offset con resto 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Decodifica UTF-32 da offset con resto 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>posizione iniziale fase utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Visualizza: decodifica UTF-32 da offset con resto 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Decodifica UTF-32 da offset con resto 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>posizione iniziale fase utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Visualizza: decodifica UTF-32 da offset con resto 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Decodifica UTF-32 da offset con resto 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>posizione iniziale fase utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Visualizza: decodifica UTF-32 da offset con resto 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Decodifica UTF-32 da offset con resto 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>posizione iniziale fase utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Elenco cronologia</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>cronologia spostamenti elenco indietro posizioni recenti jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@ La connessione non viene stabilita a meno che tu scelga di sostituire la chiave.
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Interrompe il confronto della struttura dopo aver confrontato questo numero di campi per lato (da 10.000 a 10.000.000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Confronto struttura: abbinamento degli array</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Come vengono abbinati gli elementi degli array, per modello e array. Cambialo con “Metodo di abbinamento...” nel pannello Differenze di struttura.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Confronto: confronta la struttura</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Confronta la struttura</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>struttura campo modello differenza structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Confronto: scegli il modello per il confronto della struttura</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Scegli il modello per il confronto della struttura</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>struttura modello scegli structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Confronto: spostati tra le differenze di struttura</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Spostati tra le differenze di struttura</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>successiva precedente struttura destinazione next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Confronto: mostra le differenze di struttura</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Mostra le differenze di struttura</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>struttura differenze pannello structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Confronto: differenza di struttura successiva</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Differenza di struttura successiva</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>struttura successivo campo structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Confronto: differenza di struttura precedente</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Differenza di struttura precedente</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>struttura precedente campo structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Confronto: esporta le differenze di struttura</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Esporta le differenze di struttura</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>struttura esporta rapporto structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Mostra o nascondi le differenze di struttura</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>struttura differenze pannello structure differences panel</value></data>

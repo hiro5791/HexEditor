@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>موقعیت شروع UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>ق</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>آفست mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>نما: رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>موقعیت شروع فاز, utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>نما: رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>موقعیت شروع فاز, utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>نما: رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>موقعیت شروع فاز, utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>نما: رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>رمزگشایی UTF-32 از آفست‌هایی با باقی‌ماندهٔ 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>موقعیت شروع فاز, utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>فهرست تاریخچه</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>پرش سابقه فهرست عقب موقعیت‌های اخیر, jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>مقایسهٔ ساختار را پس از مقایسهٔ این تعداد فیلد در هر طرف متوقف کن (از 10,000 تا 10,000,000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>مقایسهٔ ساختار: تطبیق آرایه</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>روش تطبیق عناصر آرایه، برای هر الگو و آرایه. آن را با «روش تطبیق...» در پنل تفاوت‌های ساختار تغییر دهید.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>مقایسه: مقایسهٔ ساختار</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>مقایسهٔ ساختار</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff ساختار فیلد الگو تفاوت</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>مقایسه: انتخاب الگو برای مقایسهٔ ساختار</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>انتخاب الگو برای مقایسهٔ ساختار</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose ساختار الگو انتخاب</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>مقایسه: جابه‌جایی بین تفاوت‌های ساختار</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>جابه‌جایی بین تفاوت‌های ساختار</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target بعدی قبلی ساختار هدف</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>مقایسه: نمایش تفاوت‌های ساختار</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>نمایش تفاوت‌های ساختار</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel تفاوت‌های ساختار پنل</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>مقایسه: تفاوت ساختار بعدی</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>تفاوت ساختار بعدی</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field ساختار بعدی فیلد</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>مقایسه: تفاوت ساختار قبلی</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>تفاوت ساختار قبلی</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field ساختار قبلی فیلد</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>مقایسه: صادر کردن تفاوت‌های ساختار</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>صادر کردن تفاوت‌های ساختار</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report ساختار صادر کردن گزارش</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>تغییر وضعیت تفاوت‌های ساختار</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel تفاوت‌های ساختار پنل</value></data>
