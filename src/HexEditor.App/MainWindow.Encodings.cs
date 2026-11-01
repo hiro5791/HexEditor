@@ -220,7 +220,7 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(_encodingList, "EncodingList_Items");
         AutomationProperties.SetName(_encodingList, Loc.Get("EncodingList_Title"));
         _encodingList.ItemClick += (_, e) => ChooseEncoding((e.ClickedItem as FrameworkElement)?.Tag as string);
-        _encodingList.KeyDown += (_, e) =>
+        Microsoft.UI.Xaml.Input.KeyEventHandler encodingKey = (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter && (_encodingList.SelectedItem as FrameworkElement)?.Tag is string id)
             {
@@ -228,6 +228,8 @@ public sealed partial class MainWindow
                 e.Handled = true;
             }
         };
+        _encodingList.KeyDown += encodingKey;
+        Controls.ItemKeys.Attach(_encodingList, encodingKey);
 
         var panel = new StackPanel { Spacing = 8 };
         panel.Children.Add(title);

@@ -34,6 +34,7 @@ public sealed partial class MainWindow
         "drop" => await TestDropAsync(request),
         "resizePhysical" => TestResizePhysical(request),
         "focus" => TestFocus(request),
+        "focusItem" => TestFocusItem(request),
         "region" => Run(() => MoveToRegion(request["forward"]?.GetValue<bool>() ?? true)),
         "menuTexts" => TestMenuTexts(),
         "textCheck" => TestTextCheck(),
@@ -213,6 +214,85 @@ public sealed partial class MainWindow
         AllowWindowLargerThanScreen();
         AppWindow.Resize(new SizeInt32((int)TestHookSettings.ReadLong(request["width"], 1280), (int)TestHookSettings.ReadLong(request["height"], 800)));
         return new JsonObject { ["size"] = $"{AppWindow.Size.Width}x{AppWindow.Size.Height}" };
+    }
+
+    /// <summary>
+    /// 一覧 (ListView、GridView) か TreeView の行を選び、その行の入れ物 (ListViewItem、TreeViewItem) にキーボードのフォーカスを置く。
+    /// 実際のキー入力 (WindowKeys) が、行の入れ物から届く道筋を確かめるのに使う。行は <c>index</c> (番号)、<c>itemId</c> (入れ物の AutomationId)、
+    /// <c>nodeText</c> (TreeView の入れ物の名前に含まれる文字列。すべての節を開いて探す)、<c>keep</c> (いま選んでいる行) のどれかで決める。
+    /// </summary>
+    private JsonObject TestFocusItem(JsonObject request)
+    {
+        string id = request["id"]!.GetValue<string>();
+        int index = request["index"]?.GetValue<int>() ?? 0;
+        FrameworkElement list = FindElement(id) ?? throw new ArgumentException($"List not found: {id}");
+        bool keep = request["keep"]?.GetValue<bool>() ?? false;
+        Control? container = null;
+        if (list is ListViewBase lv)
+        {
+            if (keep)
+            {
+                index = lv.SelectedIndex;
+            }
+            else if (request["itemId"]?.GetValue<string>() is { } itemId)
+            {
+                // 行の入れ物の AutomationId で探す (仮想化されていて見えない行は、順に表示して探す)。
+                for (int i = 0; i < lv.Items.Count; i++)
+                {
+                    lv.SelectedIndex = i;
+                    lv.UpdateLayout();
+                    lv.ScrollIntoView(lv.SelectedItem);
+                    lv.UpdateLayout();
+                    if (lv.ContainerFromIndex(i) is Control c && AutomationProperties.GetAutomationId(c) == itemId)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            lv.SelectedIndex = index;
+            lv.UpdateLayout();
+            lv.ScrollIntoView(lv.SelectedItem);
+            lv.UpdateLayout();
+            container = lv.ContainerFromIndex(index) as Control;
+        }
+        else if (list is TreeView tv)
+        {
+            TreeViewNode? target = tv.RootNodes.ElementAtOrDefault(index);
+            if (request["nodeText"]?.GetValue<string>() is { } text)
+            {
+                static void ExpandAll(IEnumerable<TreeViewNode> nodes)
+                {
+                    foreach (TreeViewNode n in nodes)
+                    {
+                        n.IsExpanded = true;
+                        ExpandAll(n.Children);
+                    }
+                }
+
+                ExpandAll(tv.RootNodes);
+                tv.UpdateLayout();
+                IEnumerable<TreeViewNode> All(IEnumerable<TreeViewNode> nodes) => nodes.SelectMany(n => new[] { n }.Concat(All(n.Children)));
+                target = All(tv.RootNodes).FirstOrDefault(n => tv.ContainerFromNode(n) is Control c
+                    && (AutomationProperties.GetName(c)?.Contains(text, StringComparison.Ordinal) ?? false));
+            }
+
+            if (target is not null)
+            {
+                tv.SelectedNode = target;
+                tv.UpdateLayout();
+                container = tv.ContainerFromNode(target) as Control;
+            }
+        }
+
+        bool moved = container?.Focus(FocusState.Keyboard) ?? false;
+        object? focused = FocusManager.GetFocusedElement(Root.XamlRoot);
+        return new JsonObject
+        {
+            ["moved"] = moved,
+            ["focused"] = focused is FrameworkElement fe ? $"{fe.GetType().Name}:{AutomationProperties.GetAutomationId(fe)}" : focused?.GetType().Name,
+        };
     }
 
     /// <summary>

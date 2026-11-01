@@ -18,6 +18,8 @@ public sealed partial class ClipboardPanel : UserControl, Panels.IPanelContent
     {
         Vm = vm;
         InitializeComponent();
+        ItemKeys.Attach(SlotList, List_KeyDown);
+        ItemKeys.Attach(HistoryList, List_KeyDown);
         foreach ((Button button, string key) in new[]
         {
             (PasteButton, "ClipboardPanel_PasteButton"), (PasteOverwriteButton, "ClipboardPanel_PasteOverwriteButton"),

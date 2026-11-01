@@ -125,6 +125,17 @@ public static class UiHelpers
         return r["focused"]?.GetValue<string>();
     }
 
+    /// <summary>
+    /// 一覧 (または TreeView) の <paramref name="index"/> 番目の行を選び、その行の入れ物 (ListViewItem など) にキーボードのフォーカスを置く。
+    /// フォーカスのある要素 ("型:AutomationId") を返す。
+    /// </summary>
+    public static async Task<string?> FocusItemAsync(this AppSession app, string listId, int index, string? itemId = null, string? nodeText = null, bool keep = false)
+    {
+        JsonObject r = await app.SendAsync("focusItem", new JsonObject { ["id"] = listId, ["index"] = index, ["itemId"] = itemId, ["nodeText"] = nodeText, ["keep"] = keep });
+        await app.IdleAsync();
+        return r["focused"]?.GetValue<string>();
+    }
+
     /// <summary>フォーカスのある要素 ("型:AutomationId")。</summary>
     public static async Task<string?> FocusedAsync(this AppSession app) => (await app.StateAsync())["focused"]?.GetValue<string>();
 

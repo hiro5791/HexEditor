@@ -44,14 +44,14 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         AutomationProperties.SetName(_list, Loc.Get("Panel_Partitions_Title"));
         _list.SelectionChanged += (_, _) => ShowDetails();
         _list.DoubleTapped += (_, _) => GoToStart();
-        _list.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(_list, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 GoToStart();
                 e.Handled = true;
             }
-        };
+        });
         _list.ContextFlyout = BuildMenu();
         AutomationProperties.SetAutomationId(_status, "Partitions_Status");
         AutomationProperties.SetAutomationId(_details, "Partitions_Details");
@@ -236,14 +236,14 @@ public sealed partial class PartitionPanel : UserControl, IPanelContent
         AutomationProperties.SetAutomationId(_lvStatus, "Partitions_LogicalVolumesStatus");
         _lvList.DoubleTapped += (_, _) => _ = OpenSelectedLogicalVolumeAsync();
         _lvList.SelectionChanged += (_, _) => ShowLogicalVolumeStatus();
-        _lvList.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(_lvList, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 _ = OpenSelectedLogicalVolumeAsync();
                 e.Handled = true;
             }
-        };
+        });
         var menu = new MenuFlyout();
         menu.Items.Add(Item("Lv_Menu_Open", () => _ = OpenSelectedLogicalVolumeAsync()));
         menu.Items.Add(Item("Lv_Menu_Assign", () =>
