@@ -205,10 +205,13 @@ public sealed partial class MainWindow : Window
         CaseFields.Text = string.Join("  /  ", c.Fields.Select(f => $"{f.Key}: {f.Value}"));
         BuildPrepPanel(c, _outcomes.GetValueOrDefault(c.Id));
         Steps.Children.Clear();
+        LocalDisk? disk = FindDisk(c);
         for (int i = 0; i < c.Steps.Count; i++)
         {
             // 手順にチェックボックスは付けない (押すとフォーカスがこのツールに移り、HexEditor でのキー入力の手順が成り立たなくなる)。
-            Steps.Children.Add(new TextBlock { Text = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}", TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
+            string step = Preparer.WithDiskNumbers(c.Steps[i]);
+            step = disk is null ? step : LocalDisks.Fill(step, disk);
+            Steps.Children.Add(new TextBlock { Text = $"{i + 1}. {step}", TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
         }
 
         PipeProbePanel.Visibility = c.Steps.Any(step => step.Contains("「パイプに接続する」", StringComparison.Ordinal)) ? Visibility.Visible : Visibility.Collapsed;
@@ -480,6 +483,26 @@ public sealed partial class MainWindow : Window
         }
 
         return block;
+    }
+
+    /// <summary>実機のディスクを使うテストケースなら、ディスクを探す。見つかれば、人が用意する段階は済んだことにする。</summary>
+    private LocalDisk? FindDisk(TestCase c)
+    {
+        foreach (PrepNeed need in _book.NeedsOf(c).Where(n => LocalDisks.Handles(n.Name)))
+        {
+            if (LocalDisks.Find(Preparer.PhysicalDisks(), need.Name) is { } disk)
+            {
+                if (!_handDone.TryGetValue(c.Id, out HashSet<string>? done))
+                {
+                    _handDone[c.Id] = done = [];
+                }
+
+                done.Add("need:" + need.Name);
+                return disk;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>補助プロセスのパイプにこのツールから接続する (TC-PKG-14-07)。結果はコメントにも残す。</summary>

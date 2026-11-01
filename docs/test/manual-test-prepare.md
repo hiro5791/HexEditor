@@ -280,14 +280,19 @@ HexEditor の画面を直接見て確かめる。
 
 ### 環境: この PC の SATA ディスク
 
-1. PowerShell で `Get-PhysicalDisk | Format-Table DeviceId,FriendlyName,BusType,Size` を実行する。
-2. BusType が SATA のディスクがあれば、その DeviceId をディスク番号として控える (以下 N)。読み取るだけで、書き換えない。
+この画面が出ているときは、ツールが探しても見つからなかった。
 
 ないとき (SATA のディスクがない): 「対象外」を押し、コメントに「SATA のディスクなし」と書く。
 
+### 環境: この PC の SATA SSD
+
+この画面が出ているときは、ツールが探しても見つからなかった。
+
+ないとき (SATA SSD がない): 「対象外」を押し、コメントに「SATA SSD なし」と書く。
+
 ### 環境: この PC の NVMe SSD
 
-1. PowerShell で `Get-PhysicalDisk | Format-Table DeviceId,FriendlyName,BusType,SerialNumber` を実行し、BusType が NVMe のディスクの番号とシリアル番号を控える。読み取るだけで、書き換えない。
+この画面が出ているときは、ツールが探しても見つからなかった。
 
 ないとき (NVMe のディスクがない): 「対象外」を押し、コメントに「NVMe SSD なし」と書く。
 
@@ -1146,9 +1151,7 @@ BitLocker で暗号化した VHDX で、Windows 11 Pro でないと作れない 
 | --- | --- |
 | 起動 | 開発版 (管理者) |
 | 引数 | なし |
-| 必要なもの | この PC の SATA ディスク、管理者として実行 |
-
-1. SATA のディスクが SSD でなければ (Get-PhysicalDisk の MediaType が HDD)、「対象外」にし、コメントに「SATA SSD なし」と書く。
+| 必要なもの | この PC の SATA SSD、管理者として実行 |
 
 ### TC-FOR-28-02
 

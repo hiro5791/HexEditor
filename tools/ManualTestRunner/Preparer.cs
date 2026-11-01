@@ -428,6 +428,26 @@ public static class Preparer
     /// 手順の文の TD-VHDX-… に、この PC でのディスクの番号を書き足す (HexEditor の一覧には「ディスク 3 (Msft Virtual Disk, …)」と出て、
     /// TD-VHDX-… の名前は出ないため)。仮想ディスクのログがなければ、そのまま返す。
     /// </summary>
+    /// <summary>この PC の物理ディスク (ツールの起動中に 1 回だけ調べる)。</summary>
+    public static IReadOnlyList<LocalDisk> PhysicalDisks()
+    {
+        if (_physicalDisks is null)
+        {
+            var start = new ProcessStartInfo("powershell.exe") { UseShellExecute = false, RedirectStandardOutput = true, CreateNoWindow = true };
+            start.ArgumentList.Add("-NoProfile");
+            start.ArgumentList.Add("-Command");
+            start.ArgumentList.Add(LocalDisks.ListCommand);
+            using Process process = Process.Start(start) ?? throw new InvalidOperationException("PowerShell を起動できません。");
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            _physicalDisks = LocalDisks.Parse(output);
+        }
+
+        return _physicalDisks;
+    }
+
+    private static IReadOnlyList<LocalDisk>? _physicalDisks;
+
     public static string WithDiskNumbers(string text)
     {
         if (!text.Contains("TD-VHDX-", StringComparison.Ordinal) || !File.Exists(VhdLog))
