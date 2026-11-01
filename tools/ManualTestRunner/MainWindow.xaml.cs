@@ -17,6 +17,8 @@ public sealed record CaseItem(TestCase Case, string Header, string Title);
 /// </summary>
 public sealed partial class MainWindow : Window
 {
+    private readonly NoActivateArea _noActivateArea;
+
     private readonly List<TestCase> _all;
     private readonly Dictionary<string, TestCase> _everyCase;
     private readonly PrepBook _book;
@@ -62,6 +64,9 @@ public sealed partial class MainWindow : Window
         }
 
         PhaseChoice.SelectedIndex = lastPhase;
+
+        // 手順の欄を読むために触っても、キーボードのフォーカスは HexEditor に残す。
+        _noActivateArea = new NoActivateArea(WinRT.Interop.WindowNative.GetWindowHandle(this), DetailScroll);
 
         // 前回選んだ「テストの選び方」と「機材が必要なテストを除く」を使う (起動のたびに選び直さなくてよいように)。
         FilterChoice.SelectedIndex = LoadChoice(FilterChoicePath, 0, FilterChoice.Items.Count);
