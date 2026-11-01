@@ -1136,7 +1136,7 @@ AFF4 の読み込みは対象外 (「対象外と未決定」の表)。
    - IDENTIFY DEVICE: 利用者がアクセスできる最大 LBA (28 bit と 48 bit)。
    - READ NATIVE MAX ADDRESS (EXT): HPA を除いた本来の最大 LBA。
    - DEVICE CONFIGURATION IDENTIFY: DCO で設定された本来の最大 LBA。
-2. 結果: 3 つの最大 LBA と、HPA の有無・サイズ、DCO の有無・サイズを表示する。HPA・DCO がある場合は InfoBar で知らせる。
+2. 結果: 3 種類のコマンドの最大 LBA (IDENTIFY DEVICE は 28 bit と 48 bit の 2 つなので、全部で 4 行) と、HPA の有無・サイズ、DCO の有無・サイズを表示する。デバイスが対応していないコマンドの行は「デバイスが対応していません」と示す。HPA・DCO がある場合は InfoBar で知らせる。
 3. HPA・DCO の解除 (SET MAX ADDRESS、DEVICE CONFIGURATION RESTORE) は行わない。デバイスの設定を変える操作であり、対象外とする。
 4. NVMe のディスクは HPA・DCO を持たないため、名前空間のサイズと容量を表示し、「HPA / DCO は該当しません」と示す。
 5. USB 変換などでコマンドが通らない場合は「このデバイスでは確認できません」と表示する。
