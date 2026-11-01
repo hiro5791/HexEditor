@@ -67,7 +67,14 @@ public sealed class StatisticsPanelTests
         await app.WaitUntilAsync(async () =>
         {
             var bounds = (await app.WaitForAsync(content)).BoundingRectangle;
-            return bounds.Width > 0 && bounds.Height > 0;
+            if (bounds.Width > 0 && bounds.Height > 0)
+            {
+                return true;
+            }
+
+            // ウィンドウが狭いと設定の部品が折り返し、中身は見えている範囲の下になる。UI オートメーションの範囲は 0 になるので、スクロールして確かめる。
+            (await app.WaitForAsync("Stats_Scroll")).Patterns.Scroll.Pattern.SetScrollPercent(-1, 100);
+            return false;
         }, Wait, $"{content} with a non-zero size");
 
         // タブの中身には下限の高さがあり、全体の高さは数値で決まっている (一覧が仮想化されたまま)

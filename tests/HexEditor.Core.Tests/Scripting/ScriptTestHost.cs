@@ -19,7 +19,9 @@ public sealed class ScriptTestHost : IDisposable
         Folders = new ScriptFolders(Path.Combine(Root, "settings"), Path.Combine(Root, "data"));
         Directory.CreateDirectory(Folders.Scripts);
         Trust = new TrustStore(Folders.TrustFile);
-        Limits = limits ?? new ScriptLimits();
+
+        // メモリの上限はプロセス全体の使用量で調べるので、同時に動く別のテストの分も数えてしまう。上限を確かめるテストだけが明示的に指定する。
+        Limits = limits ?? new ScriptLimits { MemoryBytes = ScriptLimits.MaxMemory };
         Policy = policy;
         Host = new ScriptHost(Folders, Trust, () => Limits, () => Policy, csharp) { ForceStopGrace = TimeSpan.FromSeconds(1) };
         Env = new CoreScriptEnvironment(language: language);
