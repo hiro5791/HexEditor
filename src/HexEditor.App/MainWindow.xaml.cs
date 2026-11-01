@@ -808,6 +808,15 @@ public sealed partial class MainWindow : Window
     /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
     private void FocusEditor() => _views.FirstOrDefault(v => v.Editor == Editor)?.Focus(FocusState.Programmatic);
 
+    /// <summary>表示中のものにフォーカスを置く: ページのタブならそのページ、それ以外は Hex ビュー。</summary>
+    private void FocusActiveContent()
+    {
+        if (_activeToolPage is null || ToolPageHost.Visibility != Visibility.Visible || !FocusActiveToolPage())
+        {
+            FocusEditor();
+        }
+    }
+
     private void GoTo_Click(object sender, RoutedEventArgs e) => OpenGoToBar();
 
     /// <summary>移動バーを開く。<paramref name="unit"/> を指定するとその単位の状態で開く (「セクタへ移動」。VIEW-32 の仕様 4)。</summary>

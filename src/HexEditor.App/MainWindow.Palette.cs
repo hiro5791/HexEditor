@@ -41,7 +41,7 @@ public sealed partial class MainWindow
         {
             _pendingArgument = null;
             _pendingPick = null;
-            FocusEditor();
+            FocusActiveContent();
         };
 
         // 候補の右クリック >「ショートカットを変更」(UI-18 の呼び出し)。

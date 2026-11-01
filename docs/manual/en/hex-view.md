@@ -174,7 +174,7 @@ When the zoom is not 100%, the status bar shows it. Selecting it returns to 100%
 Each document opens in its own tab.
 
 - A tab shows an icon for its kind, its name and its state. `●` means unsaved changes, a lock means read-only, and a pin means pinned. When several files have the same name, the folder name is added. The tooltip shows the path and size.
-- <kbd>Ctrl</kbd>+<kbd>Tab</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd> switch tabs in most recently used order. <kbd>Ctrl</kbd>+<kbd>Page Down</kbd> / <kbd>Ctrl</kbd>+<kbd>Page Up</kbd> switch in tab order.
+- <kbd>Ctrl</kbd>+<kbd>Tab</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd> switch tabs in most recently used order. <kbd>Ctrl</kbd>+<kbd>Page Down</kbd> / <kbd>Ctrl</kbd>+<kbd>Page Up</kbd> switch in tab order. Both also reach tabs that are not documents, such as Settings and the script editor.
 - <kbd>Ctrl</kbd>+<kbd>W</kbd> closes the selected tab, including tabs that are not documents, such as Settings or the script editor. A middle click also closes a tab. The **+** button at the right end creates a new document.
 - Drag tabs to reorder them. Right-click and select **Pin** to fix a tab at the left; it is then skipped by **Close other tabs** and similar commands. The right-click menu also has **Copy path**, **Show in Explorer** and more.
 - Drag a tab out of the tab strip to move it to a new window, or drop it on another window's tab strip. Unsaved edits, undo history and selection move with it. **Move to new window** in the right-click menu does the same.

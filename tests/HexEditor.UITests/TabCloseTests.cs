@@ -44,6 +44,8 @@ public sealed class TabCloseTests
         await WaitOpenAsync(app, tabId);
         Assert.True(await CloseEnabledAsync(app), "file.close is disabled on a tool page");
 
+        // 開いた直後はフォーカスが落ち着いておらず、キーのメッセージが捨てられることがある。
+        await app.IdleAsync();
         WindowKeys.Press(app, KeyW, ctrl: true);
         await WaitClosedAsync(app, tabId);
         Assert.Equal(documents, await DocumentCountAsync(app));
