@@ -42,6 +42,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
+        "nonClientRegionsReset" => TestResetNonClientRegions(),
         "hash" => await TestHashAsync(request),
         "viewPresets" => TestViewPresets(request),
         "stats" => await TestStatisticsAsync(request),
@@ -381,6 +382,16 @@ public sealed partial class MainWindow
             ["caption"] = Rects(Microsoft.UI.Input.NonClientRegionKind.Caption),
             ["passthrough"] = Rects(Microsoft.UI.Input.NonClientRegionKind.Passthrough),
         };
+    }
+
+    /// <summary>入力を通す領域を、TitleBar が設定する値 (タイトルと操作ボタンの上を含む広い矩形) に変える (手動テスト TC-UI-02-03 で見つかった状態)。</summary>
+    private JsonObject TestResetNonClientRegions()
+    {
+        var size = AppWindow.ClientSize;
+        Microsoft.UI.Input.InputNonClientPointerSource.GetForWindowId(AppWindow.Id).SetRegionRects(
+            Microsoft.UI.Input.NonClientRegionKind.Passthrough,
+            [new Windows.Graphics.RectInt32(0, 4, size.Width - 186, 40), new Windows.Graphics.RectInt32(size.Width - 172, 8, 240, 32)]);
+        return [];
     }
 
     // ---- 文字列 (UI-42、UI-46、UI-47) ----

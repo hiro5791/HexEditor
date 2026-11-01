@@ -10,6 +10,7 @@ public static partial class WindowHitTest
 {
     public const int Client = 1;
     public const int Caption = 2;
+    public const int Close = 20;
 
     private const uint WmNcHitTest = 0x0084;
 

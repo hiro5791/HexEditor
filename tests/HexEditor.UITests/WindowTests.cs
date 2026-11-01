@@ -172,6 +172,55 @@ public sealed partial class WindowTests
             && Math.Abs(r["right"]!.GetValue<int>() - (e["right"]!.GetValue<double>() * scale)) <= 2);
     });
 
+    /// <summary>
+    /// 起動のあとでタイトルが長くなっても (文書を開く)、タイトルの上はドラッグでき、閉じるボタンは押せる。不具合: 入口のボタンの幅を見直すのがウィンドウの幅が
+    /// 変わったときだけで、タイトルが長くなると最小幅のボタンが操作ボタンの上まで伸び、入力を通す領域が閉じるボタンに重なっていた
+    /// (手動テスト TC-UI-02-03 で見つかった。ディスクを開くとタイトルが長くなる)。
+    /// </summary>
+    [Theory]
+    [InlineData("TD_WDC_WD20EZBX_60AYRA0_1_82_TB_0123456789.bin")]
+    [InlineData("A_very_long_file_name_to_fill_the_title_bar_of_the_main_window_and_check_the_drag_region_0123456789.bin")]
+    [Trait(UiTest.TC, "TC-UI-02-04")]
+    public Task Title_bar_stays_draggable_and_closable_when_the_title_grows_after_startup(string name) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja", WaitForEditor = false });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.IdleAsync();
+
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = ctx.WriteFile(name, new byte[256]) });
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("WindowTitle"))["text"]!.GetValue<string>().StartsWith(name[..10], StringComparison.Ordinal), TimeSpan.FromSeconds(10), "the title of the file");
+
+        JsonObject title = new(), menu = new(), palette = new(), regions = new(), state = new();
+        int buttonsLeft = 0;
+        async Task<bool> RegionsAreRight()
+        {
+            title = await app.ElementAsync("WindowTitle");
+            menu = await app.ElementAsync("MainMenu");
+            palette = await app.ElementAsync("TitleBar_Palette");
+            regions = await app.SendAsync("nonClientRegions");
+            state = await app.StateAsync();
+            buttonsLeft = regions["caption"]!.AsArray().Max(r => r!["right"]!.GetValue<int>()) - state["titleBarRightInset"]!.GetValue<int>();
+            JsonArray p = regions["passthrough"]!.AsArray();
+            return p.Count == 2 && palette["right"]!.GetValue<double>() * scale <= buttonsLeft + 1
+                && p.Any(r => Math.Abs(r!["left"]!.GetValue<int>() - (palette["left"]!.GetValue<double>() * scale)) <= 2)
+                && p.All(r => r!["right"]!.GetValue<int>() <= buttonsLeft + 1);
+        }
+
+        await app.WaitUntilAsync(RegionsAreRight, TimeSpan.FromSeconds(10), "passthrough regions left of the window buttons");
+
+        double y = (title["top"]!.GetValue<double>() + title["bottom"]!.GetValue<double>()) / 2;
+        double titleCenter = (title["left"]!.GetValue<double>() + title["right"]!.GetValue<double>()) / 2;
+        Assert.Equal(WindowHitTest.Caption, WindowHitTest.At(app.Hwnd, titleCenter, y, scale));
+
+        // 閉じるボタンの中央 (操作ボタンの幅は 3 つ分。右端のボタンの中央)。
+        double closeX = (buttonsLeft + (state["titleBarRightInset"]!.GetValue<int>() * 5 / 6.0)) / scale;
+        Assert.Equal(WindowHitTest.Close, WindowHitTest.At(app.Hwnd, closeX, 8, scale));
+
+        // TitleBar が領域を自分の値に戻しても (タイトルと操作ボタンの上まで入力を通す状態)、置き直す。
+        await app.SendAsync("nonClientRegionsReset");
+        await app.WaitUntilAsync(RegionsAreRight, TimeSpan.FromSeconds(10), "passthrough regions put back");
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-UI-02-05")]
     [Trait(UiTest.Priority, UiTest.High)]

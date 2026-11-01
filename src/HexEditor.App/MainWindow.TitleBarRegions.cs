@@ -18,23 +18,11 @@ public sealed partial class MainWindow
     /// <summary>入力を通す領域を置き直すきっかけを登録する (TitleBar が自分の領域を設定し直す場面のあと)。</summary>
     private void InitializeTitleBarRegions()
     {
-        SizeChangedEventHandler changed = (_, _) => QueueTitleBarRegions();
-        AppTitleBar.SizeChanged += (_, _) =>
-        {
-            UpdateTitleMaxWidth();
-            QueueTitleBarRegions();
-        };
-        MainMenu.SizeChanged += (_, _) => UpdateTitleMaxWidth();
+        // 要素の大きさが変わらずに位置だけ動くことがあり (タイトルが長くなると入口のボタンが右へ動く)、SizeChanged では足りない。
+        AppTitleBar.LayoutUpdated += (_, _) => QueueTitleBarRegions();
         AppTitleBar.Loaded += (_, _) => QueueTitleBarRegions();
         AppTitleBar.RegisterPropertyChangedCallback(UIElement.VisibilityProperty, (_, _) => QueueTitleBarRegions());
-        MainMenu.SizeChanged += changed;
-        WindowTitle.SizeChanged += changed;
-        if (_paletteButton is not null)
-        {
-            _paletteButton.SizeChanged += changed;
-        }
-
-        Root.SizeChanged += changed;
+        WindowTitle.SizeChanged += (_, _) => ResetPaletteButtonFit();
         Root.Loaded += (_, _) =>
         {
             if (Root.XamlRoot is { } xamlRoot)
@@ -42,6 +30,10 @@ public sealed partial class MainWindow
                 xamlRoot.Changed += (_, _) => QueueTitleBarRegions();
             }
         };
+
+        // TitleBar が領域を自分の値 (LeftHeader・Content の欄全体) に戻したら、すぐ置き直す。戻ったままだとタイトルをドラッグできず、
+        // 閉じるボタンも押せない (手動テスト TC-UI-02-03 で、ディスクを開いたあとに起きた)。
+        InputNonClientPointerSource.GetForWindowId(AppWindow.Id).RegionsChanged += (_, _) => QueueTitleBarRegions();
     }
 
     /// <summary>タイトルの右 (入口のボタン) に残す幅 (DIP): アイコンだけの入口 (最大 48) と余白。</summary>
@@ -88,9 +80,11 @@ public sealed partial class MainWindow
         }
 
         _titleBarRegionsQueued = true;
-        DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+        DispatcherQueue.TryEnqueue(() =>
         {
             _titleBarRegionsQueued = false;
+            UpdateTitleMaxWidth();
+            UpdatePaletteButtonFit();
             ApplyTitleBarRegions();
         });
     }
@@ -111,6 +105,10 @@ public sealed partial class MainWindow
         if (AppTitleBar.Visibility == Visibility.Visible)
         {
             double scale = xamlRoot.RasterizationScale;
+
+            // 操作ボタンの上は入力を通さない (通すと閉じるボタンが押せなくなる)。
+            int leftLimit = appWindow.TitleBar.LeftInset;
+            int rightLimit = appWindow.ClientSize.Width - appWindow.TitleBar.RightInset;
             foreach (FrameworkElement? element in new FrameworkElement?[] { MainMenu, _paletteButton })
             {
                 if (element is not { Visibility: Visibility.Visible, ActualWidth: > 0, ActualHeight: > 0 })
@@ -120,9 +118,9 @@ public sealed partial class MainWindow
 
                 // 右から左に書く言語でも、ウィンドウ (null) への変換で左右反転を含んだ実際の位置になる。
                 var bounds = element.TransformToVisual(null).TransformBounds(new Windows.Foundation.Rect(0, 0, element.ActualWidth, element.ActualHeight));
-                int left = (int)Math.Floor(bounds.Left * scale);
+                int left = Math.Max((int)Math.Floor(bounds.Left * scale), leftLimit);
                 int top = (int)Math.Floor(bounds.Top * scale);
-                int right = (int)Math.Ceiling(bounds.Right * scale);
+                int right = Math.Min((int)Math.Ceiling(bounds.Right * scale), rightLimit);
                 int bottom = (int)Math.Ceiling(bounds.Bottom * scale);
                 if (right > left && bottom > top && right > 0 && bottom > 0)
                 {
@@ -131,7 +129,8 @@ public sealed partial class MainWindow
             }
         }
 
-        if (source.GetRegionRects(NonClientRegionKind.Passthrough).SequenceEqual(rects))
+        // 領域が 1 つもないときは空の配列ではなく null が返る (全画面のまま起動すると、ここで落ちていた)。
+        if ((source.GetRegionRects(NonClientRegionKind.Passthrough) ?? []).SequenceEqual(rects))
         {
             return;
         }

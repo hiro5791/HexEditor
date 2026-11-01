@@ -113,21 +113,26 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(_paletteButton, "TitleBar_Palette");
         _paletteButton.Click += (_, _) => OpenPalette(">");
         AppTitleBar.Content = _paletteButton;
-        Root.SizeChanged += (_, _) =>
-        {
-            // 幅が変わったら、文字列が入るかをもう一度確かめる。
-            _paletteTextOverflow = false;
-            UpdatePaletteButton();
-            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
-            {
-                if ((_paletteButtonText.IsTextTrimmed || PaletteButtonClipped()) && _paletteButtonText.Visibility == Visibility.Visible && !_paletteTextOverflow)
-                {
-                    _paletteTextOverflow = true;
-                    UpdatePaletteButton();
-                }
-            });
-        };
+        Root.SizeChanged += (_, _) => ResetPaletteButtonFit();
         UpdatePaletteButton();
+    }
+
+    /// <summary>ウィンドウの幅やタイトルの幅が変わったら、文字列が入るかをもう一度確かめる。</summary>
+    private void ResetPaletteButtonFit()
+    {
+        _paletteTextOverflow = false;
+        UpdatePaletteButton();
+        QueueTitleBarRegions();
+    }
+
+    /// <summary>入口の文字列が入りきらなければ、アイコンだけにする。</summary>
+    private void UpdatePaletteButtonFit()
+    {
+        if (_paletteButtonText is { Visibility: Visibility.Visible } text && !_paletteTextOverflow && (text.IsTextTrimmed || PaletteButtonClipped()))
+        {
+            _paletteTextOverflow = true;
+            UpdatePaletteButton();
+        }
     }
 
     /// <summary>
