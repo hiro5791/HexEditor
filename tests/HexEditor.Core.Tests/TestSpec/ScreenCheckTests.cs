@@ -2,7 +2,7 @@ using HexEditor.ManualTests;
 
 namespace HexEditor.Core.Tests.TestSpec;
 
-/// <summary>手動テストの「画面を自動で確認」の判定。</summary>
+/// <summary>コントラストテーマの UI テストの画面の判定。</summary>
 public sealed class ScreenCheckTests
 {
     private const int Width = 400;
@@ -62,6 +62,14 @@ public sealed class ScreenCheckTests
         }
 
         Assert.Empty(ScreenCheck.Evaluate(pixels, Width, Height, 1, [0xFFFAEF, 0x202020]));
+    }
+
+    [Fact]
+    public void Large_areas_of_smoothed_text_colors_are_not_foreign()
+    {
+        uint[] pixels = Image(0x000000, 0xFFFFFF);
+        Array.Fill(pixels, 0x808080u, 100 * Width, 20 * Width);
+        Assert.Empty(ScreenCheck.Evaluate(pixels, Width, Height, 1, [0x000000, 0xFFFFFF]));
     }
 
     [Fact]

@@ -468,7 +468,7 @@ public sealed partial class WindowTests
         double key = TextContrast(app, "Start_New", 0.5);
         Assert.True(key >= 3, $"the key text is not readable ({key:F1})");
 
-        // 手動テストの「画面を自動で確認」の判定も、実際のウィンドウで通る。
+        // コントラストテーマのテストと同じ画面の判定も通る。
         Assert.Empty(HexEditor.ManualTests.ScreenCheck.Run(app.Hwnd, highContrast: false));
     });
 

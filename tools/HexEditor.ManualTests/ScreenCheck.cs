@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 namespace HexEditor.ManualTests;
 
 /// <summary>
-/// 手動テストの「画面を自動で確認」: テーマの切り替えは人が行い、HexEditor の画面の判定はツールが行う。ウィンドウの画像を取り、
+/// コントラストテーマの UI テストの画面の判定。ウィンドウの画像を取り、
 /// 右上の 3 つのボタンの記号が背景と区別できること、コントラストテーマでは背景がそのテーマの色で、テーマにない色の面がないことを確かめる。
 /// </summary>
 public static class ScreenCheck
@@ -13,7 +13,7 @@ public static class ScreenCheck
     public const double MinContrast = 3;
 
     /// <summary>
-    /// ウィンドウがアクティブでないときの下限。ツールのボタンを押すと HexEditor は非アクティブになり、Windows が記号を灰色に薄くする (ライトで 2.2〜2.6)。
+    /// ウィンドウがアクティブでないときの下限。非アクティブのウィンドウでは、Windows が記号を灰色に薄くする (ライトで 2.2〜2.6)。
     /// </summary>
     public const double MinInactiveContrast = 2;
 
@@ -26,6 +26,7 @@ public static class ScreenCheck
     /// <summary>GetSysColor の番号。最初が背景: ウィンドウ、ウィンドウの文字、ボタンの面、選択、選択の文字、グレーの文字、ボタンの文字、リンク。</summary>
     private static readonly int[] SystemColors = [5, 8, 15, 13, 14, 17, 18, 26];
     private const int ColorTolerance = 8;
+    private const int BlendSteps = 16;
     private static readonly string[] ButtonNames = ["閉じる", "最大化", "最小化"];
 
     /// <summary>画像 (上から下へ。1 画素は 0xRRGGBB) を判定し、問題の一覧を返す (空なら合格)。</summary>
@@ -66,7 +67,8 @@ public static class ScreenCheck
     }
 
     /// <summary>
-    /// いちばん多い色がテーマの背景の色で、まとまった面積のテーマ以外の色がない。文字の縁のなめらかにした色は 1 色ごとの面積が小さいので数えない。
+    /// いちばん多い色がテーマの背景の色で、まとまった面積のテーマ以外の色がない。文字の縁のなめらかにした色は、テーマの 2 色の間の色なので数えない
+    /// (同じ文字が並ぶ Hex 表示では、1 色の面積が大きくなる)。
     /// </summary>
     private static void CheckThemeColors(uint[] pixels, IReadOnlyList<uint> themeColors, List<string> problems)
     {
@@ -83,7 +85,7 @@ public static class ScreenCheck
         }
 
         int area = (int)(pixels.Length * MinForeignArea);
-        foreach ((uint color, int count) in counts.Where(c => c.Value >= area && !themeColors.Any(t => Close(c.Key, t))).OrderByDescending(c => c.Value).Take(3))
+        foreach ((uint color, int count) in counts.Where(c => c.Value >= area && !IsThemeColor(c.Key, themeColors)).OrderByDescending(c => c.Value).Take(3))
         {
             problems.Add($"テーマにない色 #{color:X6} が画面の {count * 100.0 / pixels.Length:F1}% にあります");
         }
@@ -105,6 +107,25 @@ public static class ScreenCheck
         }
 
         return (0.2126 * Channel((rgb >> 16) & 0xFF)) + (0.7152 * Channel((rgb >> 8) & 0xFF)) + (0.0722 * Channel(rgb & 0xFF));
+    }
+
+    private static bool IsThemeColor(uint color, IReadOnlyList<uint> themeColors) =>
+        themeColors.Any(a => Close(color, a) || themeColors.Any(b => IsBetween(color, a, b)));
+
+    /// <summary><paramref name="color"/> が 2 色を混ぜた色か。</summary>
+    private static bool IsBetween(uint color, uint a, uint b)
+    {
+        for (int step = 1; step < BlendSteps; step++)
+        {
+            uint Mix(int shift) => (uint)((((a >> shift) & 0xFF) * (BlendSteps - step)) + (((b >> shift) & 0xFF) * step)) / BlendSteps;
+
+            if (Close(color, (Mix(16) << 16) | (Mix(8) << 8) | Mix(0)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool Close(uint a, uint b)

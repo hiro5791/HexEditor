@@ -211,8 +211,6 @@ public sealed partial class MainWindow : Window
             Steps.Children.Add(new TextBlock { Text = $"{i + 1}. {Preparer.WithDiskNumbers(c.Steps[i])}", TextWrapping = TextWrapping.Wrap, IsTextSelectionEnabled = true });
         }
 
-        ScreenCheckPanel.Visibility = c.Steps.Any(step => step.Contains("画面を自動で確認", StringComparison.Ordinal)) ? Visibility.Visible : Visibility.Collapsed;
-        ScreenCheckResult.Text = string.Empty;
         Expected.Text = string.Join(Environment.NewLine, c.Expected.Select(e => "・" + e));
         CaseResult? r = _store.ResultOf(c.Id);
         Comment.Text = r?.Comment ?? string.Empty;
@@ -480,20 +478,6 @@ public sealed partial class MainWindow : Window
         }
 
         return block;
-    }
-
-    /// <summary>HexEditor の画面を判定する (ScreenCheck)。結果はコメントにも残す。</summary>
-    private void ScreenCheck_Click(object sender, RoutedEventArgs e)
-    {
-        var accessibility = new Windows.UI.ViewManagement.AccessibilitySettings();
-        string theme = accessibility.HighContrast ? accessibility.HighContrastScheme : "通常のテーマ";
-        _hexEditor?.Refresh();
-        IReadOnlyList<string> problems = _hexEditor is { HasExited: false } process
-            ? ScreenCheck.Run(process.MainWindowHandle, accessibility.HighContrast)
-            : ["HexEditor が動いていません"];
-        string result = problems.Count == 0 ? $"OK ({theme})" : $"NG ({theme}): " + string.Join(" / ", problems);
-        ScreenCheckResult.Text = result;
-        Comment.Text = (Comment.Text.Length > 0 ? Comment.Text + Environment.NewLine : string.Empty) + result;
     }
 
     private async void GuideButton_Click(object sender, RoutedEventArgs e)
