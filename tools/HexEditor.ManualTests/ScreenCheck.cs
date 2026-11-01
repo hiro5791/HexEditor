@@ -12,6 +12,11 @@ public static class ScreenCheck
     /// <summary>記号と背景の明るさの比の下限 (WCAG 2.1 の非テキストの基準)。</summary>
     public const double MinContrast = 3;
 
+    /// <summary>
+    /// ウィンドウがアクティブでないときの下限。ツールのボタンを押すと HexEditor は非アクティブになり、Windows が記号を灰色に薄くする (ライトで 2.2〜2.6)。
+    /// </summary>
+    public const double MinInactiveContrast = 2;
+
     /// <summary>テーマにない色として数える面積 (画面全体に対する割合)。</summary>
     private const double MinForeignArea = 0.005;
 
@@ -25,7 +30,8 @@ public static class ScreenCheck
 
     /// <summary>画像 (上から下へ。1 画素は 0xRRGGBB) を判定し、問題の一覧を返す (空なら合格)。</summary>
     /// <param name="themeColors">コントラストテーマの色 (最初が背景の色)。通常のテーマでは null。</param>
-    public static IReadOnlyList<string> Evaluate(uint[] pixels, int width, int height, double scale, IReadOnlyList<uint>? themeColors)
+    /// <param name="minContrast">記号と背景の明るさの比の下限。</param>
+    public static IReadOnlyList<string> Evaluate(uint[] pixels, int width, int height, double scale, IReadOnlyList<uint>? themeColors, double minContrast = MinContrast)
     {
         var problems = new List<string>();
         uint At(int x, int y) => pixels[(Math.Clamp(y, 0, height - 1) * width) + Math.Clamp(x, 0, width - 1)];
@@ -45,7 +51,7 @@ public static class ScreenCheck
                 }
             }
 
-            if (best < MinContrast)
+            if (best < minContrast)
             {
                 problems.Add($"「{ButtonNames[i]}」の記号が背景と区別できません (明るさの比 {best:F1})");
             }
@@ -149,7 +155,7 @@ public static class ScreenCheck
         }
 
         uint[]? theme = highContrast ? [.. SystemColors.Select(index => ToRgb(GetSysColor(index)))] : null;
-        return Evaluate(pixels, width, height, GetDpiForWindow(hwnd) / 96.0, theme);
+        return Evaluate(pixels, width, height, GetDpiForWindow(hwnd) / 96.0, theme, GetForegroundWindow() == hwnd ? MinContrast : MinInactiveContrast);
     }
 
     private static uint ToRgb(uint bgr) => ((bgr & 0xFF) << 16) | (bgr & 0xFF00) | ((bgr >> 16) & 0xFF);
@@ -185,6 +191,9 @@ public static class ScreenCheck
         public int ClrUsed;
         public int ClrImportant;
     }
+
+    [DllImport("user32.dll")]
+    private static extern nint GetForegroundWindow();
 
     [DllImport("user32.dll")]
     private static extern bool GetClientRect(nint hWnd, out Rect rect);

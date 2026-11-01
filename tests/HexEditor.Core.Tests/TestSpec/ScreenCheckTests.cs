@@ -33,6 +33,18 @@ public sealed class ScreenCheckTests
         Assert.Equal(3, ScreenCheck.Evaluate(Image(0x202020, 0x303030), Width, Height, 1, null).Count);
 
     [Fact]
+    public void Dimmed_glyphs_of_an_inactive_window_pass_only_with_the_inactive_limit()
+    {
+        uint[] image = Image(0xF3F3F3, 0x999999);
+        Assert.Empty(ScreenCheck.Evaluate(image, Width, Height, 1, null, ScreenCheck.MinInactiveContrast));
+        Assert.Equal(3, ScreenCheck.Evaluate(image, Width, Height, 1, null).Count);
+    }
+
+    [Fact]
+    public void Unreadable_glyphs_fail_even_with_the_inactive_limit() =>
+        Assert.Equal(3, ScreenCheck.Evaluate(Image(0x202020, 0x303030), Width, Height, 1, null, ScreenCheck.MinInactiveContrast).Count);
+
+    [Fact]
     public void Black_window_in_a_light_contrast_theme_is_reported()
     {
         IReadOnlyList<string> problems = ScreenCheck.Evaluate(Image(0x000000, 0xFFFFFF), Width, Height, 1, [0xFFFAEF, 0xFFFFFF]);
