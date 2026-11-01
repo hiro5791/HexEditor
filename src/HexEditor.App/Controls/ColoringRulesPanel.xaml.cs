@@ -22,6 +22,7 @@ public sealed partial class ColoringRulesPanel : UserControl, Panels.IPanelConte
     {
         Vm = vm;
         InitializeComponent();
+        ItemKeys.Attach(List, List_KeyDown);
         AutomationProperties.SetName(this, Loc.Get("Coloring_PanelName"));
         AutomationProperties.SetName(List, Loc.Get("Coloring_PanelName"));
         foreach ((Button button, string key) in new[]
