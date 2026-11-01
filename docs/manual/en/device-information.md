@@ -27,6 +27,8 @@ Reading this information requires the same rights as opening the disk. If HexEdi
 
 For ATA and SATA disks, each attribute shows its ID, name, current value, worst value, threshold, raw value in hexadecimal and decimal, and a status. The status is **Warning** when the current value is at or below the threshold. Attributes that HexEditor does not know are named **Unknown**.
 
+If the table does not fit in the panel, scroll it sideways with the scroll bar, the Left and Right arrow keys, or Shift and the mouse wheel.
+
 For NVMe disks, the tab shows the warning bits, temperature, available spare, percentage used, data read and written, power cycles, power-on hours, unsafe shutdowns and media errors.
 
 The **Device** tab shows the model, serial number, firmware, capacity, logical and physical sector size, connection, rotation rate and whether TRIM is supported.

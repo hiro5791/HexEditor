@@ -15,19 +15,26 @@ public sealed record VirtualColumn(string Header, double Width, bool Mono = fals
 /// 結果一覧 (00 の 9 章) の表。行は見えている分だけ作り、スクロールは自前のスクロールバーの行番号で行うので、100 万件を超える行数でも
 /// 画面の高さの制限に当たらず、スクロールが止まらない (SearchResultsPanel と同じ考え方)。行の内容は <see cref="RowProvider"/> が必要なときに作る。
 /// 矢印・PageUp / PageDown・Home / End で選択を動かし、Enter か行のダブルクリックで <see cref="Activated"/>、Delete で <see cref="DeleteRequested"/> を出す。
+/// 列の幅の合計が表の幅より広いときは下に横のスクロールバーを出す (左右の矢印キー、Shift+ホイール、横ホイールでも動く)。
 /// </summary>
 public sealed class VirtualTable : UserControl
 {
     private const double RowHeight = 28;
+    private const double HorizontalStep = 40;
 
+    private readonly Canvas _headerHost = new() { Height = RowHeight };
     private readonly Grid _header = new() { Height = RowHeight, ColumnSpacing = 0 };
+    private readonly RectangleGeometry _headerClip = new();
+    private readonly RectangleGeometry _bodyClip = new();
     private readonly Canvas _body = new() { Background = new SolidColorBrush() };
     private readonly ScrollBar _scroll = new() { Orientation = Orientation.Vertical, SmallChange = 1, LargeChange = 10, IndicatorMode = ScrollingIndicatorMode.MouseIndicator };
+    private readonly ScrollBar _horizontal = new() { Orientation = Orientation.Horizontal, SmallChange = HorizontalStep, IndicatorMode = ScrollingIndicatorMode.MouseIndicator, Visibility = Visibility.Collapsed };
     private readonly List<Grid> _rows = [];
     private readonly string _automationId;
     private IReadOnlyList<VirtualColumn> _columns = [];
     private long _count;
     private long _top;
+    private double _left;
     private long _selected = -1;
     private bool _syncing;
 
@@ -39,13 +46,20 @@ public sealed class VirtualTable : UserControl
         root.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         Grid.SetRow(_body, 1);
         Grid.SetRow(_scroll, 1);
         Grid.SetColumn(_scroll, 1);
+        Grid.SetRow(_horizontal, 2);
         _header.SetValue(Panel.BackgroundProperty, Application.Current.Resources["LayerFillColorDefaultBrush"]);
-        root.Children.Add(_header);
+        _headerHost.Children.Add(_header);
+        _headerHost.Clip = _headerClip;
+        _body.Clip = _bodyClip;
+        AutomationProperties.SetAutomationId(_horizontal, automationId + "_HorizontalScroll");
+        root.Children.Add(_headerHost);
         root.Children.Add(_body);
         root.Children.Add(_scroll);
+        root.Children.Add(_horizontal);
         Content = root;
         IsTabStop = true;
         UseSystemFocusVisuals = true;
@@ -57,6 +71,14 @@ public sealed class VirtualTable : UserControl
             if (!_syncing)
             {
                 _top = (long)e.NewValue;
+                Layout();
+            }
+        };
+        _horizontal.ValueChanged += (_, e) =>
+        {
+            if (!_syncing)
+            {
+                _left = e.NewValue;
                 Layout();
             }
         };
@@ -241,11 +263,34 @@ public sealed class VirtualTable : UserControl
         }
     }
 
+    /// <summary>列の幅の合計 (横のスクロールの全体の幅)。表の幅より狭ければ表の幅。</summary>
+    private double ContentWidth => Math.Max(Math.Max(0, _body.ActualWidth), _columns.Sum(c => c.Width));
+
+    private bool CanScrollHorizontally => ContentWidth > _body.ActualWidth;
+
+    private void ScrollHorizontally(double delta)
+    {
+        _left += delta;
+        Layout();
+    }
+
     private void OnWheel(object sender, PointerRoutedEventArgs e)
     {
-        int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
+        Microsoft.UI.Input.PointerPointProperties properties = e.GetCurrentPoint(this).Properties;
+        int delta = properties.MouseWheelDelta;
         if (delta == 0)
         {
+            return;
+        }
+
+        if (properties.IsHorizontalMouseWheel || e.KeyModifiers.HasFlag(VirtualKeyModifiers.Shift))
+        {
+            if (CanScrollHorizontally)
+            {
+                ScrollHorizontally((properties.IsHorizontalMouseWheel ? 1 : -1) * Math.Sign(delta) * HorizontalStep * 3);
+                e.Handled = true;
+            }
+
             return;
         }
 
@@ -283,6 +328,12 @@ public sealed class VirtualTable : UserControl
             case VirtualKey.Delete when _selected >= 0:
                 DeleteRequested?.Invoke(this, _selected);
                 break;
+            case VirtualKey.Left when CanScrollHorizontally:
+                ScrollHorizontally(FlowDirection == FlowDirection.RightToLeft ? HorizontalStep : -HorizontalStep);
+                break;
+            case VirtualKey.Right when CanScrollHorizontally:
+                ScrollHorizontally(FlowDirection == FlowDirection.RightToLeft ? -HorizontalStep : HorizontalStep);
+                break;
             default:
                 return;
         }
@@ -302,6 +353,22 @@ public sealed class VirtualTable : UserControl
         _scroll.LargeChange = Math.Max(1, VisibleRows - 1);
         _scroll.Value = _top;
         _scroll.Visibility = maxTop > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        // 横: 列が表の幅に収まらないときは、見出しと行を左にずらす (キャンバスの外は切り取る。右から左の表示ではキャンバスごと反転する)
+        double viewport = Math.Max(0, _body.ActualWidth);
+        double content = ContentWidth;
+        double maxLeft = content - viewport;
+        _left = Math.Clamp(_left, 0, maxLeft);
+        _horizontal.Minimum = 0;
+        _horizontal.Maximum = maxLeft;
+        _horizontal.ViewportSize = viewport;
+        _horizontal.LargeChange = Math.Max(HorizontalStep, viewport - HorizontalStep);
+        _horizontal.Value = _left;
+        _horizontal.Visibility = maxLeft > 0 ? Visibility.Visible : Visibility.Collapsed;
+        _header.Width = content;
+        Canvas.SetLeft(_header, -_left);
+        _headerClip.Rect = new Windows.Foundation.Rect(0, 0, viewport, RowHeight);
+        _bodyClip.Rect = new Windows.Foundation.Rect(0, 0, viewport, Math.Max(0, _body.ActualHeight));
         _syncing = false;
 
         while (_rows.Count < visible && _columns.Count > 0)
@@ -324,7 +391,8 @@ public sealed class VirtualTable : UserControl
 
             row.Visibility = Visibility.Visible;
             Canvas.SetTop(row, i * RowHeight);
-            row.Width = Math.Max(0, _body.ActualWidth);
+            Canvas.SetLeft(row, -_left);
+            row.Width = content;
             IReadOnlyList<string> cells = RowProvider(index);
             for (int c = 0; c < _columns.Count; c++)
             {

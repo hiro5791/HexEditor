@@ -54,7 +54,8 @@ public sealed class DeviceInfoPanel : UserControl, IPanelContent
             return b;
         }
 
-        var bar = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Padding = new Thickness(12, 6, 12, 0) };
+        // パネルの既定の幅では 1 行に入らないので折り返す (ボタンが切れないように)。SMART の表は横にスクロールする (VirtualTable)。
+        var bar = new WrapPanel { HorizontalSpacing = 8, Margin = new Thickness(12, 6, 12, 0) };
         bar.Children.Add(Make("DeviceInfo_CheckHpa", "DeviceInfo_CheckHpa", () => window.Commands.ExecuteAsync("forensics.device.hpaDco")));
         bar.Children.Add(Make("DeviceInfo_ReadSmart", "DeviceInfo_ReadSmart", () => window.Commands.ExecuteAsync("forensics.device.smart")));
         bar.Children.Add(Make("DeviceInfo_ExportJson", "DeviceInfo_ExportJson", () => window.ExportDeviceInfoAsync(json: true)));
