@@ -1,0 +1,230 @@
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+
+namespace HexEditor.ManualTests;
+
+/// <summary>
+/// 手動テストの「画面を自動で確認」: テーマの切り替えは人が行い、HexEditor の画面の判定はツールが行う。ウィンドウの画像を取り、
+/// 右上の 3 つのボタンの記号が背景と区別できること、コントラストテーマでは背景がそのテーマの色で、テーマにない色の面がないことを確かめる。
+/// </summary>
+public static class ScreenCheck
+{
+    /// <summary>記号と背景の明るさの比の下限 (WCAG 2.1 の非テキストの基準)。</summary>
+    public const double MinContrast = 3;
+
+    /// <summary>テーマにない色として数える面積 (画面全体に対する割合)。</summary>
+    private const double MinForeignArea = 0.005;
+
+    private const int ButtonWidth = 46;
+    private const int ButtonHeight = 32;
+
+    /// <summary>GetSysColor の番号。最初が背景: ウィンドウ、ウィンドウの文字、ボタンの面、選択、選択の文字、グレーの文字、ボタンの文字、リンク。</summary>
+    private static readonly int[] SystemColors = [5, 8, 15, 13, 14, 17, 18, 26];
+    private const int ColorTolerance = 8;
+    private static readonly string[] ButtonNames = ["閉じる", "最大化", "最小化"];
+
+    /// <summary>画像 (上から下へ。1 画素は 0xRRGGBB) を判定し、問題の一覧を返す (空なら合格)。</summary>
+    /// <param name="themeColors">コントラストテーマの色 (最初が背景の色)。通常のテーマでは null。</param>
+    public static IReadOnlyList<string> Evaluate(uint[] pixels, int width, int height, double scale, IReadOnlyList<uint>? themeColors)
+    {
+        var problems = new List<string>();
+        uint At(int x, int y) => pixels[(Math.Clamp(y, 0, height - 1) * width) + Math.Clamp(x, 0, width - 1)];
+
+        int half = (int)(10 * scale);
+        int centerY = (int)(ButtonHeight / 2.0 * scale);
+        for (int i = 0; i < ButtonNames.Length; i++)
+        {
+            int centerX = width - (int)((i + 0.5) * ButtonWidth * scale);
+            uint background = At(centerX - half, centerY - half);
+            double best = 1;
+            for (int y = centerY - half; y <= centerY + half; y++)
+            {
+                for (int x = centerX - half; x <= centerX + half; x++)
+                {
+                    best = Math.Max(best, Contrast(background, At(x, y)));
+                }
+            }
+
+            if (best < MinContrast)
+            {
+                problems.Add($"「{ButtonNames[i]}」の記号が背景と区別できません (明るさの比 {best:F1})");
+            }
+        }
+
+        if (themeColors is not null)
+        {
+            CheckThemeColors(pixels, themeColors, problems);
+        }
+
+        return problems;
+    }
+
+    /// <summary>
+    /// いちばん多い色がテーマの背景の色で、まとまった面積のテーマ以外の色がない。文字の縁のなめらかにした色は 1 色ごとの面積が小さいので数えない。
+    /// </summary>
+    private static void CheckThemeColors(uint[] pixels, IReadOnlyList<uint> themeColors, List<string> problems)
+    {
+        var counts = new Dictionary<uint, int>();
+        foreach (uint pixel in pixels)
+        {
+            counts[pixel] = counts.GetValueOrDefault(pixel) + 1;
+        }
+
+        uint most = counts.MaxBy(c => c.Value).Key;
+        if (!Close(most, themeColors[0]))
+        {
+            problems.Add($"背景の色が #{most:X6} です (テーマの色は #{themeColors[0]:X6})");
+        }
+
+        int area = (int)(pixels.Length * MinForeignArea);
+        foreach ((uint color, int count) in counts.Where(c => c.Value >= area && !themeColors.Any(t => Close(c.Key, t))).OrderByDescending(c => c.Value).Take(3))
+        {
+            problems.Add($"テーマにない色 #{color:X6} が画面の {count * 100.0 / pixels.Length:F1}% にあります");
+        }
+    }
+
+    /// <summary>2 つの色の明るさの比 (WCAG 2.1)。</summary>
+    public static double Contrast(uint a, uint b)
+    {
+        double la = Luminance(a), lb = Luminance(b);
+        return (Math.Max(la, lb) + 0.05) / (Math.Min(la, lb) + 0.05);
+    }
+
+    private static double Luminance(uint rgb)
+    {
+        static double Channel(uint value)
+        {
+            double c = value / 255.0;
+            return c <= 0.03928 ? c / 12.92 : Math.Pow((c + 0.055) / 1.055, 2.4);
+        }
+
+        return (0.2126 * Channel((rgb >> 16) & 0xFF)) + (0.7152 * Channel((rgb >> 8) & 0xFF)) + (0.0722 * Channel(rgb & 0xFF));
+    }
+
+    private static bool Close(uint a, uint b)
+    {
+        static bool Near(uint x, uint y, int shift) => Math.Abs((int)((x >> shift) & 0xFF) - (int)((y >> shift) & 0xFF)) <= ColorTolerance;
+
+        return Near(a, b, 16) && Near(a, b, 8) && Near(a, b, 0);
+    }
+
+    /// <summary>ウィンドウのクライアント領域を判定する。ウィンドウがなければ問題として返す。</summary>
+    [SupportedOSPlatform("windows")]
+    public static IReadOnlyList<string> Run(nint hwnd, bool highContrast)
+    {
+        if (hwnd == 0 || !GetClientRect(hwnd, out Rect client) || client.Right <= 0 || client.Bottom <= 0
+            || !GetWindowRect(hwnd, out Rect window))
+        {
+            return ["HexEditor のウィンドウが見つかりません"];
+        }
+
+        var origin = default(Point);
+        ClientToScreen(hwnd, ref origin);
+        int fullWidth = window.Right - window.Left;
+        int fullHeight = window.Bottom - window.Top;
+        int[] full = new int[fullWidth * fullHeight];
+        nint screen = GetDC(0);
+        nint dc = CreateCompatibleDC(screen);
+        nint bitmap = CreateCompatibleBitmap(screen, fullWidth, fullHeight);
+        nint old = SelectObject(dc, bitmap);
+        PrintWindow(hwnd, dc, 2);
+        SelectObject(dc, old);
+        var header = new BitmapInfoHeader { Size = 40, Width = fullWidth, Height = -fullHeight, Planes = 1, BitCount = 32 };
+        GetDIBits(dc, bitmap, 0, (uint)fullHeight, full, ref header, 0);
+        DeleteObject(bitmap);
+        DeleteDC(dc);
+        ReleaseDC(0, screen);
+
+        int width = client.Right;
+        int height = client.Bottom;
+        int left = origin.X - window.Left;
+        int top = origin.Y - window.Top;
+        uint[] pixels = new uint[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                pixels[(y * width) + x] = (uint)full[((y + top) * fullWidth) + x + left] & 0xFFFFFF;
+            }
+        }
+
+        uint[]? theme = highContrast ? [.. SystemColors.Select(index => ToRgb(GetSysColor(index)))] : null;
+        return Evaluate(pixels, width, height, GetDpiForWindow(hwnd) / 96.0, theme);
+    }
+
+    private static uint ToRgb(uint bgr) => ((bgr & 0xFF) << 16) | (bgr & 0xFF00) | ((bgr >> 16) & 0xFF);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct Rect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct Point
+    {
+        public int X;
+        public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct BitmapInfoHeader
+    {
+        public int Size;
+        public int Width;
+        public int Height;
+        public short Planes;
+        public short BitCount;
+        public int Compression;
+        public int SizeImage;
+        public int XPelsPerMeter;
+        public int YPelsPerMeter;
+        public int ClrUsed;
+        public int ClrImportant;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool GetClientRect(nint hWnd, out Rect rect);
+
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(nint hWnd, out Rect rect);
+
+    [DllImport("user32.dll")]
+    private static extern bool ClientToScreen(nint hWnd, ref Point point);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForWindow(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetSysColor(int index);
+
+    [DllImport("user32.dll")]
+    private static extern bool PrintWindow(nint hWnd, nint hdc, uint flags);
+
+    [DllImport("user32.dll")]
+    private static extern nint GetDC(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern int ReleaseDC(nint hWnd, nint hdc);
+
+    [DllImport("gdi32.dll")]
+    private static extern nint CreateCompatibleDC(nint hdc);
+
+    [DllImport("gdi32.dll")]
+    private static extern nint CreateCompatibleBitmap(nint hdc, int width, int height);
+
+    [DllImport("gdi32.dll")]
+    private static extern nint SelectObject(nint hdc, nint obj);
+
+    [DllImport("gdi32.dll")]
+    private static extern bool DeleteObject(nint obj);
+
+    [DllImport("gdi32.dll")]
+    private static extern bool DeleteDC(nint hdc);
+
+    [DllImport("gdi32.dll")]
+    private static extern int GetDIBits(nint hdc, nint bitmap, uint start, uint lines, [Out] int[] bits, ref BitmapInfoHeader info, uint usage);
+}

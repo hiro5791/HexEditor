@@ -1,3 +1,4 @@
+using HexEditor.App.Services;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -18,6 +19,11 @@ public sealed partial class MainWindow
     /// <summary>入力を通す領域を置き直すきっかけを登録する (TitleBar が自分の領域を設定し直す場面のあと)。</summary>
     private void InitializeTitleBarRegions()
     {
+        // タイトルの文字の色はテーマから取る。何も指定しないと TitleBar が非アクティブのウィンドウで付ける色を受け継ぎ、その色は Windows のテーマのまま
+        // なので、Windows がライトでアプリがダークだと、暗い背景に暗い文字になる (手動テスト TC-UI-02-06 で見つかった)。
+        Root.ActualThemeChanged += (_, _) => UpdateTitleForeground();
+        UpdateTitleForeground();
+
         // 要素の大きさが変わらずに位置だけ動くことがあり (タイトルが長くなると入口のボタンが右へ動く)、SizeChanged では足りない。
         AppTitleBar.LayoutUpdated += (_, _) => QueueTitleBarRegions();
         AppTitleBar.Loaded += (_, _) => QueueTitleBarRegions();
@@ -35,6 +41,8 @@ public sealed partial class MainWindow
         // 閉じるボタンも押せない (手動テスト TC-UI-02-03 で、ディスクを開いたあとに起きた)。
         InputNonClientPointerSource.GetForWindowId(AppWindow.Id).RegionsChanged += (_, _) => QueueTitleBarRegions();
     }
+
+    private void UpdateTitleForeground() => WindowTitle.Foreground = AnnotationBrushes.Get("TextFillColorPrimaryBrush", Root, Appearance.IsHighContrast);
 
     /// <summary>タイトルの右 (入口のボタン) に残す幅 (DIP): アイコンだけの入口 (最大 48) と余白。</summary>
     private const double TitlePaletteReserve = 56;

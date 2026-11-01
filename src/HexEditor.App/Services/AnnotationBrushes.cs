@@ -20,16 +20,30 @@ public static class AnnotationBrushes
     public static Brush Get(string key, FrameworkElement scope, bool highContrast)
     {
         string theme = ThemeOf(scope, highContrast);
-        foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
+        return Find(Application.Current.Resources, key, theme) ?? (Brush)Application.Current.Resources[key];
+    }
+
+    /// <summary>入れ子の辞書 (XamlControlsResources の中の WinUI の色も) を、そのテーマの辞書で探す。WinUI のダークの辞書の名前は Default。</summary>
+    private static Brush? Find(ResourceDictionary dictionary, string key, string theme)
+    {
+        foreach (string name in theme == "Dark" ? new[] { "Dark", "Default" } : [theme])
         {
-            if (dictionary.ThemeDictionaries.TryGetValue(theme, out object? found) && found is ResourceDictionary themed
+            if (dictionary.ThemeDictionaries.TryGetValue(name, out object? found) && found is ResourceDictionary themed
                 && themed.TryGetValue(key, out object? value) && value is Brush brush)
             {
                 return brush;
             }
         }
 
-        return (Brush)Application.Current.Resources[key];
+        foreach (ResourceDictionary merged in dictionary.MergedDictionaries)
+        {
+            if (Find(merged, key, theme) is { } brush)
+            {
+                return brush;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>Hex 表示の背景 (文字が読めるよう淡い色)。</summary>

@@ -445,6 +445,53 @@ public sealed partial class WindowTests
         Assert.Equal(theme == "light" ? 0xF3F3F3u : 0x202020u, color & 0xFFFFFF);
     });
 
+    /// <summary>
+    /// アプリのテーマが Windows のテーマと違っても、タイトルと「新規作成」のキーの表記が読める (手動テスト TC-UI-02-06 で見つかった: ダークの背景に
+    /// ライトの暗い文字が出ていた)。テストのウィンドウはアクティブにならないので、非アクティブのタイトルの色も確かめられる。
+    /// </summary>
+    [Theory]
+    [InlineData("light")]
+    [InlineData("dark")]
+    [Trait(UiTest.TC, "TC-UI-26-05")]
+    public Task Title_and_key_text_are_readable_in_either_theme(string theme) => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), $"{{\"$schemaVersion\": 1, \"ui.theme\": \"{theme}\"}}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, WaitForEditor = false });
+        await app.WaitForAsync("Start_New");
+        await Task.Delay(500);
+
+        double title = TextContrast(app, "WindowTitle", 0);
+        Assert.True(title >= 3, $"the title is not readable ({title:F1})");
+
+        // ボタンの右半分がキーの表記。
+        double key = TextContrast(app, "Start_New", 0.5);
+        Assert.True(key >= 3, $"the key text is not readable ({key:F1})");
+
+        // 手動テストの「画面を自動で確認」の判定も、実際のウィンドウで通る。
+        Assert.Empty(HexEditor.ManualTests.ScreenCheck.Run(app.Hwnd, highContrast: false));
+    });
+
+    /// <summary>要素の中の、背景 (左上の角の色) と最も差のある色の明るさの比。<paramref name="from"/> は見始める位置 (幅の割合)。</summary>
+    private static double TextContrast(AppSession app, string automationId, double from)
+    {
+        var r = app.Find(automationId)!.BoundingRectangle;
+        NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+        WindowImage image = app.Screenshot();
+        int left = r.Left - window.Left, top = r.Top - window.Top;
+        uint background = image.Pixel(left + (int)(r.Width * from), top + 1);
+        double best = 1;
+        for (int y = top + 1; y < top + r.Height - 1; y++)
+        {
+            for (int x = left + (int)(r.Width * from); x < left + r.Width - 1; x++)
+            {
+                best = Math.Max(best, HexEditor.ManualTests.ScreenCheck.Contrast(background & 0xFFFFFF, image.Pixel(x, y) & 0xFFFFFF));
+            }
+        }
+
+        return best;
+    }
+
     [Fact(Skip = "Windows の「透明効果」(EnableTransparency) を切り替える必要があり、作業中の PC の設定を変えるため自動では実行しない (CI の専用の環境が必要)")]
     [Trait(UiTest.TC, "TC-UI-27-04")]
     public Task Transparency_off_uses_a_solid_background() => Task.CompletedTask;
