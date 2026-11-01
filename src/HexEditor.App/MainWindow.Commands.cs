@@ -137,7 +137,7 @@ public sealed partial class MainWindow
                 : d.IsProcessMemory ? Loc.Get("Snapshot_SaveAsGuide")
                 : d.Gdb is not null ? Loc.Get("Gdb_SaveAsUnavailable") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
-        Commands.Register("file.close", () => Close_Click(this, e), NeedsDocument);
+        Commands.Register("file.close", () => Close_Click(this, e), () => ActiveToolPage is not null ? CommandState.Available : NeedsDocument());
         Commands.Register("file.closeAll", () => CloseAll_Click(this, e), NeedsDocument);
         Commands.Register("file.closeOthers", async () =>
         {

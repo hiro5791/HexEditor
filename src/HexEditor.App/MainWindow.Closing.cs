@@ -19,10 +19,15 @@ public sealed partial class MainWindow
 
     private async void Close_Click(object sender, RoutedEventArgs e)
     {
-        // 比較タブの表示中は比較タブを閉じる (ANA-04。比較の左右のドキュメントは閉じない)。
-        if (ActiveCompare is { } compare)
+        // 文書以外のタブ (設定画面・スクリプトエディタ・比較タブなど) を表示中は、そのタブを閉じる (UI-09 の仕様 11)。Vm.Selected は表示していない文書を
+        // 指したままなので、ここで閉じると別のタブが閉じる。比較の左右のドキュメントは閉じない (ANA-04)。
+        if (ActiveToolPage is { } page)
         {
-            CloseToolPage(compare.Id);
+            if (await ConfirmCloseCodeEditorAsync(page))
+            {
+                CloseToolPage(page);
+            }
+
             return;
         }
 

@@ -17,6 +17,8 @@ public sealed partial class MainWindow
     public const int MinWidth = 640;
     public const int MinHeight = 400;
 
+    private FrameworkElement? _tabStrip;
+
     private void InitializeRegions()
     {
         if (AppWindow.Presenter is OverlappedPresenter presenter)
@@ -49,9 +51,20 @@ public sealed partial class MainWindow
     /// <summary>スタートページの上端をタブ列の下端に合わせる。</summary>
     private void PlaceStartPage()
     {
-        if (FindByName(Tabs, "TabContainerGrid") is FrameworkElement strip && strip.ActualHeight > 0)
+        if (FindByName(Tabs, "TabContainerGrid") is FrameworkElement strip)
         {
-            StartPage.Margin = new Thickness(0, strip.ActualHeight, 0, 0);
+            if (!ReferenceEquals(strip, _tabStrip))
+            {
+                // タブの見出しの有無でタブ列の高さが変わる (TabView 全体の大きさは変わらないので Tabs.SizeChanged は来ない)。
+                _tabStrip = strip;
+                strip.SizeChanged += (_, _) => PlaceStartPage();
+            }
+
+            if (strip.ActualHeight > 0)
+            {
+                StartPage.Margin = new Thickness(0, strip.ActualHeight, 0, 0);
+                PlaceToolPageHost();
+            }
         }
     }
 
