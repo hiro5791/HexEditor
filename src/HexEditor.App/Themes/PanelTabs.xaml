@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    パネルの中のタブ (SelectorBar。デバイス情報、統計、逆アセンブル)。既定は選んでいない項目が文字だけで、タブに見えない。
+    軽量スタイルで項目を枠で囲み、選んでいる項目は背景をアクセントカラーにする (UI-09)。テンプレートは既定のまま。
+    SelectorBarItemBackground は文字の手前の面の塗りなので変えない (文字が薄くなる)。
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <StaticResource x:Key="SelectorBarItemBackgroundPointerOver" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="SelectorBarItemBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="SelectorBarItemBackgroundSelected" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrush" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPointerOver" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPressed" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushSelected" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemForegroundSelected" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <StaticResource x:Key="SelectorBarItemBackgroundPointerOver" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="SelectorBarItemBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="SelectorBarItemBackgroundSelected" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrush" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPointerOver" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPressed" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushSelected" ResourceKey="AccentFillColorDefaultBrush" />
+            <StaticResource x:Key="SelectorBarItemForegroundSelected" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <StaticResource x:Key="SelectorBarItemBorderBrush" ResourceKey="SystemColorButtonTextColorBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPointerOver" ResourceKey="SystemColorHighlightColorBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushPressed" ResourceKey="SystemColorHighlightColorBrush" />
+            <StaticResource x:Key="SelectorBarItemBorderBrushSelected" ResourceKey="SystemColorHighlightColorBrush" />
+            <StaticResource x:Key="SelectorBarItemBackgroundSelected" ResourceKey="SystemColorHighlightColorBrush" />
+            <StaticResource x:Key="SelectorBarItemForegroundSelected" ResourceKey="SystemColorHighlightTextColorBrush" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

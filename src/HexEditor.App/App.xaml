@@ -13,6 +13,8 @@
                 <ResourceDictionary Source="ms-appx:///Themes/AnnotationPalette.xaml" />
                 <!--  比較の差分の配色 (ANA-04 の仕様 3)  -->
                 <ResourceDictionary Source="ms-appx:///Themes/ComparePalette.xaml" />
+                <!--  パネルの中のタブ (UI-09)  -->
+                <ResourceDictionary Source="ms-appx:///Themes/PanelTabs.xaml" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!--

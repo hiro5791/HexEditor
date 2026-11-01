@@ -451,6 +451,20 @@ public sealed class WriteBlockUiTests
             Assert.True(bounds.Width >= 60, $"{id} is clipped: {bounds}");
         }
 
+        // タブは枠で囲まれ、文字はくっきりしている (UI-09)
+        NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+        WindowImage image = app.Screenshot();
+        foreach (string id in new[] { "DeviceInfo_Tab_hpa", "DeviceInfo_Tab_smart", "DeviceInfo_Tab_identity" })
+        {
+            var tab = (await app.WaitForAsync(id)).BoundingRectangle;
+            int y = (int)((tab.Top + tab.Bottom) / 2) - window.Top, left = (int)tab.Left - window.Left;
+            uint inside = image.Pixel(left + 8, y) & 0xFFFFFF;
+            double edge = Enumerable.Range(left - 2, 6).Max(x => HexEditor.ManualTests.ScreenCheck.Contrast(image.Pixel(x, y) & 0xFFFFFF, inside));
+            Assert.True(edge >= 1.5, $"{id} has no visible border: contrast {edge:0.00}");
+            double text = Enumerable.Range(left + 8, (int)tab.Width - 16).Max(x => HexEditor.ManualTests.ScreenCheck.Contrast(image.Pixel(x, y) & 0xFFFFFF, inside));
+            Assert.True(text >= 4.5, $"{id} has faint text: contrast {text:0.00}");
+        }
+
         // 最後の列は最初は見えず、横のスクロールバーで見える
         var scroll = await app.WaitForAsync("DeviceInfo_SmartList_HorizontalScroll");
         double maximum = scroll.Patterns.RangeValue.Pattern.Maximum.Value;
