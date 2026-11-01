@@ -271,6 +271,13 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
             return;
         }
 
+        // Enter と Space は ListViewItem が処理済みにしてしまい KeyDown に届かないので、ここで受ける。
+        if (e.OriginalSource is ListViewItem && e.Key is VirtualKey.Enter or VirtualKey.Space)
+        {
+            e.Handled = Activate(Vm.Selected, edit: e.Key == VirtualKey.Enter);
+            return;
+        }
+
         bool shift = Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
         if (e.Key == VirtualKey.Tab && !shift && Vm.Selected is { IsBinary: true } row)
         {
@@ -285,13 +292,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
             return;
         }
 
-        e.Handled = e.Key switch
-        {
-            VirtualKey.Enter => Activate(Vm.Selected, edit: true),
-            VirtualKey.Space => Activate(Vm.Selected, edit: false),
-            VirtualKey.Escape => HandleRowEscape(),
-            _ => false,
-        };
+        e.Handled = e.Key == VirtualKey.Escape && HandleRowEscape();
     }
 
     /// <summary>Enter / Space: 見出しは折りたたみ、行は値の編集 (Enter) か、2 進の行のビットへ・GUID の展開 (Space)。</summary>

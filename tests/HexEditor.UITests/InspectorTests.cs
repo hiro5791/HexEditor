@@ -234,6 +234,32 @@ public sealed class InspectorTests
         Assert.StartsWith("HexView", await app.FocusedAsync(), StringComparison.Ordinal);
     });
 
+    /// <summary>ListViewItem は Enter と Space を処理済みにする。panelKey はそこを通らないので、実際のキーの道筋で確かめる。</summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-01-08")]
+    public Task Real_enter_and_space_toggle_a_group_and_open_a_row() => UiTestContext.RunAsync(async ctx =>
+    {
+        const int Enter = 0x0D, Space = 0x20;
+        AppSession app = await StartAsync(ctx);
+
+        async Task<bool> CollapsedAsync() => (await StateAsync(app))["items"]!.AsArray()
+            .First(i => i!["id"]!.GetValue<string>() == "Inspector_Group_Integer")!["collapsed"]!.GetValue<bool>();
+
+        await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "Inspector_Group_Integer" });
+        await app.IdleAsync();
+        WindowKeys.Press(app, Enter);
+        await app.WaitUntilAsync(CollapsedAsync, TimeSpan.FromSeconds(5), "Enter to collapse the group");
+        Assert.Equal("ListViewItem:Inspector_Group_Integer", await app.FocusedAsync());
+
+        WindowKeys.Press(app, Space);
+        await app.WaitUntilAsync(async () => !await CollapsedAsync(), TimeSpan.FromSeconds(5), "Space to expand the group");
+
+        await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "int32" });
+        await app.IdleAsync();
+        WindowKeys.Press(app, Enter);
+        await app.WaitUntilAsync(async () => (await RowAsync(app, "int32"))["editing"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "Enter to open the row editor");
+    });
+
     // ---- INSP-02 ----
 
     [Fact]
