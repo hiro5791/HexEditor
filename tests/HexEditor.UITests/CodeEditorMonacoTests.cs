@@ -70,6 +70,46 @@ public sealed class CodeEditorMonacoTests
 
     private static async Task<JsonArray> MarkersAsync(AppSession app) => (await EditorAsync(app, "markers"))["result"]!.AsArray();
 
+    /// <summary>Monaco の検索の操作の名前 (Monaco の文字列のうち、どの言語でも訳があるもの)。翻訳が効いているかの確認に使う。</summary>
+    private static async Task<string> FindActionLabelAsync(AppSession app) =>
+        (await EditorAsync(app, "eval", new JsonObject { ["script"] = "hexEditor.editor.getAction('actions.find').label" }))["result"]!.GetValue<string>();
+
+    [Theory]
+    [Trait(UiTest.TC, "TC-AUTO-20-08")]
+    [InlineData("en", "en", "Find")]
+    [InlineData("ja", "ja", "検索")]
+    [InlineData("de", "de", "Suchen")]
+    [InlineData("zh-Hans", "zh-cn", "查找")]
+    [InlineData("pt", "pt-br", "Find")] // Monaco の pt-br はごく一部の文字列だけの翻訳で、この文字列は英語のまま
+    [InlineData("vi", "en", "Find")] // Monaco に翻訳がない言語は Monaco の文字列だけ英語
+    [InlineData("ar", "en", "Find")]
+    public Task Monaco_starts_in_every_kind_of_ui_language(string language, string monacoLanguage, string findLabel) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = language });
+        await OpenScriptAsync(ctx, app, "language.js", string.Empty);
+        Assert.Equal(findLabel, await FindActionLabelAsync(app));
+        Assert.Equal(monacoLanguage, (await EditorAsync(app, "eval", new JsonObject { ["script"] = "globalThis._VSCODE_NLS_LANGUAGE || 'en'" }))["result"]!.GetValue<string>());
+
+        // worker (TypeScript の言語サービス) も動く: 補完が候補を返す
+        await EditorAsync(app, "type", new JsonObject { ["text"] = "const doc = app.activeDocument;\ndoc." });
+        await app.WaitUntilAsync(async () => (await EditorAsync(app, "jsCompletions"))["result"]?["names"]?.AsArray().Count > 0, Wait, "the completion items of doc.");
+    });
+
+    [Theory]
+    [Trait(UiTest.TC, "TC-AUTO-20-09")]
+    [InlineData("missing")]
+    [InlineData("hang")]
+    [InlineData("broken")]
+    public Task A_language_file_that_fails_to_load_cannot_block_monaco(string failure) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja" });
+        await EditorAsync(app, "simulateLanguageLoad", new JsonObject { ["value"] = failure });
+        await OpenScriptAsync(ctx, app, "language.js", string.Empty);
+
+        // 代替のエディタに切り替わらず、英語の文字列で起動する
+        Assert.Equal("Find", await FindActionLabelAsync(app));
+    });
+
     // ───────────── AUTO-20 ─────────────
 
     [Fact]

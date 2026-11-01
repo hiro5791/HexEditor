@@ -8,6 +8,26 @@ namespace HexEditor.Platform.Tests;
 /// <summary>表示言語の選択 (09 の UI-43)、翻訳の誤りの報告の URL (UI-41)、ジャンプリスト (UI-35)、ネットワークの管理 (UI-58)。</summary>
 public sealed class LocalizationTests
 {
+    /// <summary>23 言語のどれでも、Monaco の表示言語は同梱のファイルがあるものか英語 (AUTO-20 の仕様 10)。</summary>
+    [Fact]
+    [Trait(TC, "TC-AUTO-20-08")]
+    public void Every_ui_language_maps_to_a_bundled_monaco_language_or_english()
+    {
+        string folder = RepoFile("src/HexEditor.App/Assets/Monaco/vs/nls/lang/ja.js");
+        folder = Path.GetDirectoryName(folder)!;
+        string[] bundled = [.. Directory.EnumerateFiles(folder, "*.js").Select(Path.GetFileNameWithoutExtension)!];
+        Assert.Contains("ja", bundled);
+        Assert.All(DisplayLanguages.All, l =>
+        {
+            string monaco = DisplayLanguages.MonacoLanguage(l.Tag);
+            Assert.True(monaco == "en" || bundled.Contains(monaco), $"{l.Tag} maps to {monaco}, which is not bundled");
+        });
+
+        // 同梱の翻訳はどれも使う (Monaco にある言語を英語にしない)
+        string[] used = [.. DisplayLanguages.All.Select(l => DisplayLanguages.MonacoLanguage(l.Tag)).Distinct()];
+        Assert.All(bundled, b => Assert.Contains(b, used));
+    }
+
     [Fact]
     [Trait(TC, "TC-UI-43-01")]
     public void Malay_windows_uses_indonesian()

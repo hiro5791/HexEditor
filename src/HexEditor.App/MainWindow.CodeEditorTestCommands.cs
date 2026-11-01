@@ -12,7 +12,8 @@ namespace HexEditor.App;
 /// <remarks>
 /// action: state / wait (準備ができるまで待つ) / type (text を入力したのと同じ。補完のきっかけの文字も効く) / suggest (補完の一覧を出して読む) /
 /// jsCompletions (TypeScript の言語サービスの候補と、name の説明) / markers / direction / resources / key (keydown をページの中で起こす) /
-/// decorations (line の余白の印) / focus / position / simulateFailure (次に作るエディタの WebView2 を失敗させる) / eval (script)。
+/// decorations (line の余白の印) / focus / position / simulateFailure (次に作るエディタの WebView2 を失敗させる) /
+/// simulateLanguageLoad (Monaco の表示言語のファイルの読み込みの失敗。value: missing / hang / broken) / eval (script)。
 /// </remarks>
 public sealed partial class MainWindow
 {
@@ -28,6 +29,12 @@ public sealed partial class MainWindow
         {
             MonacoCodeEditor.SimulateFailure = request["value"]?.GetValue<bool>() ?? true;
             return new JsonObject { ["simulateFailure"] = MonacoCodeEditor.SimulateFailure };
+        }
+
+        if (action == "simulateLanguageLoad")
+        {
+            MonacoCodeEditor.SimulateLanguageLoad = request["value"]?.GetValue<string>();
+            return new JsonObject { ["simulateLanguageLoad"] = MonacoCodeEditor.SimulateLanguageLoad };
         }
 
         IScriptCodeEditor? editor = (IScriptCodeEditor?)ActiveScriptEditor?.Editor ?? ActiveTemplateEditor?.CodeEditor;
