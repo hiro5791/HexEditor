@@ -269,9 +269,15 @@ public sealed class PackagingTests
         // テンプレートのダウンロードを止める: 設定 network.downloads.enabled が false になり、同じ設定を使う追加コンポーネントの
         // スイッチも切れる。
         (await app.WaitForAsync("Settings_NetworkSwitch_Downloads")).Patterns.Toggle.Pattern.Toggle();
+
+        // スイッチが実際に切れてから (切り替えが反映されたことを確かめてから) 設定ファイルを見る。設定ファイルへの書き込みは
+        // 0.5 秒遅れるので、書き出しを待たずに済むよう flushSettings で書き出させる。
+        await app.WaitUntilAsync(async () => !AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_Downloads")),
+            TimeSpan.FromSeconds(10), "the Downloads switch to turn off");
+        await app.SendAsync("flushSettings");
         await app.WaitUntilAsync(() => Task.FromResult(File.Exists(Path.Combine(profile, "settings.json"))
             && UiHelpers.ReadWhileWritten(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
-            TimeSpan.FromSeconds(5), "network.downloads.enabled = false in settings.json");
+            TimeSpan.FromSeconds(10), "network.downloads.enabled = false in settings.json");
         await app.WaitUntilAsync(async () => !AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_Components")),
             TimeSpan.FromSeconds(5), "the Components switch to follow");
     });

@@ -477,6 +477,26 @@ public sealed class AppSession : IAsyncDisposable
         return Process.ExitCode;
     }
 
+    /// <summary>
+    /// 終了のコマンド (Command_Exit) を送り、プロセスの終了を待つ。確認の画面が出ないとき、アプリは応答を返す前に終了することがあり、
+    /// その場合は命令の通り道が閉じられる (IOException) のでそれは正常として扱う。
+    /// </summary>
+    public async Task<int> ExitAndWaitAsync(TimeSpan timeout)
+    {
+        try
+        {
+            await CommandAsync("Command_Exit");
+        }
+        catch (IOException) when (Process.HasExited || WaitQuietlyForExit())
+        {
+            // 応答を返す前の終了。
+        }
+
+        return await WaitForExitAsync(timeout);
+    }
+
+    private bool WaitQuietlyForExit() => Process.WaitForExit(5000);
+
     /// <summary>TerminateProcess で強制終了する (終了の処理は行われない)。</summary>
     public void Kill()
     {

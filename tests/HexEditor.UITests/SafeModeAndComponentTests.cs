@@ -31,8 +31,7 @@ public sealed class SafeModeAndComponentTests
         // プラグインのコマンド plugin.test.hello はない (プラグインを読み込んでいない)。
         await app.SendAsync("plugins", new JsonObject { ["action"] = "waitLoaded" }, TimeSpan.FromSeconds(120));
         Assert.False(await HasHelloAsync(app));
-        await app.CommandAsync("Command_Exit");
-        await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
+        await app.ExitAndWaitAsync(TimeSpan.FromSeconds(30));
 
         // フックがなければセーフモードにならず (実際のキーボードの状態に左右されない)、同じ設定フォルダでプラグインのコマンドがある。
         AppSession normal = await ctx.StartAsync(new AppOptions { Profile = profile, Hooks = new JsonObject { ["safeModeShift"] = false } });

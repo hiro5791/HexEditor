@@ -169,10 +169,10 @@ public sealed class ProcessingCenterTests
         //    テスト用の命令で読む。0.5 秒を超えた (繰り返す前の) 検索は一覧に出てよいので、その数だけを許す。
         Assert.False((await app.StateAsync())["statusOperationsVisible"]!.GetValue<bool>());
         JsonObject center = await app.SendAsync("processingCenter");
-        Assert.Empty(center["running"]!.AsArray());
-        // 遅いランナーでは、検索以外の処理 (読み込みなど) が 0.5 秒を超えて一覧に残ることがある。数えるのは検索の行だけ。
-        List<string> completed = [.. center["completed"]!.AsArray().Select(n => n!.GetValue<string>())];
-        Assert.True(completed.Count(n => n == "Find all") == elapsed.Count(e => e > 500), $"listed: {string.Join(", ", completed)}; searches took {string.Join(", ", elapsed.Select(e => $"{e:F0}"))} ms");
+        //    ファイルを開く処理 (読み込みに 0.2 秒の遅延) など、検索以外の処理は遅い CI で 0.5 秒を超えて一覧に出てもよいので、検索の行だけを数える。
+        static int FindAllRows(JsonNode? names) => names!.AsArray().Count(n => n!.GetValue<string>() == "Find all");
+        Assert.Equal(0, FindAllRows(center["running"]));
+        Assert.Equal(elapsed.Count(e => e >= 500), FindAllRows(center["completed"]));
     });
 
     private static List<JsonObject> CompletedSearches(JsonObject state) =>
