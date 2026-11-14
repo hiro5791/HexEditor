@@ -79,7 +79,7 @@ public sealed class SamplePlugin : IPlugin
     /// <summary>1 行に 16 バイトの Hex を空白で区切った形式 (インポート・エクスポート)。</summary>
     private sealed class HexLines(string p) : Extension(p + ".hexlines", "sample-hexlines"), IImportFormat, IExportFormat
     {
-        public IReadOnlyList<string> FileExtensions => [".hexlines"];
+        public IReadOnlyList<string> FileExtensions => new[] { ".hexlines" };
 
         public string FileExtension => ".hexlines";
 
@@ -250,12 +250,12 @@ public sealed class SamplePlugin : IPlugin
     private sealed class Detector(string p) : Extension(p + ".detector", "Sample format"), IFileTypeDetector
     {
         public IReadOnlyList<FileTypeMatch> Detect(ReadOnlySpan<byte> head) =>
-            head.StartsWith("SMPL"u8) ? [new FileTypeMatch("Sample format", "application/x-sample", "smpl")] : [];
+            head.StartsWith("SMPL"u8) ? new[] { new FileTypeMatch("Sample format", "application/x-sample", "smpl") } : Array.Empty<FileTypeMatch>();
     }
 
     private sealed class Colors(string p) : Extension(p + ".colors", "Sample colors"), IColorRuleProvider
     {
-        public IReadOnlyList<PluginColorRule> Rules => [new PluginColorRule("Sample FF", "byteValues", "FF", null, 0xFFCC00)];
+        public IReadOnlyList<PluginColorRule> Rules => new[] { new PluginColorRule("Sample FF", "byteValues", "FF", null, 0xFFCC00) };
     }
 
     private sealed class Disassembler(string p) : Extension(p + ".disasm", "sample-arch"), IDisassembler
