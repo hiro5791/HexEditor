@@ -194,8 +194,25 @@ public static partial class CrashReporter
         }
     }
 
-    /// <summary>ミニダンプ (MiniDumpNormal: スレッドとスタック、読み込んだモジュールの一覧。ヒープの内容は含まない) を書く。</summary>
+    /// <summary>ミニダンプを書くのを待つ上限。超えたら諦めて終了する (落ちたアプリが残り続けないように)。</summary>
+    internal static readonly TimeSpan MiniDumpTimeout = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// ミニダンプ (MiniDumpNormal: スレッドとスタック、読み込んだモジュールの一覧。ヒープの内容は含まない) を書く。
+    /// MiniDumpWriteDump を自分のプロセスに使うときは、呼んだスレッドの状態によって止まることがあるため、別のスレッドで書き、
+    /// 上限の時間を過ぎたら待たない。
+    /// </summary>
     private static void TryWriteMiniDump(string path)
+    {
+        var thread = new Thread(() => WriteMiniDumpNow(path)) { IsBackground = true, Name = "Mini dump" };
+        thread.Start();
+        if (!thread.Join(MiniDumpTimeout))
+        {
+            AppLog.Warning("Mini dump not written: timed out.");
+        }
+    }
+
+    private static void WriteMiniDumpNow(string path)
     {
         try
         {

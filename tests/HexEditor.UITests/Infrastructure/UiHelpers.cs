@@ -234,9 +234,16 @@ public static class UiHelpers
         return text;
     }
 
-    /// <summary>ダイアログ (AutomationId で指定) が出るまで待ち、その要素を返す。</summary>
-    public static Task<FlaUI.Core.AutomationElements.AutomationElement> WaitForDialogAsync(this AppSession app, string automationId) =>
-        app.WaitForAsync(automationId);
+    /// <summary>
+    /// ダイアログ (AutomationId で指定) が出て、ボタンが UI オートメーションから見えるまで待ち、その要素を返す。
+    /// ダイアログの要素はボタンより先に見えることがある (遅い CI のランナー)。
+    /// </summary>
+    public static async Task<FlaUI.Core.AutomationElements.AutomationElement> WaitForDialogAsync(this AppSession app, string automationId)
+    {
+        FlaUI.Core.AutomationElements.AutomationElement dialog = await app.WaitForAsync(automationId);
+        await app.WaitUntilAsync(() => Task.FromResult(DialogButtons(dialog).Count > 0), TimeSpan.FromSeconds(15), $"the buttons of {automationId}");
+        return dialog;
+    }
 
     /// <summary>ウィンドウ (ダイアログを含む) の中の、表示名が <paramref name="name"/> のボタン。なければ null。</summary>
     public static FlaUI.Core.AutomationElements.AutomationElement? Button(this AppSession app, string name) =>
