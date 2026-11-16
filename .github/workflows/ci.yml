@@ -668,7 +668,8 @@ jobs:
         run: |
           LC_ALL=C.UTF-8 sha256sum -c SHA256SUMS | tee ../gnu.txt
           grep -c ': OK$' ../gnu.txt | grep -qx 5
-          grep -F '日本語/テスト ファイル①.bin: OK' ../gnu.txt
+          # 新しい coreutils は空白を含む名前を引用符で囲む ('名前': OK)。どちらでも通す。
+          grep -E '^.?日本語/テスト ファイル①\.bin.?: OK$' ../gnu.txt
           # BOM なしの UTF-8 で、改行が LF
           test "$(head -c 3 SHA256SUMS | xxd -p)" != "efbbbf"
           ! grep -q $'\r' SHA256SUMS
