@@ -53,6 +53,7 @@ public sealed partial class TemplatePanel : UserControl
         Vm = vm;
         Host = host;
         InitializeComponent();
+        ItemKeys.Attach(Tree, Tree_KeyDown);
         vm.Rows.Scope = this;
         Tree.Panel = this;
         Tree.ItemsSource = vm.Rows;

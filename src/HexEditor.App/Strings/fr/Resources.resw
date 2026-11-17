@@ -2613,13 +2613,13 @@ Les détails ont été écrits dans :
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Position de départ UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Décalage mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Affichage : décoder l'UTF-32 à partir des décalages de reste 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Décoder l'UTF-32 à partir des décalages de reste 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>utf-32 position de départ phase 0 start position</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Affichage : décoder l'UTF-32 à partir des décalages de reste 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Décoder l'UTF-32 à partir des décalages de reste 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>utf-32 position de départ phase 1 start position</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Affichage : décoder l'UTF-32 à partir des décalages de reste 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Décoder l'UTF-32 à partir des décalages de reste 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>utf-32 position de départ phase 2 start position</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Affichage : décoder l'UTF-32 à partir des décalages de reste 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Décoder l'UTF-32 à partir des décalages de reste 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>utf-32 position de départ phase 3 start position</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Liste de l'historique</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>historique liste sauter retour positions récentes jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@ La connexion n'est pas établie sauf si vous choisissez de remplacer la clé.</v
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Arrête la comparaison de structure après avoir comparé ce nombre de champs de chaque côté (de 10 000 à 10 000 000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Comparaison de structure : appariement des tableaux</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Détermine comment les éléments de tableau sont appariés, par modèle et par tableau. Modifiez-le avec « Méthode d'appariement... » dans le volet Différences de structure.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Comparaison : comparer la structure</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Comparer la structure</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure champ modèle différence structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Comparaison : choisir le modèle pour la comparaison de structure</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Choisir le modèle pour la comparaison de structure</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure modèle choisir structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Comparaison : naviguer entre les différences de structure</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Naviguer entre les différences de structure</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>suivante précédente structure cible next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Comparaison : afficher les différences de structure</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Afficher les différences de structure</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure différences volet structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Comparaison : différence de structure suivante</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Différence de structure suivante</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure champ suivant structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Comparaison : différence de structure précédente</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Différence de structure précédente</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure champ précédent structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Comparaison : exporter les différences de structure</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Exporter les différences de structure</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure exporter rapport structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Afficher ou masquer les différences de structure</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure différences volet structure differences panel</value></data>

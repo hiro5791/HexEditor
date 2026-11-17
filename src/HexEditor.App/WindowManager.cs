@@ -324,6 +324,74 @@ public static partial class WindowManager
         return false;
     }
 
+    /// <summary>
+    /// 「管理者として再起動」(ENG-28 の仕様 12 の 7): 終了時と同じ確認をし、全ウィンドウのセッションを保存してから <c>runas</c> で起動し直し、
+    /// 自分を終了する。UAC で拒否されたら終了せず、文書も閉じない (元の状態のまま続ける)。
+    /// <para>
+    /// 文書は新しいプロセスが起動できてから閉じる。セッションは閉じる前に書き、閉じた後は書かない (閉じた後にセッションを写すと、タブが
+    /// 「閉じたタブ」に移った空のセッションで上書きしてしまう。TC-ENG-28-10)。ウィンドウは確認済みとして閉じる (Closed の処理から
+    /// <see cref="ExitAsync"/> を通ってセッションを書き直さない)。
+    /// </para>
+    /// </summary>
+    public static async Task RestartAsAdministratorAsync(MainWindow from)
+    {
+        if (IsExiting || s_confirmingExit)
+        {
+            return;
+        }
+
+        s_confirmingExit = true;
+        try
+        {
+            // 確かめるだけで閉じない (拒否されたら元の状態で続けるため)。
+            if (!await from.ConfirmExitAsync(closeDocuments: false))
+            {
+                return;
+            }
+        }
+        finally
+        {
+            s_confirmingExit = false;
+        }
+
+        // 確認で保存した文書 (無題を名前を付けて保存したものも) を含めて写す。文書はまだ開いている。
+        SessionState session = CaptureSession();
+        s_sessionTimer?.Stop();
+        SaveSessionForRestart(session);
+        App.Settings.Flush();
+        Commands.CommandService.Flush();
+        MainWindow.FlushBackgroundSaves();
+        AppLog.Info("Restarting as administrator with the session");
+        bool started;
+        try
+        {
+            started = AppRestart.RestartAsAdministrator();
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException or IOException)
+        {
+            // UAC で拒否された: 終了せず続ける (仕様 12 の 7)。
+            AppLog.Info($"Relaunch as admin cancelled: {ex.Message}");
+            started = false;
+        }
+
+        if (!started)
+        {
+            s_sessionTimer?.Start();
+            return;
+        }
+
+        IsExiting = true;
+        MainWindow.CloseAllDocumentsForExit();
+        MainWindow.FlushBackgroundSaves();
+        AppLog.Info("Exited (restarted as administrator)");
+        foreach (MainWindow w in s_windows.ToList())
+        {
+            w.CloseForExit();
+        }
+
+        MainWindow.DeleteTemporarySnapshots();
+    }
+
     /// <summary>直前の <see cref="RestartAsync"/> が再起動に失敗した (キャンセルではない)。「手動で再起動してください」を出す。</summary>
     public static bool LastRestartFailed { get; private set; }
 

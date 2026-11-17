@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Початкова позиція UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>П</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Зміщення mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Вигляд: декодувати UTF-32 зі зміщень з остачею 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Декодувати UTF-32 зі зміщень з остачею 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>початкова позиція фаза utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Вигляд: декодувати UTF-32 зі зміщень з остачею 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Декодувати UTF-32 зі зміщень з остачею 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>початкова позиція фаза utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Вигляд: декодувати UTF-32 зі зміщень з остачею 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Декодувати UTF-32 зі зміщень з остачею 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>початкова позиція фаза utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Вигляд: декодувати UTF-32 зі зміщень з остачею 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Декодувати UTF-32 зі зміщень з остачею 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>початкова позиція фаза utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Журнал переходів</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>журнал перехід назад останні позиції jump history list back recent positions</value></data>
@@ -9993,19 +9993,19 @@
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Зупиняє порівняння структури після порівняння такої кількості полів з кожного боку (від 10 000 до 10 000 000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Порівняння структури: зіставлення масивів</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Визначає, як зіставляються елементи масивів, окремо для кожного шаблону й масиву. Змінюється командою «Спосіб зіставлення...» на панелі «Відмінності структури».</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Порівняння: порівняти структуру</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Порівняти структуру</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>структура поле шаблон відмінність structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Порівняння: вибрати шаблон для порівняння структури</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Вибрати шаблон для порівняння структури</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>структура шаблон вибрати structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Порівняння: перехід між відмінностями структури</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Перехід між відмінностями структури</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>наступна попередня структура ціль next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Порівняння: показати відмінності структури</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Показати відмінності структури</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>структура відмінності панель structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Порівняння: наступна відмінність структури</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Наступна відмінність структури</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>структура наступне поле structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Порівняння: попередня відмінність структури</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Попередня відмінність структури</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>структура попереднє поле structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Порівняння: експортувати відмінності структури</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Експортувати відмінності структури</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>структура експорт звіт structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Показати або приховати відмінності структури</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>структура відмінності панель structure differences panel</value></data>

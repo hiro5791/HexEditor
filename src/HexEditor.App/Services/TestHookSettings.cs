@@ -154,6 +154,15 @@ public sealed record TestHookSettings
     /// </summary>
     public bool AdminDropNotice { get; init; }
 
+    /// <summary>補助プロセス (HexEditor.Elevated.exe) がない扱いにする (偽のデバイスでも案内ダイアログを出す。ENG-28 の仕様 12)。</summary>
+    public bool HelperMissing { get; init; }
+
+    /// <summary>
+    /// 「管理者として再起動」(ENG-28 の仕様 12 の 7) の runas の起動の代わり: "accept" は起動できた扱い (新しいプロセスは起動しない)、
+    /// "deny" は UAC で拒否された扱い。null なら本物の runas。
+    /// </summary>
+    public string? RunAsAdmin { get; init; }
+
     /// <summary>
     /// ネットワークにつながっている扱い (true) / つながっていない扱い (false)。マニュアルをオンラインと同梱のどちらで開くか (09 の UI-59) を
     /// 確かめる。null なら OS の状態。
@@ -251,6 +260,8 @@ public sealed record TestHookSettings
             Culture = root["culture"]?.GetValue<string>(),
             Elevated = root["elevated"]?.GetValue<bool>(),
             AdminDropNotice = root["adminDropNotice"]?.GetValue<bool>() ?? false,
+            HelperMissing = root["helperMissing"]?.GetValue<bool>() ?? false,
+            RunAsAdmin = root["runAsAdmin"]?.GetValue<string>(),
             NetworkAvailable = root["networkAvailable"]?.GetValue<bool>(),
             PauseAfterVolumeLock = root["pauseAfterVolumeLock"]?.GetValue<string>(),
             TimeZone = root["timeZone"]?.GetValue<string>(),

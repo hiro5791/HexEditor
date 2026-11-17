@@ -186,6 +186,43 @@ public sealed class ZoomTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-UI-08-06")]
+    public Task Screen_zoom_400_draws_sharp_text() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        ViewOps.WriteSettings(profile, new JsonObject { ["view.zoom.ui"] = 400 });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.ResizeAsync(1920, 1080);
+        await app.IdleAsync();
+        await Task.Delay(500);
+
+        async Task<int> EdgeWidthOfAsync(string automationId)
+        {
+            var r = (await app.WaitForAsync(automationId)).BoundingRectangle;
+            NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+            WindowImage image = app.Screenshot();
+            uint[] pixels = new uint[image.Width * image.Height];
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    pixels[(y * image.Width) + x] = image.Pixel(x, y) & 0xFFFFFF;
+                }
+            }
+
+            int left = Math.Max(0, (int)r.Left - window.Left), top = Math.Max(0, (int)r.Top - window.Top);
+            return HexEditor.ManualTests.ScreenCheck.EdgeWidth(pixels, image.Width, left, top, Math.Min(image.Width, (int)r.Right - window.Left), Math.Min(image.Height, (int)r.Bottom - window.Top));
+        }
+
+        int menu = await EdgeWidthOfAsync("MainMenu"), hex = await EdgeWidthOfAsync("HexView");
+        await app.SendAsync("settingsPage", new JsonObject { ["open"] = true, ["category"] = "general" });
+        await Task.Delay(500);
+        await app.IdleAsync();
+        int settings = await EdgeWidthOfAsync("Settings_Categories");
+        Assert.True(menu <= 2 && hex <= 2 && settings <= 2, $"blurred text at 400%: menu {menu}, hex {hex}, settings {settings}");
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-08-05")]
     public Task Screen_zoom_400_has_no_clipped_or_overlapping_text() => UiTestContext.RunAsync(async ctx =>
     {

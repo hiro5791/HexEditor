@@ -75,6 +75,7 @@ public sealed partial class StructDiffPanel : UserControl, Panels.IPanelContent
     public StructDiffPanel()
     {
         InitializeComponent();
+        ItemKeys.Attach(Tree, Tree_KeyDown);
         Tree.Panel = this;
         _rows = new StructDiffRowList(CreateRow);
         Tree.ItemsSource = _rows;

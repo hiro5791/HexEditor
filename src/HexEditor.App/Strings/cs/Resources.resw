@@ -2614,13 +2614,13 @@ Podrobnosti byly zapsány do:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Počáteční pozice UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Posun mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Zobrazení: Dekódovat UTF-32 od posunů se zbytkem 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Dekódovat UTF-32 od posunů se zbytkem 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>utf-32 počáteční pocatecni pozice fáze faze zbytek start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Zobrazení: Dekódovat UTF-32 od posunů se zbytkem 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Dekódovat UTF-32 od posunů se zbytkem 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>utf-32 počáteční pocatecni pozice fáze faze zbytek start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Zobrazení: Dekódovat UTF-32 od posunů se zbytkem 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Dekódovat UTF-32 od posunů se zbytkem 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>utf-32 počáteční pocatecni pozice fáze faze zbytek start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Zobrazení: Dekódovat UTF-32 od posunů se zbytkem 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Dekódovat UTF-32 od posunů se zbytkem 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>utf-32 počáteční pocatecni pozice fáze faze zbytek start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Seznam historie</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>skok historie seznam zpět zpet nedávné nedavne pozice jump history list back recent positions</value></data>
@@ -9993,19 +9993,19 @@ Spojení se nenaváže, pokud se nerozhodnete klíč nahradit.</value></data>
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Zastaví porovnání struktury po porovnání tohoto počtu polí na každé straně (10 000 až 10 000 000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Porovnání struktury: párování polí</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Určuje, jak se párují prvky polí, zvlášť pro každou šablonu a pole. Změníte to příkazem „Způsob párování...“ v panelu Rozdíly struktury.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Porovnání: porovnat strukturu</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Porovnat strukturu</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>struktura pole šablona rozdíl structure field template diff</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Porovnání: vybrat šablonu pro porovnání struktury</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Vybrat šablonu pro porovnání struktury</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>struktura šablona vybrat structure template choose</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Porovnání: přecházet mezi rozdíly struktury</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Přecházet mezi rozdíly struktury</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>další předchozí struktura cíl next previous structure target</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Porovnání: zobrazit rozdíly struktury</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Zobrazit rozdíly struktury</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>struktura rozdíly panel structure differences panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Porovnání: další rozdíl struktury</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Další rozdíl struktury</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>struktura další pole structure next field</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Porovnání: předchozí rozdíl struktury</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Předchozí rozdíl struktury</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>struktura předchozí pole structure previous field</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Porovnání: exportovat rozdíly struktury</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Exportovat rozdíly struktury</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>struktura export zpráva structure export json csv report</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Přepnout rozdíly struktury</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>struktura rozdíly panel structure differences panel</value></data>

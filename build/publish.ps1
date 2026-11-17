@@ -198,7 +198,8 @@ function Copy-PatchApplier($applierDir, $destination) {
 
 # The code editor (AUTO-20, TPL-31) bundles Monaco: every distribution must contain these files (the app never loads them from the internet).
 $MonacoFiles = @('Assets/Monaco/vs/loader.js', 'Assets/Monaco/vs/editor/editor.main.js', 'Assets/Monaco/host/index.html', 'Assets/Monaco/host/host.js',
-    'Assets/Monaco/host/hexeditor.d.ts', 'Assets/Monaco/LICENSE.txt', 'Assets/Monaco/ThirdPartyNotices.txt')
+    'Assets/Monaco/host/hexeditor.d.ts', 'Assets/Monaco/LICENSE.txt', 'Assets/Monaco/ThirdPartyNotices.txt',
+    'Assets/Monaco/vs/nls/lang/ja.js', 'Assets/Monaco/vs/nls/lang/de.js', 'Assets/Monaco/vs/nls/lang/zh-cn.js', 'Assets/Monaco/vs/nls/lang/pt-br.js')
 
 function Assert-Monaco($folder) {
     foreach ($name in $MonacoFiles) {

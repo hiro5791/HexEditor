@@ -166,6 +166,26 @@ public static class TestHooks
         return true;
     }
 
+    /// <summary>補助プロセスがない扱い (テスト用の設定 helperMissing)。</summary>
+    public static bool HelperMissing => Active && Settings.HelperMissing;
+
+    /// <summary>
+    /// 管理者としての起動 (runas) の差し替え (テスト用の設定 runAsAdmin)。差し替えたら true で、<paramref name="started"/> は起動できた扱いか
+    /// (false は UAC で拒否された扱い)。差し替えないときは false (本物の runas)。
+    /// </summary>
+    public static bool TryRunAsAdmin(IReadOnlyList<string> args, out bool started)
+    {
+        started = false;
+        if (!Active || Settings.RunAsAdmin is not { } result)
+        {
+            return false;
+        }
+
+        started = !string.Equals(result, "deny", StringComparison.OrdinalIgnoreCase);
+        AppLog.Info($"Test hooks: runas ({args.Count} argument(s)) -> {(started ? "accepted" : "denied")}");
+        return true;
+    }
+
     /// <summary>空き容量を上書きしたボリュームの情報 (ENG-25)。上書きしないときは null。</summary>
     public static Core.Saving.IVolumeInfoProvider? Volumes =>
         Active && (Settings.FreeSpace is not null || Settings.NoNamedStreams) ? new FixedFreeSpaceVolumes(Settings.FreeSpace, Settings.NoNamedStreams) : null;
@@ -792,6 +812,14 @@ public static class TestHooks
     }
 
     public static bool InterceptLaunch(Uri uri) => false;
+
+    public static bool HelperMissing => false;
+
+    public static bool TryRunAsAdmin(IReadOnlyList<string> args, out bool started)
+    {
+        started = false;
+        return false;
+    }
 
     public static bool? NetworkAvailableOverride => null;
 

@@ -4,6 +4,8 @@
 (function () {
   'use strict';
 
+  // 表示言語のファイルを待つ上限 (ローカルのファイルなので普通は数 ms。過ぎたら英語で起動する)
+  const languageLoadTimeoutMs = 3000;
   const webview = window.chrome && window.chrome.webview;
   const post = (message) => { if (webview) { webview.postMessage(message); } };
   const queued = [];
@@ -44,8 +46,11 @@
 
   function init(m) {
     cfg = m;
-    const nls = m.nls && m.nls !== 'en' ? { availableLanguages: { '*': m.nls } } : {};
-    window.require.config({ paths: { vs: '../vs' }, 'vs/nls': nls });
+    window.require.config({ paths: { vs: '../vs' } });
+    loadLanguage(m.nls, startEditor);
+  }
+
+  function startEditor() {
     window.require(['vs/editor/editor.main'], () => {
       try {
         create();
@@ -59,6 +64,43 @@
         handle(q);
       }
     }, (err) => post({ t: 'error', message: String(err && err.message || err) }));
+  }
+
+  // Monaco の文字列の翻訳 (vs/nls/lang/<言語>.js) を、エディタ本体より先に読む。このファイルは define を呼ばずグローバル変数に書くだけなので、
+  // AMD ローダーでは読めない (Monaco の 'vs/nls' の設定で読ませると、モジュールが完了せず editor.main が永久に待つ)。そのため普通の script で読む。
+  // 翻訳は飾りなので、読めない・壊れている・返事がないときは英語でエディタを起動する (読み込みの失敗で起動を止めない)。
+  function loadLanguage(language, done) {
+    if (!language || language === 'en') {
+      done();
+      return;
+    }
+
+    let finished = false;
+    let timer = 0;
+    const finish = (reason) => {
+      if (finished) {
+        return;
+      }
+
+      finished = true;
+      clearTimeout(timer);
+      if (reason) {
+        post({ t: 'nlsFailed', language, reason });
+      }
+
+      done();
+    };
+
+    timer = setTimeout(() => finish('timeout'), languageLoadTimeoutMs);
+    try {
+      const script = document.createElement('script');
+      script.onload = () => finish(Array.isArray(globalThis._VSCODE_NLS_MESSAGES) ? null : 'invalid');
+      script.onerror = () => finish('load error');
+      script.src = '../vs/nls/lang/' + encodeURIComponent(language) + '.js';
+      document.head.appendChild(script);
+    } catch (err) {
+      finish(String(err && err.message || err));
+    }
   }
 
   function create() {

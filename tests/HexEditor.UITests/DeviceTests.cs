@@ -11,7 +11,7 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class DeviceTests
 {
-    private static JsonObject Hooks(UiTestContext ctx)
+    internal static JsonObject Hooks(UiTestContext ctx)
     {
         var devices = new JsonObject
         {
@@ -263,6 +263,58 @@ public sealed class DeviceTests
         Assert.Single((await app.StateAsync())["notifications"]!.AsArray(), n => n!["message"]!.GetValue<string>().Contains("disk image", StringComparison.Ordinal));
     });
 
+    /// <summary>要素の外側に、祖先の ScrollViewer に切り取られずに描ける幅が、左右は <paramref name="horizontal"/>、上下は <paramref name="vertical"/> 以上ある。</summary>
+    internal static async Task AssertFocusVisualFitsAsync(AppSession app, string id, double horizontal, double vertical)
+    {
+        JsonObject c = await app.SendAsync("focusClearance", new JsonObject { ["id"] = id });
+        Assert.True(c["found"]!.GetValue<bool>(), $"{id} was not found");
+        foreach ((string side, double min) in new[] { ("left", horizontal), ("right", horizontal), ("top", vertical), ("bottom", vertical) })
+        {
+            double value = c[side]!.GetValue<double>();
+            Assert.True(value >= min, $"{id}: only {value:F1} epx outside the {side} edge before the scroll viewer clips it (the focus visual needs {min})");
+        }
+    }
+
+    [Fact]
+    public Task Open_disk_and_process_dialogs_keep_focus_visuals_and_list_icons_visible() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+
+        // 「ディスクを開く」: 並べ替えの ComboBox のキーボードフォーカスの枠 (外側に 4 px) と、チェックボックスの枠 (左右に 7 px) が
+        // ダイアログの中身の ScrollViewer で切れない。
+        await app.CommandAsync("Command_OpenDisk");
+        await app.WaitForDialogAsync("OpenDiskDialog");
+        JsonObject focus = await app.SendAsync("focus", new JsonObject { ["target"] = "OpenDisk_Sort" });
+        Assert.Equal("Keyboard", focus["focusState"]?.GetValue<string>());
+        await AssertFocusVisualFitsAsync(app, "OpenDisk_Sort", 4, 4);
+        await AssertFocusVisualFitsAsync(app, "OpenDevice_ReadOnly", 7, 3);
+
+        // 一覧: 管理者権限が要る物理ディスクには盾のアイコン (記号のフォント)、USB のボリュームにはなし。名前の左端はどの行も同じ。
+        JsonArray rows = (await app.SendAsync("deviceListRows", new JsonObject { ["id"] = "OpenDisk_List" }))["rows"]!.AsArray();
+        Assert.Equal(2, rows.Count);
+        JsonObject disk = rows.Select(r => r!.AsObject()).Single(r => r["text"]!.GetValue<string>().Contains("Fake Disk", StringComparison.Ordinal));
+        JsonObject usb = rows.Select(r => r!.AsObject()).Single(r => r["text"]!.GetValue<string>().Contains("E:", StringComparison.Ordinal));
+        Assert.Equal("\uEA18", disk["glyph"]!.GetValue<string>());
+        Assert.True(disk["iconVisible"]!.GetValue<bool>());
+        Assert.Contains("Segoe", disk["iconFont"]!.GetValue<string>(), StringComparison.Ordinal);
+        Assert.False(usb["iconVisible"]!.GetValue<bool>());
+        Assert.Equal(disk["textLeft"]!.GetValue<double>(), usb["textLeft"]!.GetValue<double>());
+        Assert.Equal(disk["textLeft"]!.GetValue<double>(), disk["detailLeft"]!.GetValue<double>());
+        Assert.StartsWith(disk["text"]!.GetValue<string>() + ", ", disk["name"]!.GetValue<string>(), StringComparison.Ordinal);
+
+        await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
+        await app.WaitUntilAsync(async () => (await app.SendAsync("element", new JsonObject { ["id"] = "OpenDisk_Sort" }))["found"]!.GetValue<bool>() == false,
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the disk dialog to close");
+
+        // 「プロセスを開く」: 絞り込みの入力欄・並べ替え・「自分のプロセスだけ表示」も同じ。
+        await app.CommandAsync("Command_OpenProcess");
+        await app.WaitForDialogAsync("OpenProcessDialog");
+        await app.SendAsync("focus", new JsonObject { ["target"] = "OpenProcess_Sort" });
+        await AssertFocusVisualFitsAsync(app, "OpenProcess_Sort", 4, 4);
+        await AssertFocusVisualFitsAsync(app, "OpenProcess_Filter", 4, 4);
+        await AssertFocusVisualFitsAsync(app, "OpenProcess_OwnOnly", 7, 3);
+    });
+
     [Fact]
     [Trait("TC", "TC-ENG-33-01")]
     public Task Opening_a_process_shows_the_memory_map_with_modules() => UiTestContext.RunAsync(async ctx =>
@@ -274,5 +326,68 @@ public sealed class DeviceTests
         Assert.True(map["panelVisible"]!.GetValue<bool>());
         Assert.Contains(map["modules"]!.AsArray(), m => m!.GetValue<string>() == "TestTarget.exe");
         Assert.Contains(map["regions"]!.AsArray(), r => r!["access"]!.GetValue<string>() == "Readable");
+    });
+
+    // ---- ENG-28 の仕様 12 の 7: 補助プロセスがないときの「管理者として再起動」 (runas はテスト用の設定で差し替える。昇格しない) ----
+
+    private static readonly Lazy<Dictionary<string, string>> En = new(() => UiHelpers.LoadResw("en"));
+
+    /// <summary>補助プロセスがない扱いで、偽の物理ディスク 0 を「ディスクを開く」から開こうとし、案内ダイアログの「管理者として再起動」を押す。</summary>
+    private static async Task RestartAsAdministratorFromGuidanceAsync(AppSession app)
+    {
+        await app.CommandAsync("Command_OpenDisk");
+        FlaUI.Core.AutomationElements.AutomationElement dialog = await app.WaitForDialogAsync("OpenDiskDialog");
+        string format = En.Value["OpenDisk_DiskName"];
+        string name = format[..format.IndexOf("{1}", StringComparison.Ordinal)].Replace("{0}", "0", StringComparison.Ordinal);
+        FlaUI.Core.AutomationElements.AutomationElement? item = null;
+        await app.WaitUntilAsync(() => Task.FromResult((item = dialog.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.ListItem))
+            .FirstOrDefault(i => AppSession.NameOf(i).Contains(name, StringComparison.Ordinal))) is not null), UiTest.Scaled(TimeSpan.FromSeconds(15)), $"the list item '{name}'");
+        item!.Patterns.SelectionItem.Pattern.Select();
+        await app.InvokeDialogButtonAsync(En.Value["Common_Open"], idle: false);
+
+        // ダイアログが UI オートメーションに現れた直後は、ボタンがまだないことがある (CI のランナーで一覧が空だった)。
+        // InvokeDialogButtonAsync がボタンが現れるまで待つ。「管理者として再起動」が出なければ、ここでタイムアウトして失敗する。
+        await app.WaitForDialogAsync("AdminGuidanceDialog");
+        await app.InvokeDialogButtonAsync(En.Value["AdminGuide_Restart"], idle: false);
+    }
+
+    private static JsonObject RestartHooks(UiTestContext ctx, string runAs)
+    {
+        JsonObject hooks = Hooks(ctx);
+        hooks["helperMissing"] = true;
+        hooks["runAsAdmin"] = runAs;
+        return hooks;
+    }
+
+    [Fact]
+    public Task Restart_as_administrator_saves_the_open_tabs_and_does_not_overwrite_them_while_exiting() => UiTestContext.RunAsync(async ctx =>
+    {
+        // TC-ENG-28-10 の不具合の回帰: 確認で文書を閉じた後にセッションを写し直し、タブが「閉じたタブ」に移った空のセッションで上書きしていた。
+        string seq = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = RestartHooks(ctx, "accept"), Files = [seq] });
+        await app.WaitForTabsAsync(1);
+
+        await RestartAsAdministratorFromGuidanceAsync(app);
+        await app.WaitForExitAsync(UiTest.Scaled(TimeSpan.FromSeconds(30)));
+
+        // 新しいプロセスが復元するセッション: TD-SEQ-1M のタブが開いたまま (閉じたタブではない)。
+        JsonObject session = JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(app.Profile, "session.json")))!.AsObject();
+        JsonArray tabs = session["windows"]![0]!["tabs"]!.AsArray();
+        Assert.Equal([Path.GetFullPath(seq)], tabs.Select(t => Path.GetFullPath(t!["path"]!.GetValue<string>())));
+        Assert.DoesNotContain(session["closedTabs"]?.AsArray() ?? [], t => string.Equals(t!["path"]?.GetValue<string>(), seq, StringComparison.OrdinalIgnoreCase));
+    });
+
+    [Fact]
+    public Task Restart_as_administrator_denied_by_uac_keeps_the_app_and_its_tabs() => UiTestContext.RunAsync(async ctx =>
+    {
+        // ENG-28 の仕様 12 の 7: UAC で拒否されたら終了せず、元の状態のまま続ける (タブを閉じない)。
+        string seq = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = RestartHooks(ctx, "deny"), Files = [seq] });
+        await app.WaitForTabsAsync(1);
+
+        await RestartAsAdministratorFromGuidanceAsync(app);
+        await app.WaitUntilAsync(() => Task.FromResult(app.Find("AdminGuidanceDialog") is null), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the guidance dialog to close");
+        await app.IdleAsync();
+        Assert.Equal([Path.GetFileName(seq)], await app.TabNamesAsync());
     });
 }

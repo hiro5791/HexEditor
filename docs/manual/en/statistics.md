@@ -6,7 +6,7 @@ Open the statistics panel with **Analysis > Statistics**. You can also use **Vie
 
 You can also select bytes, right-click and choose **Statistics**. This item is available only when something is selected, and the selection becomes the **Range**.
 
-In the upper part of the panel you choose the range and the settings. Below are the tabs: **Histogram**, **Descriptive**, **Entropy**, **Digram**, **Patterns** and **Classification**.
+In the upper part of the panel you choose the range and the settings. Below are the tabs: **Histogram**, **Descriptive**, **Entropy**, **Digram**, **Patterns** and **Classification**. When the panel is too small to show everything, scroll it. It opens scrolled to the tabs, so scroll up to reach the settings, or make the panel larger by dragging its edge.
 
 - **Range**: choose **Selection**, **Multiple selection**, **Whole document** or **Specify range**. When you specify a range, enter **Start** and **Length or end**.
 - **Type**: how to read each value. Bytes (`u8`) are the default. You can also choose 16- to 64-bit integers and the floating-point types `f32` and `f64`. For types of two bytes or more you can also set **Big-endian** and **Stride** (how many bytes to step between values).

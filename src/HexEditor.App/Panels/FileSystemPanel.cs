@@ -134,14 +134,14 @@ public sealed partial class FileSystemPanel : UserControl, IPanelContent
             Window?.Commands.NotifyStatesChanged();
         };
         _list.DoubleTapped += (_, _) => ActivateSelected();
-        _list.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(_list, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 ActivateSelected();
                 e.Handled = true;
             }
-        };
+        });
         _list.ContextFlyout = BuildMenu();
 
         _filter.PlaceholderText = Loc.Get("Fs_Filter");

@@ -17,8 +17,9 @@ namespace HexEditor.App;
 /// <summary>ディスク・プロセスを開く・書き込む (ENG-28〜ENG-34、VIEW-32)。</summary>
 public sealed partial class MainWindow
 {
-    private const string ShieldGlyph = ""; // Segoe Fluent: Permissions (盾)。
-    private const string LockGlyph = "";    // Lock。
+    // 記号のフォント (SymbolThemeFontFamily) の私用領域の文字。エスケープで書く (文字そのものを書くと、エディタ・変換で消えることがある)。
+    private const string ShieldGlyph = "\uEA18"; // Segoe Fluent: Shield (盾。ステータスバーの補助プロセスの表示と同じ)。
+    private const string LockGlyph = "\uE72E";   // Lock。
 
     /// <summary>インストーラ版・ポータブル版のダウンロードページ (ENG-28 の仕様 12 の 5)。</summary>
     internal const string DownloadPageUrl = AboutInfo.RepositoryUrl + "/releases/latest";
@@ -824,7 +825,8 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(dialog, "AdminGuidanceDialog");
         if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary && canRestart)
         {
-            await RestartElevatedAsync();
+            // 終了時と同じ確認・セッションの保存をしてから、管理者として起動し直す (ENG-28 の仕様 12 の 7)。
+            await WindowManager.RestartAsAdministratorAsync(this);
         }
     }
 
@@ -850,29 +852,6 @@ public sealed partial class MainWindow
         }
 
         return (texts, canRestart);
-    }
-
-    private async Task RestartElevatedAsync()
-    {
-        // 終了時と同じ確認・セッションの保存をしてから、管理者として起動し直す (ENG-28 の仕様 12 の 7)。
-        if (!await ConfirmExitAsync())
-        {
-            return;
-        }
-
-        SaveSession();
-        try
-        {
-            if (AppRestart.RestartAsAdministrator())
-            {
-                Application.Current.Exit();
-            }
-        }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException or IOException)
-        {
-            // UAC で拒否された: 終了せず続ける (仕様 12 の 7)。
-            AppLog.Info($"Relaunch as admin cancelled: {ex.Message}");
-        }
     }
 
     private void RefreshHelperIndicator() => UpdateHelperShield();

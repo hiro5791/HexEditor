@@ -5,6 +5,7 @@ using HexEditor.App.Commands;
 using HexEditor.App.Services;
 using HexEditor.Core.Commands;
 using HexEditor.Core.Scripting.Debugging;
+using HexEditor.Platform.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -54,6 +55,7 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
     private WebView2? _web;
     private CodeEditor? _plain;
     private DispatcherTimer? _readyTimer;
+    private readonly List<Deferral> _heldRequests = [];
     private string _text = string.Empty;
     private int _selStart;
     private int _selEnd;
@@ -125,6 +127,9 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
 
     /// <summary>テスト用: 次に作るエディタの WebView2 の初期化を失敗させる (代替の表示の確認)。</summary>
     internal static bool SimulateFailure { get; set; }
+
+    /// <summary>テスト用: Monaco の表示言語のファイルの読み込みの失敗を再現する (missing: ファイルがない、hang: 返事がない、broken: 中身が壊れている)。</summary>
+    internal static string? SimulateLanguageLoad { get; set; }
 
     public FrameworkElement View => this;
 
@@ -634,8 +639,23 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
             }
         }
 
+        // テスト用 (SimulateLanguageLoad)。本物の言語のファイルは WebView2 のキャッシュから読まれるとここを通らないので、別の名前で要求する
+        if (uri.EndsWith("/vs/nls/lang/xx-hang.js", StringComparison.OrdinalIgnoreCase))
+        {
+            // 返事をしないまま持ち続ける (ページから見ると読み込みが終わらない)
+            _heldRequests.Add(e.GetDeferral());
+            return;
+        }
+
+        if (uri.EndsWith("/vs/nls/lang/xx-broken.js", StringComparison.OrdinalIgnoreCase))
+        {
+            e.Response = sender.Environment.CreateWebResourceResponse(
+                new MemoryStream("this is not javascript ("u8.ToArray()).AsRandomAccessStream(), 200, "OK", "Content-Type: text/javascript\r\nCache-Control: no-store");
+            return;
+        }
+
         // 仮想ホスト以外への要求はすべて断る (インターネットから読み込まない。AUTO-20 の仕様 1)
-        if (!IsLocal(uri) && !uri.StartsWith("blob:", StringComparison.OrdinalIgnoreCase) && !uri.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
+        if (!IsLocal(uri)&& !uri.StartsWith("blob:", StringComparison.OrdinalIgnoreCase) && !uri.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
         {
             e.Response = sender.Environment.CreateWebResourceResponse(null, 403, "Forbidden", string.Empty);
         }
@@ -744,6 +764,9 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
         {
             case "hello":
                 SendInit();
+                break;
+            case "nlsFailed":
+                AppLog.Warning($"Code editor: Monaco language '{m["language"]?.GetValue<string>()}' not loaded ({m["reason"]?.GetValue<string>()}); using English.");
                 break;
             case "ready":
                 IsReady = true;
@@ -908,7 +931,7 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
             ["ariaLabel"] = _accessibleName,
             ["fontFamily"] = "'Cascadia Mono', Consolas, monospace",
             ["fontSize"] = 14,
-            ["nls"] = MonacoLanguage(Hosting.Localization.CurrentLanguage),
+            ["nls"] = SimulateLanguageLoad is { } simulated ? "xx-" + simulated : DisplayLanguages.MonacoLanguage(Hosting.Localization.CurrentLanguage),
             ["theme"] = MonacoTheme.Build(this),
             ["keys"] = ForwardedKeysJson(),
             ["breakpoints"] = BreakpointsJson(),
@@ -967,16 +990,6 @@ public sealed partial class MonacoCodeEditor : Grid, IScriptCodeEditor, IDisposa
 
         return libs;
     }
-
-    /// <summary>Monaco の表示言語 (同梱の vs/nls/lang にあるものだけ。ほかは英語)。</summary>
-    internal static string MonacoLanguage(string tag) => tag switch
-    {
-        "ja" or "ko" or "de" or "fr" or "es" or "it" or "ru" or "pl" or "cs" or "tr" => tag,
-        "zh-Hans" => "zh-cn",
-        "zh-Hant" => "zh-tw",
-        "pt" => "pt-br",
-        _ => "en",
-    };
 
     private JsonArray BreakpointsJson() => new([.. _breakpoints.Select(b => (JsonNode?)new JsonArray(
         b.Line, b.Enabled, b.HasCondition,

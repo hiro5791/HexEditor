@@ -110,6 +110,17 @@ public static class CiPrivileged
     }
 
     /// <summary>
+    /// MBR のディスクの、最初のパーティションより前 (MBR と隙間。最大 1 MiB)。「ディスクに何も書かれない」を確かめる範囲。ボリュームの中は
+    /// Windows 自身がマウント中に書く (NTFS のログ・メタデータ) ので比べない。64 MiB の TD-VHDX-MBR では、Windows はパーティションを 64 KiB から作る。
+    /// </summary>
+    public static byte[] ReadBeforeFirstPartition(string path)
+    {
+        byte[] head = ReadDevice(path, 1 << 20);
+        long start = BitConverter.ToUInt32(head, 0x1C6) * 512L;
+        return start is > 512 and < 1 << 20 ? head[..(int)start] : head;
+    }
+
+    /// <summary>
     /// CI のランナーで接続したテスト用の仮想ディスクの <paramref name="offset"/> に書く (FOR-25 のテストで GPT を壊す)。ボリュームの外の
     /// セクタだけに使う。この PC では <see cref="EnsureEnabled"/> で止まる。
     /// </summary>

@@ -31,7 +31,13 @@ public sealed class RunStore
 
     public string PathName { get; }
 
-    public static string Folder => Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "HexEditorManualTests");
+    /// <summary>
+    /// 記録・テストデータ・ログの置き場所。既定は %LOCALAPPDATA%\HexEditorManualTests。ツール自身の UI テストは、環境変数
+    /// HEXEDITOR_MANUALTESTS_DIR で別のフォルダにする (利用者の記録に触れないため)。
+    /// </summary>
+    public static string Folder => System.Environment.GetEnvironmentVariable("HEXEDITOR_MANUALTESTS_DIR") is { Length: > 0 } dir
+        ? Path.GetFullPath(dir)
+        : Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "HexEditorManualTests");
 
     public static RunStore LoadOrCreate()
     {
@@ -65,8 +71,11 @@ public sealed class RunStore
         Save();
     }
 
-    /// <summary>結果を Markdown と JSON で書き出し、Markdown のパスを返す。</summary>
-    public string ExportReport(IReadOnlyList<TestCase> cases)
+    /// <summary>
+    /// 結果を Markdown と JSON で書き出し、Markdown のパスを返す。<paramref name="skipped"/> は「機材が必要なテストを除く」で一覧から外したもの
+    /// (別の節に書き、件数には数えない)。
+    /// </summary>
+    public string ExportReport(IReadOnlyList<TestCase> cases, IReadOnlyList<(TestCase Case, string Equipment)>? skipped = null)
     {
         string stamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
         string json = Path.Combine(Folder, $"report-{stamp}.json");
@@ -87,6 +96,17 @@ public sealed class RunStore
         {
             CaseResult? r = ResultOf(c.Id);
             sb.AppendLine($"| {c.Id} | {c.Title} | {Label(r?.Outcome ?? Outcome.NotRun)} | {r?.Comment.Replace("|", "\\|").ReplaceLineEndings(" ")} |");
+        }
+
+        if (skipped is { Count: > 0 })
+        {
+            sb.AppendLine().AppendLine("## 機材が必要なため今回は実施しない").AppendLine();
+            sb.AppendLine($"{skipped.Count} 件。上の件数 (合格・不合格など) には数えていない。").AppendLine();
+            sb.AppendLine("| ID | 名前 | 必要な機材 |").AppendLine("| --- | --- | --- |");
+            foreach ((TestCase c, string equipment) in skipped)
+            {
+                sb.AppendLine($"| {c.Id} | {c.Title} | {equipment.Replace("|", "\\|")} |");
+            }
         }
 
         File.WriteAllText(md, sb.ToString());

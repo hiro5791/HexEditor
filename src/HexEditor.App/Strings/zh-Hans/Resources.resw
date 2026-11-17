@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 起始位置(P)</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>偏移量除以 4 的余数 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>视图：从余数为 0 的偏移量解码 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>从余数为 0 的偏移量解码 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>UTF-32 起始位置 相位 余数 utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>视图：从余数为 1 的偏移量解码 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>从余数为 1 的偏移量解码 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>UTF-32 起始位置 相位 余数 utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>视图：从余数为 2 的偏移量解码 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>从余数为 2 的偏移量解码 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>UTF-32 起始位置 相位 余数 utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>视图：从余数为 3 的偏移量解码 UTF-32</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>从余数为 3 的偏移量解码 UTF-32</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>UTF-32 起始位置 相位 余数 utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>历史记录列表</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>跳转 历史记录 列表 后退 最近位置 jump history list back recent positions</value></data>
@@ -9994,19 +9994,19 @@ SHA-256 指纹: {2}
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>两侧各比较完这么多个字段后停止结构比较（10,000 到 10,000,000）。</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>结构比较：数组匹配</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>数组元素的匹配方式，按模板和数组分别设置。可在“结构差异”面板中通过“匹配方式...”更改。</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>比较：比较结构</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>比较结构</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff 结构 字段 模板 差异</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>比较：选择结构比较使用的模板</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>选择结构比较使用的模板</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose 结构 模板 选择</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>比较：在结构差异之间移动</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>在结构差异之间移动</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target 下一个 上一个 结构 目标</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>比较：显示结构差异</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>显示结构差异</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel 结构差异 面板</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>比较：下一个结构差异</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>下一个结构差异</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field 结构 下一个 字段</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>比较：上一个结构差异</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>上一个结构差异</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field 结构 上一个 字段</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>比较：导出结构差异</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>导出结构差异</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report 结构 导出 报告</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>切换结构差异</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel 结构差异 面板</value></data>

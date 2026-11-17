@@ -2614,13 +2614,13 @@ Detail ditulis ke:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Posisi Awal UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Offset mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Tampilan: Dekode UTF-32 dari offset dengan sisa 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Dekode UTF-32 dari offset dengan sisa 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>posisi awal sisa utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Tampilan: Dekode UTF-32 dari offset dengan sisa 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Dekode UTF-32 dari offset dengan sisa 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>posisi awal sisa utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Tampilan: Dekode UTF-32 dari offset dengan sisa 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Dekode UTF-32 dari offset dengan sisa 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>posisi awal sisa utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Tampilan: Dekode UTF-32 dari offset dengan sisa 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Dekode UTF-32 dari offset dengan sisa 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>posisi awal sisa utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Daftar riwayat</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>riwayat daftar lompat kembali posisi terbaru jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@ Koneksi tidak dibuat kecuali Anda memilih untuk mengganti kunci.</value></data>
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Hentikan perbandingan struktur setelah membandingkan sejumlah bidang ini di setiap sisi (10.000 sampai 10.000.000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Perbandingan struktur: pencocokan array</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Cara elemen array dicocokkan, per templat dan array. Ubah dengan "Metode pencocokan..." di panel Perbedaan struktur.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Bandingkan: bandingkan struktur</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Bandingkan struktur</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff struktur bidang templat perbedaan</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Bandingkan: pilih templat untuk perbandingan struktur</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Pilih templat untuk perbandingan struktur</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose struktur templat pilih</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Bandingkan: pindah antar perbedaan struktur</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Pindah antar perbedaan struktur</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target berikutnya sebelumnya struktur tujuan</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Bandingkan: tampilkan perbedaan struktur</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Tampilkan perbedaan struktur</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel perbedaan struktur panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Bandingkan: perbedaan struktur berikutnya</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Perbedaan struktur berikutnya</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field struktur berikutnya bidang</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Bandingkan: perbedaan struktur sebelumnya</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Perbedaan struktur sebelumnya</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field struktur sebelumnya bidang</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Bandingkan: ekspor perbedaan struktur</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Ekspor perbedaan struktur</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report struktur ekspor laporan</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Tampilkan/sembunyikan perbedaan struktur</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel perbedaan struktur panel</value></data>

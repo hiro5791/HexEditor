@@ -14,6 +14,8 @@ public sealed partial class HistoryPanel : UserControl, Panels.IPanelContent
     {
         Vm = vm;
         InitializeComponent();
+        ItemKeys.Attach(List, List_KeyDown);
+        ItemKeys.Attach(Tree, Tree_KeyDown);
         foreach ((Control control, string key) in new (Control, string)[]
         {
             (UndoButton, "History_Undo"), (RedoButton, "History_Redo"), (CompareButton, "History_Compare"), (TreeToggle, "History_TreeView"),

@@ -589,7 +589,15 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         _text = _editor.Text;
         if (TemplateLanguageService.FindDefinition(_text, Caret, Path, TemplateService.LoadOptions) is { } at)
         {
-            await _host.OpenTemplateEditorAtAsync(at.File, at.Line, at.Column);
+            // 同じファイルの中なら、未保存の内容のままカーソルを動かす。
+            if (string.Equals(at.File, Path, StringComparison.OrdinalIgnoreCase))
+            {
+                MoveCaret(at.Line, at.Column);
+            }
+            else
+            {
+                await _host.OpenTemplateEditorAtAsync(at.File, at.Line, at.Column);
+            }
         }
     }
 

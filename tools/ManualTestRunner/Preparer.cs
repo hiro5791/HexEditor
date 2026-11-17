@@ -1,94 +1,666 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using HexEditor.ManualTests;
-using HexEditor.TestData;
 
 namespace ManualTestRunner;
 
+/// <summary>準備ボタンの結果。</summary>
+public sealed record PrepareOutcome(Process? HexEditor, SetupResult? Setup, IReadOnlyList<string> Done, IReadOnlyList<string> Problems)
+{
+    /// <summary>HexEditor を起動した (管理者として起動したときは、プロセスが取れないことがある)。</summary>
+    public bool Launched { get; init; }
+}
+
 /// <summary>
-/// 手動テストの準備 (テスト方針 8.2): テストデータの生成、テスト用の設定フォルダの作成、HexEditor の起動。
-/// 起動する HexEditor は、環境変数 HEXEDITOR_EXE、開発用のビルド (src/HexEditor.App/bin)、実行エイリアス (hexeditor.exe) の順に探す。
+/// 手動テストの準備 (テスト方針 8.2): テストデータとテスト用の設定フォルダを作り (<see cref="CaseSetup"/>)、テストケースの「起動」の種類の
+/// HexEditor を起動する。ポータブル版・インストーラ版を作る処理と、仮想ディスクを作る・外す処理 (管理者の確認が出る) もここに置く。
+/// 管理者の確認が出る処理は、利用者がボタンを押したときだけ行う。
 /// </summary>
 public static class Preparer
 {
     public static string DataFolder => Path.Combine(RunStore.Folder, "testdata");
 
-    /// <summary>準備を行い、起動した HexEditor のプロセスを返す。生成できなかったテストデータは <paramref name="missing"/> に入れる。</summary>
-    public static Process? Prepare(TestCase testCase, out IReadOnlyList<string> missing)
+    public static string LogsFolder => Path.Combine(RunStore.Folder, "logs");
+
+    /// <summary>ツールが展開したポータブル版のフォルダ。</summary>
+    public static string PortableFolder => Path.Combine(RunStore.Folder, "portable");
+
+    public static string PortableExe => Path.Combine(PortableFolder, "HexEditor", "HexEditor.exe");
+
+    private static readonly Lazy<DateTime> NewestSource = new(FindNewestSource);
+
+    /// <summary>
+    /// ポータブル版・インストーラ版が使える状態か: あり、作ったあとに src のソースが変わっていない。
+    /// 古い版のままテストすると、直した不具合が残っているように見えるため、古ければ「準備」で作り直す。
+    /// </summary>
+    public static bool IsUpToDate(string distro)
     {
-        var notGenerated = new List<string>();
-        var files = new List<string>();
-        foreach (string id in testCase.TestData)
+        string exe = distro == "Portable" ? PortableExe : InstallerExe;
+        if (!File.Exists(exe))
+        {
+            return false;
+        }
+
+        if (Fake)
+        {
+            return true;
+        }
+
+        string stamp = BuildStamp(distro);
+        string dll = Path.Combine(Path.GetDirectoryName(exe)!, "HexEditor.dll");
+        DateTime built = File.Exists(stamp) ? File.GetLastWriteTimeUtc(stamp) : File.GetLastWriteTimeUtc(File.Exists(dll) ? dll : exe);
+        return built >= NewestSource.Value;
+    }
+
+    /// <summary>作り始めた時刻を覚える (ソースの一部しか変わらないと、HexEditor.dll の日時は新しくならないため)。</summary>
+    public static void MarkBuilt(string distro, DateTime startedUtc)
+    {
+        Directory.CreateDirectory(LogsFolder);
+        File.WriteAllText(BuildStamp(distro), string.Empty);
+        File.SetLastWriteTimeUtc(BuildStamp(distro), startedUtc);
+    }
+
+    private static string BuildStamp(string distro) => Path.Combine(LogsFolder, $"built-{distro.ToLowerInvariant()}.txt");
+
+    private static DateTime FindNewestSource()
+    {
+        string src = Path.Combine(RepoRoot, "src");
+        if (!Directory.Exists(src))
+        {
+            return DateTime.MinValue;
+        }
+
+        string[] skipped = [$"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", $"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}"];
+        return Directory.EnumerateFiles(src, "*", SearchOption.AllDirectories)
+            .Where(f => !skipped.Any(d => f.Contains(d, StringComparison.OrdinalIgnoreCase)))
+            .Select(File.GetLastWriteTimeUtc)
+            .DefaultIfEmpty(DateTime.MinValue)
+            .Max();
+    }
+
+    /// <summary>インストーラ版 (Velopack) のインストール先。</summary>
+    public static string InstallerExe => Fake
+        ? Path.Combine(RunStore.Folder, "fake-installer", "HexEditor.exe")
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HexEditor", "current", "HexEditor.exe");
+
+    /// <summary>
+    /// ツール自身の UI テスト用の模擬: 環境変数 HEXEDITOR_MANUALTESTS_FAKE=1 (と HEXEDITOR_MANUALTESTS_DIR) があれば、仮想ディスク・ポータブル版・
+    /// インストーラ版・HexEditor の起動を、記録のフォルダの中に置く空のファイルで模擬する (管理者の確認もインストールも起動もしない)。
+    /// HEXEDITOR_MANUALTESTS_FAKE_FAIL に Portable / Installer / Vhd を書くと、その段階を失敗させる。
+    /// </summary>
+    public static bool Fake =>
+        Environment.GetEnvironmentVariable("HEXEDITOR_MANUALTESTS_FAKE") == "1"
+        && Environment.GetEnvironmentVariable("HEXEDITOR_MANUALTESTS_DIR") is { Length: > 0 };
+
+    private static bool FakeFails(string what) => Environment.GetEnvironmentVariable("HEXEDITOR_MANUALTESTS_FAKE_FAIL") == what;
+
+    /// <summary>New-ManualTestVhd.ps1 が仮想ディスクを置くフォルダ。</summary>
+    public static string VhdFolder => Fake
+        ? Path.Combine(RunStore.Folder, "fake-vhd")
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "HexEditorManualTestData");
+
+    public static string VhdLog => Path.Combine(LogsFolder, "virtual-disks.log");
+
+    public static bool VirtualDisksExist => Directory.Exists(VhdFolder) && Directory.EnumerateFiles(VhdFolder, "TD-VHDX-*.vhdx").Any();
+
+    /// <summary>
+    /// 仮想ディスクが接続されている (と見てよい): ファイルがあり、最後の「仮想ディスクを作る」のログが「接続した」で、そのログが PC を起動した後に
+    /// 書かれた (再起動すると接続が外れるため)。ディスクそのものには触れない。
+    /// </summary>
+    public static bool VirtualDisksAttached
+    {
+        get
         {
             try
             {
-                files.Add(TestDataCatalog.Generate(id, DataFolder));
+                if (!VirtualDisksExist || !File.Exists(VhdLog))
+                {
+                    return false;
+                }
+
+                DateTime boot = DateTime.Now - TimeSpan.FromMilliseconds(Environment.TickCount64);
+                return File.GetLastWriteTime(VhdLog) > boot && File.ReadAllText(VhdLog).Contains("RESULT: attached", StringComparison.Ordinal);
             }
-            catch (ArgumentException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                // まだ生成ツールに定義のないテストデータ (領域ごとのもの) は手で用意する。
-                notGenerated.Add(id);
+                return false;
+            }
+        }
+    }
+
+    public static string Arch => RuntimeInformation.OSArchitecture == Architecture.Arm64 ? "arm64" : "x64";
+
+    /// <summary>このツールが管理者として動いている (起動する HexEditor も管理者になる)。</summary>
+    public static bool ToolIsElevated
+    {
+        get
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            return new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+    }
+
+    /// <summary>リポジトリのルート (docs/test/cases がある場所)。</summary>
+    public static string RepoRoot { get; set; } = string.Empty;
+
+    /// <summary>起動の種類の表示名。</summary>
+    public static string LaunchLabel(LaunchKind kind) => kind switch
+    {
+        LaunchKind.DevAdmin => "開発版の HexEditor を管理者として",
+        LaunchKind.Portable => "ポータブル版の HexEditor を",
+        LaunchKind.PortableAdmin => "ポータブル版の HexEditor を管理者として",
+        LaunchKind.Installer => "インストーラ版の HexEditor を",
+        _ => "開発版の HexEditor を",
+    };
+
+    /// <summary>準備を行う。起動に要るもの (ポータブル版など) がなければ、起動せずに理由を返す。</summary>
+    public static PrepareOutcome Prepare(TestCase testCase, CasePrep prep)
+    {
+        var done = new List<string>();
+        var problems = new List<string>();
+        SetupResult setup;
+        try
+        {
+            setup = CaseSetup.Run(testCase, prep, DataFolder, Path.Combine(RunStore.Folder, "profiles", testCase.Id));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or InvalidOperationException)
+        {
+            return new PrepareOutcome(null, null, done, [$"準備に失敗しました: {ex.Message}"]);
+        }
+
+        done.AddRange(setup.Done);
+        foreach (string id in setup.Missing.Where(id => !(id.StartsWith("TD-VHDX", StringComparison.Ordinal) && VirtualDisksAttached)))
+        {
+            problems.Add(id.StartsWith("TD-VHDX", StringComparison.Ordinal)
+                ? $"{id} は「仮想ディスクを作る」で用意します。"
+                : $"{id} は準備ボタンでは作れません (「詳しい説明」の「用意のしかた」を見てください)。");
+        }
+
+        if (prep.AdminCommand is { } fakeCommand && Fake)
+        {
+            done.Add($"(模擬) 管理者の PowerShell で「{fakeCommand}」を実行したことにした");
+        }
+        else if (prep.AdminCommand is { } command)
+        {
+            try
+            {
+                StartElevatedPowerShell(command);
+                done.Add($"管理者の PowerShell で「{command}」を実行した (別のウィンドウ)");
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                problems.Add($"管理者の確認で「いいえ」が押されたため、「{command}」を実行できませんでした。もう一度「準備」を押してください。");
             }
         }
 
-        missing = notGenerated;
-        string profile = Path.Combine(RunStore.Folder, "profiles", testCase.Id);
-        if (Directory.Exists(profile))
+        if (prep.Launch == LaunchKind.None)
         {
-            Directory.Delete(profile, recursive: true);
+            done.Add("このテストケースでは HexEditor を起動しない (別の PC などで行う)");
+            return new PrepareOutcome(null, setup, done, problems);
         }
 
-        Directory.CreateDirectory(profile);
-        var start = new ProcessStartInfo(FindHexEditor()) { UseShellExecute = false };
-        start.ArgumentList.Add("--new-instance");
-        start.ArgumentList.Add("--test-profile");
-        start.ArgumentList.Add(profile);
-        foreach (string file in files.Take(1))
+        if (Fake)
         {
-            start.ArgumentList.Add(file);
+            done.Add($"(模擬) {LaunchLabel(prep.Launch)}起動したことにした: {CaseSetup.JoinArguments(setup.Arguments)}");
+            return new PrepareOutcome(null, setup, done, problems) { Launched = true };
+        }
+
+        string? exe = ExeFor(prep.Launch);
+        if (exe is null)
+        {
+            problems.Add(prep.Launch switch
+            {
+                LaunchKind.Portable or LaunchKind.PortableAdmin => "ポータブル版がまだありません。",
+                LaunchKind.Installer => "インストーラ版がまだインストールされていません。",
+                _ => "開発版の HexEditor が見つかりません (src/HexEditor.App を Debug でビルドしてください。環境変数 HEXEDITOR_EXE でも指定できます)。",
+            });
+            return new PrepareOutcome(null, setup, done, problems);
+        }
+
+        if (setup.HooksPath is not null && prep.Launch is not (LaunchKind.Dev or LaunchKind.DevAdmin))
+        {
+            problems.Add("このテストケースのテスト用の設定 (--test-hooks) は開発版でだけ効きます。");
         }
 
         try
         {
-            return Process.Start(start);
+            Process? process = Launch(exe, setup.Arguments, prep.IsAdmin);
+            done.Add($"{LaunchLabel(prep.Launch)}起動した: {exe} {CaseSetup.JoinArguments(setup.Arguments)}");
+            return new PrepareOutcome(process, setup, done, problems) { Launched = true };
         }
-        catch (System.ComponentModel.Win32Exception)
+        catch (System.ComponentModel.Win32Exception ex)
         {
-            return null;
+            problems.Add(prep.IsAdmin
+                ? "管理者の確認で「いいえ」が押されたため、HexEditor を起動できませんでした。もう一度「準備」を押してください。"
+                : $"HexEditor を起動できませんでした: {ex.Message}");
+            return new PrepareOutcome(null, setup, done, problems);
         }
     }
 
-    private static string FindHexEditor()
+    /// <summary>起動の種類の HexEditor.exe があるフォルダ (「隠すファイル」を置くところ)。まだ作っていなければ null (模擬のときは場所だけ返す)。</summary>
+    public static string? LaunchFolder(LaunchKind kind)
+    {
+        string? exe = kind switch
+        {
+            LaunchKind.Portable or LaunchKind.PortableAdmin => PortableExe,
+            LaunchKind.Installer => InstallerExe,
+            LaunchKind.None => null,
+            _ => FindDevBuild(),
+        };
+        return exe is null ? null : Path.GetDirectoryName(exe);
+    }
+
+    /// <summary>「隠すファイル」がすべて隠れている。</summary>
+    public static bool AreHidden(CasePrep prep) =>
+        prep.HiddenFiles.Count > 0 && LaunchFolder(prep.Launch) is { } folder && prep.HiddenFiles.All(n => FileHider.IsHidden(folder, n));
+
+    /// <summary>「隠すファイル」の名前を .bak に変える (準備の前)。できなければ理由を返す。</summary>
+    public static string? HideFiles(CasePrep prep)
+    {
+        if (LaunchFolder(prep.Launch) is not { } folder || !Directory.Exists(folder))
+        {
+            return prep.Launch switch
+            {
+                LaunchKind.Portable or LaunchKind.PortableAdmin => "ポータブル版がまだありません。",
+                LaunchKind.Installer => "インストーラ版がまだインストールされていません。",
+                _ => "開発版の HexEditor が見つかりません。",
+            };
+        }
+
+        foreach (string name in prep.HiddenFiles)
+        {
+            if (FileHider.Hide(folder, name) is { } error)
+            {
+                return error;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 隠したファイルを元に戻す。<paramref name="keepCase"/> のテストケースが隠すファイルは戻さない (そのテストケースを開いているあいだは隠したままにする)。
+    /// ツールの起動時・結果の記録時・別のテストケースを選んだとき・ツールを閉じるときに呼ぶ。戻せなかったものがあれば理由を返す。
+    /// </summary>
+    public static string? RestoreHidden(PrepBook book, string? keepCase)
+    {
+        var entries = new List<(string Folder, string Name, string CaseId)>();
+        foreach (CasePrep prep in book.Cases.Values.Where(p => p.HiddenFiles.Count > 0))
+        {
+            if (LaunchFolder(prep.Launch) is { } folder)
+            {
+                entries.AddRange(prep.HiddenFiles.Select(n => (folder, n, prep.Id)));
+            }
+        }
+
+        static string Key(string folder, string name) => Path.Combine(folder, name).ToUpperInvariant();
+        HashSet<string> keep = entries.Where(e => e.CaseId == keepCase).Select(e => Key(e.Folder, e.Name)).ToHashSet();
+        var all = entries.Where(e => !keep.Contains(Key(e.Folder, e.Name))).Select(e => (e.Folder, e.Name)).Distinct().ToList();
+        var problems = new List<string>();
+        foreach ((string folder, string name) in all)
+        {
+            if (FileHider.Restore(folder, name, out _) is { } problem)
+            {
+                problems.Add(problem);
+            }
+        }
+
+        return problems.Count == 0 ? null : string.Join(Environment.NewLine, problems.Distinct());
+    }
+
+    /// <summary>起動の種類の HexEditor.exe (なければ null)。</summary>
+    public static string? ExeFor(LaunchKind kind) => kind switch
+    {
+        LaunchKind.Portable or LaunchKind.PortableAdmin => File.Exists(PortableExe) ? PortableExe : null,
+        LaunchKind.Installer => File.Exists(InstallerExe) ? InstallerExe : null,
+        LaunchKind.None => null,
+        _ => FindDevBuild(),
+    };
+
+    private static Process? Launch(string exe, IReadOnlyList<string> arguments, bool admin)
+    {
+        if (admin)
+        {
+            // 管理者として起動する (Windows が確認を出す)。
+            return Process.Start(new ProcessStartInfo(exe, CaseSetup.JoinArguments(arguments)) { UseShellExecute = true, Verb = "runas" });
+        }
+
+        var start = new ProcessStartInfo(exe) { UseShellExecute = false };
+        foreach (string a in arguments)
+        {
+            start.ArgumentList.Add(a);
+        }
+
+        return Process.Start(start);
+    }
+
+    private static void StartElevatedPowerShell(string command)
+    {
+        string script = $"Set-Location -LiteralPath '{RepoRoot.Replace("'", "''")}'; {command}";
+        Process.Start(new ProcessStartInfo("powershell.exe", $"-NoExit -NoProfile -Command \"{script.Replace("\"", "\\\"")}\"")
+        {
+            UseShellExecute = true,
+            Verb = "runas",
+        });
+    }
+
+    /// <summary>
+    /// 開発用のビルド。環境変数 HEXEDITOR_EXE、src/HexEditor.App/bin の Debug (この PC のアーキテクチャのもの)、その他のビルドの順に探す。
+    /// </summary>
+    private static string? FindDevBuild()
     {
         if (Environment.GetEnvironmentVariable("HEXEDITOR_EXE") is { Length: > 0 } configured && File.Exists(configured))
         {
             return configured;
         }
 
-        // このツールのビルド先 (tools/ManualTestRunner/bin/...) からリポジトリのルートを探し、開発用のビルドを使う。
-        for (DirectoryInfo? dir = new(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        string bin = Path.Combine(RepoRoot, "src", "HexEditor.App", "bin");
+        if (!Directory.Exists(bin))
         {
-            string bin = Path.Combine(dir.FullName, "src", "HexEditor.App", "bin");
-            if (Directory.Exists(bin))
+            return null;
+        }
+
+        string rid = "win-" + Arch;
+        List<FileInfo> builds = new DirectoryInfo(bin).EnumerateFiles("HexEditor.exe", SearchOption.AllDirectories)
+            .Where(f => !f.DirectoryName!.EndsWith("AppX", StringComparison.OrdinalIgnoreCase)
+                && f.DirectoryName.Contains(rid, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(f => f.LastWriteTimeUtc)
+            .ToList();
+
+        // Debug にはテスト用の仕組み (--test-hooks) が入っている。
+        return (builds.FirstOrDefault(f => f.FullName.Contains(@"\Debug\", StringComparison.OrdinalIgnoreCase)) ?? builds.FirstOrDefault())?.FullName;
+    }
+
+    // ---- 仮想ディスク ----
+
+    /// <summary>
+    /// build/tests/New-ManualTestVhd.ps1 を管理者として実行し (Windows が確認を出す)、終わるまで待って、ログの内容を返す。
+    /// 確認で「いいえ」が押されたら null。
+    /// </summary>
+    public static async Task<string?> RunVirtualDiskScriptAsync(bool dismount)
+    {
+        Directory.CreateDirectory(LogsFolder);
+        if (File.Exists(VhdLog))
+        {
+            File.Delete(VhdLog);
+        }
+
+        if (Fake)
+        {
+            await Task.Delay(800);
+            string fake = FakeFails("Vhd") ? "ERROR: (模擬) 仮想ディスクを作れませんでした"
+                : dismount ? "RESULT: removed" : "DISK TD-VHDX-MBR 90 (模擬)\nDISK TD-VHDX-GPT 91 (模擬)\nRESULT: attached";
+            if (!dismount && !FakeFails("Vhd"))
             {
-                FileInfo? newest = new DirectoryInfo(bin).EnumerateFiles("HexEditor.exe", SearchOption.AllDirectories)
-                    .Where(f => !f.DirectoryName!.EndsWith("AppX", StringComparison.OrdinalIgnoreCase))
-                    .OrderByDescending(f => f.LastWriteTimeUtc)
-                    .FirstOrDefault();
-                if (newest is not null)
-                {
-                    return newest.FullName;
-                }
+                Directory.CreateDirectory(VhdFolder);
+                File.WriteAllBytes(Path.Combine(VhdFolder, "TD-VHDX-MBR.vhdx"), []);
+            }
+            else if (dismount && Directory.Exists(VhdFolder))
+            {
+                Directory.Delete(VhdFolder, recursive: true);
+            }
+
+            await File.WriteAllTextAsync(VhdLog, fake);
+            return fake;
+        }
+
+        string script = Path.Combine(RepoRoot, "build", "tests", "New-ManualTestVhd.ps1");
+        string arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"{script}\" -LogPath \"{VhdLog}\"" + (dismount ? " -Dismount" : string.Empty);
+        Process? process;
+        try
+        {
+            process = Process.Start(new ProcessStartInfo("powershell.exe", arguments) { UseShellExecute = true, Verb = "runas", WindowStyle = ProcessWindowStyle.Hidden });
+        }
+        catch (System.ComponentModel.Win32Exception)
+        {
+            return null;
+        }
+
+        if (process is not null)
+        {
+            await process.WaitForExitAsync();
+        }
+
+        return File.Exists(VhdLog) ? await File.ReadAllTextAsync(VhdLog) : "ログがありません (スクリプトが動きませんでした)。";
+    }
+
+    /// <summary>
+    /// 手順の文の TD-VHDX-… に、この PC でのディスクの番号を書き足す (HexEditor の一覧には「ディスク 3 (Msft Virtual Disk, …)」と出て、
+    /// TD-VHDX-… の名前は出ないため)。仮想ディスクのログがなければ、そのまま返す。
+    /// </summary>
+    /// <summary>この PC の物理ディスク (ツールの起動中に 1 回だけ調べる)。</summary>
+    public static IReadOnlyList<LocalDisk> PhysicalDisks()
+    {
+        if (_physicalDisks is null)
+        {
+            var start = new ProcessStartInfo("powershell.exe") { UseShellExecute = false, RedirectStandardOutput = true, CreateNoWindow = true };
+            start.ArgumentList.Add("-NoProfile");
+            start.ArgumentList.Add("-Command");
+            start.ArgumentList.Add(LocalDisks.ListCommand);
+            using Process process = Process.Start(start) ?? throw new InvalidOperationException("PowerShell を起動できません。");
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            _physicalDisks = LocalDisks.Parse(output);
+        }
+
+        return _physicalDisks;
+    }
+
+    private static IReadOnlyList<LocalDisk>? _physicalDisks;
+
+    public static string WithDiskNumbers(string text)
+    {
+        if (!text.Contains("TD-VHDX-", StringComparison.Ordinal) || !File.Exists(VhdLog))
+        {
+            return text;
+        }
+
+        string log;
+        try
+        {
+            log = File.ReadAllText(VhdLog);
+        }
+        catch (IOException)
+        {
+            return text;
+        }
+
+        return WithDiskNumbers(text, log);
+    }
+
+    /// <summary><see cref="WithDiskNumbers(string)"/> の本体 (ログの中身を受け取る)。</summary>
+    public static string WithDiskNumbers(string text, string log)
+    {
+        if (!log.Contains("RESULT: attached", StringComparison.Ordinal))
+        {
+            return text;
+        }
+
+        foreach (string line in log.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] parts = line.Split(' ', 4);
+            if (parts.Length >= 3 && parts[0] == "DISK" && int.TryParse(parts[2], out int number))
+            {
+                // 後ろに - や英大文字が続くものは別の名前なので当てない。
+                text = System.Text.RegularExpressions.Regex.Replace(
+                    text, System.Text.RegularExpressions.Regex.Escape(parts[1]) + "(?![-A-Z])", $"{parts[1]} (一覧の「ディスク {number}」)");
             }
         }
 
-        return "hexeditor.exe";
+        return text;
     }
+
+    /// <summary>仮想ディスクのログを、利用者向けの文に直す。</summary>
+    public static string DescribeVirtualDiskLog(string log)
+    {
+        var lines = new List<string>();
+        foreach (string line in log.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (line.StartsWith("DISK ", StringComparison.Ordinal))
+            {
+                string[] parts = line.Split(' ', 4);
+                lines.Add($"{parts[1]}: ディスク {parts[2]} {(parts.Length > 3 ? parts[3] : string.Empty)}");
+            }
+            else if (line.StartsWith("ERROR:", StringComparison.Ordinal))
+            {
+                lines.Add("失敗しました: " + line["ERROR:".Length..].Trim());
+            }
+            else if (line == "RESULT: removed")
+            {
+                lines.Add("仮想ディスクを外し、ファイルを消しました。");
+            }
+        }
+
+        if (log.Contains("RESULT: attached", StringComparison.Ordinal))
+        {
+            lines.Insert(0, "仮想ディスクを接続しました (HexEditor では「Msft Virtual Disk」と表示されます)。");
+        }
+
+        if (log.Contains("RESULT: removed", StringComparison.Ordinal) && !lines.Contains("仮想ディスクを外し、ファイルを消しました。"))
+        {
+            lines.Add("仮想ディスクを外し、ファイルを消しました。");
+        }
+
+        return lines.Count == 0 ? log.Trim() : string.Join(Environment.NewLine, lines);
+    }
+
+    // ---- ポータブル版・インストーラ版を作る ----
+
+    /// <summary>
+    /// build/publish.ps1 でポータブル版かインストーラ版を作る (数分かかる)。ポータブル版は展開し、インストーラ版はインストールする。
+    /// 進み具合は <paramref name="progress"/> に 1 行ずつ渡す。成功したら null、失敗したら理由を返す。
+    /// </summary>
+    public static async Task<string?> BuildDistributionAsync(string distro, IProgress<string> progress)
+    {
+        Directory.CreateDirectory(LogsFolder);
+        if (Fake)
+        {
+            foreach (string line in new[] { "(模擬) 作っています 1/2", "(模擬) 作っています 2/2" })
+            {
+                progress.Report(line);
+                await Task.Delay(400);
+            }
+
+            if (FakeFails(distro))
+            {
+                return $"(模擬) {distro} を作れませんでした (終了コード 1)。";
+            }
+
+            string exe = distro == "Portable" ? PortableExe : InstallerExe;
+            Directory.CreateDirectory(Path.GetDirectoryName(exe)!);
+            await File.WriteAllBytesAsync(exe, []);
+            if (distro == "Portable")
+            {
+                await File.WriteAllBytesAsync(Path.Combine(Path.GetDirectoryName(exe)!, "HexEditor.Elevated.exe"), []);
+            }
+
+            return null;
+        }
+
+        string log = Path.Combine(LogsFolder, $"publish-{distro.ToLowerInvariant()}.log");
+        string script = Path.Combine(RepoRoot, "build", "publish.ps1");
+        string shell = FindOnPath("pwsh.exe") ?? "powershell.exe";
+        // 出力を UTF-8 にそろえて読む (既定のコードページで読むと、dotnet の日本語のメッセージが文字化けする)。
+        string command = $"[Console]::OutputEncoding = [Text.Encoding]::UTF8; & '{script.Replace("'", "''")}' -Distro {distro} -Arch {Arch}";
+        var start = new ProcessStartInfo(shell, $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"")
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8,
+            StandardErrorEncoding = System.Text.Encoding.UTF8,
+            WorkingDirectory = RepoRoot,
+        };
+        using var writer = new StreamWriter(log, append: false);
+        using Process process = Process.Start(start) ?? throw new InvalidOperationException("PowerShell を起動できません。");
+        object gate = new();
+        void OnLine(string? line)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
+            lock (gate)
+            {
+                writer.WriteLine(line);
+            }
+
+            progress.Report(line.Length > 160 ? line[..160] + "…" : line);
+        }
+
+        process.OutputDataReceived += (_, e) => OnLine(e.Data);
+        process.ErrorDataReceived += (_, e) => OnLine(e.Data);
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+        await process.WaitForExitAsync();
+        if (process.ExitCode != 0)
+        {
+            return $"作れませんでした (終了コード {process.ExitCode})。ログ: {log}";
+        }
+
+        string output = Path.Combine(RepoRoot, "artifacts", distro, Arch);
+        if (distro == "Portable")
+        {
+            string? zip = Directory.EnumerateFiles(output, "*-portable.zip").FirstOrDefault();
+            if (zip is null)
+            {
+                return $"zip が見つかりません ({output})。ログ: {log}";
+            }
+
+            progress.Report("展開しています...");
+            await Task.Run(() =>
+            {
+                if (Directory.Exists(PortableFolder))
+                {
+                    Directory.Delete(PortableFolder, recursive: true);
+                }
+
+                System.IO.Compression.ZipFile.ExtractToDirectory(zip, PortableFolder);
+            });
+            return File.Exists(PortableExe) ? null : $"展開した中に HexEditor.exe がありません ({PortableFolder})。";
+        }
+
+        // インストーラ版: できた Setup.exe でこのユーザーにインストールする。
+        string? setup = Directory.EnumerateFiles(output, $"HexEditor-*-{Arch}-Setup.exe").FirstOrDefault()
+            ?? Directory.EnumerateFiles(output, "*Setup.exe").FirstOrDefault();
+        if (setup is null)
+        {
+            return $"Setup.exe が見つかりません ({output})。ログ: {log}";
+        }
+
+        progress.Report("インストールしています...");
+        using Process? installer = Process.Start(new ProcessStartInfo(setup, "--silent") { UseShellExecute = false });
+        if (installer is not null)
+        {
+            await installer.WaitForExitAsync();
+        }
+
+        return File.Exists(InstallerExe) ? null : $"インストールが終わりましたが、{InstallerExe} がありません。";
+    }
+
+    /// <summary>ポータブル版・インストーラ版の zip / Setup.exe の場所 (別の PC に持っていくときのため)。</summary>
+    public static string ArtifactsFolder(string distro) => Path.Combine(RepoRoot, "artifacts", distro, Arch);
+
+    private static string? FindOnPath(string exe) =>
+        (Environment.GetEnvironmentVariable("PATH") ?? string.Empty).Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+            .Select(dir => Path.Combine(dir.Trim(), exe))
+            .FirstOrDefault(File.Exists);
+
+    // ---- 不合格のときのスクリーンショット ----
 
     /// <summary>HexEditor のウィンドウを前面に出さずに撮る (不合格の記録に添付する)。</summary>
     public static string? CaptureWindow(Process? process, string id)
     {
-        if (process is null || process.HasExited || process.MainWindowHandle == 0)
+        try
+        {
+            if (process is null || process.HasExited || process.MainWindowHandle == 0)
+            {
+                return null;
+            }
+        }
+        catch (InvalidOperationException)
         {
             return null;
         }

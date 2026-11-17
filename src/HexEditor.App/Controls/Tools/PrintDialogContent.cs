@@ -224,7 +224,7 @@ internal sealed class PrintDialogContent : UserControl
         var grid = new Grid { ColumnSpacing = 16 };
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        grid.Children.Add(new ScrollViewer { Content = left, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, MaxHeight = 560, Padding = new Thickness(0, 0, 12, 0) });
+        grid.Children.Add(DialogParts.KeepFocusVisuals(new ScrollViewer { Content = left, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, MaxHeight = 560, Padding = new Thickness(0, 0, 12, 0) }));
         Grid.SetColumn(preview, 1);
         preview.MinWidth = 380;
         preview.MinHeight = 480;

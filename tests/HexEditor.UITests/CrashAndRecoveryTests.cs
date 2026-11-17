@@ -11,6 +11,22 @@ public sealed class CrashAndRecoveryTests
 {
     private static readonly TimeSpan ExitTimeout = TimeSpan.FromSeconds(90);
 
+    /// <summary>
+    /// 開発用のコマンドで UI スレッドに未処理の例外を起こす。アプリは返事を返す前に落ちることがあり、そのときテストの通り道は
+    /// 「The app closed the test channel」(IOException) で閉じる。これは期待する結果なので、ここでは受け流す (CI の run 39491042497)。
+    /// 本当に落ちたかは、呼び出し側が終了コードとクラッシュ情報で確かめる。
+    /// </summary>
+    private static async Task ThrowOnUiThreadAsync(AppSession app)
+    {
+        try
+        {
+            await app.CommandAsync("TestMenu_ThrowUi");
+        }
+        catch (IOException)
+        {
+        }
+    }
+
     [Fact]
     [Trait(UiTest.TC, "TC-PKG-30-01")]
     public Task Crash_report_is_written_and_shown_on_next_start() => UiTestContext.RunAsync(async ctx =>
@@ -18,7 +34,7 @@ public sealed class CrashAndRecoveryTests
         AppSession app = await ctx.StartAsync();
 
         // 1. 開発用のコマンド (テスト用のメニュー) で、UI スレッドで未処理の例外を起こす。
-        await app.CommandAsync("TestMenu_ThrowUi");
+        await ThrowOnUiThreadAsync(app);
         int exitCode = await app.WaitForExitAsync(ExitTimeout);
         Assert.NotEqual(0, exitCode);
 
@@ -59,7 +75,7 @@ public sealed class CrashAndRecoveryTests
         }
 
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
-        await app.CommandAsync("TestMenu_ThrowUi");
+        await ThrowOnUiThreadAsync(app);
         Assert.NotEqual(0, await app.WaitForExitAsync(ExitTimeout));
 
         Assert.Single(CrashReports(app.CrashFolder));
@@ -85,7 +101,7 @@ public sealed class CrashAndRecoveryTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
         await app.SelectAsync(0, 0x40);
 
-        await app.CommandAsync("TestMenu_ThrowUi");
+        await ThrowOnUiThreadAsync(app);
         await app.WaitForExitAsync(ExitTimeout);
 
         string report = File.ReadAllText(Assert.Single(CrashReports(app.CrashFolder)));
@@ -207,7 +223,7 @@ public sealed class CrashAndRecoveryTests
         Assert.Empty(RecoveryStates(app.RecoveryFolder));
 
         // 2. テスト用のメニューから、UI スレッドで未処理の例外を起こす。
-        await app.CommandAsync("TestMenu_ThrowUi");
+        await ThrowOnUiThreadAsync(app);
         await app.WaitForExitAsync(ExitTimeout);
 
         // 3. 同じ設定フォルダで起動すると、復旧の画面に 2 件出る。

@@ -2614,13 +2614,13 @@ Ayrıntılar şuraya yazıldı:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 başlangıç konumu</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Ofset mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Görünüm: UTF-32'yi kalanı 0 olan ofsetlerden çöz</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>UTF-32'yi kalanı 0 olan ofsetlerden çöz</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>başlangıç konumu faz utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Görünüm: UTF-32'yi kalanı 1 olan ofsetlerden çöz</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>UTF-32'yi kalanı 1 olan ofsetlerden çöz</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>başlangıç konumu faz utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Görünüm: UTF-32'yi kalanı 2 olan ofsetlerden çöz</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>UTF-32'yi kalanı 2 olan ofsetlerden çöz</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>başlangıç konumu faz utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Görünüm: UTF-32'yi kalanı 3 olan ofsetlerden çöz</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>UTF-32'yi kalanı 3 olan ofsetlerden çöz</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>başlangıç konumu faz utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Geçmiş listesi</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>atlama geçmişi liste geri son konumlar jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@ Anahtarı değiştirmeyi seçmedikçe bağlantı kurulmaz.</value></data>
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Her tarafta bu kadar alan karşılaştırıldıktan sonra yapı karşılaştırmasını durdur (10.000 ile 10.000.000 arası).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Yapı karşılaştırması: dizi eşleştirme</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Dizi öğelerinin nasıl eşleştirileceği; şablon ve dizi başına ayarlanır. Yapı farkları panelindeki "Eşleştirme yöntemi..." ile değiştirin.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Karşılaştır: yapıyı karşılaştır</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Yapıyı karşılaştır</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff yapı alan şablon fark</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Karşılaştır: yapı karşılaştırması için şablon seç</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Yapı karşılaştırması için şablon seç</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose yapı şablon seç</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Karşılaştır: yapı farkları arasında git</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Yapı farkları arasında git</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target sonraki önceki yapı hedef</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Karşılaştır: yapı farklarını göster</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Yapı farklarını göster</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel yapı farkları panel</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Karşılaştır: sonraki yapı farkı</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Sonraki yapı farkı</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field yapı sonraki alan</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Karşılaştır: önceki yapı farkı</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Önceki yapı farkı</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field yapı önceki alan</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Karşılaştır: yapı farklarını dışarı aktar</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Yapı farklarını dışarı aktar</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report yapı dışarı aktar rapor</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Yapı farklarını aç/kapat</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel yapı farkları panel</value></data>

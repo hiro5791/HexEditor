@@ -67,6 +67,7 @@ public sealed partial class InspectorRowSettings : UserControl
     public InspectorRowSettings()
     {
         InitializeComponent();
+        ItemKeys.Attach(SettingsList, SettingsList_KeyDown);
         AutomationProperties.SetName(SettingsList, Loc.Get("Inspector_SettingsList_Name"));
         AutomationProperties.SetName(PresetChoice, Loc.Get("Inspector_PresetLabel/Text"));
         AutomationProperties.SetName(DateFormatChoice, Loc.Get("Inspector_DateFormatLabel/Text"));

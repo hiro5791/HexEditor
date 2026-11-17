@@ -127,6 +127,10 @@ public sealed partial class MainWindow
         _activeToolPage = id;
         UpdateToolPages();
         SyncTabSelection();
+        if (ActiveTab is { } tab)
+        {
+            _mru.Touch(tab);
+        }
     }
 
     public void CloseToolPage(string id)
@@ -169,6 +173,10 @@ public sealed partial class MainWindow
             _activeToolPage = null;
             UpdateToolPages();
             SyncTabSelection();
+            if (Vm.Selected is { } doc)
+            {
+                _mru.Touch(doc);
+            }
         }
     }
 

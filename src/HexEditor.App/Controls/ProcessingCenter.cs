@@ -19,6 +19,9 @@ public sealed partial class ProcessingCenter : UserControl
     private readonly Button _clear = new() { HorizontalAlignment = HorizontalAlignment.Right };
     private readonly HashSet<LongRunningOperation> _cleared = [];
 
+    // 行は処理ごとに作り、更新では中身だけ変える (作り直すと「キャンセル」ボタンのフォーカスが外れる)。
+    private readonly Dictionary<LongRunningOperation, RowParts> _rows = [];
+
     public ProcessingCenter()
     {
         _empty.Text = Loc.Get("Operations_None");
@@ -49,30 +52,80 @@ public sealed partial class ProcessingCenter : UserControl
     /// <summary>文書の表示名 (処理の対象の名前を出すため)。</summary>
     public Func<object?, string?>? TargetName { get; set; }
 
-    /// <summary>一覧を作り直す。</summary>
+    /// <summary>一覧を新しい状態にする。前と同じ処理の行は、作り直さずに中身だけ更新する。</summary>
     public void Refresh()
     {
-        _list.Children.Clear();
-        if (Center is null)
-        {
-            return;
-        }
-
         (List<LongRunningOperation> running, List<LongRunningOperation> completed) = Shown();
+        var shown = new List<UIElement>();
         foreach (LongRunningOperation op in running.Concat(completed))
         {
-            _list.Children.Add(Row(op));
+            bool active = IsActive(op);
+            if (!_rows.TryGetValue(op, out RowParts? parts) || parts.Active != active)
+            {
+                _rows[op] = parts = Row(op, active);
+            }
+
+            Update(parts, op);
+            shown.Add(parts.Root);
         }
 
-        if (_list.Children.Count == 0)
+        foreach (LongRunningOperation gone in _rows.Keys.Where(op => !running.Contains(op) && !completed.Contains(op)).ToList())
         {
-            _list.Children.Add(_empty);
+            _rows.Remove(gone);
+        }
+
+        if (shown.Count == 0)
+        {
+            shown.Add(_empty);
+        }
+
+        // 並びが変わったときだけ入れ替える。
+        if (!_list.Children.SequenceEqual(shown))
+        {
+            _list.Children.Clear();
+            foreach (UIElement row in shown)
+            {
+                _list.Children.Add(row);
+            }
         }
 
         _clear.IsEnabled = completed.Count > 0;
     }
 
-    private UIElement Row(LongRunningOperation op)
+    private static bool IsActive(LongRunningOperation op) =>
+        op.State is OperationState.Running or OperationState.Cancelling or OperationState.Pending;
+
+    /// <summary>1 行の、更新で変わる部分。</summary>
+    private sealed record RowParts(Grid Root, bool Active, ProgressBar? Bar, TextBlock? Details, Button? Cancel, TextBlock? Result);
+
+    private static void Update(RowParts parts, LongRunningOperation op)
+    {
+        if (parts.Bar is { } bar)
+        {
+            bar.IsIndeterminate = op.Fraction is null;
+            if (op.Fraction is double f)
+            {
+                bar.Value = f;
+            }
+        }
+
+        if (parts.Details is { } details)
+        {
+            details.Text = OperationText.Details(op);
+        }
+
+        if (parts.Cancel is { } cancel)
+        {
+            cancel.IsEnabled = op.State != OperationState.Cancelling && op.CanCancel;
+        }
+
+        if (parts.Result is { } result)
+        {
+            result.Text = OperationText.Result(op);
+        }
+    }
+
+    private RowParts Row(LongRunningOperation op, bool active)
     {
         var row = new Grid { ColumnSpacing = 8 };
         row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -85,23 +138,16 @@ public sealed partial class ProcessingCenter : UserControl
             text.Children.Add(Caption(target));
         }
 
-        bool active = op.State is OperationState.Running or OperationState.Cancelling or OperationState.Pending;
         if (active)
         {
-            var bar = new ProgressBar { Maximum = 1, IsIndeterminate = op.Fraction is null };
-            if (op.Fraction is double f)
-            {
-                bar.Value = f;
-            }
-
+            var bar = new ProgressBar { Maximum = 1 };
             text.Children.Add(bar);
-            TextBlock details = Caption(OperationText.Details(op));
+            TextBlock details = Caption(string.Empty);
             AutomationProperties.SetAutomationId(details, "Operations_Details");
             text.Children.Add(details);
             var cancel = new Button { Content = Loc.Get("Common_Cancel"), VerticalAlignment = VerticalAlignment.Center };
             AutomationProperties.SetAutomationId(cancel, "Operations_Cancel");
             AutomationProperties.SetName(cancel, $"{Loc.Get("Common_Cancel")}: {op.Name}");
-            cancel.IsEnabled = op.State != OperationState.Cancelling && op.CanCancel;
             if (!op.CanCancel)
             {
                 // 書き込みを始めたずらしながらのその場保存はキャンセルできない (ENG-24 の仕様 5)。理由をツールチップで示す。
@@ -110,16 +156,15 @@ public sealed partial class ProcessingCenter : UserControl
             cancel.Click += (_, _) => _ = op.RequestCancelAsync();
             Grid.SetColumn(cancel, 1);
             row.Children.Add(cancel);
-        }
-        else
-        {
-            TextBlock result = Caption(OperationText.Result(op));
-            AutomationProperties.SetAutomationId(result, "Operations_Result");
-            text.Children.Add(result);
+            row.Children.Add(text);
+            return new RowParts(row, true, bar, details, cancel, null);
         }
 
+        TextBlock result = Caption(string.Empty);
+        AutomationProperties.SetAutomationId(result, "Operations_Result");
+        text.Children.Add(result);
         row.Children.Add(text);
-        return row;
+        return new RowParts(row, false, null, null, null, result);
     }
 
     /// <summary>

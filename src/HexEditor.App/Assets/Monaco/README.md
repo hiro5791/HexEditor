@@ -15,6 +15,7 @@
 - `vs/`: パッケージの `min/vs` のうち使う部分だけ (変更しない)。`build/monaco/trim-monaco.py` で選ぶ。
   - 残す: ローダー、エディタ本体、TypeScript の言語サービス (JavaScript の補完・型のチェック) と worker、基本言語の登録と
     JavaScript・TypeScript・C# の字句解析、Monaco の表示言語 (`nls/lang/*.js`)。
+    `nls/lang/*.js` は `define` を呼ばないので AMD ローダーでは読めない。`host.js` がエディタ本体より先に普通の `script` 要素で読む (AUTO-20 の仕様 10)。
   - 除く: ほかの基本言語、CSS・HTML・JSON の言語サービスの worker の本体、`language/` (AMD の直接読み込み用の重複)、`*.d.ts`。
 - `host/`: WebView2 の中のページ (このリポジトリのコード。`index.html`・`host.js`・`host.css`・`script-env.d.ts`)。
   `hexeditor.d.ts` / `hexeditor.ja.d.ts` はビルドで `docs/api/` から写す。

@@ -258,7 +258,17 @@ public sealed class WindowShellTests
         JsonObject hidden = await app.SendAsync("shellState");
         Assert.False(hidden["titleBarVisible"]!.GetValue<bool>());
         Assert.False(hidden["toolbarVisible"]!.GetValue<bool>());
+
+        // 全画面にした直後は配置が続くことがあるので、エディタの位置が 0.5 秒変わらなくなるまで待つ (遅い CI のランナー)。
         double editorTop = hidden["editorTop"]!.GetValue<double>();
+        await app.WaitUntilAsync(async () =>
+        {
+            await Task.Delay(500);
+            double now = (await app.SendAsync("shellState"))["editorTop"]!.GetValue<double>();
+            bool stable = Math.Abs(now - editorTop) < 0.5;
+            editorTop = now;
+            return stable;
+        }, Wait, "the editor stays in place");
 
         // 上端に置いて 400 ms: タイトルバー (メニュー)、ツールバー、タブ列が上から順に重なって出る。エディタは動かない。
         await app.SendAsync("fullScreenPointer", new JsonObject { ["y"] = 2 });

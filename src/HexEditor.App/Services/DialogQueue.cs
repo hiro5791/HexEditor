@@ -16,6 +16,9 @@ public static class DialogQueue
     /// <summary>前のダイアログが閉じてから <paramref name="dialog"/> を出す。出せなかったら None (キャンセルと同じ扱い)。</summary>
     public static async Task<ContentDialogResult> ShowQueuedAsync(this ContentDialog dialog)
     {
+        // 中身を ScrollViewer に入れたダイアログで、左端のコントロールのフォーカスの枠が切れないようにする。
+        Controls.DialogParts.KeepFocusVisuals(dialog);
+
         // ダイアログを出している処理の中から別のダイアログを出す場合に止まらないよう、待つのは一定の時間まで。
         bool entered = await Gate.WaitAsync(TimeSpan.FromSeconds(5));
         try

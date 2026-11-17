@@ -538,6 +538,20 @@ public sealed class EditCommandTests
     });
 
     [Fact]
+    public Task Dialog_content_in_a_scroll_viewer_keeps_the_combo_focus_visual() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 中身を ScrollViewer に入れたダイアログ (ここでは「塗りつぶし」) の左端の ComboBox のフォーカスの枠が切れない
+        // (DialogQueue がダイアログを出すときに、ScrollViewer を外側に広げて中身を内側に寄せる)。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await SelectRangeAsync(app, "0x10", "5");
+        await app.CommandAsync("Command_Fill");
+        await app.WaitForAsync("FillDialog");
+        await app.IdleAsync();
+        await app.SendAsync("focus", new JsonObject { ["target"] = "Fill_Kind" });
+        await DeviceTests.AssertFocusVisualFitsAsync(app, "Fill_Kind", 4, 4);
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-EDIT-29-04")]
     [Trait(UiTest.Category, "Nightly")]
     public Task Cancelling_a_cryptographic_random_fill_changes_nothing() => UiTestContext.RunAsync(async ctx =>

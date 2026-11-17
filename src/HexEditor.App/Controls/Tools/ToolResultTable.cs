@@ -83,14 +83,14 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
         _list.IsItemClickEnabled = false;
         _list.ContainerContentChanging += List_ContainerContentChanging;
         _list.DoubleTapped += (_, _) => ActivateSelected();
-        _list.KeyDown += (_, e) =>
+        ItemKeys.OnKey(_list, (_, e) =>
         {
             if (e.Key == VirtualKey.Enter && _list.SelectedItem is not null)
             {
                 ActivateSelected();
                 e.Handled = true;
             }
-        };
+        });
         _list.RightTapped += List_RightTapped;
         _list.SelectionChanged += (_, _) => SelectionChanged?.Invoke(this, EventArgs.Empty);
         AutomationProperties.SetAutomationId(_list, idPrefix + "_List");

@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!-- 手動テストの準備 (CaseSetup): テストデータの生成と、テスト用の設定フォルダ (ブックマークの付随データ) を作る。 -->
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.TestData\HexEditor.TestData.csproj" />
+    <ProjectReference Include="..\..\src\HexEditor.Core\HexEditor.Core.csproj" />
+  </ItemGroup>
+
 </Project>

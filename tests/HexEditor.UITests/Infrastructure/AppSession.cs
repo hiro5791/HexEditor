@@ -243,7 +243,27 @@ public sealed class AppSession : IAsyncDisposable
     {
         try
         {
-            return await Channel.SendAsync(cmd, args, timeout);
+            if (cmd != "dialogButton")
+            {
+                return await Channel.SendAsync(cmd, args, timeout);
+            }
+
+            // ContentDialog はポップアップがすぐ開いても、ボタン (PrimaryButton など) は次の配置でテンプレートから作られる。UI オートメーションで
+            // ダイアログの要素が見えた直後でも「Dialog button not found」になることがあるため (CI の run 40959700393: WriteBlockUiTests)、
+            // ボタンが現れるまで待ち直す。ボタンが本当にないときは、時間切れで元の失敗をそのまま投げる。
+            var watch = Stopwatch.StartNew();
+            while (true)
+            {
+                try
+                {
+                    return await Channel.SendAsync(cmd, args, timeout);
+                }
+                catch (InvalidOperationException ex) when (ex.Message.Contains("Dialog button not found", StringComparison.Ordinal)
+                    && watch.Elapsed < UiTest.Scaled(TimeSpan.FromSeconds(15)) && !Process.HasExited)
+                {
+                    await Task.Delay(100);
+                }
+            }
         }
         catch (IOException ex)
         {
@@ -389,8 +409,11 @@ public sealed class AppSession : IAsyncDisposable
             return Window.FindFirstDescendant(cf => cf.ByAutomationId(automationId));
         }
         catch (Exception e) when (e is System.Runtime.InteropServices.COMException
-                                  || (e is TimeoutException && e.InnerException is System.Runtime.InteropServices.COMException))
+                                  || (e is TimeoutException && e.InnerException is System.Runtime.InteropServices.COMException)
+                                  || e is System.ComponentModel.Win32Exception)
         {
+            // Win32Exception: FlaUI は UIA の呼び出しが 0x800705B4 (ERROR_TIMEOUT) で返ると COMException ではなく Win32Exception を投げる
+            // (CI の run 40584299115: アプリが忙しい間の FindFirstDescendant。TC-TPL-17-01)。これも「まだ見つからない」として待ち直す。
             // FlaUI は UIA の呼び出しが時間切れ (0x80131505) になると TimeoutException に包んで投げる。遅い CI のランナーで
             // ウィンドウを開いた直後に起きるため、これも「まだ見つからない」として待ち直す。
             // ダイアログを開いている・閉じている途中は UI オートメーションの木が変わり、E_UNEXPECTED などで失敗することがある
@@ -453,6 +476,26 @@ public sealed class AppSession : IAsyncDisposable
         await Process.WaitForExitAsync(cts.Token);
         return Process.ExitCode;
     }
+
+    /// <summary>
+    /// 終了のコマンド (Command_Exit) を送り、プロセスの終了を待つ。確認の画面が出ないとき、アプリは応答を返す前に終了することがあり、
+    /// その場合は命令の通り道が閉じられる (IOException) のでそれは正常として扱う。
+    /// </summary>
+    public async Task<int> ExitAndWaitAsync(TimeSpan timeout)
+    {
+        try
+        {
+            await CommandAsync("Command_Exit");
+        }
+        catch (IOException) when (Process.HasExited || WaitQuietlyForExit())
+        {
+            // 応答を返す前の終了。
+        }
+
+        return await WaitForExitAsync(timeout);
+    }
+
+    private bool WaitQuietlyForExit() => Process.WaitForExit(5000);
 
     /// <summary>TerminateProcess で強制終了する (終了の処理は行われない)。</summary>
     public void Kill()

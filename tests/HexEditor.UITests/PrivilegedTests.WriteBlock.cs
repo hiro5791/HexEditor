@@ -19,7 +19,10 @@ public sealed partial class PrivilegedTests
     {
         // 前提: TD-VHDX-MBR を接続し、内容のハッシュを記録する。テスト用の命令が、管理者のアプリから本物の補助プロセスを起動して
         // Hello の後に SetWriteBlock を送り、要求を直接送る (UI のプロセスの代わりのクライアント)。
-        string before = Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 1 << 20));
+        // ボリュームの中は Windows 自身が書くので、パーティションより前 (MBR と隙間。書き込みを試す LBA 100 を含む) を比べる。
+        byte[] head = CiPrivileged.ReadBeforeFirstPartition(CiPrivileged.VhdDiskPath);
+        Assert.True(head.Length > 101 * 512, $"the partition starts at {head.Length}, before LBA 100");
+        string before = Hash(head);
         AppSession app = await StartAsync(ctx, elevated: true);
         JsonObject r = await app.SendAsync("tcHelperProbe", new JsonObject
         {
@@ -42,8 +45,8 @@ public sealed partial class PrivilegedTests
         Assert.NotEqual(0u, S("lock"));
         Assert.NotEqual(0u, S("dismount"));
 
-        // 6. ディスクの内容が変わっていない (LBA 100 を含む先頭 1 MiB)。
-        Assert.Equal(before, Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 1 << 20)));
+        // 6. ディスクの内容が変わっていない (LBA 100 を含む、パーティションより前)。
+        Assert.Equal(before, Hash(CiPrivileged.ReadBeforeFirstPartition(CiPrivileged.VhdDiskPath)));
     });
 
     /// <summary>テストの前後で StorageDevicePolicies のキーを退避・復元する (TC-FOR-02-02 の前提)。</summary>

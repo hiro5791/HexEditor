@@ -2614,13 +2614,13 @@ Chi tiết đã được ghi vào:
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Vị trí Bắt đầu UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Độ lệch mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Xem: Giải mã UTF-32 từ độ lệch có số dư 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Giải mã UTF-32 từ độ lệch có số dư 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>vị trí bắt đầu utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Xem: Giải mã UTF-32 từ độ lệch có số dư 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Giải mã UTF-32 từ độ lệch có số dư 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>vị trí bắt đầu utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Xem: Giải mã UTF-32 từ độ lệch có số dư 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Giải mã UTF-32 từ độ lệch có số dư 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>vị trí bắt đầu utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Xem: Giải mã UTF-32 từ độ lệch có số dư 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Giải mã UTF-32 từ độ lệch có số dư 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>vị trí bắt đầu utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Danh sách lịch sử</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>lịch sử di chuyển danh sách vị trí gần đây jump history list back recent positions</value></data>
@@ -9994,19 +9994,19 @@ Kết nối sẽ không được thực hiện trừ khi bạn chọn thay khóa
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Dừng so sánh cấu trúc sau khi đã so sánh số trường này ở mỗi bên (10.000 đến 10.000.000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>So sánh cấu trúc: ghép mảng</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Cách ghép các phần tử mảng, theo từng mẫu và từng mảng. Đổi bằng "Cách ghép..." trong bảng Khác biệt cấu trúc.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>So sánh: so sánh cấu trúc</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>So sánh cấu trúc</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff cấu trúc trường mẫu khác biệt</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>So sánh: chọn mẫu để so sánh cấu trúc</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Chọn mẫu để so sánh cấu trúc</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose cấu trúc mẫu chọn</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>So sánh: di chuyển giữa các khác biệt cấu trúc</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Di chuyển giữa các khác biệt cấu trúc</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target tiếp trước cấu trúc đích</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>So sánh: hiện khác biệt cấu trúc</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Hiện khác biệt cấu trúc</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel khác biệt cấu trúc bảng</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>So sánh: khác biệt cấu trúc tiếp theo</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Khác biệt cấu trúc tiếp theo</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field cấu trúc tiếp trường</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>So sánh: khác biệt cấu trúc trước</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Khác biệt cấu trúc trước</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field cấu trúc trước trường</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>So sánh: xuất khác biệt cấu trúc</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Xuất khác biệt cấu trúc</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report cấu trúc xuất báo cáo</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Bật/tắt khác biệt cấu trúc</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel khác biệt cấu trúc bảng</value></data>

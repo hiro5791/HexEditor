@@ -88,8 +88,8 @@ public sealed class DeviceService : IAsyncDisposable
     /// <summary>補助プロセスを起動できる配布形態 (インストーラ・ポータブル)。</summary>
     public bool HelperSupported => _env.Distribution is Distribution.Installer or Distribution.Portable or Distribution.Development;
 
-    /// <summary>補助プロセスのファイルがある、または偽のデバイスがある。</summary>
-    public bool HelperAvailable => HelperSupported && (_fakeElevatedDevices is not null || _fakeElevatedProcesses is not null || File.Exists(_helperPath));
+    /// <summary>補助プロセスのファイルがある、または偽のデバイスがある (テスト用の設定 helperMissing ならない扱い)。</summary>
+    public bool HelperAvailable => HelperSupported && !TestHooks.HelperMissing && (_fakeElevatedDevices is not null || _fakeElevatedProcesses is not null || File.Exists(_helperPath));
 
     /// <summary>補助プロセスが動いている (ステータスバーの盾のアイコン。ENG-28 の「画面」)。</summary>
     public bool IsHelperRunning => _fakeHelperActive || _session is { IsConnected: true };

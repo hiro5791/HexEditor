@@ -71,7 +71,7 @@ public static class BuiltInCommands
         new("file.reopenClosed", "file") { DefaultBindings = [K("Ctrl+Shift+T")] },
         new("file.recent.clear", "file"),
         new("file.recent.showAll", "file"),
-        new("file.close", "file") { Icon = IconClose, DefaultBindings = [K("Ctrl+W"), K("Ctrl+F4")], Condition = "documentOpen" },
+        new("file.close", "file") { Icon = IconClose, DefaultBindings = [K("Ctrl+W"), K("Ctrl+F4")], Condition = "documentOpen || toolPageActive" },
         new("file.closeAll", "file") { Condition = "documentOpen" },
         new("file.closeOthers", "file") { Condition = "documentOpen" },
         new("file.closeToRight", "file") { Condition = "documentOpen" },

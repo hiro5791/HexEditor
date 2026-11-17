@@ -1,10 +1,10 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using HexEditor.Core.Clipboard;
 using HexEditor.Core.Formats;
 using HexEditor.Core.Tests.Clipboard;
 using static HexEditor.Core.Tests.Formats.FormatTestSupport;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Formats;
@@ -14,6 +14,7 @@ namespace HexEditor.Core.Tests.Formats;
 /// 書き出し、要素数と最初・最後の要素を出力する小さなプログラムに組み込んでコンパイル・実行する。処理系が PATH にない場合はスキップする。
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SerialCollection.Name)]
 public sealed class ExportCompileTests
 {
     private static readonly byte[] Bytes256 = [.. Enumerable.Range(0, 256).Select(i => (byte)i)];
@@ -63,25 +64,7 @@ public sealed class ExportCompileTests
         return dir;
     }
 
-    private static string Run(string tool, string arguments, string directory)
-    {
-        var info = new ProcessStartInfo(CopyFormatCompileTests.FindTool(tool) ?? tool, arguments)
-        {
-            WorkingDirectory = directory,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        info.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        info.Environment["DOTNET_NOLOGO"] = "1";
-        using Process process = Process.Start(info)!;
-        Task<string> stdout = process.StandardOutput.ReadToEndAsync();
-        Task<string> stderr = process.StandardError.ReadToEndAsync();
-        Assert.True(process.WaitForExit(TimeSpan.FromMinutes(5)), $"{tool} が終わりません。");
-        Assert.True(process.ExitCode == 0, $"{tool} {arguments}: {stderr.Result}{stdout.Result}");
-        return stdout.Result.ReplaceLineEndings("\n");
-    }
+    private static string Run(string tool, string arguments, string directory) => ToolProcess.Run(tool, arguments, directory);
 
     [RequiresToolFact("gcc")]
     [Trait(TC, "TC-TOOL-09-01")]

@@ -23,7 +23,7 @@ namespace HexEditor.App;
 /// </summary>
 public sealed partial class MainWindow
 {
-    private readonly TabMru<DocumentViewModel> _mru = new();
+    private readonly TabMru<object> _mru = new();
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _mruTimer;
     private Popup? _switcher;
     private bool _materializing;
@@ -166,7 +166,7 @@ public sealed partial class MainWindow
 
     private void RegisterTabCommands()
     {
-        Func<CommandState> twoTabs = () => Vm.Documents.Count < 2 ? CommandState.Unavailable(Loc.Get("Command_OnlyTab")) : CommandState.Available;
+        Func<CommandState> twoTabs = () => _tabItems.Count < 2 ? CommandState.Unavailable(Loc.Get("Command_OnlyTab")) : CommandState.Available;
         Commands.Register("tab.next", () => StepRecentTab(forward: true), twoTabs);
         Commands.Register("tab.previous", () => StepRecentTab(forward: false), twoTabs);
         Commands.Register("tab.nextInOrder", () => StepTabInOrder(forward: true), twoTabs);
@@ -224,11 +224,32 @@ public sealed partial class MainWindow
     /// <summary>Ctrl+PageDown / Ctrl+PageUp: 見出しの並び順で次 / 前のタブ (UI-09 の仕様 6)。</summary>
     private void StepTabInOrder(bool forward)
     {
-        int index = Vm.Selected is { } doc ? Vm.Documents.IndexOf(doc) : -1;
-        int next = TabStripRules.Cycle(Vm.Documents.Count, index, forward);
+        int index = ActiveTab is { } tab ? _tabItems.IndexOf(tab) : -1;
+        int next = TabStripRules.Cycle(_tabItems.Count, index, forward);
         if (next >= 0)
         {
-            Vm.Selected = Vm.Documents[next];
+            SelectTab(_tabItems[next]);
+        }
+    }
+
+    /// <summary>タブ列の項目 (文書かページ) を前に出す。ページの表示が変わるときは、表示したものにフォーカスを置く。</summary>
+    private void SelectTab(object tab)
+    {
+        bool pageChanges = _activeToolPage is not null || tab is ToolPageTab;
+        switch (tab)
+        {
+            case DocumentViewModel doc:
+                HideToolPages();
+                Vm.Selected = doc;
+                break;
+            case ToolPageTab page:
+                ShowToolPageTab(page.Id);
+                break;
+        }
+
+        if (pageChanges)
+        {
+            DispatcherQueue.TryEnqueue(FocusActiveContent);
         }
     }
 
@@ -238,12 +259,12 @@ public sealed partial class MainWindow
     /// </summary>
     private void StepRecentTab(bool forward)
     {
-        if (_mru.Step([.. Vm.Documents], forward) is not { } next)
+        if (_mru.Step([.. _tabItems], forward) is not { } next)
         {
             return;
         }
 
-        Vm.Selected = next;
+        SelectTab(next);
         if (IsCtrlDown())
         {
             ShowSwitcher();
@@ -262,9 +283,9 @@ public sealed partial class MainWindow
 
                 _mruTimer.Stop();
                 HideSwitcher();
-                if (_mru.Commit() is { } chosen && Vm.Documents.Contains(chosen) && Vm.Selected != chosen)
+                if (_mru.Commit() is { } chosen && _tabItems.Contains(chosen) && !ReferenceEquals(ActiveTab, chosen))
                 {
-                    Vm.Selected = chosen;
+                    SelectTab(chosen);
                 }
             };
         }
@@ -287,10 +308,14 @@ public sealed partial class MainWindow
         };
         AutomationProperties.SetAutomationId(list, "TabSwitcher");
         AutomationProperties.SetName(list, Loc.Get("Tab_Switcher"));
-        foreach (DocumentViewModel doc in _mru.Candidates)
+        foreach (object tab in _mru.Candidates)
         {
-            var text = new TextBlock { Text = doc.TabTitle };
-            ToolTipService.SetToolTip(text, doc.ToolTip);
+            var text = new TextBlock { Text = tab is DocumentViewModel doc ? doc.TabTitle : ((ToolPageTab)tab).Title };
+            if (tab is DocumentViewModel { ToolTip: var tip })
+            {
+                ToolTipService.SetToolTip(text, tip);
+            }
+
             list.Items.Add(text);
         }
 

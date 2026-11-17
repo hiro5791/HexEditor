@@ -98,6 +98,18 @@ public static class DisplayLanguages
         return "en";
     }
 
+    /// <summary>
+    /// Monaco Editor の表示言語 (同梱の <c>vs/nls/lang/&lt;値&gt;.js</c>。08 の AUTO-20 の仕様 10)。Monaco に翻訳がない言語は <c>en</c> (Monaco の文字列だけ英語になる)。
+    /// </summary>
+    public static string MonacoLanguage(string tag) => tag switch
+    {
+        "ja" or "ko" or "de" or "fr" or "es" or "it" or "ru" or "pl" or "cs" or "tr" => tag,
+        "zh-Hans" => "zh-cn",
+        "zh-Hant" => "zh-tw",
+        "pt" => "pt-br",
+        _ => "en",
+    };
+
     /// <summary>設定の値と Windows の言語から、使う表示言語を決める。知らない値は <c>system</c> と同じ。</summary>
     public static string Choose(string? setting, IEnumerable<string> windowsLanguages) =>
         setting is { Length: > 0 } s && !s.Equals(System, StringComparison.OrdinalIgnoreCase) && Find(s) is { } chosen

@@ -434,6 +434,50 @@ public sealed class WriteBlockUiTests
         Assert.Equal("HXT-SERIAL-02", exported["identity"]!["serialNumber"]!.GetValue<string>());
     });
 
+    /// <summary>既定の幅のパネルで、ボタンが切れず、SMART の表の全部の列を横スクロールで見られる (FOR-28 の「画面」)。</summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-FOR-28-03")]
+    public Task Device_info_panel_is_usable_at_its_default_width() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx), WaitForEditor = false });
+        await app.SendAsync("openDisk", new JsonObject { ["path"] = @"\\.\PhysicalDrive2" });
+        await app.CommandAsync("Command_DeviceSmart");
+        await app.WaitUntilAsync(async () => (await app.SendAsync("tcDeviceInfo"))["smartRows"] is JsonArray { Count: > 0 }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "SMART rows");
+
+        // ボタンはパネルの中で折り返し、文字が切れない
+        foreach (string id in new[] { "DeviceInfo_CheckHpa", "DeviceInfo_ReadSmart", "DeviceInfo_ExportJson", "DeviceInfo_ExportText" })
+        {
+            var bounds = (await app.WaitForAsync(id)).BoundingRectangle;
+            Assert.True(bounds.Width >= 60, $"{id} is clipped: {bounds}");
+        }
+
+        // タブは枠で囲まれ、文字はくっきりしている (UI-09)
+        NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+        WindowImage image = app.Screenshot();
+        foreach (string id in new[] { "DeviceInfo_Tab_hpa", "DeviceInfo_Tab_smart", "DeviceInfo_Tab_identity" })
+        {
+            var tab = (await app.WaitForAsync(id)).BoundingRectangle;
+            int y = (int)((tab.Top + tab.Bottom) / 2) - window.Top, left = (int)tab.Left - window.Left;
+            uint inside = image.Pixel(left + 8, y) & 0xFFFFFF;
+            double edge = Enumerable.Range(left - 2, 6).Max(x => HexEditor.ManualTests.ScreenCheck.Contrast(image.Pixel(x, y) & 0xFFFFFF, inside));
+            Assert.True(edge >= 1.5, $"{id} has no visible border: contrast {edge:0.00}");
+            double text = Enumerable.Range(left + 8, (int)tab.Width - 16).Max(x => HexEditor.ManualTests.ScreenCheck.Contrast(image.Pixel(x, y) & 0xFFFFFF, inside));
+            Assert.True(text >= 4.5, $"{id} has faint text: contrast {text:0.00}");
+        }
+
+        // 最後の列は最初は見えず、横のスクロールバーで見える
+        var scroll = await app.WaitForAsync("DeviceInfo_SmartList_HorizontalScroll");
+        double maximum = scroll.Patterns.RangeValue.Pattern.Maximum.Value;
+        Assert.True(maximum > 0, "no horizontal range");
+        scroll.Patterns.RangeValue.Pattern.SetValue(maximum);
+        JsonObject table = await app.ElementAsync("DeviceInfo_SmartList");
+        await app.WaitUntilAsync(async () =>
+        {
+            JsonObject last = await app.ElementAsync("DeviceInfo_SmartList_Header7");
+            return last["right"]!.GetValue<double>() <= table["right"]!.GetValue<double>() + 1 && last["left"]!.GetValue<double>() >= table["left"]!.GetValue<double>() - 1;
+        }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the last column after scrolling");
+    });
+
     // ---- FOR-29・ENG-36 の画面 ----
 
     [Fact]

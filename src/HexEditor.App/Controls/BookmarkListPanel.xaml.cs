@@ -36,6 +36,7 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
     {
         Vm = vm;
         InitializeComponent();
+        ItemKeys.Attach(List, List_KeyDown);
         AutomationProperties.SetName(this, Loc.Get("Bookmarks_PanelName"));
         AutomationProperties.SetName(List, Loc.Get("Bookmarks_PanelName"));
         foreach ((Button button, string key) in new[]

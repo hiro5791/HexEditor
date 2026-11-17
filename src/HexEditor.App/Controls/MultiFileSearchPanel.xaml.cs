@@ -60,6 +60,7 @@ public sealed partial class MultiFileSearchPanel : UserControl
     {
         Rows = new MultiFileRowList(CreateRow);
         InitializeComponent();
+        ItemKeys.Attach(ResultList, ResultList_KeyDown);
         foreach (EncodingEntry entry in TermRow.Encodings)
         {
             EncodingChoice.Items.Add(new ComboBoxItem { Content = MainWindow.EncodingDisplayText(entry), Tag = entry.Id });

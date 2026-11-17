@@ -10,6 +10,7 @@ using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace HexEditor.App;
 
@@ -40,7 +41,7 @@ public sealed partial class MainWindow
         {
             _pendingArgument = null;
             _pendingPick = null;
-            FocusEditor();
+            FocusActiveContent();
         };
 
         // 候補の右クリック >「ショートカットを変更」(UI-18 の呼び出し)。
@@ -65,6 +66,7 @@ public sealed partial class MainWindow
         };
 
         InitializePaletteButton();
+        InitializeTitleBarRegions();
     }
 
     // ---- タイトルバーの入口 (UI-02 の仕様 4) ----
@@ -78,7 +80,7 @@ public sealed partial class MainWindow
     /// <summary>
     /// タイトルバーのコマンドパレットの入口: 幅 240〜400 px のボタンに「コマンドを検索 (Ctrl+Shift+P)」(今の割り当てのキー) を
     /// 表示し、押すとコマンドモード (「&gt;」) で開く。ウィンドウ幅が 900 px 未満では虫眼鏡のアイコンだけにする。
-    /// TitleBar の Content に置くので、ドラッグ領域から除かれる (仕様 5)。
+    /// TitleBar の Content に置く。入力を通す領域にするのはこのボタンの矩形だけ (仕様 5。MainWindow.TitleBarRegions.cs)。
     /// </summary>
     private void InitializePaletteButton()
     {
@@ -111,21 +113,48 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(_paletteButton, "TitleBar_Palette");
         _paletteButton.Click += (_, _) => OpenPalette(">");
         AppTitleBar.Content = _paletteButton;
-        Root.SizeChanged += (_, _) =>
-        {
-            // 幅が変わったら、文字列が入るかをもう一度確かめる。
-            _paletteTextOverflow = false;
-            UpdatePaletteButton();
-            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
-            {
-                if (_paletteButtonText.IsTextTrimmed && _paletteButtonText.Visibility == Visibility.Visible && !_paletteTextOverflow)
-                {
-                    _paletteTextOverflow = true;
-                    UpdatePaletteButton();
-                }
-            });
-        };
+        Root.SizeChanged += (_, _) => ResetPaletteButtonFit();
         UpdatePaletteButton();
+    }
+
+    /// <summary>ウィンドウの幅やタイトルの幅が変わったら、文字列が入るかをもう一度確かめる。</summary>
+    private void ResetPaletteButtonFit()
+    {
+        _paletteTextOverflow = false;
+        UpdatePaletteButton();
+        QueueTitleBarRegions();
+    }
+
+    /// <summary>入口の文字列が入りきらなければ、アイコンだけにする。</summary>
+    private void UpdatePaletteButtonFit()
+    {
+        if (_paletteButtonText is { Visibility: Visibility.Visible } text && !_paletteTextOverflow && (text.IsTextTrimmed || PaletteButtonClipped()))
+        {
+            _paletteTextOverflow = true;
+            UpdatePaletteButton();
+        }
+    }
+
+    /// <summary>
+    /// 入口のボタンが、タイトルバーの中身の欄 (メニューバーとタイトルの残り) より広く、右端が切れているか。最小幅 (240 px) のボタンは
+    /// 欄が狭くても縮まず文字列も省略されないので、欄の幅と比べる。
+    /// </summary>
+    private bool PaletteButtonClipped()
+    {
+        if (_paletteButton is not { ActualWidth: > 0 } button)
+        {
+            return false;
+        }
+
+        for (DependencyObject? node = VisualTreeHelper.GetParent(button); node is not null && node != AppTitleBar; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is FrameworkElement { ActualWidth: > 0 } host && host.ActualWidth + 0.5 < button.ActualWidth)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>入口の文字列が入りきらなかった (次にウィンドウの幅が変わるまでアイコンだけにする)。</summary>

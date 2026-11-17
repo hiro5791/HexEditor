@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 시작 위치(P)</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>오프셋 mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>보기: 나머지가 0인 오프셋부터 UTF-32 디코딩</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>나머지가 0인 오프셋부터 UTF-32 디코딩</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>UTF-32 시작 위치 나머지 0 utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>보기: 나머지가 1인 오프셋부터 UTF-32 디코딩</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>나머지가 1인 오프셋부터 UTF-32 디코딩</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>UTF-32 시작 위치 나머지 1 utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>보기: 나머지가 2인 오프셋부터 UTF-32 디코딩</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>나머지가 2인 오프셋부터 UTF-32 디코딩</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>UTF-32 시작 위치 나머지 2 utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>보기: 나머지가 3인 오프셋부터 UTF-32 디코딩</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>나머지가 3인 오프셋부터 UTF-32 디코딩</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>UTF-32 시작 위치 나머지 3 utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>기록 목록</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>이동 기록 목록 뒤로 최근 위치 jump history list back recent positions</value></data>
@@ -9994,19 +9994,19 @@ SHA-256 지문: {2}
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>양쪽에서 이 수만큼 필드를 비교하면 구조 비교를 멈춥니다(10,000~10,000,000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>구조 비교: 배열 매칭</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>배열 요소를 매칭하는 방법으로, 템플릿과 배열별로 정합니다. 구조 차이 패널의 "매칭 방법..."에서 바꿉니다.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>비교: 구조 비교</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>구조 비교</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff 구조 필드 템플릿 차이</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>비교: 구조 비교에 사용할 템플릿 선택</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>구조 비교에 사용할 템플릿 선택</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose 구조 템플릿 선택</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>비교: 구조 차이 사이 이동</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>구조 차이 사이 이동</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target 다음 이전 구조 대상</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>비교: 구조 차이 표시</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>구조 차이 표시</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel 구조 차이 패널</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>비교: 다음 구조 차이</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>다음 구조 차이</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field 구조 다음 필드</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>비교: 이전 구조 차이</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>이전 구조 차이</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field 구조 이전 필드</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>비교: 구조 차이 내보내기</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>구조 차이 내보내기</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report 구조 내보내기 보고서</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>구조 차이 표시 전환</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel 구조 차이 패널</value></data>

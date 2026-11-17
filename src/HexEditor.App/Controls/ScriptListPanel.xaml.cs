@@ -22,6 +22,7 @@ public sealed partial class ScriptListPanel : UserControl, Panels.IPanelContent
         Vm = vm;
         _host = host;
         InitializeComponent();
+        ItemKeys.Attach(Tree, Tree_KeyDown);
         AutomationProperties.SetName(FilterBox, Loc.Get("ScriptList_Filter"));
         FilterBox.PlaceholderText = Loc.Get("ScriptList_Filter");
         AutomationProperties.SetName(NewButton, Loc.Get("ScriptList_New"));

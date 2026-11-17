@@ -137,10 +137,13 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>今表示しているタブ: 表示中のページか、選んでいる文書。</summary>
+    private object? ActiveTab => ActiveToolPage is { } id ? _toolTabs.FirstOrDefault(t => t.Id == id) : Vm.Selected;
+
     /// <summary>タブ列の選択を、表示中のページか選んでいる文書に合わせる。</summary>
     private void SyncTabSelection()
     {
-        object? target = ActiveToolPage is { } id ? _toolTabs.FirstOrDefault(t => t.Id == id) : Vm.Selected;
+        object? target = ActiveTab;
         if (target is null || !_tabItems.Contains(target) || ReferenceEquals(Tabs.SelectedItem, target))
         {
             return;
@@ -203,6 +206,7 @@ public sealed partial class MainWindow
         if (_toolTabs.FirstOrDefault(t => t.Id == id) is { } tab)
         {
             _toolTabs.Remove(tab);
+            _mru.Remove(tab);
             _syncingTabSelection = true;
             try
             {

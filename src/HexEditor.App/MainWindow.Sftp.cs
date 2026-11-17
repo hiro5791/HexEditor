@@ -307,14 +307,14 @@ public sealed partial class MainWindow
         }
 
         list.DoubleTapped += (_, _) => Activate(list.SelectedIndex);
-        list.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(list, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 Activate(list.SelectedIndex);
                 e.Handled = true;
             }
-        };
+        });
         up.Click += (_, _) =>
         {
             string trimmed = folder.TrimEnd('/');

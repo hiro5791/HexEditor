@@ -78,9 +78,10 @@ public sealed partial class MainWindow
 
     /// <summary>
     /// アプリの終了の確認 (UI-13 の仕様 2・3): すべてのウィンドウの文書を対象に、処理中の文書、未保存の文書 (複数なら 1 つの一覧)、
-    /// 書き出すコピーの量を確かめ、すべての文書を閉じる。キャンセルされたら false (文書は残る)。
+    /// 書き出すコピーの量を確かめ、すべての文書を閉じる。キャンセルされたら false (文書は残る)。<paramref name="closeDocuments"/> が false なら
+    /// 確かめるだけで閉じない (呼び出し側が <see cref="CloseAllDocumentsForExit"/> で閉じる)。
     /// </summary>
-    internal async Task<bool> ConfirmExitAsync()
+    internal async Task<bool> ConfirmExitAsync(bool closeDocuments = true)
     {
         var all = WindowManager.Windows.SelectMany(w => w.Vm.Documents.Select(d => (Window: w, Doc: d))).ToList();
 
@@ -117,6 +118,17 @@ public sealed partial class MainWindow
             return false;
         }
 
+        if (closeDocuments)
+        {
+            CloseAllDocumentsForExit();
+        }
+
+        return true;
+    }
+
+    /// <summary>すべてのウィンドウの文書を、確かめずに閉じる (終了の確認が済んだ後)。</summary>
+    internal static void CloseAllDocumentsForExit()
+    {
         foreach (MainWindow w in WindowManager.Windows.ToList())
         {
             foreach (DocumentViewModel doc in w.Vm.Documents.ToList())
@@ -126,8 +138,6 @@ public sealed partial class MainWindow
 
             w.UpdateTitle();
         }
-
-        return true;
     }
 
     /// <summary>終了の確認が済んだ: このウィンドウを閉じる。</summary>

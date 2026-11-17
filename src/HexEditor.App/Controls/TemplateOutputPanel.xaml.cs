@@ -104,6 +104,7 @@ public sealed partial class TemplateOutputPanel : UserControl
     {
         Host = host;
         InitializeComponent();
+        ItemKeys.Attach(List, List_KeyDown);
         List.ItemsSource = _rows;
     }
 

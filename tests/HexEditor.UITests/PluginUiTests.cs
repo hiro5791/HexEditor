@@ -296,8 +296,7 @@ public sealed class PluginUiTests
         Assert.DoesNotContain(await CommandTitlesAsync(app), t => t.StartsWith("Plugin: sample:", StringComparison.Ordinal) || t.EndsWith("sample: hello", StringComparison.Ordinal));
         app.Process.Refresh();
         Assert.DoesNotContain(app.Process.Modules.Cast<System.Diagnostics.ProcessModule>(), m => m.ModuleName.Equals("Plugin.Sample.dll", StringComparison.OrdinalIgnoreCase));
-        await app.CommandAsync("Command_Exit");
-        await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
+        await app.ExitAndWaitAsync(TimeSpan.FromSeconds(30));
 
         // 4. 通常の起動: 有効で候補が出る (一覧と設定は変わっていない)。
         app = await ctx.StartAsync(new AppOptions { Profile = profile });

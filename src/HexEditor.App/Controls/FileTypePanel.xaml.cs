@@ -16,6 +16,7 @@ public sealed partial class FileTypePanel : UserControl, IPanelContent
     {
         ViewModel = viewModel;
         InitializeComponent();
+        ItemKeys.Attach(EmbeddedList, EmbeddedList_KeyDown);
         AutomationProperties.SetName(this, Loc.Get("Panel_FileType_Title"));
     }
 

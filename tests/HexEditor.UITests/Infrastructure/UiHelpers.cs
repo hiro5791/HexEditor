@@ -125,6 +125,17 @@ public static class UiHelpers
         return r["focused"]?.GetValue<string>();
     }
 
+    /// <summary>
+    /// 一覧 (または TreeView) の <paramref name="index"/> 番目の行を選び、その行の入れ物 (ListViewItem など) にキーボードのフォーカスを置く。
+    /// フォーカスのある要素 ("型:AutomationId") を返す。
+    /// </summary>
+    public static async Task<string?> FocusItemAsync(this AppSession app, string listId, int index, string? itemId = null, string? nodeText = null, bool keep = false)
+    {
+        JsonObject r = await app.SendAsync("focusItem", new JsonObject { ["id"] = listId, ["index"] = index, ["itemId"] = itemId, ["nodeText"] = nodeText, ["keep"] = keep });
+        await app.IdleAsync();
+        return r["focused"]?.GetValue<string>();
+    }
+
     /// <summary>フォーカスのある要素 ("型:AutomationId")。</summary>
     public static async Task<string?> FocusedAsync(this AppSession app) => (await app.StateAsync())["focused"]?.GetValue<string>();
 
@@ -223,9 +234,16 @@ public static class UiHelpers
         return text;
     }
 
-    /// <summary>ダイアログ (AutomationId で指定) が出るまで待ち、その要素を返す。</summary>
-    public static Task<FlaUI.Core.AutomationElements.AutomationElement> WaitForDialogAsync(this AppSession app, string automationId) =>
-        app.WaitForAsync(automationId);
+    /// <summary>
+    /// ダイアログ (AutomationId で指定) が出て、ボタンが UI オートメーションから見えるまで待ち、その要素を返す。
+    /// ダイアログの要素はボタンより先に見えることがある (遅い CI のランナー)。
+    /// </summary>
+    public static async Task<FlaUI.Core.AutomationElements.AutomationElement> WaitForDialogAsync(this AppSession app, string automationId)
+    {
+        FlaUI.Core.AutomationElements.AutomationElement dialog = await app.WaitForAsync(automationId);
+        await app.WaitUntilAsync(() => Task.FromResult(DialogButtons(dialog).Count > 0), TimeSpan.FromSeconds(15), $"the buttons of {automationId}");
+        return dialog;
+    }
 
     /// <summary>ウィンドウ (ダイアログを含む) の中の、表示名が <paramref name="name"/> のボタン。なければ null。</summary>
     public static FlaUI.Core.AutomationElements.AutomationElement? Button(this AppSession app, string name) =>

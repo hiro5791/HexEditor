@@ -192,6 +192,45 @@ internal static class DialogParts
     internal static IReadOnlyList<string> HistoryOf(string automationId) =>
         s_histories.TryGetValue(automationId, out IReadOnlyList<string>? items) ? items : [];
 
+    /// <summary>
+    /// フォーカスの枠が ScrollViewer の端で切れないようにするための余白。ComboBox のキーボードフォーカスの強調の枠
+    /// (テンプレートの HighlightBackground) は外側に 4 px、CheckBox・RadioButton のフォーカスの枠は左右に 7 px はみ出す。
+    /// </summary>
+    internal static readonly Thickness FocusVisualInset = new(8, 4, 8, 4);
+
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<ScrollViewer, object> s_insetApplied = [];
+
+    /// <summary>
+    /// ScrollViewer は中身を自分の大きさで切り取るため、左端に置いたコントロールのフォーカスの枠 (外側にはみ出す) が切れる
+    /// (ComboBox では、枠の左側が消えて選択の印 (縦の帯) だけが文字の前に残って見える)。ScrollViewer を
+    /// <see cref="FocusVisualInset"/> だけ外側に広げ、同じだけ中身を内側に寄せる (中身の位置と大きさは変わらない)。
+    /// 同じ ScrollViewer に 2 回付けても 1 回分だけ効く。
+    /// </summary>
+    public static ScrollViewer KeepFocusVisuals(ScrollViewer scroll)
+    {
+        if (scroll.Content is not FrameworkElement content || s_insetApplied.TryGetValue(scroll, out _))
+        {
+            return scroll;
+        }
+
+        Thickness i = FocusVisualInset;
+        Thickness m = scroll.Margin;
+        scroll.Margin = new Thickness(m.Left - i.Left, m.Top - i.Top, m.Right - i.Right, m.Bottom - i.Bottom);
+        Thickness c = content.Margin;
+        content.Margin = new Thickness(c.Left + i.Left, c.Top + i.Top, c.Right + i.Right, c.Bottom + i.Bottom);
+        s_insetApplied.AddOrUpdate(scroll, scroll);
+        return scroll;
+    }
+
+    /// <summary>ダイアログの中身が ScrollViewer なら、フォーカスの枠が切れないようにする (<see cref="KeepFocusVisuals(ScrollViewer)"/>)。</summary>
+    public static void KeepFocusVisuals(ContentDialog dialog)
+    {
+        if (dialog.Content is ScrollViewer scroll)
+        {
+            KeepFocusVisuals(scroll);
+        }
+    }
+
     /// <summary>アプリの他のダイアログと同じ設定の ContentDialog。</summary>
     public static ContentDialog Dialog(FrameworkElement root, string automationId, string title, object content, string primary,
         string? secondary = null)

@@ -14,6 +14,9 @@ public sealed partial class StartPage : UserControl
     public StartPage()
     {
         InitializeComponent();
+        // キーの表記の色は今のテーマから取る (読み込まれる前の ActualTheme はウィンドウのテーマとは限らない)。
+        ActualThemeChanged += (_, _) => ReapplyShortcuts();
+        Loaded += (_, _) => ReapplyShortcuts();
     }
 
     public StartPageViewModel ViewModel { get; } = new();
@@ -54,6 +57,15 @@ public sealed partial class StartPage : UserControl
 
     private string? _openLabel;
     private string? _newLabel;
+    private (string Open, string New)? _shortcuts;
+
+    private void ReapplyShortcuts()
+    {
+        if (_shortcuts is { } keys)
+        {
+            SetShortcuts(keys.Open, keys.New);
+        }
+    }
 
     /// <summary>
     /// 「開く」「新規作成」のボタンに今のキー割り当てを添える (UI-38 の仕様 1。キー割り当てを変えたら呼び直す)。割り当てがなければ名前だけ。
@@ -62,6 +74,7 @@ public sealed partial class StartPage : UserControl
     {
         _openLabel ??= OpenButton.Content as string ?? string.Empty;
         _newLabel ??= NewButton.Content as string ?? string.Empty;
+        _shortcuts = (open, @new);
         Apply(OpenButton, _openLabel, open);
         Apply(NewButton, _newLabel, @new);
 
@@ -75,7 +88,7 @@ public sealed partial class StartPage : UserControl
                 var key = new TextBlock { Text = keys, Opacity = 0.8 };
                 if (button.Style != (Style)Application.Current.Resources["AccentButtonStyle"])
                 {
-                    key.Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+                    key.Foreground = Services.AnnotationBrushes.Get("TextFillColorSecondaryBrush", button, Services.Appearance.IsHighContrast);
                     key.Opacity = 1;
                 }
 

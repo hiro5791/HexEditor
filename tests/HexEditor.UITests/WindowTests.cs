@@ -92,6 +92,135 @@ public sealed partial class WindowTests
         Assert.True(InAny(regions["passthrough"]!.AsArray(), (menu["left"]!.GetValue<double>() + 10) * scale, y * scale), "the menu bar is in the drag region");
     });
 
+    [Theory]
+    [InlineData("ja", false)]
+    [InlineData("en", false)]
+    [InlineData("ja", true)]
+    [InlineData("en", true)]
+    [InlineData("ar", true)]
+    [Trait(UiTest.TC, "TC-UI-02-04")]
+    public Task Title_text_and_icon_are_caption_and_only_menu_and_palette_pass_through(string language, bool longTitle) => UiTestContext.RunAsync(async ctx =>
+    {
+        // TitleBar は LeftHeader の欄全体 (アイコン・メニューバー・タイトル) を入力を通す領域にするため、タイトルの上を
+        // ドラッグしてもウィンドウが動かなかった。入力を通す領域がメニューバーと入口のボタンの矩形だけで、アイコン・タイトルの
+        // 文字列・その間の余白はドラッグ領域 (Caption) にあることを確かめる。長いタイトル (長い名前のファイルを開く) でも同じ。
+        string[] files = longTitle
+            ? [ctx.WriteFile("A_very_long_file_name_to_fill_the_title_bar_of_the_main_window_and_check_the_drag_region_0123456789.bin", new byte[256])]
+            : [];
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = language, Files = files });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1260 * scale), (int)(800 * scale));
+
+        JsonObject title = await app.ElementAsync("WindowTitle");
+        if (longTitle)
+        {
+            await app.WaitUntilAsync(async () => (await app.ElementAsync("WindowTitle"))["text"]!.GetValue<string>().StartsWith("A_very_long", StringComparison.Ordinal), TimeSpan.FromSeconds(10), "the long title");
+        }
+
+        // サイズの変更のあと、入力を通す領域が置き直されるまで待つ (メニューバーと入口の 2 つだけになる)。
+        JsonObject regions = new();
+        JsonObject menu = new(), palette = new(), icon = new();
+        await app.WaitUntilAsync(async () =>
+        {
+            title = await app.ElementAsync("WindowTitle");
+            menu = await app.ElementAsync("MainMenu");
+            palette = await app.ElementAsync("TitleBar_Palette");
+            icon = await app.ElementAsync("TitleBar_Icon");
+            regions = await app.SendAsync("nonClientRegions");
+            JsonArray p = regions["passthrough"]!.AsArray();
+            return p.Count == 2 && Covers(p, menu) && Covers(p, palette);
+        }, TimeSpan.FromSeconds(10), "passthrough regions for the menu bar and the palette entry only");
+
+        JsonArray passthrough = regions["passthrough"]!.AsArray();
+        JsonArray caption = regions["caption"]!.AsArray();
+        double y = (title["top"]!.GetValue<double>() + title["bottom"]!.GetValue<double>()) / 2 * scale;
+        void AssertCaption(double xDip, string what)
+        {
+            Assert.False(InAny(passthrough, xDip * scale, y), $"{what} ({xDip}) is a passthrough region: {regions.ToJsonString()}");
+            Assert.True(InAny(caption, xDip * scale, y), $"{what} ({xDip}) is not a caption region: {regions.ToJsonString()}");
+        }
+
+        // タイトルの文字列の中央とアイコンの中央はドラッグ領域。
+        AssertCaption((title["left"]!.GetValue<double>() + title["right"]!.GetValue<double>()) / 2, "the title text");
+        Assert.True(title["width"]!.GetValue<double>() > 40, $"the title is too narrow ({title.ToJsonString()})");
+        AssertCaption((icon["left"]!.GetValue<double>() + icon["right"]!.GetValue<double>()) / 2, "the icon");
+
+        // メニューバーと入口の間 (タイトルと余白) は、端の 1 px を除いてすべてドラッグ領域。
+        double gapStart = Math.Min(menu["right"]!.GetValue<double>(), palette["right"]!.GetValue<double>());
+        double gapEnd = Math.Max(menu["left"]!.GetValue<double>(), palette["left"]!.GetValue<double>());
+        Assert.True(gapEnd - gapStart > 40, $"no room between the menu bar and the palette entry ({gapStart}..{gapEnd})");
+        for (double x = gapStart + 1; x < gapEnd - 1; x += 4)
+        {
+            AssertCaption(x, "the space between the menu bar and the palette entry");
+        }
+
+        // 長いタイトルは省略され、入口のボタンをウィンドウの外へ押し出さない。
+        if (longTitle)
+        {
+            Assert.True(title["isTextTrimmed"]!.GetValue<bool>(), $"the long title is not trimmed ({title.ToJsonString()})");
+        }
+
+        int captionRight = caption.Max(r => r!["right"]!.GetValue<int>());
+        Assert.True(palette["right"]!.GetValue<double>() * scale <= captionRight + 1 && palette["left"]!.GetValue<double>() >= 0, $"the palette entry is outside the title bar ({palette.ToJsonString()})");
+
+        // メニューバーと入口の中央は入力を通す領域 (クリックが届く)。
+        Assert.True(InAny(passthrough, (menu["left"]!.GetValue<double>() + 10) * scale, y), "the menu bar is in the drag region");
+        Assert.True(InAny(passthrough, (palette["left"]!.GetValue<double>() + palette["right"]!.GetValue<double>()) / 2 * scale, y), "the palette entry is in the drag region");
+
+        bool Covers(JsonArray rects, JsonObject e) => rects.Any(r =>
+            Math.Abs(r!["left"]!.GetValue<int>() - (e["left"]!.GetValue<double>() * scale)) <= 2
+            && Math.Abs(r["right"]!.GetValue<int>() - (e["right"]!.GetValue<double>() * scale)) <= 2);
+    });
+
+    /// <summary>
+    /// 起動のあとでタイトルが長くなっても (文書を開く)、タイトルの上はドラッグでき、閉じるボタンは押せる。不具合: 入口のボタンの幅を見直すのがウィンドウの幅が
+    /// 変わったときだけで、タイトルが長くなると最小幅のボタンが操作ボタンの上まで伸び、入力を通す領域が閉じるボタンに重なっていた
+    /// (手動テスト TC-UI-02-03 で見つかった。ディスクを開くとタイトルが長くなる)。
+    /// </summary>
+    [Theory]
+    [InlineData("TD_WDC_WD20EZBX_60AYRA0_1_82_TB_0123456789.bin")]
+    [InlineData("A_very_long_file_name_to_fill_the_title_bar_of_the_main_window_and_check_the_drag_region_0123456789.bin")]
+    [Trait(UiTest.TC, "TC-UI-02-04")]
+    public Task Title_bar_stays_draggable_and_closable_when_the_title_grows_after_startup(string name) => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja", WaitForEditor = false });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.IdleAsync();
+
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = ctx.WriteFile(name, new byte[256]) });
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("WindowTitle"))["text"]!.GetValue<string>().StartsWith(name[..10], StringComparison.Ordinal), TimeSpan.FromSeconds(10), "the title of the file");
+
+        JsonObject title = new(), menu = new(), palette = new(), regions = new(), state = new();
+        int buttonsLeft = 0;
+        async Task<bool> RegionsAreRight()
+        {
+            title = await app.ElementAsync("WindowTitle");
+            menu = await app.ElementAsync("MainMenu");
+            palette = await app.ElementAsync("TitleBar_Palette");
+            regions = await app.SendAsync("nonClientRegions");
+            state = await app.StateAsync();
+            buttonsLeft = regions["caption"]!.AsArray().Max(r => r!["right"]!.GetValue<int>()) - state["titleBarRightInset"]!.GetValue<int>();
+            JsonArray p = regions["passthrough"]!.AsArray();
+            return p.Count == 2 && palette["right"]!.GetValue<double>() * scale <= buttonsLeft + 1
+                && p.Any(r => Math.Abs(r!["left"]!.GetValue<int>() - (palette["left"]!.GetValue<double>() * scale)) <= 2)
+                && p.All(r => r!["right"]!.GetValue<int>() <= buttonsLeft + 1);
+        }
+
+        await app.WaitUntilAsync(RegionsAreRight, TimeSpan.FromSeconds(10), "passthrough regions left of the window buttons");
+
+        double y = (title["top"]!.GetValue<double>() + title["bottom"]!.GetValue<double>()) / 2;
+        double titleCenter = (title["left"]!.GetValue<double>() + title["right"]!.GetValue<double>()) / 2;
+        Assert.Equal(WindowHitTest.Caption, WindowHitTest.At(app.Hwnd, titleCenter, y, scale));
+
+        // 閉じるボタンの中央 (操作ボタンの幅は 3 つ分。右端のボタンの中央)。
+        double closeX = (buttonsLeft + (state["titleBarRightInset"]!.GetValue<int>() * 5 / 6.0)) / scale;
+        Assert.Equal(WindowHitTest.Close, WindowHitTest.At(app.Hwnd, closeX, 8, scale));
+
+        // TitleBar が領域を自分の値に戻しても (タイトルと操作ボタンの上まで入力を通す状態)、置き直す。
+        await app.SendAsync("nonClientRegionsReset");
+        await app.WaitUntilAsync(RegionsAreRight, TimeSpan.FromSeconds(10), "passthrough regions put back");
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-UI-02-05")]
     [Trait(UiTest.Priority, UiTest.High)]
@@ -297,6 +426,71 @@ public sealed partial class WindowTests
         var allowed = AccentShades(0xE8, 0x11, 0x23).ToList();
         Assert.True(allowed.Any(a => Close(a, color)), $"the accent button is #{color & 0xFFFFFF:X6}, not #E81123 or its shades");
     });
+
+    /// <summary>背景素材を使わないときは、ウィンドウの背景をテーマの色で塗る (不具合: 塗らず黒が見えていた。手動テスト TC-UI-02-06 の砂漠で見つかった)。</summary>
+    [Theory]
+    [InlineData("light")]
+    [InlineData("dark")]
+    [Trait(UiTest.TC, "TC-UI-27-02")]
+    public Task Window_without_a_backdrop_has_the_theme_background(string theme) => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), $"{{\"$schemaVersion\": 1, \"ui.backdrop\": \"none\", \"ui.theme\": \"{theme}\"}}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, WaitForEditor = false });
+        await app.WaitForAsync("Start_Open");
+        Assert.Equal("None", (await app.StateAsync())["backdrop"]!.GetValue<string>());
+        await Task.Delay(500);
+
+        uint color = SampleBackground(app, "TitleBar");
+        Assert.Equal(theme == "light" ? 0xF3F3F3u : 0x202020u, color & 0xFFFFFF);
+    });
+
+    /// <summary>
+    /// アプリのテーマが Windows のテーマと違っても、タイトルと「新規作成」のキーの表記が読める (手動テスト TC-UI-02-06 で見つかった: ダークの背景に
+    /// ライトの暗い文字が出ていた)。テストのウィンドウはアクティブにならないので、非アクティブのタイトルの色も確かめられる。
+    /// </summary>
+    [Theory]
+    [InlineData("light")]
+    [InlineData("dark")]
+    [Trait(UiTest.TC, "TC-UI-26-05")]
+    public Task Title_and_key_text_are_readable_in_either_theme(string theme) => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), $"{{\"$schemaVersion\": 1, \"ui.theme\": \"{theme}\"}}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, WaitForEditor = false });
+        await app.WaitForAsync("Start_New");
+        await Task.Delay(500);
+
+        double title = TextContrast(app, "WindowTitle", 0);
+        Assert.True(title >= 3, $"the title is not readable ({title:F1})");
+
+        // ボタンの右半分がキーの表記。
+        double key = TextContrast(app, "Start_New", 0.5);
+        Assert.True(key >= 3, $"the key text is not readable ({key:F1})");
+
+        // コントラストテーマのテストと同じ画面の判定も通る。
+        Assert.Empty(HexEditor.ManualTests.ScreenCheck.Run(app.Hwnd, highContrast: false));
+    });
+
+    /// <summary>要素の中の、背景 (左上の角の色) と最も差のある色の明るさの比。<paramref name="from"/> は見始める位置 (幅の割合)。</summary>
+    private static double TextContrast(AppSession app, string automationId, double from)
+    {
+        var r = app.Find(automationId)!.BoundingRectangle;
+        NativeMethods.GetWindowRect(app.Hwnd, out NativeMethods.Rect window);
+        WindowImage image = app.Screenshot();
+        int left = r.Left - window.Left, top = r.Top - window.Top;
+        uint background = image.Pixel(left + (int)(r.Width * from), top + 1);
+        double best = 1;
+        for (int y = top + 1; y < top + r.Height - 1; y++)
+        {
+            for (int x = left + (int)(r.Width * from); x < left + r.Width - 1; x++)
+            {
+                best = Math.Max(best, HexEditor.ManualTests.ScreenCheck.Contrast(background & 0xFFFFFF, image.Pixel(x, y) & 0xFFFFFF));
+            }
+        }
+
+        return best;
+    }
 
     [Fact(Skip = "Windows の「透明効果」(EnableTransparency) を切り替える必要があり、作業中の PC の設定を変えるため自動では実行しない (CI の専用の環境が必要)")]
     [Trait(UiTest.TC, "TC-UI-27-04")]

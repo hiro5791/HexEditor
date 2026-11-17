@@ -99,7 +99,7 @@ public sealed partial class MainWindow
                 ToolPageTab tool => "tool:" + tool.Id,
                 _ => null,
             },
-            ["mru"] = new JsonArray([.. _mru.Order.Select(d => (JsonNode?)d.DisplayName)]),
+            ["mru"] = new JsonArray([.. _mru.Order.Select(t => (JsonNode?)(t is DocumentViewModel d ? d.DisplayName : "tool:" + ((ToolPageTab)t).Id))]),
         };
     }
 

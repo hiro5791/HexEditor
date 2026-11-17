@@ -52,10 +52,7 @@ public static class Appearance
             _ => TitleBarTheme.UseDefaultAppMode,
         };
 
-        // 背景素材 (UI-27 の仕様 2・5)。Mica が使えない環境では WinUI が不透明の色にする (仕様 4)。
-        string backdrop = settings.GetString(BackdropKey, BackdropDefault);
-        window.SystemBackdrop = IsHighContrast || backdrop == "none" ? null
-            : new MicaBackdrop { Kind = backdrop == "micaAlt" ? MicaKind.BaseAlt : MicaKind.Base };
+        ApplyBackdrop(window, root, settings);
 
         // 設定した背景素材をログに残す (UI-27 の確認用。変わったときだけ)。
         string applied = window.SystemBackdrop is MicaBackdrop mica ? "Mica" + (mica.Kind == MicaKind.BaseAlt ? "Alt" : string.Empty) : "None";
@@ -63,6 +60,21 @@ public static class Appearance
         {
             _lastBackdrop = applied;
             AppLog.Info($"Backdrop: {applied}");
+        }
+    }
+
+    /// <summary>
+    /// 背景素材 (UI-27 の仕様 2・5)。Mica が使えない環境では WinUI が不透明の色にする (仕様 4)。背景素材を使わないときは、ウィンドウの一番下を
+    /// テーマの色で塗る (塗らないと黒が見える。砂漠のような明るいコントラストテーマでは文字が読めなくなる)。
+    /// </summary>
+    public static void ApplyBackdrop(Window window, FrameworkElement root, SettingsStore settings)
+    {
+        string backdrop = settings.GetString(BackdropKey, BackdropDefault);
+        window.SystemBackdrop = IsHighContrast || backdrop == "none" ? null
+            : new MicaBackdrop { Kind = backdrop == "micaAlt" ? MicaKind.BaseAlt : MicaKind.Base };
+        if (root is Microsoft.UI.Xaml.Controls.Panel panel)
+        {
+            panel.Background = window.SystemBackdrop is null ? AnnotationBrushes.Get("WindowSolidBackgroundBrush", root, IsHighContrast) : null;
         }
     }
 

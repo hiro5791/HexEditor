@@ -46,23 +46,23 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
         _regions.DisplayMemberPath = nameof(RegionRow.Text);
         _modules.DisplayMemberPath = nameof(ModuleRow.Text);
         _regions.DoubleTapped += (_, _) => JumpToSelectedRegion();
-        _regions.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(_regions, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 JumpToSelectedRegion();
                 e.Handled = true;
             }
-        };
+        });
         _modules.DoubleTapped += (_, _) => JumpToSelectedModule();
-        _modules.KeyDown += (_, e) =>
+        Controls.ItemKeys.OnKey(_modules, (_, e) =>
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 JumpToSelectedModule();
                 e.Handled = true;
             }
-        };
+        });
         _regions.ContextFlyout = BuildRegionMenu();
         AutomationProperties.SetAutomationId(_regions, "MemoryMap_Regions");
         AutomationProperties.SetAutomationId(_modules, "MemoryMap_Modules");

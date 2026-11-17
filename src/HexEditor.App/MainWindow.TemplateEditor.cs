@@ -83,13 +83,17 @@ public sealed partial class MainWindow : ITemplateEditorHost
     /// <summary>テンプレートをエディタのタブで開く (既に開いていれば前に出す)。</summary>
     internal TemplateEditorPage? OpenTemplateEditor(string path)
     {
-        string id = EditorId(path);
-        if (_templateEditors.TryGetValue(id, out TemplateEditorPage? existing))
+        // 新しいタブは保存した後も ID が変わらないので、ID ではなくパスで探す。
+        foreach ((string openId, TemplateEditorPage open) in _templateEditors)
         {
-            ShowToolPageTab(id);
-            return existing;
+            if (!open.IsNew && string.Equals(open.Path, path, StringComparison.OrdinalIgnoreCase))
+            {
+                ShowToolPageTab(openId);
+                return open;
+            }
         }
 
+        string id = EditorId(path);
         string text;
         try
         {

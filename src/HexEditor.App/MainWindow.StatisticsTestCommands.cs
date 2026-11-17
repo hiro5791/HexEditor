@@ -117,6 +117,12 @@ public sealed partial class MainWindow
         }
 
         result["open"] = IsStatisticsPanelOpen;
+        if (_statsPanel is { } layoutPanel)
+        {
+            (double viewport, double extent, double offset, double pageHeight) = layoutPanel.ScrollState;
+            result["layout"] = new JsonObject { ["viewport"] = viewport, ["extent"] = extent, ["offset"] = offset, ["pageHeight"] = pageHeight };
+        }
+
         result["location"] = PanelLocation(StatisticsPanelId);
         if (_statsVm is not { } vm)
         {

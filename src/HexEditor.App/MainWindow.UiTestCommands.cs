@@ -34,6 +34,7 @@ public sealed partial class MainWindow
         "drop" => await TestDropAsync(request),
         "resizePhysical" => TestResizePhysical(request),
         "focus" => TestFocus(request),
+        "focusItem" => TestFocusItem(request),
         "region" => Run(() => MoveToRegion(request["forward"]?.GetValue<bool>() ?? true)),
         "menuTexts" => TestMenuTexts(),
         "textCheck" => TestTextCheck(),
@@ -41,6 +42,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
+        "nonClientRegionsReset" => TestResetNonClientRegions(),
         "hash" => await TestHashAsync(request),
         "viewPresets" => TestViewPresets(request),
         "stats" => await TestStatisticsAsync(request),
@@ -216,7 +218,87 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
+    /// 一覧 (ListView、GridView) か TreeView の行を選び、その行の入れ物 (ListViewItem、TreeViewItem) にキーボードのフォーカスを置く。
+    /// 実際のキー入力 (WindowKeys) が、行の入れ物から届く道筋を確かめるのに使う。行は <c>index</c> (番号)、<c>itemId</c> (入れ物の AutomationId)、
+    /// <c>nodeText</c> (TreeView の入れ物の名前に含まれる文字列。すべての節を開いて探す)、<c>keep</c> (いま選んでいる行) のどれかで決める。
+    /// </summary>
+    private JsonObject TestFocusItem(JsonObject request)
+    {
+        string id = request["id"]!.GetValue<string>();
+        int index = request["index"]?.GetValue<int>() ?? 0;
+        FrameworkElement list = FindElement(id) ?? throw new ArgumentException($"List not found: {id}");
+        bool keep = request["keep"]?.GetValue<bool>() ?? false;
+        Control? container = null;
+        if (list is ListViewBase lv)
+        {
+            if (keep)
+            {
+                index = lv.SelectedIndex;
+            }
+            else if (request["itemId"]?.GetValue<string>() is { } itemId)
+            {
+                // 行の入れ物の AutomationId で探す (仮想化されていて見えない行は、順に表示して探す)。
+                for (int i = 0; i < lv.Items.Count; i++)
+                {
+                    lv.SelectedIndex = i;
+                    lv.UpdateLayout();
+                    lv.ScrollIntoView(lv.SelectedItem);
+                    lv.UpdateLayout();
+                    if (lv.ContainerFromIndex(i) is Control c && AutomationProperties.GetAutomationId(c) == itemId)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            lv.SelectedIndex = index;
+            lv.UpdateLayout();
+            lv.ScrollIntoView(lv.SelectedItem);
+            lv.UpdateLayout();
+            container = lv.ContainerFromIndex(index) as Control;
+        }
+        else if (list is TreeView tv)
+        {
+            TreeViewNode? target = tv.RootNodes.ElementAtOrDefault(index);
+            if (request["nodeText"]?.GetValue<string>() is { } text)
+            {
+                static void ExpandAll(IEnumerable<TreeViewNode> nodes)
+                {
+                    foreach (TreeViewNode n in nodes)
+                    {
+                        n.IsExpanded = true;
+                        ExpandAll(n.Children);
+                    }
+                }
+
+                ExpandAll(tv.RootNodes);
+                tv.UpdateLayout();
+                IEnumerable<TreeViewNode> All(IEnumerable<TreeViewNode> nodes) => nodes.SelectMany(n => new[] { n }.Concat(All(n.Children)));
+                target = All(tv.RootNodes).FirstOrDefault(n => tv.ContainerFromNode(n) is Control c
+                    && (AutomationProperties.GetName(c)?.Contains(text, StringComparison.Ordinal) ?? false));
+            }
+
+            if (target is not null)
+            {
+                tv.SelectedNode = target;
+                tv.UpdateLayout();
+                container = tv.ContainerFromNode(target) as Control;
+            }
+        }
+
+        bool moved = container?.Focus(FocusState.Keyboard) ?? false;
+        object? focused = FocusManager.GetFocusedElement(Root.XamlRoot);
+        return new JsonObject
+        {
+            ["moved"] = moved,
+            ["focused"] = focused is FrameworkElement fe ? $"{fe.GetType().Name}:{AutomationProperties.GetAutomationId(fe)}" : focused?.GetType().Name,
+        };
+    }
+
+    /// <summary>
     /// フォーカスを動かす。<c>target</c>: "editor" (Hex ビュー)、"next" / "previous" (Tab / Shift+Tab と同じ移動)、
+    /// "windowRoot" (Root の外のウィンドウの根元。<see cref="FocusWindowRoot"/>)、
     /// それ以外は AutomationId。<c>keyboard</c> が true (既定) ならキーボードで移したときと同じ扱い (フォーカスの枠を出す)。
     /// </summary>
     private JsonObject TestFocus(JsonObject request)
@@ -226,6 +308,7 @@ public sealed partial class MainWindow
         bool moved = target switch
         {
             "editor" => CurrentView()?.Focus(state) ?? false,
+            "windowRoot" => FocusWindowRoot(),
             "next" or "previous" => FocusManager.TryMoveFocus(
                 target == "next" ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous,
                 new FindNextElementOptions { SearchRoot = Root.XamlRoot.Content }),
@@ -253,6 +336,34 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
+    /// フォーカスを、ウィンドウの中身 (Root) の外にあるウィンドウの根元の ScrollViewer に移す (枠は出ない)。WinUI はウィンドウのアクティブ化や
+    /// フォーカスを受けない場所のクリックで、フォーカスを Root の外の根元の要素に置くことがある。その状態でもショートカットキーが効くことを確かめる。
+    /// 根元の ScrollViewer はふだんはタブで止まらないので、移すあいだだけ IsTabStop を立てる。
+    /// </summary>
+    private bool FocusWindowRoot()
+    {
+        Control? top = null;
+        for (DependencyObject? node = VisualTreeHelper.GetParent(Root); node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is Control control)
+            {
+                top = control;
+            }
+        }
+
+        if (top is null)
+        {
+            return false;
+        }
+
+        bool tabStop = top.IsTabStop;
+        top.IsTabStop = true;
+        bool moved = top.Focus(FocusState.Pointer);
+        top.IsTabStop = tabStop;
+        return moved;
+    }
+
+    /// <summary>
     /// タイトルバーの非クライアント領域 (UI-02 の仕様 5): ドラッグ領域 (Caption) と、入力を通す領域 (Passthrough) の矩形
     /// (クライアント領域の物理ピクセル)。
     /// </summary>
@@ -271,6 +382,16 @@ public sealed partial class MainWindow
             ["caption"] = Rects(Microsoft.UI.Input.NonClientRegionKind.Caption),
             ["passthrough"] = Rects(Microsoft.UI.Input.NonClientRegionKind.Passthrough),
         };
+    }
+
+    /// <summary>入力を通す領域を、TitleBar が設定する値 (タイトルと操作ボタンの上を含む広い矩形) に変える (手動テスト TC-UI-02-03 で見つかった状態)。</summary>
+    private JsonObject TestResetNonClientRegions()
+    {
+        var size = AppWindow.ClientSize;
+        Microsoft.UI.Input.InputNonClientPointerSource.GetForWindowId(AppWindow.Id).SetRegionRects(
+            Microsoft.UI.Input.NonClientRegionKind.Passthrough,
+            [new Windows.Graphics.RectInt32(0, 4, size.Width - 186, 40), new Windows.Graphics.RectInt32(size.Width - 172, 8, 240, 32)]);
+        return [];
     }
 
     // ---- 文字列 (UI-42、UI-46、UI-47) ----
@@ -327,7 +448,7 @@ public sealed partial class MainWindow
     /// 表示中の文字列の切れと要素の重なり (UI-46 の受け入れ基準 2、UI-47 の仕様 3)。ウィンドウと開いているポップアップ
     /// (ダイアログ・フライアウト) を調べる。Hex ビューの中 (データの表示) は除く。
     /// <list type="bullet">
-    /// <item>trimmed: <see cref="TextBlock.IsTextTrimmed"/> が true (省略記号で切れた)。</item>
+    /// <item>trimmed: <see cref="TextBlock.IsTextTrimmed"/> が true (省略記号で切れた)。ウィンドウのタイトルは除く (UI-02 の仕様 5)。</item>
     /// <item>clipped: 省略記号を使わずに、文字列が要素の幅 (折り返す場合は高さ) に収まっていない。</item>
     /// <item>overlaps: 同じパネルの兄弟の要素 (別のセル) の表示範囲が重なっている。</item>
     /// </list>
@@ -356,8 +477,12 @@ public sealed partial class MainWindow
             {
                 if (text.IsTextTrimmed)
                 {
-                    trimmed.Add(Describe(text));
-                    AppLog.Warning($"Text trimmed: \"{text.Text}\" ({Where(text)})");
+                    // ウィンドウのタイトルは、入口ボタンを押し出さないように省略記号で切る仕様 (UI-02 の仕様 5)。切れとして数えない。
+                    if (!ReferenceEquals(text, WindowTitle))
+                    {
+                        trimmed.Add(Describe(text));
+                        AppLog.Warning($"Text trimmed: \"{text.Text}\" ({Where(text)})");
+                    }
                 }
                 else if (IsClipped(text))
                 {

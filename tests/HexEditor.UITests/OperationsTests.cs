@@ -85,6 +85,9 @@ public sealed partial class OperationsTests
             var cancel = await app.WaitForAsync("Operations_Cancel");
             int before = CancelledCount(await app.StateAsync());
 
+            // 一覧は 250 ms ごとに更新されるが、ボタンは作り直されない (作り直すとキーボードのフォーカスが外れる)。
+            await Task.Delay(600);
+
             var watch = Stopwatch.StartNew();
             cancel.Patterns.Invoke.Pattern.Invoke();
             await app.WaitUntilAsync(async () => CancelledCount(await app.StateAsync()) > before, TimeSpan.FromSeconds(5), "the cancellation");

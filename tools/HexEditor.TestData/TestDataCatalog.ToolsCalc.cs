@@ -24,19 +24,22 @@ public static partial class TestDataCatalog
 
     private static IEnumerable<TestDataItem> ToolsCalcItems()
     {
-        yield return Folder("TD-TOOL-TREE", "a.bin", 256, "5 ファイルのフォルダ (a.bin、b.bin、empty.bin、sub/c.bin、日本語/テスト ファイル①.bin)", WriteToolTree);
-        yield return Folder("TD-TOOL-SUMS-STAR", "a.bin", 256, "sha256sum の出力 (b.bin は *b.bin、c.bin はハッシュ値が大文字) と 3 ファイル", WriteSumsStar);
-        yield return Folder("TD-TOOL-SUMS-MIXED", "ok.bin", 256, "一致・不一致・見つからない・(テストが開いたままにする) の 4 状態の SHA256SUMS と 3 ファイル", WriteSumsMixed);
-        yield return Folder("TD-TOOL-MD5", "x.bin", 256, "x.bin (TD-BYTES-256) とその MD5 の x.bin.md5", WriteMd5);
-        yield return Folder("TD-TOOL-FOLDER-L", "SAME.BIN", 256, "SAME.BIN、sub/diff.bin、left-only.bin", WriteFolderLeft);
-        yield return Folder("TD-TOOL-FOLDER-R", "same.bin", 256, "same.bin、sub/diff.bin (0x1234 を XOR FF)、right-only.bin", WriteFolderRight);
+        yield return Folder("TD-TOOL-TREE", "a.bin", 256, "5 ファイルのフォルダ (a.bin、b.bin、empty.bin、sub/c.bin、日本語/テスト ファイル①.bin)", WriteToolTree, "a.bin", "b.bin", "empty.bin", "sub/c.bin", "日本語/テスト ファイル①.bin");
+        yield return Folder("TD-TOOL-SUMS-STAR", "a.bin", 256, "sha256sum の出力 (b.bin は *b.bin、c.bin はハッシュ値が大文字) と 3 ファイル", WriteSumsStar, "a.bin", "b.bin", "c.bin", "SHA256SUMS");
+        yield return Folder("TD-TOOL-SUMS-MIXED", "ok.bin", 256, "一致・不一致・見つからない・(テストが開いたままにする) の 4 状態の SHA256SUMS と 3 ファイル", WriteSumsMixed, "ok.bin", "bad.bin", "locked.bin", "SHA256SUMS");
+        yield return Folder("TD-TOOL-MD5", "x.bin", 256, "x.bin (TD-BYTES-256) とその MD5 の x.bin.md5", WriteMd5, "x.bin", "x.bin.md5");
+        yield return Folder("TD-TOOL-FOLDER-L", "SAME.BIN", 256, "SAME.BIN、sub/diff.bin、left-only.bin", WriteFolderLeft, "SAME.BIN", "sub/diff.bin", "left-only.bin");
+        yield return Folder("TD-TOOL-FOLDER-R", "same.bin", 256, "same.bin、sub/diff.bin (0x1234 を XOR FF)、right-only.bin", WriteFolderRight, "same.bin", "sub/diff.bin", "right-only.bin");
         yield return new TestDataItem("TD-TOOL-COLOR", 4, "00 80 FF FF", path => WriteAll(path, [0x00, 0x80, 0xFF, 0xFF]));
         yield return new TestDataItem("TD-TOOL-TIMESTAMPS", 256, "2024-02-29T12:34:56.789Z を各形式で表した値 (形式ごとに 16 バイトの枠、リトルエンディアン)",
             path => WriteAll(path, ToolTimestamps()));
     }
 
-    private static TestDataItem Folder(string id, string primary, long primaryLength, string description, Action<string> write) =>
-        new(id, primaryLength, description, path => write(Path.GetDirectoryName(path)!), dir => Path.Combine(dir, id, primary));
+    private static TestDataItem Folder(string id, string primary, long primaryLength, string description, Action<string> write, params string[] files) =>
+        new(id, primaryLength, description, path => write(Path.GetDirectoryName(path)!), dir => Path.Combine(dir, id, primary))
+        {
+            IsComplete = dir => files.All(f => File.Exists(Path.Combine(dir, id, f.Replace('/', Path.DirectorySeparatorChar)))),
+        };
 
     // ---- TD-TOOL-TREE ----
 

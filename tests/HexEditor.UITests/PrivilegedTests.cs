@@ -94,7 +94,8 @@ public sealed partial class PrivilegedTests
     [Trait(UiTest.TC, "TC-ENG-14-02")]
     public Task Disk_opens_read_only_and_allowing_writes_asks_with_the_model_and_size() => UiTestContext.RunAsync(async ctx =>
     {
-        string before = Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 1 << 20));
+        // ボリュームの中は Windows 自身が書くので、パーティションより前 (MBR と隙間) を比べる。
+        string before = Hash(CiPrivileged.ReadBeforeFirstPartition(CiPrivileged.VhdDiskPath));
         AppSession app = await StartAsync(ctx, elevated: true);
         JsonObject disk = await DiskAsync(app, CiPrivileged.VhdDisk);
 
@@ -116,7 +117,7 @@ public sealed partial class PrivilegedTests
         // 5. 「書き込みを許可」: 読み取り専用が解除され、ディスクの内容は変わっていない。
         await app.InvokeDialogButtonAsync(R("ReadOnly_AllowWrite"));
         await app.WaitUntilAsync(async () => !ReadOnly(await app.DocumentAsync()), TimeSpan.FromSeconds(10), "the read-only state to be released");
-        Assert.Equal(before, Hash(CiPrivileged.ReadDevice(CiPrivileged.VhdDiskPath, 1 << 20)));
+        Assert.Equal(before, Hash(CiPrivileged.ReadBeforeFirstPartition(CiPrivileged.VhdDiskPath)));
     });
 
     // ---- ENG-28 / PKG-14: 管理者として実行すると補助プロセスを使わない ----

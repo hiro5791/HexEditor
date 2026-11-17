@@ -430,6 +430,29 @@ public sealed class CommandTests
     });
 
     [Fact]
+    public Task Title_bar_entry_is_not_cut_off_when_the_japanese_menu_bar_leaves_too_little_room() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 回帰テスト: 日本語のメニューバーとタイトルの後ろに 240 px の入口が入りきらない幅 (1260 px) で、入口の右端がウィンドウ操作ボタンの
+        // 手前で切れていた。入りきらないときはアイコンだけにする (UI-02 の仕様 4)。入口の右端はタイトルバーの中身の欄の中に収まる。
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja", WaitForEditor = false });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1260 * scale), (int)(800 * scale));
+        await app.IdleAsync();
+        JsonObject menu = await app.ElementAsync("MainMenu");
+        JsonObject title = await app.ElementAsync("WindowTitle");
+
+        // メニューバーの項目は詰めて並ぶ (既定の 28 px ではなく 18 px の間隔。UI-03)。11 個 (テスト用のビルドの Test を含む) で 800 px 未満
+        // (既定の間隔では 851 px)。
+        Assert.True(menu["width"]!.GetValue<double>() < 800, $"the menu bar is {menu["width"]} px wide");
+
+        // タイトルの後ろには、入口 (240 px) とドラッグ領域・ウィンドウ操作ボタンが入らない: 切れたボタンではなく、アイコンだけになる。
+        await app.WaitUntilAsync(async () => (await app.SendAsync("titleBarPalette"))["compact"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the compact entry");
+        Assert.True((await app.SendAsync("titleBarPalette"))["width"]!.GetValue<double>() < 100);
+        JsonObject entry = await app.ElementAsync("TitleBar_Palette");
+        Assert.True(entry["left"]!.GetValue<double>() >= title["right"]!.GetValue<double>());
+    });
+
+    [Fact]
     public Task Palette_entry_menu_changes_the_shortcut_of_the_command() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync();

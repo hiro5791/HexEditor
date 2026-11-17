@@ -2614,13 +2614,13 @@
   <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>Θέση έναρξης UTF-32</value></data>
   <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>Θ</value></data>
   <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Μετατόπιση mod 4 = {0}</value></data>
-  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Προβολή: Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 0</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 0</value></data>
   <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>θέση έναρξης φάση utf-32 start position phase 0</value></data>
-  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Προβολή: Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 1</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 1</value></data>
   <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>θέση έναρξης φάση utf-32 start position phase 1</value></data>
-  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Προβολή: Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 2</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 2</value></data>
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>θέση έναρξης φάση utf-32 start position phase 2</value></data>
-  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Προβολή: Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 3</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>Αποκωδικοποίηση UTF-32 από μετατοπίσεις με υπόλοιπο 3</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>θέση έναρξης φάση utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Λίστα ιστορικού</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>άλμα ιστορικό λίστα πίσω πρόσφατες θέσεις jump history list back recent positions</value></data>
@@ -9996,19 +9996,19 @@ Byte προς αλλαγή: {2}
   <data name="SetDesc_compare_structure_maxFields" xml:space="preserve"><value>Διακοπή της σύγκρισης δομής μετά τη σύγκριση τόσων πεδίων σε κάθε πλευρά (10.000 έως 10.000.000).</value></data>
   <data name="Set_compare_structure_arrayRules" xml:space="preserve"><value>Σύγκριση δομής: αντιστοίχιση πινάκων</value></data>
   <data name="SetDesc_compare_structure_arrayRules" xml:space="preserve"><value>Πώς αντιστοιχίζονται τα στοιχεία των πινάκων, ανά πρότυπο και πίνακα. Αλλάξτε το με το «Μέθοδος αντιστοίχισης...» στον πίνακα Διαφορές δομής.</value></data>
-  <data name="Cmd_compare_structure" xml:space="preserve"><value>Σύγκριση: σύγκριση δομής</value></data>
+  <data name="Cmd_compare_structure" xml:space="preserve"><value>Σύγκριση δομής</value></data>
   <data name="CmdAlias_compare_structure" xml:space="preserve"><value>structure field template diff δομή πεδίο πρότυπο διαφορά</value></data>
-  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Σύγκριση: επιλογή προτύπου για τη σύγκριση δομής</value></data>
+  <data name="Cmd_compare_structureTemplate" xml:space="preserve"><value>Επιλογή προτύπου για τη σύγκριση δομής</value></data>
   <data name="CmdAlias_compare_structureTemplate" xml:space="preserve"><value>structure template choose δομή πρότυπο επιλογή</value></data>
-  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Σύγκριση: μετακίνηση ανάμεσα στις διαφορές δομής</value></data>
+  <data name="Cmd_compare_navigateStructure" xml:space="preserve"><value>Μετακίνηση ανάμεσα στις διαφορές δομής</value></data>
   <data name="CmdAlias_compare_navigateStructure" xml:space="preserve"><value>next previous structure target επόμενο προηγούμενο δομή στόχος</value></data>
-  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Σύγκριση: εμφάνιση διαφορών δομής</value></data>
+  <data name="Cmd_compare_showStructDiffs" xml:space="preserve"><value>Εμφάνιση διαφορών δομής</value></data>
   <data name="CmdAlias_compare_showStructDiffs" xml:space="preserve"><value>structure differences panel διαφορές δομής πίνακας</value></data>
-  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Σύγκριση: επόμενη διαφορά δομής</value></data>
+  <data name="Cmd_compare_nextStructDiff" xml:space="preserve"><value>Επόμενη διαφορά δομής</value></data>
   <data name="CmdAlias_compare_nextStructDiff" xml:space="preserve"><value>structure next field δομή επόμενο πεδίο</value></data>
-  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Σύγκριση: προηγούμενη διαφορά δομής</value></data>
+  <data name="Cmd_compare_previousStructDiff" xml:space="preserve"><value>Προηγούμενη διαφορά δομής</value></data>
   <data name="CmdAlias_compare_previousStructDiff" xml:space="preserve"><value>structure previous field δομή προηγούμενο πεδίο</value></data>
-  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Σύγκριση: εξαγωγή διαφορών δομής</value></data>
+  <data name="Cmd_compare_exportStructDiffs" xml:space="preserve"><value>Εξαγωγή διαφορών δομής</value></data>
   <data name="CmdAlias_compare_exportStructDiffs" xml:space="preserve"><value>structure export json csv report δομή εξαγωγή αναφορά</value></data>
   <data name="Cmd_view_panel_structDiffs" xml:space="preserve"><value>Εναλλαγή εμφάνισης διαφορών δομής</value></data>
   <data name="CmdAlias_view_panel_structDiffs" xml:space="preserve"><value>structure differences panel διαφορές δομής πίνακας</value></data>

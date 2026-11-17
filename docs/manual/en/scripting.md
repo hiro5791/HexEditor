@@ -72,6 +72,7 @@ Use the script editor to write scripts. It opens as a tab next to your documents
 ### Editor features {#editor-features}
 
 - Syntax highlighting that follows the theme.
+- The find box and the editor's right-click menu use your display language where a translation exists, and English otherwise.
 - Completion. Type `doc.` to see the available methods with descriptions. C# completion needs the C# script component.
 - Error display. When you stop typing, the script is checked and errors get a wavy underline. They are also listed under **Problems** below the editor. Select one to jump to its line.
 - Go to line (<kbd>Ctrl</kbd>+<kbd>G</kbd>).

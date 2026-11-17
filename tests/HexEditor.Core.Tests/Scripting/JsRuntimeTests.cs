@@ -145,13 +145,15 @@ public sealed class JsRuntimeTests
     [Trait("TC", "TC-AUTO-01-04")]
     public async Task Stop_ends_an_infinite_loop_within_three_seconds()
     {
-        using var t = new ScriptTestHost();
+        // メモリの上限はプロセス全体のマネージドヒープの増加で数えるため、同時に動く別のテスト (メモリの上限を調べるテストなど) が
+        // 大きな領域を確保している間は、この無限ループも上限超過 (Failed) と判定されうる。停止の動作だけを調べるので上限を最大にする。
+        using var t = new ScriptTestHost(new ScriptLimits { MemoryBytes = ScriptLimits.MaxMemory });
         ScriptRun run = t.Start(new ScriptRunRequest { Code = "while(true){}", Origin = ScriptOrigin.Console, DisplayName = "loop.js" });
         await WaitUntilAsync(() => run.Status == ScriptRunStatus.Running);
         var watch = System.Diagnostics.Stopwatch.StartNew();
         run.Stop();
         ScriptRunResult r = await run.Completion.WaitAsync(TimeSpan.FromSeconds(30));
-        Assert.Equal(ScriptRunStatus.Stopped, r.Status);
+        Assert.True(r.Status == ScriptRunStatus.Stopped, $"{r.Status} {r.Failure}: {r.Message} {r.StackTrace}");
         Assert.True(watch.Elapsed < TimeSpan.FromSeconds(3) + TimeSpan.FromSeconds(0.5) || !Support.TimeBudget.IsPerfMachine, $"{watch.Elapsed}");
     }
 
