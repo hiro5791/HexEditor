@@ -197,35 +197,56 @@ public static partial class CrashReporter
     /// <summary>ミニダンプを書くのを待つ上限。超えたら諦めて終了する (落ちたアプリが残り続けないように)。</summary>
     internal static readonly TimeSpan MiniDumpTimeout = TimeSpan.FromSeconds(10);
 
+    /// <summary>ミニダンプを書く別のプロセスを起動する引数 (内部用。<see cref="Program"/> が最初に見る)。</summary>
+    public const string MiniDumpArgument = "--write-minidump";
+
     /// <summary>
     /// ミニダンプ (MiniDumpNormal: スレッドとスタック、読み込んだモジュールの一覧。ヒープの内容は含まない) を書く。
-    /// MiniDumpWriteDump を自分のプロセスに使うときは、呼んだスレッドの状態によって止まることがあるため、別のスレッドで書き、
-    /// 上限の時間を過ぎたら待たない。
+    /// 自分のプロセスに MiniDumpWriteDump を使うと、ほかのスレッドが止められて終わらなくなることがある (Microsoft の文書も別の
+    /// プロセスから呼ぶよう勧めている)。そのため、自分の実行ファイルを別のプロセスとして起動して書かせ、上限の時間だけ待つ。
     /// </summary>
     private static void TryWriteMiniDump(string path)
     {
-        var thread = new Thread(() => WriteMiniDumpNow(path)) { IsBackground = true, Name = "Mini dump" };
-        thread.Start();
-        if (!thread.Join(MiniDumpTimeout))
+        try
         {
-            AppLog.Warning("Mini dump not written: timed out.");
+            string exe = System.Environment.ProcessPath ?? throw new InvalidOperationException("No process path.");
+            var start = new System.Diagnostics.ProcessStartInfo(exe) { UseShellExecute = false, CreateNoWindow = true };
+            start.ArgumentList.Add(MiniDumpArgument);
+            start.ArgumentList.Add(System.Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            start.ArgumentList.Add(path);
+            using var writer = System.Diagnostics.Process.Start(start) ?? throw new InvalidOperationException("Not started.");
+            if (!writer.WaitForExit(MiniDumpTimeout))
+            {
+                writer.Kill();
+                AppLog.Warning("Mini dump not written: timed out.");
+            }
+            else if (writer.ExitCode != 0)
+            {
+                AppLog.Warning($"Mini dump not written: exit code {writer.ExitCode}.");
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            AppLog.Warning($"Mini dump not written: {ex.GetType().Name}");
         }
     }
 
-    private static void WriteMiniDumpNow(string path)
+    /// <summary>
+    /// 別のプロセスとして起動されたときに、<paramref name="args"/> (プロセス ID とパス) のプロセスのミニダンプを書く。
+    /// 成功で 0、失敗で 1。XAML も設定も使わない。
+    /// </summary>
+    public static int WriteMiniDumpOf(string[] args)
     {
         try
         {
-            using var process = System.Diagnostics.Process.GetCurrentProcess();
-            using var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
-            if (!MiniDumpWriteDump(process.Handle, (uint)process.Id, file.SafeFileHandle, MiniDumpNormal, 0, 0, 0))
-            {
-                AppLog.Warning($"MiniDumpWriteDump failed ({Marshal.GetLastWin32Error()}).");
-            }
+            using var process = System.Diagnostics.Process.GetProcessById(int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture));
+            using var file = new FileStream(args[2], FileMode.Create, FileAccess.Write, FileShare.None);
+            return MiniDumpWriteDump(process.Handle, (uint)process.Id, file.SafeFileHandle, MiniDumpNormal, 0, 0, 0) ? 0 : 1;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or FormatException
+            or InvalidOperationException or System.ComponentModel.Win32Exception)
         {
-            AppLog.Warning($"Mini dump not written: {ex.GetType().Name}");
+            return 1;
         }
     }
 
