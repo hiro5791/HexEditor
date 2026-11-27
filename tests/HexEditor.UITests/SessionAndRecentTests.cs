@@ -413,6 +413,29 @@ public sealed class SessionAndRecentTests
         Assert.Equal(16_777_217, new FileInfo(path).Length);
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-13-04")]
+    public Task Closing_dialog_goes_away_when_the_save_finishes() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-13 の仕様 3: 確認している間に保存が終わったら、ダイアログは自動で閉じ、タブも閉じる (ボタンを押さなくてよい)。
+        string path = ctx.CopyTestData("TD-RANDOM-16M", "random.bin");
+        var hooks = new JsonObject
+        {
+            ["fileSources"] = new JsonArray(new JsonObject { ["match"] = "random.bin", ["delayMs"] = 800, ["delayFromOffset"] = 65536 }),
+        };
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = hooks });
+        await app.KeyAsync("Insert");
+        await app.TypeAsync("00");
+        await app.KeyAsync("S", ctrl: true);
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the save");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForAsync("CloseDialog");
+
+        await app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == 0, TimeSpan.FromSeconds(60), "the tab to close");
+        Assert.Null(app.Find("CloseDialog"));
+        Assert.Equal(16_777_217, new FileInfo(path).Length);
+    });
+
     // ---- UI-30 起動時の動作、UI-31 セッション ----
 
     [Fact]

@@ -123,18 +123,19 @@ public sealed class JsRuntimeTests
     [Trait("TC", "TC-AUTO-02-03")]
     public async Task Time_limit_pauses_and_continue_gives_another_period()
     {
-        using var t = new ScriptTestHost(new ScriptLimits { Time = TimeSpan.FromSeconds(1) });
+        // メモリの上限はプロセス全体で数えるため、同時に動く別のテストで先に上限に達しないよう最大にする (時間の上限だけを調べる)。
+        using var t = new ScriptTestHost(new ScriptLimits { Time = TimeSpan.FromSeconds(1), MemoryBytes = ScriptLimits.MaxMemory });
         t.Ui.ContinueAnswer = n => n == 1;
         ScriptRunResult r = await t.RunEditorAsync("while (true) {}");
         Assert.Equal(ScriptFailure.Limit, r.Failure);
-        Assert.Equal(2, t.Ui.TimeoutPrompts);
+        Assert.True(t.Ui.TimeoutPrompts == 2, $"{t.Ui.TimeoutPrompts} prompts; {r.Status} {r.Failure}: {r.Message}");
         Assert.Contains("実行時間の上限 1 秒", r.Message);
     }
 
     [Fact]
     public async Task Headless_time_limit_ends_with_exit_code_7()
     {
-        using var t = new ScriptTestHost(new ScriptLimits { Time = TimeSpan.FromSeconds(1) });
+        using var t = new ScriptTestHost(new ScriptLimits { Time = TimeSpan.FromSeconds(1), MemoryBytes = ScriptLimits.MaxMemory });
         string path = t.WriteScript("loop.js", "while (true) {}");
         ScriptRunResult r = await t.Host.RunAndWaitAsync(new ScriptRunRequest { Path = path, Headless = true, CommandLineTrust = true }, t.Env);
         Assert.Equal(7, r.ProcessExitCode);

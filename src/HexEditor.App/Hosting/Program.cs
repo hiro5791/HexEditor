@@ -23,6 +23,12 @@ public static class Program
     [STAThread]
     private static int Main(string[] args)
     {
+        // 異常終了したアプリのミニダンプを、別のプロセスとして書く (PKG-30 の仕様 4。CrashReporter が起動する内部用の引数)。
+        if (args is [CrashReporter.MiniDumpArgument, _, _])
+        {
+            return CrashReporter.WriteMiniDumpOf(args);
+        }
+
         string step = "velopack";
         try
         {

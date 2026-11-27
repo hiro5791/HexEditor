@@ -33,7 +33,7 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
     private readonly Grid _header = new();
     private readonly ComboBox _filter = new();
     private readonly TextBlock _summary = new();
-    private readonly StackPanel _extra = new() { Orientation = Orientation.Horizontal, Spacing = 8 };
+    private readonly WrapPanel _extra = new() { HorizontalSpacing = 8 };
     private IReadOnlyList<ToolColumn> _columns = [];
     private IReadOnlyList<(string Label, Predicate<object>? Match)> _filters = [];
     private int _sortColumn = -1;
@@ -52,26 +52,24 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
 
         _summary.VerticalAlignment = VerticalAlignment.Center;
         _summary.TextWrapping = TextWrapping.Wrap;
+        _summary.Visibility = Visibility.Collapsed;
         AutomationProperties.SetAutomationId(_summary, idPrefix + "_Summary");
 
         Button csv = ToolParts.TextButton(idPrefix + "_ExportCsv", "ToolTable_ExportCsv", () => ExportRequested?.Invoke(this, "csv"));
         Button json = ToolParts.TextButton(idPrefix + "_ExportJson", "ToolTable_ExportJson", () => ExportRequested?.Invoke(this, "json"));
 
-        var top = new Grid { ColumnSpacing = 8, Padding = new Thickness(12, 8, 12, 4) };
-        top.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        top.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        top.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        top.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        top.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        // 上部: 1 行目は概要 (パスなど) を幅いっぱいに、2 行目はボタンと絞り込みを並べ、幅が足りなければ折り返す。
+        // 概要とボタンを同じ行に置くと、狭いパネルでは概要の幅がなくなり、1 行に数文字ずつしか出ない。
+        var fixedControls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        fixedControls.Children.Add(_filter);
+        fixedControls.Children.Add(csv);
+        fixedControls.Children.Add(json);
+        var bar = new WrapPanel { HorizontalSpacing = 8, VerticalSpacing = 6 };
+        bar.Children.Add(_extra);
+        bar.Children.Add(fixedControls);
+        var top = new StackPanel { Spacing = 6, Padding = new Thickness(12, 8, 12, 4) };
         top.Children.Add(_summary);
-        Grid.SetColumn(_extra, 1);
-        top.Children.Add(_extra);
-        Grid.SetColumn(_filter, 2);
-        top.Children.Add(_filter);
-        Grid.SetColumn(csv, 3);
-        top.Children.Add(csv);
-        Grid.SetColumn(json, 4);
-        top.Children.Add(json);
+        top.Children.Add(bar);
 
         _list.ItemsSource = _view;
 
@@ -126,7 +124,7 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
     public List<(string Label, Func<object, bool> Enabled, Action<object> Run)> ContextItems { get; } = [];
 
     /// <summary>上部の右に置く追加の部品(キャンセルのボタンなど)。</summary>
-    public StackPanel ExtraControls => _extra;
+    public Panel ExtraControls => _extra;
 
     public IReadOnlyList<object> Rows => _all;
 
@@ -137,7 +135,11 @@ internal sealed partial class ToolResultTable : UserControl, Panels.IPanelConten
 
     public bool FocusContent() => _list.Focus(FocusState.Programmatic);
 
-    public void SetSummary(string text) => _summary.Text = text;
+    public void SetSummary(string text)
+    {
+        _summary.Text = text;
+        _summary.Visibility = text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     public string Summary => _summary.Text;
 

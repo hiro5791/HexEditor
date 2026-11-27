@@ -331,6 +331,11 @@ public sealed class PrintAndStreamsTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Hooks() });
         await ShowAdsPanelAsync(app);
 
+        // パネルの既定の大きさで、ファイルのパス (概要) は一覧と同じ幅を使い、1 行に数文字ずつにならない。
+        var summary = (await app.WaitForAsync("Ads_Summary")).BoundingRectangle;
+        var list = (await app.WaitForAsync("Ads_List")).BoundingRectangle;
+        Assert.True(summary.Width >= list.Width * 0.8, $"the path is {summary.Width} px wide in a {list.Width} px panel");
+
         // 使えない名前は入力欄を赤枠にして確定を無効にする。
         await app.UiaInvokeAsync("Ads_Create");
         await app.WaitForAsync("AdsNameDialog");
@@ -346,6 +351,10 @@ public sealed class PrintAndStreamsTests
         await app.TypeAsync("4142");
         await app.KeyAsync("S", ctrl: true);
         await app.WaitUntilAsync(async () => DirR(path).Contains(" 2 ads.bin:note:$DATA", StringComparison.Ordinal), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the saved stream");
+
+        // ファイルに書けても、保存の処理は少し後に終わる。終わってから閉じる (保存中に閉じると、確認のダイアログが出る)。
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() == 0
+            && !(await app.DocumentAsync())["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the save to finish");
         await app.CommandAsync("Command_Close");
         await app.WaitUntilAsync(async () => !(await app.TabNamesAsync()).Contains("ads.bin:note"), UiTest.Scaled(TimeSpan.FromSeconds(15)), "the stream tab to close");
         JsonObject state = await Ads(app, "load", ("path", path));

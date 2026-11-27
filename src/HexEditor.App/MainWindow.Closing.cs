@@ -260,7 +260,37 @@ public sealed partial class MainWindow
 
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Close;
-        ContentDialogResult choice = await dialog.ShowQueuedAsync();
+
+        // 確認している間に処理が終わったら、聞く理由がなくなるので、ダイアログを閉じてそのまま閉じる処理に進む
+        // (保存に失敗して変更が残っていれば、次の未保存の確認で聞く)。
+        bool finished = false;
+        Microsoft.UI.Dispatching.DispatcherQueueTimer watch = DispatcherQueue.CreateTimer();
+        watch.Interval = TimeSpan.FromMilliseconds(100);
+        watch.Tick += (_, _) =>
+        {
+            if (Vm.Operations.ActiveFor(doc.Document).Count == 0)
+            {
+                watch.Stop();
+                finished = true;
+                dialog.Hide();
+            }
+        };
+        watch.Start();
+        ContentDialogResult choice;
+        try
+        {
+            choice = await dialog.ShowQueuedAsync();
+        }
+        finally
+        {
+            watch.Stop();
+        }
+
+        if (finished)
+        {
+            return true;
+        }
+
         if (choice == ContentDialogResult.None)
         {
             return false;
