@@ -178,25 +178,28 @@ public sealed class PrintAndStreamsTests
             Hooks = Hooks(h =>
             {
                 h["printToFile"] = pdf;
-                h["fileSources"] = new JsonArray(new JsonObject { ["match"] = "p.bin", ["delayMs"] = 100 });
+                // ファイルを読むたびに 300 ms 待たせる。画面に出して読み込み済みの最初の 64 KiB は待たないので、0〜0x10000 だけの印刷は
+                // 1 秒以内に終わり、印刷中を捕まえられないことがある。0x20000 まで印刷すると、後ろの 64 KiB (約 67 ページ) はページごとに
+                // 待つので、印刷が数秒以上かかり、その間に書き換えられる。
+                h["fileSources"] = new JsonArray(new JsonObject { ["match"] = "p.bin", ["delayMs"] = 300 });
             }),
         });
         await OpenPrintDialogAsync(app);
-        await Print(app, "range", ("kind", "Offsets"), ("text", "0:0x10000"));
+        await Print(app, "range", ("kind", "Offsets"), ("text", "0:0x20000"));
         await app.InvokeDialogButtonAsync("Print", idle: false);
 
-        // 印刷の処理が動いている間に、0xFF00 を書き換える (印刷中も編集できる)。
+        // 印刷の処理が動いている間に、後ろの 64 KiB の 0x1FF00 を書き換える (印刷中も編集できる。印刷がそこに届く前に書き換える)。
         await app.WaitUntilAsync(async () => (await app.StateAsync())["operations"]!.AsArray()
             .Any(o => o!["name"]!.GetValue<string>().StartsWith("Printing", StringComparison.Ordinal) && o["state"]!.GetValue<string>() == "Running"),
             UiTest.Scaled(TimeSpan.FromSeconds(15)), "the print operation");
-        await app.GoToAsync(0xFF00);
+        await app.GoToAsync(0x1FF00);
         await app.TypeAsync("EE");
-        Assert.Equal(0xEE, (await app.BytesAsync(0xFF00, 1))[0]);
+        Assert.Equal(0xEE, (await app.BytesAsync(0x1FF00, 1))[0]);
         await WaitForFileAsync(pdf);
 
         using PdfDocument document = PdfDocument.Open(pdf);
         string all = string.Join('\n', document.GetPages().Select(p => p.Text));
-        System.Text.RegularExpressions.Match row = System.Text.RegularExpressions.Regex.Match(all, @"FF00\s*((?:[0-9A-F]{2} ?)+)");
+        System.Text.RegularExpressions.Match row = System.Text.RegularExpressions.Regex.Match(all, @"1FF00\s*((?:[0-9A-F]{2} ?)+)");
         Assert.True(row.Success, all[..Math.Min(400, all.Length)]);
         Assert.StartsWith("00 01 02", row.Groups[1].Value, StringComparison.Ordinal);
     });
