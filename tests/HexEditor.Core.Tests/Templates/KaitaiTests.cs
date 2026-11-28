@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using HexEditor.Core.Templates;
 using HexEditor.Core.Templates.Loading;
+using HexEditor.Core.Tests.Support;
 using HexEditor.TestData;
 using static HexEditor.Core.Tests.Templates.TemplateTestSupport;
 
@@ -351,7 +352,10 @@ public sealed class KaitaiTests
 
             var sw = Stopwatch.StartNew();
             TemplateProgram p = TemplateLoader.LoadBytes(Encoding.UTF8.GetBytes(sb.ToString()), "fuzz.ksy");
-            Assert.True(sw.Elapsed < TimeSpan.FromSeconds(5));
+            // 1 回の読み込みは手元で 1 ms 以下。共有のランナーが一時的に止まることがあるので、5 秒は警告だけにし、
+            // 止まらない (読み込みが終わらない) 誤りは 30 秒で捕まえる。
+            TimeBudget.Limit(sw.Elapsed < TimeSpan.FromSeconds(5), $"読み込み {i} 回目に {sw.ElapsedMilliseconds} ms");
+            Assert.True(sw.Elapsed < TimeSpan.FromSeconds(30), $"読み込み {i} 回目に {sw.ElapsedMilliseconds} ms");
             if (!p.HasErrors)
             {
                 TemplateResult r = Run(p, TemplateDataSource.FromBytes(data),
